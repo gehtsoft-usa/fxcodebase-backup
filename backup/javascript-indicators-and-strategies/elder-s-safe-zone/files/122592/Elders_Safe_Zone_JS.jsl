@@ -1,0 +1,101 @@
+function Init()
+{
+    indicator.name("Elders Safe Zone indicator");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    
+    indicator.parameters.addInteger("LookBack", "LookBack", "No description", 10);
+    indicator.parameters.addInteger("StopFactor", "StopFactor", "No description", 3);
+    indicator.parameters.addInteger("EMALength", "EMALength", "No description", 13);
+
+
+    indicator.parameters.addColor("Line_color", "Color of line", "Color of line", core.rgb(0, 255, 255));
+}
+
+var LookBack;
+var StopFactor;
+var EMALength;
+
+var first;
+var source = null;
+var buffLine=null;
+var EMA;
+
+function Prepare()
+{
+    source = instance.source;
+    LookBack = instance.parameters.LookBack;
+    StopFactor = instance.parameters.StopFactor;
+    EMALength = instance.parameters.EMALength;
+    EMA = core.indicators.create("EMA", source.close, EMALength);
+    first = EMA.DATA.first();
+    var name = profile.id() + "(" + source.name() + ", " + LookBack + ", " + StopFactor + ", " + EMALength + ")";
+    instance.name(name);
+    buffLine = instance.addStream("Line", core.Line, name + ".Line", "Line", instance.parameters.Line_color, first);
+}
+
+function Update(period, mode)
+{
+    if (period>first+LookBack+3) 
+    {
+     EMA.update(mode);
+     var SafeStop=0.;
+     var EMA0=EMA.DATA[period];
+     var EMA1=EMA.DATA[period-1];
+     var EMA2=EMA.DATA[period-2];
+     var PreSafeStop=buffLine[period-1];
+     var Pen=0.;
+     var Counter=0;
+     if (EMA0>EMA1) 
+     {
+      for (value1=0; value1<=LookBack; value1++) 
+      {
+       if (source.low[period-value1]<source.low[period-value1-1]) 
+       {
+        Pen=source.low[period-value1-1]-source.low[period-value1]+Pen;
+        Counter=Counter+1;
+       }
+      }
+      if (Counter>0) 
+      {
+       SafeStop=source.close[period]-(StopFactor*Pen/Counter);
+      } 
+      else
+      {
+       SafeStop=source.close[period]-(StopFactor*Pen);
+      }
+      if (SafeStop<PreSafeStop && EMA1>EMA2) 
+      {
+       SafeStop=PreSafeStop;
+      }
+     } 
+     else if (EMA0<EMA1) 
+     {
+      for (value1=0; value1<=LookBack; value1++) 
+      {
+       if (source.high[period-value1]>source.high[period-value1-1]) 
+       {
+        Pen=source.high[period-value1]-source.high[period-value1-1]+Pen;
+        Counter=Counter+1;
+       }
+      }
+      if (Counter>0) 
+      {
+       SafeStop=source.close[period]+(StopFactor*Pen/Counter);
+      } 
+      else
+      {
+       SafeStop=source.close[period]+(StopFactor*Pen);
+      }
+      if (SafeStop>PreSafeStop && EMA1<EMA2) 
+      {
+       SafeStop=PreSafeStop;
+      }
+     }
+     PreSafeStop=SafeStop;
+     buffLine[period]=SafeStop;
+    }
+}
+
+

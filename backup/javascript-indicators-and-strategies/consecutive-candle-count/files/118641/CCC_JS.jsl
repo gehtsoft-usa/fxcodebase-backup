@@ -1,0 +1,103 @@
+function Init()
+{
+    indicator.name("Consecutive Candle Count");
+    indicator.description("Consecutive Candle Count");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+	
+	indicator.parameters.addGroup("Calculation");	 
+	indicator.parameters.addString("Method", "Source", "Source" , "Chart");
+    indicator.parameters.addStringAlternative("Method", "Heiken-Ashi", "Heiken-Ashi" , "Heiken-Ashi");
+    indicator.parameters.addStringAlternative("Method", "Chart", "Chart" , "Chart");
+	
+    indicator.parameters.addGroup("Style");	 
+    indicator.parameters.addColor("Up", "Color of Up Count", "Color of Count", core.rgb(0, 255, 0));
+	indicator.parameters.addColor("Down", "Color of Down Count", "Color of Count", core.rgb(255, 0, 0));  
+	
+	
+	 indicator.parameters.addGroup("OB/OS Levels");	
+    indicator.parameters.addDouble("overbought", "Overbought Level","", 9);
+    indicator.parameters.addDouble("oversold","Oversold Level","", -9);
+	    indicator.parameters.addColor("level_overboughtsold_color", "Line Color","", core.rgb(128, 128, 128));
+    indicator.parameters.addInteger("level_overboughtsold_width","Line width","", 1, 1, 5);
+    indicator.parameters.addInteger("level_overboughtsold_style", "Line Style","", core.LINE_SOLID);
+    indicator.parameters.setFlag("level_overboughtsold_style", core.FLAG_LEVEL_STYLE);
+}
+
+var first;
+var source, Source;
+var Method;
+
+var Count = null;
+
+function Prepare(nameOnly)
+{
+    source = instance.source;		
+	Method = instance.parameters.Method;
+    
+	
+	if (Method!= "Chart") 
+	{
+	 Source=  core.indicators.create("HA", source);
+	 first = Source.DATA.first();
+	}
+	else
+	{
+	 Source= source;
+	 first = source.first();	
+	}
+	
+
+
+    var name = profile.id() + "(" + source.name() + ", " + Method+ ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        Count = instance.addStream("Count", core.Bar, name, "Count", instance.parameters.Up, first);
+		Count.addLevel(instance.parameters.oversold, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);
+		Count.addLevel(instance.parameters.overbought, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);    
+		
+    }
+}
+
+function Update(period, mode)
+{
+    if (Method!= "Chart") 
+    { 
+     Source.update(mode);	
+	}
+	
+    if (period < first || !Source.close.hasData(period)) 
+    {
+	 return;
+	}
+	
+	if (Count[period-1] > 0 && Source.close[period]>= Source.open[period]) 
+	{
+	 Count[period]=Count[period-1]+1;
+	}
+	else if (Count[period-1] < 0 && Source.close[period]<= Source.open[period]) 
+	{
+	 Count[period]=Count[period-1]-1;
+	}
+	else if (Source.close[period]> Source.open[period]) 
+	{
+	 Count[period]=1;
+	}
+	else if (Source.close[period]< Source.open[period]) 
+	{
+	 Count[period]=-1;
+	}
+	
+	 
+    if (Count[period]> 0) 
+    {
+	 Count.setColor(period, instance.parameters.Up);
+	}
+	else
+	{
+	 Count.setColor(period, instance.parameters.Down);
+	}
+}
+

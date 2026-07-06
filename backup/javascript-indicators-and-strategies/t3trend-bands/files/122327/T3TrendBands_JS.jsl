@@ -1,0 +1,73 @@
+function Init()
+{
+    indicator.name("T3TrendBands indicator");
+    indicator.description("T3TrendBands indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("BandBars", "Count of bars for band", "", 28);
+    indicator.parameters.addDouble("Deviation", "Deviation", "", 3.5);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP Color", "UP Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DNclr", "DN Color", "DN Color", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+var BandBars;
+var Deviation;
+var SmoothPrice;
+var SmoothRange;
+var BuffTUP=null;
+var BuffMUP=null;
+var BuffBUP=null;
+var BuffTDN=null;
+var BuffMDN=null;
+var BuffBDN=null;
+
+function Prepare()
+{
+    source = instance.source;
+    BandBars=instance.parameters.BandBars;
+    Deviation=instance.parameters.Deviation;
+    first = source.first();
+    SmoothPrice = instance.addInternalStream(first, 0);
+    SmoothRange = instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.BandBars + ", " + instance.parameters.Deviation + ")";
+    instance.name(name);
+    BuffTUP = instance.addStream("BuffTUP", core.Dot, name + ".Top", "Top", instance.parameters.UPclr, first);
+    BuffMUP = instance.addStream("BuffMUP", core.Dot, name + ".Middle", "Middle", instance.parameters.UPclr, first);
+    BuffBUP = instance.addStream("BuffBUP", core.Dot, name + ".Bottom", "Bottom", instance.parameters.UPclr, first);
+    BuffTDN = instance.addStream("BuffTDN", core.Dot, name + ".Top", "Top", instance.parameters.DNclr, first);
+    BuffMDN = instance.addStream("BuffMDN", core.Dot, name + ".Middle", "Middle", instance.parameters.DNclr, first);
+    BuffBDN = instance.addStream("BuffBDN", core.Dot, name + ".Bottom", "Bottom", instance.parameters.DNclr, first);
+}
+
+function Update(period, mode)
+{
+   if (period==first+1) 
+   {
+    SmoothPrice[period]=source.close[period-1];
+    SmoothRange[period]=source.high[period-1]-source.low[period-1];
+   } 
+   else if (period>first+1) 
+   {
+    SmoothPrice[period]=(SmoothPrice[period-1]*(BandBars-1)+source.close[period-1])/BandBars;
+    SmoothRange[period]=(SmoothRange[period-1]*(BandBars-1)+source.high[period-1]-source.low[period-1])/BandBars;
+    if (SmoothPrice[period]>SmoothPrice[period-1]) 
+    {
+     BuffTUP[period]=SmoothPrice[period]+SmoothRange[period]*Deviation;
+     BuffMUP[period]=SmoothPrice[period];
+     BuffBUP[period]=SmoothPrice[period]-SmoothRange[period]*Deviation;
+    } 
+    else
+    {
+     BuffTDN[period]=SmoothPrice[period]+SmoothRange[period]*Deviation;
+     BuffMDN[period]=SmoothPrice[period];
+     BuffBDN[period]=SmoothPrice[period]-SmoothRange[period]*Deviation;
+    }
+   }
+}
+

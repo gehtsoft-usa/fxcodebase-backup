@@ -1,0 +1,62 @@
+function Init()
+{
+    indicator.name("Generalized DEMA");
+    indicator.description("Generalized DEMA");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addDouble("VF", "Volume Factor", "Volume Factor", 0.7,0,1);
+    indicator.parameters.addInteger("F", "Period", "Period", 20, 2,2000);
+	
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("GD_color", "Color of GD", "Color of GD", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var VF=null;
+var Frame=null;
+var EMA=null;
+var EMAofEMA=null;
+
+var first;
+var source = null;
+
+var GD = null;
+
+function Prepare()
+{
+    VF = instance.parameters.VF;
+    Frame = instance.parameters.F;
+    source = instance.source;
+     
+	
+	 EMA = core.indicators.create("EMA", source, Frame);
+	 EMAofEMA = core.indicators.create("EMA", EMA.DATA, Frame);
+	 first = EMAofEMA.DATA.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + VF + ", " + Frame + ")";
+    instance.name(name);
+    GD = instance.addStream("GD", core.Line, name, "GD", instance.parameters.GD_color, Frame*2);
+	GD.setWidth(instance.parameters.width);
+    GD.setStyle(instance.parameters.style);
+}
+
+function Update(period,mode)
+{
+    EMA.update(mode);
+    EMAofEMA.update(mode);
+
+ 
+     if (period < first)
+      {
+   return;
+   }
+   
+	
+    GD[period] = EMA.DATA[period]* (1+VF) - EMAofEMA.DATA[period]*VF;
+    
+}
+

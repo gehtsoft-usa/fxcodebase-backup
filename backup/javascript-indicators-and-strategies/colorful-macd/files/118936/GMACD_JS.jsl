@@ -1,0 +1,90 @@
+function Init()
+{
+    indicator.name("MACD with bar's coloring");
+    indicator.description("");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addInteger("SN", "Short EMA", "", 12, 2, 1000);
+    indicator.parameters.addInteger("LN", "Long EMA", "", 26, 2, 1000);
+    indicator.parameters.addInteger("IN", "Signal Line", "", 9, 2, 1000);
+    indicator.parameters.addColor("SIGNAL_color", "The signal line color", "", core.rgb(127, 255, 0));
+    indicator.parameters.addColor("HISTOGRAM_color", "The histogramm color", "", core.rgb(127, 127, 127));
+    indicator.parameters.addColor("HISTOGRAM1_color", "The histogramm color 1", "", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("HISTOGRAM2_color", "The histogramm color 2", "", core.rgb(255, 0, 0));
+}
+
+var SN;
+var LN;
+var IN;
+
+var firstPeriodMACD;
+
+var firstPeriodSIGNAL;
+var source = null;
+
+var EMAS = null;
+var EMAL = null;
+var MVAI = null;
+
+var MACD = null;
+var SIGNAL = null;
+var HISTOGRAM = null;
+
+function Prepare()
+{
+    SN = instance.parameters.SN;
+    LN = instance.parameters.LN;
+    IN = instance.parameters.IN;
+    source = instance.source;
+
+    if (LN <= SN) 
+    {
+       error("The short EMA period must be smaller than long EMA period");
+    }
+
+    EMAS = core.indicators.create("EMA", source, SN);
+    EMAL = core.indicators.create("EMA", source, LN);
+
+    var name = profile.id() + "(" + source.name() + ", " + SN + ", " + LN + ", " + IN + ")";
+    instance.name(name);
+
+    firstPeriodMACD = EMAL.DATA.first();
+
+    HISTOGRAM = instance.addStream("H", core.Bar, name + ".H", "H", instance.parameters.HISTOGRAM_color, firstPeriodMACD);
+
+    MVAI = core.indicators.create("MVA", HISTOGRAM, IN);
+    firstPeriodSIGNAL = MVAI.DATA.first();
+
+    firstPeriodSIGNAL = MVAI.DATA.first();
+    HISTOGRAM1 = instance.addStream("H1", core.Bar, name + ".H1", "H1", instance.parameters.HISTOGRAM1_color, firstPeriodSIGNAL);
+    HISTOGRAM2 = instance.addStream("H2", core.Bar, name + ".H2", "H2", instance.parameters.HISTOGRAM2_color, firstPeriodSIGNAL);
+    SIGNAL = instance.addStream("SIGNAL", core.Line, name + ".SIGNAL", "SIGNAL", instance.parameters.SIGNAL_color, firstPeriodSIGNAL);
+}
+
+function Update(period, mode)
+{
+    EMAS.update(mode);
+    EMAL.update(mode);
+
+    if (period >= firstPeriodMACD) 
+    {
+         HISTOGRAM[period] = EMAS.DATA[period] - EMAL.DATA[period];
+    }
+
+    MVAI.update(mode);
+    if (period >= firstPeriodSIGNAL) 
+    {
+        SIGNAL[period] = MVAI.DATA[period];
+        if (HISTOGRAM[period] > 0 && HISTOGRAM[period] > SIGNAL[period]) 
+        {
+           HISTOGRAM1[period] = HISTOGRAM[period];
+       }
+        else if (HISTOGRAM[period] < 0 && HISTOGRAM[period] < SIGNAL[period]) 
+        {
+           HISTOGRAM2[period] = HISTOGRAM[period];
+        }
+    }
+}
+
+

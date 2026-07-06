@@ -1,0 +1,514 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252" /><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><title>host:execute(&amp;quot;drawLabel1&amp;quot;, ...)</title><style type="text/css">a, p, h1, h2, h3, h4, h5, h6, table, td, tr, li, ul, ol {
+    font-family: Verdana, Trebuchet MS, Arial;
+}
+
+a, p, td, tr, ul, ol, li {
+    font-size: 12pt;
+}
+
+h3 {
+    font-size: 13pt;
+}
+
+h2 {
+    font-size: 13pt;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+body {
+    color: #444444;
+    background-color: white;
+}
+
+A:link {
+    color: #0065b3;
+    cursor: pointer;
+}
+
+A:visited {
+    color: #0068be;
+    cursor: pointer;
+}
+
+a.action {
+  background-color: #0065b3;
+  color: white;
+  font-size: 10pt;
+  padding: 2px 2px;
+  width: 50pt;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px;
+}
+
+.side-icon {
+    float: left;
+}
+
+a.action [class*="dripicons-"]:before {
+    padding: 0 2px 0 0;
+    font-size: 12pt;
+    vertical-align: text-bottom;
+}
+
+.side-icon:after {
+  content: "";
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  border-left: 1.5px solid white;
+  transform: translate(-50%);
+}
+
+a.actiontab {
+  font-size: 10pt;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px 3px 0 0;
+}
+
+pre, code, code a {
+    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+    font-size: 12pt;
+}
+
+code.ctag {
+    background-color: #f1f1f1;
+    padding: .1em .2em;
+    border-radius: 3px;
+}
+
+pre {
+    background-color: white;
+}
+
+pre.example {
+    background-color: #f1f1f1;
+}
+
+ul {
+    list-style-type: disc;
+    margin-left: 18pt;
+}
+
+ol {
+    list-style-type: decimal;
+    margin-left: 18pt;
+}
+
+ul.hhc {
+    list-style-type: none;
+    margin-left: 1em;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+li.hhc {
+    margin-left: 0;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+table {
+  border-spacing: 0;
+  border-color: #dfe3e7;
+}
+
+tr + tr td {
+   border-top: 0;
+}
+
+tr td + td {
+  border-left: 0;
+}
+
+td {
+  border: 1px solid;
+  border-color: #dfe3e7;
+}
+
+tr:first-child td:first-child {
+   border-radius: 0.2em 0 0 0;
+}
+
+tr:first-child td:last-child {
+  border-radius: 0 0.2em 0 0;
+}
+
+tr:first-child td:only-child {
+  border-radius: 0.2em 0.2em 0 0;
+}
+
+tr:last-child td:first-child {
+    border-radius: 0 0 0 0.2em;
+}
+
+tr:last-child td:last-child {
+    border-radius: 0 0 0.2em 0;
+}
+
+tr:last-child td:only-child {
+    border-radius: 0 0 0.2em 0.2em;
+}
+
+tr:only-child td:only-child {
+    border-radius: 0.2em 0.2em 0.2em 0.2em;
+}
+
+tr:only-child td:first-child {
+   border-radius: 0.2em 0 0 0.2em;
+}
+
+tr:only-child td:last-child {
+  border-radius: 0 0.2em 0.2em 0;
+}
+
+
+td.tmain, td.tmain_nw, td.thdr {
+    background-color: rgb(255, 255, 255);
+    vertical-align: top;
+    padding: 3px;
+}
+
+td.tmain p, td.tmain_nw p, td.thdr p {
+    margin-top: 3pt;
+    margin-bottom: 3pt;
+}
+
+td.tmain_nw {
+    white-space: nowrap;
+}
+
+td.thdr {
+    background-color: #e3e3e3;
+}
+
+table.decl {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+    vertical-align: top;
+    padding: 3px;
+    width: 100%;
+}
+
+table.decl td {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+}
+
+div.note-quote {
+    border-left: 10px solid #ccc;
+    padding: 1em 10px .1em 10px;
+    margin: 1.5em 10px;
+    background-color: rgb(224, 224, 224);
+}
+
+div.note-note {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+div.note-warning {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #fff;
+    background-color: #ff6358;
+}
+div.note-warning code.ctag {
+    color: black;
+}</style>
+<link rel="stylesheet" href="res/dripicons.css"></head><body><script type="text/javascript">
+var highlighterEnabled = false;
+var maintopic = 'index';
+var helptitle = 'Indicore SDK 3';
+    function loadStarted() {
+    window.onload = loadCompleted;
+
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        var head = document.getElementsByTagName('head')[0];
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.min.js';
+        head.appendChild(script4);
+
+
+        var script2 = document.createElement('script');
+        script2.type = 'text/javascript';
+        script2.src = './highlighter/highlight.cshtml.js';
+        head.appendChild(script2);
+
+        var script3 = document.createElement('script');
+        script3.type = 'text/javascript';
+        script3.src = './highlighter/highlight.lua.js';
+        head.appendChild(script3);
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.luax.js';
+        head.appendChild(script4);
+    }
+}
+
+function loadCompleted() {
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        hljs.registerLanguage('cshtml-razor', window.hljsDefineCshtmlRazor);
+        hljs.registerLanguage('lua', window.hljsDefineLua);
+        hljs.registerLanguage('luax', window.hljsDefineLuaX);
+        x = document.querySelectorAll('pre code');
+        for (var i = 0; i < x.length; i++) {
+            if (x[i].hasAttribute('class')) {
+                hljs.highlightBlock(x[i]);
+            }
+        }
+    }
+}
+
+
+function hidediv(divname) {
+    document.getElementById(divname).style.display = 'none';
+}
+
+function showdiv(divname) {
+    document.getElementById(divname).style.display = 'inline';
+}
+
+function syncList() {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, null, document.title);
+    }
+}
+
+function syncList1(key) {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, key + '.html', document.title);
+    }
+}</script><script type="text/javascript">
+    loadStarted();
+</script><h1><code>public method <b>host:execute("drawLabel1", ...)</b></code></h1><h2>Brief</h2>
+<p>Creates or replaces a label (advanced version).</p>
+<table class="tmain" width="100%">
+  <tr>
+    <td class="thdr"><b>Declaration</b></td>
+  </tr>
+  <tr>
+    <td class="tmain"><table class="decl">
+  <tr>
+    <td>Lua</td>
+  </tr>
+  <tr>
+    <td><code>string&nbsp;host:<b>execute</b> (&quot;drawLabel1&quot;, id, x, xType, y, yType, halign, valign, font, color, text)</code></td>
+  </tr>
+</table></td>
+  </tr>
+</table><p></p>
+<table class="tmain" width="100%">
+  <tr>
+    <td colspan="2" class="thdr"><b>Parameters</b></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>id</code></td>
+    <td class="tmain" width="69%"><p>Integer. The label identifier.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>x</code></td>
+    <td class="tmain" width="69%"><p>Double. X-coordinate of the label. The meaning of the value depends on the value of <code class="ctag">xType</code> parameter.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>xType</code></td>
+    <td class="tmain" width="69%"><p>Integer. The parameter can be one of the following values:</p><table class="tmain">
+  <tr>
+    <td class="tmain"><p><code class="ctag">core.CR_CHART</code></p></td>
+    <td class="tmain"><p>The value of the <code class="ctag">x</code> parameter is date/time. The label will move
+when chart is moved.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">core.CR_LEFT</code></p></td>
+    <td class="tmain"><p>The value of the <code class="ctag">x</code> parameter is number of points (a point is 1/72 of inch) from
+the left side of the chart area.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">core.CR_RIGHT</code></p></td>
+    <td class="tmain"><p>The value of the <code class="ctag">x</code> parameter is number of points (a point is 1/72 of inch) from
+the right side of the chart area.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">core.CR_CENTER</code></p></td>
+    <td class="tmain"><p>The value of the <code class="ctag">x</code> parameter is number of points (a point is 1/72 of inch) from
+the center of the chart area.</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>y</code></td>
+    <td class="tmain" width="69%"><p>Double. Y-coordinate of the label. The meaning of the value depends on the value of <code class="ctag">yType</code> parameter.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>yType</code></td>
+    <td class="tmain" width="69%"><p>Integer. The parameter can be one of the following values:</p><table class="tmain">
+  <tr>
+    <td class="tmain"><p><code class="ctag">core.CR_CHART</code></p></td>
+    <td class="tmain"><p>The value of the <code class="ctag">y</code> parameter is price. The label will move
+when chart is moved.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">core.CR_TOP</code></p></td>
+    <td class="tmain"><p>The value of the <code class="ctag">y</code> parameter is number of points (a point is 1/72 of inch) from
+the top side of the chart area.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">core.CR_BOTTOM</code></p></td>
+    <td class="tmain"><p>The value of the <code class="ctag">y</code> parameter is number of points (a point is 1/72 of inch) from
+the bottom side of the chart area.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">core.CR_CENTER</code></p></td>
+    <td class="tmain"><p>The value of the <code class="ctag">y</code> parameter is number of points (a point is 1/72 of inch) from
+the center of the chart area.</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>halign</code></td>
+    <td class="tmain" width="69%"><p>Integer. The horizontal alignment of the label agains the points specified by x and y coordinates.</p>
+<p>The horizontal alignment. Can be <code class="ctag">core.H_Left</code>, <code class="ctag">core.H_Center</code> or <code class="ctag">core.H_Right</code></p><table class="tmain">
+  <tr>
+    <td class="tmain"><p>core.H_Left</p></td>
+    <td class="tmain"><p>The label must be located at left of the data/time line. The right
+border of the text area must touch the date/time line.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>core.H_Center</p></td>
+    <td class="tmain"><p>The label must be centered against the date/time line.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>core.H_Right</p></td>
+    <td class="tmain"><p>The label must be located at right of the data/time line. The left
+border of the text area must touch the date/time line.</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>valign</code></td>
+    <td class="tmain" width="69%"><p>Integer. The vertical alignment of the label against the points specified by x and y coordinates.</p>
+<p>Can be <code class="ctag">core.V_Top</code>, <code class="ctag">core.V_Center</code> or <code class="ctag">core.V_Bottom</code></p><table class="tmain">
+  <tr>
+    <td class="tmain"><p>core.V_Top</p></td>
+    <td class="tmain"><p>The label must be located at above the price line. The bottom
+border of the text area must touch the price line.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>core.V_Center</p></td>
+    <td class="tmain"><p>The label must be centered against the price line.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>core.V_Bottom</p></td>
+    <td class="tmain"><p>The label must be located below the price line. The top
+border of the text area must touch the price line.</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>font</code></td>
+    <td class="tmain" width="69%"><p>String. The font previously created using <a href="host.execute_createFont.html"><code>host:execute(&quot;createFont&quot;)</code></a>
+or <code class="ctag">nil</code> to use the default chart label font.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>color</code></td>
+    <td class="tmain" width="69%"><p>Integer. The color of the label. You can either create your own color using <a href="core.rgb.html"><code>core.rgb()</code></a>,
+choose one of the color returned by <a href="core.colors.html"><code>core.colors()</code></a>, or specify one of the following
+constants: <a href="core.COLOR_LABEL.html"><code>core.COLOR_LABEL</code></a>, <a href="core.COLOR_LINE.html"><code>core.COLOR_LINE</code></a>, <a href="core.COLOR_UPCANDLE.html"><code>core.COLOR_UPCANDLE</code></a>,
+<a href="core.COLOR_DOWNCANDLE.html"><code>core.COLOR_DOWNCANDLE</code></a>, <a href="core.COLOR_CUSTOMLEVEL.html"><code>core.COLOR_CUSTOMLEVEL</code></a>, <a href="core.COLOR_BACKGROUND.html"><code>core.COLOR_BACKGROUND</code></a> to use
+the Marketscope's default colors.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>text</code></td>
+    <td class="tmain" width="69%"><p>The label text.</p></td>
+  </tr>
+</table><h2>Details</h2><p>Note: This function is optional and may be not supported by the host application.</p>
+<p>To remove the line use the <a href="host.execute_removeLabel.html"><code>host:execute(&quot;removeLabel&quot;);</code></a> method.</p>
+<p>The method can be used in indicators only.</p><div id="open41" style="display:none">
+  <p>Example: Create custom labels&nbsp;<a href="javascript: showdiv('close41'); hidediv('open41');" onclick="javascript: showdiv('close41'); hidediv('open41');" class="action">Show<span class="side-icon dripicons-chevron-right"></span></a></p>
+</div>
+<div id="close41" style="display:inline">
+  <p>Example: Create custom labels&nbsp;<a href="javascript: showdiv('open41'); hidediv('close41');" onclick="javascript: showdiv('open41'); hidediv('close41');" class="action">Hide<span class="side-icon dripicons-chevron-down"></span></a></p>
+  <pre class="example" id="example41"><code>   function Init()
+       indicator:name(&quot;testlabel&quot;);
+       indicator:requiredSource(core.Bar);
+       indicator:type(core.Indicator);
+   end
+ 
+   local font;
+   local font2;
+   local source;
+ 
+   function Prepare()
+       source = instance.source;
+       instance:name(profile:id());
+       font = core.host:execute(&quot;createFont&quot;, &quot;Courier&quot;, 10, true, false);
+       font2 = core.host:execute(&quot;createFont&quot;, &quot;Wingdings&quot;, 10, false, false);
+   end
+ 
+   function Update(period, mode)
+       if source:size() &gt; 0 and period == source:size() - 1 then
+           local id = 1;
+ 
+           local min, max;
+           min, max = mathex.minmax(source, source:first(), source:size() - 1);
+ 
+           core.host:execute(&quot;drawLabel1&quot;, id, 0, core.CR_LEFT, 0, core.CR_TOP, core.H_Right, core.V_Bottom,
+                             font, core.rgb(255, 0, 0), &quot;top-left&quot;);
+           id = id + 1;
+           core.host:execute(&quot;drawLabel1&quot;, id, 0, core.CR_LEFT, 0, core.CR_BOTTOM, core.H_Right, core.V_Top,
+                             font, core.rgb(0, 255, 0), &quot;bottom-left&quot;);
+           id = id + 1;
+           core.host:execute(&quot;drawLabel1&quot;, id, 0, core.CR_RIGHT, 0, core.CR_TOP, core.H_Left, core.V_Bottom,
+                             font, core.rgb(0, 0, 255), &quot;top-right&quot;);
+           id = id + 1;
+           core.host:execute(&quot;drawLabel1&quot;, id, 0, core.CR_RIGHT, 0, core.CR_BOTTOM, core.H_Left, core.V_Top,
+                             font, core.rgb(0, 255, 255), &quot;right-bottom&quot;);
+           id = id + 1;
+           core.host:execute(&quot;drawLabel1&quot;, id, 0, core.CR_CENTER, 0, core.CR_CENTER, core.H_Center, core.V_Center,
+                             font, core.rgb(0, 255, 255), &quot;center&quot;);
+           id = id + 1;
+           core.host:execute(&quot;drawLabel1&quot;, id + 5, 0, core.CR_CENTER, min, core.CR_CHART, core.H_Center, core.V_Bottom,
+                             font2, core.rgb(0, 255, 255), &quot;\225&quot;);
+           id = id + 1;
+           core.host:execute(&quot;drawLabel1&quot;, id + 5, 0, core.CR_CENTER, max, core.CR_CHART, core.H_Center, core.V_Top,
+                             font2, core.rgb(0, 255, 255), &quot;\226&quot;);
+       end
+   end
+ 
+   function ReleaseInstance()
+       core.host:execute(&quot;deleteFont&quot;, font);
+       core.host:execute(&quot;deleteFont&quot;, font2);
+   end</code></pre>
+</div><p>Declared in <a href="host.html">host</a></p>
+<p>
+  <center><a href="host.html">back</a></center>
+</p><script language="javascript" type="text/javascript">syncList1('host');</script></body></html>

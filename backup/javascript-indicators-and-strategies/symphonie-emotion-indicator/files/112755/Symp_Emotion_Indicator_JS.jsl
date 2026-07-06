@@ -1,0 +1,54 @@
+function Init()
+{
+    indicator.name("Symphonie Extreme indicator");
+    indicator.description("Symphonie Extreme indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("SSP", "SSP", "", 7);
+    indicator.parameters.addDouble("Kmax", "Kmax", "", 50.6);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UpClr", "Up Color", "Up Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DnClr", "Dn Color", "Dn Color", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+var SSP, Kmax;
+var St;
+var Symp_Emotion=null;
+
+function Prepare()
+{
+    source = instance.source;
+    SSP=instance.parameters.SSP;
+    Kmax=instance.parameters.Kmax;
+    first = source.first()+2;
+    St=instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + SSP + ", " + Kmax + ")";
+    instance.name(name);
+    Symp_Emotion = instance.addStream("Symp_Emotion", core.Bar, name + ".Symp_Emotion", "Symp_Emotion", instance.parameters.UpClr, first);
+}
+
+function Update(period, mode)
+{
+   if (period>first+SSP) 
+   {
+    var tmp=Math.minmax(source, core.rangeTo(period, SSP));
+    var Max=tmp[1];
+    var Min=tmp[0];
+    St[period]=Max-(Max-Min)*Kmax/100;
+    Symp_Emotion[period]=St[period];
+    if (St[period]>=St[period-SSP]) 
+    {
+     Symp_Emotion.setColor(period, instance.parameters.UpClr);
+    } 
+    else
+    {
+     Symp_Emotion.setColor(period, instance.parameters.DnClr);
+    }
+   } 
+}
+

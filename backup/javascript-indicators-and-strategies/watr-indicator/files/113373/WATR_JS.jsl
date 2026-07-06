@@ -1,0 +1,119 @@
+function Init()
+{
+    indicator.name("WATR indicator");
+    indicator.description("WATR indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("WATR_K", "WATR_K", "", 10);
+    indicator.parameters.addDouble("WATR_M", "WATR_M", "", 4);
+    indicator.parameters.addInteger("ATR_Period", "ATR_Period", "", 21);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UpClr", "UP Color", "UP Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DnClr", "DN Color", "DN Color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("DotSize", "Dot size", "Dot size", 1, 1, 5);
+}
+
+var first;
+var source = null;
+var WATR_K;
+var WATR_M;
+var ATR_Period;
+var Up=null;
+var Dn=null;
+var ATR;
+var UpBuff;
+var DnBuff;
+
+function Prepare()
+{
+    source = instance.source;
+    WATR_K=instance.parameters.WATR_K;
+    WATR_M=instance.parameters.WATR_M;
+    ATR_Period=instance.parameters.ATR_Period;
+    first = source.first()+2;
+    ATR=core.indicators.create("ATR", source, ATR_Period);
+    UpBuff = instance.addInternalStream(first, 0);
+    DnBuff = instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.WATR_K + ", " + instance.parameters.WATR_M + ", " + instance.parameters.ATR_Period + ")";
+    instance.name(name);
+    Up = instance.addStream("Up", core.Dot, name + ".Up", "Up", instance.parameters.UpClr, first);
+    Dn = instance.addStream("Dn", core.Dot, name + ".Dn", "Dn", instance.parameters.DnClr, first);
+    Up.setWidth(instance.parameters.DotSize);
+    Dn.setWidth(instance.parameters.DotSize);
+}
+
+function Update(period, mode)
+{
+   if (period>first+ATR_Period) 
+   {
+    ATR.update(mode);
+    if (AntiTrendBar(period)) 
+    {
+     Up[period]=Up[period-1];
+     Dn[period]=Dn[period-1];
+    } 
+    else
+    {
+     if (TrendUp(period)) 
+     {
+      Up[period]=source.close[period]-WATR_K*source.pipSize()-WATR_M*ATR.DATA[period];
+      if (Up[period]<Up[period-1]) 
+      {
+       Up[period]=Up[period-1];
+      }
+      Dn[period]=null;
+     } 
+     else
+     {
+      Dn[period]=source.close[period]+WATR_K*source.pipSize()+WATR_M*ATR.DATA[period];
+      if (Dn[period]>Dn[period-1]) 
+      {
+       Dn[period]=Dn[period-1];
+      }
+      Up[period]=null;
+     }
+    }
+    
+    if (TrendUp(period) && source.close[period]<Up[period]) 
+    {
+     Dn[period]=source.close[period]+WATR_K*source.pipSize()+WATR_M*ATR.DATA[period];
+     Up[period]=null;
+    }
+    if (TrendUp(period)==false && source.close[period]>Dn[period]) 
+    {
+     Up[period]=source.close[period]-WATR_K*source.pipSize()-WATR_M*ATR.DATA[period];
+     Dn[period]=null;
+    }
+    
+   } 
+}
+
+function TrendUp(period)
+{
+ if (source.close[period-1]>Up[period-1] && Up[period-1]>0) 
+ {
+  return (true);
+ } 
+ else
+ {
+  return (false);
+ }
+}
+
+function AntiTrendBar(period)
+{
+ var TU=TrendUp(period);
+ if ((TU && source.close[period]<source.open[period]) || (TU==false && source.close[period]>source.open[period])) 
+ {
+  return (true);
+ } 
+ else
+ {
+  return (false);
+ }
+}
+
+

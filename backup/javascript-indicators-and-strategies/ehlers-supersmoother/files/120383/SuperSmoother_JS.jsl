@@ -1,0 +1,56 @@
+function Init()
+{
+    indicator.name("SuperSmoother");
+    indicator.description("SuperSmoother");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+    indicator.parameters.addGroup("Style");	
+    indicator.parameters.addColor("SuperSmoother_color", "Color of SuperSmoother", "Color of SuperSmoother", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+
+var SuperSmoother = null;
+
+function Prepare(nameOnly)
+{
+    source = instance.source;
+    first = source.first()+2;
+
+    var name = profile.id() + "(" + source.name() + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        SuperSmoother = instance.addStream("SuperSmoother", core.Line, name, "SuperSmoother", instance.parameters.SuperSmoother_color, first);
+		SuperSmoother.setWidth(instance.parameters.width);
+        SuperSmoother.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period)
+{
+    if (period <first || !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+ 
+ 
+var a1 = Math.exp(-1.414*3.14159 / 10);
+var b1 = 2*a1*Math.cos(1.414*180 / 10);
+var c2 = b1;
+var c3 = -a1*a1;
+var c1 = 1 - c2 - c3;
+
+
+
+
+        SuperSmoother[period] =   c1*(source [period] + source [period-1]) / 2 + c2*SuperSmoother[period-1] + c3*SuperSmoother[period-2];  
+   
+}
+

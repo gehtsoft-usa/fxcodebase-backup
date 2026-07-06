@@ -1,0 +1,192 @@
+function Init()
+{
+    indicator.name("Wave Indicator");
+    indicator.description("Wave Indicator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+	
+	indicator.parameters.addGroup("Calculation");
+	indicator.parameters.addString("Method", "Method", "Method" , "4");
+    indicator.parameters.addStringAlternative("Method", "1", "1" , "1");
+    indicator.parameters.addStringAlternative("Method", "2", "2" , "2");
+	indicator.parameters.addStringAlternative("Method", "3", "3" , "3");
+    indicator.parameters.addStringAlternative("Method", "4", "4" , "4");
+    indicator.parameters.addStringAlternative("Method", "All", "All" , "All");
+	indicator.parameters.addStringAlternative("Method", "Average", "Average" , "Average");
+	
+	
+	indicator.parameters.addInteger("Period1", "1. Period" , "", 12)
+	indicator.parameters.addInteger("Period2", "2. Period" , "", 24)
+	indicator.parameters.addInteger("Period3", "3. Period" , "", 12)
+	indicator.parameters.addInteger("Period4", "4. Period" , "", 12)
+	indicator.parameters.addInteger("Period5", "5. Period" , "", 12)
+	
+	indicator.parameters.addGroup("Style");
+	indicator.parameters.addColor("C1", "1. Line Color", "", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("C2", "2. Line Color", "", core.rgb(255,0 , 0));
+	indicator.parameters.addColor("C3", "3. Line Color", "", core.rgb(0,  0, 255));
+	indicator.parameters.addColor("C4", "4. Line Color", "", core.rgb(128, 128, 128));
+
+}
+
+var Period1=12;
+var Period2=24;
+var Period3=12;
+var Period4=12;
+var Period5=12;
+var Method;
+var first;
+var source = null;
+var CI={};
+
+var A, B, C, D, E, F, G,H, I, J; 
+var C1, C2, C3, C4;
+
+function Prepare(nameOnly)
+{
+     C1 = instance.parameters. C2;
+	 C2 = instance.parameters.C2;
+	 C3 = instance.parameters.C3;
+	 C4 = instance.parameters.C4;
+	 Period1 = instance.parameters.Period1;
+	 Period2 = instance.parameters.Period2;
+	 Period3 = instance.parameters.Period3;
+	 Period4 = instance.parameters.Period4;
+     Period5 = instance.parameters.Period5
+    source = instance.source;
+    first = source.first();
+	Method = instance.parameters.Method;
+
+    var name = profile.id() + "(" + source.name()  + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+		  A =instance.addInternalStream(0, 0);	  
+		  B =instance.addInternalStream(0, 0);
+		  C =instance.addInternalStream(0, 0);
+		  D =instance.addInternalStream(0, 0);
+		  E =instance.addInternalStream(0, 0);
+		  F =instance.addInternalStream(0, 0);
+		  G =instance.addInternalStream(0, 0);
+		  H  =instance.addInternalStream(0, 0);
+		  I  =instance.addInternalStream(0, 0);
+		  J =instance.addInternalStream(0, 0);
+		 
+		if (Method == "All") 
+		{
+		 CI["1"] = instance.addStream("CI1", core.Line, name + ".1", "1", C1, first);
+		 CI["2"] = instance.addStream("CI2", core.Line, name + ".2", "2", C2, first);
+		 CI["3"] = instance.addStream("CI3", core.Line, name + ".3", "3", C3, first);
+		 CI["4"] = instance.addStream("CI4", core.Line, name + ".4", "4", C4, first);
+		} 
+		else	
+		{
+		 CI["All"] = instance.addStream("CI", core.Line, name + ".CI", "CI", C1, first);		
+		}
+	
+	}
+}
+
+function Update(period)
+{
+    if (period < first) 
+    {
+	 return;
+	}
+	
+	
+	
+	if (period  < Period1) 
+	{
+	 return;
+	}
+	
+	B[period] = Calculate(period, Period1, source); 
+	
+	if (period  < Period2) 
+	{
+	 return;
+	}
+	C[period] = Calculate(period, Period2, source) ;
+	D[period] = B[period]-C[period];
+	
+	if (period  <  Period2 +Period3) 
+	{
+	 return;
+	}
+	E[period] = Calculate(period, Period3, D);
+	F[period] = E[period]-E[period-1];
+	
+	
+	if (period  <  Period2 +Period3 + Period4) 
+	{
+	 return;
+	}
+	
+	G[period] = Calculate(period, Period4, F);
+	H[period] = (G[period]-G[period-1])*(-100);
+	
+	if (period  <  Period2 +Period3 + Period4+ Period5) 
+	{
+	 return;
+	}
+	
+	I[period] =  Calculate(period, Period5, H);
+	J[period] =  (I[period]-I[period-1])*(10);
+	
+	
+	if (Method == "1") 
+	{ 
+	 CI["All"][period] = E[period];
+	} 
+	else if (Method == "2") 
+	{
+	 CI["All"][period] = H[period];
+	} 
+	else if (Method == "3") 
+	{
+	 CI["All"][period] = I[period];
+	} 
+	else if (Method == "4") 
+	{
+	 CI["All"][period] = J[period];
+	} 
+	else if (Method == "All") 
+	{
+	 CI["1"][period] = E[period];
+	 CI["2"][period] = H[period];
+	 CI["3"][period] = I[period];
+	 CI["4"][period] = J[period];
+	} 
+	else
+	{
+	 CI["All"][period] = ( E[period]+ H[period] + I[period]+  J[period]) /4 ;
+	}
+	
+	
+
+ }
+ 
+ 
+function  Calculate(p, P, Source) 
+{
+   var Sum=0;
+   var Count = 0
+   
+   var i;
+   
+   for (i =  (p - P); i<=p+P-1; i++) 
+   {
+	   if (i <  (Source.size()-1 )  && i  >  (Source.first() )) 
+	   {
+	   Sum = Sum + Source[i];
+	    Count=  Count+1;
+	   }
+	   
+   }
+     
+   
+   return    (Sum/Count) ;
+
+}

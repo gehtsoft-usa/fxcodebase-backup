@@ -1,0 +1,89 @@
+function Init()
+{
+    indicator.name("SMI indicator");
+    indicator.description("SMI indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period_Q", "Period_Q", "Period_Q", 2);
+    indicator.parameters.addInteger("Period_R", "Period_R", "Period_R", 8);
+    indicator.parameters.addInteger("Period_S", "Period_S", "Period_S", 5);
+    indicator.parameters.addInteger("Period_Signal", "Period_Signal", "Period_Signal", 5);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("DATAclr", "Color of DATA line", "Color of DATA line", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("SIGNALclr", "Color of SIGNAL line", "Color of SIGNAL line", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+var Period_Q;
+var Period_R;
+var Period_S;
+var Period_Signal;
+var HQ;
+var SM;
+var HQ_MA_R;
+var HQ_MA_S;
+var SM_MA_R;
+var SM_MA_S;
+var sig;
+
+var SignalBuff;
+var DataBuff;
+
+function Prepare()
+{
+    source = instance.source;
+    Period_Q=instance.parameters.Period_Q;
+    Period_R=instance.parameters.Period_R;
+    Period_S=instance.parameters.Period_S;
+    Period_Signal=instance.parameters.Period_Signal;
+    first = source.first();
+    HQ = instance.addInternalStream(first+Period_Q, 0);
+    SM = instance.addInternalStream(first+Period_Q, 0);
+    HQ_MA_R = core.indicators.create("EMA", HQ, Period_R);
+    HQ_MA_S = core.indicators.create("EMA", HQ_MA_R.DATA, Period_S);
+    SM_MA_R = core.indicators.create("EMA", SM, Period_R);
+    SM_MA_S = core.indicators.create("EMA", SM_MA_R.DATA, Period_S);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period_Q + ", " + instance.parameters.Period_R + ", " + instance.parameters.Period_S + ", " + instance.parameters.Period_Signal + ")";
+    instance.name(name);
+    DataBuff = instance.addStream("DataBuff", core.Line, name + ".Data", "Data", instance.parameters.DATAclr, first);
+    SignalBuff = instance.addStream("SignalBuff", core.Line, name + ".Signal", "Signal", instance.parameters.SIGNALclr, first);
+    sig = core.indicators.create("EMA", DataBuff, Period_Signal);
+}
+
+function Update(period, mode)
+{
+    if (period<first+Period_Q) 
+    {
+	 return;
+	}
+     var tmp=Math.minmax(source, period-Period_Q+1, period);
+     HQ[period]=tmp[1]-tmp[0];	
+     SM[period]=source.close[period]-(tmp[1]+tmp[0])/2.;
+	 
+	
+     HQ_MA_R.update(mode);
+	 HQ_MA_S.update(mode);  
+	 SM_MA_R.update(mode);        
+     SM_MA_S.update(mode);
+	 
+	 if (period < SM_MA_S.DATA.first()  ||  period < HQ_MA_S.DATA.first()) 
+     { 
+	  return;
+	 }
+	 
+     DataBuff[period]=100.*SM_MA_S.DATA[period]/(0.5*HQ_MA_S.DATA[period]);
+	 
+     sig.update(mode);
+	 
+	  if (period < sig.DATA.first())
+      { 
+	   return;
+	  }
+     SignalBuff[period]=sig.DATA[period];
+    
+}
+

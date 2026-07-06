@@ -1,0 +1,79 @@
+function Init()
+{
+    indicator.name("Trend Percentage");
+    indicator.description("Trend Percentage");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "Period", 10);
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Bull_color", "Color of Bull", "Color of Bull", core.rgb(0, 255, 0));
+	indicator.parameters.addInteger("width1", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style1", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style1", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Bear_color", "Color of Bear", "Color of Bear", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width2", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style2", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style2", core.FLAG_LINE_STYLE);
+}
+
+var Period;
+
+var first;
+var source = null;
+
+var Bull = null;
+var Bear = null;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+    source = instance.source;
+    first = source.first()+Period;
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        Bull = instance.addStream("Bull", core.Line, name + ".Bull", "Bull", instance.parameters.Bull_color, first);
+		Bull.setWidth(instance.parameters.width1);
+        Bull.setStyle(instance.parameters.style1);
+        Bear = instance.addStream("Bear", core.Line, name + ".Bear", "Bear", instance.parameters.Bear_color, first);
+		Bear.setWidth(instance.parameters.width2);
+        Bear.setStyle(instance.parameters.style2);
+    }
+}
+
+function Update(period)
+{
+    if (period < first) 
+    {
+	 return;
+	}
+	
+	    var bull = 0;
+        var bear = 0;
+	
+	
+	var i;
+	for (i = period-Period; i<=period-1; i++) 
+    {
+	
+	    if (source[i] > source[i-1]) 
+        {
+         bull = bull  + Math.abs( source[i] - source[i-1] );
+        } 
+		else if (source[i] < source[i-1]) 
+        {
+         bear  = bear  + Math.abs( source[i] - source[i-1] );
+		}
+		
+	}
+	
+	Bull[period]=  bull / ((bull+bear)/100);
+	Bear[period]=  bear / ((bull+bear)/100);
+		
+    
+}
+

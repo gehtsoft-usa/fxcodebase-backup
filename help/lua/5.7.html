@@ -1,0 +1,41 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 5.7 - Input and Output Facilities</title>
+</head>
+<body>
+<h2>5.7 - <a name="5.7">Input and Output Facilities</a></h2>
+
+<p>
+The I/O library provides two different styles for file manipulation.
+The first one uses implicit file descriptors;
+that is, there are operations to set a default input file and a
+default output file,
+and all input/output operations are over these default files.
+The second style uses explicit file descriptors.
+
+
+<p>
+When using implicit file descriptors,
+all operations are supplied by table <a name="pdf-io"><code>io</code></a>.
+When using explicit file descriptors,
+the operation <a href="pdf-io.open.html"><code>io.open</code></a> returns a file descriptor
+and then all operations are supplied as methods of the file descriptor.
+
+
+<p>
+The table <code>io</code> also provides
+three predefined file descriptors with their usual meanings from C:
+<a name="pdf-io.stdin"><code>io.stdin</code></a>, <a name="pdf-io.stdout"><code>io.stdout</code></a>, and <a name="pdf-io.stderr"><code>io.stderr</code></a>.
+
+
+<p>
+Unless otherwise stated,
+all I/O functions return <b>nil</b> on failure
+(plus an error message as a second result)
+and some value different from <b>nil</b> on success.
+
+
+<p>
+<hr>
+</body>
+</html>

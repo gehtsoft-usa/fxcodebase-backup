@@ -1,0 +1,55 @@
+function Init()
+{
+    indicator.name("Natenberg's Volatility");
+    indicator.description("Natenberg's Volatility");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+	indicator.parameters.addGroup("Calculation");
+	indicator.parameters.addInteger("Period", "Period", "", 10);
+	indicator.parameters.addGroup("Style");
+	indicator.parameters.addColor("NV_color", "Color of NV", "Color of NV", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period;
+
+var NV = null;
+var Raw;
+
+function Prepare(nameOnly)
+{
+    Period=instance.parameters.Period;
+    source = instance.source;
+    first = source.first()+Period;
+	
+	Raw = instance.addInternalStream(0, 0);
+
+    var name = profile.id() + "(" + source.name()+ ", " + Period   + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        NV = instance.addStream("NV", core.Line, name, "NV", instance.parameters.NV_color, first );
+		NV.setWidth(instance.parameters.width);
+        NV.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period)
+{
+
+    Raw[period]=  Math.log( source.close[period] / source.close[period-1] )
+	
+    if (period < first) 
+    {
+	 return;
+	}
+	
+        NV[period] = Math.stdev(Raw, period-Period+1, period);
+    
+}
+

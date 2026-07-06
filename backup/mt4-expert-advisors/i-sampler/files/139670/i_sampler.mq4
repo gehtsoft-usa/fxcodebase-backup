@@ -1,0 +1,1463 @@
+// More information about this indicator can be found at:
+// http://fxcodebase.com/code/viewtopic.php?f=38&t=70707
+//+------------------------------------------------------------------+
+//|                               Copyright © 2020, Gehtsoft USA LLC |
+//|                                            http://fxcodebase.com |
+//+------------------------------------------------------------------+
+//|                                      Developed by : Mario Jemic  |
+//|                                           mario.jemic@gmail.com  |
+//|                          https://AppliedMachineLearning.systems  |
+//+------------------------------------------------------------------+
+//|                                 Support our efforts by donating  |
+//|                                  Paypal : https://goo.gl/9Rj74e  |
+//|                                 Patreon : https://goo.gl/GdXWeN  |
+//+------------------------------------------------------------------+
+
+#property copyright "Copyright © 2020, Gehtsoft USA LLC"
+#property link      "http://fxcodebase.com"
+#property version   "1.3"
+#property strict
+
+#property indicator_chart_window
+#property indicator_minimum -1
+#property indicator_maximum 1
+#property indicator_buffers 11
+//--- plot analog
+#property indicator_label1  "analog"
+#property indicator_type1   DRAW_NONE
+#property indicator_color1  clrSpringGreen
+#property indicator_style1  STYLE_SOLID
+#property indicator_width1  2
+//--- plot discrete
+#property indicator_label2  "discrete"
+#property indicator_type2   DRAW_NONE
+#property indicator_color2  clrDeepSkyBlue
+#property indicator_style2  STYLE_SOLID
+#property indicator_width2  2
+#property indicator_label3  "discrete"
+#property indicator_type3   DRAW_NONE
+#property indicator_color3  clrCoral
+#property indicator_style3  STYLE_SOLID
+#property indicator_width3  2
+//--- input parameters
+input int      bars_future=10;
+input int      max_bars=10000;
+input int      discrete_metod=1;
+input double   porog=0.5;
+input int      tp=500;
+input int      sl=200;
+input bool     save_file=false;
+input int bars_limit = 1000;
+
+enum SingalMode
+{
+   SingalModeLive, // Live
+   SingalModeOnBarClose // On bar close
+};
+
+enum DisplayType
+{
+   Arrows, // Arrows
+   ArrowsOnMainChart, // Arrows on main chart
+   Candles, // Candles color
+   Lines // Lines
+};
+input SingalMode signal_mode = SingalModeLive; // Signal mode
+input DisplayType Type = ArrowsOnMainChart; // Presentation Type
+input double shift_arrows_pips = 0.1; // Shift arrows
+input color up_color = Blue; // Up color
+input color down_color = Red; // Down color
+
+//--- indicator buffers
+double         analogBuffer[];
+double         discreteBuffer[];
+double         discreteColors[];
+//--- global variable
+double point;
+string name;
+int timesignal[];
+
+// ACondition v2.0
+// More templates and snippets on https://github.com/sibvic/mq4-templates
+
+#ifndef ACondition_IMP
+#define ACondition_IMP
+// Abstract condition v1.1
+
+// ICondition v3.1
+// More templates and snippets on https://github.com/sibvic/mq4-templates
+
+interface ICondition
+{
+public:
+   virtual void AddRef() = 0;
+   virtual void Release() = 0;
+   virtual bool IsPass(const int period, const datetime date) = 0;
+   virtual string GetLogMessage(const int period, const datetime date) = 0;
+};
+
+#ifndef AConditionBase_IMP
+#define AConditionBase_IMP
+
+class AConditionBase : public ICondition
+{
+   int _references;
+   string _conditionName;
+public:
+   AConditionBase(string name = "")
+   {
+      _conditionName = name;
+      _references = 1;
+   }
+
+   virtual void AddRef()
+   {
+      ++_references;
+   }
+
+   virtual void Release()
+   {
+      --_references;
+      if (_references == 0)
+         delete &this;
+   }
+
+   virtual string GetLogMessage(const int period, const datetime date)
+   {
+      if (_conditionName == "" || _conditionName == NULL)
+      {
+         return "";
+      }
+      return _conditionName + ": " + (IsPass(period, date) ? "true" : "false");
+   }
+};
+
+#endif
+// Instrument info v.1.7
+// More templates and snippets on https://github.com/sibvic/mq4-templates
+
+#ifndef InstrumentInfo_IMP
+#define InstrumentInfo_IMP
+
+class InstrumentInfo
+{
+   string _symbol;
+   double _mult;
+   double _point;
+   double _pipSize;
+   int _digits;
+   double _tickSize;
+public:
+   InstrumentInfo(const string symbol)
+   {
+      _symbol = symbol;
+      _point = MarketInfo(symbol, MODE_POINT);
+      _digits = (int)MarketInfo(symbol, MODE_DIGITS); 
+      _mult = _digits == 3 || _digits == 5 ? 10 : 1;
+      _pipSize = _point * _mult;
+      _tickSize = MarketInfo(_symbol, MODE_TICKSIZE);
+   }
+
+   // Return < 0 when lot1 < lot2, > 0 when lot1 > lot2 and 0 owtherwise
+   int CompareLots(double lot1, double lot2)
+   {
+      double lotStep = SymbolInfoDouble(_symbol, SYMBOL_VOLUME_STEP);
+      if (lotStep == 0)
+      {
+         return lot1 < lot2 ? -1 : (lot1 > lot2 ? 1 : 0);
+      }
+      int lotSteps1 = (int)floor(lot1 / lotStep + 0.5);
+      int lotSteps2 = (int)floor(lot2 / lotStep + 0.5);
+      int res = lotSteps1 - lotSteps2;
+      return res;
+   }
+   
+   static double GetBid(const string symbol) { return MarketInfo(symbol, MODE_BID); }
+   double GetBid() { return GetBid(_symbol); }
+   static double GetAsk(const string symbol) { return MarketInfo(symbol, MODE_ASK); }
+   double GetAsk() { return GetAsk(_symbol); }
+   static double GetPipSize(const string symbol)
+   { 
+      double point = MarketInfo(symbol, MODE_POINT);
+      double digits = (int)MarketInfo(symbol, MODE_DIGITS); 
+      double mult = digits == 3 || digits == 5 ? 10 : 1;
+      return point * mult;
+   }
+   double GetPipSize() { return _pipSize; }
+   double GetPointSize() { return _point; }
+   string GetSymbol() { return _symbol; }
+   double GetSpread() { return (GetAsk() - GetBid()) / GetPipSize(); }
+   int GetDigits() { return _digits; }
+   double GetTickSize() { return _tickSize; }
+   double GetMinLots() { return SymbolInfoDouble(_symbol, SYMBOL_VOLUME_MIN); };
+
+   double AddPips(const double rate, const double pips)
+   {
+      return RoundRate(rate + pips * _pipSize);
+   }
+
+   double RoundRate(const double rate)
+   {
+      return NormalizeDouble(MathFloor(rate / _tickSize + 0.5) * _tickSize, _digits);
+   }
+
+   double RoundLots(const double lots)
+   {
+      double lotStep = SymbolInfoDouble(_symbol, SYMBOL_VOLUME_STEP);
+      if (lotStep == 0)
+      {
+         return 0.0;
+      }
+      return floor(lots / lotStep) * lotStep;
+   }
+
+   double LimitLots(const double lots)
+   {
+      double minVolume = GetMinLots();
+      if (minVolume > lots)
+      {
+         return 0.0;
+      }
+      double maxVolume = SymbolInfoDouble(_symbol, SYMBOL_VOLUME_MAX);
+      if (maxVolume < lots)
+      {
+         return maxVolume;
+      }
+      return lots;
+   }
+
+   double NormalizeLots(const double lots)
+   {
+      return LimitLots(RoundLots(lots));
+   }
+};
+
+#endif
+
+class ACondition : public AConditionBase
+{
+protected:
+   ENUM_TIMEFRAMES _timeframe;
+   InstrumentInfo *_instrument;
+   string _symbol;
+public:
+   ACondition(const string symbol, ENUM_TIMEFRAMES timeframe, string name = "")
+      :AConditionBase(name)
+   {
+      _instrument = new InstrumentInfo(symbol);
+      _timeframe = timeframe;
+      _symbol = symbol;
+   }
+   ~ACondition()
+   {
+      delete _instrument;
+   }
+};
+#endif
+// Act on switch condition v4.2
+
+
+
+#ifndef ActOnSwitchCondition_IMP
+#define ActOnSwitchCondition_IMP
+
+class ActOnSwitchCondition : public ACondition
+{
+   ICondition* _condition;
+   bool _current;
+   datetime _currentDate;
+   bool _last;
+public:
+   ActOnSwitchCondition(string symbol, ENUM_TIMEFRAMES timeframe, ICondition* condition)
+      :ACondition(symbol, timeframe)
+   {
+      _last = false;
+      _current = false;
+      _currentDate = 0;
+      _condition = condition;
+      _condition.AddRef();
+   }
+
+   ~ActOnSwitchCondition()
+   {
+      _condition.Release();
+   }
+
+   virtual bool IsPass(const int period, const datetime date)
+   {
+      datetime time = iTime(_symbol, _timeframe, period);
+      if (_currentDate == 0)
+      {
+         _currentDate = time;
+         _current = _condition.IsPass(period, date);
+         _last = _current;
+      }
+      else if (time != _currentDate)
+      {
+         _last = _current;
+         _currentDate = time;
+         _current = _condition.IsPass(period, date);
+      }
+      else
+      {
+         _current = _condition.IsPass(period, date);
+      }
+      return _current && !_last;
+   }
+
+   virtual string GetLogMessage(const int period, const datetime date)
+   {
+      return "Switch of (" + _condition.GetLogMessage(period, date) + (IsPass(period, date) ? ")=true" : ")=false");
+   }
+};
+
+#endif
+// Price stream v2.0
+
+#ifndef PriceStream_IMP
+#define PriceStream_IMP
+// Stream base v1.0
+
+// Stream v.3.0
+// More templates and snippets on https://github.com/sibvic/mq4-templates
+
+interface IStream
+{
+public:
+   virtual void AddRef() = 0;
+   virtual void Release() = 0;
+   virtual int Size() = 0;
+
+   virtual bool GetValue(const int period, double &val) = 0;
+};
+
+#ifndef AStreamBase_IMP
+#define AStreamBase_IMP
+
+class AStreamBase : public IStream
+{
+   int _references;
+public:
+   AStreamBase()
+   {
+      _references = 1;
+   }
+
+   void AddRef()
+   {
+      ++_references;
+   }
+
+   void Release()
+   {
+      --_references;
+      if (_references == 0)
+         delete &this;
+   }
+};
+#endif
+
+
+
+// Abstract stream v1.1
+// More templates and snippets on https://github.com/sibvic/mq4-templates
+
+#ifndef AStream_IMP
+
+class AStream : public IStream
+{
+protected:
+   string _symbol;
+   ENUM_TIMEFRAMES _timeframe;
+   double _shift;
+   InstrumentInfo *_instrument;
+   int _references;
+
+   AStream(const string symbol, const ENUM_TIMEFRAMES timeframe)
+   {
+      _references = 1;
+      _shift = 0.0;
+      _symbol = symbol;
+      _timeframe = timeframe;
+      _instrument = new InstrumentInfo(_symbol);
+   }
+
+   ~AStream()
+   {
+      delete _instrument;
+   }
+public:
+   void SetShift(const double shift)
+   {
+      _shift = shift;
+   }
+
+   void AddRef()
+   {
+      ++_references;
+   }
+
+   void Release()
+   {
+      --_references;
+      if (_references == 0)
+         delete &this;
+   }
+
+   int Size()
+   {
+      return iBars(_symbol, _timeframe);
+   }
+};
+#define AStream_IMP
+#endif
+// IBarStream v2.1
+
+
+
+#ifndef IBarStream_IMP
+#define IBarStream_IMP
+
+interface IBarStream : public IStream
+{
+public:
+   virtual bool GetValues(const int period, double &open, double &high, double &low, double &close) = 0;
+
+   virtual bool FindDatePeriod(const datetime date, int& period) = 0;
+
+   virtual bool GetOpen(const int period, double &open) = 0;
+   virtual bool GetHigh(const int period, double &high) = 0;
+   virtual bool GetLow(const int period, double &low) = 0;
+   virtual bool GetClose(const int period, double &close) = 0;
+   
+   virtual bool GetHighLow(const int period, double &high, double &low) = 0;
+   virtual bool GetOpenClose(const int period, double &open, double &close) = 0;
+
+   virtual bool GetDate(const int period, datetime &dt) = 0;
+
+   virtual void Refresh() = 0;
+};
+#endif
+enum PriceType
+{
+   PriceClose = PRICE_CLOSE, // Close
+   PriceOpen = PRICE_OPEN, // Open
+   PriceHigh = PRICE_HIGH, // High
+   PriceLow = PRICE_LOW, // Low
+   PriceMedian = PRICE_MEDIAN, // Median
+   PriceTypical = PRICE_TYPICAL, // Typical
+   PriceWeighted = PRICE_WEIGHTED, // Weighted
+   PriceMedianBody, // Median (body)
+   PriceAverage, // Average
+   PriceTrendBiased, // Trend biased
+   PriceVolume, // Volume
+};
+
+class PriceStream : public AStreamBase
+{
+   PriceType _price;
+   IBarStream* _source;
+public:
+   PriceStream(IBarStream* source, const PriceType __price)
+      :AStreamBase()
+   {
+      _source = source;
+      _source.AddRef();
+      _price = __price;
+   }
+
+   ~PriceStream()
+   {
+      _source.Release();
+   }
+
+   int Size()
+   {
+      return _source.Size();
+   }
+
+   bool GetValue(const int period, double &val)
+   {
+      switch (_price)
+      {
+         case PriceClose:
+            if (!_source.GetClose(period, val))
+            {
+               return false;
+            }
+            break;
+         case PriceOpen:
+            if (!_source.GetOpen(period, val))
+            {
+               return false;
+            }
+            break;
+         case PriceHigh:
+            if (!_source.GetHigh(period, val))
+            {
+               return false;
+            }
+            break;
+         case PriceLow:
+            if (!_source.GetLow(period, val))
+            {
+               return false;
+            }
+            break;
+         case PriceMedian:
+            {
+               double high, low;
+               if (!_source.GetHighLow(period, high, low))
+               {
+                  return false;
+               }
+               val = (high + low) / 2.0;
+            }
+            break;
+         case PriceTypical:
+            {
+               double open, high, low, close;
+               if (!_source.GetValues(period, open, high, low, close))
+               {
+                  return false;
+               }
+               val = (high + low + close) / 3.0;
+            }
+            break;
+         case PriceWeighted:
+            {
+               double open, high, low, close;
+               if (!_source.GetValues(period, open, high, low, close))
+               {
+                  return false;
+               }
+               val = (high + low + close * 2) / 4.0;
+            }
+            break;
+         case PriceMedianBody:
+            {
+               double open, close;
+               if (!_source.GetOpenClose(period, open, close))
+               {
+                  return false;
+               }
+               val = (open + close) / 2.0;
+            }
+            break;
+         case PriceAverage:
+            {
+               double open, high, low, close;
+               if (!_source.GetValues(period, open, high, low, close))
+               {
+                  return false;
+               }
+               val = (high + low + close + open) / 4.0;
+            }
+            break;
+         case PriceTrendBiased:
+            {
+               double open, high, low, close;
+               if (!_source.GetValues(period, open, high, low, close))
+               {
+                  return false;
+               }
+               if (open > close)
+                  val = (high + close) / 2.0;
+               else
+                  val = (low + close) / 2.0;
+            }
+            break;
+         // case PriceVolume:
+         //    if (!_source.GetVolume(period, val))
+         //    {
+         //       return false;
+         //    }
+         //    break;
+      }
+      return true;
+   }
+};
+
+class SimplePriceStream : public AStream
+{
+   PriceType _price;
+public:
+   SimplePriceStream(const string symbol, const ENUM_TIMEFRAMES timeframe, const PriceType __price)
+      :AStream(symbol, timeframe)
+   {
+      _price = __price;
+   }
+
+   bool GetValue(const int period, double &val)
+   {
+      switch (_price)
+      {
+         case PriceClose:
+            val = iClose(_symbol, _timeframe, period);
+            break;
+         case PriceOpen:
+            val = iOpen(_symbol, _timeframe, period);
+            break;
+         case PriceHigh:
+            val = iHigh(_symbol, _timeframe, period);
+            break;
+         case PriceLow:
+            val = iLow(_symbol, _timeframe, period);
+            break;
+         case PriceMedian:
+            val = (iHigh(_symbol, _timeframe, period) + iLow(_symbol, _timeframe, period)) / 2.0;
+            break;
+         case PriceTypical:
+            val = (iHigh(_symbol, _timeframe, period) + iLow(_symbol, _timeframe, period) + iClose(_symbol, _timeframe, period)) / 3.0;
+            break;
+         case PriceWeighted:
+            val = (iHigh(_symbol, _timeframe, period) + iLow(_symbol, _timeframe, period) + iClose(_symbol, _timeframe, period) * 2) / 4.0;
+            break;
+         case PriceMedianBody:
+            val = (iOpen(_symbol, _timeframe, period) + iClose(_symbol, _timeframe, period)) / 2.0;
+            break;
+         case PriceAverage:
+            val = (iHigh(_symbol, _timeframe, period) + iLow(_symbol, _timeframe, period) + iClose(_symbol, _timeframe, period) + iOpen(_symbol, _timeframe, period)) / 4.0;
+            break;
+         case PriceTrendBiased:
+            {
+               double close = iClose(_symbol, _timeframe, period);
+               if (iOpen(_symbol, _timeframe, period) > iClose(_symbol, _timeframe, period))
+                  val = (iHigh(_symbol, _timeframe, period) + close) / 2.0;
+               else
+                  val = (iLow(_symbol, _timeframe, period) + close) / 2.0;
+            }
+            break;
+         case PriceVolume:
+            val = (double)iVolume(_symbol, _timeframe, period);
+            break;
+      }
+      val += _shift * _instrument.GetPipSize();
+      return true;
+   }
+};
+#endif
+//Signaler v2.0
+// More templates and snippets on https://github.com/sibvic/mq4-templates
+input string   AlertsSection            = ""; // == Alerts ==
+input bool     popup_alert              = false; // Popup message
+input bool     notification_alert       = false; // Push notification
+input bool     email_alert              = false; // Email
+input bool     play_sound               = false; // Play sound on alert
+input string   sound_file               = ""; // Sound file
+input bool     start_program            = false; // Start inputal program
+input string   program_path             = ""; // Path to the inputal program executable
+input bool     advanced_alert           = false; // Advanced alert (Telegram/Discord/other platform (like another MT4))
+input string   advanced_key             = ""; // Advanced alert key
+input string   Comment2                 = "- You can get a key via @profit_robots_bot Telegram Bot. Visit ProfitRobots.com for discord/other platform keys -";
+input string   Comment3                 = "- Allow use of dll in the indicator parameters window -";
+input string   Comment4                 = "- Install AdvancedNotificationsLib.dll -";
+
+// AdvancedNotificationsLib.dll could be downloaded here: http://profitrobots.com/Home/TelegramNotificationsMT4
+#import "AdvancedNotificationsLib.dll"
+void AdvancedAlert(string key, string text, string instrument, string timeframe);
+#import
+#import "shell32.dll"
+int ShellExecuteW(int hwnd,string Operation,string File,string Parameters,string Directory,int ShowCmd);
+#import
+
+class Signaler
+{
+   string _prefix;
+public:
+   Signaler()
+   {
+   }
+
+   void SetMessagePrefix(string prefix)
+   {
+      _prefix = prefix;
+   }
+
+   void SendNotifications(const string subject, string message = NULL)
+   {
+      if (message == NULL)
+         message = subject;
+      if (_prefix != "" && _prefix != NULL)
+         message = _prefix + message;
+
+      if (start_program)
+         ShellExecuteW(0, "open", program_path, "", "", 1);
+      if (popup_alert)
+         Alert(message);
+      if (email_alert)
+         SendMail(subject, message);
+      if (play_sound)
+         PlaySound(sound_file);
+      if (notification_alert)
+         SendNotification(message);
+      if (advanced_alert && advanced_key != "" && !IsTesting())
+         AdvancedAlert(advanced_key, message, "", "");
+   }
+};
+
+// Alert signal v4.0
+// More templates and snippets on https://github.com/sibvic/mq4-templates
+
+// Candles stream v.1.3
+class CandleStreams
+{
+public:
+   double OpenStream[];
+   double CloseStream[];
+   double HighStream[];
+   double LowStream[];
+
+   void Init()
+   {
+      ArrayInitialize(OpenStream, EMPTY_VALUE);
+      ArrayInitialize(CloseStream, EMPTY_VALUE);
+      ArrayInitialize(HighStream, EMPTY_VALUE);
+      ArrayInitialize(LowStream, EMPTY_VALUE);
+   }
+
+   void Clear(const int index)
+   {
+      OpenStream[index] = EMPTY_VALUE;
+      CloseStream[index] = EMPTY_VALUE;
+      HighStream[index] = EMPTY_VALUE;
+      LowStream[index] = EMPTY_VALUE;
+   }
+
+   int RegisterStreams(const int id, const color clr)
+   {
+      SetIndexStyle(id + 0, DRAW_HISTOGRAM, STYLE_SOLID, 5, clr);
+      SetIndexBuffer(id + 0, OpenStream);
+      SetIndexLabel(id + 0, "Open");
+      SetIndexStyle(id + 1, DRAW_HISTOGRAM, STYLE_SOLID, 5, clr);
+      SetIndexBuffer(id + 1, CloseStream);
+      SetIndexLabel(id + 1, "Close");
+      SetIndexStyle(id + 2, DRAW_HISTOGRAM, STYLE_SOLID, 1, clr);
+      SetIndexBuffer(id + 2, HighStream);
+      SetIndexLabel(id + 2, "High");
+      SetIndexStyle(id + 3, DRAW_HISTOGRAM, STYLE_SOLID, 1, clr);
+      SetIndexBuffer(id + 3, LowStream);
+      SetIndexLabel(id + 3, "Low");
+      return id + 4;
+   }
+
+   void AddTick(const int index, const double val)
+   {
+      if (OpenStream[index] == EMPTY_VALUE)
+      {
+         Set(index, val, val, val, val);
+         return;
+      }
+      HighStream[index] = MathMax(HighStream[index], val);
+      LowStream[index] = MathMin(LowStream[index], val);
+      CloseStream[index] = val;
+   }
+
+   void Set(const int index, const double open, const double high, const double low, const double close)
+   {
+      OpenStream[index] = open;
+      HighStream[index] = high;
+      LowStream[index] = low;
+      CloseStream[index] = close;
+   }
+};
+// Action v2.0
+
+#ifndef IAction_IMP
+#define IAction_IMP
+
+interface IAction
+{
+public:
+   virtual void AddRef() = 0;
+   virtual void Release() = 0;
+   
+   virtual bool DoAction(const int period, const datetime date) = 0;
+};
+
+#endif
+
+#ifndef AlertSignal_IMP
+#define AlertSignal_IMP
+
+class IAlertSignalOutput
+{
+public:
+   virtual void Clear(int period) = 0;
+   virtual void Init() = 0;
+   virtual void Set(int period) = 0;
+};
+
+class AlertSignalCandleColor : public IAlertSignalOutput
+{
+   CandleStreams* _candleStreams;
+public:
+   AlertSignalCandleColor()
+   {
+      _candleStreams = new CandleStreams();
+   }
+
+   ~AlertSignalCandleColor()
+   {
+      delete _candleStreams;
+   }
+
+   int Register(int id, color clr)
+   {
+      return _candleStreams.RegisterStreams(id, clr);
+   }
+
+   void Init()
+   {
+      _candleStreams.Init();
+   }
+
+   virtual void Clear(int period)
+   {
+      _candleStreams.Clear(period);
+   }
+
+   virtual void Set(int period)
+   {
+      _candleStreams.Set(period, Open[period], High[period], Low[period], Close[period]);
+   }
+};
+
+class AlertSignalArrow : public IAlertSignalOutput
+{
+   double _signals[];
+   IStream* _price;
+public:
+   AlertSignalArrow()
+   {
+      _price = NULL;
+   }
+
+   ~AlertSignalArrow()
+   {
+      if (_price != NULL)
+         _price.Release();
+   }
+
+   int Register(int id, string name, int code, color clr, IStream* price)
+   {
+      if (_price != NULL)
+         _price.Release();
+      _price = price;
+      _price.AddRef();
+
+      SetIndexStyle(id, DRAW_ARROW, 0, 2, clr);
+      SetIndexBuffer(id, _signals);
+      SetIndexLabel(id, name);
+      SetIndexArrow(id, code);
+      SetIndexEmptyValue(id, EMPTY_VALUE);
+      return id + 1;
+   }
+
+   void Init()
+   {
+      ArrayInitialize(_signals, EMPTY_VALUE);
+   }
+
+   virtual void Clear(int period)
+   {
+      _signals[period] = EMPTY_VALUE;
+   }
+
+   virtual void Set(int period)
+   {
+      double price;
+      if (!_price.GetValue(period, price))
+         return;
+
+      _signals[period] = price;
+   }
+};
+
+class MainChartAlertSignalArrow : public IAlertSignalOutput
+{
+   IStream* _price;
+   string _labelId;
+   color _color;
+   uchar _code;
+public:
+   MainChartAlertSignalArrow()
+   {
+      _price = NULL;
+   }
+
+   ~MainChartAlertSignalArrow()
+   {
+      if (_price != NULL)
+         _price.Release();
+   }
+
+   int Register(int id, string labelId, uchar code, color clr, IStream* price)
+   {
+      if (_price != NULL)
+         _price.Release();
+      _price = price;
+      _price.AddRef();
+      _labelId = labelId;
+      _color = clr;
+      _code = code;
+      
+      return id;
+   }
+
+   void Init()
+   {
+   }
+
+   virtual void Clear(int period)
+   {
+      ResetLastError();
+      string id = _labelId + TimeToString(Time[period]);
+      ObjectDelete(id);
+   }
+
+   virtual void Set(int period)
+   {
+      double price;
+      if (!_price.GetValue(period, price))
+      {
+         
+      Print("FALSE");
+         return;
+      }
+      ResetLastError();
+      string id = _labelId + TimeToString(Time[period]);
+      if (ObjectFind(0, id) == -1)
+      {
+         if (!ObjectCreate(0, id, OBJ_TEXT, 0, Time[period], price))
+         {
+            Print(__FUNCTION__, ". Error: ", GetLastError());
+            return ;
+         }
+         ObjectSetString(0, id, OBJPROP_FONT, "Wingdings");
+         ObjectSetInteger(0, id, OBJPROP_FONTSIZE, 12);
+         ObjectSetInteger(0, id, OBJPROP_COLOR, _color);
+      }
+      ObjectSetInteger(0, id, OBJPROP_TIME, Time[period]);
+      ObjectSetDouble(0, id, OBJPROP_PRICE1, price);
+      ObjectSetString(0, id, OBJPROP_TEXT, CharToStr(_code));
+   }
+};
+
+
+class MainChartAlertSignalLine : public IAlertSignalOutput
+{
+   string _labelId;
+   color _color;
+public:
+   int Register(int id, string labelId, color clr)
+   {
+      _labelId = labelId;
+      _color = clr;
+      
+      return id;
+   }
+
+   void Init()
+   {
+   }
+
+   virtual void Clear(int period)
+   {
+      ResetLastError();
+      string id = _labelId + TimeToString(Time[period]);
+      ObjectDelete(id);
+   }
+
+   virtual void Set(int period)
+   {
+      ResetLastError();
+      string id = _labelId + TimeToString(Time[period]);
+      if (ObjectFind(0, id) == -1)
+      {
+         if (!ObjectCreate(0, id, OBJ_VLINE, 0, Time[period], 0))
+         {
+            Print(__FUNCTION__, ". Error: ", GetLastError());
+            return ;
+         }
+         ObjectSetInteger(0, id, OBJPROP_COLOR, _color);
+      }
+      ObjectSetInteger(0, id, OBJPROP_TIME, Time[period]);
+   }
+};
+
+class AlertSignal
+{
+   IAction* _actionOnCondition;
+   ICondition* _condition;
+   Signaler* _signaler;
+   string _message;
+   datetime _lastSignal;
+   bool _onBarClose;
+   IAlertSignalOutput* _signalOutput;
+   string _symbol;
+   ENUM_TIMEFRAMES _timeframe;
+public:
+   AlertSignal(ICondition* condition, IAction* actionOnCondition, string symbol, ENUM_TIMEFRAMES timeframe, Signaler* signaler, bool onBarClose = false)
+   {
+      _symbol = symbol;
+      _timeframe = timeframe;
+      _actionOnCondition = actionOnCondition;
+      if (_actionOnCondition != NULL)
+      {
+         _actionOnCondition.AddRef();
+      }
+      _signalOutput = NULL;
+      _condition = condition;
+      _signaler = signaler;
+      _onBarClose = onBarClose;
+   }
+
+   ~AlertSignal()
+   {
+      if (_actionOnCondition != NULL)
+      {
+         _actionOnCondition.Release();
+      }
+      delete _signalOutput;
+      delete _condition;
+   }
+
+   int RegisterArrows(int id, string name, string labelId, int code, color clr, IStream* price)
+   {
+      _message = name;
+      MainChartAlertSignalArrow* signalOutput = new MainChartAlertSignalArrow();
+      _signalOutput = signalOutput;
+      return signalOutput.Register(id, labelId, (uchar)code, clr, price);
+   }
+
+   int RegisterLines(int id, string name, string labelId, color clr)
+   {
+      _message = name;
+      MainChartAlertSignalLine* signalOutput = new MainChartAlertSignalLine();
+      _signalOutput = signalOutput;
+      return signalOutput.Register(id, labelId, clr);
+   }
+
+   int RegisterStreams(int id, string name, int code, color clr, IStream* price)
+   {
+      _message = name;
+      AlertSignalArrow* signalOutput = new AlertSignalArrow();
+      _signalOutput = signalOutput;
+      return signalOutput.Register(id, name, code, clr, price);
+   }
+
+   int RegisterStreams(int id, string name, color clr)
+   {
+      _message = name;
+      AlertSignalCandleColor* signalOutput = new AlertSignalCandleColor();
+      _signalOutput = signalOutput;
+      return signalOutput.Register(id, clr);
+   }
+
+   void Init()
+   {
+      _signalOutput.Init();
+   }
+
+   void Update(int period)
+   {
+      datetime dt = iTime(_symbol, _timeframe, _onBarClose ? period + 1 : period);
+
+      if (!_condition.IsPass(_onBarClose ? period + 1 : period, dt))
+      {
+         _signalOutput.Clear(period);
+         return;
+      }
+      if (_actionOnCondition != NULL)
+      {
+         _actionOnCondition.DoAction(period, dt);
+      }
+
+      if (period == 0)
+      {
+         dt = iTime(_symbol, _timeframe, 0);
+         if (_lastSignal != dt)
+         {
+            _signaler.SendNotifications(_message);
+            _lastSignal = dt;
+         }
+      }
+
+      _signalOutput.Set(period);
+   }
+};
+
+#endif
+
+
+
+// Stream wrapper v1.0
+
+#ifndef StreamWrapper_IMP
+#define StreamWrapper_IMP
+
+class StreamWrapper : public AStream
+{
+   string _symbol;
+   ENUM_TIMEFRAMES _timeframe;
+   double _stream[];
+public:
+   StreamWrapper(const string symbol, const ENUM_TIMEFRAMES timeframe)
+      :AStream(symbol, timeframe)
+   {
+      _symbol = symbol;
+      _timeframe = timeframe;
+   }
+
+   void Init()
+   {
+      ArrayInitialize(_stream, EMPTY_VALUE);
+   }
+
+   virtual int Size()
+   {
+      return iBars(_symbol, _timeframe);
+   }
+
+   int RegisterInternalStream(int id)
+   {
+      SetIndexStyle(id, DRAW_NONE);
+      SetIndexBuffer(id, _stream);
+      return id + 1;
+   }
+
+   void SetValue(const int period, double value)
+   {
+      int totalBars = Size();
+      if (ArrayRange(_stream, 0) != totalBars) 
+      {
+         ArrayResize(_stream, totalBars);
+      }
+      _stream[period] = value;
+   }
+
+   bool GetValue(const int period, double &val)
+   {
+      int totalBars = Size();
+      if (ArrayRange(_stream, 0) != totalBars) 
+      {
+         ArrayResize(_stream, totalBars);
+      }
+      val = _stream[period];
+      return _stream[period] != EMPTY_VALUE;
+   }
+};
+
+#endif
+
+AlertSignal* conditions[];
+Signaler* mainSignaler;
+StreamWrapper* customStream;
+
+int CreateAlert(int id, ICondition* condition, IAction* action, int code, string message, color clr, PriceType priceType, int sign)
+{
+   int size = ArraySize(conditions);
+   ArrayResize(conditions, size + 1);
+   #ifdef ACT_ON_SWITCH
+      ActOnSwitchCondition* upSwitch = new ActOnSwitchCondition(_Symbol, (ENUM_TIMEFRAMES)_Period, condition);
+      condition.Release();
+      condition = upSwitch;
+   #endif
+   conditions[size] = new AlertSignal(condition, action, _Symbol, (ENUM_TIMEFRAMES)_Period, mainSignaler, signal_mode == SingalModeOnBarClose);
+      
+   switch (Type)
+   {
+      case Arrows:
+         {
+            id = conditions[size].RegisterStreams(id, message, code, clr, customStream);
+         }
+         break;
+      case ArrowsOnMainChart:
+         {
+            SimplePriceStream* highStream = new SimplePriceStream(_Symbol, (ENUM_TIMEFRAMES)_Period, priceType);
+            highStream.SetShift(shift_arrows_pips * sign);
+            static int lastId = 1;
+            id = conditions[size].RegisterArrows(id, message, IndicatorObjPrefix + IntegerToString(lastId++), code, clr, highStream);
+            highStream.Release();
+         }
+         break;
+      case Candles:
+         {
+            id = conditions[size].RegisterStreams(id, message, clr);
+         }
+         break;
+      case Lines:
+         {
+            id = conditions[size].RegisterLines(id, message, IndicatorObjPrefix + IntegerToString(id), clr);
+         }
+         break;
+   }
+   return id;
+}
+
+int CreateAlert(int id, ENUM_TIMEFRAMES tf, color upColor, color downColor)
+{
+   ICondition* upCondition = (ICondition*) new UpCondition(_Symbol, tf);
+   ICondition* downCondition = (ICondition*) new DownCondition(_Symbol, tf);
+   id = CreateAlert(id, upCondition, NULL, 217, "Up " + TimeframeToString(tf), upColor, PriceHigh, 1);
+   return CreateAlert(id, downCondition, NULL, 218, "Down " + TimeframeToString(tf), downColor, PriceLow, -1);
+}
+
+class UpCondition : public ACondition
+{
+public:
+   UpCondition(const string symbol, ENUM_TIMEFRAMES timeframe)
+      :ACondition(symbol, timeframe)
+   {
+
+   }
+
+   bool IsPass(const int period, const datetime date)
+   {
+      return discreteBuffer[period] == 1;
+   }
+};
+
+class DownCondition : public ACondition
+{
+public:
+   DownCondition(const string symbol, ENUM_TIMEFRAMES timeframe)
+      :ACondition(symbol, timeframe)
+   {
+
+   }
+
+   bool IsPass(const int period, const datetime date)
+   {
+      return discreteColors[period] == -1;
+   }
+};
+string IndicatorObjPrefix;
+
+bool NamesCollision(const string name)
+{
+   for (int k = ObjectsTotal(); k >= 0; k--)
+   {
+      if (StringFind(ObjectName(0, k), name) == 0)
+      {
+         return true;
+      }
+   }
+   return false;
+}
+
+string GenerateIndicatorPrefix(const string target)
+{
+   for (int i = 0; i < 1000; ++i)
+   {
+      string prefix = target + "_" + IntegerToString(i);
+      if (!NamesCollision(prefix))
+      {
+         return prefix;
+      }
+   }
+   return target;
+}
+
+string TimeframeToString(ENUM_TIMEFRAMES tf)
+{
+   switch (tf)
+   {
+      case PERIOD_M1: return "M1";
+      case PERIOD_M5: return "M5";
+      case PERIOD_D1: return "D1";
+      case PERIOD_H1: return "H1";
+      case PERIOD_H4: return "H4";
+      case PERIOD_M15: return "M15";
+      case PERIOD_M30: return "M30";
+      case PERIOD_MN1: return "MN1";
+      case PERIOD_W1: return "W1";
+   }
+   return "";
+}
+
+int init()
+{
+   IndicatorObjPrefix = GenerateIndicatorPrefix("sampler");
+   IndicatorShortName("sampler");
+
+   IndicatorBuffers(11);
+   SetIndexBuffer(0, analogBuffer);
+   SetIndexBuffer(1, discreteBuffer);
+   SetIndexBuffer(2, discreteColors);
+
+   if (!IsDllsAllowed() && advanced_alert)
+   {
+      Print("Error: Dll calls must be allowed!");
+      return INIT_FAILED;
+   }
+   mainSignaler = new Signaler();
+   mainSignaler.SetMessagePrefix(_Symbol + "/" + TimeframeToString((ENUM_TIMEFRAMES)_Period) + ": ");
+
+   int id = 3;
+
+   if (Type == Arrows)
+   {
+      customStream = new StreamWrapper(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   }
+   {
+      ICondition* upCondition = (ICondition*) new UpCondition(_Symbol, (ENUM_TIMEFRAMES)_Period);
+      ICondition* downCondition = (ICondition*) new DownCondition(_Symbol, (ENUM_TIMEFRAMES)_Period);
+      id = CreateAlert(id, (ENUM_TIMEFRAMES)_Period, up_color, down_color);
+   }
+   if (customStream != NULL)
+   {
+      id = customStream.RegisterInternalStream(id);
+   }
+
+   return INIT_SUCCEEDED;
+}
+
+int deinit()
+{
+   if (customStream != NULL)
+   {
+      customStream.Release();
+      customStream = NULL;
+   }
+   delete mainSignaler;
+   mainSignaler = NULL;
+   for (int i = 0; i < ArraySize(conditions); ++i)
+   {
+      delete conditions[i];
+   }
+   ArrayResize(conditions, 0);
+   ObjectsDeleteAll(ChartID(), IndicatorObjPrefix);
+   return 0;
+}
+
+int OnCalculate(const int rates_total,
+                const int prev_calculated,
+                const datetime &time[],
+                const double &open[],
+                const double &high[],
+                const double &low[],
+                const double &close[],
+                const long &tick_volume[],
+                const long &volume[],
+                const int &spread[])
+{
+   if (prev_calculated <= 0 || prev_calculated > rates_total)
+   {
+      ArrayInitialize(analogBuffer, EMPTY_VALUE);
+      ArrayInitialize(discreteBuffer, EMPTY_VALUE);
+      ArrayInitialize(discreteColors, EMPTY_VALUE);
+      if (customStream != NULL)
+      {
+         customStream.Init();
+      }
+      for (int i = 0; i < ArraySize(conditions); ++i)
+      {
+         AlertSignal* item = conditions[i];
+         item.Init();
+      }
+   }
+   bool timeSeries = ArrayGetAsSeries(time); 
+   bool openSeries = ArrayGetAsSeries(open); 
+   bool highSeries = ArrayGetAsSeries(high); 
+   bool lowSeries = ArrayGetAsSeries(low); 
+   bool closeSeries = ArrayGetAsSeries(close); 
+   bool tickVolumeSeries = ArrayGetAsSeries(tick_volume); 
+   ArraySetAsSeries(time, true);
+   ArraySetAsSeries(open, true);
+   ArraySetAsSeries(high, true);
+   ArraySetAsSeries(low, true);
+   ArraySetAsSeries(close, true);
+   ArraySetAsSeries(tick_volume, true);
+
+   int toSkip = 0;
+   for (int pos = MathMin(bars_limit, rates_total - 1 - MathMax(prev_calculated, toSkip)); pos >= 0 && !IsStopped(); --pos)
+   {
+      double price_high = high[ArrayMaximum(high, pos, bars_future)];
+      double price_low = low[ArrayMinimum(low, pos, bars_future)];
+
+      double deviation_plus = price_high - open[pos];
+      double deviation_minus = open[pos] - price_low;
+
+      double value = (2.0 * deviation_plus) / (deviation_plus + deviation_minus) - 1;
+      analogBuffer[pos] = value;
+
+      switch (discrete_metod)
+      {
+         case 1:
+            if (value > porog)
+            { 
+               discreteBuffer[pos] = 1;
+            }
+            else if (value < -porog)
+            {
+               discreteColors[pos] = -1;
+            }
+            break;
+         case 2:
+            if (deviation_plus > tp * point && deviation_minus < sl * point)
+            {
+               discreteBuffer[pos] = 1;
+            }
+            else if (deviation_plus < sl * point && deviation_minus > tp * point)
+            {
+               discreteColors[pos] = -1;
+            }
+            break;
+      }
+
+      if (save_file && pos == rates_total - bars_future - 1)
+         SaveBuffer(rates_total, time, discreteBuffer);
+
+      if (customStream != NULL)
+      {
+         customStream.SetValue(pos, 0);
+      }
+      for (int i = 0; i < ArraySize(conditions); ++i)
+      {
+         AlertSignal* item = conditions[i];
+         item.Update(pos);
+      }
+   }
+   
+   ArraySetAsSeries(time, timeSeries);
+   ArraySetAsSeries(open, openSeries);
+   ArraySetAsSeries(high, highSeries);
+   ArraySetAsSeries(low, lowSeries);
+   ArraySetAsSeries(close, closeSeries);
+   ArraySetAsSeries(tick_volume, tickVolumeSeries);
+   return rates_total;
+}
+
+void SaveBuffer(const int rates_total, const datetime &time[], const double &Buffer[])
+{
+   uint n = 0, ne;
+   for (int i = 0; i < rates_total; i++)
+   {
+      if (Buffer[i] == 1 || Buffer[i] == -1)
+         n++;
+   }
+   ArrayResize(timesignal, n);
+   n = 0;
+   for (int i = 0; i < rates_total; i++)
+   {
+      if (Buffer[i] == 1 || Buffer[i] == -1)
+      {
+         timesignal[n] = (int)time[i] * (int)Buffer[i];
+         n++;
+      }
+   }
+
+   ResetLastError();
+   string namefile;
+   StringConcatenate(namefile, _Symbol, "_Sampler.BIN");
+   int filehandle = FileOpen(namefile, FILE_WRITE | FILE_BIN | FILE_COMMON);
+   if (filehandle != INVALID_HANDLE)
+   {
+      ne = FileWriteArray(filehandle, timesignal, 0, WHOLE_ARRAY);
+      FileClose(filehandle);
+   }
+   else 
+      Print(namefile," �������� FileWrite ��������, ������ ",GetLastError());
+}

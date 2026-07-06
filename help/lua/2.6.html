@@ -1,0 +1,64 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 2.6 - Visibility Rules</title>
+</head>
+<body>
+<h2>2.6 - <a name="2.6">Visibility Rules</a></h2>
+
+<p>
+
+Lua is a lexically scoped language.
+The scope of variables begins at the first statement <em>after</em>
+their declaration and lasts until the end of the innermost block that
+includes the declaration.
+Consider the following example:
+
+<pre>
+     x = 10                -- global variable
+     do                    -- new block
+       local x = x         -- new 'x', with value 10
+       print(x)            --&gt; 10
+       x = x+1
+       do                  -- another block
+         local x = x+1     -- another 'x'
+         print(x)          --&gt; 12
+       end
+       print(x)            --&gt; 11
+     end
+     print(x)              --&gt; 10  (the global one)
+</pre>
+
+<p>
+Notice that, in a declaration like <code>local x = x</code>,
+the new <code>x</code> being declared is not in scope yet,
+and so the second <code>x</code> refers to the outside variable.
+
+
+<p>
+Because of the lexical scoping rules,
+local variables can be freely accessed by functions
+defined inside their scope.
+A local variable used by an inner function is called
+an <em>upvalue</em>, or <em>external local variable</em>,
+inside the inner function.
+
+
+<p>
+Notice that each execution of a <b>local</b> statement
+defines new local variables.
+Consider the following example:
+
+<pre>
+     a = {}
+     local x = 20
+     for i=1,10 do
+       local y = 0
+       a[i] = function () y=y+1; return x+y end
+     end
+</pre><p>
+The loop creates ten closures
+(that is, ten instances of the anonymous function).
+Each of these closures uses a different <code>y</code> variable,
+while all of them share the same <code>x</code>.
+</body>
+</html>

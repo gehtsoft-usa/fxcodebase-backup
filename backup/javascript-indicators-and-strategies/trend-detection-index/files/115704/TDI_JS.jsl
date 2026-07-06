@@ -1,0 +1,125 @@
+function Init()
+{
+    indicator.name("Trend Detection Index");
+    indicator.description("Trend Detection Index");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+	indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "Period", 20);
+	indicator.parameters.addString("Type", "Type", "", "Signal");
+    indicator.parameters.addStringAlternative("Type", "Signal", "", "Signal");
+    indicator.parameters.addStringAlternative("Type", "Indicator", "", "Indicator");
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("TDI_color", "Color of TDI", "Color of TDI", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width1", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style1", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style1", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Direction_color", "Color of Direction", "Color of Direction", core.rgb(0, 255, 0));
+	indicator.parameters.addInteger("width2", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style2", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style2", core.FLAG_LINE_STYLE);
+	
+	indicator.parameters.addColor("Signal_color", "Color of Signal", "Color of Signal", core.rgb(0, 0, 255));
+	indicator.parameters.addInteger("width3", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style3", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style3", core.FLAG_LINE_STYLE);
+}
+
+var Period;
+
+var first;
+var source = null;
+var Type;
+
+var TDI = null;
+var Direction = null;
+var MomBuffer,MomAbsBuffer;
+var Signal;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+	Type = instance.parameters.Type;
+    source = instance.source;
+	
+	MomBuffer = instance.addInternalStream(0, 0);	
+	MomAbsBuffer = instance.addInternalStream(0, 0);
+	
+    first = source.first()+Period;
+
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+	
+	 if (Type != "Signal") 
+	 { 
+        TDI = instance.addStream("TDI", core.Line, name + ".TDI", "TDI", instance.parameters.TDI_color, first);
+		TDI.setWidth(instance.parameters.width1);
+        TDI.setStyle(instance.parameters.style1);
+        Direction = instance.addStream("Direction", core.Line, name + ".Direction", "Direction", instance.parameters.Direction_color, first+Period);
+		Direction.setWidth(instance.parameters.width2);
+        Direction.setStyle(instance.parameters.style2)
+		Signal = instance.addInternalStream(0, 0);
+	}	
+    else
+	{	
+        TDI = instance.addInternalStream(0, 0);
+        Direction = instance.addInternalStream(0, 0);		
+		Signal = instance.addStream("SIGNAL", core.Line, name + ".Signal", "Signal", instance.parameters.Signal_color, first+Period);
+		Signal.setWidth(instance.parameters.width3);
+        Signal.setStyle(instance.parameters.style3);
+   
+		
+	}
+		
+		
+   }
+}
+
+function Update(period)
+{
+    if (period < first) 
+    {
+	 return;
+	}
+	
+	MomBuffer[period]=source[period]-source[period-Period];
+    MomAbsBuffer[period]=Math.abs(MomBuffer[period]);
+	
+    Direction[period]=Math.sum(MomBuffer,period-Period+1, period);
+	
+	var F= Math.abs(Direction[period]);
+	var H=Math.sum(MomAbsBuffer,period-Period+1, period);
+	
+	if (period < first+Period) 
+	{
+	 return;
+	}
+	
+	var G=Math.sum(MomAbsBuffer,period-Period*2+1, period);
+ 
+        TDI[period] = (F + H)- G;
+		
+		if (TDI[period] > 0) 
+		{
+		
+		   if (Direction[period] >0) 
+		   {
+		    Signal[period]=1;
+		   } 
+		   else
+		   {
+		    Signal[period]=-1;
+		   }
+		}   
+		else
+		{
+		 Signal[period]=Signal[period-1];
+		}
+}
+

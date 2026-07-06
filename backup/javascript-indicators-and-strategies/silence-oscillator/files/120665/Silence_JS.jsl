@@ -1,0 +1,81 @@
+function Init()
+{
+    indicator.name("Silence oscillator");
+    indicator.description("Silence oscillator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 12);
+    indicator.parameters.addInteger("InterpolationPeriod", "Interpolation period", "", 288);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Aclr", "Aggressiveness Color", "Aggressiveness Color", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("Vclr", "Volatility Color", "Volatility Color", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+var Period;
+var InterpolationPeriod;
+var ABuff=null;
+var VBuff=null;
+var SizeArray;
+var Aggress;
+var Volat;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    InterpolationPeriod=instance.parameters.InterpolationPeriod;
+    first = source.first()+2;
+    SizeArray = instance.addInternalStream(first, 0);
+    Aggress = instance.addInternalStream(first, 0);
+    Volat = instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.InterpolationPeriod + ")";
+    instance.name(name);
+    ABuff = instance.addStream("ABuff", core.Line, name + ".Aggressiveness", "Aggressiveness", instance.parameters.Aclr, first);
+    VBuff = instance.addStream("VBuff", core.Line, name + ".Volatility", "Volatility", instance.parameters.Vclr, first);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    SizeArray[period]=Math.abs(source[period]-source[period-1]);
+    if (period>first+Period) 
+    {
+     var B=Math.avg(SizeArray, period-Period+1, period);
+     var i;
+     dAmount=0;
+     for (i=period-Period+1; i<=period; i++) 
+     {
+      dAmount=dAmount+Math.pow(source[i]-Math.avg(source, period-Period+1, period),2);
+     }
+     dAmount=dAmount/Period;
+     Aggress[period]=B/source.pipSize();
+     Volat[period]=Math.sqrt(dAmount);
+     var tmp=Math.minmax(Aggress, period-Math.min(InterpolationPeriod, period-first)+1, period);
+     var min=tmp[0];
+     var max=tmp[1];
+     ABuff[period]=Inter(max,min,100,0,Aggress[period]);
+     tmp=Math.minmax(Volat, period-Math.min(InterpolationPeriod, period-first)+1, period);
+     min=tmp[0];
+     max=tmp[1];
+     VBuff[period]=Inter(max,min,100,0,Volat[period]);
+    }
+   } 
+}
+
+function Inter(a,b,c,d,X)
+{
+ if (a==b) 
+ {
+  return (1000000000);
+ } 
+ else
+ {
+  return (d-(b-X)*(d-c)/(b-a));
+ }
+}

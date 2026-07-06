@@ -1,0 +1,29 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - tonumber (e [, base])</title>
+</head>
+<body>
+<h3><a name="pdf-tonumber"><code>tonumber (e [, base])</code></a></h3>
+Tries to convert its argument to a number.
+If the argument is already a number or a string convertible
+to a number, then <code>tonumber</code> returns this number;
+otherwise, it returns <b>nil</b>.
+
+
+<p>
+An optional argument specifies the base to interpret the numeral.
+The base may be any integer between 2 and 36, inclusive.
+In bases above&nbsp;10, the letter '<code>A</code>' (in either upper or lower case)
+represents&nbsp;10, '<code>B</code>' represents&nbsp;11, and so forth,
+with '<code>Z</code>' representing 35.
+In base 10 (the default), the number may have a decimal part,
+as well as an optional exponent part (see <a href="2.1.html">&sect;2.1</a>).
+In other bases, only unsigned integers are accepted.
+
+
+
+
+<p>
+<hr>
+</body>
+</html>

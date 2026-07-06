@@ -1,0 +1,58 @@
+function Init()
+{
+    indicator.name("Lambda indicator");
+    indicator.description("Lambda indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Lambda", "Lambda", "", 10);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("BigClr", "Big Color", "Big Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("SmallClr", "Small Color", "Small Color", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+var Lambda;
+var BigBuff=null;
+var SmallBuff=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Lambda=instance.parameters.Lambda;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Lambda + ")";
+    instance.name(name);
+    BigBuff = instance.addStream("BigBuff", core.Line, name + ".Big", "Big", instance.parameters.BigClr, first);
+    SmallBuff = instance.addStream("SmallBuff", core.Line, name + ".Small", "Small", instance.parameters.SmallClr, first);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    var d=source.open[period]-source.open[period-1];
+    if (Math.abs(d)>Lambda*source.pipSize()) 
+    {
+     BigBuff[period]=BigBuff[period-1]+d;
+     SmallBuff[period]=SmallBuff[period-1];
+    }
+    else
+    {
+     SmallBuff[period]=SmallBuff[period-1]+d;
+     BigBuff[period]=BigBuff[period-1];
+    }
+   } 
+   else
+   {
+    if (period==first) 
+    {
+    BigBuff[period]=0;
+    SmallBuff[period]=0;
+   } 
+  } 
+}
+

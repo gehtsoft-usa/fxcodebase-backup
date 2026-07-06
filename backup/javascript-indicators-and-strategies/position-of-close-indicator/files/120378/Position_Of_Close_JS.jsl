@@ -1,0 +1,69 @@
+function Init()
+{
+    indicator.name("Position of Close indicator");
+    indicator.description("Position of Close indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addDouble("MinPos", "Min. position, from Low to High, %", "", 75, 0, 100);
+    indicator.parameters.addDouble("MaxPos", "Max. position, from Low to High, %", "", 100, 0, 100);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(255, 255, 0));    
+    indicator.parameters.addColor("clrDefaultUp", "Default UP bar color", "Default UP bar color", core.COLOR_UPCANDLE);
+    indicator.parameters.addColor("clrDefaultDn", "Default DN bar color", "Default DN bar color", core.COLOR_DOWNCANDLE);
+}
+
+var first;
+var source = null;
+var MinPos;
+var MaxPos;
+var open=null;
+var close=null;
+var high=null;
+var low=null;
+
+function Prepare()
+{
+    source = instance.source;
+    MinPos=instance.parameters.MinPos/100;
+    MaxPos=instance.parameters.MaxPos/100;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.MinPos + ", " + instance.parameters.MaxPos + ")";
+    instance.name(name);
+    instance.setLabelColor(instance.parameters.clr);
+    open = instance.addStream("open", core.Line, name, "open", core.rgb(0, 0, 0), first)
+    high = instance.addStream("high", core.Line, name, "high", core.rgb(0, 0, 0), first)
+    low = instance.addStream("low", core.Line, name, "low", core.rgb(0, 0, 0), first)
+    close = instance.addStream("close", core.Line, name, "close", core.rgb(0, 0, 0), first)
+    instance.createCandleGroup("PositionOfClose", "", open, high, low, close);
+}
+
+function Update(period, mode)
+{
+   if (period>=first) 
+   {
+     open[period]=source.open[period];
+     close[period]=source.close[period];
+     high[period]=source.high[period];
+     low[period]=source.low[period];
+     var Range=high[period]-low[period];
+     var Min=low[period]+Range*MinPos;
+     var Max=low[period]+Range*MaxPos;
+     
+     if (close[period]>=Min && close[period]<=Max) 
+     {
+      open.setColor(period, instance.parameters.clr);
+     } 
+     else if (close[period]>=open[period]) 
+     {
+      open.setColor(period, instance.parameters.clrDefaultUp);
+     } 
+     else
+     {
+      open.setColor(period, instance.parameters.clrDefaultDn);
+     }
+   } 
+}
+

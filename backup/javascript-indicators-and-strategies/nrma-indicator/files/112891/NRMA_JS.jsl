@@ -1,0 +1,117 @@
+function Init()
+{
+    indicator.name("NRMA");
+    indicator.description("NRMA");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    
+    indicator.parameters.addDouble("K", "K", "K", 1);
+    indicator.parameters.addInteger("Smooth", "Smooth", "Smooth", 3);
+    indicator.parameters.addDouble("Fast", "Fast", "Fast", 2);
+    indicator.parameters.addDouble("Sharp", "Sharp", "Sharp", 2);
+
+    indicator.parameters.addColor("LineClr", "Color of Line", "Color of Line", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("UPClr", "UP Color", "UP Color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("DNClr", "DN Color", "DN Color", core.rgb(0, 0, 255));
+}
+
+var first;
+var source = null;
+var K;
+var Smooth;
+var Fast;
+var Sharp;
+var Trend;
+var Oscil;
+var NRatio;
+var NRTR;
+
+function Prepare()
+{
+    source = instance.source;
+    K=instance.parameters.K;
+    Smooth=instance.parameters.Smooth;
+    Fast=instance.parameters.Fast;
+    Sharp=instance.parameters.Sharp;
+    Trend = instance.addInternalStream(0, 0);
+    Oscil = instance.addInternalStream(0, 0);
+    NRatio = instance.addInternalStream(0, 0);
+    NRTR = instance.addInternalStream(0, 0);
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.K + ", " + instance.parameters.Smooth + ", " + instance.parameters.Fast + ", " + instance.parameters.Sharp + ")";
+    instance.name(name);
+    NRMA = instance.addStream("NRMA", core.Line, name + ".NRMA", "NRMA", instance.parameters.LineClr, first);
+    buffUp = instance.createTextOutput ("Up", "Up", "Wingdings", 10, core.H_Center, core.V_Center, instance.parameters.UPClr, first);
+    buffDn = instance.createTextOutput ("Dn", "Dn", "Wingdings", 10, core.H_Center, core.V_Center, instance.parameters.DNClr, first);
+}
+
+function Update(period, mode)
+{
+    if (period>first) 
+    {
+     if (Trend[period-1]>0) 
+     {
+      if (source.close[period]<NRTR[period-1]) 
+      {
+       Trend[period]=-1;
+       NRTR[period]=source.close[period]*(1+K/100.);
+       buffUp.set(period, source.close[period]*(1+K/100.), "\159", "");
+      } 
+      else
+      {
+       Trend[period]=1;
+       if (source.close[period]*(1-K/100.)>NRTR[period-1]) 
+       {
+        NRTR[period]=source.close[period]*(1-K/100.);
+       } 
+       else
+       {
+        NRTR[period]=NRTR[period-1];
+       } 
+       buffDn.set(period, NRTR[period], "\159", "");
+      }
+     } 
+     else
+     {
+      if (source.close[period]>NRTR[period-1]) 
+      {
+       Trend[period]=1;
+       buffDn.set(period, source.close[period]*(1-K/100.), "\159", "");
+       NRTR[period]=source.close[period]*(1-K/100.);
+      } 
+      else
+      {
+       Trend[period]=-1;
+       if (source.close[period]*(1+K/100.)<NRTR[period-1]) 
+       {
+        NRTR[period]=source.close[period]*(1+K/100.);
+       } 
+       else
+       {
+        NRTR[period]=NRTR[period-1];
+       }
+       buffUp.set(period, NRTR[period], "\159", "");
+      }
+     }
+     Oscil[period]=100.*Math.abs(source.close[period]-NRTR[period])/(K*source.close[period]);
+     NRatio[period]=Math.pow(Math.avg(Oscil,period-Smooth+1,period),Sharp);
+     var F=2/(1.0+Fast);
+     NRMA[period]=NRMA[period-1]+NRatio[period]*F*(source.close[period]-NRMA[period-1]);
+    } 
+    else
+    {
+     if (source.close[period]>source.open[period]) 
+     {
+      Trend[period]=1.;
+      NRTR[period]=source.close[period]*(1-K/100.);
+      buffDn.set(period, source.close[period]*(1-K/100.), "\159", "");
+     } 
+     else
+     {
+      Trend[period]=-1;
+      NRTR[period]=source.close[period]*(1+K/100.);
+      buffUp.set(period, source.close[period]*(1+K/100.), "\159", "");
+     } 
+    } 
+}
+

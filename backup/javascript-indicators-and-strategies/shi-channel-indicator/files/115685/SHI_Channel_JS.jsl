@@ -1,0 +1,92 @@
+function Init()
+{
+    indicator.name("SHI Channel indicator");
+    indicator.description("SHI Channel indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("BarsForFractal", "Bars for fractal", "", 3);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(0, 255, 0));
+}
+
+var first;
+var source = null;
+var Buff1=null;
+var Fl;
+
+function Prepare()
+{
+    source = instance.source;
+    BarsForFractal=instance.parameters.BarsForFractal;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.BarsForFractal + ")";
+    instance.name(name);
+    Buff1 = instance.addStream("Buff1", core.Line, name + ".Buff1", "Buff1", instance.parameters.clr, first);
+    Buff2 = instance.addStream("Buff2", core.Line, name + ".Buff2", "Buff2", instance.parameters.clr, first);
+}
+
+function Update(period, mode)
+{
+   var BFF=(BarsForFractal-1)/2;
+   if (period==source.size()-1) 
+   {
+    var FrDir=null;
+    var FrU1=0;
+    var FrU2=0;
+    var FrD1=0;
+    var FrD2=0;
+    var i;
+    var i2;
+    for (i=first+BFF; i<=period-BFF; i++) 
+    {
+     Fl=true;
+     for (i2=1; i2<=BFF; i2++) 
+     {
+      if (source.high[i]<=source.high[i-i2] || source.high[i]<=source.high[i+i2]) 
+      {
+       Fl=false;
+      }
+     }
+     if (Fl) 
+     {
+      FrDir=1;
+      FrU2=FrU1;
+      FrU1=i;
+     }
+     
+     if (!Fl) 
+     {
+      Fl=true;
+      for (i2=1; i2<=BFF; i2++) 
+      {
+       if (source.low[i]>=source.low[i-i2] || source.low[i]>=source.low[i+i2]) 
+       {
+        Fl=false;
+       }
+      }
+      if (Fl) 
+      {
+       FrDir=-1;
+       FrD2=FrD1;
+       FrD1=i;
+      }
+     } 
+     
+    }
+    if (FrDir==1) 
+    {
+     core.drawLine(Buff1,core.range(first,period),source.high[FrU2],FrU2,source.high[FrU1],FrU1);
+     core.drawLine(Buff2,core.range(first,period),source.low[FrD1],FrD1,source.low[FrD1]-(source.high[FrU2]-source.high[FrU1]),FrD1-(FrU2-FrU1));
+    } 
+    else if (FrDir==-1) 
+    {
+     core.drawLine(Buff1,core.range(first,period),source.low[FrD2],FrD2,source.low[FrD1],FrD1);
+     core.drawLine(Buff2,core.range(first,period),source.high[FrU1],FrU1,source.high[FrU1]-(source.low[FrD2]-source.low[FrD1]),FrU1-(FrD2-FrD1));
+    }
+   } 
+    
+}
+

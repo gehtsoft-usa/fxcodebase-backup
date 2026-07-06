@@ -1,0 +1,458 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252" /><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><title>xmlhandler</title><style type="text/css">a, p, h1, h2, h3, h4, h5, h6, table, td, tr, li, ul, ol {
+    font-family: Verdana, Trebuchet MS, Arial;
+}
+
+a, p, td, tr, ul, ol, li {
+    font-size: 12pt;
+}
+
+h3 {
+    font-size: 13pt;
+}
+
+h2 {
+    font-size: 13pt;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+body {
+    color: #444444;
+    background-color: white;
+}
+
+A:link {
+    color: #0065b3;
+    cursor: pointer;
+}
+
+A:visited {
+    color: #0068be;
+    cursor: pointer;
+}
+
+a.action {
+  background-color: #0065b3;
+  color: white;
+  font-size: 10pt;
+  padding: 2px 2px;
+  width: 50pt;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px;
+}
+
+.side-icon {
+    float: left;
+}
+
+a.action [class*="dripicons-"]:before {
+    padding: 0 2px 0 0;
+    font-size: 12pt;
+    vertical-align: text-bottom;
+}
+
+.side-icon:after {
+  content: "";
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  border-left: 1.5px solid white;
+  transform: translate(-50%);
+}
+
+a.actiontab {
+  font-size: 10pt;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px 3px 0 0;
+}
+
+pre, code, code a {
+    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+    font-size: 12pt;
+}
+
+code.ctag {
+    background-color: #f1f1f1;
+    padding: .1em .2em;
+    border-radius: 3px;
+}
+
+pre {
+    background-color: white;
+}
+
+pre.example {
+    background-color: #f1f1f1;
+}
+
+ul {
+    list-style-type: disc;
+    margin-left: 18pt;
+}
+
+ol {
+    list-style-type: decimal;
+    margin-left: 18pt;
+}
+
+ul.hhc {
+    list-style-type: none;
+    margin-left: 1em;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+li.hhc {
+    margin-left: 0;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+table {
+  border-spacing: 0;
+  border-color: #dfe3e7;
+}
+
+tr + tr td {
+   border-top: 0;
+}
+
+tr td + td {
+  border-left: 0;
+}
+
+td {
+  border: 1px solid;
+  border-color: #dfe3e7;
+}
+
+tr:first-child td:first-child {
+   border-radius: 0.2em 0 0 0;
+}
+
+tr:first-child td:last-child {
+  border-radius: 0 0.2em 0 0;
+}
+
+tr:first-child td:only-child {
+  border-radius: 0.2em 0.2em 0 0;
+}
+
+tr:last-child td:first-child {
+    border-radius: 0 0 0 0.2em;
+}
+
+tr:last-child td:last-child {
+    border-radius: 0 0 0.2em 0;
+}
+
+tr:last-child td:only-child {
+    border-radius: 0 0 0.2em 0.2em;
+}
+
+tr:only-child td:only-child {
+    border-radius: 0.2em 0.2em 0.2em 0.2em;
+}
+
+tr:only-child td:first-child {
+   border-radius: 0.2em 0 0 0.2em;
+}
+
+tr:only-child td:last-child {
+  border-radius: 0 0.2em 0.2em 0;
+}
+
+
+td.tmain, td.tmain_nw, td.thdr {
+    background-color: rgb(255, 255, 255);
+    vertical-align: top;
+    padding: 3px;
+}
+
+td.tmain p, td.tmain_nw p, td.thdr p {
+    margin-top: 3pt;
+    margin-bottom: 3pt;
+}
+
+td.tmain_nw {
+    white-space: nowrap;
+}
+
+td.thdr {
+    background-color: #e3e3e3;
+}
+
+table.decl {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+    vertical-align: top;
+    padding: 3px;
+    width: 100%;
+}
+
+table.decl td {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+}
+
+div.note-quote {
+    border-left: 10px solid #ccc;
+    padding: 1em 10px .1em 10px;
+    margin: 1.5em 10px;
+    background-color: rgb(224, 224, 224);
+}
+
+div.note-note {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+div.note-warning {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #fff;
+    background-color: #ff6358;
+}
+div.note-warning code.ctag {
+    color: black;
+}</style>
+<link rel="stylesheet" href="res/dripicons.css"></head><body><script type="text/javascript">
+var highlighterEnabled = false;
+var maintopic = 'index';
+var helptitle = 'Indicore SDK 3';
+    function loadStarted() {
+    window.onload = loadCompleted;
+
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        var head = document.getElementsByTagName('head')[0];
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.min.js';
+        head.appendChild(script4);
+
+
+        var script2 = document.createElement('script');
+        script2.type = 'text/javascript';
+        script2.src = './highlighter/highlight.cshtml.js';
+        head.appendChild(script2);
+
+        var script3 = document.createElement('script');
+        script3.type = 'text/javascript';
+        script3.src = './highlighter/highlight.lua.js';
+        head.appendChild(script3);
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.luax.js';
+        head.appendChild(script4);
+    }
+}
+
+function loadCompleted() {
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        hljs.registerLanguage('cshtml-razor', window.hljsDefineCshtmlRazor);
+        hljs.registerLanguage('lua', window.hljsDefineLua);
+        hljs.registerLanguage('luax', window.hljsDefineLuaX);
+        x = document.querySelectorAll('pre code');
+        for (var i = 0; i < x.length; i++) {
+            if (x[i].hasAttribute('class')) {
+                hljs.highlightBlock(x[i]);
+            }
+        }
+    }
+}
+
+
+function hidediv(divname) {
+    document.getElementById(divname).style.display = 'none';
+}
+
+function showdiv(divname) {
+    document.getElementById(divname).style.display = 'inline';
+}
+
+function syncList() {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, null, document.title);
+    }
+}
+
+function syncList1(key) {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, key + '.html', document.title);
+    }
+}</script><script type="text/javascript">
+    loadStarted();
+</script><h1><code>table <b>xmlhandler</b></code></h1>
+<h2>Brief</h2>
+<p>The table interface for SAX-style parsing.</p>
+<h2>Details</h2><p>Please note that this table <b>is not</b> implemented in the extension kit. Your application
+must create the table according this interface in order to listen SAX events during the parsing.</p><div id="open168" style="display:none">
+  <p>Example: Parsing XML using SAX parser&nbsp;<a href="javascript: showdiv('close168'); hidediv('open168');" onclick="javascript: showdiv('close168'); hidediv('open168');" class="action">Show<span class="side-icon dripicons-chevron-right"></span></a></p>
+</div>
+<div id="close168" style="display:inline">
+  <p>Example: Parsing XML using SAX parser&nbsp;<a href="javascript: showdiv('open168'); hidediv('close168');" onclick="javascript: showdiv('open168'); hidediv('close168');" class="action">Hide<span class="side-icon dripicons-chevron-down"></span></a></p>
+  <pre class="example" id="example168"><code>   function sax_characters(this, text)
+       print(&quot;text:&quot; .. expat_lua.utf8_to_ansi(text) .. &quot;\n&quot;);
+   end
+ 
+   function sax_startElement(this, name, attributes)
+       print(&quot;start element:&quot; .. name .. &quot;\n&quot;);
+ 
+       local i;
+       for i = 0, attributes.count - 1, 1 do
+           print(&quot;   attribute &quot; .. attributes[i].name .. &quot;=&quot; .. attributes[i].value .. &quot;\n&quot;);
+       end
+   end
+ 
+   function sax_endElement(this, name)
+       print(&quot;end element:&quot; .. name .. &quot;\n&quot;);
+   end
+ 
+   function sax_comment(this, text)
+       print(&quot;comment:&quot; .. text .. &quot;\n&quot;);
+   end
+ 
+   function sax_startCDATA(this)
+       print(&quot;startCDATA\n&quot;);
+   end
+ 
+   function sax_endCDATA(this)
+       print(&quot;endCDATA\n&quot;);
+   end
+ 
+   function sax_processingInstruction(this, target, data)
+       print(&quot;processing:&quot; .. target .. &quot;,&quot; .. data .. &quot;\n&quot;);
+   end
+ 
+   function sax_startNamespace(this, prefix, uri)
+       if (prefix == nil) then prefix = &quot;nil&quot;; end
+       print(&quot;startNamespace:&quot; .. prefix .. &quot;,&quot; .. uri .. &quot;\n&quot;);
+   end
+ 
+   function sax_endNamespace(this, prefix)
+       if (prefix == nil) then prefix = &quot;nil&quot;; end
+       print(&quot;endNamespace:&quot; .. prefix .. &quot;\n&quot;);
+   end
+ 
+   require(&quot;expat_lua&quot;);
+ 
+   local f = io.open(&quot;test.rus.xml&quot;, &quot;r&quot;);
+   assert(f ~= nil, &quot;can't open file&quot;);
+   local xml = f:read(&quot;*all&quot;)
+   f:close()
+ 
+   local handler = {characters = sax_characters,
+                    startElement = sax_startElement, endElement = sax_endElement,
+                    comment = sax_comment, startCDATA = sax_startCDATA, endCDATA = sax_endCDATA,
+                    processingInstruction = sax_processingInstruction,
+                    startNamespace = sax_startNamespace, endNamespace = sax_endNamespace};
+ 
+   expat_lua.parseSAX(xml, handler);</code></pre>
+</div><p></p>
+<table class="tmain" width="100%">
+  <tr>
+    <td colspan="2" class="thdr"><b>Public Methods</b></td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="ext_kit_xml.xmlhandler.characters.html">characters</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Receives notification of character data inside an element.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="ext_kit_xml.xmlhandler.comment.html">comment</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Receives notification of XML comment.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="ext_kit_xml.xmlhandler.endCDATA.html">endCDATA</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Receives notification of the end of the CDATA section.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="ext_kit_xml.xmlhandler.endElement.html">endElement</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Receives notification of the end of an element.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="ext_kit_xml.xmlhandler.endNamespace.html">endNamespace</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Receives notification of the end of the XML name space scope.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="ext_kit_xml.xmlhandler.processingInstruction.html">processingInstruction</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Receives notification of the XML processing instruction.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="ext_kit_xml.xmlhandler.startCDATA.html">startCDATA</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Receives notification of the begin of the CDATA section.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="ext_kit_xml.xmlhandler.startElement.html">startElement</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Receives notification of the start of an element.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="ext_kit_xml.xmlhandler.startNamespace.html">startNamespace</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Receives notification of the start of the XML name space scope.</p>
+    </td>
+  </tr>
+</table><p>
+  <center><a href="ext_kit_xml.html">back</a></center>
+</p><script language="javascript" type="text/javascript">if(window.parent.frames[0]) window.parent.frames[0].selectItem(window.location.href);</script></body></html>

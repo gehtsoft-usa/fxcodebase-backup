@@ -1,0 +1,95 @@
+function Init()
+{
+    indicator.name("Fractal channel indicator");
+    indicator.description("Fractal channel indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    
+    indicator.parameters.addGroup("Calculation");	
+    indicator.parameters.addInteger("Frame", "Number of fractals (Odd)", "Number of fractals (Odd)", 5, 3,99);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Uclr", "Upper channel color", "Upper channel color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("Lclr", "Lower channel color", "Lower channel color", core.rgb(0, 0, 255));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var UpperChannel=null;
+var LowerChannel=null;
+var Frame;
+var Shift;
+
+function Prepare()
+{
+    source = instance.source;
+    first = source.first()+2;
+    Frame = instance.parameters.Frame;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Frame + ")";
+    instance.name(name);
+    UpperChannel = instance.addStream("Upper", core.Line, name + ".Upper", "Upper", instance.parameters.Uclr, first);
+    LowerChannel = instance.addStream("Lower", core.Line, name + ".Lower", "Lower", instance.parameters.Lclr, first);
+    UpperChannel.setWidth(instance.parameters.widthLinReg);
+    UpperChannel.setStyle(instance.parameters.styleLinReg);
+    LowerChannel.setWidth(instance.parameters.widthLinReg);
+    LowerChannel.setStyle(instance.parameters.styleLinReg);
+    Shift=(Frame-1)/2;
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    var UpFr=true;
+    var DnFr=true;
+    var i;
+    for (i=1; i<=Shift; i++) 
+    {
+     if (source.high[period-Shift]<=source.high[period-Shift+i] || source.high[period-Shift]<=source.high[period-Shift-i]) 
+     {
+      UpFr=false;
+     }
+     if (source.low[period-Shift]>=source.low[period-Shift+i] || source.low[period-Shift]>=source.low[period-Shift-i]) 
+     {
+      DnFr=false;
+     }
+    }
+    if (UpFr) 
+    {
+     for (i=0; i<=Shift; i++) 
+     {
+      UpperChannel[period-Shift+i]=source.high[period-Shift];
+     }
+    } 
+    else
+    {
+     for (i=0; i<=Shift; i++) 
+     {
+      UpperChannel[period-Shift+i]=UpperChannel[period-Shift-1+i];
+     } 
+    }
+    if (DnFr) 
+    {
+     for (i=0; i<=Shift; i++) 
+     {
+      LowerChannel[period-Shift+i]=source.low[period-Shift];
+     }
+    } 
+    else
+    {
+     for (i=0; i<=Shift; i++) 
+     {
+      LowerChannel[period-Shift+i]=LowerChannel[period-Shift-1+i];
+     } 
+    }
+   } 
+   else if (period==first) 
+   {
+    UpperChannel[period]=null;
+    LowerChannel[period]=null;
+   } 
+}
+

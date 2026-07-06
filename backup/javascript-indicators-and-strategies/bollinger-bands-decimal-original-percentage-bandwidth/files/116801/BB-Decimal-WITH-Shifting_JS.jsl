@@ -1,0 +1,80 @@
+function Init()
+{
+    indicator.name("Bollinger Bands w. Shifting (Original+Decimal)");
+    indicator.description("Original Bollinger Bands with Decimal Support && Shifting Support.");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addDouble("N", "Number of periods", "Number of periods", 20.0);
+    indicator.parameters.addDouble("Dev", "Number of standard deviations", "Number of standard deviations", 2.0);
+    
+    indicator.parameters.addInteger("S_TL", "Shift TL line, n-periods.(NO DECIMAL)", "Shift TL line, n-periods.(NO DECIMAL)", 0);
+    indicator.parameters.addInteger("S_BL", "Shift BL line, n-periods.(NO DECIMAL)", "Shift BL line, n-periods.(NO DECIMAL)", 0);
+    indicator.parameters.addInteger("S_AL", "Shift AL line, n-periods.(NO DECIMAL)", "Shift AL line, n-periods.(NO DECIMAL)", 0);
+    
+    indicator.parameters.addColor("clrBBP", "clrBBP", "clrBBP", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("clrBBM", "clrBBM", "clrBBM", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clrBBA", "clrBBA", "clrBBA", core.rgb(0, 0, 255));
+}
+
+var N;
+var D;
+
+var firstPeriod;
+var source = null;
+
+var S_TL = null;
+var S_BL = null;
+var S_AL = null;
+
+var TL = null;
+var BL = null;
+
+function Prepare()
+{
+    N = instance.parameters.N;
+    D = instance.parameters.Dev;
+    
+    S_TL = instance.parameters.S_TL;
+    S_BL = instance.parameters.S_BL;
+    S_AL = instance.parameters.S_AL;
+    
+    source = instance.source;
+    firstPeriod = source.first() + N - 1;
+
+    var name = "Bollinger Bands - Decimal + Shifting (" + N + ", " + D + ")";
+    instance.name(name);
+    
+    TL = instance.addStream("TL", core.Line, name + ".TL", "TL", instance.parameters.clrBBP, firstPeriod + S_TL, S_TL)
+    BL = instance.addStream("BL", core.Line, name + ".BL", "BL", instance.parameters.clrBBM, firstPeriod + S_BL, S_BL)
+    AL = instance.addStream("AL", core.Line, name + ".AL", "AL", instance.parameters.clrBBA, firstPeriod + S_AL, S_AL)
+}
+
+function Update(period)
+{
+    if (period >= firstPeriod) 
+    {
+        var ml = Math.avg(source, period-N+1, period);
+        var d = Math.stdev(source, period-N+1, period);
+        
+        if (period + S_TL >= 0  ) 
+        {
+        	TL[period + S_TL] = ml + D * d;
+        }
+        
+        if (period + S_BL >= 0  ) 
+        {
+        	BL[period + S_BL] = ml - D * d;
+        }
+        
+        if (period + S_BL >= 0  ) 
+        {
+        	AL[period + S_AL] = ml;
+        }
+    }
+}
+
+
+
+
+

@@ -1,0 +1,183 @@
+function Init()
+{
+    indicator.name("Fractal_Graph_Dimension");
+    indicator.description("Fractal_Graph_Dimension");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    
+    indicator.parameters.addInteger("Period", "Period", "Period", 30);
+    indicator.parameters.addString("app_price", "app_price", "", "close");
+    indicator.parameters.addStringAlternative("app_price", "close", "", "close");
+    indicator.parameters.addStringAlternative("app_price", "open", "", "open");
+    indicator.parameters.addStringAlternative("app_price", "high", "", "high");
+    indicator.parameters.addStringAlternative("app_price", "low", "", "low");
+    indicator.parameters.addStringAlternative("app_price", "median", "", "median");
+    indicator.parameters.addStringAlternative("app_price", "typical", "", "typical");
+    indicator.parameters.addStringAlternative("app_price", "weighted", "", "weighted");
+
+    indicator.parameters.addDouble("Random_Line", "Random_Line", "Random_Line", 1.5);
+
+    indicator.parameters.addColor("clr_buffUP", "Color of buffUp", "Color of buffUp", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("clr_buffDN", "Color of buffDn", "Color of buffDn", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("clr_UPbuffUP", "Color of UPbuffUp", "Color of UPbuffUp", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("clr_UPbuffDN", "Color of UPbuffDn", "Color of UPbuffDn", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("clr_DNbuffUP", "Color of DNbuffUp", "Color of DNbuffUp", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("clr_DNbuffDN", "Color of DNbuffDn", "Color of DNbuffDn", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+var Period;
+var app_price;
+var Random_Line;
+var Price;
+var buffUP=null;
+var buffDN=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    app_price=instance.parameters.app_price;
+    Random_Line=instance.parameters.Random_Line;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.app_price + ", " + instance.parameters.Random_Line + ")";
+    instance.name(name);
+    Price = instance.addInternalStream(0, 0);
+    buffUP = instance.addStream("buffUP", core.Line, name + ".buffUP", "buffUP", instance.parameters.clr_buffUP, first);
+    buffDN = instance.addStream("buffDN", core.Line, name + ".buffDN", "buffDN", instance.parameters.clr_buffDN, first);
+    UPbuffUP = instance.addStream("UPbuffUP", core.Line, name + ".UPbuffUP", "UPbuffUP", instance.parameters.clr_UPbuffUP, first);
+    UPbuffDN = instance.addStream("UPbuffDN", core.Line, name + ".UPbuffDN", "UPbuffDN", instance.parameters.clr_UPbuffDN, first);
+    DNbuffUP = instance.addStream("DNbuffUP", core.Line, name + ".DNbuffUP", "DNbuffUP", instance.parameters.clr_DNbuffUP, first);
+    DNbuffDN = instance.addStream("DNbuffDN", core.Line, name + ".DNbuffDN", "DNbuffDN", instance.parameters.clr_DNbuffDN, first);
+    buffUP.addLevel(Random_Line);
+}
+
+function Update(period, mode)
+{
+    if (app_price=="close") 
+    {
+     Price[period]=source.close[period];
+    } 
+    else if (app_price=="open") 
+    {
+     Price[period]=source.open[period];
+    } 
+    else if (app_price=="high") 
+    {
+     Price[period]=source.high[period];
+    } 
+    else if (app_price=="low") 
+    {
+     Price[period]=source.low[period];
+    } 
+    else if (app_price=="median") 
+    {
+     Price[period]=(source.high[period]+source.low[period])/2.;
+    } 
+    else if (app_price=="typical") 
+    {
+     Price[period]=(source.high[period]+source.low[period]+source.close[period])/3.;
+    } 
+    else
+    {
+     Price[period]=(source.high[period]+source.low[period]+2.*source.close[period])/4.;
+    }
+     
+    if (period>first+Period) 
+    {
+     var tmp=Math.minmax(Price,period-Period+1,period);
+     var priceMax=tmp[1];
+     var priceMin=tmp[0];
+     var length=0.;
+     var priorDiff=0.;
+     var sum=0.;
+     
+     for (i=period-Period+1;i<=period;i++) 
+     {
+      if (priceMax-priceMin>0.) 
+      {
+       diff=(Price[i]-priceMin)/(priceMax-priceMin);
+       if (i>period-Period+1) 
+       {
+        length=length+Math.sqrt(Math.pow(diff-priorDiff,2)+(1./Math.pow(Period,2)));
+       }
+       priorDiff=diff;
+      }
+     }
+     
+     var variance;
+     var fdi;
+     if (length>0.) 
+     {
+      fdi=1.+(Math.log(length)+Math.log(2.))/Math.log(2.*(Period-1));
+      var mean=length/(Period-1);
+      var delta;
+      for (i=period-Period+1;i<=period;i++) 
+      {
+       if (priceMax-priceMin>0.) 
+       {
+        diff=(Price[i]-priceMin)/(priceMax-priceMin);
+        if (i>period-Period+1) 
+        {
+         delta=Math.sqrt(Math.pow(diff-priorDiff,2)+(1./Math.pow(Period,2)));
+         sum=sum+Math.pow(delta-length/(Period-1),2);
+        }
+        priorDiff=diff;
+       }
+      }
+      variance=sum/(Math.pow(length,2)*Math.pow(Math.log(2.*(Period-1)),2));
+     } 
+     else
+     {
+      fdi=0.;
+      variance=0.; 
+     }
+     var stddev=Math.sqrt(variance);
+     
+     if (fdi>Random_Line) 
+     {
+      buffUP[period]=fdi;
+      buffUP[period-1]=Math.max(buffUP[period-1],buffDN[period-1]);
+      buffDN[period]=null;
+      UPbuffUP[period]=fdi+stddev;
+      UPbuffUP[period-1]=buffUP[period-1]+stddev;
+      UPbuffDN[period]=null;
+      if (fdi-stddev>Random_Line) 
+      {
+       DNbuffUP[period]=fdi-stddev;
+       DNbuffUP[period-1]=buffUP[period-1]-stddev;
+       DNbuffDN[period]=null;
+      } 
+      else
+      {
+       DNbuffDN[period]=fdi-stddev;
+       DNbuffDN[period-1]=buffUP[period-1]-stddev;
+       DNbuffUP[period]=null;
+      }
+     } 
+     else
+     {
+      buffDN[period]=fdi;
+      buffDN[period-1]=Math.max(buffUP[period-1],buffDN[period-1]);
+      buffUP[period]=null;
+      if (fdi+stddev>Random_Line) 
+      {
+       UPbuffUP[period]=fdi+stddev;
+       UPbuffUP[period-1]=buffDN[period-1]+stddev;
+       UPbuffDN[period]=null;
+      } 
+      else
+      {
+       UPbuffDN[period]=fdi+stddev;
+       UPbuffDN[period-1]=buffDN[period-1]+stddev;
+       UPbuffUP[period]=null;
+      }
+      DNbuffDN[period]=fdi-stddev;
+      DNbuffDN[period-1]=buffDN[period-1]-stddev;
+      DNbuffUP[period]=null;
+     }
+
+    } 
+}
+

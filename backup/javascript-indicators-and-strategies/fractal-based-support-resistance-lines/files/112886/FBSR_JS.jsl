@@ -1,0 +1,75 @@
+function Init()
+{
+    indicator.name("Fractal Based Support/Resistance lines");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addColor("R_color", "Color of R", "Color of R", core.rgb(255, 192, 0));
+    indicator.parameters.addColor("S_color", "Color of S", "Color of S", core.rgb(0, 192, 255));
+}
+
+var first;
+var source = null;
+
+// Streams block
+var R = null;
+var S = null;
+
+function Prepare()
+{
+    source = instance.source;
+    first = source.first() + 4;
+
+    var name = profile.id() + "(" + source.name() + ")";
+    instance.name(name);
+    R = instance.addStream("R", core.Dot, name + ".R", "R", instance.parameters.R_color, first);
+    S = instance.addStream("S", core.Dot, name + ".S", "S", instance.parameters.S_color, first);
+}
+
+function Update(period)
+{
+    if (period >= first && source.hasData(period)) 
+    {
+        var up, down, curr;
+        up = false;
+        down = false;
+        curr = source.high[period - 2];
+        if (curr >= source.high[period - 4] && curr >= source.high[period - 3] && curr >= source.high[period - 1] && curr >= source.high[period]) 
+        {
+            up = true;
+        }
+        if (up) 
+        {
+            R[period - 2] = curr;
+            R[period - 1] = curr;
+            R[period] = curr;
+        }
+        else
+        {
+            if (R.hasData(period - 1)) 
+            {
+                R[period] = R[period - 1];
+            }
+        }
+        curr = source.low[period - 2];
+        if (curr <= source.low[period - 4] && curr <= source.low[period - 3] && curr <= source.low[period - 1] && curr <= source.low[period]) 
+        {
+            down = true;
+        }
+        if (down) 
+        {
+            S[period - 2] = curr;
+            S[period - 1] = curr;
+            S[period] = curr;
+        }
+        else
+        {
+            if (S.hasData(period - 1)) 
+            {
+                S[period] = S[period - 1];
+            }
+        }
+    }
+}
+

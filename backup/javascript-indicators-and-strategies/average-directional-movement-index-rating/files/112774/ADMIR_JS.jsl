@@ -1,0 +1,57 @@
+function Init()
+{
+    indicator.name("Average Directional Movement Index Rating");
+    indicator.description("Average Directional Movement Index Rating");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "Period", 14);
+	indicator.parameters.addInteger("Difference", "Look Back Period", "Look Back Period", 14);
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("ADXMIR_color", "Color of ADXMIR", "Color of ADXMIR", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var Period,Difference;
+
+var first;
+var source = null;
+
+// Streams block
+var ADXMIR = null;
+var ADX;
+// Routine
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+	Difference = instance.parameters.Difference;
+    source = instance.source;
+	
+	ADX = core.indicators.create("ADX", source,Period );
+    first = ADX.DATA.first()+Difference;
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ")";
+    instance.name(name);
+
+    if (not (nameOnly)) 
+    {
+        ADXMIR = instance.addStream("ADXMIR", core.Line, name, "ADXMIR", instance.parameters.ADXMIR_color, first);
+		ADXMIR.setWidth(instance.parameters.width);
+        ADXMIR.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period, mode)
+{
+    ADX.update(mode);
+    if (period < first) 
+    {
+	 return;
+	}
+    ADXMIR[period] = (ADX.DATA[period]+ADX.DATA[period-Difference])/2;
+    
+}
+

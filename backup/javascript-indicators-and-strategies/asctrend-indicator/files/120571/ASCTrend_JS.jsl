@@ -1,0 +1,157 @@
+function Init()
+{
+    indicator.name("ASCTrend indicator");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    
+    indicator.parameters.addInteger("RISK", "RISK", "No description", 3);
+    indicator.parameters.addBoolean("DotMode", "DotMode", "No description", false);
+
+    indicator.parameters.addColor("UP_color", "Color of UP", "Color of UP", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DN_color", "Color of DN", "Color of DN", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("DotClr", "Dot color", "Dot color", core.rgb(0, 0, 255));
+}
+
+var first;
+var RISK;
+var source = null;
+var buffUp=null;
+var buffDn=null;
+var Table_value2;
+var DotMode;
+var buffDot=null;
+
+function Prepare()
+{
+    source = instance.source;
+    RISK=instance.parameters.RISK;
+    DotMode=instance.parameters.DotMode;
+    first = source.first();
+    Table_value2=instance.addInternalStream(0, 0);
+    var name = profile.id() + "(" + source.name() + ", " + RISK + ")";
+    instance.name(name);
+    buffUp = instance.createTextOutput ("Up", "Up", "Wingdings", 10, core.H_Center, core.V_Top, instance.parameters.UP_color, first);
+    buffDn = instance.createTextOutput ("Dn", "Dn", "Wingdings", 10, core.H_Center, core.V_Bottom, instance.parameters.DN_color, first);
+    buffDot = instance.addStream("buffDot", core.Dot, name + ".ASCTrend", "ASCTrend", instance.parameters.DotClr, first);
+}
+
+function Update(period, mode)
+{
+    var value10=3*2*RISK;
+    if (period>first+2+value10) 
+    {
+     var x1=67+RISK;
+     var x2=33-RISK;
+     var value11=value10;
+     var Range=0.;
+     var AvgRange=0.;
+     for (i=period-9; i<=period; i++) 
+     {
+      AvgRange=AvgRange+Math.abs(source.high[i]-source.low[i]);
+     }
+     Range=AvgRange/10.;
+     var TrueCount=0;
+     var Counter=period;
+     while (Counter>period-9 && TrueCount<1) 
+     {
+      if (Math.abs(source.open[Counter]-source.close[Counter-1])>=Range*2.) 
+      {
+       TrueCount=TrueCount+1;
+      }
+      Counter=Counter-1;
+     }
+     var MRO1;
+     if (TrueCount>=1) 
+     {
+      MRO1=Counter;
+     } 
+     else
+     {
+      MRO1=-1;
+     }
+     Counter=period;
+     TrueCount=0;
+     while (Counter>period-6 && TrueCount<1) 
+     {
+      if (Math.abs(source.close[Counter-3]-source.close[Counter])>Range*4.6) 
+      {
+       TrueCount=TrueCount+1;
+      }
+      Counter=Counter-1;
+     }
+     var MRO2;
+     if (TrueCount>=1) 
+     {
+      MRO2=Counter;
+     } 
+     else
+     {
+      MRO2=-1;
+     }
+     if (MRO1>-1) 
+     {
+      value11=3;
+     } 
+     else
+     {
+      value11=value10;
+     }
+     if (MRO2>-1) 
+     {
+      value11=4;
+     } 
+     else
+     {
+      value11=value10;
+     }
+     var tmp=Math.minmax(source, period-value11+1, period);
+     var WPR=-(tmp[1]-source.close[period])*100./(tmp[1]-tmp[0]);
+     var value2=100-Math.abs(WPR);
+     Table_value2[period]=value2;
+     value3=0;
+     var i1;
+     if (value2<x2) 
+     {
+      i1=1;
+      while (Table_value2[period-i1]>=x2 && Table_value2[period-i1]<=x1) 
+      {
+       i1=i1+1;
+      }
+      if (Table_value2[period-i1]>x1) 
+      {
+       value3=source.high[period]+Range*0.5;
+       if (DotMode==false) 
+       {
+        buffUp.set(period, value3, "\226", "");
+       } 
+       else
+       {
+        buffDot[period]=source.high[period];
+       } 
+      }
+     }
+     if (value2>x1) 
+     {
+      i1=1;
+      while (Table_value2[period-i1]>=x2 && Table_value2[period-i1]<=x1) 
+      {
+       i1=i1+1;
+      }
+      if (Table_value2[period-i1]<x2) 
+      {
+       value3=source.low[period]-Range*0.5;
+       if (DotMode==false) 
+       {
+        buffDn.set(period, value3, "\225", "");
+       } 
+       else
+       {
+        buffDot[period]=source.low[period];
+       } 
+      }
+     }
+
+    }
+}
+

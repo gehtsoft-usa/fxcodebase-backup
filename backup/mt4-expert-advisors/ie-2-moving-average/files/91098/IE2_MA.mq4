@@ -1,0 +1,103 @@
+//+------------------------------------------------------------------+
+//|                                                       IE2_MA.mq4 |
+//|                               Copyright © 2013, Gehtsoft USA LLC |
+//|                                            http://fxcodebase.com |
+//+------------------------------------------------------------------+
+#property copyright "Copyright © 2013, Gehtsoft USA LLC"
+#property link      "http://fxcodebase.com"
+
+#property indicator_chart_window
+#property indicator_buffers 2
+#property indicator_color1 Yellow
+
+extern int Length=20;
+extern int Price=0;      // Applied price
+                         // 0 - Close
+                         // 1 - Open
+                         // 2 - High
+                         // 3 - Low
+                         // 4 - Median
+                         // 5 - Typical
+                         // 6 - Weighted  
+
+double IE2[];
+double Pr[];
+double sum, sum2;
+int N;
+double L2;
+
+int init()
+{
+ IndicatorShortName("IE/2 Moving Average");
+ IndicatorDigits(Digits);
+ SetIndexStyle(0,DRAW_LINE);
+ SetIndexBuffer(0,IE2);
+ SetIndexStyle(1,DRAW_NONE);
+ SetIndexBuffer(1,Pr);
+
+ sum=Length*(Length-1)/2;
+ sum2=(Length-1)*Length*(2*Length-1)/6; 
+ N=(Length+1)/3;
+ return(0);
+}
+
+int deinit()
+{
+
+ return(0);
+}
+
+int start()
+{
+ if(Bars<=Length) return(0);
+ int ExtCountedBars=IndicatorCounted();
+ if (ExtCountedBars<0) return(-1);
+ int limit=Bars-2;
+ if(ExtCountedBars>2) limit=Bars-ExtCountedBars-1;
+ int pos;
+ pos=limit;
+ while(pos>=0)
+ {
+  Pr[pos]=iMA(NULL, 0, 1, 0, MODE_SMA, Price, pos);
+  pos--;
+ } 
+ 
+ double sum1, sumy;
+ double sum3;
+ double num1, num2;
+ double slope;
+ double ILRS, LSMA;
+ int i;
+ pos=limit;
+ while(pos>=0)
+ {
+  sum1=0;
+  sumy=0;
+  sum3=0;
+  L2=0.;
+  for (i=0;i<Length;i++)
+  {
+   sum1+=Pr[pos+i]*i;
+   sumy+=Pr[pos+i];
+   sum3+=Pr[pos+i]*(Length-N-i);
+   L2+=(Length-N-i);
+  }
+  num1=sum1*Length-sum*sumy;
+  num2=sum*sum-sum2*Length;
+  if (num2!=0)
+  {
+   slope=num1/num2;
+  }
+  else
+  {
+   slope=0;
+  }
+  ILRS=iMA(NULL, 0, Length, 0, MODE_SMA, Price, pos)+slope;
+  LSMA=sum3/L2;
+  IE2[pos]=(ILRS+LSMA)/2;
+  pos--;
+ }  
+ 
+ return(0);
+}
+

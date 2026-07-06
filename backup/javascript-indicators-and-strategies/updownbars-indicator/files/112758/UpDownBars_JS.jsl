@@ -1,0 +1,64 @@
+function Init()
+{
+    indicator.name("UpDownBars indicator");
+    indicator.description("UpDownBars indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 20);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP Color", "UP Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DNclr", "DN Color", "DN Color", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+var Period;
+var UpDownBars=null;
+var up;
+var down;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    first = source.first()+2;
+    up=instance.addInternalStream(first, 0);
+    down=instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ")";
+    instance.name(name);
+    UpDownBars = instance.addStream("UpDownBars", core.Bar, name + ".UpDownBars", "UpDownBars", instance.parameters.UPclr, first);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+     var Range=source.close[period]-source.open[period];
+     if (Range>0) 
+     {
+      up[period]=Math.sqrt(Range);
+      down[period]=0;
+     } 
+     else
+     {
+      up[period]=0;
+      down[period]=Math.sqrt(-Range);
+     }
+     if (period>first+Period) 
+     {
+      UpDownBars[period]=Math.lwma(up,core.rangeTo(period,Period))-Math.lwma(down,core.rangeTo(period,Period));
+      if (UpDownBars[period]>0) 
+      {
+       UpDownBars.setColor(period,instance.parameters.UPclr);
+      } 
+      else
+      {
+       UpDownBars.setColor(period,instance.parameters.DNclr);
+      }
+     } 
+   } 
+}
+

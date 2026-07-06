@@ -1,0 +1,117 @@
+function Init()
+{
+    indicator.name("WVF Stochastic");
+    indicator.description("WVF Stochastic");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+	 indicator.parameters.addGroup("WTF Calculation"); 
+    indicator.parameters.addInteger("WP", "WVF Period", "WVF Period", 14);
+    
+	 indicator.parameters.addGroup("Stochastic Calculation");
+    indicator.parameters.addInteger("KP", "K Period", "", 5, 2, 1000); 
+    indicator.parameters.addInteger("DP", "D Period Smoothing Period", "",  3, 2, 1000);
+
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("K_color", "Color of K", "Color of K", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("D_color", "Color of D", "Color of D", core.rgb(0, 255, 0));
+	
+	
+	indicator.parameters.addGroup("Overbought/oversold level");
+   
+    indicator.parameters.addInteger("overbought","Overbought Level", "", 80, 0, 100);
+    indicator.parameters.addInteger("oversold", "Oversold Level", "", 20, 0, 100);
+    indicator.parameters.addInteger("level_overboughtsold_width", "Line Width", "", 1, 1, 5);
+    indicator.parameters.addInteger("level_overboughtsold_style", "Line Style", "", core.LINE_SOLID);
+    indicator.parameters.addColor("level_overboughtsold_color", "Line Color", "", core.rgb(255, 255, 0));
+    indicator.parameters.setFlag("level_overboughtsold_style", core.FLAG_LEVEL_STYLE);
+}
+
+var WP, KP, DP;
+var WVF;
+var first;
+var source = null;
+
+var K = null;
+var D = null;
+var Smoothing;
+
+var mins, maxes;
+
+function Prepare()
+{
+    WP = instance.parameters.WP;
+    DP = instance.parameters.DP;
+	KP = instance.parameters.KP;
+    source = instance.source;
+	
+	
+     mins = instance.addInternalStream(source.first() + KP, 0);
+    maxes = instance.addInternalStream(source.first() + KP, 0);
+	
+	assert(core.indicators.findIndicator("WVF_JS") != null, "Please, {wnload && install WVF.LUA indicator");
+	
+	WVF = core.indicators.create("WVF_JS", source, WP);
+		
+	
+    var name = profile.id() + "(" + source.name() + ", " + WP + ", " + KP + ", " + DP + ")";
+    instance.name(name);
+    K = instance.addStream("K", core.Line, name + ".K", "K", instance.parameters.K_color, WVF.DATA.first()+KP);
+	
+	 Smoothing = core.indicators.create("MVA", K , DP);
+	 
+	 first= Smoothing.DATA.first();
+	
+    D = instance.addStream("D", core.Line, name + ".D", "D", instance.parameters.D_color, first);
+	
+	D.setPrecision(2);
+   
+
+    D.addLevel(0);
+    D.addLevel(instance.parameters.oversold, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);
+    D.addLevel(instance.parameters.overbought, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);
+    D.addLevel(100);
+	
+}
+
+function Update(period, mode)
+{
+ if (period < first+KP) 
+ { 
+  return;
+ }
+ 	
+	    WVF.update(mode);
+		
+		 var tmp = Math.minmax(WVF.DATA, period - KP + 1, period);
+		 var minLow=tmp[0];
+		 var maxHigh=tmp[1];
+		 
+		 
+		 mins[period] = WVF.DATA[period] - minLow;
+        maxes[period] = maxHigh - minLow;
+		
+		
+		if (maxes[period] > 0) 
+		{
+           K[period] = mins[period] / maxes[period] * 100;
+        }   
+        else
+        {
+            K[period] = 50;
+        }
+		
+		
+	
+		
+		Smoothing.update(mode);
+		
+		 if (period < first) 
+		 { 
+		  return;
+		 }
+		
+        D[period] = Smoothing.DATA[period];
+   
+}
+

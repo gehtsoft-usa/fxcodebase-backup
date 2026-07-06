@@ -1,0 +1,282 @@
+// More information about this indicator can be found at:
+// http://fxcodebase.com/code/viewtopic.php?f=38&t=67761
+
+//+------------------------------------------------------------------+
+//|                               Copyright © 2019, Gehtsoft USA LLC | 
+//|                                            http://fxcodebase.com |
+//+------------------------------------------------------------------+
+//|                                      Developed by : Mario Jemic  |
+//|                                          mario.jemic@gmail.com   |
+//+------------------------------------------------------------------+
+//|                                 Support our efforts by donating  |
+//|                                  Paypal : https://goo.gl/9Rj74e  |
+//+------------------------------------------------------------------+
+//|                                Patreon :  https://goo.gl/GdXWeN  |
+//|                    BitCoin : 15VCJTLaz12Amr7adHSBtL9v8XomURo9RF  |
+//|               BitCoin Cash : 1BEtS465S3Su438Kc58h2sqvVvHK9Mijtg  |
+//|           Ethereum : 0x8C110cD61538fb6d7A2B47858F0c0AaBd663068D  |
+//|                   LiteCoin : LLU8PSY2vsq7B9kRELLZQcKf5nJQrdeqwD  |
+//+------------------------------------------------------------------+
+
+#property copyright "Copyright © 2019, Gehtsoft USA LLC"
+#property link      "http://fxcodebase.com"
+#property version   "1.1"
+#property strict
+
+#property indicator_separate_window
+#property indicator_buffers 6
+#property indicator_color1 Green
+#property indicator_color2 Red
+
+enum CalcMethod
+{
+   Total, // Total
+   Average // Average
+};
+
+enum LegSize
+{
+   DoNotShow, // Do not show
+   ShowPips, // Pips
+   ShowBars // Bars
+};
+
+extern int dif=1;
+extern bool Absolute=false;
+extern color up_leg_color = Green; // Up Leg Color
+extern color down_leg_color = Red; // Down Leg Color
+extern CalcMethod leg_volume_calc_method = Total; // Leg Volume Calculation Method
+extern bool show_leg_volume_total = false; // Show Leg Total Volume
+extern bool show_leg_volume_avg = false; // Show Leg Average Volume
+extern color labels_color = Gray; // Labels Color
+extern bool show_time = false; // Show Time
+extern LegSize show_leg_size = DoNotShow; // Show Leg Size
+extern int bars_limit = 1000;
+
+double WW[], WW_DN[];
+double mov[], trend[], wave[], vol[];
+double difPip;
+
+string IndicatorName;
+string IndicatorObjPrefix;
+
+string GenerateIndicatorName(const string target)
+{
+   string name = target;
+   int try = 2;
+   while (WindowFind(name) != -1)
+   {
+      name = target + " #" + IntegerToString(try++);
+   }
+   return name;
+}
+
+// Instrument info v.1.2
+class InstrumentInfo
+{
+   string _symbol;
+   double _mult;
+   double _point;
+   double _pipSize;
+   int _digits;
+   double _tickSize;
+public:
+   InstrumentInfo(const string symbol)
+   {
+      _symbol = symbol;
+      _point = MarketInfo(symbol, MODE_POINT);
+      _digits = (int)MarketInfo(symbol, MODE_DIGITS); 
+      _mult = _digits == 3 || _digits == 5 ? 10 : 1;
+      _pipSize = _point * _mult;
+      _tickSize = MarketInfo(_symbol, MODE_TICKSIZE);
+   }
+   
+   static double GetBid(const string symbol) { return MarketInfo(symbol, MODE_BID); }
+   double GetBid() { return GetBid(_symbol); }
+   static double GetAsk(const string symbol) { return MarketInfo(symbol, MODE_ASK); }
+   double GetAsk() { return GetAsk(_symbol); }
+   double GetPipSize() { return _pipSize; }
+   double GetPointSize() { return _point; }
+   string GetSymbol() { return _symbol; }
+   double GetSpread() { return (GetAsk() - GetBid()) / GetPipSize(); }
+   int GetDigits() { return _digits; }
+   double GetTickSize() { return _tickSize; }
+
+   double RoundRate(const double rate)
+   {
+      return NormalizeDouble(MathCeil(rate / _tickSize + 0.5) * _tickSize, _digits);
+   }
+};
+
+double pipSize;
+
+int init()
+{
+   IndicatorName = GenerateIndicatorName("WeisWave Statistics");
+   IndicatorObjPrefix = "__" + IndicatorName + "__";
+   IndicatorShortName(IndicatorName);
+
+   InstrumentInfo info(_Symbol);
+   pipSize = info.GetPipSize();
+
+   IndicatorDigits(Digits);
+   SetIndexStyle(0, DRAW_HISTOGRAM);
+   SetIndexBuffer(0, WW);
+   SetIndexStyle(1, DRAW_HISTOGRAM);
+   SetIndexBuffer(1, WW_DN);
+
+   SetIndexStyle(2,DRAW_NONE);
+   SetIndexBuffer(2,mov);
+   SetIndexStyle(3,DRAW_NONE);
+   SetIndexBuffer(3,trend);
+   SetIndexStyle(4,DRAW_NONE);
+   SetIndexBuffer(4,wave);
+   SetIndexStyle(5,DRAW_NONE);
+   SetIndexBuffer(5,vol);
+   
+   difPip = dif * Point;
+
+   return(0);
+}
+
+int deinit()
+{
+   ObjectsDeleteAll(ChartID(), IndicatorObjPrefix);
+   return(0);
+}
+
+int findPreviousPosition(const int pos)
+{
+   int direction = (int)wave[pos];
+   for (int i = pos + 1; i < Bars - 1; ++i)
+   {
+      if (wave[i] != direction)
+         return i;
+   }
+   return -1;
+}
+
+void DrawLine(const string id, const double rate1, const int pos1, const double rate2, const int pos2, const color clr)
+{
+   if (!ObjectCreate(ChartID(), id, OBJ_TREND, 0, Time[pos1], rate1, Time[pos2], rate2)) 
+      return;
+
+   ObjectSetInteger(ChartID(), id, OBJPROP_COLOR, clr); 
+   ObjectSetInteger(ChartID(), id, OBJPROP_RAY_RIGHT, false); 
+   string label = "";
+   if (show_leg_volume_total)
+      label = label + " " + IntegerToString((int)vol[pos2]);
+   if (show_leg_volume_avg)
+      label = label + " " + IntegerToString((int)MathCeil(vol[pos2] / (pos1 - pos2)));
+   if (show_time)
+      label = label + " " + IntegerToString((int)MathCeil((Time[pos2] - Time[pos1]) / 60 )) + "min";
+
+   switch (show_leg_size)
+   {
+      case DoNotShow:
+         break;
+      case ShowPips:
+         label = label + " " + DoubleToStr(MathAbs(Low[pos1] - High[pos2]) / pipSize, 1) + "p";
+         break;
+      case ShowBars:
+         label = label + " " + IntegerToString(pos1 - pos2) + " bars";
+         break;
+   }
+   if (label != "")
+   {
+      if (!ObjectCreate(ChartID(), id + "_label", OBJ_TEXT, 0, Time[pos2], rate2))
+         return;
+      ObjectSetString(ChartID(), id + "_label", OBJPROP_TEXT, label); 
+      ObjectSetString(ChartID(), id + "_label", OBJPROP_FONT, "Arial"); 
+      ObjectSetInteger(ChartID(), id + "_label", OBJPROP_FONTSIZE, 10); 
+      ObjectSetInteger(ChartID(), id + "_label", OBJPROP_ANCHOR, rate1 > rate2 ? ANCHOR_UPPER : ANCHOR_LOWER); 
+      ObjectSetInteger(ChartID(), id + "_label", OBJPROP_COLOR, labels_color); 
+   }
+}
+
+int start()
+{
+   if (Bars <= 3)
+      return(0);
+   int ExtCountedBars=IndicatorCounted();
+   if (ExtCountedBars < 0)
+      return(-1);
+   int limit = Bars - 2;
+   if (ExtCountedBars > 2)
+      limit = Bars - ExtCountedBars - 1;
+   int pos = MathMin(bars_limit, limit);
+   while (pos >= 0)
+   {
+      if (Close[pos] > Close[pos+1])
+         mov[pos] = 1.;
+      else
+      {
+         if (Close[pos] < Close[pos+1])
+            mov[pos] = -1.;
+         else
+            mov[pos] = 0.;
+      }
+      
+      if (mov[pos] != 0. && mov[pos] != mov[pos + 1])
+         trend[pos] = mov[pos];
+      else
+         trend[pos]=trend[pos+1];
+      
+      if (trend[pos] != wave[pos + 1] && MathAbs(Close[pos] - Close[pos + 1]) >= difPip)
+      {
+         wave[pos]=trend[pos];
+         if (wave[pos] == 1)
+         {
+            int prev_pos = findPreviousPosition(pos + 1);
+            if (prev_pos != -1)
+            {
+               DrawLine(IndicatorObjPrefix + TimeToStr(Time[prev_pos]) + "wave", 
+                  High[prev_pos], prev_pos, Low[pos + 1], pos + 1, down_leg_color);
+            }
+         }
+         else
+         {
+            int prev_pos = findPreviousPosition(pos + 1);
+            if (prev_pos != -1)
+            {
+               DrawLine(IndicatorObjPrefix + TimeToStr(Time[prev_pos]) + "wave", 
+                  Low[prev_pos], prev_pos, High[pos + 1], pos + 1, up_leg_color);
+            }
+         }
+      }
+      else
+         wave[pos]=wave[pos+1];
+      
+      if (wave[pos]==wave[pos+1])
+         vol[pos]=vol[pos+1]+Volume[pos];
+      else
+         vol[pos] = (double)Volume[pos];
+
+      WW[pos]=EMPTY_VALUE;
+      WW_DN[pos]=EMPTY_VALUE;
+      
+      int period = 1;
+      if (leg_volume_calc_method != Total)
+      {
+         int prev_pos = findPreviousPosition(pos);
+         if (prev_pos != -1)
+            period = pos - prev_pos;
+      } 
+      if (wave[pos] == 1)
+         WW[pos] = vol[pos] / period;
+      else
+      {
+         if (wave[pos] == -1)
+         {
+            if (Absolute)
+               WW_DN[pos] = vol[pos] / period;
+            else
+               WW_DN[pos] = -vol[pos] / period;
+         }
+      }
+
+      pos--;
+   } 
+   return(0);
+}
+

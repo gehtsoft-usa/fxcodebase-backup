@@ -1,0 +1,127 @@
+function Init()
+{
+    indicator.name("Distance from the moving average");
+    indicator.description("Distance from the moving average");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");	
+    indicator.parameters.addInteger("Period1", "Period", "Period", 14);
+    indicator.parameters.addString("Method1", "Method1", "Method", "MVA");
+	indicator.parameters.addStringAlternative("Method1", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method1", "EMA", "EMA" , "EMA");
+	indicator.parameters.addStringAlternative("Method1", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method1", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method1", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method1", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method1", "WMA", "WMA" , "WMA");
+	
+	indicator.parameters.addBoolean("Smoothing", "Uses Smoothing", "", true);
+	
+	
+	indicator.parameters.addInteger("Period2", "Period", "Period", 14);
+    indicator.parameters.addString("Method2", "Method2", "Method", "MVA");
+	indicator.parameters.addStringAlternative("Method2", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method2", "EMA", "EMA" , "EMA");
+	indicator.parameters.addStringAlternative("Method2", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method2", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method2", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method2", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method2", "WMA", "WMA" , "WMA");
+	
+	indicator.parameters.addString("Mode", "Mode", "Mode", "Value");
+	indicator.parameters.addStringAlternative("Mode", "Value", "Value" , "Value");
+    indicator.parameters.addStringAlternative("Mode", "Pip", "Pip" , "Pip");
+	
+	indicator.parameters.addGroup("Style");	
+    indicator.parameters.addColor("color1", "Color of Distance", "Color of Distance", core.rgb(0, 255, 0));
+	indicator.parameters.addInteger("width1", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style1", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style1", core.FLAG_LINE_STYLE);
+	
+	
+	indicator.parameters.addColor("color2", "Color of Smoothed", "Color of Smoothed", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width2", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style2", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style2", core.FLAG_LINE_STYLE);
+}
+
+var Period1;
+var Method1;
+var Period2;
+var Method2;
+var Smoothing;
+var first1, first2;
+var source = null;
+var ma1, ma2, MA;
+var Mode;
+
+var Distance = null;
+
+function Prepare(nameOnly)
+{
+    Period1 = instance.parameters.Period1;
+    Method1 = instance.parameters.Method1;
+	
+	Period2 = instance.parameters.Period2;
+    Method2 = instance.parameters.Method2;
+	
+	Mode= instance.parameters.Mode;
+	
+	Smoothing= instance.parameters.Smoothing;
+	
+    source = instance.source;
+	
+	ma1= core.indicators.create(Method1, source, Period1);
+    first1 = ma1.DATA.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period1) + ", " + tostring(Method1)+ ", " + tostring(Period2) + ", " + tostring(Method2)+ ", " + tostring(Mode) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        Distance = instance.addStream("Distance", core.Line, name, "Distance", instance.parameters.color1, first1);
+		Distance.setWidth(instance.parameters.width1);
+        Distance.setStyle(instance.parameters.style1);
+		if (Smoothing) 
+		{
+		 ma2= core.indicators.create(Method2, Distance, Period2);
+         first2 = ma2.DATA.first();
+		
+		 MA = instance.addStream("Smoothed", core.Line, name, "Smoothed", instance.parameters.color2, first2);
+		 MA.setWidth(instance.parameters.width2);
+         MA.setStyle(instance.parameters.style2);
+		}
+    }
+}
+
+function Update(period,mode)
+{
+    ma1.update(mode);
+    if (period < first1 || !source.hasData(period)) 
+    {
+	 return;
+	}
+	    if (Mode== "Pip") 
+	    {
+		 Distance[period] = (source[period]- ma1.DATA[period])/source.pipSize();
+		} 
+		else
+		{	
+         Distance[period] = source[period]- ma1.DATA[period];
+		}
+		
+	if (!Smoothing) 
+	{
+     return;
+    }	
+	ma2.update(mode);
+	
+    if (period < first2)   
+    {
+	 return;
+	}	
+	
+	   MA[period] =  ma2.DATA[period];
+    
+}
+

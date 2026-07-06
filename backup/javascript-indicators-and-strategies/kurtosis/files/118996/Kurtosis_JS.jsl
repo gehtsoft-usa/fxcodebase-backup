@@ -1,0 +1,75 @@
+function Init()
+{
+    indicator.name("Kurtosis");
+    indicator.description("Kurtosis");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addInteger("KP", "Kurtosis Period", "Kurtosis Period", 4);
+    indicator.parameters.addInteger("FS", "First Smoothing Period", "First Smoothing Period", 66);
+    indicator.parameters.addInteger("SS", "Second Smoothing Period", "Second Smoothing Period", 3);
+	
+	indicator.parameters.addGroup("Style");
+	indicator.parameters.addInteger("style", "Line Style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LEVEL_STYLE);	
+	indicator.parameters.addInteger("width", "Line Width", "", 3, 1, 5);
+    indicator.parameters.addColor("Kurtosis_color", "Color of Kurtosis", "Color of Kurtosis", core.rgb(255, 0, 0));
+}
+
+var KP;
+var FS;
+var SS;
+
+var first;
+var source = null;
+
+var Indicator={};
+
+var Kurtosis = null;
+var Momentum;
+var RAW;
+
+function Prepare()
+{
+    KP = instance.parameters.KP;
+    FS = instance.parameters.FS;
+    SS = instance.parameters.SS;
+    source = instance.source;
+    first = source.first()+KP;
+	
+	Momentum =  instance.addInternalStream (first, 0);
+	RAW =  instance.addInternalStream (first, 0);
+	
+	Indicator["EMA"] =   core.indicators.create("EMA", RAW, FS);
+	Indicator["MVA"] =   core.indicators.create("MVA", Indicator["EMA"] .DATA, SS);
+
+    var name = profile.id() + "(" + source.name() + ", " + KP + ", " + FS + ", " + SS + ")";
+    instance.name(name);
+    Kurtosis = instance.addStream("Kurtosis", core.Line, name, "Kurtosis", instance.parameters.Kurtosis_color, first);
+	Kurtosis.setWidth(instance.parameters.width);
+    Kurtosis.setStyle(instance.parameters.style);
+}
+
+function Update(period, mode)
+{
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+	Momentum[period]= source[period] - source[period-KP];
+	
+	
+	RAW[period] = Momentum[period] - Momentum[period-1];
+	
+	if (period < first + FS +SS) 
+	{
+	 return;
+	}
+	
+	Indicator["EMA"].update(mode);
+	Indicator["MVA"].update(mode);
+	
+    Kurtosis[period] = Indicator["MVA"].DATA[period];
+    
+}
+

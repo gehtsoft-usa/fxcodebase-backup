@@ -1,0 +1,34 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - luaL_loadfile</title>
+</head>
+<body>
+<h3><a name="luaL_loadfile"><code>luaL_loadfile</code></a></h3>
+<pre>int luaL_loadfile (lua_State *L, const char *filename);</pre>
+
+<p>
+Loads a file as a Lua chunk.
+This function uses <a href="lua_load.html"><code>lua_load</code></a> to load the chunk in the file
+named <code>filename</code>.
+If <code>filename</code> is <code>NULL</code>,
+then it loads from the standard input.
+The first line in the file is ignored if it starts with a <code>#</code>.
+
+
+<p>
+This function returns the same results as <a href="lua_load.html"><code>lua_load</code></a>,
+but it has an extra error code <a name="pdf-LUA_ERRFILE"><code>LUA_ERRFILE</code></a>
+if it cannot open/read the file.
+
+
+<p>
+As <a href="lua_load.html"><code>lua_load</code></a>, this function only loads the chunk;
+it does not run it.
+
+
+
+
+
+<hr>
+</body>
+</html>

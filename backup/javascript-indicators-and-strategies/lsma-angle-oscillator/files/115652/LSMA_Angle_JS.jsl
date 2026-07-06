@@ -1,0 +1,100 @@
+function Init()
+{
+    indicator.name("LSMA angle indicator");
+    indicator.description("LSMA angle indicator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 25);
+    indicator.parameters.addInteger("AngleTreshold", "Angle treshold", "", 15);
+    indicator.parameters.addInteger("StartShift", "Start shift", "", 4);
+    indicator.parameters.addInteger("EndShift", "End shift", "", 0);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("PUPclr", "Positive UP color", "Positive UP color", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("PDNclr", "Positive DN color", "Positive DN color", core.rgb(0, 255, 255));
+    indicator.parameters.addColor("NUPclr", "Negative UP color", "Negative UP color", core.rgb(255, 128, 192));
+    indicator.parameters.addColor("NDNclr", "Negative DN color", "Negative DN color", core.rgb(255, 0, 255));
+    indicator.parameters.addColor("Nclr", "Neutral color", "Neutral color", core.rgb(128, 128, 128));
+}
+
+var first;
+var source = null;
+var Period;
+var AngleTreshold;
+var StartShift;
+var EndShift;
+var LSMA_Angle=null;
+var MaxShift;
+var mFactor;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    AngleTreshold=instance.parameters.AngleTreshold;
+    StartShift=instance.parameters.StartShift;
+    EndShift=instance.parameters.EndShift;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.AngleTreshold + ", " + instance.parameters.StartShift + ", " + instance.parameters.EndShift + ")";
+    instance.name(name);
+    LSMA_Angle = instance.addStream("LSMA_Angle", core.Bar, name + ".LSMA_Angle", "LSMA_Angle", instance.parameters.PUPclr, first);
+    MaxShift=Math.max(StartShift, EndShift);
+    mFactor=100000/(StartShift-EndShift);
+}
+
+function LSMA(index, shift)
+{
+ var i;
+ var sum=0;
+ var tmp;
+ var len=(Period+1)/3;
+ for (i=1; i<=Period; i++) 
+ {
+  tmp=(i-len)*source[index-shift-Period+i];
+  sum=sum+tmp;
+ }
+ return (sum*6/(Period*(Period+1)));
+}
+
+function Update(period, mode)
+{
+   if (period>first+MaxShift) 
+   {
+    var fEnd=LSMA(period, EndShift);
+    var fStart=LSMA(period, StartShift);
+    var fAngle=mFactor*(fEnd-fStart)/2;
+    LSMA_Angle[period]=fAngle;
+    if (Math.abs(LSMA_Angle[period])>=AngleTreshold) 
+    {
+     if (LSMA_Angle[period]>0) 
+     {
+      if (LSMA_Angle[period]>=LSMA_Angle[period-1]) 
+      {
+       LSMA_Angle.setColor(period, instance.parameters.PUPclr);
+      } 
+      else
+      {
+       LSMA_Angle.setColor(period, instance.parameters.PDNclr);
+      }
+     } 
+     else
+     {
+      if (LSMA_Angle[period]>=LSMA_Angle[period-1]) 
+      {
+       LSMA_Angle.setColor(period, instance.parameters.NUPclr);
+      } 
+      else
+      {
+       LSMA_Angle.setColor(period, instance.parameters.NDNclr);
+      } 
+     }
+    } 
+    else
+    {
+     LSMA_Angle.setColor(period, instance.parameters.Nclr);
+    }
+   } 
+}
+

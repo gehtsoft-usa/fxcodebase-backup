@@ -1,0 +1,108 @@
+function Init()
+{
+    indicator.name("Symphonie Matrix indicator");
+    indicator.description("Symphonie Matrix indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Emotion_SSP", "SSP (Emotion)", "", 7);
+    indicator.parameters.addDouble("Emotion_Kmax", "Kmax (Emotion)", "", 50.6);
+
+    indicator.parameters.addInteger("Extreme_r", "r (Extreme)", "", 12);
+    indicator.parameters.addInteger("Extreme_s", "s (Extreme)", "", 12);
+    indicator.parameters.addInteger("Extreme_u", "u (Extreme)", "", 5);
+
+    indicator.parameters.addInteger("Sentiment_Period", "Period (Sentiment)", "", 12);
+
+    indicator.parameters.addInteger("Trendline_CCI_Period", "Period of CCI (Trendline)", "", 63);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UpClr", "Up Color", "Up Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DnClr", "Dn Color", "Dn Color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("DotSize", "Dot size", "Dot size", 3, 1, 5);
+}
+
+var first;
+var source = null;
+var Ind_Symp_Emotion;
+var Ind_Symp_Extreme;
+var Ind_Symp_Sentiment;
+var Ind_Symp_Trendline;
+var Symp_Emotion;
+var Symp_Extreme;
+var Symp_Sentiment;
+var Symp_Trendline;
+
+function Prepare()
+{
+    source = instance.source;
+    first = source.first()+2;
+    Ind_Symp_Emotion = core.indicators.create("SYMP_EMOTION_INDICATOR", source, instance.parameters.Emotion_SSP, instance.parameters.Emotion_Kmax);
+    Ind_Symp_Extreme = core.indicators.create("SYMP_EXTREME_INDICATOR", source, instance.parameters.Extreme_r, instance.parameters.Extreme_s, instance.parameters.Extreme_u);
+    Ind_Symp_Sentiment = core.indicators.create("SYMP_SENTIMENT_INDICATOR", source, instance.parameters.Sentiment_Period);
+    Ind_Symp_Trendline = core.indicators.create("CCI", source, instance.parameters.Trendline_CCI_Period);
+    var name = profile.id() + "(" + source.name() + ")";
+    instance.name(name);
+    Symp_Sentiment = instance.addStream("Symp_Sentiment", core.Dot, name + ".Symp_Sentiment", "Symp_Sentiment", instance.parameters.UpClr, first);
+    Symp_Emotion = instance.addStream("Symp_Emotion", core.Dot, name + ".Symp_Emotion", "Symp_Emotion", instance.parameters.UpClr, first);
+    Symp_Trendline = instance.addStream("Symp_Trendline", core.Dot, name + ".Symp_Trendline", "Symp_Trendline", instance.parameters.UpClr, first);
+    Symp_Extreme = instance.addStream("Symp_Extreme", core.Dot, name + ".Symp_Extreme", "Symp_Extreme", instance.parameters.UpClr, first);
+    Symp_Emotion.setWidth(instance.parameters.DotSize);
+    Symp_Extreme.setWidth(instance.parameters.DotSize);
+    Symp_Sentiment.setWidth(instance.parameters.DotSize);
+    Symp_Trendline.setWidth(instance.parameters.DotSize);
+    Symp_Emotion.addLevel(0);
+    Symp_Emotion.addLevel(5);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    Ind_Symp_Emotion.update(mode);
+    Ind_Symp_Extreme.update(mode);
+    Ind_Symp_Sentiment.update(mode);
+    Ind_Symp_Trendline.update(mode);
+    Symp_Sentiment[period]=1;
+    Symp_Emotion[period]=2;
+    Symp_Trendline[period]=3;
+    Symp_Extreme[period]=4;
+    if (Ind_Symp_Sentiment.DATA[period]>=0) 
+    {
+     Symp_Sentiment.setColor(period,instance.parameters.UpClr);
+    }
+    else
+    {
+     Symp_Sentiment.setColor(period,instance.parameters.DnClr);
+    }
+    if (period>first+instance.parameters.Emotion_SSP) 
+    {
+     if (Ind_Symp_Emotion.DATA[period]>=Ind_Symp_Emotion.DATA[period-instance.parameters.Emotion_SSP]) 
+     {
+      Symp_Emotion.setColor(period,instance.parameters.UpClr);
+     }
+     else
+     {
+      Symp_Emotion.setColor(period,instance.parameters.DnClr);
+     }
+    }
+    if (Ind_Symp_Trendline.DATA[period]>=0) 
+    {
+     Symp_Trendline.setColor(period,instance.parameters.UpClr);
+    }
+    else
+    {
+     Symp_Trendline.setColor(period,instance.parameters.DnClr);
+    }
+    if (Ind_Symp_Extreme.DATA[period]>=Ind_Symp_Extreme.DATA[period-1]) 
+    {
+     Symp_Extreme.setColor(period,instance.parameters.UpClr);
+    }
+    else
+    {
+     Symp_Extreme.setColor(period,instance.parameters.DnClr);
+    }
+   } 
+}
+

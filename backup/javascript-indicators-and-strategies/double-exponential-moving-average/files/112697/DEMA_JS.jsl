@@ -1,0 +1,62 @@
+// Indicator profile initialization routine
+// Defines indicator profile properties && indicator parameters
+// TODO. Add minimal && maximal value of numeric parameters && default color of the streams
+function Init()
+{
+    indicator.name("Double exponential moving average");
+    indicator.description("Double exponential moving average");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addInteger("TF", "Period", "Period", 50,2,2000);
+    indicator.parameters.addColor("DC", "Color of DEMA", "Color of DEMA", core.rgb(255, 0, 0));
+}
+
+// Indicator instance initialization routine
+// Processes indicator parameters && creates output streams
+// TODO. Refine the first period calculation for each of the output streams.
+// TODO. Calculate all constants, create instances all subsequent indicators && load all required libraries
+// Parameters block
+var Frame;
+
+var first;
+var source = null;
+
+// Streams block
+var DEMA = null;
+var AVG,AVGofAVG;
+var DC=null;
+
+// Routine
+function Prepare()
+{
+    Frame = instance.parameters.TF;
+	DC = instance.parameters.DC;
+    source = instance.source;
+    first = source.first();
+	
+	AVG = core.indicators.create("EMA", source.close, Frame);
+	AVGofAVG = core.indicators.create("EMA", AVG.DATA, Frame);
+
+    var name = profile.id() + "(" + source.name() + ", " + Frame + ")";
+    instance.name(name);
+    DEMA = instance.addStream("DEMA", core.Line, name, "DEMA", DC, first);
+}
+
+// Indicator calculation routine
+// TODO. Add your code for calculation output values
+function Update(period,mode)
+{
+    if (period >= Frame && source.hasData(period)) 
+    {
+	
+	   AVG.update(mode);
+	   
+	   if (period >= Frame*2) 
+       {
+	    AVGofAVG.update(mode);
+	    DEMA[period] = (2*AVG.DATA[period])-AVGofAVG.DATA[period];
+	   }
+    }
+}
+

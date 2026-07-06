@@ -1,0 +1,142 @@
+function Init()
+{
+    indicator.name("MACD gradient indicator");
+    indicator.description("MACD gradient indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("ShortEMA", "Short period of EMA", "", 12);
+    indicator.parameters.addInteger("LongEMA", "Long period of EMA", "", 26);
+    indicator.parameters.addInteger("SignalPeriod", "Signal period", "", 9);
+    indicator.parameters.addString("MACD_Price", "Price for MACD", "", "close");
+    indicator.parameters.addStringAlternative("MACD_Price", "close", "", "close");
+    indicator.parameters.addStringAlternative("MACD_Price", "open", "", "open");
+    indicator.parameters.addStringAlternative("MACD_Price", "high", "", "high");
+    indicator.parameters.addStringAlternative("MACD_Price", "low", "", "low");
+    indicator.parameters.addStringAlternative("MACD_Price", "median", "", "median");
+    indicator.parameters.addStringAlternative("MACD_Price", "typical", "", "typical");
+    indicator.parameters.addStringAlternative("MACD_Price", "weighted", "", "weighted");
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addString("UPclr", "UP color", "", "Green");
+    indicator.parameters.addStringAlternative("UPclr", "Red", "", "Red");
+    indicator.parameters.addStringAlternative("UPclr", "Green", "", "Green");
+    indicator.parameters.addStringAlternative("UPclr", "Blue", "", "Blue");
+    indicator.parameters.addString("DNclr", "DN color", "", "Red");
+    indicator.parameters.addStringAlternative("DNclr", "Red", "", "Red");
+    indicator.parameters.addStringAlternative("DNclr", "Green", "", "Green");
+    indicator.parameters.addStringAlternative("DNclr", "Blue", "", "Blue");
+    indicator.parameters.addDouble("Depth", "Depth", "", 1000);
+}
+
+var first;
+var source = null;
+var ShortEMA;
+var LongEMA;
+var SignalPeriod;
+var MACD_Price;
+var UPclr;
+var DNclr;
+var Depth;
+var MACD;
+var open=null;
+var close=null;
+var high=null;
+var low=null;
+
+function Prepare()
+{
+    source = instance.source;
+    ShortEMA=instance.parameters.ShortEMA;
+    LongEMA=instance.parameters.LongEMA;
+    SignalPeriod=instance.parameters.SignalPeriod;
+    MACD_Price=instance.parameters.MACD_Price;
+    UPclr=instance.parameters.UPclr;
+    DNclr=instance.parameters.DNclr;
+    Depth=instance.parameters.Depth;
+    first = source.first()+2;
+    if (MACD_Price=="close") 
+    {
+     MACD = core.indicators.create("MACD", source.close, ShortEMA, LongEMA, SignalPeriod);
+    } 
+    else if (MACD_Price=="open") 
+    {
+     MACD = core.indicators.create("MACD", source.open, ShortEMA, LongEMA, SignalPeriod);
+    } 
+    else if (MACD_Price=="high") 
+    {
+     MACD = core.indicators.create("MACD", source.high, ShortEMA, LongEMA, SignalPeriod);
+    } 
+    else if (MACD_Price=="low") 
+    {
+     MACD = core.indicators.create("MACD", source.low, ShortEMA, LongEMA, SignalPeriod);
+    } 
+    else if (MACD_Price=="median") 
+    {
+     MACD = core.indicators.create("MACD", source.median, ShortEMA, LongEMA, SignalPeriod);
+    } 
+    else if (MACD_Price=="typical") 
+    {
+     MACD = core.indicators.create("MACD", source.typical, ShortEMA, LongEMA, SignalPeriod);
+    }
+    else
+    {
+     MACD = core.indicators.create("MACD", source.weighted, ShortEMA, LongEMA, SignalPeriod);
+    } 
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.ShortEMA + ", " + instance.parameters.LongEMA + ", " + instance.parameters.SignalPeriod + ", " + instance.parameters.MACD_Price + ")";
+    instance.name(name);
+    open = instance.addStream("open", core.Line, name, "open", core.rgb(0, 0, 0), first)
+    high = instance.addStream("high", core.Line, name, "high", core.rgb(0, 0, 0), first)
+    low = instance.addStream("low", core.Line, name, "low", core.rgb(0, 0, 0), first)
+    close = instance.addStream("close", core.Line, name, "close", core.rgb(0, 0, 0), first)
+    instance.createCandleGroup("MACD color candle", "", open, high, low, close);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    MACD.update(mode);
+    open[period]=source.open[period];
+    close[period]=source.close[period];
+    high[period]=source.high[period];
+    low[period]=source.low[period];
+    var R=0;
+    var G=0;
+    var B=0;
+    var MACDvalue=MACD.HISTOGRAM[period];
+    if (MACDvalue>0) 
+    {
+     if (UPclr=="Red") 
+     {
+      R=Math.min(MACDvalue*Depth*255,255);
+     } 
+     else if (UPclr=="Green") 
+     {
+      G=Math.min(MACDvalue*Depth*255,255);
+     } 
+     else
+     {
+      B=Math.min(MACDvalue*Depth*255,255);
+     }
+    } 
+    else
+    {
+     if (DNclr=="Red") 
+     {
+      R=Math.min(-MACDvalue*Depth*255,255);
+     } 
+     else if (DNclr=="Green") 
+     {
+      G=Math.min(-MACDvalue*Depth*255,255);
+     } 
+     else
+     {
+      B=Math.min(-MACDvalue*Depth*255,255);
+     }
+    }
+    open.setColor(period,core.rgb(R,G,B));
+   } 
+}
+

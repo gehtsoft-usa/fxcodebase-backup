@@ -1,0 +1,125 @@
+function Init()
+{
+    indicator.name("Doji Bar");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+	 indicator.parameters.addGroup("Calculation");	
+	indicator.parameters.addString("Type", "Doji Type", "", "All");
+    indicator.parameters.addStringAlternative("Type", "All Types", "", "All");
+    indicator.parameters.addStringAlternative("Type", "Dragonfly/Gravestone Doji", "", "Dragonfly/Gravestone");
+     indicator.parameters.addInteger("Trend", "Trend Period", " ", 1);
+    indicator.parameters.addInteger("Delta", "Open/Close difference (% of body length)", " ", 5);
+	indicator.parameters.addInteger("Wick", "Dragonfly / Gravestone Doji max. Wick Size(% of body length)", " ", 5);
+	 
+	 indicator.parameters.addGroup("Style");	
+	indicator.parameters.addColor("Top", "Color Doji", " ", core.rgb(255, 0, 0));
+	indicator.parameters.addColor("Bottom", "Color Doji", " ", core.rgb(0, 255, 0));
+	indicator.parameters.addColor("No", "Color Doji", " ", core.rgb(0, 0, 255));
+	 indicator.parameters.addInteger("Size", "Font Size", " ", 10);
+	
+}
+
+var Delta=null;
+
+var first;
+var source = null;
+var Size;
+// Streams block
+var up = null;
+var down = null;
+var no;
+var Wick;
+var Type;
+var Trend;
+// Routine
+function Prepare()
+{
+    source = instance.source;
+	Trend =  instance.parameters.Trend;
+    first = source.first()+Trend;
+	Type =  instance.parameters.Type;
+	Size =  instance.parameters.Size;
+	Delta =  instance.parameters.Delta;
+	Wick =  instance.parameters.Wick;
+	
+    var name = profile.id() + "(" + source.name() + ")";
+    instance.name(name);
+	
+	down = instance.createTextOutput ("Up", "Up", "Wingdings", Size, core.H_Center, core.V_Bottom, instance.parameters.Bottom, first);
+    up = instance.createTextOutput ("Down", "Down", "Wingdings", Size, core.H_Center, core.V_Top, instance.parameters.Top, first);
+	no = instance.createTextOutput ("Neutral", "Neutral", "Wingdings", Size, core.H_Center, core.V_Top, instance.parameters.No, first);
+}
+
+function Update(period)
+{
+    if (period <  first)  
+    {
+	 return;
+	}
+	
+	up.setNoData (period);
+	down.setNoData (period);
+	no.setNoData (period);
+	
+	var Percentage = (source.high[period]- source.low[period])/100;
+	var Diff = (source.open[period]- source.close[period]) / Percentage ;
+	var Label;
+	              if (Math.abs(Diff) <= Delta) 
+	              {
+							if (Type == "All") 
+							{
+						  
+								   if  (( source.high[period] - Math.max (source.open[period] ,source.close[period] )) / Percentage    <  Wick) 
+								   {
+								   Label = "Dragonfly  Doji";	
+								   down.set(period, source.low[period], "\225", Label);			  
+								   } 
+							      else if  ((Math.min (source.open[period] ,source.close[period] ) -source.low[period] ) / Percentage    <  Wick) 
+							      {
+								   Label = "Gravestone  Doji";
+									up.set(period, source.high[period], "\226", Label);
+								}
+								  else
+								  {			
+							  
+							 					 
+								 
+										  Label = "Doji";
+									  
+										  if (source.open[period-1-Trend]  < source.open[period])  
+										  {
+										   up.set(period, source.high[period], "\226", Label);
+										  } 
+										  else if (source.open[period-1-Trend]  > source.open[period])  
+										  {
+										   down.set(period, source.low[period], "\225", Label);
+										  } 
+										  else
+										  {
+										   no.set(period, source.low[period], "\225", Label);
+										  }
+										  
+								  }
+								}
+							
+						  else if (Type == "Dragonfly/Gravestone") 
+						  { 
+						      
+							  
+							     if  (( source.high[period] - Math.max (source.open[period] ,source.close[period] )) / Percentage    <  Wick) 
+							     {
+								   Label = "Dragonfly  Doji";	
+								   down.set(period, source.low[period], "\225", Label);			   
+								  } 
+							      else if  ((Math.min (source.open[period] ,source.close[period] ) -source.low[period] ) / Percentage    <  Wick) 
+							      {
+								   Label = "Gravestone  Doji";
+									up.set(period, source.high[period], "\226", Label);
+						         }
+						  }
+				}
+}
+
+
+

@@ -1,0 +1,488 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252" /><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><title>instance_impl:createCandleGroup</title><style type="text/css">a, p, h1, h2, h3, h4, h5, h6, table, td, tr, li, ul, ol {
+    font-family: Verdana, Trebuchet MS, Arial;
+}
+
+a, p, td, tr, ul, ol, li {
+    font-size: 12pt;
+}
+
+h3 {
+    font-size: 13pt;
+}
+
+h2 {
+    font-size: 13pt;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+body {
+    color: #444444;
+    background-color: white;
+}
+
+A:link {
+    color: #0065b3;
+    cursor: pointer;
+}
+
+A:visited {
+    color: #0068be;
+    cursor: pointer;
+}
+
+a.action {
+  background-color: #0065b3;
+  color: white;
+  font-size: 10pt;
+  padding: 2px 2px;
+  width: 50pt;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px;
+}
+
+.side-icon {
+    float: left;
+}
+
+a.action [class*="dripicons-"]:before {
+    padding: 0 2px 0 0;
+    font-size: 12pt;
+    vertical-align: text-bottom;
+}
+
+.side-icon:after {
+  content: "";
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  border-left: 1.5px solid white;
+  transform: translate(-50%);
+}
+
+a.actiontab {
+  font-size: 10pt;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px 3px 0 0;
+}
+
+pre, code, code a {
+    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+    font-size: 12pt;
+}
+
+code.ctag {
+    background-color: #f1f1f1;
+    padding: .1em .2em;
+    border-radius: 3px;
+}
+
+pre {
+    background-color: white;
+}
+
+pre.example {
+    background-color: #f1f1f1;
+}
+
+ul {
+    list-style-type: disc;
+    margin-left: 18pt;
+}
+
+ol {
+    list-style-type: decimal;
+    margin-left: 18pt;
+}
+
+ul.hhc {
+    list-style-type: none;
+    margin-left: 1em;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+li.hhc {
+    margin-left: 0;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+table {
+  border-spacing: 0;
+  border-color: #dfe3e7;
+}
+
+tr + tr td {
+   border-top: 0;
+}
+
+tr td + td {
+  border-left: 0;
+}
+
+td {
+  border: 1px solid;
+  border-color: #dfe3e7;
+}
+
+tr:first-child td:first-child {
+   border-radius: 0.2em 0 0 0;
+}
+
+tr:first-child td:last-child {
+  border-radius: 0 0.2em 0 0;
+}
+
+tr:first-child td:only-child {
+  border-radius: 0.2em 0.2em 0 0;
+}
+
+tr:last-child td:first-child {
+    border-radius: 0 0 0 0.2em;
+}
+
+tr:last-child td:last-child {
+    border-radius: 0 0 0.2em 0;
+}
+
+tr:last-child td:only-child {
+    border-radius: 0 0 0.2em 0.2em;
+}
+
+tr:only-child td:only-child {
+    border-radius: 0.2em 0.2em 0.2em 0.2em;
+}
+
+tr:only-child td:first-child {
+   border-radius: 0.2em 0 0 0.2em;
+}
+
+tr:only-child td:last-child {
+  border-radius: 0 0.2em 0.2em 0;
+}
+
+
+td.tmain, td.tmain_nw, td.thdr {
+    background-color: rgb(255, 255, 255);
+    vertical-align: top;
+    padding: 3px;
+}
+
+td.tmain p, td.tmain_nw p, td.thdr p {
+    margin-top: 3pt;
+    margin-bottom: 3pt;
+}
+
+td.tmain_nw {
+    white-space: nowrap;
+}
+
+td.thdr {
+    background-color: #e3e3e3;
+}
+
+table.decl {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+    vertical-align: top;
+    padding: 3px;
+    width: 100%;
+}
+
+table.decl td {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+}
+
+div.note-quote {
+    border-left: 10px solid #ccc;
+    padding: 1em 10px .1em 10px;
+    margin: 1.5em 10px;
+    background-color: rgb(224, 224, 224);
+}
+
+div.note-note {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+div.note-warning {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #fff;
+    background-color: #ff6358;
+}
+div.note-warning code.ctag {
+    color: black;
+}</style>
+<link rel="stylesheet" href="res/dripicons.css"></head><body><script type="text/javascript">
+var highlighterEnabled = false;
+var maintopic = 'index';
+var helptitle = 'Indicore SDK 3';
+    function loadStarted() {
+    window.onload = loadCompleted;
+
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        var head = document.getElementsByTagName('head')[0];
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.min.js';
+        head.appendChild(script4);
+
+
+        var script2 = document.createElement('script');
+        script2.type = 'text/javascript';
+        script2.src = './highlighter/highlight.cshtml.js';
+        head.appendChild(script2);
+
+        var script3 = document.createElement('script');
+        script3.type = 'text/javascript';
+        script3.src = './highlighter/highlight.lua.js';
+        head.appendChild(script3);
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.luax.js';
+        head.appendChild(script4);
+    }
+}
+
+function loadCompleted() {
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        hljs.registerLanguage('cshtml-razor', window.hljsDefineCshtmlRazor);
+        hljs.registerLanguage('lua', window.hljsDefineLua);
+        hljs.registerLanguage('luax', window.hljsDefineLuaX);
+        x = document.querySelectorAll('pre code');
+        for (var i = 0; i < x.length; i++) {
+            if (x[i].hasAttribute('class')) {
+                hljs.highlightBlock(x[i]);
+            }
+        }
+    }
+}
+
+
+function hidediv(divname) {
+    document.getElementById(divname).style.display = 'none';
+}
+
+function showdiv(divname) {
+    document.getElementById(divname).style.display = 'inline';
+}
+
+function syncList() {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, null, document.title);
+    }
+}
+
+function syncList1(key) {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, key + '.html', document.title);
+    }
+}</script><script type="text/javascript">
+    loadStarted();
+</script><h1><code>public method <b>instance_impl:createCandleGroup</b></code></h1><h2>Brief</h2>
+<p>The method groups four or five output streams into a candle.</p>
+<table class="tmain" width="100%">
+  <tr>
+    <td class="thdr"><b>Declaration</b></td>
+  </tr>
+  <tr>
+    <td class="tmain"><table class="decl">
+  <tr>
+    <td>Lua</td>
+  </tr>
+  <tr>
+    <td><code>instance_impl:<b>createCandleGroup</b> (label, id, open, high, low, close, volume?, barSize?, isBar?)</code></td>
+  </tr>
+</table></td>
+  </tr>
+</table><p></p>
+<table class="tmain" width="100%">
+  <tr>
+    <td colspan="2" class="thdr"><b>Parameters</b></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>label</code></td>
+    <td class="tmain" width="69%"><p>The short name of the group.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>id</code></td>
+    <td class="tmain" width="69%"><p>The identifier of the group.
+The identifier must contain only English letters or digits and must be unique within the
+instance of the indicator.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>open</code></td>
+    <td class="tmain" width="69%"><p>The <a href="output_stream_impl.html"><code>output stream</code></a> that contains the <code class="ctag">open</code> values of the candles.
+The stream must be created by using the <a href="instance_impl.addStream.html"><code>addStream()</code></a> or the
+<a href="instance_impl.addInternalStream.html"><code>addInternalStream()</code></a> method.</p>
+<p>Note that the <code class="ctag">open</code> stream defines the graphical representation of the group.
+The <a href="output_stream_impl.setColor.html"><code>color</code></a>,
+<a href="output_stream_impl.setBreak.html"><code>breaks</code></a>, and
+<a href="output_stream_impl.setVisible.html"><code>visibility</code></a> of the stream are
+applied to the whole group.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>high</code></td>
+    <td class="tmain" width="69%"><p>The <a href="output_stream_impl.html"><code>output stream</code></a> that contains the <code class="ctag">high</code> values of the candles.
+The stream must be created by using the <a href="instance_impl.addStream.html"><code>addStream()</code></a> or the
+<a href="instance_impl.addInternalStream.html"><code>addInternalStream()</code></a> method.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>low</code></td>
+    <td class="tmain" width="69%"><p>The <a href="output_stream_impl.html"><code>output stream</code></a> that contains the <code class="ctag">low</code> values of the candles.
+The stream must be created by using the <a href="instance_impl.addStream.html"><code>addStream()</code></a> or the
+<a href="instance_impl.addInternalStream.html"><code>addInternalStream()</code></a> method.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>close</code></td>
+    <td class="tmain" width="69%"><p>The <a href="output_stream_impl.html"><code>output stream</code></a> that contains the <code class="ctag">close</code> values of the candles.
+The stream must be created by using the <a href="instance_impl.addStream.html"><code>addStream()</code></a> or the
+<a href="instance_impl.addInternalStream.html"><code>addInternalStream()</code></a> method.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>volume</code></td>
+    <td class="tmain" width="69%"><p><b>Optional</b>. The <a href="output_stream_impl.html"><code>output stream</code></a> that contains the <code class="ctag">volume</code> values of the candles.
+The stream must be created by using the <a href="instance_impl.addStream.html"><code>addStream()</code></a> or the
+<a href="instance_impl.addInternalStream.html"><code>addInternalStream()</code></a> method.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>barSize</code></td>
+    <td class="tmain" width="69%"><p><b>Optional</b>.
+The time frame of the periods.
+The parameter is applicable only for a <a href="view_indicators.html"><code>view indicator</code></a>.
+The value is the string that defines the time frame of the period. The first letter is an item, then
+the number which is number of items:</p><table class="tmain">
+  <tr>
+    <td class="tmain" width="1%"><p>Y</p></td>
+    <td class="tmain"><p>A year.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>M</p></td>
+    <td class="tmain"><p>A month.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>D</p></td>
+    <td class="tmain"><p>A day.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>W</p></td>
+    <td class="tmain"><p>A week.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>H</p></td>
+    <td class="tmain"><p>Hours.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>m</p></td>
+    <td class="tmain"><p>Minutes.</p></td>
+  </tr>
+</table><p>For example, <code class="ctag">D1</code> means one day period, <code class="ctag">m30</code> - 30 minutes period, etc.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>isBar</code></td>
+    <td class="tmain" width="69%"><p><b>Optional</b>.
+The graphical representation of the group. The parameter is applicable only for a <a href="view_indicators.html"><code>view indicator</code></a>.
+The group is drawn as a bar if the value is <code class="ctag">true</code>.
+The group is drawn as a candle if the value is <code class="ctag">false</code>. The default value is <code class="ctag">false</code>.</p></td>
+  </tr>
+</table><h2>Details</h2><p>Four (or five) output streams can be grouped into a candle group. In this case, the Japanese candles (or bars)
+are drawn on the chart instead of lines. The output candle group is also recognized as complete
+source bar stream for other indicators.</p>
+<p>The candle group is drawn according the default system settings, but you can override the color
+of each particular bar by using the <a href="output_stream_impl.setColor.html"><code>output_stream_impl:setColor()</code></a> method of
+the <code class="ctag">open</code> output stream.</p>
+<p>If you want to replace the currently shown chart by these candles, use <a href="indicator.setTag.html"><code>indicator:setTag(&quot;replaceSource&quot;, &quot;t&quot;);</code></a>
+call in the <code class="ctag">Init()</code> function of your indicator.</p><div id="open88" style="display:none">
+  <p>Example: Highlight candles depending on the direction of chosen MVA line&nbsp;<a href="javascript: showdiv('close88'); hidediv('open88');" onclick="javascript: showdiv('close88'); hidediv('open88');" class="action">Show<span class="side-icon dripicons-chevron-right"></span></a></p>
+</div>
+<div id="close88" style="display:inline">
+  <p>Example: Highlight candles depending on the direction of chosen MVA line&nbsp;<a href="javascript: showdiv('open88'); hidediv('close88');" onclick="javascript: showdiv('open88'); hidediv('close88');" class="action">Hide<span class="side-icon dripicons-chevron-down"></span></a></p>
+  <pre class="example" id="example88"><code> 
+   function Init()
+       indicator:name(&quot;sample indicator&quot;);
+       indicator:description(&quot;&quot;);
+       indicator:requiredSource(core.Bar);
+       indicator:type(core.Indicator);
+ 
+       indicator.parameters:addInteger(&quot;N&quot;, &quot;Number of periods to calculate SMA&quot;, &quot;&quot;, 7, 1, 300);
+       indicator.parameters:addColor(&quot;clr&quot;, &quot;MVA color&quot;, &quot;&quot;, core.rgb(0, 0, 255));
+       indicator.parameters:addColor(&quot;clrA&quot;, &quot;Ascending color&quot;, &quot;&quot;, core.COLOR_UPCANDLE);
+       indicator.parameters:addColor(&quot;clrD&quot;, &quot;Descending color&quot;, &quot;&quot;, core.COLOR_DOWNCANDLE);
+   end
+ 
+   local source;
+   local o, h, l, c, v;
+   local mva;
+   local n;
+   local first;
+ 
+   function Prepare()
+       n = instance.parameters.N;
+       source = instance.source;
+       first = source:first() + n - 1;
+       local name = profile:id() .. &quot;(&quot; .. source:name() .. &quot;,&quot; .. n .. &quot;)&quot;;
+       instance:name(name);
+ 
+       o = instance:addInternalStream(first + 1, 0);
+       h = instance:addInternalStream(first + 1, 0);
+       l = instance:addInternalStream(first + 1, 0);
+       c = instance:addInternalStream(first + 1, 0);
+       v = instance:addInternalStream(first + 1, 0);
+       instance:createCandleGroup(source:name(), source:name(), o, h, l, c, v);
+ 
+       -- create dummy stream just to make the indicator label colored
+       mva = instance:addStream(&quot;mva&quot;, core.Line, name, &quot;mva&quot;, instance.parameters.clr, first);
+   end
+ 
+   function Update(period, mode)
+       if period &gt;= first then
+           mva[period] = mathex.avg(source.close, period - n + 1, period);
+           if period &gt;= first + 1 then
+               o[period] = source.open[period];
+               c[period] = source.close[period];
+               h[period] = source.high[period];
+               l[period] = source.low[period];
+               v[period] = source.volume[period];
+               if mva[period] &gt;= mva[period - 1] then
+                   o:setColor(period, instance.parameters.clrA);
+               else
+                   o:setColor(period, instance.parameters.clrD);
+               end
+           end
+       end
+   end</code></pre>
+</div><p>Declared in <a href="instance_impl.html">instance_impl</a></p>
+<p>
+  <center><a href="instance_impl.html">back</a></center>
+</p><script language="javascript" type="text/javascript">syncList1('instance_impl');</script></body></html>

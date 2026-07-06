@@ -1,0 +1,150 @@
+function Init()
+{
+    indicator.name("TAT oscillator");
+    indicator.description("TAT oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("MACD_Fast_Period", "MACD fast period", "", 12);
+    indicator.parameters.addInteger("MACD_Slow_Period", "MACD slow period", "", 26);
+    indicator.parameters.addInteger("MACD_Signal_Period", "MACD signal period", "", 9);
+    indicator.parameters.addDouble("SAR_Step", "SAR step", "", 0.02);
+    indicator.parameters.addDouble("SAR_Max", "SAR maximum", "", 0.2);
+    indicator.parameters.addDouble("TAT_MACD_Mult", "TAT MACD multiplier", "", 66.67);
+    indicator.parameters.addDouble("TAT_SAR_Mult", "TAT SAR multiplier", "", 6.67);
+    indicator.parameters.addInteger("TAT_Signal_Period", "TAT signal period", "", 12);
+    indicator.parameters.addDouble("Overbought_Level", "Overbought level", "", 10);
+    indicator.parameters.addDouble("Oversold_Level", "Oversold level", "", -10);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("MainClr", "Main color", "Main color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("SignalClr", "Signal color", "Signal color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("LevelsClr", "Levels color", "Levels color", core.rgb(128, 128, 128));
+}
+
+var first;
+var source = null;
+var MACD_Fast_Period;
+var MACD_Slow_Period;
+var MACD_Signal_Period;
+var SAR_Step;
+var SAR_Max;
+var TAT_MACD_Mult;
+var TAT_SAR_Mult;
+var TAT_Signal_Period;
+var TAT=null;
+var Signal=null;
+var FastEMA, SlowEMA;
+var MACD_Main;
+var MACD_Signal;
+var IsLong;
+var af, extreme, sar;
+var TAT_EMA;
+
+function Prepare()
+{
+    source = instance.source;
+    MACD_Fast_Period=instance.parameters.MACD_Fast_Period;
+    MACD_Slow_Period=instance.parameters.MACD_Slow_Period;
+    MACD_Signal_Period=instance.parameters.MACD_Signal_Period;
+    SAR_Step=instance.parameters.SAR_Step;
+    SAR_Max=instance.parameters.SAR_Max;
+    TAT_MACD_Mult=instance.parameters.TAT_MACD_Mult;
+    TAT_SAR_Mult=instance.parameters.TAT_SAR_Mult;
+    TAT_Signal_Period=instance.parameters.TAT_Signal_Period;
+    first = source.first()+2;
+    FastEMA = core.indicators.create("EMA", source.close, MACD_Fast_Period);
+    SlowEMA = core.indicators.create("EMA", source.close, MACD_Slow_Period);
+    MACD_Main = instance.addInternalStream(first, 0);
+    MACD_Signal = core.indicators.create("EMA", MACD_Main, MACD_Signal_Period);
+    IsLong = instance.addInternalStream(first, 0);
+    af = instance.addInternalStream(first, 0);
+    extreme = instance.addInternalStream(first, 0);
+    sar = instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.MACD_Fast_Period + ", " + instance.parameters.MACD_Slow_Period + ", " + instance.parameters.MACD_Signal_Period + ", " + instance.parameters.SAR_Step + ", " + instance.parameters.SAR_Max + ", " + instance.parameters.TAT_MACD_Mult + ", " + instance.parameters.TAT_SAR_Mult + ", " + instance.parameters.TAT_Signal_Period + ")";
+    instance.name(name);
+    TAT = instance.addStream("TAT", core.Bar, name + ".TAT", "TAT", instance.parameters.MainClr, first);
+    TAT_EMA = core.indicators.create("EMA", TAT, TAT_Signal_Period);
+    Signal = instance.addStream("Signal", core.Line, name + ".Signal", "Signal", instance.parameters.SignalClr, first);
+    TAT.addLevel(0, core.LINE_DASH, 1, instance.parameters.LevelsClr);
+    TAT.addLevel(instance.parameters.Overbought_Level, core.LINE_DASH, 1, instance.parameters.LevelsClr);
+    TAT.addLevel(instance.parameters.Oversold_Level, core.LINE_DASH, 1, instance.parameters.LevelsClr);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    FastEMA.update(mode);
+    SlowEMA.update(mode);
+    MACD_Main[period]=FastEMA.DATA[period]-SlowEMA.DATA[period];
+    MACD_Signal.update(mode);
+    IsLong[period] = IsLong[period-1];
+    af[period] = af[period-1];
+    extreme[period] = extreme[period-1];
+    sar[period] = sar[period-1]+af[period-1]*(extreme[period-1]-sar[period-1]);
+    if (IsLong[period-1] == 1) 
+    {
+     if (source.low[period]<sar[period]) 
+     {
+      IsLong[period] = 0;
+      af[period] = SAR_Step;
+      sar[period] = extreme[period-1];
+      extreme[period] = source.low[period];
+     } 
+     else
+     {
+      if (extreme[period-1]<source.high[period]) 
+      {
+       extreme[period] = source.high[period];
+       af[period] = af[period-1]+SAR_Step;
+       if (af[period]>SAR_Max) 
+       {
+        af[period] = SAR_Max;
+       }
+      }
+     }
+    }  
+    else
+    { 
+     if (source.high[period]>sar[period]) 
+     {
+      IsLong[period] = 1;
+      af[period] = SAR_Step;
+      sar[period] = extreme[period-1];
+      extreme[period] = source.high[period];
+     } 
+     else
+     {
+      if (extreme[period-1]>source.low[period]) 
+      {
+       extreme[period] = source.low[period];
+       af[period] = af[period-1]+SAR_Step;
+       if (af[period]>SAR_Max) 
+       {
+        af[period] = SAR_Max;
+       }
+      }
+     }
+    }
+    var TAT_SAR = 0;
+    var TAT_MACD = 0;
+    if (sar[period]!=0) 
+    {
+     TAT_SAR = (source.close[period]-sar[period])/sar[period];
+    }
+    TAT_MACD = (MACD_Main[period]-MACD_Signal.DATA[period])/source.close[period];
+    TAT[period] = 50*(TAT_SAR*TAT_SAR_Mult+TAT_MACD*TAT_MACD_Mult);
+    TAT_EMA.update(mode);
+    Signal[period] = TAT_EMA.DATA[period];
+   } 
+   else if (period==first) 
+   {
+    IsLong[period] = 1;
+    af[period] = SAR_Step;
+    extreme[period] = source.high[period];
+    sar[period] = source.low[period];
+   } 
+}
+

@@ -1,0 +1,118 @@
+function Init()
+{
+    indicator.name("BAT ATR indicator");
+    indicator.description("BAT ATR indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("ATR_Period", "ATR period", "", 3);
+    indicator.parameters.addDouble("Factor", "Factor", "", 3);
+    indicator.parameters.addBoolean("UseTypicalPrice", "Use typical price", "", false);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP color", "UP color", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("UPwidth", "UP line width", "UP line width", 1, 1, 5);
+    indicator.parameters.addInteger("UPstyle", "UP line style", "UP line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("UPstyle", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("DNclr", "DN color", "DN color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("DNwidth", "DN line width", "DN line width", 1, 1, 5);
+    indicator.parameters.addInteger("DNstyle", "DN line style", "DN line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("DNstyle", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var ATR_Period;
+var Factor;
+var UseTypicalPrice;
+var UP=null;
+var DN=null;
+var PriceLevel;
+var ATR;
+var Dir;
+var LevelUp, LevelDn;
+
+function Prepare()
+{
+    source = instance.source;
+    ATR_Period=instance.parameters.ATR_Period;
+    Factor=instance.parameters.Factor;
+    UseTypicalPrice=instance.parameters.UseTypicalPrice;
+    first = source.first()+2;
+    Dir = instance.addInternalStream(first, 0);
+    LevelUp = instance.addInternalStream(first, 0);
+    LevelDn = instance.addInternalStream(first, 0);
+    ATR = core.indicators.create("ATR", source, ATR_Period);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.ATR_Period + ", " + instance.parameters.Factor + ")";
+    instance.name(name);
+    UP = instance.addStream("UP", core.Line, name + ".UP", "UP", instance.parameters.UPclr, first);
+    UP.setWidth(instance.parameters.UPwidth);
+    UP.setStyle(instance.parameters.UPstyle);
+    DN = instance.addStream("DN", core.Line, name + ".DN", "DN", instance.parameters.DNclr, first);
+    DN.setWidth(instance.parameters.DNwidth);
+    DN.setStyle(instance.parameters.DNstyle);
+    if (UseTypicalPrice) 
+    {
+     PriceLevel=source.typical;
+    } 
+    else
+    {
+     PriceLevel=source.close;
+    }
+}
+
+function Update(period, mode)
+{
+   var CurrUp, PrevUp, CurrDn, PrevDn; 
+   if (period>first+ATR_Period) 
+   {
+    ATR.update(mode);
+    CurrUp=PriceLevel[period]-ATR.DATA[period]*Factor;
+    CurrDn=PriceLevel[period]+ATR.DATA[period]*Factor;
+    Dir[period]=Dir[period-1];
+    LevelUp[period]=LevelUp[period-1];
+    LevelDn[period]=LevelDn[period-1];
+    if (Dir[period]==1) 
+    {
+     LevelUp[period]=Math.max(LevelUp[period], CurrUp);
+     DN[period]=LevelUp[period];
+     UP[period]=null;
+     if (source.low[period]<DN[period]) 
+     {
+      Dir[period]=-1;
+      LevelDn[period]=100000;
+     }
+    } 
+    else
+    {
+     LevelDn[period]=Math.min(LevelDn[period], CurrDn);
+     UP[period]=LevelDn[period];
+     DN[period]=null;
+     if (source.high[period]>UP[period]) 
+     {
+      Dir[period]=1;
+      LevelUp[period]=0;
+     }
+    }
+   } 
+   else if (period==first+ATR_Period) 
+   {
+    ATR.update(mode);
+    CurrUp=source.close[period]-ATR.DATA[period]*Factor;
+    PrevUp=source.close[period-1]-ATR.DATA[period-1]*Factor;
+    CurrDn=source.close[period]+ATR.DATA[period]*Factor;
+    PrevDn=source.close[period-1]+ATR.DATA[period-1]*Factor;
+    if (CurrUp>PrevUp) 
+    {
+     Dir[period]=1;
+     LevelUp[period]=CurrUp;
+    } 
+    else if (CurrDn<PrevDn) 
+    {
+     Dir[period]=-1;
+     LevelDn[period]=CurrDn; 
+    }
+   } 
+}
+

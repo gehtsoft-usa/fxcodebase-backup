@@ -1,0 +1,368 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252" /><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><title>context:drawLine</title><style type="text/css">a, p, h1, h2, h3, h4, h5, h6, table, td, tr, li, ul, ol {
+    font-family: Verdana, Trebuchet MS, Arial;
+}
+
+a, p, td, tr, ul, ol, li {
+    font-size: 12pt;
+}
+
+h3 {
+    font-size: 13pt;
+}
+
+h2 {
+    font-size: 13pt;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+body {
+    color: #444444;
+    background-color: white;
+}
+
+A:link {
+    color: #0065b3;
+    cursor: pointer;
+}
+
+A:visited {
+    color: #0068be;
+    cursor: pointer;
+}
+
+a.action {
+  background-color: #0065b3;
+  color: white;
+  font-size: 10pt;
+  padding: 2px 2px;
+  width: 50pt;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px;
+}
+
+.side-icon {
+    float: left;
+}
+
+a.action [class*="dripicons-"]:before {
+    padding: 0 2px 0 0;
+    font-size: 12pt;
+    vertical-align: text-bottom;
+}
+
+.side-icon:after {
+  content: "";
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  border-left: 1.5px solid white;
+  transform: translate(-50%);
+}
+
+a.actiontab {
+  font-size: 10pt;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px 3px 0 0;
+}
+
+pre, code, code a {
+    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+    font-size: 12pt;
+}
+
+code.ctag {
+    background-color: #f1f1f1;
+    padding: .1em .2em;
+    border-radius: 3px;
+}
+
+pre {
+    background-color: white;
+}
+
+pre.example {
+    background-color: #f1f1f1;
+}
+
+ul {
+    list-style-type: disc;
+    margin-left: 18pt;
+}
+
+ol {
+    list-style-type: decimal;
+    margin-left: 18pt;
+}
+
+ul.hhc {
+    list-style-type: none;
+    margin-left: 1em;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+li.hhc {
+    margin-left: 0;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+table {
+  border-spacing: 0;
+  border-color: #dfe3e7;
+}
+
+tr + tr td {
+   border-top: 0;
+}
+
+tr td + td {
+  border-left: 0;
+}
+
+td {
+  border: 1px solid;
+  border-color: #dfe3e7;
+}
+
+tr:first-child td:first-child {
+   border-radius: 0.2em 0 0 0;
+}
+
+tr:first-child td:last-child {
+  border-radius: 0 0.2em 0 0;
+}
+
+tr:first-child td:only-child {
+  border-radius: 0.2em 0.2em 0 0;
+}
+
+tr:last-child td:first-child {
+    border-radius: 0 0 0 0.2em;
+}
+
+tr:last-child td:last-child {
+    border-radius: 0 0 0.2em 0;
+}
+
+tr:last-child td:only-child {
+    border-radius: 0 0 0.2em 0.2em;
+}
+
+tr:only-child td:only-child {
+    border-radius: 0.2em 0.2em 0.2em 0.2em;
+}
+
+tr:only-child td:first-child {
+   border-radius: 0.2em 0 0 0.2em;
+}
+
+tr:only-child td:last-child {
+  border-radius: 0 0.2em 0.2em 0;
+}
+
+
+td.tmain, td.tmain_nw, td.thdr {
+    background-color: rgb(255, 255, 255);
+    vertical-align: top;
+    padding: 3px;
+}
+
+td.tmain p, td.tmain_nw p, td.thdr p {
+    margin-top: 3pt;
+    margin-bottom: 3pt;
+}
+
+td.tmain_nw {
+    white-space: nowrap;
+}
+
+td.thdr {
+    background-color: #e3e3e3;
+}
+
+table.decl {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+    vertical-align: top;
+    padding: 3px;
+    width: 100%;
+}
+
+table.decl td {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+}
+
+div.note-quote {
+    border-left: 10px solid #ccc;
+    padding: 1em 10px .1em 10px;
+    margin: 1.5em 10px;
+    background-color: rgb(224, 224, 224);
+}
+
+div.note-note {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+div.note-warning {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #fff;
+    background-color: #ff6358;
+}
+div.note-warning code.ctag {
+    color: black;
+}</style>
+<link rel="stylesheet" href="res/dripicons.css"></head><body><script type="text/javascript">
+var highlighterEnabled = false;
+var maintopic = 'index';
+var helptitle = 'Indicore SDK 3';
+    function loadStarted() {
+    window.onload = loadCompleted;
+
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        var head = document.getElementsByTagName('head')[0];
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.min.js';
+        head.appendChild(script4);
+
+
+        var script2 = document.createElement('script');
+        script2.type = 'text/javascript';
+        script2.src = './highlighter/highlight.cshtml.js';
+        head.appendChild(script2);
+
+        var script3 = document.createElement('script');
+        script3.type = 'text/javascript';
+        script3.src = './highlighter/highlight.lua.js';
+        head.appendChild(script3);
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.luax.js';
+        head.appendChild(script4);
+    }
+}
+
+function loadCompleted() {
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        hljs.registerLanguage('cshtml-razor', window.hljsDefineCshtmlRazor);
+        hljs.registerLanguage('lua', window.hljsDefineLua);
+        hljs.registerLanguage('luax', window.hljsDefineLuaX);
+        x = document.querySelectorAll('pre code');
+        for (var i = 0; i < x.length; i++) {
+            if (x[i].hasAttribute('class')) {
+                hljs.highlightBlock(x[i]);
+            }
+        }
+    }
+}
+
+
+function hidediv(divname) {
+    document.getElementById(divname).style.display = 'none';
+}
+
+function showdiv(divname) {
+    document.getElementById(divname).style.display = 'inline';
+}
+
+function syncList() {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, null, document.title);
+    }
+}
+
+function syncList1(key) {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, key + '.html', document.title);
+    }
+}</script><script type="text/javascript">
+    loadStarted();
+</script><h1><code>public method <b>context:drawLine</b></code></h1><h2>Brief</h2>
+<p>Draws a line.</p>
+<table class="tmain" width="100%">
+  <tr>
+    <td class="thdr"><b>Declaration</b></td>
+  </tr>
+  <tr>
+    <td class="tmain"><table class="decl">
+  <tr>
+    <td>Lua</td>
+  </tr>
+  <tr>
+    <td><code>context:<b>drawLine</b> (pen, x1, y1, x2, y2, transparency?)</code></td>
+  </tr>
+</table></td>
+  </tr>
+</table><p></p>
+<table class="tmain" width="100%">
+  <tr>
+    <td colspan="2" class="thdr"><b>Parameters</b></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>pen</code></td>
+    <td class="tmain" width="69%"><p>The index of the pen object.</p>
+<p>The pen object must be created using the <a href="context.createPen.html"><code>createPen</code></a> method.</p>
+<p>Use <code class="ctag">-1</code> index for null (invisible) pen.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>x1</code></td>
+    <td class="tmain" width="69%"><p>The X coordinate of the line start point.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>y1</code></td>
+    <td class="tmain" width="69%"><p>The Y coordinate of the line start point.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>x2</code></td>
+    <td class="tmain" width="69%"><p>The X coordinate of the line end point.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>y2</code></td>
+    <td class="tmain" width="69%"><p>The Y coordinate of the line end point.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>transparency?</code></td>
+    <td class="tmain" width="69%"><p>Transparency of the paintings performed by the method. The value must be a number between <code class="ctag">0</code> and <code class="ctag">255</code>. <code class="ctag">0</code> means
+the opaque paintings (the paintings hides everything below), <code class="ctag">255</code> means the completely transparent paintings (the painting is not visible).
+The values between these values defines transparency of the painting, the bigger number means more transparency.</p>
+<p>The parameter is optional. If the default transparency is 0.</p>
+<p>Use transparency only if you actually need it for your goals. Please remember that semi-transparent painting procedure is
+<b>much</b> slower than opaque drawing.</p></td>
+  </tr>
+</table><p>Declared in <a href="context.html">context</a></p>
+<p>
+  <center><a href="context.html">back</a></center>
+</p><script language="javascript" type="text/javascript">syncList1('context');</script></body></html>

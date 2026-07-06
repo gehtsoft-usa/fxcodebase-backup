@@ -1,0 +1,86 @@
+function Init()
+{
+    indicator.name("Stretch oscillator");
+    indicator.description("Stretch oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("St_Period", "St_Period", "", 10);
+    indicator.parameters.addInteger("Av_Period", "Av_Period", "", 12);
+    indicator.parameters.addString("Method", "Method", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("Method", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Method", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Method", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Method", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Method", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Method", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Method", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Method", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Method", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Method", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Method", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Method", "JSmooth", "", "JSmooth");
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Hclr", "Histogram color", "Histogram color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("Sclr", "Signal color", "Signal color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("Swidth", "Signal width", "Signal width", 2, 1, 5);
+    indicator.parameters.addInteger("Sstyle", "Signal style", "Signal style", core.LINE_DASH);
+    indicator.parameters.setFlag("Sstyle", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var St_Period;
+var Av_Period;
+var Method;
+var Abs_HO_LO;
+var Abs_LO;
+var MA;
+var Stretch=null;
+var Signal=null;
+
+function Prepare()
+{
+    source = instance.source;
+    St_Period=instance.parameters.St_Period;
+    Av_Period=instance.parameters.Av_Period;
+    Method=instance.parameters.Method;
+    first = source.first()+2;
+    Abs_HO_LO = instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.St_Period + ", " + instance.parameters.Av_Period + ", " + instance.parameters.Method + ")";
+    instance.name(name);
+    Stretch = instance.addStream("Stretch", core.Bar, name + ".Stretch", "Stretch", instance.parameters.Hclr, first);
+    MA = core.indicators.create("AVERAGES", Stretch, Method, Av_Period, false);
+    Signal = instance.addStream("Signal", core.Line, name + ".Signal", "Signal", instance.parameters.Sclr, first);
+    Signal.setWidth(instance.parameters.Swidth);
+    Signal.setStyle(instance.parameters.Sstyle);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    var Abs_HO=Math.abs(source.high[period]-source.open[period]);
+    var Abs_LO=Math.abs(source.low[period]-source.open[period]);
+    Abs_HO_LO[period]=Math.min(Abs_HO, Abs_LO);
+    if (period>first+St_Period) 
+    {
+     var Avg=Math.avg(Abs_HO_LO, period-St_Period+1, period);
+     Stretch[period]=Avg;
+     MA.update(mode);
+     Signal[period]=MA.DATA[period];
+    }
+   } 
+}
+

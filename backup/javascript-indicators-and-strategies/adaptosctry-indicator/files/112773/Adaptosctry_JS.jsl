@@ -1,0 +1,114 @@
+function Init()
+{
+    indicator.name("Adaptosctry indicator");
+    indicator.description("Adaptosctry indicator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("nExtr1", "nExtr1", "", 3);
+    indicator.parameters.addInteger("nExtr2", "nExtr2", "", 6);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr1", "Color 1", "Color 1", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clr2", "Color 2", "Color 2", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("clr3", "Color 3", "Color 3", core.rgb(0, 0, 255));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var nExtr1;
+var nExtr2;
+var Buff1=null;
+var Buff2=null;
+var Buff3=null;
+var FATL;
+
+function Prepare()
+{
+    source = instance.source;
+    nExtr1=instance.parameters.nExtr1;
+    nExtr2=instance.parameters.nExtr2;
+    first = source.first()+2;
+    FATL = core.indicators.create("FATL", source);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.nExtr1 + ", " + instance.parameters.nExtr2 + ")";
+    instance.name(name);
+    Buff1 = instance.addStream("Buff1", core.Line, name + ".Buff1", "Buff1", instance.parameters.clr1, first);
+    Buff2 = instance.addStream("Buff2", core.Line, name + ".Buff2", "Buff2", instance.parameters.clr2, first);
+    Buff3 = instance.addStream("Buff3", core.Line, name + ".Buff3", "Buff3", instance.parameters.clr3, first);
+    Buff1.setWidth(instance.parameters.widthLinReg);
+    Buff1.setStyle(instance.parameters.styleLinReg);
+    Buff2.setWidth(instance.parameters.widthLinReg);
+    Buff2.setStyle(instance.parameters.styleLinReg);
+    Buff3.setWidth(instance.parameters.widthLinReg);
+    Buff3.setStyle(instance.parameters.styleLinReg);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    FATL.update(mode);
+    var i=period-1;
+    var n=0;
+    var Pe1=null;
+    var Pe2=null;
+    while (i>first+2 && (Pe1==null || Pe2==null)) 
+    {
+     if ((FATL.DATA[i]>FATL.DATA[i-1] && FATL.DATA[i-1]<FATL.DATA[i-2]) || (FATL.DATA[i]<FATL.DATA[i-1] && FATL.DATA[i-1]>FATL.DATA[i-2]))
+     {
+      n=n+1;
+      if (n==nExtr1 && Pe1==null) 
+      {
+       Pe1=period-i;
+      }
+      if (n==nExtr2 && Pe2==null) 
+      {
+       Pe2=period-i;
+      }
+     }
+     i=i-1; 
+    }
+    if (Pe1!=null && Pe2!=null) 
+    {
+     Buff1[period]=RSI(period, Pe1);
+     Buff2[period]=RSI(period, Pe2);
+     Buff3[period]=(Buff1[period]+Buff2[period])/2;
+    }
+   } 
+}
+
+function RSI(period, Period)
+{
+ var i=period;
+ var sump=0;
+ var sumn=0;
+ var d;
+ while (i>first && period-i<Period) 
+ {
+  d=source[i]-source[i-1];
+  if (d>0) 
+  {
+   sump=sump+d;
+  }
+  else
+  {
+   sumn=sumn-d;
+  }
+  i=i-1;
+ }
+ sump=sump/Period;
+ sumn=sumn/Period;
+ if (sumn==0) 
+ {
+  return (0);
+ } 
+ else
+ { 
+  return (100-100/(1+sump/sumn));
+ } 
+}
+

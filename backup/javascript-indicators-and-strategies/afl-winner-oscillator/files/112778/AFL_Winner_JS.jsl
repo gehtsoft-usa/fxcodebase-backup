@@ -1,0 +1,121 @@
+function Init()
+{
+    indicator.name("AFL_Winner oscillator");
+    indicator.description("AFL_Winner oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Periods", "Periods", "", 10);
+    indicator.parameters.addInteger("Average", "Average", "", 5);
+    indicator.parameters.addString("Method", "Method", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("Method", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Method", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Method", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Method", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Method", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Method", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Method", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Method", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Method", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Method", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Method", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Method", "JSmooth", "", "JSmooth");
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP Color", "UP Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DNclr", "DN Color", "DN Color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Periods;
+var Average;
+var Method;
+var HBuff=null;
+var LBuff=null;
+var Cost;
+var pa;
+var rsv;
+var MA1, MA2;
+
+function Prepare()
+{
+    source = instance.source;
+    Periods=instance.parameters.Periods;
+    Average=instance.parameters.Average;
+    Method=instance.parameters.Method;
+    first = source.first()+2;
+    Cost = instance.addInternalStream(first, 0);
+    pa = instance.addInternalStream(first, 0);
+    rsv = instance.addInternalStream(first, 0);
+    MA1 = core.indicators.create("AVERAGES", rsv, Method, Average, false);
+    MA2 = core.indicators.create("AVERAGES", MA1.DATA, Method, Average, false);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Periods + ", " + instance.parameters.Average + ", " + instance.parameters.Method + ")";
+    instance.name(name);
+    HBuff = instance.addStream("HBuff", core.Line, name + ".HBuff", "HBuff", instance.parameters.UPclr, first);
+    LBuff = instance.addStream("LBuff", core.Line, name + ".LBuff", "LBuff", instance.parameters.UPclr, first);
+    HBuff.setWidth(instance.parameters.widthLinReg);
+    HBuff.setStyle(instance.parameters.styleLinReg);
+    LBuff.setWidth(instance.parameters.widthLinReg);
+    LBuff.setStyle(instance.parameters.styleLinReg);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    Cost[period]=source.volume[period]*(2*source.close[period]+source.high[period]+source.low[period])/4;
+    if (period>first+Math.max(Average, Periods)) 
+    {
+     var SumCost=Math.sum(Cost, core.rangeTo(period, Average));
+     var SumVolume=Math.sum(source.volume, core.rangeTo(period, Average));
+     if (SumVolume!=0) 
+     {
+      pa[period]=SumCost/SumVolume;
+     } 
+     else
+     {
+      pa[period]=0;
+     } 
+     var tmp = Math.minmax(pa, core.rangeTo(period, Periods));
+     var min=tmp[0];
+     var max=tmp[1];
+     if (min!=max) 
+     {
+      rsv[period]=100*(pa[period]-min)/(max-min);
+     } 
+     else
+     {
+      rsv[period]=0;
+     }
+     MA1.update(mode);
+     MA2.update(mode);
+     HBuff[period]=MA1.DATA[period];
+     LBuff[period]=MA2.DATA[period];
+     if (HBuff[period]>=LBuff[period]) 
+     {
+      HBuff.setColor(period, instance.parameters.UPclr);
+      LBuff.setColor(period, instance.parameters.UPclr);
+     } 
+     else
+     {
+      HBuff.setColor(period, instance.parameters.DNclr);
+      LBuff.setColor(period, instance.parameters.DNclr);
+     } 
+    } 
+   } 
+}
+

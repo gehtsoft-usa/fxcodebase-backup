@@ -1,0 +1,46 @@
+function Init()
+{
+    indicator.name("SinTrend indicator");
+    indicator.description("SinTrend indicator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 30);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP Color", "UP Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DNclr", "DN Color", "DN Color", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+var Period;
+var SinTrend=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ")";
+    instance.name(name);
+    SinTrend = instance.addStream("SinTrend", core.Bar, name + ".SinTrend", "SinTrend", instance.parameters.UPclr, first);
+}
+
+function Update(period, mode)
+{
+   if (period>first+Period) 
+   {
+    SinTrend[period]=Math.sin((source[period]-source[period-Period])/Period);
+    if (SinTrend[period]>0)
+    {
+     SinTrend.setColor(period,instance.parameters.UPclr);
+    } 
+    else
+    {
+     SinTrend.setColor(period,instance.parameters.DNclr);
+    }
+   } 
+}
+

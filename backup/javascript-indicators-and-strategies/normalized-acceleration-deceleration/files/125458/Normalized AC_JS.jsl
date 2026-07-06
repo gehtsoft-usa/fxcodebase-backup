@@ -1,0 +1,127 @@
+function Init()
+{
+    indicator.name("Normalized Acceleration/Deceleration");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+	
+    indicator.parameters.addGroup("Calulation");	
+    indicator.parameters.addInteger("FM", "Fast Moving Average for Awesome oscillator", "The number of periods to calculate the fast moving average of the median price", 5, 2, 10000);
+    indicator.parameters.addInteger("SM", "Slow Moving Average for Awesome oscillator", "The number of periods to calculate the slow moving average of the median price", 35, 2, 10000);
+    indicator.parameters.addInteger("M", "Moving Average for Acceleration/Deceleration", "The number of periods to calculate the moving average of the AO", 5, 2, 10000);
+
+	indicator.parameters.addInteger("Level", "Normalization Level" , "Normalization Level", 50);
+	indicator.parameters.addInteger("Scale", "Scale" , "Scale", 100);
+	indicator.parameters.addInteger("Period", "Normalization Period" , "Period", 0);
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Up", "Line Color", "Line Color", core.rgb(0, 0, 255));
+    
+}
+
+var FM;
+var SM;
+var M;
+
+
+var first;
+var source = null;
+var Period;
+var AC,RawAC;
+var AO = null;
+var MVA = null;
+var Level,Scale;
+
+function Prepare()
+{
+    Level = instance.parameters.Level;
+	Period = instance.parameters.Period;
+    FM = instance.parameters.FM;
+    SM = instance.parameters.SM;
+    M = instance.parameters.M; 
+	Scale = instance.parameters.Scale;
+
+    source = instance.source;
+
+    AO = core.indicators.create("AO", source, FM, SM, true);
+    MVA = core.indicators.create("MVA", AO.DATA, M);
+    first = MVA.DATA.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + FM + ", " + SM + ", " + M+ ", " + Level+ ", " + Scale+ ", " + Period + ")";
+    instance.name(name);
+       RawAC= instance.addInternalStream(0, 0);
+       AC = instance.addStream("AC", core.Line, name + ".AC", "AC", instance.parameters.Up, first);
+      
+}
+
+function Update(period, mode)
+{
+    AO.update(mode);
+    MVA.update(mode);
+
+    if (period < first) 
+    {
+	 return;
+	}	
+    
+    RawAC[period] = AO.DATA[period] - MVA.DATA[period];
+	
+	if (Period == 0) 
+	{
+	
+	if (period < source.size()-1) 
+	{
+	 return;
+	}
+	
+	var min, max;
+	
+    var tmp=Math.minmax(RawAC,first, period);	
+    min=tmp[0];
+    max=tmp[1];
+
+	 if (Scale == 0) 
+	 {
+	  Scale=max- min;
+	 }
+	 
+	 var Max= Math.abs(min,max);
+		
+	
+	for (period = first; period<=source.size()-1; period++) 
+	{		
+		AC[period] = Level +RawAC[period] * ( Scale/ Max);
+	}
+}
+	
+	else
+	{
+			
+				if (period < first + Period) 
+				{
+			return;
+			}
+			
+			
+		 
+			var min, max;
+			
+			var tmp=Math.minmax(RawAC,period-Period, period);	
+			min=tmp[0];
+			max=tmp[1];
+
+			 if (Scale == 0) 
+			 {
+			  Scale=max- min;
+			 }
+			 
+			 var Max= Math.abs(min,max);
+				
+			
+			 
+				AC[period] = Level +RawAC[period] * ( Scale/ Max);
+			 
+	
+	}
+	
+}
+

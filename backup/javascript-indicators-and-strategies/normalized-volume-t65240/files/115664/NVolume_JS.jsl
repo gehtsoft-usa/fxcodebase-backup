@@ -1,0 +1,64 @@
+function Init()
+{
+    indicator.name("NVolume oscillator");
+    indicator.description("NVolume oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 24);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Nclr", "Negative color", "Negative color", core.rgb(0, 128, 192));
+    indicator.parameters.addColor("Pclr1", "Positive color 1", "Positive color 1", core.rgb(0, 128, 0));
+    indicator.parameters.addColor("Pclr2", "Positive color 2", "Positive color 2", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("Pclr3", "Positive color 3", "Positive color 3", core.rgb(255, 128, 64));
+    indicator.parameters.addColor("Pclr4", "Positive color 4", "Positive color 4", core.rgb(255, 255, 0));
+}
+
+var first;
+var source = null;
+var Period;
+var MVA;
+var NVolume=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    first = source.first()+2;
+    MVA = core.indicators.create("MVA", source.volume, Period);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ")";
+    instance.name(name);
+    NVolume = instance.addStream("NVolume", core.Bar, name + ".NVolume", "NVolume", instance.parameters.Nclr, first);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    MVA.update(mode);
+    NVolume[period]=source.volume[period]/MVA.DATA[period]*100-100;
+    if (NVolume[period]<0) 
+    {
+     NVolume.setColor(period, instance.parameters.Nclr);
+    } 
+    else if (NVolume[period]<38.2) 
+    {
+     NVolume.setColor(period, instance.parameters.Pclr1);
+    } 
+    else if (NVolume[period]<61.8) 
+    {
+     NVolume.setColor(period, instance.parameters.Pclr2);
+    } 
+    else if (NVolume[period]<100) 
+    {
+     NVolume.setColor(period, instance.parameters.Pclr3);
+    } 
+    else
+    {
+     NVolume.setColor(period, instance.parameters.Pclr4);
+    }
+   } 
+}
+

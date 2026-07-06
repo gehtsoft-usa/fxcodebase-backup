@@ -1,0 +1,28 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_newthread</title>
+</head>
+<body>
+<h3><a name="lua_newthread"><code>lua_newthread</code></a></h3>
+<pre>lua_State *lua_newthread (lua_State *L);</pre>
+
+<p>
+Creates a new thread, pushes it on the stack,
+and returns a pointer to a <a href="lua_State.html"><code>lua_State</code></a> that represents this new thread.
+The new state returned by this function shares with the original state
+all global objects (such as tables),
+but has an independent execution stack.
+
+
+<p>
+There is no explicit function to close or to destroy a thread.
+Threads are subject to garbage collection,
+like any Lua object.
+
+
+
+
+
+<hr>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_insert</title>
+</head>
+<body>
+<h3><a name="lua_insert"><code>lua_insert</code></a></h3>
+<pre>void lua_insert (lua_State *L, int index);</pre>
+
+<p>
+Moves the top element into the given valid index,
+shifting up the elements above this index to open space.
+Cannot be called with a pseudo-index,
+because a pseudo-index is not an actual stack position.
+
+
+
+
+
+<hr>
+</body>
+</html>

@@ -1,0 +1,59 @@
+function Init()
+{
+    indicator.name("Derivative Oscillator");
+    indicator.description("Derivative Oscillator as mentioned in Constance Brown's book Technical Analysys for Trading Professional.");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addInteger("RSI_N", "RSI Periods", "No description", 14);
+    indicator.parameters.addInteger("EMA_N1", "EMA(RSI) periods", "No description", 5);
+    indicator.parameters.addInteger("EMA_N2", "EMA(EMA(RSI)) periods", "No description", 3);
+    indicator.parameters.addInteger("MVA_N", "MVA(EMA(EMA(RSI))) periods", "No description", 9);
+    indicator.parameters.addColor("DO_color", "Color of DO", "Color of DO", core.rgb(0, 255, 0));
+}
+
+var RSI_N;
+var EMA_N1;
+var EMA_N2;
+var MVA_N;
+
+var RSI;
+var EMA1;
+var EMA2;
+var MVA;
+
+var first;
+var source = null;
+
+var DO = null;
+
+function Prepare()
+{
+    RSI_N = instance.parameters.RSI_N;
+    EMA_N1 = instance.parameters.EMA_N1;
+    EMA_N2 = instance.parameters.EMA_N2;
+    MVA_N = instance.parameters.MVA_N;
+    source = instance.source;
+    RSI = core.indicators.create("RSI", source, RSI_N);
+    EMA1 = core.indicators.create("EMA", RSI.DATA, EMA_N1);
+    EMA2 = core.indicators.create("EMA", EMA1.DATA, EMA_N2);
+    MVA = core.indicators.create("MVA", EMA2.DATA, MVA_N);
+    first = MVA.DATA.first();
+    var name = profile.id() + "(" + source.name() + ", " + RSI_N + ", " + EMA_N1 + ", " + EMA_N2 + ", " + MVA_N + ")";
+    instance.name(name);
+    DO = instance.addStream("DO", core.Bar, name, "DO", instance.parameters.DO_color, first);
+}
+
+function Update(period, mode)
+{
+    RSI.update(mode);
+    EMA1.update(mode);
+    EMA2.update(mode);
+    MVA.update(mode);
+
+    if (period >= first) 
+    {
+        DO[period] = EMA2.DATA[period] - MVA.DATA[period];
+    }
+}
+

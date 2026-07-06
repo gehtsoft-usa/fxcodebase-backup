@@ -1,0 +1,133 @@
+function Init()
+{
+    indicator.name("RSI with step MA oscillator");
+    indicator.description("RSI with step MA oscillator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("RSI_Period", "RSI period", "", 14);
+    indicator.parameters.addInteger("Step", "Step", "", 5);
+    indicator.parameters.addInteger("MA_Period", "MA period", "", 6);
+    indicator.parameters.addString("Method", "Method", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("Method", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Method", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Method", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Method", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Method", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Method", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Method", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Method", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Method", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Method", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Method", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Method", "JSmooth", "", "JSmooth");
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("RSIclr", "RSI color", "RSI color", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("RSIwidth", "RSI width", "RSI width", 1, 1, 5);
+    indicator.parameters.addInteger("RSIstyle", "RSI style", "RSI style", core.LINE_SOLID);
+    indicator.parameters.setFlag("RSIstyle", core.FLAG_LINE_STYLE);
+    indicator.parameters.addInteger("Level1", "Level 1", "", 30);
+    indicator.parameters.addInteger("Level2", "Level 2", "", 70);
+    indicator.parameters.addColor("Lclr", "Levels color", "Levels color", core.rgb(128, 128, 0));
+    indicator.parameters.addInteger("Lwidth", "Levels width", "Levels width", 1, 1, 5);
+    indicator.parameters.addInteger("Lstyle", "Levels style", "Levels style", core.LINE_DASH);
+    indicator.parameters.setFlag("Lstyle", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var RSI_Period;
+var Step;
+var MA_Period;
+var Method;
+var RSI=null;
+var MA;
+var P, N;
+
+function Prepare()
+{
+    source = instance.source;
+    RSI_Period=instance.parameters.RSI_Period;
+    Step=instance.parameters.Step;
+    MA_Period=instance.parameters.MA_Period;
+    Method=instance.parameters.Method;
+    first = source.first()+RSI_Period+Step-1;
+    MA = core.indicators.create("AVERAGES", source, Method, MA_Period, false);
+    P=instance.addInternalStream(first, 0);
+    N=instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.RSI_Period + ", " + instance.parameters.Step + ", " + instance.parameters.MA_Period + ", " + instance.parameters.Method + ")";
+    instance.name(name);
+    RSI = instance.addStream("RSI", core.Line, name + ".RSI", "RSI", instance.parameters.RSIclr, first);
+    RSI.setWidth(instance.parameters.RSIwidth);
+    RSI.setStyle(instance.parameters.RSIstyle);
+    RSI.addLevel(30, instance.parameters.Lstyle, instance.parameters.Lwidth, instance.parameters.Lclr);
+    RSI.addLevel(70, instance.parameters.Lstyle, instance.parameters.Lwidth, instance.parameters.Lclr);
+}
+
+function Update(period, mode)
+{
+   if (period>=first) 
+   {
+    MA.update(mode);
+    var i=0;
+    var sump=0;
+    var sumn=0;
+    var positive=0;
+    var negative=0;
+    var diff=0;
+    if (period==first) 
+    {
+     for (i=period-RSI_Period+1; i<=period; i++) 
+     {
+      diff=MA.DATA[i]-MA.DATA[i-Step];
+      if (diff>=0) 
+      {
+       sump=sump+diff;
+      } 
+      else
+      {
+       sumn=sumn-diff;
+      }
+     }
+     positive=sump/RSI_Period;
+     negative=sumn/RSI_Period;
+    } 
+    else
+    {
+     diff=MA.DATA[period]-MA.DATA[period-Step];
+     if (diff>=0) 
+     {
+      sump=diff;
+     } 
+     else
+     {
+      sumn=-diff;
+     }
+     positive=(P[period-1]*(RSI_Period-1)+sump)/RSI_Period;
+     negative=(N[period-1]*(RSI_Period-1)+sumn)/RSI_Period;
+    }
+    P[period]=positive;
+    N[period]=negative;
+    if (negative==0) 
+    {
+     RSI[period]=0;
+    } 
+    else
+    {
+     RSI[period]=100-(100/(1+positive/negative));
+    }
+    
+   } 
+}
+

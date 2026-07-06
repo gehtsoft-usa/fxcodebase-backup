@@ -1,0 +1,73 @@
+function Init()
+{
+    indicator.name("Closing Price Position Oscillator");
+    indicator.description("Closing Price Position Oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+       indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addDouble("High", "High(%)", "", 75);
+    indicator.parameters.addDouble("Low", "Low(%)", "", 25);
+	
+	 indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UP", "Color of Top Range Candle", "", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DN", "Color of Bottom Range Candle", "", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("NE", "Color of Mid Range Candle", "", core.rgb(0, 0, 255));
+ 
+}
+
+var High;
+var Low;
+var UP, DN, NE;
+
+var first;
+var source = null;
+
+var open = null;
+var close = null;
+var high = null;
+var low = null;
+
+function Prepare()
+{
+    UP = instance.parameters.UP;
+	DN = instance.parameters.DN;
+	NE = instance.parameters.NE;
+	
+    High = instance.parameters.High;
+    Low = instance.parameters.Low;
+    source = instance.source;
+    first = source.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + High + ", " + Low + ")";
+    instance.name(name);
+    open = instance.addStream("open", core.Bar, name + ".open", "open",  core.rgb(0, 0, 0), first);
+	
+}
+
+function Update(period)
+{
+    if (period < first && !source.hasData(period)) 
+    {
+	 return;
+	}
+
+	
+	
+		var One=  (source.high[period] -source.low[period]) /100;
+           open[period]  =   (source.close[period]-source.low[period])/ One;	
+		
+			if (open[period] > High) 
+            { 
+			 open.setColor(period, UP);	
+            } 
+			else if (open[period] < Low) 
+            { 
+			 open.setColor(period, DN);	
+            } 
+			else
+            {
+             open.setColor(period, NE);				
+			}	
+    
+}
+

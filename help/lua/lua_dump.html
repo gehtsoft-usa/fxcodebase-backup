@@ -1,0 +1,36 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_dump</title>
+</head>
+<body>
+<h3><a name="lua_dump"><code>lua_dump</code></a></h3>
+<pre>int lua_dump (lua_State *L, lua_Writer writer, void *data);</pre>
+
+<p>
+Dumps a function as a binary chunk.
+Receives a Lua function on the top of the stack
+and produces a binary chunk that,
+if loaded again,
+results in a function equivalent to the one dumped.
+As it produces parts of the chunk,
+<a href="lua_dump.html"><code>lua_dump</code></a> calls function <code>writer</code> (see <a href="lua_Writer.html"><code>lua_Writer</code></a>)
+with the given <code>data</code>
+to write them.
+
+
+<p>
+The value returned is the error code returned by the last
+call to the writer;
+0 means no errors.
+
+
+<p>
+This function does not pop the Lua function from the stack.
+
+
+
+
+
+<hr>
+</body>
+</html>

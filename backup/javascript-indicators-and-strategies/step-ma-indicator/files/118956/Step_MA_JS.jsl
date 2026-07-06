@@ -1,0 +1,161 @@
+function Init()
+{
+    indicator.name("Step MA indicator");
+    indicator.description("Step MA indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 10);
+    indicator.parameters.addDouble("Kv", "Kv", "", 1);
+    indicator.parameters.addInteger("StepSize", "Step size", "", 0);
+    indicator.parameters.addString("Mode", "MA mode", "", "MVA");
+    indicator.parameters.addStringAlternative("Mode", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Mode", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Mode", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("Mode", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Mode", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Mode", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Mode", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Mode", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Mode", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Mode", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Mode", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Mode", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Mode", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Mode", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Mode", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Mode", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Mode", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Mode", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Mode", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Mode", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Mode", "JSmooth", "", "JSmooth");
+    indicator.parameters.addDouble("Percentage", "Percentage", "", 0);
+    indicator.parameters.addString("UsePrice", "Use price", "", "0");
+    indicator.parameters.addStringAlternative("UsePrice", "Close", "", "0");
+    indicator.parameters.addStringAlternative("UsePrice", "High/Low", "", "1");
+    indicator.parameters.addBoolean("ColorMode", "Color mode", "", false);
+    indicator.parameters.addBoolean("I", "Indicator mode", "Keep true value to display labels && lines. Set this parameter to false when the indicator is used in another indicator.", true);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("MainClr", "Main color", "Main color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("UPclr", "UP color", "UP color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("DNclr", "DN color", "DN color", core.rgb(0, 0, 255));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period;
+var Kv;
+var StepSize;
+var Mode;
+var Percentage;
+var UsePrice;
+var ColorMode;
+var smin, smax, trend;
+var HL;
+var MA_HL;
+var pipSize;
+var StepMA=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    Kv=instance.parameters.Kv;
+    StepSize=instance.parameters.StepSize;
+    Mode=instance.parameters.Mode;
+    Percentage=instance.parameters.Percentage/100;
+    UsePrice=tonumber(instance.parameters.UsePrice);
+    ColorMode=instance.parameters.ColorMode;
+    first = source.first()+2;
+    smin=instance.addInternalStream(first, 0);
+    smax=instance.addInternalStream(first, 0);
+    HL=instance.addInternalStream(first, 0);
+    MA_HL=core.indicators.create("AVERAGES", HL, Mode, Period, false);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.Kv + ", " + instance.parameters.StepSize + ", " + instance.parameters.Mode + ", " + instance.parameters.Percentage + ", " + instance.parameters.UsePrice + ")";
+    instance.name(name);
+    StepMA = instance.addStream("StepMA", core.Line, name + ".StepMA", "StepMA", instance.parameters.MainClr, first);
+    StepMA.setWidth(instance.parameters.widthLinReg);
+    StepMA.setStyle(instance.parameters.styleLinReg);
+    pipSize=source.pipSize();
+    if (instance.parameters.I) 
+    {
+     trend=instance.addInternalStream(first, 0);
+    }
+    else
+    {
+     trend = instance.addStream("trend", core.Line, name + ".trend", "trend", instance.parameters.MainClr, first);
+    } 
+}
+
+function StepSizeCalc(index)
+{
+ if (StepSize==0) 
+ {
+  var tmp=Math.minmax(MA_HL.DATA, MA_HL.DATA.first(), index);
+  var ATRmin=tmp[0];
+  var ATRmax=tmp[1];
+  return (Math.floor(0.5*Kv*(ATRmax+ATRmin)/pipSize+0.5));
+ }
+ else
+ {
+  return (Kv*StepSize);
+ } 
+}
+
+function Update(period, mode)
+{
+   if (period>first+Period) 
+   {
+    HL[period]=source.high[period]-source.low[period];
+    MA_HL.update(mode);
+    var Step=StepSizeCalc(period)*pipSize;
+    if (UsePrice==0) 
+    {
+     smax[period]=source.close[period]+2*Step;
+     smin[period]=source.close[period]-2*Step;
+    }
+    else
+    {
+     smax[period]=source.low[period]+2*Step;
+     smin[period]=source.high[period]-2*Step;
+    }
+    trend[period]=trend[period-1];
+    if (source.close[period]>smax[period-1]) 
+    {
+     trend[period]=1;
+    }
+    else if (source.close[period]<smin[period-1]) 
+    {
+     trend[period]=-1; 
+    }
+    var result;
+    if (trend[period]==1) 
+    {
+     smin[period]=Math.max(smin[period], smin[period-1]);
+     StepMA[period]=smin[period]+Step+Percentage*Step;
+    }
+    else
+    {
+     smax[period]=Math.min(smax[period], smax[period-1]);
+     StepMA[period]=smax[period]-Step+Percentage*Step;
+    }
+    if (ColorMode) 
+    {
+     if (StepMA[period]>=StepMA[period-1]) 
+     {
+      StepMA.setColor(period, instance.parameters.UPclr);
+     }
+     else
+     {
+      StepMA.setColor(period, instance.parameters.DNclr);
+     }
+    }    
+   } 
+}
+

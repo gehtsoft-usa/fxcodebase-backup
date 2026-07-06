@@ -1,0 +1,25 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - luaL_dostring</title>
+</head>
+<body>
+<h3><a name="luaL_dostring"><code>luaL_dostring</code></a></h3>
+<pre>int luaL_dostring (lua_State *L, const char *str);</pre>
+
+<p>
+Loads and runs the given string.
+It is defined as the following macro:
+
+<pre>
+     (luaL_loadstring(L, str) || lua_pcall(L, 0, LUA_MULTRET, 0))
+</pre><p>
+It returns 0 if there are no errors
+or 1 in case of errors.
+
+
+
+
+
+<hr>
+</body>
+</html>

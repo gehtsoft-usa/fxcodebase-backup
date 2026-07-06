@@ -1,0 +1,126 @@
+function Init()
+{
+    indicator.name("Distance from Bollinger Band  ");
+    indicator.description("Provides a Distance  between  Price && Bollinger Bands.");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Parameters");
+    indicator.parameters.addInteger("N", "Number of periods", "Number of periods", 20);
+    indicator.parameters.addDouble("Dev", "Number of standard deviations", "Number of standard deviations", 2);
+	
+	
+	indicator.parameters.addString("Method", "Presentation Method", "Method" , "Percentage");
+    indicator.parameters.addStringAlternative("Method", "Percentage", "Percentage" , "Percentage");
+    indicator.parameters.addStringAlternative("Method", "Pip", "Pip" , "Pip");
+	
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr1", "Distance from Top Line color", "", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("width1", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style1", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style1", core.FLAG_LINE_STYLE);
+	
+	indicator.parameters.addColor("clr2", "Distance from Bottom Line color", "", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("width2", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style2", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style2", core.FLAG_LINE_STYLE);
+
+    indicator.parameters.addGroup("Levels");
+    indicator.parameters.addColor("clrL", "Line color", "", core.rgb(192, 192, 192));
+    indicator.parameters.addInteger("widthL", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("styleL", "Line style", "", core.LINE_DOT);
+    indicator.parameters.setFlag("styleL", core.FLAG_LINE_STYLE);
+    indicator.parameters.addBoolean("customLevels", "Show Custom Levels", "You can specify two levels in addition to 0/50/100", false);
+    indicator.parameters.addDouble("customLevel1", "First custom level", "", 40, 0, 100);
+    indicator.parameters.addDouble("customLevel2", "Second custom level", "", 60, 0, 100);
+}
+
+var N;
+var D;
+var Method;
+var firstPeriod;
+var source = null;
+
+var TL = null;
+var AL = null;
+var BL = null;
+
+var Bottom, Top;
+
+function Prepare()
+{
+    N = instance.parameters.N;
+    D = instance.parameters.Dev;
+	Method = instance.parameters.Method;
+    source = instance.source;
+    firstPeriod = source.first() + N - 1;
+
+    var name;
+    name = profile.id() + "(" + source.name() + "," + N + ", " + D+ ", " + Method+ ")";
+    instance.name(name);
+
+    TL = instance.addInternalStream(firstPeriod)
+    BL = instance.addInternalStream(firstPeriod)
+    AL = instance.addInternalStream(firstPeriod)
+
+    Top = instance.addStream("TOP", core.Line, name + ".Top", "Top", instance.parameters.clr1, firstPeriod);
+    Top.setWidth(instance.parameters.width1);
+    Top.setStyle(instance.parameters.style1);
+	
+	 Bottom = instance.addStream("BOTTOM", core.Line, name + ".Bottom", "Bottom", instance.parameters.clr2, firstPeriod);
+    Bottom.setWidth(instance.parameters.width2);
+    Bottom.setStyle(instance.parameters.style2);
+	
+	
+	
+	
+
+    Top.addLevel(0, instance.parameters.styleL, instance.parameters.widthL, instance.parameters.clrL);
+	
+	if (Method != "Pip") 
+    {
+     Top.addLevel(50, instance.parameters.styleL, instance.parameters.widthL, instance.parameters.clrL);  
+     Top.addLevel(100, instance.parameters.styleL, instance.parameters.widthL, instance.parameters.clrL);
+    }
+
+    if (instance.parameters.customLevels) 
+    {
+        Top.addLevel(instance.parameters.customLevel1, instance.parameters.styleL, instance.parameters.widthL, instance.parameters.clrL);
+        Top.addLevel(instance.parameters.customLevel2, instance.parameters.styleL, instance.parameters.widthL, instance.parameters.clrL);
+    }
+}
+
+function Update(period)
+{
+    if (period >= firstPeriod) 
+    {
+        var p = core.rangeTo(period, N);
+        var ml = Math.avg(source, period-N+1, period);
+        var d = Math.stdev(source, period-N+1, period);
+
+        TL[period] = ml + D * d;
+        BL[period] = ml - D * d;
+        AL[period] = ml;
+    }
+
+    if (period < firstPeriod) 
+    {
+	 return;
+	}
+	
+	if (Method != "Pip") 
+    {
+        Top[period] = ((TL[period]-source[period]) / (TL[period] - BL[period])) * 100;
+		Bottom[period] = ((source[period]-BL[period]) / (TL[period] - BL[period])) * 100;
+    }    
+   else
+   {
+        Top[period] = (TL[period]-source[period]) / source.pipSize();
+		Bottom[period] = (source[period]-BL[period]) / source.pipSize() ;
+   }
+}
+
+
+
+
+

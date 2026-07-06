@@ -1,0 +1,71 @@
+function Init()
+{
+    indicator.name("Wave Segregation Index");
+    indicator.description("Wave Segregation Index");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addInteger("CCIP", "CCI Period", "CCI Period", 100,2,2000);
+    indicator.parameters.addInteger("ADXP", "ADX Period", "ADX Period", 100,2,2000);
+    indicator.parameters.addColor("LINE", "Color of line", "Color of line", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("UP", "Color of UP", "Color of UP", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DOWN", "Color of DOWN", "Color of DOWN", core.rgb(255, 0, 0));
+}
+
+var CCIP;
+var ADXP;
+
+var first;
+var source = null;
+
+var UP = null;
+var DOWN = null;
+var WSI = null;
+var CCI=null;
+var ADX=null;
+var UPC,DOWNC,LINEC;
+
+function Prepare()
+{
+    CCIP = instance.parameters.CCIP;
+    ADXP = instance.parameters.ADXP;
+	
+	UPC = instance.parameters.UP;
+    DOWNC = instance.parameters.DOWN;
+    LINEC = instance.parameters.LINE;
+    source = instance.source;
+    first = source.first();
+
+	CCI = core.indicators.create("CCI", source, CCIP);
+	ADX = core.indicators.create("ADX", source, ADXP);
+
+    var name = profile.id() + "(" + source.name() + ", " + CCIP + ", " + ADXP + ")";
+    instance.name(name);
+    WSI = instance.addStream("WSI", core.Line, name + ".Line", "Line", LINEC, first);
+    UP = instance.addStream("UP", core.Bar, name + ".UP", "UP", UPC, first);
+    DOWN = instance.addStream("DOWN", core.Bar, name + ".DOWN", "DOWN", DOWNC, first);
+	UP.addLevel(1.5);
+	DOWN.addLevel(-1.5);
+}
+
+function Update(period,mode)
+{
+    if (period >= Math.max(CCIP,ADXP) && source.hasData(period)) 
+    {
+	
+	   CCI.update(mode);
+	   ADX.update(mode);
+	
+	   WSI[period]=(CCI.DATA[period]*source.typical[period]* ADX.DATA[period]) / 1000;
+	  
+	    if (WSI[period] >= 0)  
+        {
+	     UP[period] = WSI[period];
+        } 
+		else
+        {
+         DOWN[period] = WSI[period];
+		} 
+    }
+}
+

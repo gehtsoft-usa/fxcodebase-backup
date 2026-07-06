@@ -1,0 +1,88 @@
+function Init()
+{
+    indicator.name("Force Index");
+    indicator.description("Dr. Alexander Elder's Force Index. The indicator combines price movements && volume to measure the strength of bulls && bears in the market.");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.setTag("group", "Volume Indicators");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addBoolean("SM", "Smooth", "Choose false to see the RAW Force Index value", true);
+    indicator.parameters.addInteger("N", "Smoothing Periods", "", 13, 1, 1000);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clrFI", "Indicator Line Color", "", core.rgb(255, 255, 0));
+    indicator.parameters.addInteger("widthFI", "Indicator Line Width", "", 1, 1, 5);
+    indicator.parameters.addInteger("styleFI", "Indicator Line Style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleFI", core.FLAG_LINE_STYLE);
+}
+
+var source;
+var first;
+var first1;
+var RawFI;
+var FI;
+var EMA;
+var SM;
+
+function Prepare()
+{
+    source = instance.source;
+    first1 = source.first() + 1;
+    SM = instance.parameters.SM;
+
+    assert(source.supportsVolume(), "The source must have volume");
+
+    var name;
+    name = profile.id() + "(" + source.name() + "," ;
+    if (SM) 
+    {
+        name = name + "EMA(" + instance.parameters.N + "))";
+    }    
+    else
+    {
+        name = name + "RAW)";
+    }
+    instance.name(name);
+
+    RawFI = instance.addInternalStream(first1, 0);
+    if (SM) 
+    {
+        EMA = core.indicators.create("EMA", RawFI, instance.parameters.N);
+        first = EMA.DATA.first();
+    }    
+    else
+    {
+        first = first1;
+    }
+
+    FI = instance.addStream("FI", core.Line, name, "FI", instance.parameters.clrFI, first);
+    FI.setPrecision(0);
+    FI.setWidth(instance.parameters.widthFI);
+    FI.setStyle(instance.parameters.styleFI);
+    FI.addLevel(0);
+}
+
+function Update(period, mode)
+{
+    if (period >= first1) 
+    {
+        RawFI[period] = (source.close[period] - source.close[period - 1]) * source.volume[period];
+    }
+
+    if (period >= first) 
+    {
+        if (SM) 
+        {
+            EMA.update(mode);
+            FI[period] = EMA.DATA[period];
+        }    
+        else
+        {
+            FI[period] = RawFI[period];
+        }
+    }
+}
+
+
+

@@ -1,0 +1,72 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 2.4.4 - Control Structures</title>
+</head>
+<body>
+<h3>2.4.4 - <a name="2.4.4">Control Structures</a></h3><p>
+The control structures
+<b>if</b>, <b>while</b>, and <b>repeat</b> have the usual meaning and
+familiar syntax:
+
+
+
+
+<pre>
+	stat ::= <b>while</b> exp <b>do</b> block <b>end</b>
+	stat ::= <b>repeat</b> block <b>until</b> exp
+	stat ::= <b>if</b> exp <b>then</b> block {<b>elseif</b> exp <b>then</b> block} [<b>else</b> block] <b>end</b>
+</pre><p>
+Lua also has a <b>for</b> statement, in two flavors (see <a href="2.4.5.html">&sect;2.4.5</a>).
+
+
+<p>
+The condition expression of a
+control structure may return any value.
+Both <b>false</b> and <b>nil</b> are considered false.
+All values different from <b>nil</b> and <b>false</b> are considered true
+(in particular, the number 0 and the empty string are also true).
+
+
+<p>
+In the <b>repeat</b>&ndash;<b>until</b> loop,
+the inner block does not end at the <b>until</b> keyword,
+but only after the condition.
+So, the condition can refer to local variables
+declared inside the loop block.
+
+
+<p>
+The <b>return</b> statement is used to return values
+from a function or a chunk (which is just a function).
+
+Functions and chunks may return more than one value,
+so the syntax for the <b>return</b> statement is
+
+<pre>
+	stat ::= <b>return</b> [explist1]
+</pre>
+
+<p>
+The <b>break</b> statement is used to terminate the execution of a
+<b>while</b>, <b>repeat</b>, or <b>for</b> loop,
+skipping to the next statement after the loop:
+
+
+<pre>
+	stat ::= <b>break</b>
+</pre><p>
+A <b>break</b> ends the innermost enclosing loop.
+
+
+<p>
+The <b>return</b> and <b>break</b>
+statements can only be written as the <em>last</em> statement of a block.
+If it is really necessary to <b>return</b> or <b>break</b> in the
+middle of a block,
+then an explicit inner block can be used,
+as in the idioms
+<code>do return end</code> and <code>do break end</code>,
+because now <b>return</b> and <b>break</b> are the last statements in
+their (inner) blocks.
+</body>
+</html>

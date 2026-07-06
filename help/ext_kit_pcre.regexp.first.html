@@ -1,0 +1,417 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252" /><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><title>regexp:first</title><style type="text/css">a, p, h1, h2, h3, h4, h5, h6, table, td, tr, li, ul, ol {
+    font-family: Verdana, Trebuchet MS, Arial;
+}
+
+a, p, td, tr, ul, ol, li {
+    font-size: 12pt;
+}
+
+h3 {
+    font-size: 13pt;
+}
+
+h2 {
+    font-size: 13pt;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+body {
+    color: #444444;
+    background-color: white;
+}
+
+A:link {
+    color: #0065b3;
+    cursor: pointer;
+}
+
+A:visited {
+    color: #0068be;
+    cursor: pointer;
+}
+
+a.action {
+  background-color: #0065b3;
+  color: white;
+  font-size: 10pt;
+  padding: 2px 2px;
+  width: 50pt;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px;
+}
+
+.side-icon {
+    float: left;
+}
+
+a.action [class*="dripicons-"]:before {
+    padding: 0 2px 0 0;
+    font-size: 12pt;
+    vertical-align: text-bottom;
+}
+
+.side-icon:after {
+  content: "";
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  border-left: 1.5px solid white;
+  transform: translate(-50%);
+}
+
+a.actiontab {
+  font-size: 10pt;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px 3px 0 0;
+}
+
+pre, code, code a {
+    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+    font-size: 12pt;
+}
+
+code.ctag {
+    background-color: #f1f1f1;
+    padding: .1em .2em;
+    border-radius: 3px;
+}
+
+pre {
+    background-color: white;
+}
+
+pre.example {
+    background-color: #f1f1f1;
+}
+
+ul {
+    list-style-type: disc;
+    margin-left: 18pt;
+}
+
+ol {
+    list-style-type: decimal;
+    margin-left: 18pt;
+}
+
+ul.hhc {
+    list-style-type: none;
+    margin-left: 1em;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+li.hhc {
+    margin-left: 0;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+table {
+  border-spacing: 0;
+  border-color: #dfe3e7;
+}
+
+tr + tr td {
+   border-top: 0;
+}
+
+tr td + td {
+  border-left: 0;
+}
+
+td {
+  border: 1px solid;
+  border-color: #dfe3e7;
+}
+
+tr:first-child td:first-child {
+   border-radius: 0.2em 0 0 0;
+}
+
+tr:first-child td:last-child {
+  border-radius: 0 0.2em 0 0;
+}
+
+tr:first-child td:only-child {
+  border-radius: 0.2em 0.2em 0 0;
+}
+
+tr:last-child td:first-child {
+    border-radius: 0 0 0 0.2em;
+}
+
+tr:last-child td:last-child {
+    border-radius: 0 0 0.2em 0;
+}
+
+tr:last-child td:only-child {
+    border-radius: 0 0 0.2em 0.2em;
+}
+
+tr:only-child td:only-child {
+    border-radius: 0.2em 0.2em 0.2em 0.2em;
+}
+
+tr:only-child td:first-child {
+   border-radius: 0.2em 0 0 0.2em;
+}
+
+tr:only-child td:last-child {
+  border-radius: 0 0.2em 0.2em 0;
+}
+
+
+td.tmain, td.tmain_nw, td.thdr {
+    background-color: rgb(255, 255, 255);
+    vertical-align: top;
+    padding: 3px;
+}
+
+td.tmain p, td.tmain_nw p, td.thdr p {
+    margin-top: 3pt;
+    margin-bottom: 3pt;
+}
+
+td.tmain_nw {
+    white-space: nowrap;
+}
+
+td.thdr {
+    background-color: #e3e3e3;
+}
+
+table.decl {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+    vertical-align: top;
+    padding: 3px;
+    width: 100%;
+}
+
+table.decl td {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+}
+
+div.note-quote {
+    border-left: 10px solid #ccc;
+    padding: 1em 10px .1em 10px;
+    margin: 1.5em 10px;
+    background-color: rgb(224, 224, 224);
+}
+
+div.note-note {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+div.note-warning {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #fff;
+    background-color: #ff6358;
+}
+div.note-warning code.ctag {
+    color: black;
+}</style>
+<link rel="stylesheet" href="res/dripicons.css"></head><body><script type="text/javascript">
+var highlighterEnabled = false;
+var maintopic = 'index';
+var helptitle = 'Indicore SDK 3';
+    function loadStarted() {
+    window.onload = loadCompleted;
+
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        var head = document.getElementsByTagName('head')[0];
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.min.js';
+        head.appendChild(script4);
+
+
+        var script2 = document.createElement('script');
+        script2.type = 'text/javascript';
+        script2.src = './highlighter/highlight.cshtml.js';
+        head.appendChild(script2);
+
+        var script3 = document.createElement('script');
+        script3.type = 'text/javascript';
+        script3.src = './highlighter/highlight.lua.js';
+        head.appendChild(script3);
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.luax.js';
+        head.appendChild(script4);
+    }
+}
+
+function loadCompleted() {
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        hljs.registerLanguage('cshtml-razor', window.hljsDefineCshtmlRazor);
+        hljs.registerLanguage('lua', window.hljsDefineLua);
+        hljs.registerLanguage('luax', window.hljsDefineLuaX);
+        x = document.querySelectorAll('pre code');
+        for (var i = 0; i < x.length; i++) {
+            if (x[i].hasAttribute('class')) {
+                hljs.highlightBlock(x[i]);
+            }
+        }
+    }
+}
+
+
+function hidediv(divname) {
+    document.getElementById(divname).style.display = 'none';
+}
+
+function showdiv(divname) {
+    document.getElementById(divname).style.display = 'inline';
+}
+
+function syncList() {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, null, document.title);
+    }
+}
+
+function syncList1(key) {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, key + '.html', document.title);
+    }
+}</script><script type="text/javascript">
+    loadStarted();
+</script><h1><code>public method <b>regexp:first</b></code></h1><h2>Brief</h2>
+<p>Find the first match in the string specified.</p>
+<table class="tmain" width="100%">
+  <tr>
+    <td class="thdr"><b>Declaration</b></td>
+  </tr>
+  <tr>
+    <td class="tmain"><table class="decl">
+  <tr>
+    <td>Lua</td>
+  </tr>
+  <tr>
+    <td><code>integer&nbsp;regexp:<b>first</b> (string)</code></td>
+  </tr>
+</table></td>
+  </tr>
+</table><p></p>
+<table class="tmain" width="100%">
+  <tr>
+    <td colspan="2" class="thdr"><b>Parameters</b></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>string</code></td>
+    <td class="tmain" width="69%"><p>The string to be matched.</p></td>
+  </tr>
+</table><h2>Details</h2><p>The method finds the first of the matches in the string specified. The method returns
+the number of captures or 0 in case the string has no matches to the expression.</p>
+<p>The first capture is the whole part of the text which matches the whole expression. Other
+captures are corresponding to the regular expression groups (a part of the pattern enclosed
+into the brackets) and are indexed from the left to right. I.e. the first left bracket starts the
+second capture and so on.</p>
+<p>To get the captures use <a href="ext_kit_pcre.regexp.match_pos.html"><code>regexp:match_pos()</code></a> and
+<a href="ext_kit_pcre.regexp.match_pos.html"><code>regexp:match_text()</code></a> methods.</p>
+<p>To find the next match in the same string use <a href="ext_kit_pcre.regexp.next.html"><code>regexp:next()</code></a>
+method.</p><div id="open183" style="display:none">
+  <p>Example: Use first/next methods to find all matches&nbsp;<a href="javascript: showdiv('close183'); hidediv('open183');" onclick="javascript: showdiv('close183'); hidediv('open183');" class="action">Show<span class="side-icon dripicons-chevron-right"></span></a></p>
+</div>
+<div id="close183" style="display:inline">
+  <p>Example: Use first/next methods to find all matches&nbsp;<a href="javascript: showdiv('open183'); hidediv('close183');" onclick="javascript: showdiv('open183'); hidediv('close183');" class="action">Hide<span class="side-icon dripicons-chevron-down"></span></a></p>
+  <pre class="example" id="example183"><code> 
+   -- expression which finds the day in
+   -- yy-mm-dd, yyyy-mm-dd, yy-mmm-dd or yyyy-mmm-dd formats
+   local exp = pcre_lua.compile(&quot;(((\\d\\d)?\\d\\d)-(((\\d\\d?)|(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)))-(\\d\\d?))&quot;, pcre_lua.CASELESS + pcre_lua.MULTILINE);
+   local text = &quot;2010-11-22 text 2009-1-1 another text 2000-jan-01 and in final now 1999-Dec-31&quot;;
+   local matches;
+ 
+   matches = exp:first(text);
+   while matches &gt; 0 do
+       print(&quot;Match found!!!\n&quot;);
+       for i = 0, matches - 1, 1 do
+           local pos, len, text;
+           pos, len = exp:match_pos(i);
+           text = exp:match_text(i);
+           print(string.format(&quot;  %i (%i, %i) %s\n&quot;, i, pos, len, text));
+       end
+   end
+   matches = exp:next();
+   ...
+   <font color="#7f7f7f">
+   The output of the example is:
+   Match found!!!
+     0 (0, 10) 2010-11-22
+     1 (0, 10) 2010-11-22
+     2 (0, 4) 2010
+     3 (0, 2) 20
+     4 (5, 2) 11
+     5 (5, 2) 11
+     6 (5, 2) 11
+     7 (-1, 0)
+     8 (8, 2) 22
+   Match found!!!
+     0 (16, 8) 2009-1-1
+     1 (16, 8) 2009-1-1
+     2 (16, 4) 2009
+     3 (16, 2) 20
+     4 (21, 1) 1
+     5 (21, 1) 1
+     6 (21, 1) 1
+     7 (-1, 0)
+     8 (23, 1) 1
+   Match found!!!
+     0 (38, 11) 2000-jan-01
+     1 (38, 11) 2000-jan-01
+     2 (38, 4) 2000
+     3 (38, 2) 20
+     4 (43, 3) jan
+     5 (43, 3) jan
+     6 (-1, 0)
+     7 (43, 3) jan
+     8 (47, 2) 01
+   Match found!!!
+     0 (67, 11) 1999-Dec-31
+     1 (67, 11) 1999-Dec-31
+     2 (67, 4) 1999
+     3 (67, 2) 19
+     4 (72, 3) Dec
+     5 (72, 3) Dec
+     6 (-1, 0)
+     7 (72, 3) Dec
+     8 (76, 2) 31
+   </font></code></pre>
+</div><p>Declared in <a href="ext_kit_pcre.regexp.html">regexp</a></p>
+<p>
+  <center><a href="ext_kit_pcre.regexp.html">back</a></center>
+</p><script language="javascript" type="text/javascript">syncList1('ext_kit_pcre.regexp');</script></body></html>

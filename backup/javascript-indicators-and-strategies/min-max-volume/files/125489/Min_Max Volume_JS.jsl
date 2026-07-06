@@ -1,0 +1,66 @@
+function Init()
+{
+    indicator.name("Min Max Volume");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+	
+	indicator.parameters.addGroup("Calculation");	
+	indicator.parameters.addInteger("Period", "Period", "", 20);
+	
+	indicator.parameters.addGroup("Style");
+	indicator.parameters.addInteger("Size", "Arriw Size", "", 10);
+	indicator.parameters.addColor("Up", "Max color", "", core.rgb(0, 255, 0));
+	indicator.parameters.addColor("Dn", "Min color", "", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+var Size;
+var Type;
+var up, down; 
+var Period;
+
+function Prepare()
+{
+    Period=instance.parameters.Period;
+	Size=instance.parameters.Size;	 
+	up = instance.createTextOutput ("Up", "Up", "Wingdings", Size, core.H_Center, core.V_Top, instance.parameters.Up, 0);
+    down = instance.createTextOutput ("Dn", "Dn", "Wingdings", Size, core.H_Center, core.V_Bottom, instance.parameters.Dn, 0);
+	
+	source = instance.source;
+	   
+    var name = profile.id() + "(" + source.name() + ", "+source.barSize() + ", "+Period;
+    instance.name(name);	
+	
+	first= source.first()+Period;
+		
+}
+
+function Update(period)
+{	
+			if (period < first) 
+			{
+			 return;
+			}
+			
+			up.setNoData(period);
+            down.setNoData(period);
+			
+	      var min,max;
+		  
+		  var tmp=Math.minmax(source.volume, period-Period+1, period);
+		  min=tmp[0];
+		  max=tmp[1];
+		 
+		                        if (source.volume[period]== max) 
+		                        {
+								 up.set(period, source.high[period], "\108",source.volume[period]);
+							    }
+							    if (source.volume[period]== min)  
+							    {
+								 down.set(period, source.low[period], "\108", source.volume[period]);
+								}
+}
+		 
+

@@ -1,0 +1,68 @@
+function Init()
+{
+    indicator.name("VSA BAR DOTS indicator");
+    indicator.description("VSA BAR DOTS indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addDouble("K", "K", "", 3.6);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP Color", "UP Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("MDclr", "Middle Color", "Middle Color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("DNclr", "DN Color", "DN Color", core.rgb(0, 0, 255));
+    indicator.parameters.addInteger("DotSize", "Dot size", "Dot size", 3, 1, 5);
+}
+
+var first;
+var source = null;
+var K;
+var UpBar=null;
+var MiddleBar=null;
+var DnBar=null;
+
+function Prepare()
+{
+    source = instance.source;
+    K=instance.parameters.K;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + K + ")";
+    instance.name(name);
+    UpBar = instance.addStream("UpBar", core.Dot, name + ".UpBar", "UpBar", instance.parameters.UPclr, first);
+    MiddleBar = instance.addStream("MiddleBar", core.Dot, name + ".MiddleBar", "MiddleBar", instance.parameters.MDclr, first);
+    DnBar = instance.addStream("DnBar", core.Dot, name + ".DnBar", "DnBar", instance.parameters.DNclr, first);
+    UpBar.setWidth(instance.parameters.DotSize);
+    MiddleBar.setWidth(instance.parameters.DotSize);
+    DnBar.setWidth(instance.parameters.DotSize);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    var Middle=(source.high[period-1]+source.low[period-1])/2;
+    var D=(source.high[period-1]-source.low[period-1])/K;
+    var Up=Middle+D;
+    var Dn=Middle-D;
+    if (source.close[period-1]<=Up && source.close[period-1]>=Dn) 
+    {
+     MiddleBar[period-1]=Middle;
+     UpBar[period-1]=null;
+     DnBar[period-1]=null;
+    } 
+    else if (source.close[period-1]>Up) 
+    {
+     UpBar[period-1]=Up;
+     MiddleBar[period-1]=null;
+     DnBar[period-1]=null;
+    } 
+    else
+    {
+     DnBar[period-1]=Dn;
+     UpBar[period-1]=null;
+     MiddleBar[period-1]=null;
+    }
+   } 
+}
+

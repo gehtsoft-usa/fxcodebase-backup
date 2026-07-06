@@ -1,0 +1,122 @@
+function Init()
+{
+    indicator.name("AtrVolatility");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("ATRP", "ATR Period", "ATR Period", 12);  
+	
+	indicator.parameters.addGroup("Levels");
+	indicator.parameters.addDouble("Up", "High Volatility Level (Pip/%)", "", 20);
+	indicator.parameters.addDouble("Down", "Low Volatility Level (Pip/%)", "", 20);
+	
+	 indicator.parameters.addString("Type", "Pip/%", "", "Pip");
+    indicator.parameters.addStringAlternative("Type", "Pip", "", "Pip");
+    indicator.parameters.addStringAlternative("Type", "%", "", "%");
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UP", "Color for High Volatility", "", core.rgb(0, 255, 0));
+	 indicator.parameters.addColor("DOWN", "Color for Low Volatility", "", core.rgb(255, 0, 0));
+	  indicator.parameters.addColor("NO", "Color for Moderate Volatility", "", core.rgb(255, 128, 0));
+}
+
+var ATRP;
+var Up, Down;
+
+var ATR;
+var Type;
+var first;
+var source = null;
+
+var OUT=null;
+
+function Prepare()
+{
+    Type = instance.parameters.Type;
+    ATRP = instance.parameters.ATRP;
+    Up = instance.parameters.Up;	
+	Down = instance.parameters.Down;
+    source = instance.source;
+	
+	UP = instance.parameters.UP;
+	DOWN = instance.parameters.DOWN;
+	NO = instance.parameters.NO;    
+	
+	ATR=core.indicators.create("ATR", source, ATRP );
+	
+	first =  ATR.DATA.first() ;
+	
+	
+
+    var name = profile.id() + "(" + source.name() + ", " + ATRP + ", " + Up+ ", " + Down +")";
+    instance.name(name);
+    OUT = instance.addStream("TREND", core.Bar, name, "TREND", NO, first);
+	 OUT.addLevel(1, core.LINE_NONE, 1, core.rgb(0, 0 , 0));
+    OUT.addLevel(0, core.LINE_NONE, 1, core.rgb(0, 0 , 0));
+	
+
+}
+
+function Update(period, mode)
+{
+    if (period < first)
+    {
+	 OUT[period]= 0;	
+	 return;
+	}
+	
+	if (period < source.size()-1) 
+	{
+	 return;
+	}
+	
+	 ATR.update(mode);
+	
+	var min, max;	
+	var tmp;
+	tmp=Math.minmax(ATR.DATA, first, source.size()-1);
+	min=tmp[0];
+	max=tmp[1];
+	 
+	var i;
+    
+    for (i = first; i<=source.size()-1; i++) 
+    {	
+	period =i; 
+	 
+    OUT[period]= 1;
+
+	var Top, Bottom;
+	
+	if (Type== "Pip") 
+	{
+	 Top= Up* source.pipSize();
+	 Bottom= Down* source.pipSize();
+	} 
+	else
+	{
+	 var Percentage = (max-min) /100;
+	 Top= min +  Percentage * Up  ;
+	 Bottom= min +  Percentage * Down;
+	
+	}
+		
+		
+		 if (ATR.DATA[period] > Top) 
+		 {
+		  OUT.setColor(period, UP);	
+		 } 
+		 else if (ATR.DATA[period] <   Bottom) 
+		 {
+		  OUT.setColor(period, DOWN);
+		 } 
+		 else
+		 {
+		  OUT.setColor(period, NO);
+		 }
+		
+	}
+   
+}
+

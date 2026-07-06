@@ -1,0 +1,81 @@
+function Init()
+{
+    indicator.name("Digital adaptive Moving Average");
+    indicator.description("Digital adaptive Moving Average");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+    indicator.parameters.addGroup("Calculation");
+	
+    indicator.parameters.addInteger("Period", "Period", "Period", 14);
+	indicator.parameters.addDouble("Step", "Step", "Step", 2);
+	
+	indicator.parameters.addString("Method", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method", "WMA", "WMA" , "WMA");
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("XMA_color", "Color of XMA", "Color of XMA", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var Period;
+var Method;
+var first;
+var source = null;
+var Step;
+
+var XMA = null;
+var MA;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;	
+	Method = instance.parameters.Method;
+    source = instance.source;
+	Step = instance.parameters.Step;
+    first = source.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period)+ ", " + tostring(Step)+ ", " + tostring(Method) + ")";
+    instance.name(name);
+	
+	Step= Step*source.pipSize();
+	
+	MA = core.indicators.create(Method, source, Period);
+
+    if (!(nameOnly)) 
+    {
+        XMA = instance.addStream("XMA", core.Line, name, "XMA", instance.parameters.XMA_color, first);
+		XMA.setWidth(instance.parameters.width);
+        XMA.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period, mode)
+{   
+	MA.update(mode);
+	
+	if (period < first) 
+    {
+	 return;
+	}
+	
+	if (Math.abs(MA.DATA[period]-MA.DATA[period-1])>=Step) 
+    {
+	  XMA[period]=MA.DATA[period];
+    }  
+      else
+    {
+	 XMA[period]=XMA[period-1];
+    }
+    
+    
+}
+

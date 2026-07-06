@@ -1,0 +1,102 @@
+function Init()
+{
+    indicator.name("Kuskus starlight oscillator");
+    indicator.description("No description");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addInteger("R", "Range", "", 30, 1, 100);
+    indicator.parameters.addDouble("PS", "Price Smoothing", "", 0.3, 0.00001, 0.999999);
+    indicator.parameters.addDouble("IS", "Index Smoothing", "", 0.3, 0.00001, 0.999999);
+    indicator.parameters.addColor("UP_color", "Color of UP trend", "", core.rgb(0, 183, 239));
+    indicator.parameters.addColor("DN_color", "Color of DN trend", "", core.rgb(255, 0, 0));
+}
+
+var R;
+var PS;
+var IS;
+
+var first;
+var first1;
+var source = null;
+
+var UP = null;
+var DN = null;
+var B1, B4;
+var point;
+
+function Prepare()
+{
+    R = instance.parameters.R;
+    PS = instance.parameters.PS;
+    IS = instance.parameters.IS;
+    source = instance.source;
+    first = source.first() + 2 * R + 4;
+    first1 = source.first() + R;
+    point = source.pipSize();
+
+    var name = profile.id() + "(" + source.name() + ", " + R + ", " + PS + ", " + IS + ")";
+    instance.name(name);
+    B1 = instance.addInternalStream(0, 0);
+    B4 = instance.addInternalStream(0, 0);
+    UP = instance.addStream("UP", core.Line, name + ".UP", "UP", instance.parameters.UP_color, first);
+    DN = instance.addStream("DN", core.Line, name + ".DN", "DN", instance.parameters.DN_color, first);
+}
+
+function Update(period)
+{
+    var ll, hh, range, middle, location, smoothed, fish;
+    if (period >= first1) 
+    {
+        var tmp=Math.minmax(source, period-R+1, period);
+        ll=tmp[0];
+        hh=tmp[1];
+        if ((hh - ll) < 0.1 * point) 
+        {
+            hh = ll + 0.1 * point;
+        }
+        range = hh - ll;
+        middle = source.median[period];
+        location = (middle - ll) / range;
+        location = 2 * location - 1;
+        B4[period] = PS * B4[period - 1] + (1.0 - PS) * location;
+        smoothed = B4[period];
+        if (smoothed > 0.99999) 
+        {
+            smoothed = 0.99999;
+        }    
+        else if (smoothed < -0.99999) 
+        {
+            smoothed = -0.99999;
+        }
+        fish = Math.log((1 + smoothed) / (1 - smoothed));
+        B1[period] = IS * B1[period - 1] + (1.0 - IS) * fish;
+    }
+    else
+    {
+        B1[period] = 0;
+        B4[period] = 0;
+    }
+
+    if (period >= first) 
+    {
+        smoothed = B1[period];
+        if (smoothed > 0) 
+        {
+            UP[period] = smoothed;
+            DN[period] = 0;
+        }
+        else if (smoothed < 0) 
+        {
+            UP[period] = 0;
+            DN[period] = smoothed;
+        }
+        else
+        {
+            UP[period] = 0;
+            DN[period] = 0;
+        }
+    }
+}
+
+

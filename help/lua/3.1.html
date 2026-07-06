@@ -1,0 +1,43 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 3.1 - The Stack</title>
+</head>
+<body>
+<h2>3.1 - <a name="3.1">The Stack</a></h2>
+
+<p>
+Lua uses a <em>virtual stack</em> to pass values to and from C.
+Each element in this stack represents a Lua value
+(<b>nil</b>, number, string, etc.).
+
+
+<p>
+Whenever Lua calls C, the called function gets a new stack,
+which is independent of previous stacks and of stacks of
+C&nbsp;functions that are still active.
+This stack initially contains any arguments to the C&nbsp;function
+and it is where the C&nbsp;function pushes its results
+to be returned to the caller (see <a href="lua_CFunction.html"><code>lua_CFunction</code></a>).
+
+
+<p>
+For convenience,
+most query operations in the API do not follow a strict stack discipline.
+Instead, they can refer to any element in the stack
+by using an <em>index</em>:
+A positive index represents an <em>absolute</em> stack position
+(starting at&nbsp;1);
+a negative index represents an <em>offset</em> relative to the top of the stack.
+More specifically, if the stack has <em>n</em> elements,
+then index&nbsp;1 represents the first element
+(that is, the element that was pushed onto the stack first)
+and
+index&nbsp;<em>n</em> represents the last element;
+index&nbsp;-1 also represents the last element
+(that is, the element at the top)
+and index <em>-n</em> represents the first element.
+We say that an index is <em>valid</em>
+if it lies between&nbsp;1 and the stack top
+(that is, if <code>1 &le; abs(index) &le; top</code>).
+</body>
+</html>

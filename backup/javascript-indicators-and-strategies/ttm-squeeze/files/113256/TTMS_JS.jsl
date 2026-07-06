@@ -1,0 +1,131 @@
+function Init()
+{
+    indicator.name("TTM Squeeze");
+    indicator.description("TTM Squeeze");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+	
+    indicator.parameters.addGroup("Bollinger Calculation");
+    indicator.parameters.addDouble("Period", "Number of periods", "Number of periods", 20.0);	
+    indicator.parameters.addDouble("Dev", "Number of standard deviations", "Number of standard deviations", 2.0);
+	
+	
+	indicator.parameters.addGroup("Keltner Calculation");
+	    indicator.parameters.addInteger("NM", "Number of the periods to smooth the center line", "", 20);
+    indicator.parameters.addInteger("NB", "Number of periods to smooth deviation", "", 20);
+    indicator.parameters.addDouble("F", "Factor which is used to apply the deviation", "", 2);
+	
+	indicator.parameters.addString("MS", "The center line smoothing method", "", "MVA");
+    indicator.parameters.addStringAlternative("MS", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("MS", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("MS", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("MS", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("MS", "Wilders", "", "WMA");
+	
+	indicator.parameters.addGroup("Style"); 
+    indicator.parameters.addColor("Up", "Color of Up TTMS", "Color of TTMS", core.rgb(0, 255, 0));
+	indicator.parameters.addColor("Down", "Color of Down TTMS", "Color of TTMS", core.rgb( 255, 0 , 0));
+	indicator.parameters.addColor("Alert", "Trade Zone Color", "Trade Zone Color", core.rgb( 0, 0 , 255));
+	indicator.parameters.addColor("Neutral", "No Trade Zone Color", "No Trade Zone Color", core.rgb( 128, 128, 128));
+}
+
+var TL, BL  ;
+var Dev;
+var Alert;
+var source = null;
+var Period;
+// Streams block
+var TTMS = null;
+var NM, NB, F;
+var H, L, MS;
+var ATR, MA;
+// Routine
+function Prepare(nameOnly)
+{
+    Dev = instance.parameters.Dev;
+	Period = instance.parameters.Period;
+    source = instance.source;
+	NB = instance.parameters.NB;
+	NM = instance.parameters.NM;
+	F = instance.parameters.F;
+	MS = instance.parameters.MS;
+		
+	TL = instance.addInternalStream(0,0);
+    BL = instance.addInternalStream(0,0);
+    H = instance.addInternalStream(0,0);
+    L = instance.addInternalStream(0,0);
+	
+	ATR = core.indicators.create("ATR", source, NB);
+	MA = core.indicators.create(MS, source.close, NM);
+
+    var name = profile.id() + "(" + source.name() + ", " + Period+ ", " + tostring(Dev)  + ", " + NM + ", " + NB+ ", " + F+ ", " + MS+ ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        TTMS = instance.addStream("TTMS", core.Bar, name, "TTMS", instance.parameters.Up, Math.max(Period, NM, NB));
+		Alert = instance.addStream("Alert", core.Dot, name, "Alert", instance.parameters.Alert, Math.max(Period, NM, NB));
+		Alert.setWidth(3);
+    }
+}
+
+function Update(period, mode)
+{
+    if (period < Period) 
+    {
+	   return;
+	  }
+	
+	BB(period);
+	
+	if (period < Math.max(NM, NB))  
+  {
+	 return;
+	}
+	
+	MA.update(mode);
+	ATR.update(mode);
+	
+	Keltner(period);
+	
+	
+   TTMS[period] = (H[period]-L[period])/(TL[period]-BL[period])-1;
+   
+   if  (TTMS[period] >  TTMS[period-1]) 
+   {
+    TTMS.setColor(period, instance.parameters.Up);
+   } 
+   else
+   {
+    TTMS.setColor(period, instance.parameters.Down);
+   }
+   
+   Alert[period]=0;
+   
+   if (TL[period] <  H[period] &&  BL[period] >  L[period]) 
+   {
+    Alert.setColor(period, instance.parameters.Alert);
+   } 
+   else
+   {
+    Alert.setColor(period, instance.parameters.Neutral);
+   }
+   
+}
+
+function BB(period)
+{
+       var ml = Math.avg(source.close, period-Period+1, period);
+        var d = Math.stdev(source.close, period-Period+1, period);
+
+        TL[period] = ml + Dev * d;
+        BL[period] = ml - Dev * d;				
+     
+
+}
+
+function Keltner (period)
+{
+       H[period] = MA.DATA[period] + ATR.DATA[period] * F;
+        L[period] =  MA.DATA[period] - ATR.DATA[period] * F;
+}

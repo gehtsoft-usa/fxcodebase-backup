@@ -1,0 +1,36 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - io.lines ([filename])</title>
+</head>
+<body>
+<h3><a name="pdf-io.lines"><code>io.lines ([filename])</code></a></h3>
+
+
+<p>
+Opens the given file name in read mode
+and returns an iterator function that,
+each time it is called,
+returns a new line from the file.
+Therefore, the construction
+
+<pre>
+     for line in io.lines(filename) do <em>body</em> end
+</pre><p>
+will iterate over all lines of the file.
+When the iterator function detects the end of file,
+it returns <b>nil</b> (to finish the loop) and automatically closes the file.
+
+
+<p>
+The call <code>io.lines()</code> (without a file name) is equivalent
+to <code>io.input():lines()</code>;
+that is, it iterates over the lines of the default input file.
+In this case it does not close the file when the loop ends.
+
+
+
+
+<p>
+<hr>
+</body>
+</html>

@@ -1,0 +1,70 @@
+function Init()
+{
+    indicator.name("Z cloud indicator");
+    indicator.description("Z cloud indicator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addDouble("ki", "ki", "", 2);
+	
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP color", "UP color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DNclr", "DN color", "DN color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("Transparency", "Transparency", "", 50,0,100);
+}
+
+var first;
+var source = null;
+var ki;
+var Pbuff=null;
+var Mbuff=null;
+
+function Prepare()
+{
+    source = instance.source;
+    ki=instance.parameters.ki;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.ki + ")";
+    instance.name(name);
+    Pbuff = instance.addStream("Pbuff", core.Line, name + ".Pbuff", "Pbuff", instance.parameters.UPclr, first);
+    Mbuff = instance.addStream("Mbuff", core.Line, name + ".Mbuff", "Mbuff", instance.parameters.UPclr, first);
+    instance.createChannelGroup("TC","TC" , Pbuff, Mbuff, instance.parameters.UPclr, 100-instance.parameters.Transparency);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    if ((source[period]>Pbuff[period-1] && source[period]>source[period-1]) || (source[period]<Pbuff[period-1] && source[period]<source[period-1])) 
+    {
+     Pbuff[period]=Pbuff[period-1]+(source[period]-Pbuff[period-1])/ki;
+    } 
+    else
+    {
+     Pbuff[period]=Pbuff[period-1];
+    } 
+    
+    if ((source[period]>Mbuff[period-1] && source[period]<source[period-1]) || (source[period]<Mbuff[period-1] && source[period]>source[period-1])) 
+    {
+     Mbuff[period]=Mbuff[period-1]+(source[period]-Mbuff[period-1])/ki;
+    } 
+    else
+    {
+     Mbuff[period]=Mbuff[period-1];
+    } 
+    
+    if (Pbuff[period]>Mbuff[period]) 
+    {
+     Pbuff.setColor(period, instance.parameters.UPclr);
+     Mbuff.setColor(period, instance.parameters.UPclr);
+    } 
+    else
+    {
+     Pbuff.setColor(period, instance.parameters.DNclr);
+     Mbuff.setColor(period, instance.parameters.DNclr);
+    }
+    
+   } 
+}
+

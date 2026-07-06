@@ -1,0 +1,65 @@
+function Init()
+{
+    indicator.name("Intraday Intensity Index");
+    indicator.description("Intraday Intensity Index");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 21);
+	indicator.parameters.addBoolean("Normalized"  , "Use Normalization", "", true);	
+	
+	indicator.parameters.addGroup("Style");		
+    indicator.parameters.addColor("III_color", "Color of III", "Color of III", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+	
+}
+ 
+var first;
+var source = null;
+var Period;
+var Normalized;
+
+var III = null;
+var Raw;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+	Normalized = instance.parameters.Normalized;
+    source = instance.source;
+    first = source.first()+Period;
+	
+	 Raw = instance.addInternalStream(0, 0);
+	 assert(source.supportsVolume(), "The source must have volume");
+
+    var name = profile.id() + "(" + source.name() + ", " + Period  + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        III = instance.addStream("III", core.Line, name, "III", instance.parameters.III_color, first);
+		III.setWidth(instance.parameters.width);
+        III.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period)
+{
+    Raw[period] =  ((2*source.close[period]-source.high[period]-source.low[period])/(source.high[period]-source.low[period]))*source.volume[period];
+   
+    if (period < first) 
+    {
+	 return;	
+	}
+	if (Normalized) 
+    {	 
+	 III[period]= (Math.sum(Raw, period-Period+1, period)/ Math.sum(source.volume, period-Period+1, period))*100 ;
+    } 
+	else	
+    {
+	 III[period]= Math.sum(Raw, period-Period+1, period);
+	}
+}
+

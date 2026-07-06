@@ -1,0 +1,505 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252" /><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><title>OTO (One-Triggers-the-Other) Contingent Order</title><style type="text/css">a, p, h1, h2, h3, h4, h5, h6, table, td, tr, li, ul, ol {
+    font-family: Verdana, Trebuchet MS, Arial;
+}
+
+a, p, td, tr, ul, ol, li {
+    font-size: 12pt;
+}
+
+h3 {
+    font-size: 13pt;
+}
+
+h2 {
+    font-size: 13pt;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+body {
+    color: #444444;
+    background-color: white;
+}
+
+A:link {
+    color: #0065b3;
+    cursor: pointer;
+}
+
+A:visited {
+    color: #0068be;
+    cursor: pointer;
+}
+
+a.action {
+  background-color: #0065b3;
+  color: white;
+  font-size: 10pt;
+  padding: 2px 2px;
+  width: 50pt;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px;
+}
+
+.side-icon {
+    float: left;
+}
+
+a.action [class*="dripicons-"]:before {
+    padding: 0 2px 0 0;
+    font-size: 12pt;
+    vertical-align: text-bottom;
+}
+
+.side-icon:after {
+  content: "";
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  border-left: 1.5px solid white;
+  transform: translate(-50%);
+}
+
+a.actiontab {
+  font-size: 10pt;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px 3px 0 0;
+}
+
+pre, code, code a {
+    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+    font-size: 12pt;
+}
+
+code.ctag {
+    background-color: #f1f1f1;
+    padding: .1em .2em;
+    border-radius: 3px;
+}
+
+pre {
+    background-color: white;
+}
+
+pre.example {
+    background-color: #f1f1f1;
+}
+
+ul {
+    list-style-type: disc;
+    margin-left: 18pt;
+}
+
+ol {
+    list-style-type: decimal;
+    margin-left: 18pt;
+}
+
+ul.hhc {
+    list-style-type: none;
+    margin-left: 1em;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+li.hhc {
+    margin-left: 0;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+table {
+  border-spacing: 0;
+  border-color: #dfe3e7;
+}
+
+tr + tr td {
+   border-top: 0;
+}
+
+tr td + td {
+  border-left: 0;
+}
+
+td {
+  border: 1px solid;
+  border-color: #dfe3e7;
+}
+
+tr:first-child td:first-child {
+   border-radius: 0.2em 0 0 0;
+}
+
+tr:first-child td:last-child {
+  border-radius: 0 0.2em 0 0;
+}
+
+tr:first-child td:only-child {
+  border-radius: 0.2em 0.2em 0 0;
+}
+
+tr:last-child td:first-child {
+    border-radius: 0 0 0 0.2em;
+}
+
+tr:last-child td:last-child {
+    border-radius: 0 0 0.2em 0;
+}
+
+tr:last-child td:only-child {
+    border-radius: 0 0 0.2em 0.2em;
+}
+
+tr:only-child td:only-child {
+    border-radius: 0.2em 0.2em 0.2em 0.2em;
+}
+
+tr:only-child td:first-child {
+   border-radius: 0.2em 0 0 0.2em;
+}
+
+tr:only-child td:last-child {
+  border-radius: 0 0.2em 0.2em 0;
+}
+
+
+td.tmain, td.tmain_nw, td.thdr {
+    background-color: rgb(255, 255, 255);
+    vertical-align: top;
+    padding: 3px;
+}
+
+td.tmain p, td.tmain_nw p, td.thdr p {
+    margin-top: 3pt;
+    margin-bottom: 3pt;
+}
+
+td.tmain_nw {
+    white-space: nowrap;
+}
+
+td.thdr {
+    background-color: #e3e3e3;
+}
+
+table.decl {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+    vertical-align: top;
+    padding: 3px;
+    width: 100%;
+}
+
+table.decl td {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+}
+
+div.note-quote {
+    border-left: 10px solid #ccc;
+    padding: 1em 10px .1em 10px;
+    margin: 1.5em 10px;
+    background-color: rgb(224, 224, 224);
+}
+
+div.note-note {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+div.note-warning {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #fff;
+    background-color: #ff6358;
+}
+div.note-warning code.ctag {
+    color: black;
+}</style>
+<link rel="stylesheet" href="res/dripicons.css"></head><body><script type="text/javascript">
+var highlighterEnabled = false;
+var maintopic = 'index';
+var helptitle = 'Indicore SDK 3';
+    function loadStarted() {
+    window.onload = loadCompleted;
+
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        var head = document.getElementsByTagName('head')[0];
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.min.js';
+        head.appendChild(script4);
+
+
+        var script2 = document.createElement('script');
+        script2.type = 'text/javascript';
+        script2.src = './highlighter/highlight.cshtml.js';
+        head.appendChild(script2);
+
+        var script3 = document.createElement('script');
+        script3.type = 'text/javascript';
+        script3.src = './highlighter/highlight.lua.js';
+        head.appendChild(script3);
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.luax.js';
+        head.appendChild(script4);
+    }
+}
+
+function loadCompleted() {
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        hljs.registerLanguage('cshtml-razor', window.hljsDefineCshtmlRazor);
+        hljs.registerLanguage('lua', window.hljsDefineLua);
+        hljs.registerLanguage('luax', window.hljsDefineLuaX);
+        x = document.querySelectorAll('pre code');
+        for (var i = 0; i < x.length; i++) {
+            if (x[i].hasAttribute('class')) {
+                hljs.highlightBlock(x[i]);
+            }
+        }
+    }
+}
+
+
+function hidediv(divname) {
+    document.getElementById(divname).style.display = 'none';
+}
+
+function showdiv(divname) {
+    document.getElementById(divname).style.display = 'inline';
+}
+
+function syncList() {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, null, document.title);
+    }
+}
+
+function syncList1(key) {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, key + '.html', document.title);
+    }
+}</script><script type="text/javascript">
+    loadStarted();
+</script><h1>OTO (One-Triggers-the-Other) Contingent Order</h1>
+<h2>Brief</h2>
+<p>The article describes the OTO (One-Triggers-the-Other) contingent order.</p>
+<h2>Details</h2><p>An <b>OTO (One-Triggers-the-Other) Contingent Order</b> is a contingent order consisting of two (or more) linked orders:
+one <b>primary</b> order and one (or more) <b>secondary</b> orders. When the OTO contingent order is placed, the
+primary order becomes active while the secondary orders remain inactive. Once the primary order is
+executed, the secondary orders are automatically triggered (activated). The primary and secondary orders
+can be placed from the same account but for different instruments. The primary order also can be a
+primary order for the <a href="ELSContingentOrder.html">ELS Contingent Order</a>.</p>
+<p>The secondary order can be a primary order of another OTO contingent order as well.</p>
+<p>Only <b>entry</b> orders can be used in OTO order.
+The trade operation of the secondary orders does not depend on the trade operation of the primary order
+and can be the same or opposite. The amount also does not depend on the amount of the primary order.</p>
+<p>The additional feature of the OTO contingent order is that the <b>If-Then</b> order may be used as a primary order.
+The If-Then order not a real order. It doesn't buy or sell an instrument. It is only an activation signal to secondary orders.
+The If-Then order works in the same manner as an entry order. Once the market price reaches the price specified in the order, it is &quot;executed&quot;,
+and the secondary orders are activated on market.</p>
+<p></p>
+<h3>Primary and Secondary Order Execution</h3>
+<p>The time-in-force options and execution details for primary and secondary order(s) are the same as those for
+<a href="LimitEntryLimitOrders.html">Entry Limit</a> and <a href="StopEntryStopOrders.html">Entry Stop</a> orders.</p>
+<p></p>
+<h3>OTO Contingent Order Execution</h3>
+<p>As mentioned above, secondary orders become active only after the primary order is completely executed.
+If the primary order is completely or partially rejected, the secondary orders are cancelled.
+When the secondary orders become active, they turn to regular entry orders.
+See execution <a href="OTOOrderScenario1.html">Scenario 1</a>, <a href="OTOOrderScenario2.html">Scenario 2</a>,
+<a href="OTOOrderScenario3.html">Scenario 3</a>, <a href="OTOOrderScenario4.html">Scenario 4</a>.</p>
+<p></p>
+<h3>OTO Contingent Order Expiration</h3>
+<p>If the primary order expires (makes sense only for orders with DAY time-in-force option), all secondary
+orders expire as well.</p>
+<p></p>
+<h3>OTO Contingent Order Cancelation and Rejection</h3>
+<p>If the primary order is cancelled by the trader, the secondary orders are automatically cancelled.<br>
+If a secondary order is cancelled by the trader, this doesn’t affect the other secondary orders.<br>
+If the primary order is rejected (for example, doesn’t pass validation), the secondary orders are automatically cancelled.<br>
+If the primary order is partially rejected (for example, doesn't completely filled because of IOC time-in-force option), the secondary orders are automatically cancelled.<br>
+If a secondary order is rejected due to unsuccessful validation, this doesn’t affect the primary order and the other secondary orders.</p>
+<p></p>
+<h3>OTO Secondary Order State Machine</h3>
+<p>The OTO secondary order state machine is based on the FXCM order statuses.
+The state machine, description of order statuses, and their transitions are provided below.
+Note that the order is created by the system only after successful order validation. If the order does not pass
+validation, the system creates a rejection message and does not store the order in the database. However,
+the information about the order (such as, for example, the order ID and the reason for its rejection) is stored
+in the database. So, the initial transition on the diagram indicates that the order is successfully validated.</p>
+<p><b>OTO Secondary Order: State Machine</b><br></p>
+<p><img src="img/OTOStateMachine.gif"></p>
+<p><b>OTO Secondary Order: FXCM Order Statuses Description</b><br></p><table class="tmain" width="100%">
+  <tr>
+    <td class="thdr" width="12%"><p>Order Status</p></td>
+    <td class="thdr" width="38%"><p>Order Status Description</p></td>
+    <td class="thdr" width="50%"><p>Transition</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><b>Waiting (W)</b></p></td>
+    <td class="tmain"><p>The status has one of the following meanings:</p><ul class="main">
+  <li><p>Initial Transition:<br>
+The order was successfully validated and is waiting until the primary order is completely filled.</p></li>
+  <li><p>Transition from &quot;Waiting (W)&quot;:<br>
+1) The order was modified by the trader.<br>
+2) The primary order was completely filled. The order was activated.</p></li>
+  <li><p>Transition from &quot;Pending Calculated (U)&quot;:<br>
+The order was filled partially or was not filled at all because of limited or no liquidity, and is
+waiting until the market price satisfies the order criteria.</p></li>
+</ul></td>
+    <td class="tmain"><table class="tmain" width="100%">
+  <tr>
+    <td class="tmain" width="13%"><p>Waiting (W)</p></td>
+    <td class="tmain"><p>The transition has one of the following meanings:</p><ul class="main">
+  <li><p>The primary order is completely filled. The secondary order is activated.</p></li>
+  <li><p>The trader modifies the order.</p></li>
+</ul></td>
+  </tr>
+  <tr>
+    <td class="tmain" width="13%"><p>In Process (P)</p></td>
+    <td class="tmain"><p>The market price satisfies the order criteria.<br>
+<b>Note:</b> Only <b>active</b> secondary orders make this transition.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain" width="13%"><p>Pending Cancelled (S)</p></td>
+    <td class="tmain"><p>The trader removes the order.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain" width="13%"><p>Cancelled (C)</p></td>
+    <td class="tmain"><p>The transition has one of the following meanings:</p><ul class="main">
+  <li><p>The position the order is placed on is already closed by another order.</p></li>
+  <li><p>Trader removes primary order, primary order expires or primary order is rejected.</p></li>
+  <li><p>The market price satisfies the order criteria, but there is insufficient margin in the account/the account is under the margin call.<br>
+<b>Note:</b> Only <b>active</b> secondary orders make this transition.</p></li>
+</ul></td>
+  </tr>
+  <tr>
+    <td class="tmain" width="13%"><p>Expired (T)</p></td>
+    <td class="tmain"><p>The transition is applicable only to DAY orders:<br>
+The order expires because it cannot be executed on the day it was placed.</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><b>In Process (P)</b></p></td>
+    <td class="tmain"><p>The market price satisfied the criteria set in the secondary order; the order is ready for further execution.</p></td>
+    <td class="tmain"><table class="tmain" width="100%">
+  <tr>
+    <td class="tmain" width="13%"><p>Pending Calculated (U)</p></td>
+    <td class="tmain"><p>The secondary order is sent to external execution.<br>
+<b>Note:</b> Only <b>active</b> secondary orders make this transition.</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><b>Pending Calculated (U)</b></p></td>
+    <td class="tmain"><p>The status has one of the following meanings:</p><ul class="main">
+  <li><p>Transition from &quot;In Process (P)&quot;:<br>
+The market price satisfied the secondary order criteria and the order was sent to external execution.</p></li>
+  <li><p>Transition from &quot;Pending Calculated (U)&quot;:<br>
+The secondary order was filled partially.</p></li>
+</ul></td>
+    <td class="tmain"><table class="tmain" width="100%">
+  <tr>
+    <td class="tmain" width="13%"><p>Executing (E)</p></td>
+    <td class="tmain"><p>The secondary order is completely filled.<br>
+<b>Note:</b> Only <b>active</b> secondary orders make this transition.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain" width="13%"><p>Pending Calculated (U)</p></td>
+    <td class="tmain"><p>The order is filled partially. Position is opened/closed in the filled amount. Note that the filled portion may result in
+a number of open/closed positions.
+<b>Note:</b> Only <b>active</b> secondary orders make this transition.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain" width="13%"><p>Waiting (W)</p></td>
+    <td class="tmain"><p>The secondary order cannot be filled because there is no liquidity to fill the order.<br>
+<b>Note:</b> Only <b>active</b> secondary orders make this transition.</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><b>Executing (E)</b></p></td>
+    <td class="tmain"><p>The secondary order was completely filled.</p></td>
+    <td class="tmain"><table class="tmain" width="100%">
+  <tr>
+    <td class="tmain" width="13%"><p>Executed (F)</p></td>
+    <td class="tmain"><p>A position is either opened or closed. Note that the order may result in a number of open/closed positions.<br>
+<b>Note:</b> Only <b>active</b> secondary orders make this transition.</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><b>Executed (F)</b></p></td>
+    <td class="tmain"><p>A position was opened/closed. Note that the order may result in a number of open/closed positions.</p></td>
+    <td class="tmain">
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><b>Pending Cancelled (S)</b></p></td>
+    <td class="tmain"><p>The order was removed by the trader.</p></td>
+    <td class="tmain"><table class="tmain" width="100%">
+  <tr>
+    <td class="tmain" width="13%"><p>Cancelled (C)</p></td>
+    <td class="tmain"><p>The trader removes the order and the system deletes order.</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><b>Cancelled (C)</b></p></td>
+    <td class="tmain"><p>The status has one of the following meanings:</p><ul class="main">
+  <li><p>Transition from &quot;Waiting (W)&quot;:<br>
+1) The position the order was placed on was already closed by another order.<br>
+2) Trader removed primary order or primary order was rejected.<br>
+3) The account is under the margin call/there is insufficient margin in the account.</p></li>
+  <li><p>Transition from &quot;Pending Cancelled (S)&quot;:<br>
+The order was removed by the trader and deleted by the system.</p></li>
+</ul></td>
+    <td class="tmain">
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><b>Expired (T)</b></p></td>
+    <td class="tmain"><p>The status is applicable only to DAY orders:<br>
+The order expired because it was not executed on the day it was placed.</p></td>
+    <td class="tmain"><table class="tmain" width="100%">
+  <tr>
+    <td class="tmain" width="13%"><p>Expired (T)</p></td>
+    <td class="tmain"><p>The transition is applicable only to DAY orders:<br>
+The system deletes the order after the order expiration.</p></td>
+  </tr>
+</table></td>
+  </tr>
+</table><p>
+  <center><a href="FXCMOTOOrder.html">back</a></center>
+</p><script language="javascript" type="text/javascript">if(window.parent.frames[0]) window.parent.frames[0].selectItem(window.location.href);</script></body></html>

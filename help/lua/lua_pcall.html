@@ -1,0 +1,73 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_pcall</title>
+</head>
+<body>
+<h3><a name="lua_pcall"><code>lua_pcall</code></a></h3>
+<pre>lua_pcall (lua_State *L, int nargs, int nresults, int errfunc);</pre>
+
+<p>
+Calls a function in protected mode.
+
+
+<p>
+Both <code>nargs</code> and <code>nresults</code> have the same meaning as
+in <a href="lua_call.html"><code>lua_call</code></a>.
+If there are no errors during the call,
+<a href="lua_pcall.html"><code>lua_pcall</code></a> behaves exactly like <a href="lua_call.html"><code>lua_call</code></a>.
+However, if there is any error,
+<a href="lua_pcall.html"><code>lua_pcall</code></a> catches it,
+pushes a single value on the stack (the error message),
+and returns an error code.
+Like <a href="lua_call.html"><code>lua_call</code></a>,
+<a href="lua_pcall.html"><code>lua_pcall</code></a> always removes the function
+and its arguments from the stack.
+
+
+<p>
+If <code>errfunc</code> is 0,
+then the error message returned on the stack
+is exactly the original error message.
+Otherwise, <code>errfunc</code> is the stack index of an
+<em>error handler function</em>.
+(In the current implementation, this index cannot be a pseudo-index.)
+In case of runtime errors,
+this function will be called with the error message
+and its return value will be the message returned on the stack by <a href="lua_pcall.html"><code>lua_pcall</code></a>.
+
+
+<p>
+Typically, the error handler function is used to add more debug
+information to the error message, such as a stack traceback.
+Such information cannot be gathered after the return of <a href="lua_pcall.html"><code>lua_pcall</code></a>,
+since by then the stack has unwound.
+
+
+<p>
+The <a href="lua_pcall.html"><code>lua_pcall</code></a> function returns 0 in case of success
+or one of the following error codes
+(defined in <code>lua.h</code>):
+
+<ul>
+
+<li><b><a name="pdf-LUA_ERRRUN"><code>LUA_ERRRUN</code></a>:</b>
+a runtime error.
+</li>
+
+<li><b><a name="pdf-LUA_ERRMEM"><code>LUA_ERRMEM</code></a>:</b>
+memory allocation error.
+For such errors, Lua does not call the error handler function.
+</li>
+
+<li><b><a name="pdf-LUA_ERRERR"><code>LUA_ERRERR</code></a>:</b>
+error while running the error handler function.
+</li>
+
+</ul>
+
+
+
+
+<hr>
+</body>
+</html>

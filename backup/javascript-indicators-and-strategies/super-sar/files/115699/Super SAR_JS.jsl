@@ -1,0 +1,154 @@
+function Init()
+{
+    indicator.name("Super SAR Indicator");
+    indicator.description("Super SAR Indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+	
+	indicator.parameters.addDouble("Step", "Step", "The sensitivity of SAR.", 0.02, 0.001, 1);
+    indicator.parameters.addDouble("MAX", "Max", "The maximum value of Step.", 0.2, 0.001, 10);
+	
+	indicator.parameters.addInteger("STFrame", "Super Trend Number of periods", "Super Trend Number of periods", 8);
+    indicator.parameters.addDouble("Multiplier", "Super Trend Multiplier", "Super Trend Multiplier", 1.5);
+	
+	indicator.parameters.addBoolean("Broader", "Broader definition", "", false);
+
+    indicator.parameters.addColor("UP", "Color of Up Trend", "Color of Up Trend", core.rgb(0, 255, 0));
+	indicator.parameters.addColor("DOWN", "Color of Down Trend", "Color of Down Trend", core.rgb(255, 0, 0));
+	indicator.parameters.addColor("NEUTRAL", "Color For Neutral", "Color of Neutral", core.rgb(255, 255, 255));
+}
+
+
+var first;
+var source = null;
+
+var up = null;
+var neutralup = null;
+var neutraldown = null;
+var down = null;
+
+var STEP=null;
+var MAX=null;
+
+var STFrame=null;
+var Multiplier=null;	
+var Broader=null;
+
+var STFlag=null
+var SARFlag=null;
+var FLAG=null;
+
+var ST=null;
+var SAR=null;
+
+function Prepare()
+{
+    source = instance.source;
+    first = source.first();
+	
+	STEP=instance.parameters.Step;
+	MAX=instance.parameters.MAX;
+	
+    STFrame=instance.parameters.STFrame;
+    Multiplier=instance.parameters.Multiplier;
+	
+	Broader=instance.parameters.Broader;
+
+	ST  = core.indicators.create("SUPERTREND", source, STFrame, Multiplier);
+	SAR  = core.indicators.create("SAR", source, STEP, MAX);	
+	
+	if (Broader) 
+	{	
+	 up = instance.createTextOutput ("UP", "Up", "Wingdings", 20, core.H_Center, core.V_Top, instance.parameters.UP, 0);	
+     down = instance.createTextOutput ("DOWN", "Down", "Wingdings", 20, core.H_Center, core.V_Bottom, instance.parameters.DOWN, 0);
+	
+ 	 var name = profile.id() + "(" + source.name() + ")";
+     instance.name(name);
+    } 
+	else	
+	{
+	 up = instance.createTextOutput ("UP", "Up", "Wingdings", 20, core.H_Center, core.V_Top, instance.parameters.UP, 0);	
+     down = instance.createTextOutput ("DOWN", "Down", "Wingdings", 20, core.H_Center, core.V_Bottom, instance.parameters.DOWN, 0);	
+	 neutralup = instance.createTextOutput ("Neutral Up", "Neutral Up", "Wingdings", 20, core.H_Center, core.V_Top, instance.parameters.NEUTRAL, 0);	
+	 neutraldown = instance.createTextOutput ("Neutral Down", "Neutral Down ", "Wingdings", 20, core.H_Center, core.V_Bottom, instance.parameters.NEUTRAL, 0);
+	
+	 var name = profile.id() + "(" + source.name() + ")";
+     instance.name(name);
+	}
+	
+}
+
+function Update(period, mode)
+{
+    if (period > first+1 && source.hasData(period)) 
+    {
+	
+				
+						if (Broader) 
+						{
+						
+									SAR.update(mode);
+									ST.update(mode);       
+								
+							      if (SAR.DATA[period] < source.close[period]  &&  SAR.DATA[period-1] > source.close[period-1]) 
+							      {							
+									SARFlag= true;
+								  }	
+								  else if (SAR.DATA[period] > source.close[period]  &&  SAR.DATA[period-1] < source.close[period-1]) 
+								  {
+									SARFlag= false;									
+								  }	
+								  
+								 if (ST.UP[period] > 0) 
+								 {
+									STFlag= true;
+								}	
+						    	   else if (ST.DN[period] > 0) 
+						    	   {
+									STFlag= false;               
+							   	}
+								
+								if (SARFlag && STFlag && Flag!="Buy") 
+								{
+								 up.set(period, source.high[period], "\225"); 
+								 Flag="Buy"
+								}
+								
+								if (!SARFlag &&  !STFlag && Flag!= "Sell") 
+								{
+								 down.set(period, source.low[period], "\226");
+								 Flag="Sell";
+								}
+								
+						}
+						else
+						 {
+								    SAR.update(mode);
+								    ST.update(mode);
+						
+						            if (SAR.DATA[period] < source.close[period]  &&  SAR.DATA[period-1] > source.close[period-1]   &&  ST.UP[period] > 0) 
+						            {
+							
+								 	 up.set(period, source.high[period], "\225"); 
+								    }
+									else if (SAR.DATA[period] < source.close[period]  &&  SAR.DATA[period-1] > source.close[period-1]) 
+									{
+									 neutralup.set(period, source.high[period], "\225"); 
+									}
+								    else if (SAR.DATA[period] > source.close[period]  &&  SAR.DATA[period-1] < source.close[period-1]  && ST.DN[period] > 0) 
+								    {	
+								   
+									down.set(period, source.low[period], "\226"); 	
+									}
+									else if (SAR.DATA[period] > source.close[period]  &&  SAR.DATA[period-1] < source.close[period-1]) 
+									{
+									 neutraldown.set(period, source.low[period], "\226"); 	
+									}
+								  }	
+					}	
+						
+					
+			
+					
+    
+}

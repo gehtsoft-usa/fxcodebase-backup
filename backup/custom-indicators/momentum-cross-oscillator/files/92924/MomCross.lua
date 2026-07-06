@@ -1,0 +1,116 @@
+-- More information about this indicator can be found at:
+-- http://fxcodebase.com/code/viewtopic.php?f=17&t=60363
+-- Id: 11234
+
+--+------------------------------------------------------------------+
+--|                               Copyright © 2018, Gehtsoft USA LLC |
+--|                                            http://fxcodebase.com |
+--+------------------------------------------------------------------+
+--|                                 Support our efforts by donating  |
+--|                                  Paypal : https://goo.gl/9Rj74e  |
+--|                                 Patreon : https://goo.gl/GdXWeN  |
+--|                    BitCoin : 15VCJTLaz12Amr7adHSBtL9v8XomURo9RF  |
+--|               BitCoin Cash : 1BEtS465S3Su438Kc58h2sqvVvHK9Mijtg  |
+--|           Ethereum : 0x8C110cD61538fb6d7A2B47858F0c0AaBd663068D  |
+--|                   LiteCoin : LLU8PSY2vsq7B9kRELLZQcKf5nJQrdeqwD  |
+--+------------------------------------------------------------------+
+
+function Init()
+    indicator:name("Momentum cross oscillator");
+    indicator:description("Momentum cross oscillator");
+    indicator:requiredSource(core.Tick);
+    indicator:type(core.Oscillator);
+
+    indicator.parameters:addGroup("Calculation");
+    indicator.parameters:addInteger("Fast_Period", "Fast period", "", 5);
+    indicator.parameters:addInteger("Slow_Period", "Slow period", "", 14);
+    indicator.parameters:addInteger("Smooth_Period", "Smooth period", "", 3);
+    indicator.parameters:addString("Smooth_Method", "Smooth method", "", "EMA");
+    indicator.parameters:addStringAlternative("Smooth_Method", "MVA", "", "MVA");
+    indicator.parameters:addStringAlternative("Smooth_Method", "EMA", "", "EMA");
+    indicator.parameters:addStringAlternative("Smooth_Method", "KAMA", "", "KAMA");
+    indicator.parameters:addStringAlternative("Smooth_Method", "Wilder", "", "Wilder");
+    indicator.parameters:addStringAlternative("Smooth_Method", "LWMA", "", "LWMA");
+    indicator.parameters:addStringAlternative("Smooth_Method", "SineWMA", "", "SineWMA");
+    indicator.parameters:addStringAlternative("Smooth_Method", "TriMA", "", "TriMA");
+    indicator.parameters:addStringAlternative("Smooth_Method", "LSMA", "", "LSMA");
+    indicator.parameters:addStringAlternative("Smooth_Method", "SMMA", "", "SMMA");
+    indicator.parameters:addStringAlternative("Smooth_Method", "HMA", "", "HMA");
+    indicator.parameters:addStringAlternative("Smooth_Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters:addStringAlternative("Smooth_Method", "DEMA", "", "DEMA");
+    indicator.parameters:addStringAlternative("Smooth_Method", "T3", "", "T3");
+    indicator.parameters:addStringAlternative("Smooth_Method", "ITrend", "", "ITrend");
+    indicator.parameters:addStringAlternative("Smooth_Method", "Median", "", "Median");
+    indicator.parameters:addStringAlternative("Smooth_Method", "GeoMean", "", "GeoMean");
+    indicator.parameters:addStringAlternative("Smooth_Method", "REMA", "", "REMA");
+    indicator.parameters:addStringAlternative("Smooth_Method", "ILRS", "", "ILRS");
+    indicator.parameters:addStringAlternative("Smooth_Method", "IE/2", "", "IE/2");
+    indicator.parameters:addStringAlternative("Smooth_Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters:addStringAlternative("Smooth_Method", "JSmooth", "", "JSmooth");
+
+    indicator.parameters:addGroup("Style");
+    indicator.parameters:addColor("UPclr", "UP color", "UP color", core.rgb(0, 255, 0));
+    indicator.parameters:addColor("DNclr", "DN color", "DN color", core.rgb(255, 0, 0));
+    indicator.parameters:addInteger("Transparency", "Transparency", "", 50,0,100);
+end
+
+local first;
+local source = nil;
+local Fast_Period;
+local Slow_Period;
+local Smooth_Period;
+local Smooth_Method;
+local Fast_Mom, Slow_Mom;
+local Fast_Smooth_Mom, Slow_Smooth_Mom;
+local UP=nil;
+local DN=nil;
+
+function Prepare(nameOnly)
+    source = instance.source;
+    Fast_Period=instance.parameters.Fast_Period;
+    Slow_Period=instance.parameters.Slow_Period;
+    Smooth_Period=instance.parameters.Smooth_Period;
+    Smooth_Method=instance.parameters.Smooth_Method;
+    
+    local name = profile:id() .. "(" .. source:name() .. ", " .. instance.parameters.Fast_Period .. ", " .. instance.parameters.Slow_Period .. ", " .. instance.parameters.Smooth_Period .. ", " .. instance.parameters.Smooth_Method .. ")";
+    instance:name(name);
+    if nameOnly then
+        return;
+    end
+	assert(core.indicators:findIndicator("MOMENTUM") ~= nil, "Please, download and install MOMENTUM.LUA indicator");
+    assert(core.indicators:findIndicator("AVERAGES") ~= nil, "Please, download and install AVERAGES.LUA indicator"); 
+	
+    Fast_Mom = core.indicators:create("MOMENTUM", source, Fast_Period);
+    Slow_Mom = core.indicators:create("MOMENTUM", source, Slow_Period);
+    Fast_Smooth_Mom = core.indicators:create("AVERAGES", Fast_Mom.DATA, Smooth_Method, Smooth_Period, false);
+    Slow_Smooth_Mom = core.indicators:create("AVERAGES", Slow_Mom.DATA, Smooth_Method, Smooth_Period, false);
+	
+	first = math.max(Fast_Smooth_Mom.DATA:first(),Slow_Smooth_Mom.DATA:first());
+    UP = instance:addStream("UP", core.Line, name .. ".UP", "UP", instance.parameters.UPclr, first);
+    UP:setPrecision(math.max(2, instance.source:getPrecision()));
+    DN = instance:addStream("DN", core.Line, name .. ".DN", "DN", instance.parameters.UPclr, first);
+    DN:setPrecision(math.max(2, instance.source:getPrecision()));
+    instance:createChannelGroup("MomCross","MomCross" , UP, DN, instance.parameters.UPclr, 100-instance.parameters.Transparency);
+end
+
+function Update(period, mode)
+   if period<first then
+   return;
+   end
+   
+    Fast_Mom:update(mode);
+    Slow_Mom:update(mode);
+    Fast_Smooth_Mom:update(mode);
+    Slow_Smooth_Mom:update(mode);
+    UP[period]=Fast_Smooth_Mom.DATA[period]-100;
+    DN[period]=Slow_Smooth_Mom.DATA[period]-100;
+    if UP[period]>DN[period] then
+     UP:setColor(period, instance.parameters.UPclr);
+     DN:setColor(period, instance.parameters.UPclr);
+    else
+     UP:setColor(period, instance.parameters.DNclr);
+     DN:setColor(period, instance.parameters.DNclr);
+    end
+  
+end
+

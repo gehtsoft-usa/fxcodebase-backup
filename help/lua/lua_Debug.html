@@ -1,0 +1,102 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_Debug</title>
+</head>
+<body>
+<h3><a name="lua_Debug"><code>lua_Debug</code></a></h3>
+<pre>typedef struct lua_Debug {
+  int event;
+  const char *name;           /* (n) */
+  const char *namewhat;       /* (n) */
+  const char *what;           /* (S) */
+  const char *source;         /* (S) */
+  int currentline;            /* (l) */
+  int nups;                   /* (u) number of upvalues */
+  int linedefined;            /* (S) */
+  int lastlinedefined;        /* (S) */
+  char short_src[LUA_IDSIZE]; /* (S) */
+  /* private part */
+  <em>other fields</em>
+} lua_Debug;</pre>
+
+<p>
+A structure used to carry different pieces of
+information about an active function.
+<a href="lua_getstack.html"><code>lua_getstack</code></a> fills only the private part
+of this structure, for later use.
+To fill the other fields of <a href="lua_Debug.html"><code>lua_Debug</code></a> with useful information,
+call <a href="lua_getinfo.html"><code>lua_getinfo</code></a>.
+
+
+<p>
+The fields of <a href="lua_Debug.html"><code>lua_Debug</code></a> have the following meaning:
+
+<ul>
+
+<li><b><code>source</code>:</b>
+If the function was defined in a string,
+then <code>source</code> is that string.
+If the function was defined in a file,
+then <code>source</code> starts with a '<code>@</code>' followed by the file name.
+</li>
+
+<li><b><code>short_src</code>:</b>
+a "printable" version of <code>source</code>, to be used in error messages.
+</li>
+
+<li><b><code>linedefined</code>:</b>
+the line number where the definition of the function starts.
+</li>
+
+<li><b><code>lastlinedefined</code>:</b>
+the line number where the definition of the function ends.
+</li>
+
+<li><b><code>what</code>:</b>
+the string <code>"Lua"</code> if the function is a Lua function,
+<code>"C"</code> if it is a C&nbsp;function,
+<code>"main"</code> if it is the main part of a chunk,
+and <code>"tail"</code> if it was a function that did a tail call.
+In the latter case,
+Lua has no other information about the function.
+</li>
+
+<li><b><code>currentline</code>:</b>
+the current line where the given function is executing.
+When no line information is available,
+<code>currentline</code> is set to -1.
+</li>
+
+<li><b><code>name</code>:</b>
+a reasonable name for the given function.
+Because functions in Lua are first-class values,
+they do not have a fixed name:
+some functions may be the value of multiple global variables,
+while others may be stored only in a table field.
+The <code>lua_getinfo</code> function checks how the function was
+called to find a suitable name.
+If it cannot find a name,
+then <code>name</code> is set to <code>NULL</code>.
+</li>
+
+<li><b><code>namewhat</code>:</b>
+explains the <code>name</code> field.
+The value of <code>namewhat</code> can be
+<code>"global"</code>, <code>"local"</code>, <code>"method"</code>,
+<code>"field"</code>, <code>"upvalue"</code>, or <code>""</code> (the empty string),
+according to how the function was called.
+(Lua uses the empty string when no other option seems to apply.)
+</li>
+
+<li><b><code>nups</code>:</b>
+the number of upvalues of the function.
+</li>
+
+</ul>
+
+
+
+
+<hr>
+</body>
+</html>

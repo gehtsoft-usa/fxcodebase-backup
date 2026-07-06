@@ -1,0 +1,107 @@
+function Init()
+{
+    indicator.name("MultiVote OBV ");
+    indicator.description("MultiVote OBV ");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addColor("Up", "Color of Up", "", core.rgb(0, 255, 0));
+	 indicator.parameters.addColor("Down", "Color of Down", "", core.rgb(255, 0, 0));
+	 indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+
+}
+
+var first;
+var source = null;
+
+var MVOBV = null;
+
+function Prepare(nameOnly)
+{    
+    source = instance.source;
+    first = source.first();
+
+    var name = profile.id() + "(" + source.name()  + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        MVOBV = instance.addStream("MVOBV", core.Line, name, "MVOBV", core.rgb(128, 128, 128), first);
+		MVOBV.setWidth(instance.parameters.width);
+        MVOBV.setStyle(instance.parameters.style);
+
+    }
+}
+
+function Update(period)
+{
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+    
+   var HIGHVOTE = 0;
+
+   var LOWVOTE = 0;
+
+   var CLOSEVOTE = 0;
+
+
+
+    if (source.high[period] > source.high[period-1]) 
+    {
+     HIGHVOTE = 1 
+    }
+    else if (source.high[period] < source.high[period-1]) 
+    { 
+	 HIGHVOTE = -1;
+	}
+
+	
+	 
+	if (source.low[period] > source.low[period-1]) 
+    {
+     LOWVOTE = 1 
+    } 
+    else if (source.low[period] < source.low[period-1]) 
+    { 
+	 LOWVOTE = -1;
+	}
+
+    
+	
+	if (source.close[period] > source.close[period-1]) 
+    {
+     CLOSEVOTE = 1 
+    } 
+    else if (source.close[period] < source.close[period-1]) 
+    { 
+	 CLOSEVOTE = -1;
+	}
+    
+	
+var TOTALVOTE = HIGHVOTE + LOWVOTE + CLOSEVOTE;
+
+
+
+MVOBV[period] = MVOBV[period-1] + ( source.volume[period] * TOTALVOTE );
+
+if (MVOBV[period] > 0) 
+{
+ MVOBV.setColor(period, instance.parameters.Up);
+} 
+else if (MVOBV[period] < 0) 
+{
+ MVOBV.setColor(period, instance.parameters.Down);
+} 
+else
+{
+ MVOBV.setColor(period, core.rgb(128, 128, 128));
+}
+
+  
+    
+}
+

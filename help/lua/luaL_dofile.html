@@ -1,0 +1,25 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - luaL_dofile</title>
+</head>
+<body>
+<h3><a name="luaL_dofile"><code>luaL_dofile</code></a></h3>
+<pre>int luaL_dofile (lua_State *L, const char *filename);</pre>
+
+<p>
+Loads and runs the given file.
+It is defined as the following macro:
+
+<pre>
+     (luaL_loadfile(L, filename) || lua_pcall(L, 0, LUA_MULTRET, 0))
+</pre><p>
+It returns 0 if there are no errors
+or 1 in case of errors.
+
+
+
+
+
+<hr>
+</body>
+</html>

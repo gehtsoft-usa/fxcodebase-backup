@@ -1,0 +1,75 @@
+function Init()
+{
+    indicator.name("CCI custom candles");
+    indicator.description("CCI custom candles");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("CCI_Period", "CCI period", "", 14);
+    indicator.parameters.addInteger("Overbought", "Overbought level", "", 100);
+    indicator.parameters.addInteger("Oversold", "Oversold level", "", -100);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP color", "UP color", core.COLOR_UPCANDLE);
+    indicator.parameters.addColor("DNclr", "DN color", "DN color", core.COLOR_DOWNCANDLE);
+    indicator.parameters.addColor("OBclr", "Overbought color", "Overbought color", core.rgb(0, 255, 255));
+    indicator.parameters.addColor("OSclr", "Oversold color", "Oversold color", core.rgb(255, 128, 255));
+}
+
+var first;
+var source = null;
+var CCI_Period;
+var Overbought;
+var Oversold;
+var CCI;
+var open=null;
+var close=null;
+var high=null;
+var low=null;
+
+function Prepare()
+{
+    source = instance.source;
+    CCI_Period=instance.parameters.CCI_Period;
+    Overbought=instance.parameters.Overbought;
+    Oversold=instance.parameters.Oversold;
+    first = source.first()+2;
+    CCI = core.indicators.create("CCI", source, CCI_Period);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.CCI_Period + ", " + instance.parameters.Overbought + ", " + instance.parameters.Oversold + ")";
+    instance.name(name);
+    open = instance.addStream("open", core.Line, name, "open", core.rgb(0, 0, 0), first)
+    high = instance.addStream("high", core.Line, name, "high", core.rgb(0, 0, 0), first)
+    low = instance.addStream("low", core.Line, name, "low", core.rgb(0, 0, 0), first)
+    close = instance.addStream("close", core.Line, name, "close", core.rgb(0, 0, 0), first)
+    instance.createCandleGroup("CCI_Candles", "", open, high, low, close);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    open[period]=source.open[period];
+    close[period]=source.close[period];
+    high[period]=source.high[period];
+    low[period]=source.low[period];
+    CCI.update(mode);
+    if (CCI.DATA[period]>Overbought) 
+    {
+     open.setColor(period, instance.parameters.OBclr);
+    } 
+    else if (CCI.DATA[period]<Oversold) 
+    {
+     open.setColor(period, instance.parameters.OSclr);
+    } 
+    else if (source.close[period]>=source.open[period]) 
+    {
+     open.setColor(period, instance.parameters.UPclr);
+    } 
+    else
+    {
+     open.setColor(period, instance.parameters.DNclr);
+    }
+   } 
+}
+

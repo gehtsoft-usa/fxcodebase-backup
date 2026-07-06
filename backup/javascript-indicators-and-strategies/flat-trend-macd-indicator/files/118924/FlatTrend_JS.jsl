@@ -1,0 +1,62 @@
+function Init()
+{
+    indicator.name("Flat/Trend indicator");
+    indicator.description("Flat/Trend indicator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+    
+    indicator.parameters.addInteger("MACD_Fast", "MACD_Fast", "Period for fast MACD", 12);
+    indicator.parameters.addInteger("MACD_Slow", "MACD_Slow", "Period for slow MACD", 26);
+    indicator.parameters.addInteger("MACD_MA", "MACD_MA", "Period for signal MACD", 9);
+
+    indicator.parameters.addColor("clrUP", "UP trend", "UP trend", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clrDN", "DN trend", "DN trend", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("clrFL", "Flat", "Flat", core.rgb(0, 0, 255));
+}
+
+var first;
+var source = null;
+var MACD_Fast;
+var MACD_Slow;
+var MACD_MA;
+var MACD;
+var buffUP=null;
+var buffDN=null;
+var buffFL=null;
+
+function Prepare()
+{
+    source = instance.source;
+    MACD_Fast=instance.parameters.MACD_Fast;
+    MACD_Slow=instance.parameters.MACD_Slow;
+    MACD_MA=instance.parameters.MACD_MA;
+    MACD = core.indicators.create("MACD", source, MACD_Fast, MACD_Slow, MACD_MA);
+    first = MACD.DATA.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.MACD_Fast + ", " + instance.parameters.MACD_Slow + ", " + instance.parameters.MACD_MA + ")";
+    instance.name(name);
+    buffUP = instance.addStream("UP", core.Bar, name + ".UP", "UP", instance.parameters.clrUP, first);
+    buffDN = instance.addStream("DN", core.Bar, name + ".DN", "DN", instance.parameters.clrDN, first);
+    buffFL = instance.addStream("FL", core.Bar, name + ".Flat", "Flat", instance.parameters.clrFL, first);
+}
+
+function Update(period, mode)
+{
+    MACD.update(mode);
+    if (period>first) 
+    {
+     if (MACD.SIGNAL[period]<MACD.MACD[period] && MACD.MACD[period]>0) 
+     {
+      buffUP[period]=1;
+     } 
+     else if (MACD.SIGNAL[period]>MACD.MACD[period] && MACD.MACD[period]<0) 
+     {
+      buffDN[period]=1;
+     } 
+     else
+     {
+      buffFL[period]=1;
+     } 
+     
+    } 
+}
+

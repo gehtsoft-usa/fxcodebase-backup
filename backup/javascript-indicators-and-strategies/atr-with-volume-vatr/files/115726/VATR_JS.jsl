@@ -1,0 +1,96 @@
+function Init()
+{
+    indicator.name("ATR with Volume indicator");
+    indicator.description("ATR with Volume indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("N", "Period", "Period", 14, 1, 1000);
+    indicator.parameters.addBoolean("UseVolume", "Use volume", "Use volume", true);
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addString("Type", "Type of ATR", "", "Histogram");
+    indicator.parameters.addStringAlternative("Type", "Line", "", "Line");
+    indicator.parameters.addStringAlternative("Type", "Histogram", "", "Histogram");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var n;
+var UseVolume;
+
+var first;
+var source = null;
+var tr = null;
+var trFirst = null;
+var tAbs = Math.abs;
+
+var ATR = null;
+
+function Prepare()
+{
+    n = instance.parameters.N;
+    UseVolume = instance.parameters.UseVolume;
+    source = instance.source;
+
+    var name = profile.id() + "(" + source.name() + ", " + n + ")";
+    instance.name(name);
+    tr = instance.addInternalStream(source.first() + 1, 0);
+    first = tr.first() + n;
+    if (instance.parameters.Type=="Line") 
+    {
+     ATR = instance.addStream("ATR", core.Line, name, "ATR", instance.parameters.clr, first)
+     ATR.setWidth(instance.parameters.widthLinReg);
+     ATR.setStyle(instance.parameters.styleLinReg);
+    } 
+    else
+    {
+     ATR = instance.addStream("ATR", core.Bar, name, "ATR", instance.parameters.clr, first)
+    } 
+    var precision = Math.max(2, source.getPrecision());
+    ATR.setPrecision(precision);
+    trFirst = tr.first();
+}
+
+function getTrueRange(period)
+{
+    var hl = tAbs(source.high[period] - source.low[period]);
+    var hc = tAbs(source.high[period] - source.close[period - 1]);
+    var lc = tAbs(source.low[period] - source.close[period - 1]);
+
+    var tr = hl;
+    if (tr < hc) 
+    {
+        tr = hc;
+    }
+    if (tr < lc) 
+    {
+        tr = lc;
+    }
+    return (tr);
+}
+
+function Update(period)
+{
+    if (period >= trFirst) 
+    {
+      if (UseVolume) 
+      {
+        tr[period] = getTrueRange(period)*source.volume[period];
+      }  
+      else
+      {
+        tr[period] = getTrueRange(period);
+      }  
+    }
+    if (period >= first) 
+    {
+        ATR[period] = Math.avg(tr, period - n + 1, period);
+    }
+}
+
+
+
+

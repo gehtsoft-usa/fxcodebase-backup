@@ -1,0 +1,68 @@
+function Init()
+{
+    indicator.name("KDJ indicator");
+    indicator.description("KDJ indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    
+    indicator.parameters.addInteger("nPeriod", "nPeriod", "nPeriod", 9);
+    indicator.parameters.addDouble("factor_1", "factor_1", "factor_1", 0.6666666);
+    indicator.parameters.addDouble("factor_2", "factor_2", "factor_2", 0.3333333);
+
+    indicator.parameters.addColor("clr_K", "Color K", "Color K", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("clr_D", "Color D", "Color D", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clr_J", "Color J", "Color J", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+var nPeriod;
+var factor_1;
+var factor_2;
+var buff_K=null;
+var buff_D=null;
+var buff_J=null;
+var RSV;
+
+function Prepare()
+{
+    source = instance.source;
+    nPeriod=instance.parameters.nPeriod;
+    factor_1=instance.parameters.factor_1;
+    factor_2=instance.parameters.factor_2;
+    RSV = instance.addInternalStream(0, 0);
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.nPeriod + ", " + instance.parameters.factor_1 + ", " + instance.parameters.factor_2 + ")";
+    instance.name(name);
+    buff_K = instance.addStream("buff_K", core.Line, name + ".K", "K", instance.parameters.clr_K, first);
+    buff_D = instance.addStream("buff_D", core.Line, name + ".D", "D", instance.parameters.clr_D, first);
+    buff_J = instance.addStream("buff_J", core.Line, name + ".J", "J", instance.parameters.clr_J, first);
+}
+
+function Update(period, mode)
+{
+    if (period>first+nPeriod) 
+    {
+     var Cn=source.close[period];
+     var Ln=Cn;
+     var Hn=Cn;
+     for (i=0; i<=nPeriod-1; i++) 
+     {
+      Ln=Math.min(Ln,source.low[period-i]);
+      Hn=Math.max(Hn,source.high[period-i]);
+     }
+     if (Hn-Ln!=0.) 
+     {
+      RSV[period]=(Cn-Ln)/(Hn-Ln)*100.;
+     }
+     else
+     {
+      RSV[period]=50.;
+     }
+     buff_K[period]=factor_1*buff_K[period-1]+factor_2*RSV[period];
+     buff_D[period]=factor_1*buff_D[period-1]+factor_2*buff_K[period];
+     buff_J[period]=3.*buff_D[period]-2.*buff_K[period];
+
+    } 
+}
+

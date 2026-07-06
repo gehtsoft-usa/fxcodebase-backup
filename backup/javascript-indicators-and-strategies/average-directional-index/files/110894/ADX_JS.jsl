@@ -1,0 +1,75 @@
+//initializes the indicator
+function Init()
+{
+    indicator.name("ADX");
+    indicator.description("Average Directional Index");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.setTag("group", "Trend Strength");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("N", "Number of periods", "The number of periods.", 10, 1, 10000);
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Line color", "The color of line", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("width", "Line width", "The width of line", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "The style of line", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LEVEL_STYLE);
+}
+
+var first = 0;
+var dmifirst=0;
+var n = 0;
+var source = null;
+var out = null;
+var DMI, EMA;
+
+//initializes the instance of the indicator
+function Prepare(onlyName)
+{
+    source = instance.source;
+    n = instance.parameters.N;
+    var name = profile.id() + "(" + instance.source.name() + "," + n + ")";
+    instance.name(name);
+  
+    if (onlyName == true)
+        return ;
+
+    DMI = core.indicators.create("DMI", source, n);
+    dmifirst = DMI.DIP.first();
+
+    buffer = instance.addInternalStream(dmifirst, 0);
+
+    EMA = core.indicators.create("EMA", buffer, n);
+    first = EMA.DATA.first();
+
+    out = instance.addStream("ADX", core.Line, name, "ADX", instance.parameters.clr,  first)
+    out.setWidth(instance.parameters.width);
+    out.setStyle(instance.parameters.style);
+}
+
+// calculate the value
+function Update(period, mode)
+{
+    if (period >= dmifirst)
+    {
+        DMI.update(mode);
+        var plus = DMI.DIP[period];
+        var minus = DMI.DIM[period];
+
+        var div = plus + minus;
+        if (div == 0)
+        {
+            buffer[period] = 0;
+        }
+        else
+        {
+            buffer[period] = 100 * (Math.abs(plus - minus) / div)
+        }
+     }   
+
+    if (period >= first)
+    {
+        EMA.update(mode);
+        out[period] = EMA.DATA[period];
+    }
+}

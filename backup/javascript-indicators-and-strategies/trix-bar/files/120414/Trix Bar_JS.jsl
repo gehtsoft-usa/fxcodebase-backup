@@ -1,0 +1,121 @@
+function Init()
+{
+    indicator.name("Trix Bar Indicator");
+    indicator.description("");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+	
+	
+	
+    indicator.parameters.addInteger("P_N", "TRIX Periods", "", 14);
+    indicator.parameters.addString("MA_1", "First Smoothing Method", "The methods marked by an asterisk (*) require the appropriate indicators to be loaded.", "EMA");
+    indicator.parameters.addStringAlternative("MA_1", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("MA_1", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("MA_1", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("MA_1", "TMA", "", "TMA");
+    indicator.parameters.addStringAlternative("MA_1", "SMMA*", "", "SMMA");
+    indicator.parameters.addStringAlternative("MA_1", "Vidya (1995)*", "", "VIDYA");
+    indicator.parameters.addStringAlternative("MA_1", "Vidya (1992)*", "", "VIDYA92");
+    indicator.parameters.addStringAlternative("MA_1", "Wilders*", "", "WMA");
+    indicator.parameters.addString("MA_2", "Second Smoothing Method", "The methods marked by an asterisk (*) require the appropriate indicators to be loaded.", "EMA");
+    indicator.parameters.addStringAlternative("MA_2", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("MA_2", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("MA_2", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("MA_2", "TMA", "", "TMA");
+    indicator.parameters.addStringAlternative("MA_2", "SMMA*", "", "SMMA");
+    indicator.parameters.addStringAlternative("MA_2", "Vidya (1995)*", "", "VIDYA");
+    indicator.parameters.addStringAlternative("MA_2", "Vidya (1992)*", "", "VIDYA92");
+    indicator.parameters.addStringAlternative("MA_2", "Wilders*", "", "WMA");
+    indicator.parameters.addString("MA_3", "Third Smoothing Method", "The methods marked by an asterisk (*) require the appropriate indicators to be loaded.", "EMA");
+    indicator.parameters.addStringAlternative("MA_3", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("MA_3", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("MA_3", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("MA_3", "TMA", "", "TMA");
+    indicator.parameters.addStringAlternative("MA_3", "SMMA*", "", "SMMA");
+    indicator.parameters.addStringAlternative("MA_3", "Vidya (1995)*", "", "VIDYA");
+    indicator.parameters.addStringAlternative("MA_3", "Vidya (1992)*", "", "VIDYA92");
+    indicator.parameters.addStringAlternative("MA_3", "Wilders*", "", "WMA");
+    indicator.parameters.addInteger("S_N", "Signal Periods", "", 9);
+    indicator.parameters.addString("MA_S", "Signal Smoothing Method", "The methods marked by an asterisk (*) require the appropriate indicators to be loaded.", "MVA");
+    indicator.parameters.addStringAlternative("MA_S", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("MA_S", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("MA_S", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("MA_S", "TMA", "", "TMA");
+    indicator.parameters.addStringAlternative("MA_S", "SMMA*", "", "SMMA");
+    indicator.parameters.addStringAlternative("MA_S", "Vidya (1995)*", "", "VIDYA");
+    indicator.parameters.addStringAlternative("MA_S", "Vidya (1992)*", "", "VIDYA92");
+    indicator.parameters.addStringAlternative("MA_S", "Wilders*", "", "WMA");
+	
+				
+	indicator.parameters.addGroup("Style");
+	indicator.parameters.addColor("Up", "Color for Up Trend", "", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("Dn", "Color for Down Trend", "", core.rgb(255, 0, 0));
+	indicator.parameters.addColor("No", "Color for No Trend", "", core.rgb(255, 255, 0));
+}
+
+var P_N, MA_1,MA_2,MA_3, S_N, MA_S;
+var first;
+var source = null;
+
+var Indicator={};
+var Short={};
+var Out = null;
+
+function Prepare(nameOnly)    
+{	 
+	    S_N= instance.parameters.S_N;
+		P_N= instance.parameters.P_N;
+		MA_1= instance.parameters.MA_1;
+		MA_2= instance.parameters.MA_2;
+		MA_3= instance.parameters.MA_3;
+		MA_S= instance.parameters.MA_S;
+  
+    source = instance.source;
+    
+
+    var name = profile.id() + "(" + source.name() + ", " + P_N+ ", " +  MA_1+ ", " + MA_2+ ", " + MA_3+ ", " +  S_N+ ", " +  MA_S + ")";
+    instance.name(name);
+	
+	assert(core.indicators.findIndicator("TRIX") != null, "Please, {wnload && install TRIX.LUA indicator");          
+	
+	Indicator[1] =  core.indicators.create("TRIX", source, P_N, MA_1,MA_2,MA_3, S_N, MA_S   );
+	Short[1] = Indicator[1].getStream(0);
+	Short[2] = Indicator[1].getStream(1);
+	 
+	 first = Math.max(Short[1].first(),Short[2].first());
+
+    if (!(nameOnly)) 
+    {
+        Out = instance.addStream("Out", core.Bar, name, "Out", instance.parameters.Up, first);
+    }
+}
+
+function Update(period, mode)
+{
+    if (period < period ||  !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+	 Indicator[1].update(mode);
+	
+	
+	  Out[period] = 1;
+	 
+	 if  (Short[1][period] >  Short[2][period] && Short[1][period]  > 0)
+	 {
+	  Out.setColor(period, instance.parameters.Up);  
+     } 
+	  else if (Short[1][period] <  Short[2][period] &&   Short[1][period]  < 0)
+	 {
+	  Out.setColor(period, instance.parameters.Dn);  
+    }
+	 else
+     {
+	  Out.setColor(period, instance.parameters.No);  
+	 }
+	
+       
+    
+}
+

@@ -1,0 +1,61 @@
+function Init()
+{
+    indicator.name("The Vortext Indicator");
+    indicator.description("The indicator was described in Jan, 10 issue of the 'Stock && Commodites' Magazin");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addInteger("N", "Length of the vortex", "No description", 14);
+    indicator.parameters.addColor("VIP_color", "Color of VI+", "Color of VI+", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("VIM_color", "Color of VI-", "Color of VI-", core.rgb(255, 0, 0));
+}
+
+var N;
+
+var first;
+var source = null;
+
+var VIP = null;
+var VIM = null;
+var iVIP = null;
+var iVIN = null;
+var iATR = null;
+
+function Prepare()
+{
+    N = instance.parameters.N;
+    source = instance.source;
+    iATR = core.indicators.create("ATR", instance.source, 1);
+ 
+    first = iATR.DATA.first() + N; 
+
+    var name = profile.id() + "(" + source.name() + ", " + N + ")";
+    instance.name(name);
+    VIP = instance.addStream("VIP", core.Line, name + ".VI+", "VI+", instance.parameters.VIP_color, first);
+    VIM = instance.addStream("VIM", core.Line, name + ".VI-", "VI-", instance.parameters.VIM_color, first);
+
+    iVIP = instance.addInternalStream(1, 0);
+    iVIM = instance.addInternalStream(1, 0);
+}
+
+function Update(period, mode)
+{
+    iATR.update(mode);
+    if (period >= 1) 
+    {
+        iVIP[period] = Math.abs(source.high[period] - source.low[period - 1]);
+        iVIM[period] = Math.abs(source.low[period] - source.high[period - 1]);
+    }
+    if (period >= first) 
+    {
+        var svip, svim, satr;
+        var range;
+        svip = Math.sum(iVIP, period-N+1, period);
+        svim = Math.sum(iVIM, period-N+1, period);
+        satr = Math.sum(iATR.DATA, period-N+1, period);
+
+        VIP[period] = svip / satr * 100;
+        VIM[period] = svim / satr * 100;
+    }
+}
+

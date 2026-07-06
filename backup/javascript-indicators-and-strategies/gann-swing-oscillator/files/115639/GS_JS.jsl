@@ -1,0 +1,59 @@
+function Init()
+{
+    indicator.name("Gann Swings");
+    indicator.description("Gann Swings");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addColor("GS_color", "Color of GS", "Color of GS", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+
+var GS = null;
+
+function Prepare(nameOnly)
+{
+    source = instance.source;
+    first = source.first()+2;
+
+    var name = profile.id() + "(" + source.name() + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        GS = instance.addStream("GS", core.Line, name, "GS", instance.parameters.GS_color, first);
+    }
+}
+
+function Update(period)
+{
+    if (period <  first) 
+    {
+	 GS[period] = 0;
+	 return;
+	}
+	
+	GS[period] = GS[period-1];
+	
+	if (source.high[period]>source.high[period-1] && source.high[period-1]>source.high[period-2])
+	{
+     GS[period]=1;
+    } 
+	else if (source.low[period]<source.low[period-1] && source.low[period-1]<source.low[period-2])
+	{
+     GS[period]=-1;
+    } 	
+	
+	 if (GS[period]==-1 && source.high[period] > source.high[period - 1] && source.low[period] >= source.low[period -1]) 
+	 {
+      GS[period]=1;
+     }
+               
+     if (GS[period]==1 && source.high[period] <= source.high[period - 1] && source.low[period] < source.low[period -1]) 
+     {
+       GS[period]=-1;
+     }	
+}
+

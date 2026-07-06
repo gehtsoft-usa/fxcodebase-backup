@@ -1,0 +1,139 @@
+function Init()
+{
+    indicator.name("Logarithmic regression indicator");
+    indicator.description("Logarithmic regression indicator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 50);
+    indicator.parameters.addDouble("Deviation", "Deviation", "", 1);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clrReg", "Color regression", "Color regression", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("clrBand", "Color band", "Color band", core.rgb(0, 0, 255));
+    indicator.parameters.addInteger("width", "width", "width", 1, 1, 5);
+    indicator.parameters.addInteger("style", "style", "style", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LEVEL_STYLE);
+}
+
+var first;
+var source = null;
+var Period;
+var Deviation;
+var BuffReg=null;
+var BuffBandUp=null;
+var BuffBandDn=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    Deviation=instance.parameters.Deviation;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.Deviation + ")";
+    instance.name(name);
+    BuffReg = instance.addStream("BuffReg", core.Line, name + ".Regression", "Regression", instance.parameters.clrReg, first);
+    BuffBandUp = instance.addStream("BuffBandUp", core.Line, name + ".BandUp", "BandUp", instance.parameters.clrBand, first);
+    BuffBandDn = instance.addStream("BuffBandDn", core.Line, name + ".BandDn", "BandDn", instance.parameters.clrBand, first);
+    BuffReg.setWidth(instance.parameters.width);
+    BuffReg.setStyle(instance.parameters.style);
+    BuffBandUp.setWidth(instance.parameters.width);
+    BuffBandUp.setStyle(instance.parameters.style);
+    BuffBandDn.setWidth(instance.parameters.width);
+    BuffBandDn.setStyle(instance.parameters.style);
+}
+
+function Update(period, mode)
+{
+   if (period==source.size()-1) 
+   {
+    var i,ii;
+    var sumxvalue={};
+    var sumyvalue={};
+    var constant={};
+    var matrix={};
+    var pos=period-Period+1;
+    
+    for (i=0; i<=3; i++) 
+    {
+     sumyvalue[i]=0;
+     constant[i]=0;
+     matrix[i]={};
+     for (ii=0; ii<=3; ii++) 
+     {
+      matrix[i][ii]=0;
+     }
+    }
+    for (i=0; i<=7; i++) 
+    {
+     sumxvalue[i]=0;
+    }
+    sumxvalue[0]=Period;
+    var exp;
+    for (exp=1; exp<=2; exp++) 
+    {
+     var sumx=0;
+     var sumy=0;
+     var k;
+     for (k=1; k<=Period; k++) 
+     {
+      var lnx=Math.log(k);
+      sumx=sumx+Math.pow(lnx,exp);
+      if (exp==1) 
+      {
+       sumy=sumy+Math.log(source[pos+k-1]);
+      } 
+      else
+      {
+       sumy=sumy+Math.log(source[pos+k-1])*Math.pow(lnx,exp-1);
+      }
+     }
+     sumxvalue[exp]=sumx;
+     if (sumy!=0) 
+     {
+      sumyvalue[exp-1]=sumy;
+     }
+    }
+
+    var row;
+    var col;
+    for (row=0; row<=1; row++) 
+    {
+     for (col=0; col<=1; col++) 
+     {
+      matrix[row][col]=sumxvalue[row+col];
+     }
+    }  
+    sumyvalue[1]=sumyvalue[1]-(matrix[1][0]/matrix[0][0])*sumyvalue[0];
+    matrix[1][1]=matrix[1][1]-(matrix[1][0]/matrix[0][0])*matrix[0][1];
+    
+    constant[1]=sumyvalue[1]/matrix[1][1];
+    var a=(sumyvalue[0]-(constant[1]*matrix[0][1]))/matrix[0][0];
+    constant[0]=Math.exp(a);
+    
+    k=1;
+    for (i=period-Period+1; i<=period; i++) 
+    {
+     BuffReg[i]=constant[0]*Math.pow(k,constant[1]);
+     k=k+1;
+    }
+    BuffReg[period-Period]=null;
+    
+    sum=0;
+    for (i=period-Period+1; i<=period; i++) 
+    {
+     sum=sum+Math.pow(source[i]-BuffReg[i],2)
+    }
+    var variance=Math.sqrt(sum/Period);
+    for (i=period-Period+1; i<=period; i++) 
+    {
+     BuffBandUp[i]=BuffReg[i]+Deviation*variance;
+     BuffBandDn[i]=BuffReg[i]-Deviation*variance;
+    }
+    BuffBandUp[period-Period]=null;
+    BuffBandDn[period-Period]=null;
+    
+   } 
+}
+

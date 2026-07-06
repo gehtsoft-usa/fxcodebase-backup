@@ -1,0 +1,90 @@
+function Init()
+{
+    indicator.name("Simple Decycler");
+    indicator.description("Simple Decycler");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+ 
+    indicator.parameters.addGroup("Calculation"); 
+ 
+	indicator.parameters.addDouble("HPPeriod", "HPPeriod ", "HPPeriod", 125); 
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("color", "Color of Decycler Oscillator ", "Color of Decycler Oscillator", core.rgb(0, 0, 255));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+	
+	
+	 indicator.parameters.addColor("color1", "Color of Top Line", "Color of Top Line", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width1", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style1", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style1", core.FLAG_LINE_STYLE);
+	
+	
+	 indicator.parameters.addColor("color2", "Color of Bottom Line ", "Color of Bottom Line", core.rgb(0, 255, 0));
+	indicator.parameters.addInteger("width2", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style2", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style2", core.FLAG_LINE_STYLE);
+ 
+	
+}
+
+var first1;
+var source = null;
+var HPPeriod;
+
+var alpha1;
+var HP;
+var Decycle;
+var Top, Bottom;
+
+function Prepare(nameOnly)
+{
+    source = instance.source;
+    first1 = source.first()+2;
+    
+	HPPeriod=instance.parameters.HPPeriod;
+	 
+	 
+	 var PI = 3.1415926;
+	 var angle1 = 0.707 * 2 * PI / HPPeriod;
+     var angle2 = 0.707 * 2 * PI / ( 0.5 * HPPeriod );
+	 alpha1 = ( Math.cos( angle1 ) + Math.sin( angle1 ) - 1 ) / Math.cos( angle1 );
+ 
+ 
+	
+	var name = profile.id() + "(" + source.name() + ")";
+    instance.name(name);
+ 
+     HP = instance.addInternalStream(first1, 0);
+	 
+	 
+     Decycle  = instance.addStream("Decycle", core.Line, name, "Decycle", instance.parameters.color, first1);
+	 Decycle.setWidth(instance.parameters.width);
+     Decycle.setStyle(instance.parameters.style);
+  
+  
+     Top  = instance.addStream("Top", core.Line, name, "Top", instance.parameters.color1, first1);
+	 Top.setWidth(instance.parameters.width1);
+     Top.setStyle(instance.parameters.style1);
+	 
+	 Bottom  = instance.addStream("Bottom", core.Line, name, "Bottom", instance.parameters.color2, first1);
+	 Bottom.setWidth(instance.parameters.width2);
+     Bottom.setStyle(instance.parameters.style2);
+ 
+}
+
+function Update(period)
+{
+    if (period < first1 || !source.hasData(period)) 
+    {
+	 return;
+	}
+ 
+    HP[period] = (1 - alpha1 / 2)*(1 - alpha1 / 2)*(source[period] - 2*source[period-1] + source[period-2]) + 2*(1 - alpha1)*HP[period-1] - (1 - alpha1)*(1 - alpha1)*HP[period-2];
+	Decycle[period] = source[period] - HP[period];
+	Top[period] = Decycle[period]*1.005;
+	Bottom[period] = Decycle[period]*0.995;
+    
+ 
+}

@@ -1,0 +1,72 @@
+function Init()
+{
+    indicator.name("Historical Volatility ratio oscillator");
+    indicator.description("Historical Volatility ratio oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period1", "Period1", "", 11, 2, 1000);
+    indicator.parameters.addString("Method1", "Method1", "", "MVA");
+    indicator.parameters.addStringAlternative("Method1", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method1", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method1", "High-Low", "", "High-Low");
+    indicator.parameters.addDouble("decline1", "decline1", "", 0.94, 0, 1);
+    indicator.parameters.addInteger("Period2", "Period2", "", 21, 2, 1000);
+    indicator.parameters.addString("Method2", "Method2", "", "MVA");
+    indicator.parameters.addStringAlternative("Method2", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method2", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method2", "High-Low", "", "High-Low");
+    indicator.parameters.addDouble("decline2", "decline2", "", 0.94, 0, 1);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(255, 255, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period1;
+var Method1;
+var decline1;
+var Period2;
+var Method2;
+var decline2;
+var HV1=null;
+var HV2=null;
+var HV_Ratio=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period1=instance.parameters.Period1;
+    Method1=instance.parameters.Method1;
+    decline1=instance.parameters.decline1;
+    Period2=instance.parameters.Period2;
+    Method2=instance.parameters.Method2;
+    decline2=instance.parameters.decline2;
+    first = source.first()+2;
+    HV1 = core.indicators.create("HISTORICAL_VOLATILITY", source, Period1, Method1, decline1);
+    HV2 = core.indicators.create("HISTORICAL_VOLATILITY", source, Period2, Method2, decline2);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period1 + ", " + instance.parameters.Method1 + ", " + instance.parameters.decline1 + ", " + instance.parameters.Period2 + ", " + instance.parameters.Method2 + ", " + instance.parameters.decline2 + ")";
+    instance.name(name);
+    HV_Ratio = instance.addStream("HV_Ratio", core.Line, name + ".HV_Ratio", "HV_Ratio", instance.parameters.clr, first);
+    HV_Ratio.setWidth(instance.parameters.widthLinReg);
+    HV_Ratio.setStyle(instance.parameters.styleLinReg);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    HV1.update(mode);
+    HV2.update(mode);
+    if (HV2.DATA[period]!=0) 
+    {
+     HV_Ratio[period]=HV1.DATA[period]/HV2.DATA[period];
+    } 
+   } 
+}
+

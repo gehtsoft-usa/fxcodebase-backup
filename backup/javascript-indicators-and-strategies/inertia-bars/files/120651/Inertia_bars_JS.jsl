@@ -1,0 +1,69 @@
+function Init()
+{
+    indicator.name("Inertia bars indicator");
+    indicator.description("Inertia_bars indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    
+    indicator.parameters.addInteger("Level", "Level (in pips)", "", 10);
+    
+    indicator.parameters.addColor("clrDefaultUp", "Default UP bar color", "Default UP bar color", core.COLOR_UPCANDLE);
+    indicator.parameters.addColor("clrDefaultDn", "Default DN bar color", "Default DN bar color", core.COLOR_DOWNCANDLE);
+    indicator.parameters.addColor("UPclr", "Up bar color (if Body>=Level)", "Up bar color (if Body>=Level)", core.rgb(0, 255, 0));    
+    indicator.parameters.addColor("DNclr", "Dn bar color (if Body>=Level)", "Dn bar color (if Body>=Level)", core.rgb(255, 255, 0));    
+}
+
+var first;
+var source = null;
+var Level;
+
+function Prepare()
+{
+    source = instance.source;
+    Level=instance.parameters.Level*source.pipSize();
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ")";
+    instance.name(name);
+    open = instance.addStream("open", core.Line, name, "open", core.rgb(0, 0, 0), first)
+    high = instance.addStream("high", core.Line, name, "high", core.rgb(0, 0, 0), first)
+    low = instance.addStream("low", core.Line, name, "low", core.rgb(0, 0, 0), first)
+    close = instance.addStream("close", core.Line, name, "close", core.rgb(0, 0, 0), first)
+    instance.createCandleGroup("ColorCandle", "", open, high, low, close);
+}
+
+function Update(period, mode)
+{
+    if (period>first) 
+    {
+     open[period]=source.open[period];
+     close[period]=source.close[period];
+     high[period]=source.high[period];
+     low[period]=source.low[period];
+     
+     var Body=Math.abs(source.close[period]-source.open[period]);
+     if (source.close[period]>=source.open[period]) 
+     {
+      if (Body>=Level) 
+      {
+       open.setColor(period, instance.parameters.UPclr);
+      } 
+      else
+      {
+       open.setColor(period, instance.parameters.clrDefaultUp);
+      }
+     } 
+     else
+     {
+      if (Body>=Level) 
+      {
+       open.setColor(period, instance.parameters.DNclr);
+      } 
+      else
+      {
+       open.setColor(period, instance.parameters.clrDefaultDn);
+      }
+     }
+     
+    } 
+}
+

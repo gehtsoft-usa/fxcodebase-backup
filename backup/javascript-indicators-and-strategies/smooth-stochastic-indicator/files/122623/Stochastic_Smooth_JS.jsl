@@ -1,0 +1,81 @@
+function Init()
+{
+    indicator.name("Smooth stochastic indicator");
+    indicator.description("Smooth stochastic indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 13);
+    indicator.parameters.addInteger("Slowing", "Slowing", "", 8);
+    indicator.parameters.addInteger("SignalSlowing", "SignalSlowing", "", 9);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clrLine", "Line Color", "Line Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clrSignal", "Signal Color", "Signal Color", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+var Period;
+var Slowing;
+var SignalSlowing;
+var BuffLine=null;
+var BuffSignal=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    Slowing=instance.parameters.Slowing;
+    SignalSlowing=instance.parameters.SignalSlowing;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.Slowing + ", " + instance.parameters.SignalSlowing + ")";
+    instance.name(name);
+    BuffLine = instance.addStream("BuffLine", core.Line, name + ".Line", "Line", instance.parameters.clrLine, first);
+    BuffSignal = instance.addStream("BuffSignal", core.Line, name + ".Signal", "Signal", instance.parameters.clrSignal, first);
+    BuffLine.addLevel(0);    
+    BuffLine.addLevel(20);    
+    BuffLine.addLevel(80);    
+    BuffLine.addLevel(100);    
+}
+
+function Update(period, mode)
+{
+   if (period>first+Period) 
+   {
+    var tmp=Math.minmax(source, period-Period+1, period);
+    var HighPrice=tmp[1];
+    var LowPrice=tmp[0];
+    var St;
+    if (HighPrice!=LowPrice) 
+    {
+     St=100*(source.close[period]-LowPrice)/(HighPrice-LowPrice);
+    } 
+    else
+    {
+     St=0;
+    }
+    var Prev=0;
+    if (BuffLine[period-1]!=null) 
+    {
+     Prev=BuffLine[period-1];
+    }
+    BuffLine[period]=2/(1+Slowing)*(St-Prev)+Prev;
+    tmp=Math.minmax(BuffLine, period-Period+1, period);
+    var HighLine=tmp[1];
+    var LowLine=tmp[0];
+    var St2=0;
+    if (HighLine!=LowLine) 
+    {
+     St2=100*(BuffLine[period]-LowLine)/(HighLine-LowLine);
+    }
+    var Prev2=0;
+    if (BuffSignal[period-1]!=null) 
+    {
+     Prev2=BuffSignal[period-1];
+    }
+    BuffSignal[period]=2/(1+SignalSlowing)*(St2-Prev2)+Prev2;
+   } 
+}
+

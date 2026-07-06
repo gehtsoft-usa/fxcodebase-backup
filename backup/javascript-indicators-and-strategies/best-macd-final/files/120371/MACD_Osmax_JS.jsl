@@ -1,0 +1,97 @@
+function Init()
+{
+    indicator.name("MACD Osmax Oscillator");
+    indicator.description("MACD Osmax Oscillator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("FastEMA", "FastEMA", "", 12);
+    indicator.parameters.addInteger("SlowEMA", "SlowEMA", "", 26);
+    indicator.parameters.addInteger("SignalEMA", "SignalEMA", "", 9);
+    indicator.parameters.addInteger("OsmaX", "OsmaX", "", 2);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP Color", "UP Color", core.rgb(0, 255, 255));
+    indicator.parameters.addColor("DNclr", "DN Color", "DN Color", core.rgb(255, 0, 255));
+    indicator.parameters.addColor("NEclr", "Neutral Color", "Neutral Color", core.rgb(147, 112, 219));
+    indicator.parameters.addColor("LineClr", "Line Color", "Line Color", core.rgb(192, 192, 192));
+    indicator.parameters.addColor("SignalClr", "Signal Color", "Signal Color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("MACDClr", "MACD Color", "MACD Color", core.rgb(127, 255, 212));
+}
+
+var first;
+var source = null;
+var FastEMA;
+var SlowEMA;
+var SignalEMA;
+var OsmaX;
+var FastMA;
+var SlowMA;
+var DiffMA;
+var SignalMA;
+var buffUP=null;
+var buffDN=null;
+var buffNE=null;
+var buffLine=null;
+var buffSignal=null;
+var buffMACD=null;
+
+function Prepare()
+{
+    source = instance.source;
+    FastEMA=instance.parameters.FastEMA;
+    SlowEMA=instance.parameters.SlowEMA;
+    SignalEMA=instance.parameters.SignalEMA;
+    OsmaX=instance.parameters.OsmaX;
+    FastMA = core.indicators.create("EMA", source, FastEMA);
+    SlowMA = core.indicators.create("EMA", source, SlowEMA);
+    first = Math.max(FastMA.DATA.first(),SlowMA.DATA.first())+2;
+    DiffMA = instance.addInternalStream(first, 0);
+    SignalMA = core.indicators.create("EMA", DiffMA, SignalEMA);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.FastEMA + ", " + instance.parameters.SlowEMA + ", " + instance.parameters.SignalEMA + ", " + instance.parameters.OsmaX + ")";
+    instance.name(name);
+    buffUP = instance.addStream("buffUP", core.Bar, name + ".UP", "UP", instance.parameters.UPclr, first);
+    buffDN = instance.addStream("buffDN", core.Bar, name + ".DN", "DN", instance.parameters.DNclr, first);
+    buffNE = instance.addStream("buffNE", core.Bar, name + ".NE", "NE", instance.parameters.NEclr, first);
+    buffLine = instance.addStream("buffLine", core.Line, name + ".Line", "Line", instance.parameters.LineClr, first);
+    buffSignal = instance.addStream("buffSignal", core.Line, name + ".Signal", "Signal", instance.parameters.SignalClr, first);
+    buffMACD = instance.addStream("buffMACD", core.Line, name + ".MACD", "MACD", instance.parameters.MACDClr, first);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    FastMA.update(mode);
+    SlowMA.update(mode); 
+    DiffMA[period]=FastMA.DATA[period]-SlowMA.DATA[period];
+    buffMACD[period]=DiffMA[period];
+    SignalMA.update(mode);
+    buffSignal[period]=SignalMA.DATA[period];
+    buffLine[period]=(buffMACD[period]-buffSignal[period])*OsmaX;
+    if (DiffMA[period]>DiffMA[period-1]) 
+    {
+     if (buffLine[period]>buffLine[period-1]) 
+     {
+      buffUP[period]=buffLine[period];
+     } 
+     else
+     {
+      buffNE[period]=buffLine[period];
+     }
+    } 
+    else
+    {
+     if (buffLine[period]<buffLine[period-1]) 
+     {
+      buffDN[period]=buffLine[period];
+     } 
+     else
+     {
+      buffNE[period]=buffLine[period];
+     }
+    }
+   } 
+}
+

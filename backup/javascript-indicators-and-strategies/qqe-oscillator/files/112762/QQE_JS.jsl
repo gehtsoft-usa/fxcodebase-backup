@@ -1,0 +1,119 @@
+function Init()
+{
+    indicator.name("QQE oscillator");
+    indicator.description("QQE oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("RSI_Period", "RSI period", "", 14);
+    indicator.parameters.addInteger("SF", "SF", "", 5);
+    indicator.parameters.addDouble("DarFactor", "DarFactor", "", 4.236);
+    indicator.parameters.addString("Method", "Method", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("Method", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Method", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Method", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Method", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Method", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Method", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Method", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Method", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Method", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Method", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Method", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Method", "JSmooth", "", "JSmooth");
+	
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP color", "UP color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DNclr", "DN color", "DN color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("Transparency", "Transparency", "", 50,0,100);
+}
+
+var first;
+var source = null;
+var RSI_Period;
+var SF;
+var DarFactor;
+var Method;
+var Wilders_Period;
+var RSI;
+var MA_RSI;
+var Abs_MA_RSI;
+var MA1;
+var MA2;
+var Pbuff=null;
+var Mbuff=null;
+
+function Prepare()
+{
+    source = instance.source;
+    RSI_Period=instance.parameters.RSI_Period;
+    SF=instance.parameters.SF;
+    DarFactor=instance.parameters.DarFactor;
+    Method=instance.parameters.Method;
+    Wilders_Period=2*RSI_Period-1;
+    first = source.first()+2;
+    RSI = core.indicators.create("RSI", source.close, RSI_Period);
+    MA_RSI = core.indicators.create("AVERAGES", RSI.DATA, Method, SF, false);
+    Abs_MA_RSI=instance.addInternalStream(first, 0);
+    MA1 = core.indicators.create("AVERAGES", Abs_MA_RSI, Method, Wilders_Period, false);
+    MA2 = core.indicators.create("AVERAGES", MA1.DATA, Method, Wilders_Period, false);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.RSI_Period + ", " + instance.parameters.SF + ", " + instance.parameters.DarFactor + ", " + instance.parameters.Method + ")";
+    instance.name(name);
+    Pbuff = instance.addStream("Pbuff", core.Line, name + ".Pbuff", "Pbuff", instance.parameters.UPclr, first);
+    Mbuff = instance.addStream("Mbuff", core.Line, name + ".Mbuff", "Mbuff", instance.parameters.UPclr, first);
+    instance.createChannelGroup("TC","TC" , Pbuff, Mbuff, instance.parameters.UPclr, 100-instance.parameters.Transparency);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    RSI.update(mode);
+    MA_RSI.update(mode);
+    Abs_MA_RSI[period]=Math.abs(MA_RSI.DATA[period-1]-MA_RSI.DATA[period]);
+    MA1.update(mode);
+    MA2.update(mode);
+    var dar=MA2.DATA[period]*DarFactor;
+    var tr=Mbuff[period-1];
+    var dv=tr;
+    if (MA_RSI.DATA[period]<tr) 
+    {
+     tr=MA_RSI.DATA[period]+dar;
+     if (MA_RSI.DATA[period-1]<dv && tr>dv) 
+     {
+      tr=dv;
+     }
+    }
+    else if (MA_RSI.DATA[period]>=tr) 
+    {
+     tr=MA_RSI.DATA[period]-dar;
+     if (MA_RSI.DATA[period-1]>dv && tr<dv) 
+     {
+      tr=dv;
+     }
+    }
+    Mbuff[period]=tr;
+    Pbuff[period]=MA_RSI.DATA[period];
+    if (Pbuff[period]>Mbuff[period]) 
+    {
+     Pbuff.setColor(period, instance.parameters.UPclr);
+     Mbuff.setColor(period, instance.parameters.UPclr);
+    } 
+    else
+    {
+     Pbuff.setColor(period, instance.parameters.DNclr);
+     Mbuff.setColor(period, instance.parameters.DNclr);
+    }
+   } 
+}
+

@@ -1,0 +1,103 @@
+function Init()
+{
+    indicator.name("Level shift indicator");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP shift color", "", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DNclr", "DN shift color", "", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("transparency", "Fill Transparency", "0 - opaque, 100 - transparent", 75, 0, 100);
+}
+
+var source = null;
+var first;
+var transparency;
+var UPclr, DNclr;
+
+function Prepare(onlyName)
+{
+    source = instance.source;
+    first=source.first();
+    var name = profile.id() + "(" + source.name() + ")";
+    instance.name(name);
+
+    if (onlyName) 
+    {
+        return ;
+    }
+
+    instance.ownerDrawn(true);
+    
+    UPclr = instance.parameters.UPclr;
+    DNclr = instance.parameters.DNclr;
+    instance.setLabelColor(UPclr);
+}
+
+function Update(period)
+{
+
+}
+
+var init = false;
+
+function Draw(stage, context)
+{
+    if (stage == 2) 
+    {
+    
+        if (!init) 
+        {
+            context.createPen(1, context.SOLID, 1, UPclr);
+            context.createSolidBrush(2, UPclr);
+            context.createPen(3, context.SOLID, 1, DNclr);
+            context.createSolidBrush(4, DNclr);
+            transparency = context.convertTransparency(instance.parameters.transparency);
+            init = true;
+        }
+        
+        var firstBar = context.firstBar();
+        var lastBar = context.lastBar();
+        
+        firstBar=Math.max(firstBar, first+1);
+        lastBar=Math.min(lastBar, source.size()-2);
+        
+        var i;
+        var x1, x1_1, x1_2;
+        var x2, x2_1, x2_2;
+        var v, y1, y2;
+        var tmp;
+        for (i=firstBar; i<=lastBar; i++) 
+        {
+         if (source.low[i+1]>source.high[i-1]) 
+         {
+          tmp=context.positionOfBar(i-1);
+          x1=tmp[0];
+          tmp=context.positionOfBar(i+1);
+          x2=tmp[0];
+          tmp=context.pointOfPrice(source.high[i-1]);
+          y1=tmp[1];
+          tmp=context.pointOfPrice(source.low[i+1]);
+          y2=tmp[1];
+          context.drawRectangle(1, 2, x1, y1, x2, y2, transparency);
+         } 
+         else if (source.high[i+1]<source.low[i-1]) 
+         {
+          tmp=context.positionOfBar(i-1);
+          x1=tmp[0];
+          tmp=context.positionOfBar(i+1);
+          x2=tmp[0];
+          tmp=context.pointOfPrice(source.low[i-1]);
+          y1=tmp[1];
+          tmp=context.pointOfPrice(source.high[i+1]);
+          y2=tmp[1];
+          context.drawRectangle(3, 4, x1, y1, x2, y2, transparency);
+         }
+        }
+
+    }
+}
+
+
+

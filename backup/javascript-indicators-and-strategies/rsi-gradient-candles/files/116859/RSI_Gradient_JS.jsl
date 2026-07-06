@@ -1,0 +1,136 @@
+function Init()
+{
+    indicator.name("RSI gradient indicator");
+    indicator.description("RSI gradient indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 14);
+    indicator.parameters.addString("RSI_Price", "Price for RSI", "", "close");
+    indicator.parameters.addStringAlternative("RSI_Price", "close", "", "close");
+    indicator.parameters.addStringAlternative("RSI_Price", "open", "", "open");
+    indicator.parameters.addStringAlternative("RSI_Price", "high", "", "high");
+    indicator.parameters.addStringAlternative("RSI_Price", "low", "", "low");
+    indicator.parameters.addStringAlternative("RSI_Price", "median", "", "median");
+    indicator.parameters.addStringAlternative("RSI_Price", "typical", "", "typical");
+    indicator.parameters.addStringAlternative("RSI_Price", "weighted", "", "weighted");
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addString("UPclr", "UP color", "", "Green");
+    indicator.parameters.addStringAlternative("UPclr", "Red", "", "Red");
+    indicator.parameters.addStringAlternative("UPclr", "Green", "", "Green");
+    indicator.parameters.addStringAlternative("UPclr", "Blue", "", "Blue");
+    indicator.parameters.addString("DNclr", "DN color", "", "Red");
+    indicator.parameters.addStringAlternative("DNclr", "Red", "", "Red");
+    indicator.parameters.addStringAlternative("DNclr", "Green", "", "Green");
+    indicator.parameters.addStringAlternative("DNclr", "Blue", "", "Blue");
+    indicator.parameters.addDouble("Depth", "Depth", "", 0.04);
+}
+
+var first;
+var source = null;
+var Period;
+var RSI_Price;
+var UPclr;
+var DNclr;
+var Depth;
+var RSI;
+var open=null;
+var close=null;
+var high=null;
+var low=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    RSI_Price=instance.parameters.RSI_Price;
+    UPclr=instance.parameters.UPclr;
+    DNclr=instance.parameters.DNclr;
+    Depth=instance.parameters.Depth;
+    first = source.first()+2;
+    if (RSI_Price=="close") 
+    {
+     RSI = core.indicators.create("RSI", source.close, Period);
+    } 
+    else if (RSI_Price=="open") 
+    {
+     RSI = core.indicators.create("RSI", source.open, Period);
+    } 
+    else if (RSI_Price=="high") 
+    {
+     RSI = core.indicators.create("RSI", source.high, Period);
+    } 
+    else if (RSI_Price=="low") 
+    {
+     RSI = core.indicators.create("RSI", source.low, Period);
+    } 
+    else if (RSI_Price=="median") 
+    {
+     RSI = core.indicators.create("RSI", source.median, Period);
+    } 
+    else if (RSI_Price=="typical") 
+    {
+     RSI = core.indicators.create("RSI", source.typical, Period);
+    } 
+    else
+    {
+     RSI = core.indicators.create("RSI", source.weighted, Period);
+    } 
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.RSI_Price + ")";
+    instance.name(name);
+    open = instance.addStream("open", core.Line, name, "open", core.rgb(0, 0, 0), first)
+    high = instance.addStream("high", core.Line, name, "high", core.rgb(0, 0, 0), first)
+    low = instance.addStream("low", core.Line, name, "low", core.rgb(0, 0, 0), first)
+    close = instance.addStream("close", core.Line, name, "close", core.rgb(0, 0, 0), first)
+    instance.createCandleGroup("RSI color candle", "", open, high, low, close);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    RSI.update(mode);
+    open[period]=source.open[period];
+    close[period]=source.close[period];
+    high[period]=source.high[period];
+    low[period]=source.low[period];
+    var R=0;
+    var G=0;
+    var B=0;
+    var RSIvalue=RSI.DATA[period]-50;
+    if (RSIvalue>0) 
+    {
+     if (UPclr=="Red") 
+     {
+      R=Math.min(RSIvalue*Depth*255,255);
+     } 
+     else if (UPclr=="Green") 
+     {
+      G=Math.min(RSIvalue*Depth*255,255);
+     } 
+     else
+     {
+      B=Math.min(RSIvalue*Depth*255,255);
+     }
+    } 
+    else
+    {
+     if (DNclr=="Red") 
+     {
+      R=Math.min(-RSIvalue*Depth*255,255);
+     } 
+     else if (DNclr=="Green") 
+     {
+      G=Math.min(-RSIvalue*Depth*255,255);
+     } 
+     else
+     {
+      B=Math.min(-RSIvalue*Depth*255,255);
+     }
+    }
+    open.setColor(period,core.rgb(R,G,B));
+   } 
+}
+

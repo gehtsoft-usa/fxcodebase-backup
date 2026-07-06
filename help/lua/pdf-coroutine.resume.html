@@ -1,0 +1,35 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - coroutine.resume (co [, val1, &middot;&middot;&middot;])</title>
+</head>
+<body>
+<h3><a name="pdf-coroutine.resume"><code>coroutine.resume (co [, val1, &middot;&middot;&middot;])</code></a></h3>
+
+
+<p>
+Starts or continues the execution of coroutine <code>co</code>.
+The first time you resume a coroutine,
+it starts running its body.
+The values <code>val1</code>, &middot;&middot;&middot; are passed
+as the arguments to the body function.
+If the coroutine has yielded,
+<code>resume</code> restarts it;
+the values <code>val1</code>, &middot;&middot;&middot; are passed
+as the results from the yield.
+
+
+<p>
+If the coroutine runs without any errors,
+<code>resume</code> returns <b>true</b> plus any values passed to <code>yield</code>
+(if the coroutine yields) or any values returned by the body function
+(if the coroutine terminates).
+If there is any error,
+<code>resume</code> returns <b>false</b> plus the error message.
+
+
+
+
+<p>
+<hr>
+</body>
+</html>

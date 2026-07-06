@@ -1,0 +1,48 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - module (name [, &middot;&middot;&middot;])</title>
+</head>
+<body>
+<h3><a name="pdf-module"><code>module (name [, &middot;&middot;&middot;])</code></a></h3>
+
+
+<p>
+Creates a module.
+If there is a table in <code>package.loaded[name]</code>,
+this table is the module.
+Otherwise, if there is a global table <code>t</code> with the given name,
+this table is the module.
+Otherwise creates a new table <code>t</code> and
+sets it as the value of the global <code>name</code> and
+the value of <code>package.loaded[name]</code>.
+This function also initializes <code>t._NAME</code> with the given name,
+<code>t._M</code> with the module (<code>t</code> itself),
+and <code>t._PACKAGE</code> with the package name
+(the full module name minus last component; see below).
+Finally, <code>module</code> sets <code>t</code> as the new environment
+of the current function and the new value of <code>package.loaded[name]</code>,
+so that <a href="pdf-require.html"><code>require</code></a> returns <code>t</code>.
+
+
+<p>
+If <code>name</code> is a compound name
+(that is, one with components separated by dots),
+<code>module</code> creates (or reuses, if they already exist)
+tables for each component.
+For instance, if <code>name</code> is <code>a.b.c</code>,
+then <code>module</code> stores the module table in field <code>c</code> of
+field <code>b</code> of global <code>a</code>.
+
+
+<p>
+This function may receive optional <em>options</em> after
+the module name,
+where each option is a function to be applied over the module.
+
+
+
+
+<p>
+<hr>
+</body>
+</html>

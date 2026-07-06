@@ -1,0 +1,98 @@
+function Init()
+{
+    indicator.name("Gaussian smoothing");
+    indicator.description("gaussian smoothing");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+	
+	indicator.parameters.addGroup("Calculation");
+	indicator.parameters.addInteger("Mode", "Period", "", 50, 1, 2000);
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("color", "Color of Gauss", "Color of Gauss", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var Mode;
+var first;
+var source = null;
+var Raw={}
+var Norm={};
+
+var Gauss = null;
+
+function Prepare(nameOnly)
+{
+    Mode=instance.parameters.Mode;  
+    source = instance.source;
+    first = source.first()+Mode;
+
+    var name = profile.id() + "(" + source.name() + ", " + Mode + ")";
+    instance.name(name);
+
+
+	Gaussian(Mode);
+	Normalization(Mode);
+	
+	
+    if (!(nameOnly)) 
+    {
+        Gauss = instance.addStream("Gauss", core.Line, name, "Gauss", instance.parameters.color, first);
+		    Gauss.setWidth(instance.parameters.width);
+        Gauss.setStyle(instance.parameters.style);
+    }
+}
+
+function  Gaussian( Mode) 
+{
+    var i;
+	for (i = 0; i<=Mode; i++) 
+  {
+    Raw[i]= (Math.exp(-i*i*9/((Mode+1)*(Mode+1))));
+	}
+   
+}
+
+function Normalization(Mode)
+{
+var i;
+var Sum=0;
+
+  
+  for (i = 0; i<=Mode; i++) 
+  {
+   Sum = Sum +Raw[i];
+  }
+  
+  for (i = 0; i<=Mode; i++) 
+  {
+   Norm[i] = Raw[i]/Sum;
+  }
+  
+
+}
+
+function Update(period)
+{
+    if (period < first) 
+    {
+	   return;
+	  }
+	
+	
+        Gauss[period] =Smooth(period);
+    
+}
+
+function Smooth (period)
+{
+	var i;
+	var sum =0;
+	for (i=0; i<=Mode; i++) 
+  {
+	 sum=sum +Norm[i]*source[period-i];
+	}
+	return (sum);
+}
+

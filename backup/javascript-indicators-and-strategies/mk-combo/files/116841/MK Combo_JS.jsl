@@ -1,0 +1,96 @@
+function Init()
+{
+    indicator.name("MK combo");
+    indicator.description("MK combo");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+	
+	
+	indicator.parameters.addGroup("SSD Calculation");
+    indicator.parameters.addInteger("k", "%K periods","", 5, 2, 1000);
+    indicator.parameters.addInteger("sd", "%D slowing periods","", 3, 2, 1000);
+    indicator.parameters.addInteger("d","%D period","", 3, 2, 1000);
+	
+ 
+	indicator.parameters.addGroup("TBS Calculation"); 
+
+    indicator.parameters.addInteger("K", "%K periods","", 5, 2, 1000);
+    indicator.parameters.addInteger("SD",  "%D slowing periods","", 3, 2, 1000);
+    indicator.parameters.addInteger("D", "%D period","", 3, 2, 1000);
+
+    indicator.parameters.addString("MVAT_K", "Smoothing type for %K", "The type of smoothing algorithm for %K.", "MVA");
+    indicator.parameters.addStringAlternative("MVAT_K", "MVA", "MVA", "MVA");
+    indicator.parameters.addStringAlternative("MVAT_K", "EMA", "EMA", "EMA");
+    indicator.parameters.addStringAlternative("MVAT_K", "MetaTrader", "The MetaTrader algorithm.", "MT");
+	indicator.parameters.addStringAlternative("MVAT_K" , "LWMA", "", "LWMA");	
+	indicator.parameters.addStringAlternative("MVAT_K" , "KAMA", "", "KAMA");	
+	indicator.parameters.addStringAlternative("MVAT_K" , "SMMA", "", "SMMA");	
+	indicator.parameters.addStringAlternative("MVAT_K" , "TMA", "", "TMA");	
+	indicator.parameters.addStringAlternative("MVAT_K" , "VIDYA", "", "VIDYA");	
+	indicator.parameters.addStringAlternative("MVAT_K" , "WMA", "", "WMA");	
+    
+    indicator.parameters.addString("MVAT_D", "Smoothing type for %D", "The type of smoothing algorithm for %D.", "MVA");
+    indicator.parameters.addStringAlternative("MVAT_D", "MVA", "MVA", "MVA");
+    indicator.parameters.addStringAlternative("MVAT_D", "EMA", "EMA", "EMA");
+	indicator.parameters.addStringAlternative("MVAT_D" , "LWMA", "", "LWMA");	
+	indicator.parameters.addStringAlternative("MVAT_D" , "KAMA", "", "KAMA");	
+	indicator.parameters.addStringAlternative("MVAT_D" , "SMMA", "", "SMMA");	
+	indicator.parameters.addStringAlternative("MVAT_D" , "TMA", "", "TMA");	
+	indicator.parameters.addStringAlternative("MVAT_D" , "VIDYA", "", "VIDYA");	
+	indicator.parameters.addStringAlternative("MVAT_D" , "WMA", "", "WMA");	
+	
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Combo_color", "Color of Combo", "Color of Combo", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var k, sd, d,ssd;
+var first;
+var source = null;
+var MVAT_K, MVAT_D, K,SD,D,tbs,Price;
+
+var Combo = null;
+
+function Prepare(nameOnly)
+{
+    source = instance.source;   
+	k=instance.parameters.k;
+	sd=instance.parameters.sd;
+	d=instance.parameters.d;
+	MVAT_K=instance.parameters.MVAT_K;
+	MVAT_D=instance.parameters.MVAT_D;
+	K=instance.parameters.K;
+	SD=instance.parameters.SD;
+	D=instance.parameters.D;
+		
+	assert(core.indicators.findIndicator("TBS") != null, "Please, {wnload && install TBS.LUA indicator");
+	
+	ssd = core.indicators.create("SSD", source, k, sd, d);
+	tbs= core.indicators.create("TBS", source.volume, "B",K, SD, D,MVAT_K,MVAT_D );
+	first = Math.max(ssd.D.first(),tbs.D.first());
+
+    var name = profile.id() + "(" + source.name() + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        Combo = instance.addStream("Combo", core.Line, name, "Combo", instance.parameters.Combo_color, first);
+		Combo.setWidth(instance.parameters.width);
+        Combo.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period, mode)
+{
+    ssd.update(mode);
+	tbs.update(mode);
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+        Combo[period] = Combo[period-1]+(ssd.K[period] - ssd.D[period])*(tbs.K[period] - tbs.D[period]);
+     
+}
+

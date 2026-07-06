@@ -1,0 +1,21 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - luaL_where</title>
+</head>
+<body>
+<h3><a name="luaL_where"><code>luaL_where</code></a></h3>
+<pre>void luaL_where (lua_State *L, int lvl);</pre>
+
+<p>
+Pushes onto the stack a string identifying the current position
+of the control at level <code>lvl</code> in the call stack.
+Typically this string has the format <code>&lt;chunkname&gt;:&lt;currentline&gt;:</code>.
+Level&nbsp;0 is the running function,
+level&nbsp;1 is the function that called the running function,
+etc.
+
+
+<p>
+This function is used to build a prefix for error messages.
+</body>
+</html>

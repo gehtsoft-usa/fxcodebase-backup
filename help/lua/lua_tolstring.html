@@ -1,0 +1,39 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_tolstring</title>
+</head>
+<body>
+<h3><a name="lua_tolstring"><code>lua_tolstring</code></a></h3>
+<pre>const char *lua_tolstring (lua_State *L, int index, size_t *len);</pre>
+
+<p>
+Converts the Lua value at the given acceptable index to a string
+(<code>const char*</code>).
+If <code>len</code> is not <code>NULL</code>,
+it also sets <code>*len</code> with the string length.
+The Lua value must be a string or a number;
+otherwise, the function returns <code>NULL</code>.
+If the value is a number,
+then <a href="lua_tolstring.html"><code>lua_tolstring</code></a> also
+<em>changes the actual value in the stack to a string</em>.
+(This change confuses <a href="lua_next.html"><code>lua_next</code></a>
+when <a href="lua_tolstring.html"><code>lua_tolstring</code></a> is applied to keys during a table traversal.)
+
+
+<p>
+<a href="lua_tolstring.html"><code>lua_tolstring</code></a> returns a fully aligned pointer
+to a string inside the Lua state.
+This string always has a zero ('<code>\0</code>')
+after its last character (as in&nbsp;C),
+but may contain other zeros in its body.
+Because Lua has garbage collection,
+there is no guarantee that the pointer returned by <a href="lua_tolstring.html"><code>lua_tolstring</code></a>
+will be valid after the corresponding value is removed from the stack.
+
+
+
+
+
+<hr>
+</body>
+</html>

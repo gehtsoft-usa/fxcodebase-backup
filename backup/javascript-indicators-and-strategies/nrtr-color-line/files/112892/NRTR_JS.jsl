@@ -1,0 +1,154 @@
+function Init()
+{
+    indicator.name("NRTR indicator");
+    indicator.description("NRTR indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("ATR_Period", "ATR period", "", 14);
+    indicator.parameters.addDouble("Coeff", "Coeff", "", 4);
+    indicator.parameters.addString("Mode", "Mode", "", "1");
+    indicator.parameters.addStringAlternative("Mode", "Stops only", "", "0");
+    indicator.parameters.addStringAlternative("Mode", "Signals & Stops", "", "1");
+    indicator.parameters.addStringAlternative("Mode", "Signals only", "", "2");
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP color", "UP color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DNclr", "DN color", "DN color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+    indicator.parameters.addInteger("DotSize", "Dot size", "Dot size", 3, 1, 5);
+}
+
+var first;
+var source = null;
+var ATR_Period;
+var Coeff;
+var Mode;
+var UpStop=null;
+var UpSignal=null;
+var DnStop=null;
+var DnSignal=null;
+var TrendUp;
+var Extremum;
+var TR;
+
+function Prepare()
+{
+    source = instance.source;
+    ATR_Period=instance.parameters.ATR_Period;
+    Coeff=instance.parameters.Coeff;
+    Mode=tonumber(instance.parameters.Mode);
+    first = source.first()+2;
+    TrendUp=instance.addInternalStream(first, 0);
+    Extremum=instance.addInternalStream(first, 0);
+    TR=instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.ATR_Period + ", " + instance.parameters.Coeff + ", " + instance.parameters.Mode + ")";
+    instance.name(name);
+    if (Mode<2) 
+    {
+     UpStop = instance.addStream("UpStop", core.Line, name + ".UpStop", "UpStop", instance.parameters.UPclr, first);
+     DnStop = instance.addStream("DnStop", core.Line, name + ".DnStop", "DnStop", instance.parameters.DNclr, first);
+    } 
+    else
+    {
+     UpStop=instance.addInternalStream(first, 0);
+     DnStop=instance.addInternalStream(first, 0);
+    }
+    if (Mode>0) 
+    {
+     UpSignal = instance.addStream("UpSignal", core.Dot, name + ".UpSignal", "UpSignal", instance.parameters.UPclr, first);
+     DnSignal = instance.addStream("DnSignal", core.Dot, name + ".DnSignal", "DnSignal", instance.parameters.DNclr, first);
+    } 
+    else
+    {
+     UpSignal=instance.addInternalStream(first, 0);
+     DnSignal=instance.addInternalStream(first, 0);
+    } 
+    UpStop.setWidth(instance.parameters.widthLinReg);
+    UpStop.setStyle(instance.parameters.styleLinReg);
+    DnStop.setWidth(instance.parameters.widthLinReg);
+    DnStop.setStyle(instance.parameters.styleLinReg);
+    UpSignal.setWidth(instance.parameters.DotSize);
+    DnSignal.setWidth(instance.parameters.DotSize);
+}
+
+function Update(period, mode)
+{
+   if (period>first+ATR_Period) 
+   {
+    TR[period]=source.high[period]-source.low[period];
+    if (Math.abs(source.high[period]-source.close[period-1])>TR[period]) 
+    {
+     TR[period]=Math.abs(source.high[period]-source.close[period-1]);
+    }
+    if (Math.abs(source.low[period]-source.close[period-1])>TR[period]) 
+    {
+     TR[period]=Math.abs(source.low[period]-source.close[period-1]);
+    }
+    var i;
+    var ATR=0;
+    for (i=0;i<=ATR_Period-1;i++) 
+    {
+     ATR=ATR+TR[period-i]*(ATR_Period-i);
+    }
+    ATR=2*ATR/(ATR_Period*(ATR_Period+1));
+    var ChannelWidth=Coeff*ATR;
+    TrendUp[period]=TrendUp[period-1];
+    Extremum[period]=Extremum[period-1];
+    if (TrendUp[period]==1 && source.low[period]<(Extremum[period]-ChannelWidth)) 
+    {
+     TrendUp[period]=0;
+     Extremum[period]=source.high[period];
+    }
+    if (TrendUp[period]==0 && source.high[period]>(Extremum[period]+ChannelWidth)) 
+    {
+     TrendUp[period]=1;
+     Extremum[period]=source.low[period];
+    }
+    if (TrendUp[period]==1 && source.low[period]>Extremum[period]) 
+    {
+     Extremum[period]=source.low[period];
+    }
+    if (TrendUp[period]==0 && source.high[period]<Extremum[period]) 
+    {
+     Extremum[period]=source.high[period];
+    }
+    if (TrendUp[period]==1) 
+    {
+     UpStop[period]=Extremum[period]-ChannelWidth;
+     DnStop[period]=null;
+     if (TrendUp[period]!=TrendUp[period-1]) 
+     {
+      UpSignal[period]=Extremum[period]-ChannelWidth;
+      DnSignal[period]=null;
+     }
+    } 
+    else
+    {
+     DnStop[period]=Extremum[period]+ChannelWidth;
+     UpStop[period]=null;
+     if (TrendUp[period]!=TrendUp[period-1]) 
+     {
+      DnSignal[period]=Extremum[period]+ChannelWidth;
+      UpSignal[period]=null;
+     }
+    }
+    }
+   else if (period>first) 
+   {
+    Extremum[period]=source.close[period];
+    if (source.close[period]>source.close[period-1]) 
+    {
+     TrendUp[period]=1;
+    } 
+    else
+    {
+     TrendUp[period]=0;
+    }
+    Extremum[period]=source.close[period];
+   } 
+}
+

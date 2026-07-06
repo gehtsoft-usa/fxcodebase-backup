@@ -1,0 +1,109 @@
+function Init()
+{
+    indicator.name("BB_CCI_CrossOver indicator");
+    indicator.description("BB_CCI_CrossOver indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("CCI_Period", "CCI period", "", 21);
+    indicator.parameters.addDouble("CCI_Min", "CCI Min", "", -80);
+    indicator.parameters.addDouble("CCI_Max", "CCI Max", "", 80);
+    indicator.parameters.addInteger("MM_Period", "MM period", "", 14);
+    indicator.parameters.addInteger("BB_Period", "BB period", "", 21);
+    indicator.parameters.addDouble("BB_Desvio", "BB desvio", "", 2);
+    indicator.parameters.addInteger("Pip_Desvio_Max", "Pip desvio max", "", 10);
+    indicator.parameters.addInteger("Pip_Desvio_Min", "Pip desvio min", "", 10);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP color", "UP color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DNclr", "DN color", "DN color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("ArrowSize", "Arrow size", "", 10);
+}
+
+var first;
+var source = null;
+var CCI_Period;
+var CCI_Min;
+var CCI_Max;
+var MM_Period;
+var BB_Period;
+var BB_Desvio;
+var Pip_Desvio_Max;
+var Pip_Desvio_Min;
+var UP=null;
+var DN=null;
+var CCI;
+var ATR;
+var BB;
+var MM;
+
+function Prepare()
+{
+    source = instance.source;
+    CCI_Period=instance.parameters.CCI_Period;
+    CCI_Min=instance.parameters.CCI_Min;
+    CCI_Max=instance.parameters.CCI_Max;
+    MM_Period=instance.parameters.MM_Period;
+    BB_Period=instance.parameters.BB_Period;
+    BB_Desvio=instance.parameters.BB_Desvio;
+    Pip_Desvio_Max=instance.parameters.Pip_Desvio_Max*source.pipSize();
+    Pip_Desvio_Min=instance.parameters.Pip_Desvio_Min*source.pipSize();
+    first = source.first()+2;
+    CCI=core.indicators.create("CCI", source, CCI_Period);
+    ATR=core.indicators.create("ATR", source, 10);
+    BB=core.indicators.create("BB", source.weighted, BB_Period, BB_Desvio);
+    MM=core.indicators.create("EMA", CCI.DATA, MM_Period);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.CCI_Period + ", " + instance.parameters.CCI_Min + ", " + instance.parameters.CCI_Max + ", " + instance.parameters.MM_Period + ", " + instance.parameters.BB_Period + ", " + instance.parameters.BB_Desvio + ", " + instance.parameters.Pip_Desvio_Max + ", " + instance.parameters.Pip_Desvio_Min + ")";
+    instance.name(name);
+    UP = instance.createTextOutput ("UP", "UP", "Wingdings", instance.parameters.ArrowSize, core.H_Center, core.V_Top, instance.parameters.UPclr, 0);
+    DN = instance.createTextOutput ("DN", "DN", "Wingdings", instance.parameters.ArrowSize, core.H_Center, core.V_Bottom, instance.parameters.DNclr, 0);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    CCI.update(mode);
+    ATR.update(mode);
+    BB.update(mode);
+    MM.update(mode);
+    var Range=ATR.DATA[period]*3/8;
+    if (CCI.DATA[period]>CCI_Max) 
+    {
+     if (CCI.DATA[period]<MM.DATA[period]) 
+     {
+      if (source.high[period]<=BB.TL[period]) 
+      {
+       if (source.high[period-1]>source.high[period] && BB.TL[period]-source.high[period]<=Pip_Desvio_Max) 
+       {
+        DN.set(period, source.high[period]+Range, "\226");
+       }
+      } 
+      else if (source.high[period-1]>source.high[period]) 
+      {
+       DN.set(period, source.high[period]+Range, "\226");
+      }
+     }
+    }
+    
+    if (CCI.DATA[period]<CCI_Min) 
+    {
+     if (CCI.DATA[period]>MM.DATA[period]) 
+     {
+      if (source.low[period]>=BB.BL[period]) 
+      {
+       if (source.low[period-1]<source.low[period] && source.low[period]-BB.BL[period]<=Pip_Desvio_Min) 
+       {
+        UP.set(period, source.low[period]-Range, "\225");
+       }
+      } 
+      else if (source.low[period-1]<source.low[period]) 
+      {
+       UP.set(period, source.low[period]-Range, "\225");
+      }
+     }
+    }
+   } 
+}
+

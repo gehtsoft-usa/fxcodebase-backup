@@ -1,0 +1,123 @@
+function Init()
+{
+    indicator.name("FantailVMA indicator");
+    indicator.description("FantailVMA indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("MA_Length", "MA_Length", "", 1);
+    indicator.parameters.addInteger("VarMA_Length", "VarMA_Length", "", 4);
+    indicator.parameters.addInteger("ADX_Length", "ADX_Length", "", 8);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var MA_Length;
+var VarMA_Length;
+var ADX_Length;
+var FantailMA=null;
+var Alpha;
+var sPDI=null;
+var sMDI=null;
+var STR=null;
+var ADX=null;
+var MaInd;
+var VarMA=null;
+var dSmoothFactor;
+
+function Prepare()
+{
+    source = instance.source;
+    MA_Length=instance.parameters.MA_Length;
+    VarMA_Length=instance.parameters.VarMA_Length;
+    ADX_Length=instance.parameters.ADX_Length;
+    first = source.first()+2;
+    sPDI = instance.addInternalStream(first, 0);
+    sMDI = instance.addInternalStream(first, 0);
+    STR = instance.addInternalStream(first, 0);
+    ADX = instance.addInternalStream(first, 0);
+    VarMA = instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.MA_Length + ", " + instance.parameters.VarMA_Length + ", " + instance.parameters.ADX_Length + ")";
+    instance.name(name);
+    FantailMA = instance.addStream("FantailMA", core.Line, name + ".FantailMA", "FantailMA", instance.parameters.clr, first);
+    FantailMA.setWidth(instance.parameters.widthLinReg);
+    FantailMA.setStyle(instance.parameters.styleLinReg);
+    Alpha=1/ADX_Length;
+    if (VarMA_Length>0) 
+    {
+     MaInd=2/(1+VarMA_Length);
+    } 
+    else
+    {
+     MaInd=0.2;
+    }
+    dSmoothFactor=2/(1+MA_Length);
+}
+
+function Update(period, mode)
+{
+   if (period>first+ADX_Length) 
+   {
+    var Bulls=0;
+    var Bears=0;
+    if (source.high[period]>source.high[period-1]) 
+    {
+     Bulls=1;
+    }
+    if (source.low[period]<source.low[period-1]) 
+    {
+     Bears=1;
+    }
+    if (Bulls==Bears) 
+    {
+      Bulls=0;
+      Bears=0;
+    } 
+    sPDI[period]=sPDI[period-1]+Alpha*(Bulls-sPDI[period-1]);
+    sMDI[period]=sMDI[period-1]+Alpha*(Bears-sMDI[period-1]);
+    var TR=Math.max(source.high[period]-source.low[period],source.high[period]-source.close[period-1]);
+    STR[period]=STR[period-1]+Alpha*(TR-STR[period-1]);
+    var PDI=0;
+    var MDI=0;
+    var DX=0;
+    if (STR[period]>0) 
+    {
+     PDI=100*sPDI[period]/STR[period];
+     MDI=100*sMDI[period]/STR[period];
+    }
+    if (PDI+MDI>0) 
+    {
+     DX=100*Math.abs(PDI-MDI)/(PDI+MDI);
+    }
+    ADX[period]=ADX[period-1]+Alpha*(DX-ADX[period-1]);
+    var tmp=Math.minmax(ADX, period-ADX_Length+1, period);
+    var ADXmin=tmp[0];
+    var ADXmax=tmp[1];
+    var Diff=ADXmax-ADXmin;
+    var Const=MaInd;
+    if (Diff>0) 
+    {
+     Const=(ADX[period]-ADXmin)/Diff;
+    }
+    Const=Math.min(Const,MaInd);
+    VarMA[period]=((2-Const)*VarMA[period-1]+Const*source.close[period])/2;
+    FantailMA[period]=VarMA[period]*dSmoothFactor+FantailMA[period-1]*(1-dSmoothFactor);
+   }
+   else if (period>=first) 
+   {
+    sPDI[period]=0;
+    sMDI[period]=0; 
+    STR[period]=0;
+    ADX[period]=0;
+    VarMA[period]=0;
+    FantailMA[period]=0;
+   } 
+}
+

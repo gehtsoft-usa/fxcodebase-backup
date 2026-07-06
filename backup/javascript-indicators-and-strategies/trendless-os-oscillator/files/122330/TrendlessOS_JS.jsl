@@ -1,0 +1,104 @@
+function Init()
+{
+    indicator.name("TrendlesOS");
+    indicator.description("");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addInteger("SMA_Period", "Period of SMA", "No description", 7);
+    indicator.parameters.addDouble("OBLevel", "OBLevel", "No description", 0.0047);
+    indicator.parameters.addDouble("OSLevel", "OSLevel", "No description", -0.00473);
+    indicator.parameters.addString("DisplayMode", "DisplayMode", "", "line");
+    indicator.parameters.addStringAlternative("DisplayMode", "line", "", "line");
+    indicator.parameters.addStringAlternative("DisplayMode", "histogram", "", "histogram");
+    
+    indicator.parameters.addColor("color_1", "Color 1", "Color 1", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("color_2", "Color 2", "Color 2", core.rgb(0, 128, 0));
+    indicator.parameters.addColor("color_3", "Color 3", "Color 3", core.rgb(255, 255, 0));
+    indicator.parameters.addColor("color_4", "Color 4", "Color 4", core.rgb(255, 128, 0));
+    indicator.parameters.addColor("color_5", "Color 5", "Color 5", core.rgb(255, 0, 0));
+}
+
+var SMA_Period;
+var OBLevel;
+var OSLevel;
+var DisplayMode;
+
+var MA;
+
+var first;
+var source = null;
+var buff1=null;
+var buff2=null;
+var buff3=null;
+var buff4=null;
+var buff5=null;
+
+function Prepare()
+{
+    SMA_Period = instance.parameters.SMA_Period;
+    OBLevel = instance.parameters.OBLevel;
+    OSLevel = instance.parameters.OSLevel;
+    DisplayMode = instance.parameters.DisplayMode;
+    source = instance.source;
+    MA = core.indicators.create("MVA", source, SMA_Period);
+    
+    first = MA.DATA.first();
+    var name = profile.id() + "(" + source.name() + ", " + SMA_Period + ", " + OBLevel + ", " + OSLevel + ", " + DisplayMode + ")";
+    instance.name(name);
+    if (DisplayMode=="line") 
+    {
+     buff1 = instance.addStream("buff1", core.Line, name + ".buff1", "buff1", instance.parameters.color_1, first);
+     buff2 = instance.addInternalStream(0, 0);
+     buff3 = instance.addInternalStream(0, 0);
+     buff4 = instance.addInternalStream(0, 0);
+     buff5 = instance.addInternalStream(0, 0);
+     buff1.addLevel(0.8*OSLevel);    
+     buff1.addLevel(0.6*OSLevel);    
+     buff1.addLevel(0.8*OBLevel);    
+     buff1.addLevel(0.6*OBLevel);    
+     buff1.addLevel(OBLevel);    
+     buff1.addLevel(OSLevel);
+     }   
+    else
+    {
+     buff1 = instance.addInternalStream(0, 0);
+     buff2 = instance.addStream("buff2", core.Bar, name + ".buff2", "buff2", instance.parameters.color_2, first);
+     buff3 = instance.addStream("buff3", core.Bar, name + ".buff3", "buff3", instance.parameters.color_3, first);
+     buff4 = instance.addStream("buff4", core.Bar, name + ".buff4", "buff4", instance.parameters.color_4, first);
+     buff5 = instance.addStream("buff5", core.Bar, name + ".buff5", "buff5", instance.parameters.color_5, first);
+     buff2.addLevel(0.8*OSLevel);    
+     buff2.addLevel(0.6*OSLevel);    
+     buff2.addLevel(0.8*OBLevel);    
+     buff2.addLevel(0.6*OBLevel);    
+     buff2.addLevel(OBLevel);    
+     buff2.addLevel(OSLevel);    
+    } 
+}
+
+function Update(period, mode)
+{
+ if (period>first) 
+ {
+  MA.update(mode);
+  
+  buff1[period]=source[period]-MA.DATA[period];
+  if (buff1[period]>0.6*OSLevel && buff1[period]<0.6*OBLevel) 
+  {
+   buff2[period]=buff1[period];
+  } 
+  else if ((buff1[period]>0.8*OSLevel && buff1[period]<=0.6*OSLevel) || (buff1[period]>=0.6*OBLevel && buff1[period]<0.8*OBLevel)) 
+  {
+   buff3[period]=buff1[period];
+  } 
+  else if ((buff1[period]>OSLevel && buff1[period]<=0.8*OSLevel) || (buff1[period]>=0.8*OBLevel && buff1[period]<OBLevel)) 
+  {
+   buff4[period]=buff1[period];
+  } 
+  else
+  {
+   buff5[period]=buff1[period];
+  }
+ } 
+}
+

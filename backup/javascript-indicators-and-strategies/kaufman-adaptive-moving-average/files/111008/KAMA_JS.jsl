@@ -1,0 +1,78 @@
+//initializes the indicator
+function Init()
+{
+    indicator.name("Kaufman Adaptive Moving Average");
+    indicator.description("Kaufman Adaptive Moving Average");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+    indicator.setTag("group", "Moving Averages");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("N", "Number of periods", "The number of periods.", 14, 1, 10000);
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Line color", "The color of line", core.rgb(255, 83, 83));
+    indicator.parameters.addInteger("width", "Line width", "The width of line", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "The style of line", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LEVEL_STYLE);
+}
+
+var first = 0;
+var first1=0;
+var n = 0;
+var source = null;
+var KAMA;
+var INT;
+
+var fastend = 0.666;
+var slowend = 0.0645;
+
+//initializes the instance of the indicator
+function Prepare(onlyName)
+{
+    source = instance.source;
+    n = instance.parameters.N;
+    var name = profile.id() + "(" + instance.source.name() + "," + n + ")";
+    instance.name(name);
+  
+    if (onlyName == true)
+        return ;
+    first1 = source.first() + 1;
+    first = first1 + n - 1;
+
+    INT = instance.addInternalStream(first1, 0);
+
+    KAMA = instance.addStream("KAMA", core.Line, name, "KAMA", instance.parameters.clr,  first)
+    KAMA.setWidth(instance.parameters.width);
+    KAMA.setStyle(instance.parameters.style);
+}
+
+// calculate the value
+function Update(period, mode)
+{
+    if (period >= first1)
+    {
+        INT[period] = Math.abs(source[period] - source[period - 1]);
+    }
+    if (period >= first)
+    {
+        var value = 0;
+        if (period == first)
+        {
+            value = source[period];
+        }
+        else
+        {
+            value = KAMA[period - 1];
+        }
+        var i = 0;
+        var er = 0;
+        er = Math.sum(INT, period - n + 1, period);
+        if (er != 0)
+        {
+            er = Math.abs(source[period] - source[period - n + 1]) / er;
+        }
+        var sc = er * (fastend - slowend) + slowend;
+        sc = sc * sc;
+        KAMA[period] = value + sc * (source[period] - value);
+    }
+}

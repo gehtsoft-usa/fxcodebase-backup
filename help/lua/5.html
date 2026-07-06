@@ -1,0 +1,67 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 5 - Standard Libraries</title>
+</head>
+<body>
+<h1>5 - <a name="5">Standard Libraries</a></h1>
+
+<p>
+The standard Lua libraries provide useful functions
+that are implemented directly through the C&nbsp;API.
+Some of these functions provide essential services to the language
+(e.g., <a href="pdf-type.html"><code>type</code></a> and <a href="pdf-getmetatable.html"><code>getmetatable</code></a>);
+others provide access to "outside" services (e.g., I/O);
+and others could be implemented in Lua itself,
+but are quite useful or have critical performance requirements that
+deserve an implementation in C (e.g., <code>sort</code>).
+
+
+<p>
+All libraries are implemented through the official C&nbsp;API
+and are provided as separate C&nbsp;modules.
+Currently, Lua has the following standard libraries:
+
+<ul>
+
+<li>basic library;</li>
+
+<li>package library;</li>
+
+<li>string manipulation;</li>
+
+<li>table manipulation;</li>
+
+<li>mathematical functions (sin, log, etc.);</li>
+
+<li>input and output;</li>
+
+<li>operating system facilities;</li>
+
+<li>debug facilities.</li>
+
+</ul><p>
+Except for the basic and package libraries,
+each library provides all its functions as fields of a global table
+or as methods of its objects.
+
+
+<p>
+To have access to these libraries,
+the C&nbsp;host program must call
+<a href="luaL_openlibs.html"><code>luaL_openlibs</code></a>,
+which open all standard libraries.
+Alternatively,
+it can open them individually by calling
+<a name="pdf-luaopen_base"><code>luaopen_base</code></a> (for the basic library),
+<a name="pdf-luaopen_package"><code>luaopen_package</code></a> (for the package library),
+<a name="pdf-luaopen_string"><code>luaopen_string</code></a> (for the string library),
+<a name="pdf-luaopen_table"><code>luaopen_table</code></a> (for the table library),
+<a name="pdf-luaopen_math"><code>luaopen_math</code></a> (for the mathematical library),
+<a name="pdf-luaopen_io"><code>luaopen_io</code></a> (for the I/O and the Operating System libraries),
+and <a name="pdf-luaopen_debug"><code>luaopen_debug</code></a> (for the debug library).
+These functions are declared in <a name="pdf-lualib.h"><code>lualib.h</code></a>
+and should not be called directly:
+you must call them like any other Lua C&nbsp;function,
+e.g., by using <a href="lua_call.html"><code>lua_call</code></a>.
+</body>
+</html>

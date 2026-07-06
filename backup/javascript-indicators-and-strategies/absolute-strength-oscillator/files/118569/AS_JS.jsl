@@ -1,0 +1,228 @@
+function Init()
+{
+    indicator.name("Absolute Strength Indicator");
+    indicator.description("Absolute Strength Indicator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+	
+	
+	 indicator.parameters.addString("Method", "Method", "", "RSI");
+    indicator.parameters.addStringAlternative("Method", "RSI", "", "RSI");
+    indicator.parameters.addStringAlternative("Method", "Stoch", "", "Stoch");
+    indicator.parameters.addStringAlternative("Method", "ADX", "", "ADX");
+	
+	indicator.parameters.addString("Method1", "Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method1", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method1", "EMA", "EMA" , "EMA");
+	indicator.parameters.addStringAlternative("Method1", "LWMA", "LWMA" , "LWMA");   
+    indicator.parameters.addStringAlternative("Method1", "SMMA", "SMMA" , "SMMA");
+
+	
+	 indicator.parameters.addInteger("Length", "Period for Evaluation", "", 10);
+	 indicator.parameters.addInteger("Signal", "Period for Signal", "", 5);
+	 indicator.parameters.addInteger("Smoothing", "Period for Smoothing", "", 5);
+	 
+	  indicator.parameters.addDouble("OverBought", "OverBought", "", 0);
+	   indicator.parameters.addDouble("OverSold", "OverSold", "", 0);
+
+	 indicator.parameters.addGroup("Selector");   
+	 indicator.parameters.addBoolean("ShowBulls", "Show Bulls", "" , true);
+	 indicator.parameters.addBoolean("ShowBears", "Show Bears", "" , true);
+	
+	 indicator.parameters.addGroup("Bulls Style");   
+    indicator.parameters.addColor("Bulls_color", "Color of Bulls", "Color of Bulls", core.rgb(0, 255, 0));
+		indicator.parameters.addInteger("Bullswidth", "Line Width", "", 1, 1, 5);
+     indicator.parameters.addInteger("Bullsstyle", "Line Style", "", core.LINE_SOLID);
+	indicator.parameters.setFlag("Bullsstyle", core.FLAG_LINE_STYLE);
+	
+	 indicator.parameters.addGroup("Bears Style");
+    indicator.parameters.addColor("Bears_color", "Color of Bears", "Color of Bears", core.rgb(255, 0, 0));
+		indicator.parameters.addInteger("Bearswidth", "Line Width", "", 1, 1, 5);
+     indicator.parameters.addInteger("Bearsstyle", "Line Style", "", core.LINE_SOLID);
+	indicator.parameters.setFlag("Bearsstyle", core.FLAG_LINE_STYLE);
+	
+	 indicator.parameters.addGroup("Bulls Signal Style");
+    indicator.parameters.addColor("SignalBulls_color", "Color of SignalBulls", "Color of SignalBulls", core.rgb(0, 255, 128));
+		indicator.parameters.addInteger("SignalBullswidth", "Line Width", "", 1, 1, 5);
+     indicator.parameters.addInteger("SignalBullsstyle", "Line Style", "", core.LINE_DASH);
+	indicator.parameters.setFlag("SignalBullsstyle", core.FLAG_LINE_STYLE);
+	
+	 indicator.parameters.addGroup("Bears Signal Style");
+    indicator.parameters.addColor("SignalBears_color", "Color of SignalBears", "Color of SignalBears", core.rgb(255, 0, 128));	
+	indicator.parameters.addInteger("SignalBearswidth", "Line Width", "", 1, 1, 5);
+     indicator.parameters.addInteger("SignalBearsstyle", "Line Style", "", core.LINE_DASH);
+	indicator.parameters.setFlag("SignalBearsstyle", core.FLAG_LINE_STYLE);	
+	
+}
+
+var Method;
+var Method1;
+
+var first;
+var source = null;
+
+ var BullsAVGofAVG;
+ var BearsAVGofAVG; 
+
+var Bulls = null;
+var Bears = null;
+var SignalBulls = null;
+var SignalBears = null;
+var Length;
+var BullsTemp, BearsTemp;
+var MA;
+var BullsAVG, BearsAVG;
+var OverBought, OverSold;
+var Smoothing, Signal;
+var Type1,P1;
+
+var AVGBull;
+var AVGBear;
+var ShowBulls, ShowBears;
+
+function Prepare()
+{
+     ShowBulls= instance.parameters.ShowBulls;
+	 ShowBears= instance.parameters.ShowBears;
+    Smoothing = instance.parameters.Smoothing;
+	Signal = instance.parameters.Signal;  
+   
+    OverBought = instance.parameters.OverBought;
+	OverSold = instance.parameters.OverSold;
+    Length = instance.parameters.Length;
+    Method = instance.parameters.Method;
+	Method1= instance.parameters.Method1;
+    source = instance.source;
+    first = source.first();
+	
+
+	
+	MA= core.indicators.create("MVA", source, 2);
+	
+	BullsTemp = instance.addInternalStream(0, 0);
+	BearsTemp = instance.addInternalStream(0, 0); 
+	
+	BullsAVG= core.indicators.create(Method1,BullsTemp, Length);
+	BearsAVG= core.indicators.create(Method1, BearsTemp, Length);
+	
+	AVGBull= core.indicators.create(Method1,BullsAVG.DATA, Smoothing);
+	AVGBear= core.indicators.create(Method1, BearsAVG.DATA, Smoothing);
+	
+	 BullsAVGofAVG= core.indicators.create(Method1,AVGBull.DATA, Signal); 
+  BearsAVGofAVG = core.indicators.create(Method1,AVGBear.DATA, Signal); 
+	
+	
+
+    var name = profile.id() + "(" + source.name() + ", " + Method + ", "+ Method1+ "," + Length+ ","+ Smoothing +"," + Signal+ ")";
+    instance.name(name);
+	
+	if (ShowBulls) 
+	{
+     Bulls = instance.addStream("Bulls", core.Line, name + ".Bulls", "Bulls", instance.parameters.Bulls_color, first);
+	 Bulls.setWidth(instance.parameters.Bullswidth);
+	 Bulls.setStyle(instance.parameters.Bullsstyle);
+	 SignalBulls = instance.addStream("SignalBulls", core.Line, name + ".SignalBulls", "SignalBulls", instance.parameters.SignalBulls_color, first);
+	 SignalBulls.setWidth(instance.parameters.SignalBullswidth);
+	 SignalBulls.setStyle(instance.parameters.SignalBullsstyle);
+	}
+	else
+	{
+	 Bulls= instance.addInternalStream(0, 0);
+	 SignalBulls= instance.addInternalStream(0, 0);
+	}
+	
+	if (ShowBears) 
+	{ 
+     Bears = instance.addStream("Bears", core.Line, name + ".Bears", "Bears", instance.parameters.Bears_color, first);
+	 Bears.setWidth(instance.parameters.Bearswidth);
+	 Bears.setStyle(instance.parameters.Bearsstyle);   
+     SignalBears = instance.addStream("SignalBears", core.Line, name + ".SignalBears", "SignalBears", instance.parameters.SignalBears_color, first);
+	 SignalBears.setWidth(instance.parameters.SignalBearswidth);
+	 SignalBears.setStyle(instance.parameters.SignalBearsstyle);
+	}
+	else
+	{
+	 Bears= instance.addInternalStream(0, 0);
+	 SignalBears= instance.addInternalStream(0, 0);
+	}
+}
+
+function Update(period,mode)
+{
+    if (period < first + Length ||  !source.hasData(period)) 
+    {
+     return;
+    }	
+	
+			MA.update(mode); 
+			
+			if (!MA.DATA.hasData(period)) 
+			{ 
+			 return;
+			}	
+					
+			if (Method == "RSI") 
+			{
+	
+				BullsTemp[period] = 0.5*(Math.abs(MA.DATA[period]-MA.DATA[period-1])+(MA.DATA[period]-MA.DATA[period-1]));
+				BearsTemp[period] = 0.5*(Math.abs(MA.DATA[period]-MA.DATA[period-1])-(MA.DATA[period]-MA.DATA[period-1]));
+			}
+			else if (Method == "Stoch") 
+			{	
+				var min,max;
+				var tmp = Math.minmax(source, period -Length , period);
+				min=tmp[0];
+				max=tmp[1];
+				BullsTemp[period] = MA.DATA[period]-min;
+				BearsTemp[period] = max-MA.DATA[period];
+				
+			}
+			else if (Method == "ADX") 
+			{			
+			   BullsTemp[period] = 0.5*(Math.abs(source.high[period]-source.high[period-1])+(source.high[period]-source.high[period-1]));
+			   BearsTemp[period] = 0.5*(Math.abs(source.low[period-1]-source.low[period])+(source.low[period-1]-source.low[period]));       
+			   
+			}
+			   
+			   
+			  BullsAVG.update(mode); 
+             BearsAVG.update(mode); 			 
+			   
+			   if (!BullsAVG.DATA.hasData(period) ||  !BearsAVG.DATA.hasData(period)) 
+			   {
+			    return;
+			   }
+			   
+			   
+			   AVGBull.update(mode); 
+               AVGBear.update(mode); 			 
+			   
+			   if (!AVGBull.DATA.hasData(period) ||  !AVGBear.DATA.hasData(period)) 
+			   {
+			    return;
+			   }
+			   
+			    Bulls[period] =AVGBull.DATA[period];
+			   Bears[period] =AVGBear.DATA[period]; 
+			   
+			   
+				 if (OverBought > 0 && OverSold > 0)  
+				 {
+				
+				SignalBulls[period]=OverBought/100*( Bulls[period]+Bears[period]);
+				SignalBears[period] =OverSold/100*( Bulls[period]+Bears[period]);
+				}
+				else			
+				{
+				  BullsAVGofAVG.update(mode); 
+                  BearsAVGofAVG.update(mode); 
+				  if  (!BullsAVGofAVG.DATA.hasData(period) || !BearsAVGofAVG.DATA.hasData(period)) 
+				  {
+				   return;
+				  }
+				  
+				SignalBulls[period]=BullsAVGofAVG.DATA[period];
+				SignalBears[period]=BearsAVGofAVG.DATA[period];
+			    }
+			
+}

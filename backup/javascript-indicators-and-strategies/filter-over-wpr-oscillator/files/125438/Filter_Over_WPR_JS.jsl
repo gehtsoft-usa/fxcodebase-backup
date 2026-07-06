@@ -1,0 +1,90 @@
+function Init()
+{
+    indicator.name("Filter over WPR oscillator");
+    indicator.description("Filter over WPR oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 14);
+    indicator.parameters.addInteger("PercentD", "Percent D", "", 3);
+    indicator.parameters.addInteger("Smooth", "Smooth", "", 5);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr1", "Strong bears color", "Strong bears color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("clr2", "Strong bulls color", "Strong bulls color", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("clr3", "Potential to bulls color", "Potential to bulls color", core.rgb(0, 255, 255));
+    indicator.parameters.addColor("clr4", "Potential to bears color", "Potential to bears color", core.rgb(255, 128, 64));
+}
+
+var first;
+var source = null;
+var Period;
+var PercentD;
+var Smooth;
+var Stoch;
+var trend;
+var FilterOverWPR=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    PercentD=instance.parameters.PercentD;
+    Smooth=instance.parameters.Smooth;
+    first = source.first()+2;
+    trend = instance.addInternalStream(first, 0);
+    Stoch = core.indicators.create("STOCHASTIC", source, Period, PercentD, Smooth, "EMA", "EMA");
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.PercentD + ", " + instance.parameters.Smooth + ")";
+    instance.name(name);
+    FilterOverWPR = instance.addStream("FilterOverWPR", core.Bar, name + ".FilterOverWPR", "FilterOverWPR", instance.parameters.clr1, first);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    Stoch.update(mode);
+    var PK=Stoch.K[period];
+    var PD=Stoch.D[period];
+    FilterOverWPR[period]=1;
+    if (PK>20 && PK>PD && PK<40 && PD<40) 
+    {
+     trend[period]=1;
+    } 
+    else if (PK<=20) 
+    {
+     trend[period]=2;
+    } 
+    else if (PK<80 && PK<PD && PK>60 && PD>60) 
+    {
+     trend[period]=3;
+    } 
+    else if (PK>=80) 
+    {
+     trend[period]=4;
+    } 
+    else
+    {
+     trend[period]=trend[period-1]; 
+    }
+    
+    if (trend[period]==1) 
+    {
+     FilterOverWPR.setColor(period, instance.parameters.clr3);
+    } 
+    else if (trend[period]==2) 
+    {
+     FilterOverWPR.setColor(period, instance.parameters.clr1);
+    } 
+    else if (trend[period]==3) 
+    {
+     FilterOverWPR.setColor(period, instance.parameters.clr4);
+    } 
+    else
+    {
+     FilterOverWPR.setColor(period, instance.parameters.clr2);
+    }
+   } 
+}
+

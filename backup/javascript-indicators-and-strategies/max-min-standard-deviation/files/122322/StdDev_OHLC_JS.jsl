@@ -1,0 +1,94 @@
+function Init()
+{
+    indicator.name("StdDev OHLC indicator");
+    indicator.description("StdDev OHLC indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 20);
+    indicator.parameters.addString("Method", "Method", "", "OHLC");
+    indicator.parameters.addStringAlternative("Method", "OHLC", "", "OHLC");
+    indicator.parameters.addStringAlternative("Method", "HL", "", "HL");
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Oclr", "Open Color", "Open Color", core.rgb(255, 255, 0));
+    indicator.parameters.addColor("Hclr", "High Color", "High Color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("Lclr", "Low Color", "Low Color", core.rgb(0, 255, 255));
+    indicator.parameters.addColor("Cclr", "Close Color", "Close Color", core.rgb(0, 255, 0));
+}
+
+var first;
+var source = null;
+var Period;
+var Method;
+var StdDev_O;
+var StdDev_H;
+var StdDev_L;
+var StdDev_C;
+var Buff_O=null;
+var Buff_H=null;
+var Buff_L=null;
+var Buff_C=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    Method=instance.parameters.Method;
+    first = source.first()+2;
+    StdDev_O = core.indicators.create("STDDEV", source.open, Period);
+    StdDev_H = core.indicators.create("STDDEV", source.high, Period);
+    StdDev_L = core.indicators.create("STDDEV", source.low, Period);
+    StdDev_C = core.indicators.create("STDDEV", source.close, Period);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ")";
+    instance.name(name);
+    Buff_O = instance.addStream("Buff_O", core.Bar, name + ".Open", "Open", instance.parameters.Oclr, first);
+    Buff_H = instance.addStream("Buff_H", core.Bar, name + ".High", "High", instance.parameters.Hclr, first);
+    Buff_L = instance.addStream("Buff_L", core.Bar, name + ".Low", "Low", instance.parameters.Lclr, first);
+    Buff_C = instance.addStream("Buff_C", core.Bar, name + ".Close", "Close", instance.parameters.Cclr, first);
+}
+
+function Update(period, mode)
+{
+   if (period>first+Period) 
+   {
+    StdDev_O.update(mode);
+    StdDev_H.update(mode);
+    StdDev_L.update(mode);
+    StdDev_C.update(mode);
+    var Avg=(StdDev_O.DATA[period]+StdDev_H.DATA[period]+StdDev_L.DATA[period]+StdDev_C.DATA[period])/4;
+    var Temp_O=StdDev_O.DATA[period]-Avg;
+    var Temp_H=StdDev_H.DATA[period]-Avg;
+    var Temp_L=StdDev_L.DATA[period]-Avg;
+    var Temp_C=StdDev_C.DATA[period]-Avg;
+    if (Method=="HL") 
+    {
+     Temp_O=0;
+     Temp_C=0;
+    }
+    var max=Math.max(Temp_O,Temp_H,Temp_L,Temp_C);
+    var min=Math.min(Temp_O,Temp_H,Temp_L,Temp_C);
+    if ((Temp_O-max)*(Temp_O-min)!=0) 
+    {
+     Temp_O=null;
+    }
+    if ((Temp_H-max)*(Temp_H-min)!=0) 
+    {
+     Temp_H=null;
+    }
+    if ((Temp_L-max)*(Temp_L-min)!=0) 
+    {
+     Temp_L=null;
+    }
+    if ((Temp_C-max)*(Temp_C-min)!=0) 
+    {
+     Temp_C=null;
+    }
+    Buff_O[period]=Temp_O;
+    Buff_H[period]=Temp_H;
+    Buff_L[period]=Temp_L;
+    Buff_C[period]=Temp_C;
+   } 
+}
+

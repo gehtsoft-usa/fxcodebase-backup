@@ -1,0 +1,78 @@
+function Init()
+{
+    indicator.name("Dynamic RS Lines indicator");
+    indicator.description("Dynamic RS Lines indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Cclr", "Central line color", "Central line color", core.rgb(255, 255, 0));
+    indicator.parameters.addInteger("Cwidth", "Central line width", "Central line width", 2, 1, 5);
+    indicator.parameters.addInteger("Cstyle", "Central line style", "Central line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("Cstyle", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Uclr", "Upper line color", "Upper line color", core.rgb(0, 0, 255));
+    indicator.parameters.addInteger("Uwidth", "Upper line width", "Upper line width", 1, 1, 5);
+    indicator.parameters.addInteger("Ustyle", "Upper line style", "Upper line style", core.LINE_DASH);
+    indicator.parameters.setFlag("Ustyle", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Lclr", "Lower line color", "Lower line color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("Lwidth", "Lower line width", "Lower line width", 1, 1, 5);
+    indicator.parameters.addInteger("Lstyle", "Lower line style", "Lower line style", core.LINE_DASH);
+    indicator.parameters.setFlag("Lstyle", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Central=null;
+var Upper=null;
+var Lower=null;
+
+function Prepare()
+{
+    source = instance.source;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ")";
+    instance.name(name);
+    Central = instance.addStream("Central", core.Line, name + ".Central", "Central", instance.parameters.Cclr, first);
+    Central.setWidth(instance.parameters.Cwidth);
+    Central.setStyle(instance.parameters.Cstyle);
+    Upper = instance.addStream("Upper", core.Line, name + ".Upper", "Upper", instance.parameters.Uclr, first);
+    Upper.setWidth(instance.parameters.Uwidth);
+    Upper.setStyle(instance.parameters.Ustyle);
+    Lower = instance.addStream("Lower", core.Line, name + ".Lower", "Lower", instance.parameters.Lclr, first);
+    Lower.setWidth(instance.parameters.Lwidth);
+    Lower.setStyle(instance.parameters.Lstyle);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    if (source.high[period]<source.high[period-1] && source.high[period]<Central[period-1]) 
+    {
+     Central[period]=source.high[period];
+     Lower[period]=source.high[period];
+     Upper[period]=Upper[period-1];
+    } 
+    else if (source.low[period]>source.low[period-1] && source.low[period]>Central[period-1]) 
+    {
+     Central[period]=source.low[period];
+     Upper[period]=source.low[period];
+     Lower[period]=Lower[period-1];
+    } 
+    else
+    {
+     Central[period]=Central[period-1];
+     if (Central[period-1]==Upper[period-1]) 
+     {
+      Upper[period]=Central[period-1];
+      Lower[period]=Lower[period-1];
+     } 
+     else if (Central[period-1]==Lower[period-1]) 
+     {
+      Lower[period]=Central[period-1];
+      Upper[period]=Upper[period-1];
+     }
+    }
+   } 
+}
+

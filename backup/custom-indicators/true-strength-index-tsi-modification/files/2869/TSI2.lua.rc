@@ -1,0 +1,199 @@
+﻿default=enu
+[enu]
+codepage=1252
+name=True Strength Index
+description=Is a variation of the Relative Strength Indicator which uses a doubly-smoothed exponential moving average of price momentum to eliminate choppy price changes and spot trend changes.
+param_N_name=Long term
+param_N_description=The number of periods to average the Price Momentum.
+param_M_name=Short term
+param_M_description=The number of periods to smooth the Average Momentum.
+param_clrTSI_name=Line color
+param_clrTSI_description=The color of the True Strength Index line.
+
+[ara]
+codepage=1256
+name=مؤشر القوي الحقيقي
+description=هو الاختلاف من مؤشر القوة النسبية والذي يستخدم على نحو مضاعف ، ممهدة المتوسط المتحرك الأسي من زخم السعر للقضاء على تغيرات الأسعار متذبذبة وتغير الاتجاه في النمط.
+param_N_name=اعتمد فترة طويلة
+param_N_description=عدد الفترات ل average the Average Momentum
+param_M_name=اعتمد فترة قصيرة
+param_M_description=عدد الفترات ل smooth the Average Momentum
+param_clrTSI_name=لون الخط
+param_clrTSI_description=لون خط مؤشر القوة الحقيقة
+
+[chs]
+codepage=936
+name=真实强弱指数
+description=TSI的一个变量，该变量使用的是经过双重平滑的指数平均线，以减少价格震荡以及趋势变化的影响
+param_N_name=长期
+param_N_description=平均价格动力时期
+param_M_name=短期
+param_M_description=平滑平均动力时期
+param_clrTSI_name=线颜色
+param_clrTSI_description=真实强弱指数线颜色
+
+[cht]
+codepage=950
+name=真實強弱指數
+description=TSI的一個變量，該變量使用的是經過雙重平滑的指數平均線，以減少價格震盪以及趨勢變化的影響
+param_N_name=長期
+param_N_description=平均價格動力時期
+param_M_name=短期
+param_M_description=平滑平均動力時期
+param_clrTSI_name=線顏色
+param_clrTSI_description=真實強弱指數線顏色
+
+[ctt]
+codepage=950
+name=真實強弱指數
+description=TSI的一個變量，該變量使用的是經過雙重平滑的指數平均線，以減少價格震盪以及趨勢變化的影響
+param_N_name=長期
+param_N_description=平均價格動力時期
+param_M_name=短期
+param_M_description=平滑平均動力時期
+param_clrTSI_name=線顏色
+param_clrTSI_description=真實強弱指數線顏色
+
+[deu]
+codepage=1252
+name=True Strength Index
+description=Eine Variation des Relative-Strenght Indikators, die einen geglätteten gleitenden  Exponentialdurchschnitt des Presimomentums benutzt, um sporadische und unvermittelte Preis- und Trendschwankungen richtig abzuwickeln.
+param_N_name=Lange Periode definieren
+param_N_description=Anzahl von Periodenn in denen aus dem Preismomentum der Mittelwert gebildet wird.
+param_M_name=Kurze Periode definieren
+param_M_description=Anzahl von Perioden in denen durchschnittliches Momentum ausgeglichen wird.
+param_clrTSI_name=Linienfarbe
+param_clrTSI_description=Farbe der True-Strength-Index Linie
+
+[esp]
+codepage=1252
+name=Índice de Fuerza Real
+description=Es una variación del Indicador de Potencia Relativa, el cual utiliza una Media Móvil exponencial de movimiento de precios para eliminar cambios en precios de rangos y tendencias.
+param_N_name=Determinar período largo
+param_N_description=El número de periodos para promediar la tendencia de precios.
+param_M_name=Determinar período corto
+param_M_description=El número de periodos para solucionar la tendencia promedio.
+param_clrTSI_name=Color de la línea
+param_clrTSI_description=El color de la línea de fuerza real
+
+[fra]
+codepage=1252
+name=Indice de force réelle
+description=Est une variante de l'Indicateur de Force Relative qui utilise une moyenne de déplacement exponentielle doublement lissée sur le momentum du prix pour éliminer le prix variable.
+param_N_name=Mettre en place une période long terme
+param_N_description=Le nombre de périodes pour faire la moyenne du momentum des prix.
+param_M_name=Mettre en place une période court terme
+param_M_description=Le nombre de périodes pour lisser la moyenne du momentum.
+param_clrTSI_name=Couleur de la ligne
+param_clrTSI_description=La couleur de la ligne de l'indice de la force réelle.
+
+[jpn]
+codepage=932
+name=トゥルー・ストレングス指数
+description=断続的なレート変化及びトレンド変化を排除するため、二重に平滑化されたプライスモメンタムの指数移動平均線を使用するRSIと同種の指標です。
+param_N_name=ロング・ピリオドを設定
+param_N_description=プライスモメンタムを平均化するための期間数
+param_M_name=ショート・ピリオドを設定
+param_M_description=平均モメンタムを平滑化するための期間数
+param_clrTSI_name=ラインの色
+param_clrTSI_description=トゥルー・ストレングス指数ラインの色
+
+[kor]
+codepage=949
+name=순수 강도 인덱스
+description=끊기는 가격 변동을 방지하기 위하여 두번 부드럽게 만든 이동평균가격 모멘텀을 사용한 상대강도지표의 변화
+param_N_name=장기간 정하기
+param_N_description=가격변동 평균의 기간개수
+param_M_name=단기간 정하기
+param_M_description=평균모멘텀을 부드럽기 만들기 위한 기간개수
+param_clrTSI_name=선 색상
+param_clrTSI_description=순수 강도 인덱스 선 색상
+
+[rus]
+codepage=1251
+name=Индекс истинной силы
+description=Вариант индекса относительной силы, который, отсеивая мелкие колебания цены, выявляет изменения тренда.
+param_N_name=Длинный период
+param_N_description=Количество периодов для среднего ценового момента.
+param_M_name=Короткий период
+param_M_description=Количество периодов для сглаживания ценового момента.
+param_clrTSI_name=Цвет линии
+param_clrTSI_description=Цвет линии индекса истинной силы.
+
+[tur]
+codepage=1254
+name=Gerçek Güç Endeksi
+description=Göreli Güç Endeksinin bir türevidir. İki kere düzlenmiş üstel hareketli ortalama kullanarak fiyat değişimlerindeki sapmaları ortadan kaldırır ve trend dönüşlerini gösterir.
+param_N_name=Uzun dönem
+param_N_description=Fiyat Momentumu ortalaması için periyot sayısı.
+param_M_name=Kısa dönem
+param_M_description=Ortalama Momentum düzlemesi için periyot sayısı.
+param_clrTSI_name=Çizgi Rengi
+param_clrTSI_description=Gerçek Güç Endeksi çizgi rengi
+
+[ita]
+codepage=1252
+name=True Strength Index
+description=E' una variazione del Relative Strength Indicator che utilizza una media mobile esponenziale doppiamente smorzata del price momentum per eliminare l'erraticità dei prezzi e cambiamenti nel trend
+param_N_name=Lungo periodo
+param_N_description=Il numeri di periodi per i quali mediare il Price Momentum
+param_M_name=Breve periodo
+param_M_description=Il numero di periodi per i quali smorzare l'Average Momentum
+param_clrTSI_name=Colore della linea
+param_clrTSI_description=Il colore della linea del True Strength Index
+
+[heb]
+codepage=1255
+name=מדד העוצמה האמיתית
+description=גרסה מוחלקת של מדד העוצמה היחסית.
+param_N_name=טווח ארוך
+param_N_description=מספר התקופות לחישוב הממוצע של מומנטום המחיר.
+param_M_name=טווח קצר
+param_M_description=מספר התקופות להחלקת ממוצע המומנטום
+param_clrTSI_name=צבע קו
+param_clrTSI_description=צבע הקו של מדד העוצמה האמיתית.
+
+[pol]
+codepage=1250
+name=True Strength Index
+description=Odmiana Relative Strength Index używająca podwójnie gładzoną eksponencjalną średnią kroczącą momentum cen celem eliminacji lokalnych ruchów cen i
+param_N_name=Długi okres
+param_N_description=Liczba okresów do wygładzania momentum cenowego
+param_M_name=Krótki okres
+param_M_description=Liczba okresów do wygładzania średniej momentum
+param_clrTSI_name=Kolor linii
+param_clrTSI_description=Kolor linii True Strength Index
+
+[cze]
+codepage=1250
+name=Index skutečné síly
+description=Je variací RSI, ktreý používá dvojitě vyhlazený exponenciální klouzavý průměr cenového momenta k vyhlazení cenových chyb a rozpoznání změny trendu
+param_N_name=Dlouhodobý
+param_N_description=Počet period na průměrování cenového momentu.
+param_M_name=Krátkodobý
+param_M_description=Počet period na vyhlazení průměrného momentu.
+param_clrTSI_name=Barva linky
+param_clrTSI_description=Barva linky True Strength Index
+
+[por]
+codepage=1252
+name=Índice de Força Real
+description=É uma variação do Indicador de Potência Relativa, o qual utiliza uma Média Móvel Exponencial de movimento de preços para eliminar mudanças nos preços de intervalos e tendências.
+param_N_name=Determinar longo prazo
+param_N_description=O número de períodos para fazer a média da tendência de preços.
+param_M_name=Determinar curto prazo
+param_M_description=O número de períodos para solucionar a Tendência Média.
+param_clrTSI_name=Cor da linha
+param_clrTSI_description=A cor da linha do Índice de Força Real
+
+[gre]
+codepage=1253
+name=True Strength Index (TSI)
+description=Είναι μια παραλλαγή του Relative Strength Index, που χρησιμοποιεί έναν εκθετικό κινητό μέσο όρο ορμής τιμής που έχει εξομαλυνθεί διπλά για να εξαλείφει ασταθείς μεταβολές τιμών και να εντοπίζει μεταβολές τάσεων.
+param_N_name=Μακροπρόθεσμος
+param_N_description=Ο αριθμός περιόδων για το μέσο όρο του δείκτη Price Momentum.
+param_M_name=Βραχυπρόθεσμος
+param_M_description=Ο αριθμός περιόδων για την εξομάλυνση του Average Momentum.
+param_clrTSI_name=Χρώμα γραμμής
+param_clrTSI_description=Το χρώμα της γραμμής του True Strength Index
+

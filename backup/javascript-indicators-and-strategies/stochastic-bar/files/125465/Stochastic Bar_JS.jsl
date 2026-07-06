@@ -1,0 +1,147 @@
+function Init()
+{
+    indicator.name("Stochastic Bar");
+    indicator.description("Stochastic Bar");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.setTag("group", "Custom");
+
+    indicator.parameters.addGroup("Stochastic Calculation");
+	
+	indicator.parameters.addInteger("K", "Number of periods for %K", "The number of periods for %K.", 5, 2, 1000);
+    indicator.parameters.addInteger("SD", "%D slowing periods", "The number of periods for slow %D.", 3, 2, 1000);
+    indicator.parameters.addInteger("D", "Number of periods for %D", "The number of periods for %D.", 3, 2, 1000);
+
+    indicator.parameters.addString("MVAT_K", "Smoothing type for %K", "The type of smoothing algorithm for %K.", "MVA");
+    indicator.parameters.addStringAlternative("MVAT_K", "MVA", "MVA", "MVA");
+    indicator.parameters.addStringAlternative("MVAT_K", "EMA", "EMA", "EMA");
+    indicator.parameters.addStringAlternative("MVAT_K", "MetaTrader", "The MetaTrader algorithm.", "MT");
+	indicator.parameters.addStringAlternative("MVAT_K" , "LWMA", "", "LWMA");	
+	indicator.parameters.addStringAlternative("MVAT_K" , "KAMA", "", "KAMA");	
+	indicator.parameters.addStringAlternative("MVAT_K" , "SMMA", "", "SMMA");	
+	indicator.parameters.addStringAlternative("MVAT_K" , "TMA", "", "TMA");	
+	indicator.parameters.addStringAlternative("MVAT_K" , "VIDYA", "", "VIDYA");	
+	indicator.parameters.addStringAlternative("MVAT_K" , "WMA", "", "WMA");	
+    
+    indicator.parameters.addString("MVAT_D", "Smoothing type for %D", "The type of smoothing algorithm for %D.", "MVA");
+    indicator.parameters.addStringAlternative("MVAT_D", "MVA", "MVA", "MVA");
+    indicator.parameters.addStringAlternative("MVAT_D", "EMA", "EMA", "EMA");
+	indicator.parameters.addStringAlternative("MVAT_D" , "LWMA", "", "LWMA");	
+	indicator.parameters.addStringAlternative("MVAT_D" , "KAMA", "", "KAMA");	
+	indicator.parameters.addStringAlternative("MVAT_D" , "SMMA", "", "SMMA");	
+	indicator.parameters.addStringAlternative("MVAT_D" , "TMA", "", "TMA");	
+	indicator.parameters.addStringAlternative("MVAT_D" , "VIDYA", "", "VIDYA");	
+	indicator.parameters.addStringAlternative("MVAT_D" , "WMA", "", "WMA");	
+	
+	indicator.parameters.addGroup("Style");
+	indicator.parameters.addDouble("OB", "OB Level", "", 80);
+    indicator.parameters.addDouble("OS", "OS Level", "", 20);
+	indicator.parameters.addColor("Up", "Up color", "", core.rgb(0, 255, 0));
+	indicator.parameters.addColor("OBC", "Up in OB Zone ", "", core.rgb(0, 200, 0));
+	indicator.parameters.addColor("Dn", "Down color", "", core.rgb(255, 0, 0));
+	indicator.parameters.addColor("OSC", "Down in OS Zone ", "", core.rgb(200, 0, 0));
+	indicator.parameters.addColor("No", "Neutral color", "", core.rgb(128, 128, 128));
+	 indicator.parameters.addInteger("Transparency", "Transparency", "", 40,0,100);
+
+
+}
+
+var k;
+var d;
+var sd;
+var averageTypeK = null;
+var averageTypeD = null;
+var OB, OS;
+var firstPeriod;
+var source = null;
+
+var Transparency;
+var STOCHASTIC;
+var  open=null;
+var  close=null;
+var K, D;
+
+var No;
+
+function Prepare()
+{   
+   No = instance.parameters.No;
+   OB = instance.parameters.OB;
+   OS = instance.parameters.OS;
+	Transparency= (100 -instance.parameters.Transparency);
+	
+	 k = instance.parameters.K;
+    d = instance.parameters.D;
+    sd = instance.parameters.SD;
+	
+	averageTypeK = instance.parameters.MVAT_K;
+    averageTypeD = instance.parameters.MVAT_D;
+    
+    source = instance.source;
+	
+	STOCHASTIC=core.indicators.create("STOCHASTIC",  source, k , d ,sd , averageTypeK , averageTypeD);
+	K=STOCHASTIC.getStream(0);
+	D=STOCHASTIC.getStream(1);
+	
+    first = STOCHASTIC.getStream(1).first();
+
+    var name = profile.id() + " Stochastic. " + k + ", " + d + ", " + sd + ", " + averageTypeK + ", " + averageTypeD+ "";
+    instance.name(name);
+    
+
+	
+	open = instance.addStream("open", core.Line, name, "", core.rgb(0, 0, 0), first);
+    close = instance.addStream("high", core.Line, name, "", core.rgb(0, 0, 0), first);   
+   instance.createChannelGroup("Overlay","Overlay" , open, close,  No, Transparency);
+}
+
+function Update(period, mode)
+{
+    open[period] = 100;
+	close[period] = 0;
+
+	
+	open.setColor(period,  No);	
+
+    if (period < first)  
+    {
+     return;
+    }	
+	
+	STOCHASTIC.update(mode);
+		
+		
+	
+	    if (K[period]> D[period]) 
+	    {
+				 if (K[period]> OB) 
+				 {
+				  open.setColor(period,  instance.parameters.OBC);
+				 } 
+				 else
+				 {
+				  open.setColor(period, instance.parameters.Up);
+				 }
+		}
+		else if (K[period]< D[period]) 
+		{
+				if (K[period]< OS) 
+				{
+				 open.setColor(period, instance.parameters.OSC);
+				} 
+				else
+				{
+				 open.setColor(period, instance.parameters.Dn);
+				} 
+		}
+		else
+		{
+		 open.setColor(period, No);			
+	    }
+}
+
+
+
+
+
+

@@ -1,0 +1,118 @@
+function Init()
+{
+    indicator.name("Wide Range Body");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Range Period", "", 3, 1, 100);
+    indicator.parameters.addInteger("Shift", "Shift", "Shift", 0, 0 , 100);
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UP", "Color of Top", "", core.rgb(0, 255, 0));
+	 indicator.parameters.addColor("DOWN", "Color of Bottom", "", core.rgb(255, 0, 0));
+	  indicator.parameters.addColor("NE", "Color of Mixed", "", core.rgb(0, 0, 255));
+	indicator.parameters.addInteger("Size", "Font Size", "", 10, 1 , 100);	 
+}
+
+var Period;
+var Shift;
+
+var first;
+var source = null;
+var Size;
+
+var up,down, neu,ned;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+	Size = instance.parameters.Size;
+    Shift = instance.parameters.Shift;
+    source = instance.source;
+    first = source.first()+ Shift  +Period;
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ", " + tostring(Shift) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+  
+	  up = instance.createTextOutput ("UP", "Up", "Wingdings", Size, core.H_Center, core.V_Top, instance.parameters.UP, 0);
+    down = instance.createTextOutput ("DN", "Dn", "Wingdings", Size, core.H_Center, core.V_Bottom, instance.parameters.DOWN, 0);
+	 neu = instance.createTextOutput ("NU", "Ne", "Wingdings", Size, core.H_Center, core.V_Bottom, instance.parameters.NE, 0);
+	  ned = instance.createTextOutput ("ND", "Ne", "Wingdings", Size, core.H_Center, core.V_Top, instance.parameters.NE, 0);
+    }
+}
+
+function Update(period)
+{
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}	
+	
+	var UP = true;
+	var DOWN = true;
+	var NEUTRAL = true;
+
+	period = period-Shift;
+	
+	  down.setNoData (period);
+	  up.setNoData (period);
+	  neu.setNoData (period);
+	  ned.setNoData (period); 
+
+	var i;
+	
+	for (i = 1; i<=Period; i++) 
+	{
+	
+			if (Math.abs(source.open[period]  - source.close[period]) < Math.abs(source.open[period-i]  - source.close[period-i]) || source.close[period-i] < source.open[period-i]	|| source.close[period]  < source.open[period])
+			{
+			 UP = false;
+			}
+			
+			if (Math.abs(source.open[period]  - source.close[period]) < Math.abs(source.open[period-i]  - source.close[period-i]) || source.close[period-i]  > source.open[period-i] || source.close[period]  > source.open[period])
+			{
+			 DOWN = false;
+			}
+		   
+		   	if  (Math.abs(source.open[period]  - source.close[period]) < Math.abs(source.open[period-i]  - source.close[period-i]))  
+		   	{
+			 NEUTRAL = false;
+			}
+	}
+	
+		
+	if (UP) 
+	{
+	   up.set(period , source.high[period], "\108");  
+	   down.setNoData (period);
+	   neu.setNoData (period);
+	   ned.setNoData (period);
+    }
+
+    if (DOWN) 
+    {	
+	 down.set(period, source.low[period], "\108");	
+	  up.setNoData (period);
+	  neu.setNoData (period);
+	  ned.setNoData (period);
+     }	
+	 
+	   if (NEUTRAL && !UP && !DOWN) 
+	   {	
+				 if  (source.open[period]  < source.close[period]) 
+				 {
+				  neu.set(period, source.low[period], "\108");
+				 } 
+				 else
+				 {	 
+				  ned.set(period, source.high[period], "\108");
+				 }
+	  down.setNoData (period);
+	  up.setNoData (period);
+     }	
+    
+}
+

@@ -1,0 +1,80 @@
+//initializes the indicator
+function Init()
+{
+    indicator.name("TSI");
+    indicator.description("True strength index");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+    indicator.setTag("group", "Oscillators");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("N", "Smooth 1", "Smooth 1", 7);
+    indicator.parameters.addInteger("M", "Smooth 2", "Smooth 2", 14);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Line color", "Line color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("width", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LEVEL_STYLE);
+}
+
+var first = 0;
+var source = null;
+var TSI = null;
+var m, n;
+var deltaFirst, delta, absDelta, ema_r1, ema_r2, ema_s1, ema_s2;
+
+//initializes the instance of the indicator
+function Prepare(onlyName)
+{
+    source = instance.source;
+    n = instance.parameters.N;
+    m = instance.parameters.M;
+
+    var name = profile.id() + "(" + instance.source.name() + ")";
+    instance.name(name);
+  
+    if (onlyName == true)
+        return ;
+    deltaFirst = source.first() + 1;
+    delta = instance.addInternalStream(deltaFirst, 0);
+    absDelta = instance.addInternalStream(deltaFirst, 0);
+
+    ema_r1 = core.indicators.create("EMA", delta, n);
+    ema_r2 = core.indicators.create("EMA", absDelta, n);
+    ema_s1 = core.indicators.create("EMA", ema_r1.DATA, m);
+    ema_s2 = core.indicators.create("EMA", ema_r2.DATA, m);
+
+    first = Math.max(ema_s1.DATA.first(), ema_s2.DATA.first());
+
+    TSI = instance.addStream("TSI", core.Line, name, "TSI", instance.parameters.clr,  first)
+    TSI.setWidth(instance.parameters.width);
+    TSI.setStyle(instance.parameters.style);
+}
+
+// calculate the value
+function Update(period, mode)
+{
+    if (period >= deltaFirst)
+    {
+        delta[period] = source[period] - source[period - 1];
+        absDelta[period] = Math.abs(delta[period]);
+    }
+
+    ema_r1.update(mode);
+    ema_r2.update(mode);
+    ema_s1.update(mode);
+    ema_s2.update(mode);
+
+    if (period >= first)
+    {
+        if (ema_s2.DATA[period] == 0)
+        {
+            TSI[period] = 0;
+        }
+        else
+        {
+            TSI[period] = 100 * ema_s1.DATA[period] / ema_s2.DATA[period];
+        }
+    }
+}

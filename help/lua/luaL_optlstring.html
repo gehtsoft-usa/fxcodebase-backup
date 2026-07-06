@@ -1,0 +1,30 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - luaL_optlstring</title>
+</head>
+<body>
+<h3><a name="luaL_optlstring"><code>luaL_optlstring</code></a></h3>
+<pre>const char *luaL_optlstring (lua_State *L,
+                             int narg,
+                             const char *d,
+                             size_t *l);</pre>
+
+<p>
+If the function argument <code>narg</code> is a string,
+returns this string.
+If this argument is absent or is <b>nil</b>,
+returns <code>d</code>.
+Otherwise, raises an error.
+
+
+<p>
+If <code>l</code> is not <code>NULL</code>,
+fills the position <code>*l</code> with the results's length.
+
+
+
+
+
+<hr>
+</body>
+</html>

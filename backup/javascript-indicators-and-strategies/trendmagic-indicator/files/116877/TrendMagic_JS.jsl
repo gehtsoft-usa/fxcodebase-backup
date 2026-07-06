@@ -1,0 +1,79 @@
+function Init()
+{
+    indicator.name("TrendMagic Indicator");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    
+    indicator.parameters.addInteger("CCI", "CCI", "No description", 50);
+    indicator.parameters.addInteger("ATR", "ATR", "No description", 5);
+
+    indicator.parameters.addColor("UP_color", "Color of UP", "Color of UP", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DN_color", "Color of DN", "Color of DN", core.rgb(255, 0, 0));
+}
+
+var pCCI;
+var pATR;
+
+var first;
+var source = null;
+var ATR = null;
+var CCI = null;
+
+var thisCCI, lastCCI;
+
+function Prepare()
+{
+    pCCI = instance.parameters.CCI;
+    pATR = instance.parameters.ATR;
+    source = instance.source;
+    ATR = core.indicators.create("ATR", source, pATR);
+    CCI = core.indicators.create("CCI", source, pCCI);
+    first = ATR.DATA.first();
+    var name = profile.id() + "(" + source.name() + ", " + pATR + ", " + pCCI + ")";
+    instance.name(name);
+    bufferUp = instance.addStream("UP", core.Line, name + ".UP", "UP", instance.parameters.UP_color, first);
+    bufferDn = instance.addStream("DN", core.Line, name + ".DN", "DN", instance.parameters.DN_color, first);
+}
+
+function Update(period, mode)
+{
+    ATR.update(mode);
+    CCI.update(mode);
+    if (period>=first) 
+    {
+     thisCCI=CCI.DATA[period];
+     lastCCI=CCI.DATA[period-1];
+     if (thisCCI>=0 && lastCCI<0) 
+     { 
+      bufferUp[period-1]=bufferDn[period-1] 
+     }
+     if (thisCCI<=0 && lastCCI>0) 
+     { 
+      bufferDn[period-1]=bufferUp[period-1] 
+     }
+
+     if (thisCCI>=0) 
+     {
+       bufferUp[period]=source.low[period]-ATR.DATA[period];
+       if (bufferUp[period]<bufferUp[period-1]) 
+       {
+        bufferUp[period]=bufferUp[period-1];
+       }
+     }
+     if (thisCCI<=0) 
+     {
+       bufferDn[period]=source.high[period]+ATR.DATA[period];
+       if (bufferDn[period]>bufferDn[period-1]) 
+       {
+        bufferDn[period]=bufferDn[period-1];
+       } 
+      }
+     }  
+      else
+      {
+      bufferDn[period]=0;
+      bufferUp[period]=0;     
+    }
+}
+

@@ -1,0 +1,116 @@
+function Init()
+{
+    indicator.name("Discipline oscillator");
+    indicator.description("Discipline oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 10);
+    indicator.parameters.addString("Price", "Price", "", "0");
+    indicator.parameters.addStringAlternative("Price", "close", "", "0");
+    indicator.parameters.addStringAlternative("Price", "open", "", "1");
+    indicator.parameters.addStringAlternative("Price", "high", "", "2");
+    indicator.parameters.addStringAlternative("Price", "low", "", "3");
+    indicator.parameters.addStringAlternative("Price", "median", "", "4");
+    indicator.parameters.addStringAlternative("Price", "typical", "", "5");
+    indicator.parameters.addStringAlternative("Price", "weighted", "", "6");
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("PUclr", "Positive UP color", "Positive UP color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("PDclr", "Positive DN color", "Positive DN color", core.rgb(0, 128, 0));
+    indicator.parameters.addColor("NUclr", "Negative UP color", "Negative UP color", core.rgb(128, 0, 64));
+    indicator.parameters.addColor("NDclr", "Negative DN color", "Negative DN color", core.rgb(255, 128, 255));
+}
+
+var first;
+var source = null;
+var Period;
+var Price;
+var TickSource;
+var Value;
+var D=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    Price=tonumber(instance.parameters.Price);
+    first = source.first()+2;
+    Value = instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.Price + ")";
+    instance.name(name);
+    D = instance.addStream("D", core.Bar, name + ".D", "D", instance.parameters.PUclr, first);
+   if (Price==0) 
+   {
+    TickSource = source.close;
+   }
+   else if (Price==1) 
+   {
+    TickSource = source.open;
+   } 
+   else if (Price==2) 
+   {
+    TickSource = source.high;
+   } 
+   else if (Price==3) 
+   {
+    TickSource = source.low;
+   } 
+   else if (Price==4) 
+   {
+    TickSource = source.median;
+   } 
+   else if (Price==5) 
+   {
+    TickSource = source.typical;
+   } 
+   else
+   {
+     TickSource = source.wieghted;
+   }
+}
+
+function Update(period, mode)
+{
+   if (period>first+Period) 
+   {
+    var tmp=Math.minmax(source, period-Period+1, period);
+    var Min=tmp[0];
+    var Max=tmp[1]
+    var Range=Max-Min;
+    if (Range!=0) 
+    {
+     Value[period]=((TickSource[period]-Min)/Range-0.5+Value[period-1])*2/3;
+    } 
+    else
+    {
+     Value[period]=0.999;
+    }
+    Value[period]=Math.min(Math.max(Value[period], -0.999), 0.999);
+    D[period]=(Math.log(1+Value[period])/(1-Value[period])+D[period-1])/2;
+    if (D[period]>0) 
+    {
+     if (D[period]>=D[period-1]) 
+     {
+      D.setColor(period, instance.parameters.PUclr);
+     } 
+     else
+     {
+      D.setColor(period, instance.parameters.PDclr);
+     }
+    } 
+    else
+    {
+     if (D[period]>=D[period-1]) 
+     {
+      D.setColor(period, instance.parameters.NUclr);
+     } 
+     else
+     {
+      D.setColor(period, instance.parameters.NDclr);
+     }
+    }
+   } 
+}
+

@@ -1,0 +1,145 @@
+function Init()
+{
+    indicator.name("SidusV1");
+    indicator.description("SidusV1 Cloud");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+	indicator.parameters.addGroup("Averages");
+	indicator.parameters.addString("Type", "Price Type", "", "close");
+    indicator.parameters.addStringAlternative("Type", "OPEN", "", "open");
+    indicator.parameters.addStringAlternative("Type", "HIGH", "", "high");
+    indicator.parameters.addStringAlternative("Type", "LOW", "", "low");
+    indicator.parameters.addStringAlternative("Type","CLOSE", "", "close");
+    indicator.parameters.addStringAlternative("Type", "MEDIAN", "", "median");
+    indicator.parameters.addStringAlternative("Type", "TYPICAL", "", "typical");
+    indicator.parameters.addStringAlternative("Type", "WEIGHTED", "", "weighted");
+	indicator.parameters.addInteger("LWMA1", "First LWMA Period", "First LWMA Period", 5);
+	indicator.parameters.addInteger("LWMA2", "Second LWMA Period", "Second LWMA Period", 8);
+	indicator.parameters.addInteger("EMA1", "First EMA Period", "First EMA Period", 18);
+	indicator.parameters.addInteger("EMA2", "Second EMA Period", "Second EMA Period", 28);
+	
+	indicator.parameters.addGroup("Lines Style");
+	indicator.parameters.addBoolean("Lines", "Draw Average Lines", "" , false); 
+    indicator.parameters.addColor("LWMA1c", "First LWMA Color", "Color", core.rgb(0, 0, 255));
+    indicator.parameters.addInteger("LWMA1w", "First LWMA Width", "Width", 1, 1, 5);
+    indicator.parameters.addInteger("LWMA1s", "First LWMA Style", "Style", core.LINE_SOLID);
+    indicator.parameters.setFlag("LWMA1s", core.FLAG_LEVEL_STYLE);
+    indicator.parameters.addColor("LWMA2c", "Second LWMA Color", "Color", core.rgb(255, 255, 0));
+    indicator.parameters.addInteger("LWMA2w", "Second LWMA Width", "Width", 1, 1, 5);
+    indicator.parameters.addInteger("LWMA2s", "Second LWMA Style", "Style", core.LINE_SOLID);
+    indicator.parameters.setFlag("LWMA2s", core.FLAG_LEVEL_STYLE);
+    indicator.parameters.addColor("EMA1c", "First EMA Color", "Color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("EMA1w", "First EMA Width", "Width", 1, 1, 5);
+    indicator.parameters.addInteger("EMA1s", "First EMA Style", "Style", core.LINE_SOLID);
+    indicator.parameters.setFlag("EMA1s", core.FLAG_LEVEL_STYLE);
+    indicator.parameters.addColor("EMA2c", "Second EMA Color", "Color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("EMA2w", "Second EMA Width", "Width", 1, 1, 5);
+    indicator.parameters.addInteger("EMA2s", "Second EMA Style", "Style", core.LINE_SOLID);
+    indicator.parameters.setFlag("EMA2s", core.FLAG_LEVEL_STYLE);
+
+	indicator.parameters.addGroup("Cloud Style");	
+	indicator.parameters.addInteger("Transparency", "Transparency", "", 40,0,100);
+    indicator.parameters.addColor("Up", "Color of Up", "Color of Up", core.rgb( 0, 255, 0));
+    indicator.parameters.addColor("Down", "Color of Down", "Color of Down", core.rgb(255, 0, 0));
+
+}
+
+var source = null;
+var Transparency;
+var Lines;
+var first;
+var LWMA1, LWMA2, EMA1, EMA2;
+var LWMAStreams, LWMA1Stream, LWMA2Stream;
+var EMAStreams, EMA1Stream, EMA2Stream;
+
+function Prepare()
+{
+    Transparency = 100 - instance.parameters.Transparency;
+    Lines = instance.parameters.Lines;
+    source = instance.source;
+    first = source.first();
+	
+    var name = profile.id() + "(" + source.name() 
+        + ", " + instance.parameters.LWMA1 
+        + ", " + instance.parameters.LWMA2 
+        + ", " + instance.parameters.EMA1
+        + ", " + instance.parameters.EMA2  + ")";
+
+    instance.name(name);
+    
+	LWMA1 = core.indicators.create("LWMA", source[instance.parameters.Type], instance.parameters.LWMA1);
+	LWMA2 = core.indicators.create("LWMA", source[instance.parameters.Type], instance.parameters.LWMA2);
+	EMA1 = core.indicators.create("EMA", source[instance.parameters.Type], instance.parameters.EMA1);
+	EMA2 = core.indicators.create("EMA", source[instance.parameters.Type], instance.parameters.EMA2);
+	
+	first = Math.max(LWMA1.DATA.first(), LWMA2.DATA.first(), EMA1.DATA.first(), EMA2.DATA.first());
+
+    if (Lines) 
+    {
+        LWMA1Stream=instance.addStream("LWMA1", core.Line, "LWMA1", "LWMA1", instance.parameters.LWMA1c, first);
+        LWMA1Stream.setWidth(instance.parameters.LWMA1w);
+        LWMA1Stream.setStyle(instance.parameters.LWMA1s);
+
+        LWMA2Stream=instance.addStream("LWMA2", core.Line, "LWMA2", "LWMA2", instance.parameters.LWMA2c, first);
+        LWMA2Stream.setWidth(instance.parameters.LWMA2w);
+        LWMA2Stream.setStyle(instance.parameters.LWMA2s);
+
+        EMA1Stream=instance.addStream("EMA1", core.Line, "EMA1", "EMA1", instance.parameters.EMA1c, first);
+        EMA1Stream.setWidth(instance.parameters.EMA1w);
+        EMA1Stream.setStyle(instance.parameters.EMA1s);
+
+        EMA2Stream=instance.addStream("EMA2", core.Line, "EMA2", "EMA2", instance.parameters.EMA2c, first);
+        EMA2Stream.setWidth(instance.parameters.EMA2w);
+        EMA2Stream.setStyle(instance.parameters.EMA2s);
+    }
+
+    LWMAStreams = instance.addInternalStream(first, 0);
+    EMAStreams = instance.addInternalStream(first, 0);
+	
+	instance.createChannelGroup("Cloud", "Cloud" , LWMAStreams, EMAStreams, instance.parameters.Up, Transparency);
+}
+
+function Update(period, mode)
+{
+    if (period > first && source.hasData(period)) 
+    {
+        LWMA1.update(mode);
+        LWMA2.update(mode);
+        EMA1.update(mode);
+        EMA2.update(mode);
+
+        var lwma1 = LWMA1.DATA[period];
+        var lwma2 = LWMA2.DATA[period];
+        var ema1 = EMA1.DATA[period];
+        var ema2 = EMA2.DATA[period];
+
+        if (Lines) 
+        {
+            LWMA1Stream[period]=lwma1;
+            LWMA2Stream[period]=lwma2;
+            EMA1Stream[period]=ema1;
+            EMA2Stream[period]=ema2;
+        }
+
+        var maxEMA = Math.max(ema1, ema2);
+        var minEMA = Math.min(ema1, ema2);
+        var maxLWMA = Math.max(lwma1, lwma2);
+        var minLWMA = Math.min(lwma1, lwma2);
+
+        if (minLWMA > maxEMA) 
+        {
+            LWMAStreams[period] = minLWMA;
+            EMAStreams[period] = maxEMA;
+            LWMAStreams.setColor(period, instance.parameters.Up);
+        }    
+        else if (minEMA > maxLWMA) 
+        {
+            LWMAStreams[period] = maxLWMA;
+            EMAStreams[period] = minEMA;
+            LWMAStreams.setColor(period, instance.parameters.Down);
+        }
+		
+    }
+}
+

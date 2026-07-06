@@ -1,0 +1,160 @@
+function Init()
+{
+    indicator.name("Absolute Strength Histogram");
+    indicator.description("Absolute Strength Histogram");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);	
+
+	indicator.parameters.addString("Mode", "Calculation Mode", "", "RSI");
+    indicator.parameters.addStringAlternative("Mode", "RSI", "", "RSI");
+    indicator.parameters.addStringAlternative("Mode", "STOCH", "", "STOCH")
+	indicator.parameters.addInteger("Length", "Length", "", 9, 2, 2000);   
+	indicator.parameters.addInteger("Smooth", "Smoothing Period", "", 2, 2, 2000); 
+	indicator.parameters.addString("Price", "MA Price Source", "", "close");
+	indicator.parameters.addStringAlternative("Price", "Open", "", "open");
+	indicator.parameters.addStringAlternative("Price", "High", "", "high");
+	indicator.parameters.addStringAlternative("Price", "Low", "", "low");
+	indicator.parameters.addStringAlternative("Price", "Close/Tick", "", "close");
+	indicator.parameters.addStringAlternative("Price", "Median", "", "median");
+	indicator.parameters.addStringAlternative("Price", "Typical", "", "typical");
+	indicator.parameters.addStringAlternative("Price", "Weighted", "", "weighted");
+    indicator.parameters.addString("Method", "Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "EMA" , "EMA");
+	indicator.parameters.addStringAlternative("Method", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "SMMA" , "SMMA");	
+    indicator.parameters.addStringAlternative("Method", "KAMA", "KAMA" , "KAMA");   
+    indicator.parameters.addStringAlternative("Method", "WMA", "WMA" , "WMA");
+	indicator.parameters.addStringAlternative("Method", "VIDYA", "VIDYA" , "VIDYA");
+ 
+    indicator.parameters.addColor("Bulls_color", "Color of Bulls", "Color of Bulls", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("Bears_color", "Color of Bears", "Color of Bears", core.rgb(255, 0, 0));
+}
+
+var Mode;
+var Length;
+var Smooth;
+var Price;
+var Method;
+
+var first,FIRST;
+var source = null;
+var MAsource;
+
+var AvgBulls;
+var AvgBears;
+
+var BullsOut = null;
+var BearsOut = null;
+
+var SmthBulls = null;
+var SmthBears = null;
+
+var Bulls = null;
+var Bears = null;
+
+function Prepare(nameOnly)   
+{
+	Method = instance.parameters.Method;
+    Smooth = instance.parameters.Smooth;
+    Mode = instance.parameters.Mode;
+	Length= instance.parameters.Length;
+	Price= instance.parameters.Price;
+    source = instance.source;
+   
+	
+	if (Price == "open") 
+	{
+        MAsource = source.open;
+    }
+    else if (Price == "high") 
+    {
+        MAsource = source.high;
+    }
+    else if (Price == "low") 
+    {
+        MAsource = source.low;
+    }
+    else if (Price == "close") 
+    {
+        MAsource = source.close;
+    }
+    else if (Price == "median") 
+    {
+        MAsource = source.median;
+    }
+    else if (Price == "typical") 
+    {
+        MAsource = source.typical;
+    }
+    else if (Price == "weighted") 
+    {
+        MAsource = source.weighted;
+    }
+    else
+    {
+        MAsource = source.close;
+    }
+	
+	FIRST = source.first()+1;
+	
+	Bulls=instance.addInternalStream (FIRST, 0);
+	Bears=instance.addInternalStream (FIRST, 0);
+	
+	AvgBulls= core.indicators.create(Method, Bulls, Length);
+	AvgBears= core.indicators.create(Method, Bears, Length);
+	
+	SmthBulls= core.indicators.create(Method, AvgBulls.DATA, Smooth);
+	SmthBears= core.indicators.create(Method, AvgBears.DATA, Smooth);
+	
+	 first = SmthBulls.DATA.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Mode)+ ", " + tostring(Length)+ ", " + tostring(Smooth)+ ", " + tostring(Price)+ ", " + tostring(Method) +  ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        BullsOut = instance.addStream("Bulls", core.Line, name + ".Bulls", "Bulls", instance.parameters.Bulls_color, first);
+        BearsOut = instance.addStream("Bears", core.Line, name + ".Bears", "Bears", instance.parameters.Bears_color, first);
+    }
+}
+
+function Update(period,mode)
+{
+    if (period < FIRST + Length  || !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+	      if (Mode == "RSI") 
+	      {
+		   Bulls[period]=0.5*(Math.abs(MAsource[period]-MAsource[period-1]))+(MAsource[period]-MAsource[period-1]);
+           Bears[period]=0.5*(Math.abs(MAsource[period]-MAsource[period-1]))-(MAsource[period]-MAsource[period-1]);
+          } 
+		  else
+		  {
+		   var tmp=Math.minmax(source, period- Length, period);	
+		   var  smax=tmp[1];
+           var smin=tmp[0];
+           Bulls[period]=MAsource[period] - smin;
+           Bears[period]=smax - MAsource[period];		  
+		  }
+	  
+		  
+		  AvgBulls.update(mode);
+		  AvgBears.update(mode);
+		  
+		  SmthBulls.update(mode);
+		  SmthBears.update(mode);
+		  
+		  if (!SmthBulls.DATA.hasData(period) || !SmthBears.DATA.hasData(period)) 
+		  {
+		   return;
+		  }  	  
+		
+		   BullsOut[period] = SmthBulls.DATA[period]/ source.pipSize();
+           BearsOut[period] =SmthBears.DATA[period]/ source.pipSize();	
+		   
+}
+

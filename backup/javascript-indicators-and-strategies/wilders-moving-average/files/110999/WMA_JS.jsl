@@ -1,0 +1,59 @@
+//initializes the indicator
+function Init()
+{
+    indicator.name("Wilders moving average");
+    indicator.description("Wilders moving average");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+    indicator.setTag("group", "Moving Averages");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("N", "Number of periods", "The number of periods.", 14, 1, 10000);
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Line color", "The color of line", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("width", "Line width", "The width of line", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "The style of line", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LEVEL_STYLE);
+}
+
+var first = 0;
+var n = 0;
+var source = null;
+var WMA;
+var k = 0;
+
+//initializes the instance of the indicator
+function Prepare(onlyName)
+{
+    source = instance.source;
+    n = instance.parameters.N;
+    var name = profile.id() + "(" + instance.source.name() + "," + n + ")";
+    instance.name(name);
+  
+    if (onlyName == true)
+        return ;
+    n1 = 2 * n - 1;
+    k = 2.0 / (n1 + 1.0);
+    first = source.first() + n1 - 1;
+
+    WMA = instance.addStream("WMA", core.Line, name, "WMA", instance.parameters.clr,  first);
+    WMA.setWidth(instance.parameters.width);
+    WMA.setStyle(instance.parameters.style);
+}
+
+// calculate the value
+function Update(period, mode)
+{
+    if (period == first)
+    {
+        WMA[period] = Math.avg(source, period - n + 1, period);
+    }
+    else
+    {
+        if (period > first)
+        {
+            WMA[period] = ((source[period] - WMA[period - 1]) * k) + WMA[period - 1];
+        }
+    }
+    
+}

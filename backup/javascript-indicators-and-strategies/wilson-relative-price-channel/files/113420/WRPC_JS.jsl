@@ -1,0 +1,110 @@
+function Init()
+{
+    indicator.name("WILSON RELATIVE PRICE CHANNEL");
+    indicator.description("WILSON RELATIVE PRICE CHANNEL");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+
+	
+	indicator.parameters.addGroup("Calculation");	
+    indicator.parameters.addInteger("CP", "Channel Periods", "Channel Periods", 34, 1, 2000);
+    indicator.parameters.addInteger("SP", "Smoothing Period", "Smoothing Period", 14, 1, 2000);
+    indicator.parameters.addDouble("OB", "Over Bought", "Over Bought", 70);
+    indicator.parameters.addDouble("OS", "Over Sold", "Over Sold", 30);
+    indicator.parameters.addDouble("UNZ", "Upper Neutral Zone", "Upper Neutral Zone", 55);
+    indicator.parameters.addInteger("LNZ", "Lower Neutral Zone", "Lower Neutral Zone", 45);
+	indicator.parameters.addGroup("Style");	
+    indicator.parameters.addColor("OverBought_color", "Color of OverBought", "Color of OverBought", core.rgb(0, 255, 0)); 
+	indicator.parameters.addColor("OverSold_color", "Color of OverSold", "Color of OverSold", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("Transparency", "Transparency", "", 40,0,100);
+
+}
+
+var CP;
+var SP;
+var OB;
+var OS;
+var UNZ;
+var LNZ;
+var Transparency;
+var first;
+var source = null;
+
+var OverBought = null;
+var OverSold = null;
+var NeutralUp = null;
+var NeutralDown = null;
+var RSI, OBS, OSS;
+var ROB, ROS;
+var ROBUNZ, ROSLNZ; 
+var UNZS,LNZS;
+
+function Prepare(nameOnly)
+{
+    Transparency = instance.parameters.Transparency;
+    CP = instance.parameters.CP;
+    SP = instance.parameters.SP;
+    OB = instance.parameters.OB;
+    OS = instance.parameters.OS;
+    UNZ = instance.parameters.UNZ;
+    LNZ = instance.parameters.LNZ;
+    source = instance.source;
+	
+	Transparency= 100-Transparency;
+   
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(CP) + ", " + tostring(SP) + ", " + tostring(OB) + ", " + tostring(OS) + ", " + tostring(UNZ) + ", " + tostring(LNZ) + ")";
+    instance.name(name);
+	
+	ROB=instance.addInternalStream(0, 0);
+	ROS=instance.addInternalStream(0, 0);
+	ROBUNZ =instance.addInternalStream(0, 0);
+	ROSLNZ=instance.addInternalStream(0, 0);
+	
+	RSI = core.indicators.create( "RSI", source, CP);
+	OBS = core.indicators.create( "EMA", ROB, SP);
+	OSS = core.indicators.create( "EMA", ROS, SP);
+	UNZS= core.indicators.create( "EMA", ROBUNZ, SP);
+	LNZS= core.indicators.create( "EMA", ROSLNZ, SP);
+	
+	
+	 first = UNZS.DATA.first();
+
+    if (!(nameOnly)) 
+    {
+        OverBought = instance.addStream("OverBought", core.Line, name + ".OverBought", "OverBought", instance.parameters.OverBought_color, first);
+        OverSold = instance.addStream("OverSold", core.Line, name + ".OverSold", "OverSold", instance.parameters.OverSold_color, first);
+        NeutralUp = instance.addStream("NeutralUp", core.Line, name + ".NeutralUp", "NeutralUp", instance.parameters.OverBought_color, first);
+        NeutralDown = instance.addStream("NeutralDown", core.Line, name + ".NeutralDown", "NeutralDown", instance.parameters.OverSold_color, first);
+		
+		instance.createChannelGroup("Up","Up" , OverBought, NeutralUp, instance.parameters.OverBought_color, Transparency);
+	   instance.createChannelGroup("Down","Down" , OverSold, NeutralDown, instance.parameters.OverSold_color, Transparency);
+    }
+}
+
+function Update(period, mode)
+{
+    if (period <  first || !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+	 RSI.update(mode);
+	 
+	 ROB[period]= RSI.DATA[period] - OB;
+	 ROS[period]= RSI.DATA[period] - OS;
+	 ROBUNZ[period]= RSI.DATA[period] - UNZ;
+	 ROSLNZ[period]= RSI.DATA[period] - LNZ;
+	 
+	 OBS.update(mode);
+	 OSS.update(mode);
+	 UNZS.update(mode);
+	 LNZS.update(mode);
+
+        OverBought[period] = source[period] - (source[period] * (OBS.DATA[period] /100) );
+        OverSold[period] = source[period] - (source[period] * (OSS.DATA[period] /100) );
+        NeutralUp[period] = source[period] - (source[period] * (UNZS.DATA[period] /100) );
+        NeutralDown[period] = source[period] - (source[period] * (LNZS.DATA[period] /100) );
+    
+}
+

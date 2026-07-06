@@ -1,0 +1,98 @@
+function Init()
+{
+    indicator.name("Cumulative Volume");
+    indicator.description("Cumulative Volume");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+  
+	indicator.parameters.addGroup("Calculation");
+	 indicator.parameters.addColor("Period", "Period", "Period", 14);
+	 indicator.parameters.addBoolean("Cumulative", "Combined", "Combined" ,  true);
+	 indicator.parameters.addBoolean("Relative", "Relative", "Relative" ,  false);
+	indicator.parameters.addGroup("Style");	
+	 indicator.parameters.addColor("Pozitiv", "Color Pozitiv", " ", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("Negativ", "Color of Negativ", " ", core.rgb(0, 255, 0));
+}
+
+var first;
+var source = null;
+var Period;
+var Pos, Neg;
+var pos,neg;
+var Cumulative,Relative;
+
+function Prepare()
+{
+    Period = instance.parameters.Period;
+	Relative = instance.parameters.Relative;
+	Cumulative = instance.parameters.Cumulative;
+    source = instance.source;
+    first = source.first()+Period;
+
+  
+    var name = profile.id() + "(" +  (Relative && "Relative" || "Absolute") + ", " + (Cumulative && "Combined" || "Separated") + ")";
+    instance.name(name);
+	pos = instance.addInternalStream(0, 0);
+	neg = instance.addInternalStream(0, 0);
+        if (Cumulative)    
+        {
+		 Cum = instance.addStream("C", core.Bar, name + ".Cumulative", "Cumulative", instance.parameters.Pozitiv, first);
+		} 
+		else		
+		{	
+         Pos = instance.addStream("P", core.Bar, name + ".Pozitiv", "Pozitiv", instance.parameters.Pozitiv, first);
+         Neg = instance.addStream("N", core.Bar, name + ".Negativ", "Negativ", instance.parameters.Negativ, first);	
+        }
+}
+
+function Update(period, mode)
+{ 
+     if (period < first)
+	 {
+	  return;
+	 }
+			 
+              var denominator = Math.sum(source.volume, period-Period+1, period) / 100;
+			  var p, n;
+			  if (source.close[period]>source.close[period-1]) 
+			  {
+			   pos[period]=source.volume[period];
+			   neg[period]=0;
+			  } 
+			  else
+			  {
+			   neg[period]=source.volume[period];
+			   pos[period]=0;
+			  }
+			  
+			  var p = Math.sum(pos, period-Period+1, period) / 100;
+			  var n = Math.sum(neg , period-Period+1, period) / 100;
+			  
+			  if (Cumulative) 
+			  {
+			     if (Relative) 
+			     {				
+				  Cum[period]=((p-n)/denominator)*100;
+				 } 
+				 else
+				 {
+			      Cum[period]=(p-n);
+				 }
+			  }	 
+			  else
+			  {
+				   if (Relative) 
+				   {
+				    Pos[period]= (p/denominator)*100;
+				    Neg[period]= -(n/denominator)*100;
+				   } 
+				  else
+				  {
+				   Pos[period]= p;
+				  Neg[period]= -n;
+				  }
+              }
+		 
+  
+}
+

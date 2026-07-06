@@ -1,0 +1,420 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252" /><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><title>mathex.min2</title><style type="text/css">a, p, h1, h2, h3, h4, h5, h6, table, td, tr, li, ul, ol {
+    font-family: Verdana, Trebuchet MS, Arial;
+}
+
+a, p, td, tr, ul, ol, li {
+    font-size: 12pt;
+}
+
+h3 {
+    font-size: 13pt;
+}
+
+h2 {
+    font-size: 13pt;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+body {
+    color: #444444;
+    background-color: white;
+}
+
+A:link {
+    color: #0065b3;
+    cursor: pointer;
+}
+
+A:visited {
+    color: #0068be;
+    cursor: pointer;
+}
+
+a.action {
+  background-color: #0065b3;
+  color: white;
+  font-size: 10pt;
+  padding: 2px 2px;
+  width: 50pt;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px;
+}
+
+.side-icon {
+    float: left;
+}
+
+a.action [class*="dripicons-"]:before {
+    padding: 0 2px 0 0;
+    font-size: 12pt;
+    vertical-align: text-bottom;
+}
+
+.side-icon:after {
+  content: "";
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  border-left: 1.5px solid white;
+  transform: translate(-50%);
+}
+
+a.actiontab {
+  font-size: 10pt;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px 3px 0 0;
+}
+
+pre, code, code a {
+    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+    font-size: 12pt;
+}
+
+code.ctag {
+    background-color: #f1f1f1;
+    padding: .1em .2em;
+    border-radius: 3px;
+}
+
+pre {
+    background-color: white;
+}
+
+pre.example {
+    background-color: #f1f1f1;
+}
+
+ul {
+    list-style-type: disc;
+    margin-left: 18pt;
+}
+
+ol {
+    list-style-type: decimal;
+    margin-left: 18pt;
+}
+
+ul.hhc {
+    list-style-type: none;
+    margin-left: 1em;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+li.hhc {
+    margin-left: 0;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+table {
+  border-spacing: 0;
+  border-color: #dfe3e7;
+}
+
+tr + tr td {
+   border-top: 0;
+}
+
+tr td + td {
+  border-left: 0;
+}
+
+td {
+  border: 1px solid;
+  border-color: #dfe3e7;
+}
+
+tr:first-child td:first-child {
+   border-radius: 0.2em 0 0 0;
+}
+
+tr:first-child td:last-child {
+  border-radius: 0 0.2em 0 0;
+}
+
+tr:first-child td:only-child {
+  border-radius: 0.2em 0.2em 0 0;
+}
+
+tr:last-child td:first-child {
+    border-radius: 0 0 0 0.2em;
+}
+
+tr:last-child td:last-child {
+    border-radius: 0 0 0.2em 0;
+}
+
+tr:last-child td:only-child {
+    border-radius: 0 0 0.2em 0.2em;
+}
+
+tr:only-child td:only-child {
+    border-radius: 0.2em 0.2em 0.2em 0.2em;
+}
+
+tr:only-child td:first-child {
+   border-radius: 0.2em 0 0 0.2em;
+}
+
+tr:only-child td:last-child {
+  border-radius: 0 0.2em 0.2em 0;
+}
+
+
+td.tmain, td.tmain_nw, td.thdr {
+    background-color: rgb(255, 255, 255);
+    vertical-align: top;
+    padding: 3px;
+}
+
+td.tmain p, td.tmain_nw p, td.thdr p {
+    margin-top: 3pt;
+    margin-bottom: 3pt;
+}
+
+td.tmain_nw {
+    white-space: nowrap;
+}
+
+td.thdr {
+    background-color: #e3e3e3;
+}
+
+table.decl {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+    vertical-align: top;
+    padding: 3px;
+    width: 100%;
+}
+
+table.decl td {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+}
+
+div.note-quote {
+    border-left: 10px solid #ccc;
+    padding: 1em 10px .1em 10px;
+    margin: 1.5em 10px;
+    background-color: rgb(224, 224, 224);
+}
+
+div.note-note {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+div.note-warning {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #fff;
+    background-color: #ff6358;
+}
+div.note-warning code.ctag {
+    color: black;
+}</style>
+<link rel="stylesheet" href="res/dripicons.css"></head><body><script type="text/javascript">
+var highlighterEnabled = false;
+var maintopic = 'index';
+var helptitle = 'Indicore SDK 3';
+    function loadStarted() {
+    window.onload = loadCompleted;
+
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        var head = document.getElementsByTagName('head')[0];
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.min.js';
+        head.appendChild(script4);
+
+
+        var script2 = document.createElement('script');
+        script2.type = 'text/javascript';
+        script2.src = './highlighter/highlight.cshtml.js';
+        head.appendChild(script2);
+
+        var script3 = document.createElement('script');
+        script3.type = 'text/javascript';
+        script3.src = './highlighter/highlight.lua.js';
+        head.appendChild(script3);
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.luax.js';
+        head.appendChild(script4);
+    }
+}
+
+function loadCompleted() {
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        hljs.registerLanguage('cshtml-razor', window.hljsDefineCshtmlRazor);
+        hljs.registerLanguage('lua', window.hljsDefineLua);
+        hljs.registerLanguage('luax', window.hljsDefineLuaX);
+        x = document.querySelectorAll('pre code');
+        for (var i = 0; i < x.length; i++) {
+            if (x[i].hasAttribute('class')) {
+                hljs.highlightBlock(x[i]);
+            }
+        }
+    }
+}
+
+
+function hidediv(divname) {
+    document.getElementById(divname).style.display = 'none';
+}
+
+function showdiv(divname) {
+    document.getElementById(divname).style.display = 'inline';
+}
+
+function syncList() {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, null, document.title);
+    }
+}
+
+function syncList1(key) {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, key + '.html', document.title);
+    }
+}</script><script type="text/javascript">
+    loadStarted();
+</script><h1><code>static public method <b>mathex.min2</b></code></h1><h2>Brief</h2>
+<p>Finds two minimal values and their positions in the specified stream and in the specified range.</p>
+<table class="tmain" width="100%">
+  <tr>
+    <td class="thdr"><b>Declaration</b></td>
+  </tr>
+  <tr>
+    <td class="tmain"><table class="decl">
+  <tr>
+    <td>Lua</td>
+  </tr>
+  <tr>
+    <td><code>min, minpos, min2, min2pos&nbsp;mathex.<b>min2</b> (stream, range, to?)</code></td>
+  </tr>
+</table></td>
+  </tr>
+</table><p></p>
+<table class="tmain" width="100%">
+  <tr>
+    <td colspan="2" class="thdr"><b>Parameters</b></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>stream</code></td>
+    <td class="tmain" width="69%"><p>The <a href="tick_stream.html">stream of ticks</a>.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>range</code></td>
+    <td class="tmain" width="69%"><p>Can be either the range table or the index of the period
+to calculate the value from.</p>
+<p>The range can be created using
+<a href="core.range.html"><code>core.range</code></a>,
+<a href="core.rangeTo.html"><code>core.rangeTo</code></a>, or
+<a href="core.rangeFrom.html"><code>core.rangeFrom</code></a> methods.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>to</code></td>
+    <td class="tmain" width="69%"><p>If range parameter is a number, the parameter must contain
+the index of the period to calculate the value to.</p></td>
+  </tr>
+</table><p><b>Returns</b></p><p>The function returns four values: the first is the minimal value in the range,
+the second is the position of the minimal value, the third is the value next to the minimal
+value, and the fourth is its position.</p><h2>Details</h2><p>Please note that all the periods inside the range specified
+must conform the following rule: <code class="ctag">stream:first() &lt;= index &lt;= stream:size() - 1</code></p><div id="open124" style="display:none">
+  <p>Example: Find the two minimal close values of the last N periods using core.rangeTo method&nbsp;<a href="javascript: showdiv('close124'); hidediv('open124');" onclick="javascript: showdiv('close124'); hidediv('open124');" class="action">Show<span class="side-icon dripicons-chevron-right"></span></a></p>
+</div>
+<div id="close124" style="display:inline">
+  <p>Example: Find the two minimal close values of the last N periods using core.rangeTo method&nbsp;<a href="javascript: showdiv('open124'); hidediv('close124');" onclick="javascript: showdiv('open124'); hidediv('close124');" class="action">Hide<span class="side-icon dripicons-chevron-down"></span></a></p>
+  <pre class="example" id="example124"><code>   local N;
+   local first;
+   local source;
+ 
+   function Prepare()
+       ...
+       source = instance.source;
+       first = source:first() + N - 1;
+       ...
+   end
+   ...
+   function Update(period, mode)
+       ...
+       if period &gt;= first then
+           local range = core.rangeTo(period, N);
+           local min, minpos, min2, min2pos;
+           if source:isBar() then
+               min, minpos, min2, min2pos = mathex.min2(source.close, range);
+           else
+               min, minpos, min2, min2pos = mathex.min2(source, range);
+           end
+       end
+       ...
+   end</code></pre>
+</div><p>For the performance reason it is recommended to:</p><ul class="main">
+  <li><p>Use 3-parameters version of the call</p></li>
+  <li><p>Do check of the source type once in the prepare method.</p></li>
+</ul><div id="open125" style="display:none">
+  <p>Example: Calculate the two minimal values of the last N periods using from/to values&nbsp;<a href="javascript: showdiv('close125'); hidediv('open125');" onclick="javascript: showdiv('close125'); hidediv('open125');" class="action">Show<span class="side-icon dripicons-chevron-right"></span></a></p>
+</div>
+<div id="close125" style="display:inline">
+  <p>Example: Calculate the two minimal values of the last N periods using from/to values&nbsp;<a href="javascript: showdiv('open125'); hidediv('close125');" onclick="javascript: showdiv('open125'); hidediv('close125');" class="action">Hide<span class="side-icon dripicons-chevron-down"></span></a></p>
+  <pre class="example" id="example125"><code>   local N;
+   local first;
+   local source;
+   local tsource;
+ 
+   function Prepare()
+       ...
+       source = instance.source;
+       if source:isBar() then
+          tsource = source.close;
+       else
+          tsource = source;
+       end
+       first = source:first() + N - 1;
+       ...
+   end
+   ...
+   function Update(period, mode)
+       ...
+       if period &gt;= first then
+           local min, minpos, min2, min2pos;
+           min, minpos, min2, min2pos = mathex.min2(tsource, period - N + 1, period);
+           ...
+       end
+   end</code></pre>
+</div><p>Declared in <a href="mathex.html">mathex</a></p>
+<p>
+  <center><a href="mathex.html">back</a></center>
+</p><script language="javascript" type="text/javascript">syncList1('mathex');</script></body></html>

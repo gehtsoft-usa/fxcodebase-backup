@@ -1,0 +1,95 @@
+function Init()
+{
+    indicator.name("Point of balance oscillator");
+    indicator.description("Point of balance oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "Period", 14, 2 , 100);
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Up", "Color of BL", "Color of BL", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("Dn", "Color of BL", "Color of BL", core.rgb(255, 0, 0));
+}
+
+var Period;
+
+var first;
+var source = null;
+var POBC={};
+ 
+var POB = null;
+ 
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+    source = instance.source;
+    first = source.first()+Period;
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ")";
+    instance.name(name);
+	
+	var i;
+	
+	for (i = 1; i<=Period; i++) 
+	{
+	 POBC[i]  = instance.addInternalStream(0, 0);
+	}
+
+    if (!(nameOnly)) 
+    {
+      
+        POB = instance.addStream("POB", core.Bar, name + ".POB", "POB", instance.parameters.Up, first);
+		 
+    }
+}
+
+function Update(period)
+{
+    if (period < first) 
+    {
+	 return;
+	}
+	
+var min, max;
+	var tmp= Math.minmax(source.close, period-Period+1, period);
+	min=tmp[0];
+	max=tmp[1];
+       
+   POB[period] = 100*((source.close[period] - AV(period))) / (max-min);
+   
+      if (POB[period] > 0) 
+      {
+	   POB.setColor(period, instance.parameters.Up);
+	  } 
+	   else
+	   {
+	    POB.setColor(period, instance.parameters.Dn);
+	   }
+}
+
+function AV (period)
+{
+var i;
+var SUM =0;
+var min, max;
+	var tmp= Math.minmax(source.close, period-Period+1, period);
+	min=tmp[0];
+	max=tmp[1];
+
+POBC[1][period] = (max + min) /2;
+SUM=SUM+POBC[1][period];
+
+
+		for (i = 2; i<=Period; i++) 
+		{
+
+		tmp= Math.minmax(POBC[i-1], period-Period+1, period);
+		min=tmp[0];
+		max=tmp[1];
+
+		POBC[i][period] = (max + min) /2;
+		SUM=SUM+POBC[i][period]; 
+		}
+
+return (SUM /Period);
+}

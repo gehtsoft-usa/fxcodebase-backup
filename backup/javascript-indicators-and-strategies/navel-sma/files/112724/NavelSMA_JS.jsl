@@ -1,0 +1,39 @@
+function Init()
+{
+    indicator.name("Navel SMA");
+    indicator.description("Navel SMA");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    
+    indicator.parameters.addInteger("MA_period", "MA_period", "period of MA", 13);
+    indicator.parameters.addInteger("nslow", "nslow", "nslow", 10);
+    indicator.parameters.addColor("clr", "Color of MA", "Color of MA", core.rgb(0, 255, 0));
+}
+
+var first;
+var source = null;
+var MA_period;
+var MA;
+var Navel;
+
+function Prepare()
+{
+    source = instance.source;
+    MA_period=instance.parameters.MA_period;
+    Navel = instance.addInternalStream(0, 0);
+    first = source.first()+2;
+    var name = profile.id()+"("+source.name()+", "+instance.parameters.MA_period+")";
+    instance.name(name);
+    MA = instance.addStream("MA", core.Line, name+".MA", "MA", instance.parameters.clr, first);
+}
+
+function Update(period, mode)
+{
+    Navel[period]=(source.close[period]*5.+source.open[period]*2.+source.high[period]+source.low[period])/9.;
+    if (period>first+MA_period)
+    {
+     var sum=Math.sum(Navel,core.rangeTo(period,MA_period));
+     MA[period]=sum/MA_period;
+    } 
+}
+

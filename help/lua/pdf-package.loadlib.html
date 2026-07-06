@@ -1,0 +1,40 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - package.loadlib (libname, funcname)</title>
+</head>
+<body>
+<h3><a name="pdf-package.loadlib"><code>package.loadlib (libname, funcname)</code></a></h3>
+
+
+<p>
+Dynamically links the host program with the C&nbsp;library <code>libname</code>.
+Inside this library, looks for a function <code>funcname</code>
+and returns this function as a C&nbsp;function.
+(So, <code>funcname</code> must follow the protocol (see <a href="lua_CFunction.html"><code>lua_CFunction</code></a>)).
+
+
+<p>
+This is a low-level function.
+It completely bypasses the package and module system.
+Unlike <a href="pdf-require.html"><code>require</code></a>,
+it does not perform any path searching and
+does not automatically adds extensions.
+<code>libname</code> must be the complete file name of the C&nbsp;library,
+including if necessary a path and extension.
+<code>funcname</code> must be the exact name exported by the C&nbsp;library
+(which may depend on the C&nbsp;compiler and linker used).
+
+
+<p>
+This function is not supported by ANSI C.
+As such, it is only available on some platforms
+(Windows, Linux, Mac OS X, Solaris, BSD,
+plus other Unix systems that support the <code>dlfcn</code> standard).
+
+
+
+
+<p>
+<hr>
+</body>
+</html>

@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<help-index>
+ <key keyword="Lua 5.1 Reference Manual" name="Lua 5.1 Reference Manual" local="lua/lua_51_reference_manual.html" />
+ <key keyword="Lua: 1 - Introduction" name="Lua: 1 - Introduction" local="lua/1.html" />
+ <key keyword="Lua: 2 - The Language" name="Lua: 2 - The Language" local="lua/2.html" />
+ <key keyword="Lua: 2.1 - Lexical Conventions" name="Lua: 2.1 - Lexical Conventions" local="lua/2.1.html" />
+ <key keyword="Lua: 2.2 - Values and Types" name="Lua: 2.2 - Values and Types" local="lua/2.2.html" />
+ <key keyword="Lua: 2.2.1 - Coercion" name="Lua: 2.2.1 - Coercion" local="lua/2.2.1.html" />
+ <key keyword="Lua: 2.3 - Variables" name="Lua: 2.3 - Variables" local="lua/2.3.html" />
+ <key keyword="Lua: 2.4 - Statements" name="Lua: 2.4 - Statements" local="lua/2.4.html" />
+ <key keyword="Lua: 2.4.1 - Chunks" name="Lua: 2.4.1 - Chunks" local="lua/2.4.1.html" />
+ <key keyword="Lua: 2.4.2 - Blocks" name="Lua: 2.4.2 - Blocks" local="lua/2.4.2.html" />
+ <key keyword="Lua: 2.4.3 - Assignment" name="Lua: 2.4.3 - Assignment" local="lua/2.4.3.html" />
+ <key keyword="Lua: 2.4.4 - Control Structures" name="Lua: 2.4.4 - Control Structures" local="lua/2.4.4.html" />
+ <key keyword="Lua: 2.4.5 - For Statement" name="Lua: 2.4.5 - For Statement" local="lua/2.4.5.html" />
+ <key keyword="Lua: 2.4.6 - Function Calls as Statements" name="Lua: 2.4.6 - Function Calls as Statements" local="lua/2.4.6.html" />
+ <key keyword="Lua: 2.4.7 - Local Declarations" name="Lua: 2.4.7 - Local Declarations" local="lua/2.4.7.html" />
+ <key keyword="Lua: 2.5 - Expressions" name="Lua: 2.5 - Expressions" local="lua/2.5.html" />
+ <key keyword="Lua: 2.5.1 - Arithmetic Operators" name="Lua: 2.5.1 - Arithmetic Operators" local="lua/2.5.1.html" />
+ <key keyword="Lua: 2.5.2 - Relational Operators" name="Lua: 2.5.2 - Relational Operators" local="lua/2.5.2.html" />
+ <key keyword="Lua: 2.5.3 - Logical Operators" name="Lua: 2.5.3 - Logical Operators" local="lua/2.5.3.html" />
+ <key keyword="Lua: 2.5.4 - Concatenation" name="Lua: 2.5.4 - Concatenation" local="lua/2.5.4.html" />
+ <key keyword="Lua: 2.5.5 - The Length Operator" name="Lua: 2.5.5 - The Length Operator" local="lua/2.5.5.html" />
+ <key keyword="Lua: 2.5.6 - Precedence" name="Lua: 2.5.6 - Precedence" local="lua/2.5.6.html" />
+ <key keyword="Lua: 2.5.7 - Table Constructors" name="Lua: 2.5.7 - Table Constructors" local="lua/2.5.7.html" />
+ <key keyword="Lua: 2.5.8 - Function Calls" name="Lua: 2.5.8 - Function Calls" local="lua/2.5.8.html" />
+ <key keyword="Lua: 2.5.9 - Function Definitions" name="Lua: 2.5.9 - Function Definitions" local="lua/2.5.9.html" />
+ <key keyword="Lua: 2.6 - Visibility Rules" name="Lua: 2.6 - Visibility Rules" local="lua/2.6.html" />
+ <key keyword="Lua: 2.7 - Error Handling" name="Lua: 2.7 - Error Handling" local="lua/2.7.html" />
+ <key keyword="Lua: 2.8 - Metatables" name="Lua: 2.8 - Metatables" local="lua/2.8.html" />
+ <key keyword="Lua: 2.9 - Environments" name="Lua: 2.9 - Environments" local="lua/2.9.html" />
+ <key keyword="Lua: 2.10 - Garbage Collection" name="Lua: 2.10 - Garbage Collection" local="lua/2.10.html" />
+ <key keyword="Lua: 2.10.1 - Garbage-Collection Metamethods" name="Lua: 2.10.1 - Garbage-Collection Metamethods" local="lua/2.10.1.html" />
+ <key keyword="Lua: 2.10.2 - Weak Tables" name="Lua: 2.10.2 - Weak Tables" local="lua/2.10.2.html" />
+ <key keyword="Lua: 2.11 - Coroutines" name="Lua: 2.11 - Coroutines" local="lua/2.11.html" />
+ <key keyword="Lua: 3 - The Application Program Interface" name="Lua: 3 - The Application Program Interface" local="lua/3.html" />
+ <key keyword="Lua: 3.1 - The Stack" name="Lua: 3.1 - The Stack" local="lua/3.1.html" />
+ <key keyword="Lua: 3.2 - Stack Size" name="Lua: 3.2 - Stack Size" local="lua/3.2.html" />
+ <key keyword="Lua: 3.3 - Pseudo-Indices" name="Lua: 3.3 - Pseudo-Indices" local="lua/3.3.html" />
+ <key keyword="Lua: 3.4 - C Closures" name="Lua: 3.4 - C Closures" local="lua/3.4.html" />
+ <key keyword="Lua: 3.5 - Registry" name="Lua: 3.5 - Registry" local="lua/3.5.html" />
+ <key keyword="Lua: 3.6 - Error Handling in C" name="Lua: 3.6 - Error Handling in C" local="lua/3.6.html" />
+ <key keyword="Lua: 3.7 - Functions and Types" name="Lua: 3.7 - Functions and Types" local="lua/3.7.html" />
+ <key keyword="Lua: 3.8 - The Debug Interface" name="Lua: 3.8 - The Debug Interface" local="lua/3.8.html" />
+ <key keyword="Lua: 4 - The Auxiliary Library" name="Lua: 4 - The Auxiliary Library" local="lua/4.html" />
+ <key keyword="Lua: 4.1 - Functions and Types" name="Lua: 4.1 - Functions and Types" local="lua/4.1.html" />
+ <key keyword="Lua: 5 - Standard Libraries" name="Lua: 5 - Standard Libraries" local="lua/5.html" />
+ <key keyword="Lua: 5.1 - Basic Functions" name="Lua: 5.1 - Basic Functions" local="lua/5.1.html" />
+ <key keyword="assert (v [, message])" name="assert (v [, message])" local="lua/pdf-assert.html" />
+ <key keyword="collectgarbage (opt [, arg])" name="collectgarbage (opt [, arg])" local="lua/pdf-collectgarbage.html" />
+ <key keyword="dofile (filename)" name="dofile (filename)" local="lua/pdf-dofile.html" />
+ <key keyword="error (message [, level])" name="error (message [, level])" local="lua/pdf-error.html" />
+ <key keyword="_G" name="_G" local="lua/pdf-_G.html" />
+ <key keyword="getfenv (f)" name="getfenv (f)" local="lua/pdf-getfenv.html" />
+ <key keyword="getmetatable (object)" name="getmetatable (object)" local="lua/pdf-getmetatable.html" />
+ <key keyword="ipairs (t)" name="ipairs (t)" local="lua/pdf-ipairs.html" />
+ <key keyword="load (func [, chunkname])" name="load (func [, chunkname])" local="lua/pdf-load.html" />
+ <key keyword="loadfile ([filename])" name="loadfile ([filename])" local="lua/pdf-loadfile.html" />
+ <key keyword="loadstring (string [, chunkname])" name="loadstring (string [, chunkname])" local="lua/pdf-loadstring.html" />
+ <key keyword="next (table [, index])" name="next (table [, index])" local="lua/pdf-next.html" />
+ <key keyword="pairs (t)" name="pairs (t)" local="lua/pdf-pairs.html" />
+ <key keyword="pcall (f, arg1, ...)" name="pcall (f, arg1, ...)" local="lua/pdf-pcall.html" />
+ <key keyword="print (...)" name="print (...)" local="lua/pdf-print.html" />
+ <key keyword="rawequal (v1, v2)" name="rawequal (v1, v2)" local="lua/pdf-rawequal.html" />
+ <key keyword="rawget (table, index)" name="rawget (table, index)" local="lua/pdf-rawget.html" />
+ <key keyword="rawset (table, index, value)" name="rawset (table, index, value)" local="lua/pdf-rawset.html" />
+ <key keyword="select (index, ...)" name="select (index, ...)" local="lua/pdf-select.html" />
+ <key keyword="setfenv (f, table)" name="setfenv (f, table)" local="lua/pdf-setfenv.html" />
+ <key keyword="setmetatable (table, metatable)" name="setmetatable (table, metatable)" local="lua/pdf-setmetatable.html" />
+ <key keyword="tonumber (e [, base])" name="tonumber (e [, base])" local="lua/pdf-tonumber.html" />
+ <key keyword="tostring (e)" name="tostring (e)" local="lua/pdf-tostring.html" />
+ <key keyword="type (v)" name="type (v)" local="lua/pdf-type.html" />
+ <key keyword="unpack (list [, i [, j]])" name="unpack (list [, i [, j]])" local="lua/pdf-unpack.html" />
+ <key keyword="_VERSION" name="_VERSION" local="lua/pdf-_VERSION.html" />
+ <key keyword="xpcall (f, err)" name="xpcall (f, err)" local="lua/pdf-xpcall.html" />
+ <key keyword="Lua: 5.2 - Coroutine Manipulation" name="Lua: 5.2 - Coroutine Manipulation" local="lua/5.2.html" />
+ <key keyword="coroutine.create (f)" name="coroutine.create (f)" local="lua/pdf-coroutine.create.html" />
+ <key keyword="coroutine.resume (co [, val1, ...])" name="coroutine.resume (co [, val1, ...])" local="lua/pdf-coroutine.resume.html" />
+ <key keyword="coroutine.running ()" name="coroutine.running ()" local="lua/pdf-coroutine.running.html" />
+ <key keyword="coroutine.status (co)" name="coroutine.status (co)" local="lua/pdf-coroutine.status.html" />
+ <key keyword="coroutine.wrap (f)" name="coroutine.wrap (f)" local="lua/pdf-coroutine.wrap.html" />
+ <key keyword="coroutine.yield (...)" name="coroutine.yield (...)" local="lua/pdf-coroutine.yield.html" />
+ <key keyword="Lua: 5.3 - Modules" name="Lua: 5.3 - Modules" local="lua/5.3.html" />
+ <key keyword="module (name [, ...])" name="module (name [, ...])" local="lua/pdf-module.html" />
+ <key keyword="require (modname)" name="require (modname)" local="lua/pdf-require.html" />
+ <key keyword="package.cpath" name="package.cpath" local="lua/pdf-package.cpath.html" />
+ <key keyword="package.loaded" name="package.loaded" local="lua/pdf-package.loaded.html" />
+ <key keyword="package.loadlib (libname, funcname)" name="package.loadlib (libname, funcname)" local="lua/pdf-package.loadlib.html" />
+ <key keyword="package.path" name="package.path" local="lua/pdf-package.path.html" />
+ <key keyword="package.preload" name="package.preload" local="lua/pdf-package.preload.html" />
+ <key keyword="package.seeall (module)" name="package.seeall (module)" local="lua/pdf-package.seeall.html" />
+ <key keyword="Lua: 5.4 - String Manipulation" name="Lua: 5.4 - String Manipulation" local="lua/5.4.html" />
+ <key keyword="string.byte (s [, i [, j]])" name="string.byte (s [, i [, j]])" local="lua/pdf-string.byte.html" />
+ <key keyword="string.char (...)" name="string.char (...)" local="lua/pdf-string.char.html" />
+ <key keyword="string.dump (function)" name="string.dump (function)" local="lua/pdf-string.dump.html" />
+ <key keyword="string.find (s, pattern [, init [, plain]])" name="string.find (s, pattern [, init [, plain]])" local="lua/pdf-string.find.html" />
+ <key keyword="string.format (formatstring, ...)" name="string.format (formatstring, ...)" local="lua/pdf-string.format.html" />
+ <key keyword="string.gmatch (s, pattern)" name="string.gmatch (s, pattern)" local="lua/pdf-string.gmatch.html" />
+ <key keyword="string.gsub (s, pattern, repl [, n])" name="string.gsub (s, pattern, repl [, n])" local="lua/pdf-string.gsub.html" />
+ <key keyword="string.len (s)" name="string.len (s)" local="lua/pdf-string.len.html" />
+ <key keyword="string.lower (s)" name="string.lower (s)" local="lua/pdf-string.lower.html" />
+ <key keyword="string.match (s, pattern [, init])" name="string.match (s, pattern [, init])" local="lua/pdf-string.match.html" />
+ <key keyword="string.rep (s, n)" name="string.rep (s, n)" local="lua/pdf-string.rep.html" />
+ <key keyword="string.reverse (s)" name="string.reverse (s)" local="lua/pdf-string.reverse.html" />
+ <key keyword="string.sub (s, i [, j])" name="string.sub (s, i [, j])" local="lua/pdf-string.sub.html" />
+ <key keyword="string.upper (s)" name="string.upper (s)" local="lua/pdf-string.upper.html" />
+ <key keyword="Lua: 5.4.1 - Patterns" name="Lua: 5.4.1 - Patterns" local="lua/5.4.1.html" />
+ <key keyword="Character Class:" name="Character Class:" local="lua/character_class.html" />
+ <key keyword="Pattern Item:" name="Pattern Item:" local="lua/pattern_item.html" />
+ <key keyword="Pattern:" name="Pattern:" local="lua/pattern.html" />
+ <key keyword="Captures:" name="Captures:" local="lua/captures.html" />
+ <key keyword="Lua: 5.5 - Table Manipulation" name="Lua: 5.5 - Table Manipulation" local="lua/5.5.html" />
+ <key keyword="table.concat (table [, sep [, i [, j]]])" name="table.concat (table [, sep [, i [, j]]])" local="lua/pdf-table.concat.html" />
+ <key keyword="table.insert (table, [pos,] value)" name="table.insert (table, [pos,] value)" local="lua/pdf-table.insert.html" />
+ <key keyword="table.maxn (table)" name="table.maxn (table)" local="lua/pdf-table.maxn.html" />
+ <key keyword="table.remove (table [, pos])" name="table.remove (table [, pos])" local="lua/pdf-table.remove.html" />
+ <key keyword="table.sort (table [, comp])" name="table.sort (table [, comp])" local="lua/pdf-table.sort.html" />
+ <key keyword="Lua: 5.6 - Mathematical Functions" name="Lua: 5.6 - Mathematical Functions" local="lua/5.6.html" />
+ <key keyword="math.abs (x)" name="math.abs (x)" local="lua/pdf-math.abs.html" />
+ <key keyword="math.acos (x)" name="math.acos (x)" local="lua/pdf-math.acos.html" />
+ <key keyword="math.asin (x)" name="math.asin (x)" local="lua/pdf-math.asin.html" />
+ <key keyword="math.atan (x)" name="math.atan (x)" local="lua/pdf-math.atan.html" />
+ <key keyword="math.atan2 (x, y)" name="math.atan2 (x, y)" local="lua/pdf-math.atan2.html" />
+ <key keyword="math.ceil (x)" name="math.ceil (x)" local="lua/pdf-math.ceil.html" />
+ <key keyword="math.cos (x)" name="math.cos (x)" local="lua/pdf-math.cos.html" />
+ <key keyword="math.cosh (x)" name="math.cosh (x)" local="lua/pdf-math.cosh.html" />
+ <key keyword="math.deg (x)" name="math.deg (x)" local="lua/pdf-math.deg.html" />
+ <key keyword="math.exp (x)" name="math.exp (x)" local="lua/pdf-math.exp.html" />
+ <key keyword="math.floor (x)" name="math.floor (x)" local="lua/pdf-math.floor.html" />
+ <key keyword="math.fmod (x, y)" name="math.fmod (x, y)" local="lua/pdf-math.fmod.html" />
+ <key keyword="math.frexp (x)" name="math.frexp (x)" local="lua/pdf-math.frexp.html" />
+ <key keyword="math.huge" name="math.huge" local="lua/pdf-math.huge.html" />
+ <key keyword="math.ldexp (m, e)" name="math.ldexp (m, e)" local="lua/pdf-math.ldexp.html" />
+ <key keyword="math.log (x)" name="math.log (x)" local="lua/pdf-math.log.html" />
+ <key keyword="math.log10 (x)" name="math.log10 (x)" local="lua/pdf-math.log10.html" />
+ <key keyword="math.max (x, ...)" name="math.max (x, ...)" local="lua/pdf-math.max.html" />
+ <key keyword="math.min (x, ...)" name="math.min (x, ...)" local="lua/pdf-math.min.html" />
+ <key keyword="math.modf (x)" name="math.modf (x)" local="lua/pdf-math.modf.html" />
+ <key keyword="math.pi" name="math.pi" local="lua/pdf-math.pi.html" />
+ <key keyword="math.pow (x, y)" name="math.pow (x, y)" local="lua/pdf-math.pow.html" />
+ <key keyword="math.rad (x)" name="math.rad (x)" local="lua/pdf-math.rad.html" />
+ <key keyword="math.random ([m [, n]])" name="math.random ([m [, n]])" local="lua/pdf-math.random.html" />
+ <key keyword="math.randomseed (x)" name="math.randomseed (x)" local="lua/pdf-math.randomseed.html" />
+ <key keyword="math.sin (x)" name="math.sin (x)" local="lua/pdf-math.sin.html" />
+ <key keyword="math.sinh (x)" name="math.sinh (x)" local="lua/pdf-math.sinh.html" />
+ <key keyword="math.sqrt (x)" name="math.sqrt (x)" local="lua/pdf-math.sqrt.html" />
+ <key keyword="math.tan (x)" name="math.tan (x)" local="lua/pdf-math.tan.html" />
+ <key keyword="math.tanh (x)" name="math.tanh (x)" local="lua/pdf-math.tanh.html" />
+ <key keyword="Lua: 5.7 - Input and Output Facilities" name="Lua: 5.7 - Input and Output Facilities" local="lua/5.7.html" />
+ <key keyword="io.close ([file])" name="io.close ([file])" local="lua/pdf-io.close.html" />
+ <key keyword="io.flush ()" name="io.flush ()" local="lua/pdf-io.flush.html" />
+ <key keyword="io.input ([file])" name="io.input ([file])" local="lua/pdf-io.input.html" />
+ <key keyword="io.lines ([filename])" name="io.lines ([filename])" local="lua/pdf-io.lines.html" />
+ <key keyword="io.open (filename [, mode])" name="io.open (filename [, mode])" local="lua/pdf-io.open.html" />
+ <key keyword="io.output ([file])" name="io.output ([file])" local="lua/pdf-io.output.html" />
+ <key keyword="io.popen ([prog [, mode]])" name="io.popen ([prog [, mode]])" local="lua/pdf-io.popen.html" />
+ <key keyword="io.read (...)" name="io.read (...)" local="lua/pdf-io.read.html" />
+ <key keyword="io.tmpfile ()" name="io.tmpfile ()" local="lua/pdf-io.tmpfile.html" />
+ <key keyword="io.type (obj)" name="io.type (obj)" local="lua/pdf-io.type.html" />
+ <key keyword="io.write (...)" name="io.write (...)" local="lua/pdf-io.write.html" />
+ <key keyword="file table" name="file table" local="lua/pdf-file.html" />
+ <key keyword="file:close ()" name="file:close ()" local="lua/pdf-file.html" />
+ <key keyword="file:flush ()" name="file:flush ()" local="lua/pdf-file.html" />
+ <key keyword="file:lines ()" name="file:lines ()" local="lua/pdf-file.html" />
+ <key keyword="file:read (...)" name="file:read (...)" local="lua/pdf-file.html" />
+ <key keyword="file:seek ([whence] [, offset])" name="file:seek ([whence] [, offset])" local="lua/pdf-file.html" />
+ <key keyword="file:setvbuf (mode [, size])" name="file:setvbuf (mode [, size])" local="lua/pdf-file.html" />
+ <key keyword="file:write (...)" name="file:write (...)" local="lua/pdf-file.html" />
+ <key keyword="Lua: 5.8 - Operating System Facilities" name="Lua: 5.8 - Operating System Facilities" local="lua/5.8.html" />
+ <key keyword="os.clock ()" name="os.clock ()" local="lua/pdf-os.clock.html" />
+ <key keyword="os.date ([format [, time]])" name="os.date ([format [, time]])" local="lua/pdf-os.date.html" />
+ <key keyword="os.difftime (t2, t1)" name="os.difftime (t2, t1)" local="lua/pdf-os.difftime.html" />
+ <key keyword="os.execute ([command])" name="os.execute ([command])" local="lua/pdf-os.execute.html" />
+ <key keyword="os.exit ([code])" name="os.exit ([code])" local="lua/pdf-os.exit.html" />
+ <key keyword="os.getenv (varname)" name="os.getenv (varname)" local="lua/pdf-os.getenv.html" />
+ <key keyword="os.remove (filename)" name="os.remove (filename)" local="lua/pdf-os.remove.html" />
+ <key keyword="os.rename (oldname, newname)" name="os.rename (oldname, newname)" local="lua/pdf-os.rename.html" />
+ <key keyword="os.setlocale (locale [, category])" name="os.setlocale (locale [, category])" local="lua/pdf-os.setlocale.html" />
+ <key keyword="os.time ([table])" name="os.time ([table])" local="lua/pdf-os.time.html" />
+ <key keyword="os.tmpname ()" name="os.tmpname ()" local="lua/pdf-os.tmpname.html" />
+ <key keyword="Lua: 5.9 - The Debug Library" name="Lua: 5.9 - The Debug Library" local="lua/5.9.html" />
+ <key keyword="debug.debug ()" name="debug.debug ()" local="lua/pdf-debug.debug.html" />
+ <key keyword="debug.getfenv (o)" name="debug.getfenv (o)" local="lua/pdf-debug.getfenv.html" />
+ <key keyword="debug.gethook ([thread])" name="debug.gethook ([thread])" local="lua/pdf-debug.gethook.html" />
+ <key keyword="debug.getinfo ([thread,] function [, what])" name="debug.getinfo ([thread,] function [, what])" local="lua/pdf-debug.getinfo.html" />
+ <key keyword="debug.getlocal ([thread,] level, local)" name="debug.getlocal ([thread,] level, local)" local="lua/pdf-debug.getlocal.html" />
+ <key keyword="debug.getmetatable (object)" name="debug.getmetatable (object)" local="lua/pdf-debug.getmetatable.html" />
+ <key keyword="debug.getregistry ()" name="debug.getregistry ()" local="lua/pdf-debug.getregistry.html" />
+ <key keyword="debug.getupvalue (func, up)" name="debug.getupvalue (func, up)" local="lua/pdf-debug.getupvalue.html" />
+ <key keyword="debug.setfenv (object, table)" name="debug.setfenv (object, table)" local="lua/pdf-debug.setfenv.html" />
+ <key keyword="debug.sethook ([thread,] hook, mask [, count])" name="debug.sethook ([thread,] hook, mask [, count])" local="lua/pdf-debug.sethook.html" />
+ <key keyword="debug.setlocal ([thread,] level, local, value)" name="debug.setlocal ([thread,] level, local, value)" local="lua/pdf-debug.setlocal.html" />
+ <key keyword="debug.setmetatable (object, table)" name="debug.setmetatable (object, table)" local="lua/pdf-debug.setmetatable.html" />
+ <key keyword="debug.setupvalue (func, up, value)" name="debug.setupvalue (func, up, value)" local="lua/pdf-debug.setupvalue.html" />
+ <key keyword="debug.traceback ([thread,] [message])" name="debug.traceback ([thread,] [message])" local="lua/pdf-debug.traceback.html" />
+ <key keyword="Lua: 6 - Lua Stand-alone" name="Lua: 6 - Lua Stand-alone" local="lua/6.html" />
+ <key keyword="Lua: 7 - Incompatibilities with the Previous Version" name="Lua: 7 - Incompatibilities with the Previous Version" local="lua/7.html" />
+ <key keyword="Lua: 7.1 - Changes in the Language" name="Lua: 7.1 - Changes in the Language" local="lua/7.1.html" />
+ <key keyword="Lua: 7.2 - Changes in the Libraries" name="Lua: 7.2 - Changes in the Libraries" local="lua/7.2.html" />
+ <key keyword="Lua: 7.3 - Changes in the API" name="Lua: 7.3 - Changes in the API" local="lua/7.3.html" />
+ <key keyword="Lua: 8 - The Complete Syntax of Lua" name="Lua: 8 - The Complete Syntax of Lua" local="lua/8.html" />
+</help-index>

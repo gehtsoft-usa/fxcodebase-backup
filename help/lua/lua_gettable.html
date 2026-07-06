@@ -1,0 +1,27 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_gettable</title>
+</head>
+<body>
+<h3><a name="lua_gettable"><code>lua_gettable</code></a></h3>
+<pre>void lua_gettable (lua_State *L, int index);</pre>
+
+<p>
+Pushes onto the stack the value <code>t[k]</code>,
+where <code>t</code> is the value at the given valid index <code>index</code>
+and <code>k</code> is the value at the top of the stack.
+
+
+<p>
+This function pops the key from the stack
+(putting the resulting value in its place).
+As in Lua, this function may trigger a metamethod
+for the "index" event (see <a href="2.8.html">&sect;2.8</a>).
+
+
+
+
+
+<hr>
+</body>
+</html>

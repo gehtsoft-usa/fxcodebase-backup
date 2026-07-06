@@ -1,0 +1,79 @@
+function Init()
+{
+    indicator.name("FN Signal indicator");
+    indicator.description("FN Signal indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    
+    indicator.parameters.addInteger("FN", "FN", "FN", 34);
+    indicator.parameters.addDouble("Deviation", "Deviation", "Deviation", 3.);
+    indicator.parameters.addInteger("FastEMA", "FastEMA", "FastEMA", 5);
+    indicator.parameters.addInteger("SlowEMA", "SlowEMA", "SlowEMA", 13);
+
+    indicator.parameters.addColor("clrLine", "Color of Line", "Color of Line", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("UPclr", "UP Color", "UP Color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("DNclr", "DN Color", "DN Color", core.rgb(0, 0, 255));
+}
+
+var first;
+var source = null;
+var FN;
+var Deviation;
+var FastEMA;
+var SlowEMA;
+var Buff;
+var FastMA;
+var SlowMA;
+var MA;
+var StdDev;
+var buffLine=null;
+var buffUP=null;
+var buffDN=null;
+
+function Prepare()
+{
+    source = instance.source;
+    FN=instance.parameters.FN;
+    Deviation=instance.parameters.Deviation;
+    FastEMA=instance.parameters.FastEMA;
+    SlowEMA=instance.parameters.SlowEMA;
+    Buff = instance.addInternalStream(0, 0);
+    SlowMA = core.indicators.create("EMA", Buff, SlowEMA);
+    FastMA = core.indicators.create("EMA", Buff, FastEMA);
+    MA = core.indicators.create("EMA", source.close, FN);
+    StdDev = core.indicators.create("STDDEV", source.close, FN);
+    first = MA.DATA.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.FN + ", " + instance.parameters.Deviation + ", " + instance.parameters.FastEMA + ", " + instance.parameters.SlowEMA + ")";
+    instance.name(name);
+    buffLine = instance.addStream("FN", core.Line, name + ".FN", "FN", instance.parameters.clrLine, first);
+    buffUP = instance.addStream("UP", core.Bar, name + ".UP", "UP", instance.parameters.UPclr, first);
+    buffDN = instance.addStream("DN", core.Bar, name + ".DN", "DN", instance.parameters.DNclr, first);
+}
+
+function Update(period, mode)
+{
+    if (period>first) 
+    {
+     MA.update(mode);
+     StdDev.update(mode);
+     var A=(source.close[period]-MA.DATA[period])/StdDev.DATA[period];
+     A=A/Deviation;
+     A=Math.min(A,0.99);
+     A=Math.max(A,-0.99);
+     Buff[period]=0.5*Math.log((1.+A)/(1.-A));
+     SlowMA.update(mode);
+     FastMA.update(mode);
+     buffLine[period]=SlowMA.DATA[period];
+     if (FastMA.DATA[period]>buffLine[period]) 
+     {
+      buffUP[period]=FastMA.DATA[period];
+      buffDN[period]=null;
+     } 
+     else
+     {
+      buffUP[period]=null;
+      buffDN[period]=FastMA.DATA[period];
+     }
+    } 
+}
+

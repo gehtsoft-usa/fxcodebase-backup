@@ -1,0 +1,123 @@
+function Init()
+{
+    indicator.name("Centred moving average");
+    indicator.description("Centred moving average");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+     indicator.parameters.addGroup("Calculation");	
+    indicator.parameters.addInteger("Period", "Period", "Period", 14);
+
+	indicator.parameters.addGroup("Style");	
+    indicator.parameters.addColor("Color", "Color of Actual CMA", "Color of Actual CMA", core.rgb(255, 0, 0));
+	indicator.parameters.addColor("Prediction", "Color of Prediction of CMA", "Color of Prediction of CMA", core.rgb(0,255, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var Period;
+var Raw;
+var first;
+var source = null;
+var Prediction;
+var Color;
+
+var CMA = null;
+ 
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;	 
+	Prediction = instance.parameters.Prediction;
+	Color = instance.parameters.Color;
+    source = instance.source;
+    first = source.first();
+	
+	Raw=instance.addInternalStream(first, Period/2+4); 
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period)  + ")";
+    instance.name(name);
+	
+    Odd  = !EvenOdd(Period);
+
+    if (!(nameOnly)) 
+    {
+        CMA = instance.addStream("CMA", core.Line, name, "CMA", Color, first );
+		CMA.setWidth(instance.parameters.width);
+        CMA.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period, mode)
+{
+
+    var i;
+
+
+    if (period < source.size() -1) 
+    {
+     Raw[period]= source[period];	 
+    }
+    else
+    {
+	
+		for (i = period+1; i<=(period+1+Period/2); i++) 
+		{
+		 Raw[i] =source[period]; 
+		}
+		
+	    Raw[period] =source[period];   
+	    Raw[period-1] =source[period-1]; 
+	
+	}
+ 
+    	
+	 
+	 
+    if (period < (first +Period/2) || !source.hasData(period)) 
+    {
+	 return;
+	}
+
+	
+	
+	
+   if (period < first +Period+Period/2+1) 
+   {
+    return;
+   }
+   
+	  if (period < source.size() -1) 
+	  {
+	   
+		CMA[period- (Period/2)] = Math.avg(Raw, period-Period+1, period) ;
+		CMA.setColor(period- (Period/2), Color); 
+	  }
+	  else
+	  {
+	  
+	     if (Odd) 
+	     {
+		      for (i= 0; i<=(Period/2)+1; i++) 
+		      {
+			 CMA[period- (Period/2)+i] =  Math.avg(Raw, period-Period+1+i, period+i) ;
+			 CMA.setColor(period- (Period/2)+i, Prediction);
+			 }
+		 }
+		 else
+		 {
+		 
+	    
+			 for (i= 0; i<=(Period/2); i++) 
+			 {
+			  CMA[period- (Period/2)+i] =  Math.avg(Raw, period-Period+1+i, period+i) ;
+			  CMA.setColor(period- (Period/2)+i, Prediction);
+			 }
+		 }
+	  
+	  }
+    
+}
+
+function EvenOdd (value)
+{ 
+ return (value % 2 == 0);
+}

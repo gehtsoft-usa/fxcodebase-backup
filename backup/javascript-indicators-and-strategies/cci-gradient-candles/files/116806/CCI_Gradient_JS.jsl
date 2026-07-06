@@ -1,0 +1,99 @@
+function Init()
+{
+    indicator.name("CCI gradient indicator");
+    indicator.description("CCI gradient indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 14);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addString("UPclr", "UP color", "", "Green");
+    indicator.parameters.addStringAlternative("UPclr", "Red", "", "Red");
+    indicator.parameters.addStringAlternative("UPclr", "Green", "", "Green");
+    indicator.parameters.addStringAlternative("UPclr", "Blue", "", "Blue");
+    indicator.parameters.addString("DNclr", "DN color", "", "Red");
+    indicator.parameters.addStringAlternative("DNclr", "Red", "", "Red");
+    indicator.parameters.addStringAlternative("DNclr", "Green", "", "Green");
+    indicator.parameters.addStringAlternative("DNclr", "Blue", "", "Blue");
+    indicator.parameters.addDouble("Depth", "Depth", "", 0.005);
+}
+
+var first;
+var source = null;
+var Period;
+var UPclr;
+var DNclr;
+var Depth;
+var CCI;
+var open=null;
+var close=null;
+var high=null;
+var low=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    UPclr=instance.parameters.UPclr;
+    DNclr=instance.parameters.DNclr;
+    Depth=instance.parameters.Depth;
+    first = source.first()+2;
+    CCI = core.indicators.create("CCI", source, Period);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ")";
+    instance.name(name);
+    open = instance.addStream("open", core.Line, name, "open", core.rgb(0, 0, 0), first)
+    high = instance.addStream("high", core.Line, name, "high", core.rgb(0, 0, 0), first)
+    low = instance.addStream("low", core.Line, name, "low", core.rgb(0, 0, 0), first)
+    close = instance.addStream("close", core.Line, name, "close", core.rgb(0, 0, 0), first)
+    instance.createCandleGroup("CCI color candle", "", open, high, low, close);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    CCI.update(mode);
+    open[period]=source.open[period];
+    close[period]=source.close[period];
+    high[period]=source.high[period];
+    low[period]=source.low[period];
+    var R=0;
+    var G=0;
+    var B=0;
+    var CCIvalue=CCI.DATA[period];
+    if (CCIvalue>0) 
+    {
+     if (UPclr=="Red") 
+     {
+      R=Math.min(CCIvalue*Depth*255,255);
+     } 
+     else if (UPclr=="Green") 
+     {
+      G=Math.min(CCIvalue*Depth*255,255);
+     } 
+     else
+     {
+      B=Math.min(CCIvalue*Depth*255,255);
+     }
+    } 
+    else
+    {
+     if (DNclr=="Red") 
+     {
+      R=Math.min(-CCIvalue*Depth*255,255);
+     } 
+     else if (DNclr=="Green") 
+     {
+      G=Math.min(-CCIvalue*Depth*255,255);
+     } 
+     else
+     {
+      B=Math.min(-CCIvalue*Depth*255,255);
+     }
+    }
+    open.setColor(period,core.rgb(R,G,B));
+   } 
+}
+

@@ -1,0 +1,29 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_setlocal</title>
+</head>
+<body>
+<h3><a name="lua_setlocal"><code>lua_setlocal</code></a></h3>
+<pre>const char *lua_setlocal (lua_State *L, const lua_Debug *ar, int n);</pre>
+
+<p>
+Sets the value of a local variable of a given activation record.
+Parameters <code>ar</code> and <code>n</code> are as in <a href="lua_getlocal.html"><code>lua_getlocal</code></a>
+(see <a href="lua_getlocal.html"><code>lua_getlocal</code></a>).
+<a href="lua_setlocal.html"><code>lua_setlocal</code></a> assigns the value at the top of the stack
+to the variable and returns its name.
+It also pops the value from the stack.
+
+
+<p>
+Returns <code>NULL</code> (and pops nothing)
+when the index is greater than
+the number of active local variables.
+
+
+
+
+
+<hr>
+</body>
+</html>

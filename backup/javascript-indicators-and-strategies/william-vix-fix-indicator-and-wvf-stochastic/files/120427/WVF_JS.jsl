@@ -1,0 +1,64 @@
+function Init()
+{
+    indicator.name(" William Vix Fix indicator");
+    indicator.description(" William Vix Fix indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+	
+    indicator.parameters.addGroup("Calculation");	
+    indicator.parameters.addInteger("Period", "Period", "Period", 22);
+	
+	indicator.parameters.addGroup("Style");	
+	indicator.parameters.addString("Type", "Line Type", "Type" , "Line");
+    indicator.parameters.addStringAlternative("Type", "Line", "Line" , "Line");
+    indicator.parameters.addStringAlternative("Type", "Bar", "Bar" , "Bar");
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("WVF_color", "Color of WVF", "Color of WVF", core.rgb(255, 0, 0));
+}
+
+var Period;
+
+var first;
+var source = null;
+var Type;
+
+var WVF = null;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+	Type = instance.parameters.Type;
+    source = instance.source;
+    first = source.first()+Period;
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ", " + tostring(Type)+ ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+	    if (Type == "Line") 
+        {
+         WVF = instance.addStream("WVF", core.Line, name, "WVF", instance.parameters.WVF_color, first);
+		 WVF.setWidth(instance.parameters.width);
+         WVF.setStyle(instance.parameters.style);
+        } 
+		else
+        {
+		 WVF = instance.addStream("WVF", core.Bar, name, "WVF", instance.parameters.WVF_color, first);
+		}
+    }
+}
+
+function Update(period)
+{
+    if (period < first) 
+    {
+	 return;
+	}
+	   var tmp=Math.minmax(source.close, period-Period, period);
+        WVF[period] = ((tmp[1]- source.low[period])/tmp[1])*100;
+  
+}
+

@@ -1,0 +1,65 @@
+function Init()
+{
+    indicator.name("Exponential Smoothing with Trend Adjustment");
+    indicator.description("Exponential Smoothing with Trend Adjustment");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+    indicator.parameters.addGroup("Calculation")
+    indicator.parameters.addDouble("Alfa", "Alpha", "Alpha", 0.2);
+    indicator.parameters.addDouble("Beta", "Beta", "Beta", 0.3);
+	indicator.parameters.addBoolean("Use", "Use Trend Adjustment", "", true);
+	indicator.parameters.addGroup("Style")
+    indicator.parameters.addColor("H_color", "Color of Historical Forecast", "", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+
+}
+
+var Alfa;
+var Beta;
+var Period=0;
+var first;
+var source = null;
+
+var F, T;
+var Use;
+
+function Prepare(nameOnly)
+{
+    Alfa = instance.parameters.Alfa;
+    Use = instance.parameters.Use;
+    Beta = instance.parameters.Beta;
+    source = instance.source;
+    first = source.first();
+    T= instance.addInternalStream(first, Period);
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Alfa) + ", " + tostring(Beta) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        F = instance.addStream("EMATA", core.Line, name, "EMATA", instance.parameters.H_color, first, Period );
+		F.setWidth(instance.parameters.width);
+        F.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period)
+{
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+   
+	F[period] = Alfa* source[period-1]+(1-Alfa)*(F[period-1]+T[period-1]);	
+	if (Use) 
+    { 
+	 T[period]=Beta*(F[period]-F[period-1])+(1-Beta)*T[period-1];
+    } 
+	else
+    {
+	 T[period]=0;
+	}
+	
+
+}

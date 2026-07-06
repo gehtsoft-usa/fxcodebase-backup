@@ -1,0 +1,114 @@
+function Init()
+{
+    indicator.name("Anchored Momentum");
+    indicator.description("Anchored Momentum");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+	
+	
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("One", "First Period", "", 2,2, 2000);
+    indicator.parameters.addInteger("Two", "Second Period", "", 42, 2, 2000);
+	
+	indicator.parameters.addGroup("Calculation");
+	indicator.parameters.addString("Method1", "First Method", "", "SMMA");
+	indicator.parameters.addStringAlternative("Method1", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method1", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method1", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method1", "MWA", "", "WMA");
+    indicator.parameters.addStringAlternative("Method1", "LWMA", "", "LWMA");
+	indicator.parameters.addStringAlternative("Method1", "WMA", "", "WMA");
+	indicator.parameters.addStringAlternative("Method1", "Price", "", "Price");
+	
+	indicator.parameters.addString("Method2", "Second Method", "", "MVA");
+    indicator.parameters.addStringAlternative("Method2", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method2", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method2", "MWA", "", "WMA");
+    indicator.parameters.addStringAlternative("Method2", "LWMA", "", "LWMA");
+	indicator.parameters.addStringAlternative("Method2", "WMA", "", "WMA");
+	indicator.parameters.addStringAlternative("Method2", "SMMA", "", "SMMA");
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UP_color", "Color of UP", "", core.rgb(0, 255, 0));
+	indicator.parameters.addColor("DOWN_color", "Color of DOWN", "", core.rgb(255, 0, 0));
+}
+
+var One;
+var Two;
+var Method1, Method2;
+
+var first;
+var source = null;
+
+var indicator={};
+var AM = null;
+
+function Prepare(nameOnly)
+{
+    Method1 = instance.parameters.Method1;
+	Method2 = instance.parameters.Method2;
+    One = instance.parameters.One;
+    Two = instance.parameters.Two;
+    source = instance.source;
+    first = source.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(One) + ", " + tostring(Two) +"," + Method1+", "+ Method2+ ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+	    
+		if (Method1 != "Price") 
+		{
+		 indicator[1]=  core.indicators.create(Method1, source, One);
+		 first= Math.max(indicator[1].DATA.first(), first);
+		}
+		
+		indicator[2]=  core.indicators.create(Method2, source, Two);
+		first= Math.max(indicator[2].DATA.first(), first);
+		
+        AM = instance.addStream("AM", core.Bar, name, "AM", instance.parameters.UP_color,first );
+    }
+}
+
+function Update(period, mode)
+{
+    if (period >= first && source.hasData(period)) 
+    {
+        
+	 var a,b;
+
+	  if (Method1 != "Price") 
+	  {
+	         indicator[1].update(mode);
+	         if (!indicator[1].DATA.hasData(period)) 
+	         {
+		      return;
+		     }
+		a = indicator[1].DATA[period];
+	  }
+	  else
+	  {
+	   a = source[period];
+	  }
+	  
+	           indicator[2].update(mode);
+		      if (!indicator[2].DATA.hasData(period)) 
+		      {
+			   return;
+			  }
+		b = indicator[2].DATA[period];
+		
+		AM[period] =  100*((a / b)-1);
+		
+		if (AM[period] > AM[period-1]) 
+		{
+		 AM.setColor(period, instance.parameters.UP_color);
+		} 
+        else
+        {
+		 AM.setColor(period, instance.parameters.DOWN_color);
+        } 		
+    }
+}
+

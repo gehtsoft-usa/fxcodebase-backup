@@ -1,0 +1,95 @@
+function Init()
+{
+    indicator.name("Dinapoli Preferred Stochastic");
+    indicator.description("Dinapoli Preferred Stochastic");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+  
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("K", "Number of periods for %K", "The number of periods for %K.", 10, 2, 1000);
+    indicator.parameters.addInteger("SD", "%D slowing periods", "The number of periods for slow %D.", 5, 2, 1000);
+    indicator.parameters.addInteger("D", "Number of periods for %D", "The number of periods for %D.", 5, 2, 1000);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clrFirst", "K line Color", "K line Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clrSecond", "D line Color", "D line Color", core.rgb(255, 0, 0));
+}
+
+var k;
+var d;
+var sd;
+
+var source = null;
+var mins = null;
+var maxes = null;
+
+var FastK = null;
+var fastkFirst = null;
+var kFirst = null;
+var dFirst = null;
+
+var K = null;
+var D = null;
+
+var  Smoothing = null;
+var  Signal = null;
+
+function Prepare()
+{
+    k = instance.parameters.K;
+    d = instance.parameters.D;
+    sd = instance.parameters.SD;
+	
+    source = instance.source;
+	
+    mins = instance.addInternalStream(source.first() + k, 0);
+    maxes = instance.addInternalStream(source.first() + k, 0);
+	
+    FastK = instance.addInternalStream(mins.first(), 0);	
+	fastkFirst = FastK.first();
+	
+	Smoothing = instance.addInternalStream(fastkFirst+sd, 0);
+	Signal = instance.addInternalStream(Smoothing.first()+d, 0);
+
+    var name = profile.id() + "(" + source.name() + ", " + k + ", " + d + ", " + sd + ", " + ")";
+    instance.name(name);  
+			   
+    K = instance.addStream("K", core.Line, name + ".K", "K", instance.parameters.clrFirst, FastK.first() + sd);
+	kFirst = K.first();
+    D = instance.addStream("D", core.Line, name + ".D", "D", instance.parameters.clrSecond,  Signal.first());
+	dFirst = D.first();
+	D.addLevel(20);
+    D.addLevel(80);
+}
+
+function Update(period)
+{
+    if (period >= fastkFirst) 
+    {
+        var tmp=Math.minmax(source, period-k+1, period);
+        var minLow = tmp[0];
+        var maxHigh = tmp[1];
+		
+		
+		 FastK[period]= ((source[period] - minLow) / (maxHigh - minLow)) * 100;
+		 
+		Smoothing[period] =Smoothing[period-1] + (FastK[period] - Smoothing[period-1]) / sd;
+		 
+		if (period >= kFirst) 
+		{  
+			
+			K[period]= Smoothing[period];
+			
+			Signal[period] = Signal[period-1] + (Smoothing[period] - Signal[period-1]) / d;
+			
+			 if (period >= dFirst) 
+			 {  	
+			  D[period] =Signal[period];
+			 } 
+		 } 
+		 
+	}
+		
+      
+}
+

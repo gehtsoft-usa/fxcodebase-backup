@@ -1,0 +1,82 @@
+function Init()
+{
+    indicator.name("Price Difference Indicator");
+    indicator.description("Price Difference Indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    indicator.parameters.addGroup("Calculation");	
+	
+	indicator.parameters.addString("Price", "Price Source", "", "median");
+    indicator.parameters.addStringAlternative("Price", "OPEN", "", "open");
+    indicator.parameters.addStringAlternative("Price", "HIGH", "", "high");
+    indicator.parameters.addStringAlternative("Price", "LOW", "", "low");
+    indicator.parameters.addStringAlternative("Price","CLOSE", "", "close");
+    indicator.parameters.addStringAlternative("Price", "MEDIAN", "", "median");
+    indicator.parameters.addStringAlternative("Price", "TYPICAL", "", "typical");
+    indicator.parameters.addStringAlternative("Price", "WEIGHTED", "", "weighted");	
+	
+    indicator.parameters.addDouble("Difference", "Difference (in Pips)", "If set to Zero Signal is deactivated", 0);
+	
+	
+	indicator.parameters.addBoolean("On", "Repaint", "", true);
+	
+	indicator.parameters.addGroup("Style");	
+    indicator.parameters.addColor("Up", "Color of Up", "Color of Up", core.rgb(0, 255, 0));
+	indicator.parameters.addColor("Down", "Color of Down", "Color of Down", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("Size", "Font Size", "", 10, 1 , 100);	
+}
+
+var Difference;
+var On;
+var first;
+var source = null;
+var Price;
+
+var Up = null;
+var Down = null;
+var Size;
+
+function Prepare(nameOnly)
+{
+    Difference = instance.parameters.Difference;
+	On = instance.parameters.On;
+	Size = instance.parameters.Size;
+	Price = instance.parameters.Price;
+    source = instance.source;
+    first = source.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Difference) + ", " + tostring(Price) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+         Up = instance.createTextOutput ("Up", "Up", "Wingdings", Size, core.H_Center, core.V_Top, instance.parameters.Up, first);
+         Down = instance.createTextOutput ("Dn", "Dn", "Wingdings", Size, core.H_Center, core.V_Bottom, instance.parameters.Down, first);
+    }
+}
+
+function Update(period)
+{
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+	if (Difference == 0  || On) 
+	{
+	 Up.setNoData (period);
+	 Down.setNoData (period);
+	 return;
+	}
+	
+	    if ((source[Price][period]-source[Price][period-1])/source.pipSize()>Difference) 
+	    {
+         Up.set(period, source.high[period], "\226");
+        } 
+		else if ((source[Price][period]-source[Price][period-1])/source.pipSize()<-Difference)  
+		{
+		 Down.set(period, source.low[period], "\225");
+		}
+    
+}
+

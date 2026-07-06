@@ -1,0 +1,43 @@
+function Init()
+{
+    indicator.name("Vector");
+    indicator.description("Vector");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addColor("clrWP", "Slow Vector Color","Slow Vector Color", core.rgb(255, 0, 0));
+	 indicator.parameters.addColor("clrWN", "Fast Vector Color", "Fast Vector Color", core.rgb(0, 255, 0));
+}
+
+var first;
+var source = null;
+
+var SI = null;
+var IS = null;
+
+function Prepare()
+{
+    source = instance.source;
+    first = source.first() + 1;
+
+    var name = profile.id() + "(" + source.name() + ")";
+    instance.name(name);
+    SI = instance.addStream("WP", core.Bar, name, "WP", instance.parameters.clrWP, first);
+	IS = instance.addStream("WN", core.Bar, name, "WN", instance.parameters.clrWN, first);
+
+}
+
+function Update(period)
+{
+    if (period >=16 && source.hasData(period)) 
+    {
+       
+		
+		SI[period]=((source.close[period] - source.close[period-2]) + (source.close[period] - source.close[period-4]) +(source.close[period] - source.close[period-8])+ (source.close[period] - source.close[period-16]))/4;
+
+		IS[period]=(0.5*(source.close[period] - source.close[period-2]) + 0.25*(source.close[period] - source.close[period-4]) + 0.125*(source.close[period] - source.close[period-8])+ 0.0625*(source.close[period] - source.close[period-16]));
+
+
+		
+    }
+}

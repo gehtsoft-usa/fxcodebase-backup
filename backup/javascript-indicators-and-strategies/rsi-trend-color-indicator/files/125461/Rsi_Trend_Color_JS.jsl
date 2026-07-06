@@ -1,0 +1,121 @@
+function Init()
+{
+    indicator.name("RSI trend color indicator");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    
+    indicator.parameters.addInteger("RSI_Period", "RSI_Period", "Period of RSI", 50);
+    indicator.parameters.addInteger("EMA_Period", "EMA_Period", "Period of EMA", 25);
+    indicator.parameters.addInteger("PriceType", "PriceType", "0 - close, 1 - open, 2 - hi, 3 -low , 4 - median, 5 - typical, 6 - weighted.", 0);
+    indicator.parameters.addInteger("overBought", "overBought", "overBought", 50);
+    indicator.parameters.addInteger("overSold", "overSold", "overSold", 50);
+
+    indicator.parameters.addColor("RSI_color", "Color of RSI", "Color of RSI", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("MA_color", "Color of MA", "Color of MA", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("Upper_color", "Color of Upper", "Color of Upper", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("Lower_color", "Color of Lower", "Color of Lower", core.rgb(128, 128, 128));
+}
+
+var pCCI;
+var pATR;
+
+var first;
+var source = null;
+var Price=null;
+var RSI = null;
+var MA = null;
+var RSI_Period;
+var EMA_Period;
+var PriceType;
+var overBought;
+var overSold;
+
+var thisCCI, lastCCI;
+
+function Prepare()
+{
+    source = instance.source;
+    RSI_Period=instance.parameters.RSI_Period;
+    EMA_Period=instance.parameters.EMA_Period;
+    PriceType=instance.parameters.PriceType;
+    overBought=instance.parameters.overBought;
+    overSold=instance.parameters.overSold;
+    Price = instance.addInternalStream(0, 0);
+    RSI = core.indicators.create("RSI", Price, RSI_Period);
+    MA = core.indicators.create("EMA", RSI.DATA, EMA_Period);
+    first = source.first()+Math.max(RSI_Period,EMA_Period);
+    var name = profile.id() + "(" + source.name() + ", " + RSI_Period + ", " + EMA_Period + ", " + PriceType + ", " + overBought + ", " + overSold + ")";
+    instance.name(name);
+    RSIbuff = instance.addStream("RSIbuff", core.Line, name + ".RSIbuff", "RSIbuff", instance.parameters.RSI_color, first);
+    MAbuff = instance.addStream("MAbuff", core.Line, name + ".MAbuff", "MAbuff", instance.parameters.MA_color, first);
+    Upper = instance.addStream("Upper", core.Line, name + ".Upper", "Upper", instance.parameters.Upper_color, first);
+    Lower = instance.addStream("Lower", core.Line, name + ".Lower", "Lower", instance.parameters.Lower_color, first);
+}
+
+function Update(period, mode)
+{
+    if (PriceType==0) 
+    {
+     Price[period]=source.close[period];
+    } 
+    else if (PriceType==1) 
+    {
+     Price[period]=source.open[period];
+    } 
+    else if (PriceType==2) 
+    {
+     Price[period]=source.high[period];
+    } 
+    else if (PriceType==3) 
+    {
+     Price[period]=source.low[period];
+    } 
+    else if (PriceType==4) 
+    {
+     Price[period]=(source.high[period]+source.low[period])/2.;
+    } 
+    else if (PriceType==5) 
+    {
+     Price[period]=(source.high[period]+source.low[period]+source.close[period])/3.;
+    } 
+    else if (PriceType==6) 
+    {
+     Price[period]=(source.high[period]+source.low[period]+2.*source.close[period])/4.;
+    }
+    RSI.update(mode);
+    MA.update(mode);
+    if (period>first) 
+    {
+     RSIbuff[period]=RSI.DATA[period];
+     MAbuff[period]=MA.DATA[period];
+     
+     if (RSI.DATA[period]>overBought) 
+     {
+      Upper[period]=RSI.DATA[period];
+      Upper[period-1]=RSI.DATA[period-1];
+     } 
+     else
+     {
+      Upper[period]=null;
+      if (Upper[period-2]==null) 
+      {
+       Upper[period-1]=null;
+      } 
+      if (RSI.DATA[period]<overSold) 
+      {
+       Lower[period]=RSI.DATA[period];
+       Lower[period-1]=RSI.DATA[period-1];
+      } 
+      else
+      {
+       Lower[period]=null;
+       if (Lower[period-2]==null) 
+       {
+        Lower[period-1]=null; 
+       } 
+      }
+     }
+    } 
+}
+

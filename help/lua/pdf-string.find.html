@@ -1,0 +1,34 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - string.find (s, pattern [, init [, plain]])</title>
+</head>
+<body>
+<h3><a name="pdf-string.find"><code>string.find (s, pattern [, init [, plain]])</code></a></h3>
+Looks for the first match of
+<code>pattern</code> in the string <code>s</code>.
+If it finds a match, then <code>find</code> returns the indices of&nbsp;<code>s</code>
+where this occurrence starts and ends;
+otherwise, it returns <b>nil</b>.
+A third, optional numerical argument <code>init</code> specifies
+where to start the search;
+its default value is&nbsp;1 and may be negative.
+A value of <b>true</b> as a fourth, optional argument <code>plain</code>
+turns off the pattern matching facilities,
+so the function does a plain "find substring" operation,
+with no characters in <code>pattern</code> being considered "magic".
+Note that if <code>plain</code> is given, then <code>init</code> must be given as well.
+
+
+<p>
+If the pattern has captures,
+then in a successful match
+the captured values are also returned,
+after the two indices.
+
+
+
+
+<p>
+<hr>
+</body>
+</html>

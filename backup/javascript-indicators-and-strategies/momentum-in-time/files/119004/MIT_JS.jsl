@@ -1,0 +1,118 @@
+function Init()
+{
+    indicator.name("Moment In Time");
+    indicator.description("Momemt In Time");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Selector");
+	indicator.parameters.addInteger("hour", "Hour", "", 0, 0, 24);
+	indicator.parameters.addInteger("minute", "Minute", "", 0, 0, 60);
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("MIT_color", "Color of MIT", "Color of MIT", core.rgb(255, 0, 0));
+	indicator.parameters.addColor("Label", "Label Color", "", core.rgb(0, 0, 255));
+	indicator.parameters.addInteger("Size", "Label Size", "", 10, 1 , 100);
+}
+
+var Size, LabeL;
+var first;
+var source = null;
+var Start;
+
+var MIT = null;
+var hour, minute;
+var  dayoffset,weekoffset;
+var ChartSize, DSize;
+
+function Prepare(nameOnly)
+{  
+    source = instance.source;
+    first = source.first();
+	Size= instance.parameters.Size;
+	Label= instance.parameters.Label;
+	hour= instance.parameters.hour;
+	minute= instance.parameters.minute;
+	dayoffset = core.host.execute("getTradingDayOffset");
+	weekoffset = core.host.execute("getTradingWeekOffset");
+
+	
+	var s1, e1
+	
+	 s1, e1 = core.getcandle(source.barSize(),  0,  0, 0);
+	 ChartSize = e1-s1;
+	
+	 s1, e1 = core.getcandle("D1", 0, 0, 0);
+	 DSize = e1-s1;
+	
+    var name = profile.id() + "(" + source.name() + ", " + tostring(hour)+ ", " + tostring(minute) + ")";
+    instance.name(name);
+
+
+    if (!(nameOnly)) 
+    {
+	    if (DSize > ChartSize) 
+	    {
+         MIT = instance.addStream("MIT", core.Line, name, "MIT", instance.parameters.MIT_color, first);
+		 Start = instance.createTextOutput ("Start", "Start", "Wingdings", Size, core.H_Center, core.V_Center, instance.parameters.Label, first);
+		}
+		else
+		{
+		 MIT = instance.addStream("MIT", core.Bar, name, "MIT", instance.parameters.MIT_color, first);
+		}
+    }
+}
+
+function Update(period)
+{
+    if (period < first) 
+    {
+	 return;
+	}
+	
+	var date = source.date(period) ;
+    var t = core.dateToTable(date);
+
+
+	var s, e;
+	s, e = core.getcandle("D1", date,dayoffset,weekoffset); 
+	
+	var second = 1 / 86400;
+	
+	s= s + minute*60*second + 60*60*hour*second;
+	
+
+    
+	
+	var index, Flag;
+	
+	if (source.barSize() == "m1") 
+	{
+	 Flag= true;
+	}
+	else
+	{
+	 Flag=false;
+	}
+	
+     index= core.findDate(source, s, Flag);
+
+
+   
+	
+    if (DSize > ChartSize) 
+    {
+    MIT[period] = source.close[period]- source.open[index]; 
+	
+	 if (period == index) 
+	 {
+	  Start.set(period , 0, "\108");	
+	 }
+	 }
+	else
+	{
+	 MIT[period] = source.close[period]- source.open[period-1];
+    }	
+    
+}
+

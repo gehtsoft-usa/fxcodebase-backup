@@ -1,0 +1,100 @@
+function Init()
+{
+    indicator.name("HL_MA_Band indicator");
+    indicator.description("HL_MA_Band indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 20);
+    indicator.parameters.addString("Method", "Method", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("Method", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Method", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Method", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Method", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Method", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Method", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Method", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Method", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Method", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Method", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Method", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Method", "JSmooth", "", "JSmooth");
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP color", "UP color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DNclr", "DN color", "DN color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("Cclr", "Constriction color", "Constriction color", core.rgb(0, 255, 255));
+    indicator.parameters.addColor("Eclr", "Expansion color", "Expansion color", core.rgb(255, 255, 128));
+    indicator.parameters.addInteger("Transparency", "Transparency", "", 50,0,100);
+}
+
+var first;
+var source = null;
+var Period;
+var Method;
+var MA_H, MA_L;
+var Hbuff=null;
+var Lbuff=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    Method=instance.parameters.Method;
+    first = source.first()+2;
+    MA_H = core.indicators.create("AVERAGES", source.high, Method, Period, false);
+    MA_L = core.indicators.create("AVERAGES", source.low, Method, Period, false);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.Method + ")";
+    instance.name(name);
+    Hbuff = instance.addStream("Hbuff", core.Line, name + ".Hbuff", "Hbuff", instance.parameters.UPclr, first);
+    Lbuff = instance.addStream("Lbuff", core.Line, name + ".Lbuff", "Lbuff", instance.parameters.UPclr, first);
+    instance.createChannelGroup("TC","TC" , Hbuff, Lbuff, instance.parameters.UPclr, 100-instance.parameters.Transparency);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    MA_H.update(mode);
+    MA_L.update(mode);
+    Hbuff[period]=MA_H.DATA[period];
+    Lbuff[period]=MA_L.DATA[period];
+    if (Hbuff[period]>Hbuff[period-1]) 
+    {
+     if (Lbuff[period]>Lbuff[period-1]) 
+     {
+      Hbuff.setColor(period, instance.parameters.UPclr);
+      Lbuff.setColor(period, instance.parameters.UPclr);
+     }
+     else
+     {
+      Hbuff.setColor(period, instance.parameters.Eclr);
+      Lbuff.setColor(period, instance.parameters.Eclr);
+     }
+    }
+    else
+    {
+     if (Lbuff[period]>Lbuff[period-1]) 
+     {
+      Hbuff.setColor(period, instance.parameters.Cclr);
+      Lbuff.setColor(period, instance.parameters.Cclr);
+     } 
+     else
+     {
+      Hbuff.setColor(period, instance.parameters.DNclr);
+      Lbuff.setColor(period, instance.parameters.DNclr);
+     }
+    }
+   } 
+}
+

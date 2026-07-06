@@ -1,0 +1,58 @@
+//initializes the indicator
+function Init()
+{
+    indicator.name("MD");
+    indicator.description("McGinley Dynamic");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+    indicator.setTag("group", "Trend");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("N", "Number of periods", "The number of periods.", 14, 1, 10000);
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Line color", "Line color", core.rgb(219, 64, 0));
+    indicator.parameters.addInteger("width", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LEVEL_STYLE);
+}
+
+var first = 0;
+var n = 0;
+var source = null;
+var MD = null;
+
+//initializes the instance of the indicator
+function Prepare(onlyName)
+{
+    source = instance.source;
+    n = instance.parameters.N;
+    var name = profile.id() + "(" + instance.source.name() + "," + n + ")";
+    instance.name(name);
+  
+    if (onlyName == true)
+        return ;
+    first = source.first() + 1;
+
+    MD = instance.addStream("MD", core.Line, name, "MD", instance.parameters.clr,  first)
+    MD.setWidth(instance.parameters.width);
+    MD.setStyle(instance.parameters.style);
+}
+
+// calculate the value
+function Update(period, mode)
+{
+    if (period >= first)
+    {
+        var value = 0;
+        var closePeriod = source[period];
+        if (period == first)
+        {
+            value = closePeriod;
+        }
+        else
+        {
+            value = MD[period - 1];
+        }
+       MD[period] = value + (closePeriod - value) / (0.6 * n * (Math.pow(closePeriod / value, 4)));
+    }
+}

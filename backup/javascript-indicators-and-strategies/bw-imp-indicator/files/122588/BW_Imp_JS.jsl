@@ -1,0 +1,86 @@
+function Init()
+{
+    indicator.name("BW Imp indicator");
+    indicator.description("BW Imp indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 96);
+    indicator.parameters.addInteger("Tr", "Tr", "", 3);
+    indicator.parameters.addInteger("T3_Period", "T3 period", "", 8);
+    indicator.parameters.addDouble("b", "b", "", 0.7);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(255, 255, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period;
+var Tr;
+var T3_Period;
+var b;
+var e1, e2, e3, e4, e5, e6;
+var c1, c2, c3, c4;
+var w1, w2;
+var CO, Avg_CO;
+var BW_Imp=null;
+var pipSize;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    Tr=instance.parameters.Tr;
+    T3_Period=instance.parameters.T3_Period;
+    b=instance.parameters.b;
+    first = source.first()+2;
+    e1 = instance.addInternalStream(first, 0);
+    e2 = instance.addInternalStream(first, 0);
+    e3 = instance.addInternalStream(first, 0);
+    e4 = instance.addInternalStream(first, 0);
+    e5 = instance.addInternalStream(first, 0);
+    e6 = instance.addInternalStream(first, 0);
+    CO = instance.addInternalStream(first, 0);
+    Avg_CO = instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.Tr + ", " + instance.parameters.T3_Period + ", " + instance.parameters.b + ")";
+    instance.name(name);
+    BW_Imp = instance.addStream("BW_Imp", core.Line, name + ".BW_Imp", "BW_Imp", instance.parameters.clr, first);
+    BW_Imp.setWidth(instance.parameters.widthLinReg);
+    BW_Imp.setStyle(instance.parameters.styleLinReg);
+    var b2=b*b;
+    var b3=b2*b;
+    c1=-b3;
+    c2=(3*(b2+b3));
+    c3=-3*(2*b2+b+b3);
+    c4=(1+3*b+b3+3*b2);
+    var n=1+0.5*(Math.max(T3_Period, 1)-1);
+    w1=2/(n+1);
+    w2=1-w1;
+    pipSize=source.pipSize();
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    CO[period]=(source.close[period]-source.open[period])/pipSize;
+    if (period>first+Period) 
+    {
+     Avg_CO[period]=Math.avg(CO, period-Period+1, period);
+     var sum=Math.avg(Avg_CO, period-Tr+1, period);
+     e1[period]=w1*sum+w2*e1[period-1];
+     e2[period]=w1*e1[period]+w2*e2[period-1];
+     e3[period]=w1*e2[period]+w2*e3[period-1];
+     e4[period]=w1*e3[period]+w2*e4[period-1];
+     e5[period]=w1*e4[period]+w2*e5[period-1];
+     e6[period]=w1*e5[period]+w2*e6[period-1];
+     BW_Imp[period]=c1*e6[period]+c2*e5[period]+c3*e4[period]+c4*e3[period];
+    }
+   } 
+}
+

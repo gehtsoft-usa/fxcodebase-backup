@@ -1,0 +1,109 @@
+function Init()
+{
+    indicator.name("Smooth Oscillator");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    
+    indicator.parameters.addInteger("PeriodRSI", "PeriodRSI", "No description", 13);
+    indicator.parameters.addInteger("PeriodStoch", "PeriodStoch", "No description", 8);
+    indicator.parameters.addInteger("PeriodSK", "PeriodSK", "No description", 5);
+    indicator.parameters.addInteger("PeriodSD", "PeriodSD", "No description", 3);
+
+    indicator.parameters.addColor("SK_color", "Color of SK", "Color of UP", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("SD_color", "Color of SD", "Color of DN", core.rgb(255, 0, 0));
+}
+
+var PeriodRSI;
+var PeriodStoch;
+var PeriodSK;
+var PeriodSD;
+
+var first;
+var source = null;
+var RSI;
+
+function Prepare()
+{
+    PeriodRSI = instance.parameters.PeriodRSI;
+    PeriodStoch = instance.parameters.PeriodStoch;
+    PeriodSK = instance.parameters.PeriodSK;
+    PeriodSD = instance.parameters.PeriodSD;
+    
+    source = instance.source;
+    RSI = core.indicators.create("RSI", source.close, PeriodRSI);
+    first = RSI.DATA.first();
+    var name = profile.id() + "(" + source.name() + ", " + PeriodRSI + ", " + PeriodStoch + ", " + PeriodSK + ", " + PeriodSD + ")";
+    instance.name(name);
+    SK = instance.addStream("SK", core.Line, name + ".SK", "SK", instance.parameters.SK_color, first);
+    SD = instance.addStream("SD", core.Line, name + ".SD", "SD", instance.parameters.SD_color, first);
+    StoRSI = instance.addStream("StoRSI", core.Line, name + ".StoRSI", "StoRSI", instance.parameters.SD_color, first);
+    pRSI = instance.addStream("pRSI", core.Line, name + ".pRSI", "pRSI", instance.parameters.SD_color, first);
+    
+}
+
+function Update(period, mode)
+{
+    RSI.update(mode);
+    if (period>=first) 
+    {
+     pRSI[period]=RSI.DATA[period];
+     var LLV=1000000;
+     var HHV=-1000000;
+     for (i=period-PeriodStoch; i<=period; i++) 
+     {
+      if (i>=first) 
+      {
+       LLV=Math.min(LLV,pRSI[i]);
+       HHV=Math.max(HHV,pRSI[i]);
+       if (HHV-LLV>0.) 
+       {
+        StoRSI[period]=100.0*((pRSI[period]-LLV)/(HHV-LLV));
+       }
+       else
+       {
+        StoRSI[period]=0; 
+       }
+      }
+     }
+     
+     var AvgSK=0.;
+     var AvgSD=0.;
+     var Count=0;
+     for (i=period-PeriodSK; i<=period; i++) 
+     {
+      if (i>=first) 
+      {
+       AvgSK=AvgSK+StoRSI[i];
+       Count=Count+1;
+      } 
+     }
+     if (Count>0) 
+     {
+      SK[period]=AvgSK/Count;
+     } 
+     else
+     {
+      SK[period]=0.;
+     } 
+     Count=0;
+     for (i=period-PeriodSD; i<=period; i++) 
+     {
+      if (i>=first) 
+      {
+       AvgSD=AvgSD+SK[i];
+       Count=Count+1;
+      }
+     }
+     if (Count>0) 
+     {
+      SD[period]=AvgSD/Count;
+     } 
+     else
+     {
+      SD[period]=0.;
+     }
+     
+    }
+}
+

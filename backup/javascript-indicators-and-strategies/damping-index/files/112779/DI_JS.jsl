@@ -1,0 +1,69 @@
+function Init()
+{
+    indicator.name("Damping index");
+    indicator.description("Damping index");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "Period", 5);
+	indicator.parameters.addString("Method", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "EMA" , "EMA");
+ indicator.parameters.addStringAlternative("Method", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method", "WMA", "WMA" , "WMA");
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("DI_color", "Color of DI", "Color of DI", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var Period;
+var Method;
+var first;
+var source = null;
+
+// Streams block
+var DI = null;
+var High, Low;
+
+// Routine
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+	Method= instance.parameters.Method;
+    source = instance.source;
+	
+	High= core.indicators.create(Method, source.high, Period);
+	Low= core.indicators.create(Method, source.low, Period);
+    first = High.DATA.first()+Period;
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period)  + ", " + tostring(Method)+ ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        DI = instance.addStream("DI", core.Line, name, "DI", instance.parameters.DI_color, first);
+		DI.setWidth(instance.parameters.width);
+        DI.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period, mode)
+{
+
+	High.update(mode);
+	Low.update(mode); 
+
+    if (period < first)   
+    {
+	 return;
+	}
+        DI[period] =(High.DATA[period]-Low.DATA[period])/(High.DATA[period-Period]-Low.DATA[period-Period]);
+    
+}
+

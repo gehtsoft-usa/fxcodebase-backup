@@ -1,0 +1,82 @@
+function Init()
+{
+    indicator.name("MA with gaussian filter");
+    indicator.description("MA with gaussian filter");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 12);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP Color", "UP Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DNclr", "DN Color", "DN Color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Aclr", "Acceleration Color", "Acceleration Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("Dclr", "Deceleration Color", "Deceleration Color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("DotSize", "Dot size", "Dot size", 1, 1, 5);
+}
+
+var first;
+var source = null;
+var Period;
+var GaussMA=null;
+var AD=null;
+var Alpha;
+var p1,p2,p3,p4,p5;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ")";
+    instance.name(name);
+    GaussMA = instance.addStream("GaussMA", core.Line, name + ".GaussMA", "GaussMA", instance.parameters.UPclr, first);
+    GaussMA.setWidth(instance.parameters.widthLinReg);
+    GaussMA.setStyle(instance.parameters.styleLinReg);
+    AD = instance.addStream("AD", core.Dot, name + ".A/D", "A/D", instance.parameters.Aclr, first);
+    AD.setWidth(instance.parameters.DotSize);
+    var w=2*3.1415926/Period;
+    var beta=(1-Math.cos(w))/(Math.pow(2,1/3)-1);
+    Alpha=-beta+Math.sqrt(beta*(beta+2));
+    p1=Math.pow(Alpha,4);
+    p2=4*(1-Alpha);
+    p3=6*Math.pow(1-Alpha,2);
+    p4=4*Math.pow(1-Alpha,3);
+    p5=Math.pow(1-Alpha,4);
+}
+
+function Update(period, mode)
+{
+   if (period>first+5) 
+   {
+    GaussMA[period]=p1*source[period-1]+p2*GaussMA[period-1]-p3*GaussMA[period-2]+p4*GaussMA[period-3]-p5*GaussMA[period-4];
+    if (GaussMA[period]>=GaussMA[period-1]) 
+    {
+     GaussMA.setColor(period,instance.parameters.UPclr);
+    } 
+    else
+    {
+     GaussMA.setColor(period,instance.parameters.DNclr);
+    }
+    AD[period]=GaussMA[period];
+    var s1=GaussMA[period-1]-GaussMA[period];
+    var s2=GaussMA[period-2]-GaussMA[period-1];
+    if (s1<s2) 
+    {
+     AD.setColor(period,instance.parameters.Aclr);
+    } 
+    else
+    {
+     AD.setColor(period,instance.parameters.Dclr);
+    }
+   } 
+   else if (period>=first) 
+   {
+    GaussMA[period]=source[period];
+   } 
+}
+

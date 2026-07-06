@@ -1,0 +1,55 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 2.9 - Environments</title>
+</head>
+<body>
+<h2>2.9 - <a name="2.9">Environments</a></h2>
+
+<p>
+Besides metatables,
+objects of types thread, function, and userdata
+have another table associated with them,
+called their <em>environment</em>.
+Like metatables, environments are regular tables and
+multiple objects can share the same environment.
+
+
+<p>
+Environments associated with userdata have no meaning for Lua.
+It is only a convenience feature for programmers to associate a table to
+a userdata.
+
+
+<p>
+Environments associated with threads are called
+<em>global environments</em>.
+They are used as the default environment for their threads and
+non-nested functions created by the thread
+(through <a href="pdf-loadfile.html"><code>loadfile</code></a>, <a href="pdf-loadstring.html"><code>loadstring</code></a> or <a href="pdf-load.html"><code>load</code></a>)
+and can be directly accessed by C&nbsp;code (see <a href="3.3.html">&sect;3.3</a>).
+
+
+<p>
+Environments associated with C&nbsp;functions can be directly
+accessed by C&nbsp;code (see <a href="3.3.html">&sect;3.3</a>).
+They are used as the default environment for other C&nbsp;functions
+created by the function.
+
+
+<p>
+Environments associated with Lua functions are used to resolve
+all accesses to global variables within the function (see <a href="2.3.html">&sect;2.3</a>).
+They are used as the default environment for other Lua functions
+created by the function.
+
+
+<p>
+You can change the environment of a Lua function or the
+running thread by calling <a href="pdf-setfenv.html"><code>setfenv</code></a>.
+You can get the environment of a Lua function or the running thread
+by calling <a href="pdf-getfenv.html"><code>getfenv</code></a>.
+To manipulate the environment of other objects
+(userdata, C&nbsp;functions, other threads) you must
+use the C&nbsp;API.
+</body>
+</html>

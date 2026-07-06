@@ -1,0 +1,396 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252" /><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><title>http_request:httpStatus</title><style type="text/css">a, p, h1, h2, h3, h4, h5, h6, table, td, tr, li, ul, ol {
+    font-family: Verdana, Trebuchet MS, Arial;
+}
+
+a, p, td, tr, ul, ol, li {
+    font-size: 12pt;
+}
+
+h3 {
+    font-size: 13pt;
+}
+
+h2 {
+    font-size: 13pt;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+body {
+    color: #444444;
+    background-color: white;
+}
+
+A:link {
+    color: #0065b3;
+    cursor: pointer;
+}
+
+A:visited {
+    color: #0068be;
+    cursor: pointer;
+}
+
+a.action {
+  background-color: #0065b3;
+  color: white;
+  font-size: 10pt;
+  padding: 2px 2px;
+  width: 50pt;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px;
+}
+
+.side-icon {
+    float: left;
+}
+
+a.action [class*="dripicons-"]:before {
+    padding: 0 2px 0 0;
+    font-size: 12pt;
+    vertical-align: text-bottom;
+}
+
+.side-icon:after {
+  content: "";
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  border-left: 1.5px solid white;
+  transform: translate(-50%);
+}
+
+a.actiontab {
+  font-size: 10pt;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px 3px 0 0;
+}
+
+pre, code, code a {
+    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+    font-size: 12pt;
+}
+
+code.ctag {
+    background-color: #f1f1f1;
+    padding: .1em .2em;
+    border-radius: 3px;
+}
+
+pre {
+    background-color: white;
+}
+
+pre.example {
+    background-color: #f1f1f1;
+}
+
+ul {
+    list-style-type: disc;
+    margin-left: 18pt;
+}
+
+ol {
+    list-style-type: decimal;
+    margin-left: 18pt;
+}
+
+ul.hhc {
+    list-style-type: none;
+    margin-left: 1em;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+li.hhc {
+    margin-left: 0;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+table {
+  border-spacing: 0;
+  border-color: #dfe3e7;
+}
+
+tr + tr td {
+   border-top: 0;
+}
+
+tr td + td {
+  border-left: 0;
+}
+
+td {
+  border: 1px solid;
+  border-color: #dfe3e7;
+}
+
+tr:first-child td:first-child {
+   border-radius: 0.2em 0 0 0;
+}
+
+tr:first-child td:last-child {
+  border-radius: 0 0.2em 0 0;
+}
+
+tr:first-child td:only-child {
+  border-radius: 0.2em 0.2em 0 0;
+}
+
+tr:last-child td:first-child {
+    border-radius: 0 0 0 0.2em;
+}
+
+tr:last-child td:last-child {
+    border-radius: 0 0 0.2em 0;
+}
+
+tr:last-child td:only-child {
+    border-radius: 0 0 0.2em 0.2em;
+}
+
+tr:only-child td:only-child {
+    border-radius: 0.2em 0.2em 0.2em 0.2em;
+}
+
+tr:only-child td:first-child {
+   border-radius: 0.2em 0 0 0.2em;
+}
+
+tr:only-child td:last-child {
+  border-radius: 0 0.2em 0.2em 0;
+}
+
+
+td.tmain, td.tmain_nw, td.thdr {
+    background-color: rgb(255, 255, 255);
+    vertical-align: top;
+    padding: 3px;
+}
+
+td.tmain p, td.tmain_nw p, td.thdr p {
+    margin-top: 3pt;
+    margin-bottom: 3pt;
+}
+
+td.tmain_nw {
+    white-space: nowrap;
+}
+
+td.thdr {
+    background-color: #e3e3e3;
+}
+
+table.decl {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+    vertical-align: top;
+    padding: 3px;
+    width: 100%;
+}
+
+table.decl td {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+}
+
+div.note-quote {
+    border-left: 10px solid #ccc;
+    padding: 1em 10px .1em 10px;
+    margin: 1.5em 10px;
+    background-color: rgb(224, 224, 224);
+}
+
+div.note-note {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+div.note-warning {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #fff;
+    background-color: #ff6358;
+}
+div.note-warning code.ctag {
+    color: black;
+}</style>
+<link rel="stylesheet" href="res/dripicons.css"></head><body><script type="text/javascript">
+var highlighterEnabled = false;
+var maintopic = 'index';
+var helptitle = 'Indicore SDK 3';
+    function loadStarted() {
+    window.onload = loadCompleted;
+
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        var head = document.getElementsByTagName('head')[0];
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.min.js';
+        head.appendChild(script4);
+
+
+        var script2 = document.createElement('script');
+        script2.type = 'text/javascript';
+        script2.src = './highlighter/highlight.cshtml.js';
+        head.appendChild(script2);
+
+        var script3 = document.createElement('script');
+        script3.type = 'text/javascript';
+        script3.src = './highlighter/highlight.lua.js';
+        head.appendChild(script3);
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.luax.js';
+        head.appendChild(script4);
+    }
+}
+
+function loadCompleted() {
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        hljs.registerLanguage('cshtml-razor', window.hljsDefineCshtmlRazor);
+        hljs.registerLanguage('lua', window.hljsDefineLua);
+        hljs.registerLanguage('luax', window.hljsDefineLuaX);
+        x = document.querySelectorAll('pre code');
+        for (var i = 0; i < x.length; i++) {
+            if (x[i].hasAttribute('class')) {
+                hljs.highlightBlock(x[i]);
+            }
+        }
+    }
+}
+
+
+function hidediv(divname) {
+    document.getElementById(divname).style.display = 'none';
+}
+
+function showdiv(divname) {
+    document.getElementById(divname).style.display = 'inline';
+}
+
+function syncList() {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, null, document.title);
+    }
+}
+
+function syncList1(key) {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, key + '.html', document.title);
+    }
+}</script><script type="text/javascript">
+    loadStarted();
+</script><h1><code>public method <b>http_request:httpStatus</b></code></h1><h2>Brief</h2>
+<p>Gets the status of the request execution.</p>
+<table class="tmain" width="100%">
+  <tr>
+    <td class="thdr"><b>Declaration</b></td>
+  </tr>
+  <tr>
+    <td class="tmain"><table class="decl">
+  <tr>
+    <td>Lua</td>
+  </tr>
+  <tr>
+    <td><code>number&nbsp;http_request:<b>httpStatus</b> ()</code></td>
+  </tr>
+</table></td>
+  </tr>
+</table>
+<h2>Details</h2><p>The method can be called when the request is executed (the
+<a href="ext_kit_http.http_request.start.html"><code>http_request:start(...)</code></a>
+method has been called), and loading is finished
+(the <a href="ext_kit_http.http_request.loading.html"><code>http_request:loading()</code></a>
+method returned <code class="ctag">false</code>) and the communication has been
+finished successfully (the <a href="ext_kit_http.http_request.success.html"><code>http_request:success()</code></a>
+method returned <code class="ctag">true</code>).</p>
+<p>For an example please see the
+<a href="ext_kit_http.http_request.loading.html"><code>http_request:loading()</code></a> method.</p>
+<p>The method returns the status code of the HTTP response received from the server. The full list
+of the HTTP status codes can be found in
+<a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html" target="_blank">RFC 2616</a>.</p>
+<p>The most used codes are listed below, but in common task usually required
+in indicators and strategies any code except 200 can be recognized
+as an error.</p><table class="tmain">
+  <tr>
+    <td class="tmain"><p>200</p></td>
+    <td class="tmain"><p>The request has succeeded.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>301</p></td>
+    <td class="tmain"><p>The requested resource has been assigned a new permanent URI and any future
+references to this resource SHOULD use one of the returned URIs.</p>
+<p>The new permanent URI SHOULD be given by the &quot;Location&quot; header value in the response.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>302 and 307</p></td>
+    <td class="tmain"><p>The requested resource resides temporarily under a different URI.</p>
+<p>The temporary  URI SHOULD be given by the &quot;Location&quot; header value in the response.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>400</p></td>
+    <td class="tmain"><p>The request could not be understood by the server due to malformed syntax.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>401</p></td>
+    <td class="tmain"><p>The request requires user authentication.</p>
+<p>The response MUST include a WWW-Authenticate header field.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>403</p></td>
+    <td class="tmain"><p>The server understood the request, but is refusing to fulfill it. Authorization will not help and the request SHOULD NOT be repeated.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>404</p></td>
+    <td class="tmain"><p>The server has not found anything matching the Request-URI.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>405</p></td>
+    <td class="tmain"><p>The resource identified by the request is only capable of generating response entities which have content characteristics not acceptable according to the accept headers sent in the request.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>408</p></td>
+    <td class="tmain"><p>The client did not produce a request within the time that the server was prepared to wait.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>500</p></td>
+    <td class="tmain"><p>The server encountered an unexpected condition which prevented it from fulfilling the request.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>501</p></td>
+    <td class="tmain"><p>The server does not support the functionality required to fulfill the request.</p></td>
+  </tr>
+</table><p>Declared in <a href="ext_kit_http.http_request.html">http_request</a></p>
+<p>
+  <center><a href="ext_kit_http.http_request.html">back</a></center>
+</p><script language="javascript" type="text/javascript">syncList1('ext_kit_http.http_request');</script></body></html>

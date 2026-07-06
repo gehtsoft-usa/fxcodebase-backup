@@ -1,0 +1,155 @@
+function Init()
+{
+    indicator.name("STOCHASTIC MOMENTUM");
+    indicator.description("STOCHASTIC MOMENTUM");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "Period", 13);
+    indicator.parameters.addInteger("SignalPeriod", "SignalPeriod", "Period", 3);
+	indicator.parameters.addString("Method3", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method3", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method3", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method3", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method3", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method3", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method3", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method3", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method3", "WMA", "WMA" , "WMA");
+	
+	indicator.parameters.addGroup("Smoothing");
+	indicator.parameters.addBoolean("Smooth", "Use Smoothing", " ", true);
+	
+	indicator.parameters.addInteger("FirstPeriod", "First Smoothing Period", "First Smoothings Period", 10);
+	indicator.parameters.addString("Method1", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method1", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method1", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method1", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method1", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method1", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method1", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method1", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method1", "WMA", "WMA" , "WMA");
+
+    indicator.parameters.addInteger("SecondPeriod", "Second Smoothing Period", "Second Smoothings Period", 2);
+	indicator.parameters.addString("Method2", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method2", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method2", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method2", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method2", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method2", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method2", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method2", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method2", "WMA", "WMA" , "WMA");
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("SM_color", "Color of SM", "Color of SM", core.rgb(0, 255, 0));
+	indicator.parameters.addInteger("width1", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style1", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style1", core.FLAG_LINE_STYLE);
+	
+	
+	 indicator.parameters.addColor("Signal_color", "Color of Signal", "Color of Signal", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width2", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style2", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style2", core.FLAG_LINE_STYLE);
+}
+
+var Period;
+var FirstPeriod;
+var SecondPeriod;
+var Method2, Method1, Method3;
+var first;
+var source = null;
+var Smooth;
+
+var SM = null;
+var FIRST, SECOND;
+var Raw;
+var Signal, SIGNAL;
+var SignalPeriod;
+
+function Prepare(nameOnly)
+{
+    SignalPeriod = instance.parameters.SignalPeriod;
+	Method3 = instance.parameters.Method3;
+    Period = instance.parameters.Period;
+	Smooth = instance.parameters.Smooth;
+	Method2 = instance.parameters.Method2;
+	Method1 = instance.parameters.Method1;
+    FirstPeriod = instance.parameters.FirstPeriod;
+    SecondPeriod = instance.parameters.SecondPeriod;
+    source = instance.source;
+    first = source.first()+Period;
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period)+ ", " + tostring(SignalPeriod)+ ", " + tostring(Method3) + ", " + tostring(FirstPeriod)+ ", " + tostring(Method1) + ", " + tostring(SecondPeriod)+ ", " + tostring(Method2) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {   
+	    Raw = instance.addInternalStream(0, 0);
+		if (Smooth) 
+		{
+	     FIRST = core.indicators.create(Method1, Raw,FirstPeriod);
+		 SECOND = core.indicators.create(Method2, FIRST.DATA,SecondPeriod);
+         SM = instance.addStream("SM", core.Line, name, "SM", instance.parameters.SM_color, SECOND.DATA.first());
+        } 
+		else
+		{	
+		 SM = instance.addStream("SM", core.Line, name, "SM", instance.parameters.SM_color, first+Period);
+		}
+		SM.setWidth(instance.parameters.width1);
+        SM.setStyle(instance.parameters.style1);
+		
+		SIGNAL = core.indicators.create(Method3, SM,SignalPeriod);
+		
+		Signal = instance.addStream("Signal", core.Line, name, "Signal", instance.parameters.Signal_color, SIGNAL.DATA.first());
+		Signal.setWidth(instance.parameters.width2);
+        Signal.setStyle(instance.parameters.style2);
+    }
+}
+
+function Update(period, mode)
+{
+    if (period  <  first)  
+    {
+	 return;
+	}
+	
+	var min, max;
+	
+	var tmp= Math.minmax (source, period-Period+1, period);
+	min=tmp[0];
+	max=tmp[1];
+	
+    Raw[period] =  source.close[period] - 0.5* (min + max);
+	
+	if (Smooth) 
+	{
+	
+			FIRST.update(mode);
+			SECOND.update(mode);
+			
+			if (period  < SECOND.DATA.first()) 
+			{
+			 return;
+			}
+			
+			SM[period]= SECOND.DATA[period];
+	}
+	else
+	{	
+	        SM[period]= Raw[period];
+	}
+	
+	
+	SIGNAL.update(mode);
+	
+	if (period < SIGNAL.DATA[period]) 
+	{
+	 return;
+	}
+	
+	Signal[period]= SIGNAL.DATA[period];
+    
+}
+

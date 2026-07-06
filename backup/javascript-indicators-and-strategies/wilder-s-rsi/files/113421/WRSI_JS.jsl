@@ -1,0 +1,101 @@
+function Init()
+{
+    indicator.name("Wilder's RSI");
+    indicator.description("Wilder's RSI");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addInteger("Period", "Period", "Period", 14);
+	
+	
+   indicator.parameters.addGroup("RSI Style");
+	
+	indicator.parameters.addInteger("widthFirst", "Width", "", 1, 1, 5);
+    indicator.parameters.addInteger("styleFirst", "Style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleFirst", core.FLAG_LEVEL_STYLE);
+	indicator.parameters.addColor("Color", "RSI Line Color", "", core.rgb(0, 255, 0));
+	
+	 indicator.parameters.addGroup("Levels Style" ); 
+    indicator.parameters.addInteger("overbought", "Overbought Level", "", 70, 0, 100);
+    indicator.parameters.addInteger("oversold", "Oversold Level", "", 30, 0, 100);
+	
+    indicator.parameters.addInteger("level_overboughtsold_width", "Width", "", 1, 1, 5);
+    indicator.parameters.addInteger("level_overboughtsold_style", "Style", "", core.LINE_SOLID);
+	indicator.parameters.setFlag("level_overboughtsold_style", core.FLAG_LEVEL_STYLE);
+    indicator.parameters.addColor("level_overboughtsold_color", "Color", "", core.rgb(255, 0, 0));
+}
+
+var Period;
+
+var first;
+var source = null;
+
+var RSI = null;
+var pos, neg;
+var positive, negative;
+var k;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+    source = instance.source;
+    first = source.first()+Period;
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ")";
+    instance.name(name);
+	
+	k= 1/ Period;
+	
+	pos = instance.addInternalStream(0, 0);
+    neg = instance.addInternalStream(0, 0);
+	positive = instance.addInternalStream(0, 0);
+    negative = instance.addInternalStream(0, 0);
+
+    if (!(nameOnly)) 
+    {
+        RSI = instance.addStream("RSI", core.Line, name, "RSI", instance.parameters.Color, first);
+		RSI.addLevel(0);
+		RSI.addLevel(instance.parameters.oversold, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);
+		RSI.addLevel(instance.parameters.overbought, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);
+		RSI.addLevel(100);
+		
+    }
+}
+
+function Update(period)
+{
+    if (period < first || !source.hasData(period)) 
+    {
+     return;
+    }
+	
+	var diff = source[period] - source[period-1];
+	
+	pos[period]=0;
+	neg[period]=0;
+	
+	if (diff > 0) 
+	{
+	 pos[period]=diff;
+	} 
+	else if (diff < 0) 
+	{
+	 neg[period]=Math.abs(diff);
+	}
+	
+	if (period == first) 
+	{
+	 positive[period] = Math.avg (pos, period - Period +1 , period);
+	 negative[period] = Math.avg (neg, period - Period +1 , period);
+	} 
+	else
+	{
+	 positive[period] =  ((pos[period] - positive[period - 1]) * k) + positive[period - 1];
+	 negative[period] =  ((neg[period] - negative[period - 1]) * k) + negative[period - 1];
+	}
+	
+	
+    RSI[period] =  100 - (100 / (1 + positive[period] / negative[period]));
+   
+}
+

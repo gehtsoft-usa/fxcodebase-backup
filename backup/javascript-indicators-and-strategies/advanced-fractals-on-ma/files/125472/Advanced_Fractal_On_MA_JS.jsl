@@ -1,0 +1,172 @@
+function Init()
+{
+    indicator.name("Advanced fractal on MA");
+    indicator.description("Advanced fractal on MA");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addString("Method", "Method", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Method", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Method", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Method", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Method", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Method", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Method", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Method", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Method", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Method", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Method", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Method", "JSmooth", "", "JSmooth");
+ 
+    indicator.parameters.addInteger("Period", "Period", "", 20);
+    
+    indicator.parameters.addString("up_price", "up_price", "", "high");
+    indicator.parameters.addStringAlternative("up_price", "close", "", "close");
+    indicator.parameters.addStringAlternative("up_price", "open", "", "open");
+    indicator.parameters.addStringAlternative("up_price", "high", "", "high");
+    indicator.parameters.addStringAlternative("up_price", "low", "", "low");
+    indicator.parameters.addStringAlternative("up_price", "median", "", "median");
+    indicator.parameters.addStringAlternative("up_price", "typical", "", "typical");
+    indicator.parameters.addStringAlternative("up_price", "weighted", "", "weighted");
+    
+    indicator.parameters.addString("dn_price", "dn_price", "", "low");
+    indicator.parameters.addStringAlternative("dn_price", "close", "", "close");
+    indicator.parameters.addStringAlternative("dn_price", "open", "", "open");
+    indicator.parameters.addStringAlternative("dn_price", "high", "", "high");
+    indicator.parameters.addStringAlternative("dn_price", "low", "", "low");
+    indicator.parameters.addStringAlternative("dn_price", "median", "", "median");
+    indicator.parameters.addStringAlternative("dn_price", "typical", "", "typical");
+    indicator.parameters.addStringAlternative("dn_price", "weighted", "", "weighted");
+    
+    indicator.parameters.addInteger("Frame", "Number of fractals (Odd)", "Number of fractals (Odd)", 5, 5,99);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UP", "Up fractal color", "Up fractal color", core.rgb(0,255,0));
+    indicator.parameters.addColor("DOWN", "Down fractal color", "Down fractal color", core.rgb(255,0,0));
+}
+
+var first;
+var source = null;
+var Method;
+var Period;
+var Frame;
+var up_price;
+var dn_price;
+var MA_up;
+var MA_dn;
+var up;
+var down;
+
+function Prepare()
+{
+    source = instance.source;
+    Method=instance.parameters.Method;
+    Period=instance.parameters.Period;
+    Frame=instance.parameters.Frame;
+    up_price=instance.parameters.up_price;
+    dn_price=instance.parameters.dn_price;
+    if (up_price=="close") 
+    {
+     MA_up = core.indicators.create("AVERAGES", source.close,  Method, Period, false);
+    }
+    else if (up_price=="open") 
+    {
+     MA_up = core.indicators.create("AVERAGES", source.open,  Method, Period, false);
+    } 
+    else if (up_price=="high") 
+    {
+     MA_up = core.indicators.create("AVERAGES", source.high,  Method, Period, false);
+    } 
+    else if (up_price=="low") 
+    {
+     MA_up = core.indicators.create("AVERAGES", source.low,  Method, Period, false);
+    } 
+    else if (up_price=="median") 
+    {
+     MA_up = core.indicators.create("AVERAGES", source.median,  Method, Period, false);
+    } 
+    else if (up_price=="typical") 
+    {
+     MA_up = core.indicators.create("AVERAGES", source.typical,  Method, Period, false);
+    } 
+    else
+    {
+     MA_up = core.indicators.create("AVERAGES", source.weighted,  Method, Period, false);
+    } 
+    if (dn_price=="close") 
+    {
+     MA_dn = core.indicators.create("AVERAGES", source.close,  Method, Period, false);
+    } 
+    else if (dn_price=="open") 
+    {
+     MA_dn = core.indicators.create("AVERAGES", source.open,  Method, Period, false);
+    } 
+    else if (dn_price=="high") 
+    {
+     MA_dn = core.indicators.create("AVERAGES", source.high,  Method, Period, false);
+    } 
+    else if (dn_price=="low") 
+    {
+     MA_dn = core.indicators.create("AVERAGES", source.low,  Method, Period, false);
+    } 
+    else if (dn_price=="median") 
+    {
+     MA_dn = core.indicators.create("AVERAGES", source.median,  Method, Period, false);
+    } 
+    else if (dn_price=="typical") 
+    {
+     MA_dn = core.indicators.create("AVERAGES", source.typical,  Method, Period, false);
+    } 
+    else
+    {
+     MA_dn = core.indicators.create("AVERAGES", source.weighted,  Method, Period, false);
+    } 
+    first = MA_up.DATA.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Method + ", " + instance.parameters.Period + ", " + instance.parameters.Frame + ", " + instance.parameters.up_price + ", " + instance.parameters.dn_price + ")";
+    instance.name(name);
+    up = instance.createTextOutput ("Up", "Up", "Wingdings", 10, core.H_Center, core.V_Top, instance.parameters.UP, 0);
+    down = instance.createTextOutput ("Dn", "Dn", "Wingdings", 10, core.H_Center, core.V_Bottom, instance.parameters.DOWN, 0);
+}
+
+function Update(period, mode)
+{
+   var shift=Math.floor((Frame-1)/2)+1;
+   if (period>first+Frame) 
+   {
+    MA_up.update(mode);
+    MA_dn.update(mode);
+    var Fl_UP=true;
+    var Fl_DN=true;
+    var i;
+    for (i=1; i<=Math.floor((Frame-1)/2); i++) 
+    {
+     if (MA_dn.DATA[period-i-shift]<=MA_dn.DATA[period-shift] || MA_dn.DATA[period+i-shift]<=MA_dn.DATA[period-shift]) 
+     {
+      Fl_DN=false;
+     }
+     if (MA_up.DATA[period-i-shift]>=MA_up.DATA[period-shift] || MA_up.DATA[period+i-shift]>=MA_up.DATA[period-shift]) 
+     {
+      Fl_UP=false;
+     }
+    }
+    if (Fl_UP==true) 
+    {
+     up.set(period-shift, source.high[period-shift], "\226");
+    }
+    if (Fl_DN==true) 
+    {
+     down.set(period-shift, source.low[period-shift], "\225");
+    }
+   } 
+}
+

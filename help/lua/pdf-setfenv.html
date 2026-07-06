@@ -1,0 +1,28 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - setfenv (f, table)</title>
+</head>
+<body>
+<h3><a name="pdf-setfenv"><code>setfenv (f, table)</code></a></h3>
+
+
+<p>
+Sets the environment to be used by the given function.
+<code>f</code> can be a Lua function or a number
+that specifies the function at that stack level:
+Level&nbsp;1 is the function calling <code>setfenv</code>.
+<code>setfenv</code> returns the given function.
+
+
+<p>
+As a special case, when <code>f</code> is 0 <code>setfenv</code> changes
+the environment of the running thread.
+In this case, <code>setfenv</code> returns no values.
+
+
+
+
+<p>
+<hr>
+</body>
+</html>

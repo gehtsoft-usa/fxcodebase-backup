@@ -1,0 +1,126 @@
+function Init()
+{
+    indicator.name("Self-Adjusting RSI");
+    indicator.description("Self-Adjusting RSI");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+	
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("x", "Period", "Period", 14);
+    indicator.parameters.addDouble("k1", "Standard Deviation", "Standard Deviation",1.8,0.1, 5  );
+     indicator.parameters.addDouble("c1", "SMA constant", "SMA constant",2, 0.1, 5 );
+	 
+	 indicator.parameters.addInteger("m1", "Method", "",1);
+     indicator.parameters.addIntegerAlternative("m1", "Standard Deviation", "", 1);
+     indicator.parameters.addIntegerAlternative("m1", "Simple Moving Average", "", 2); 	 
+
+ 
+	 indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("RSI_color", "Color of RSI", "Color of RSI", core.rgb(0, 0, 255));
+	indicator.parameters.addInteger("widthR", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("styleR", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleR", core.FLAG_LINE_STYLE);
+	indicator.parameters.addColor("TOP_color", "Color of TOP", "Color of TOP", core.rgb(0, 255, 0));
+	indicator.parameters.addInteger("widthT", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("styleT", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleT", core.FLAG_LINE_STYLE);
+	indicator.parameters.addColor("BOTTOM_color", "Color of BOTTOM", "Color of BOTTOM", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("widthB", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("styleB", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleB", core.FLAG_LINE_STYLE);
+}
+
+var x;
+var k1;
+var c1;
+var m1;
+var first;
+var source = null;
+var Indicator;
+
+var RSI = null;
+var Top, Bottom;
+var MA1, MA2, RAW;
+
+function Prepare(nameOnly)
+{
+    x = instance.parameters.x;
+    k1 = instance.parameters.k1;
+	c1 = instance.parameters.c1;
+	m1 = instance.parameters.m1;
+    source = instance.source;
+	
+	Indicator = core.indicators.create("RSI",source,x);
+	first = Indicator.DATA.first()+x;
+
+	 if (m1 == 2) 
+	 {
+	 MA1 = core.indicators.create("MVA",Indicator.DATA , x);
+	 RAW=  instance.addInternalStream(0, 0);
+	 MA2 = core.indicators.create("MVA",RAW , x);
+	  first = MA2.DATA.first();
+	}
+	 
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(x) + ", " + tostring(k1)+ ", " + tostring(c1)+ ", " + tostring(m1) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        RSI = instance.addStream("RSI", core.Line, name, "RSI", instance.parameters.RSI_color, first);
+		RSI.setWidth(instance.parameters.widthR);
+        RSI.setStyle(instance.parameters.styleR);
+		Top = instance.addStream("OB", core.Line, name, "OB", instance.parameters.TOP_color, first);
+		Top.setWidth(instance.parameters.widthT);
+        Top.setStyle(instance.parameters.styleT);
+		Bottom = instance.addStream("OS", core.Line, name, "OS", instance.parameters.BOTTOM_color, first);
+		Bottom.setWidth(instance.parameters.widthB);
+        Bottom.setStyle(instance.parameters.styleB);
+    }
+}
+
+function Update(period, mode)
+{
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+	Indicator.update(mode);
+	
+
+	
+	if (m1 == 1) 
+	{	
+ 	 Top [period] = 50+(k1* Math.stdev(Indicator.DATA , period- x+1, period ));
+	 Bottom [period] = 50-(k1* Math.stdev(Indicator.DATA , period- x+1, period ));
+	}
+	else if (m1 == 2) 
+	{   
+	 MA1.update(mode);
+	
+	 if (period < MA1.DATA[period]) 
+	 {
+          return;
+         }
+ 	
+	 RAW[period] = Math.abs(Indicator.DATA[period] - MA1.DATA[period]);
+	
+	 MA2.update(mode);
+	
+	if (period < MA2.DATA[period]) 
+	{
+         return;
+        }	
+	
+	Top [period]=  50+(c1*  MA2.DATA[period]);
+	Bottom [period]=  50-(c1*  MA2.DATA[period]);
+       }
+	
+	
+
+   
+   RSI[period] = Indicator.DATA[period];
+   
+}
+

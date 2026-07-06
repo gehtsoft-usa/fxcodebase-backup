@@ -1,0 +1,164 @@
+function Init()
+{
+    indicator.name("AverageChange indicator");
+    indicator.description("AverageChange indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addString("Method1", "Method1", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method1", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method1", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method1", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("Method1", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Method1", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method1", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Method1", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Method1", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Method1", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method1", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Method1", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Method1", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Method1", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Method1", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Method1", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Method1", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Method1", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Method1", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Method1", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Method1", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Method1", "JSmooth", "", "JSmooth");
+    indicator.parameters.addInteger("Period1", "Period1", "", 12);
+    indicator.parameters.addString("Price1", "Price1", "", "median");
+    indicator.parameters.addStringAlternative("Price1", "close", "", "close");
+    indicator.parameters.addStringAlternative("Price1", "open", "", "open");
+    indicator.parameters.addStringAlternative("Price1", "high", "", "high");
+    indicator.parameters.addStringAlternative("Price1", "low", "", "low");
+    indicator.parameters.addStringAlternative("Price1", "median", "", "median");
+    indicator.parameters.addStringAlternative("Price1", "typical", "", "typical");
+    indicator.parameters.addStringAlternative("Price1", "weighted", "", "weighted");
+    indicator.parameters.addString("Method2", "Method2", "", "JSmooth");
+    indicator.parameters.addStringAlternative("Method2", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method2", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method2", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("Method2", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Method2", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method2", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Method2", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Method2", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Method2", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method2", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Method2", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Method2", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Method2", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Method2", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Method2", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Method2", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Method2", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Method2", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Method2", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Method2", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Method2", "JSmooth", "", "JSmooth");
+    indicator.parameters.addInteger("Period2", "Period2", "", 5);
+    indicator.parameters.addString("Price2", "Price2", "", "close");
+    indicator.parameters.addStringAlternative("Price2", "close", "", "close");
+    indicator.parameters.addStringAlternative("Price2", "open", "", "open");
+    indicator.parameters.addStringAlternative("Price2", "high", "", "high");
+    indicator.parameters.addStringAlternative("Price2", "low", "", "low");
+    indicator.parameters.addStringAlternative("Price2", "median", "", "median");
+    indicator.parameters.addStringAlternative("Price2", "typical", "", "typical");
+    indicator.parameters.addStringAlternative("Price2", "weighted", "", "weighted");
+    indicator.parameters.addDouble("Power", "Power", "", 5);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(255, 255, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Source1;
+var Source2;
+var Method1;
+var Period1;
+var Price1;
+var Method2;
+var Period2;
+var Price2;
+var Power;
+var Ratio;
+var MA1;
+var MA2;
+var AverageChange=null;
+
+function TickSource(_source, _price)
+{
+ if (_price=="close") 
+ {
+  return (_source.close);
+ } 
+ else if (_price=="open") 
+ {
+  return (_source.open);
+ } 
+ else if (_price=="high") 
+ {
+  return (_source.high);
+ } 
+ else if (_price=="low") 
+ {
+  return (_source.low);
+ } 
+ else if (_price=="median") 
+ {
+  return (_source.median);
+ } 
+ else if (_price=="typical") 
+ {
+  return (_source.typical);
+ } 
+ else
+ {
+  return _source.weighted;
+ } 
+}
+
+function Prepare()
+{
+    source = instance.source;
+    Method1=instance.parameters.Method1;
+    Period1=instance.parameters.Period1;
+    Price1=instance.parameters.Price1;
+    Method2=instance.parameters.Method2;
+    Period2=instance.parameters.Period2;
+    Price2=instance.parameters.Price2;
+    Power=instance.parameters.Power;
+    first = source.first()+2;
+    Source1=TickSource(source, Price1);
+    Source2=TickSource(source, Price2);
+    MA1 = core.indicators.create("AVERAGES", Source1, Method1, Period1, false);
+    Ratio = instance.addInternalStream(first, 0);
+    MA2 = core.indicators.create("AVERAGES", Ratio, Method2, Period2, false);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Method1 + ", " + instance.parameters.Period1 + ", " + instance.parameters.Price1 + ", " + instance.parameters.Method2 + ", " + instance.parameters.Period2 + ", " + instance.parameters.Price2 + ", " + instance.parameters.Power + ")";
+    instance.name(name);
+    AverageChange = instance.addStream("AverageChange", core.Line, name + ".AverageChange", "AverageChange", instance.parameters.clr, first);
+    AverageChange.setWidth(instance.parameters.widthLinReg);
+    AverageChange.setStyle(instance.parameters.styleLinReg);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    MA1.update(mode);
+    if (MA1.DATA[period]!=0) 
+    {
+     Ratio[period]=Math.pow(Source2[period]/MA1.DATA[period], Power);
+     MA2.update(mode);
+     AverageChange[period]=MA2.DATA[period];
+    } 
+   } 
+}
+

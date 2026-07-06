@@ -1,0 +1,201 @@
+function Init()
+{
+    indicator.name("Wyckoff PV Histogram");
+    indicator.description("Wyckoff PV Histogram");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+	
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period1", "Short Period", "Short Period", 5);
+    indicator.parameters.addInteger("Period2", "Long Period", "Long Period", 15);
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Short_color", "Color of Short", "Color of Short", core.rgb(0, 255, 0));
+	indicator.parameters.addInteger("swidth", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("sstyle", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("sstyle", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Long_color", "Color of Long", "Color of Long", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("lwidth", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("lstyle", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("lstyle", core.FLAG_LINE_STYLE);
+	indicator.parameters.addBoolean("Show", "Show Histogram", "", false);
+    indicator.parameters.addColor("Histogram_color", "Color of Histogram", "Color of Histogram", core.rgb(0, 0, 255));
+}
+
+var Period1;
+var Period2;
+var Show;
+var first;
+var source = null;
+
+var Short = null;
+var Long = null;
+var Histogram = null;
+var S,L;
+var Out;
+
+function Prepare(nameOnly)
+{
+    Period1 = instance.parameters.Period1;
+    Period2 = instance.parameters.Period2;
+	Show = instance.parameters.Show;
+    source = instance.source;
+   
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period1) + ", " + tostring(Period2) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+	     Histogram = instance.addInternalStream(0, 0);
+		 
+		 S= core.indicators.create("MVA",Histogram, Period1);
+		 L= core.indicators.create("MVA",Histogram, Period2);
+		 
+		 first = Math.max(S.DATA.first(), L.DATA.first());
+		 if (Show) 
+		 { 
+		  Out = instance.addStream("Histogram", core.Bar, name + ".Histogram", "Histogram", instance.parameters.Histogram_color, source.first()+1); 
+		 } 
+		 else
+		 {
+		  Out = instance.addInternalStream(0, 0);
+		 } 
+        Short = instance.addStream("Short", core.Line, name + ".Short", "Short", instance.parameters.Short_color, first);
+		Short.setWidth(instance.parameters.swidth);
+        Short.setStyle(instance.parameters.sstyle);
+        Long = instance.addStream("Long", core.Line, name + ".Long", "Long", instance.parameters.Long_color, first);
+		Long.setWidth(instance.parameters.lwidth);
+        Long.setStyle(instance.parameters.lstyle);
+       
+    }
+}
+
+function Update(period, mode)
+{
+	var UDPC;
+	var UDNC;
+	var DDPC;
+	var DDNC;
+	var HVWS;
+	var HVNS;
+	var LVWS;
+	var LVNS;
+	
+	//UDPC.=(C>=((H-L)*.5)+L) AND C>Ref(C,-1);
+	if (source.close[period]>= ((source.high[period]-source.low[period])*0.5 +source.low[period]) && source.close[period]> source.close[period-1])  
+	{
+	 UDPC= true;
+	} 
+	else
+	{
+	 UDPC= false;
+	}
+	
+	//UDNC.=(C<((H-L)*.5)+L) AND C>Ref(C,-1);	
+	if (source.close[period]< ((source.high[period]-source.low[period])*0.5 +source.low[period]) && source.close[period]> source.close[period-1])  
+	{
+	 UDNC= true;
+	} 
+	else
+	{
+	 UDNC= false;
+	}
+	
+	//DDPC.=(C>=((H-L)*.5)+L) AND C<Ref(C,-1);
+	if (source.close[period]>= ((source.high[period]-source.low[period])*0.5 +source.low[period]) && source.close[period]< source.close[period-1])  
+	{
+	 DDPC= true;
+	} 
+	else
+	{
+	 DDPC= false;
+	}
+	
+	//DDNC.=(C<((H-L)*.5)+L) AND C<Ref(C,-1);
+	if (source.close[period]< ((source.high[period]-source.low[period])*0.5 +source.low[period]) && source.close[period]< source.close[period-1])  
+	{
+	 DDNC= true;
+	} 
+	else
+	{
+	 DDNC= false;
+	}
+	
+	//HVWS.=((H-L)>=Ref((H-L),-1)) AND V>Ref(V,-1);
+	if  ((source.high[period]-source.low[period]) >= (source.high[period-1]-source.low[period]-1)  && source.volume[period] >  source.volume[period-1]) 
+	{
+	 HVWS= true;
+	} 
+	else
+	{
+	 HVWS= false;
+	}
+	
+	//HVNS.=((H-L)<Ref((H-L),-1)) AND V>Ref(V,-1);
+    if  ((source.high[period]-source.low[period]) < (source.high[period-1]-source.low[period]-1)  && source.volume[period] >  source.volume[period-1]) 
+    {
+	 HVNS= true;
+	} 
+	else
+	{
+	 HVNS= false;
+	}
+	
+	//LVWS.=((H-L)>=Ref((H-L),-1)) AND V<Ref(V,-1);
+	if ((source.high[period]-source.low[period]) >= (source.high[period-1]-source.low[period]-1)  && source.volume[period] <  source.volume[period-1]) 
+	{
+	 LVWS= true;
+	} 
+	else
+	{
+	 LVWS= false;
+	}
+	
+	//LVNS.=((H-L)<Ref((H-L),-1)) AND V<Ref(V,-1);
+	if  ((source.high[period]-source.low[period]) < (source.high[period-1]-source.low[period]-1)  && source.volume[period] <  source.volume[period-1]) 
+	{
+	 LVNS= true;
+	} 
+	else
+	{
+	 LVNS= false;
+	}
+	
+	
+	 Histogram[period]=0;
+	 
+	 if (UDPC && LVWS) { Histogram[period] = 8;}
+	 else if(UDPC && HVWS) { Histogram[period] =7; }
+	 else if(UDPC && HVNS) { Histogram[period] =6; }
+	 else if(UDPC && LVNS) { Histogram[period] =5; }
+	 else if(UDNC && LVWS) { Histogram[period] =4; }
+	 else if(UDNC && HVWS) { Histogram[period] =3; }
+	 else if(UDNC && HVNS) { Histogram[period] =2; }
+	 else if(UDNC && LVNS) { Histogram[period] =1; }
+	 else if(DDPC && LVNS) { Histogram[period] =-1; }
+	 else if(DDPC && HVNS) { Histogram[period] =-2; }
+	 else if(DDPC && HVWS) { Histogram[period] =-3; }
+	 else if(DDPC && LVWS) { Histogram[period] =-4; }
+	 else if(DDNC && LVNS) { Histogram[period] =-5; }
+	 else if(DDNC && HVNS) { Histogram[period] =-6; }
+	 else if(DDNC && HVWS) { Histogram[period] =-7; }
+	 else if(DDNC && LVWS) { Histogram[period] =-8; }
+     else
+     {
+	  Histogram[period] =0;
+     }	
+	 S.update(mode);
+	 L.update(mode);
+	 
+	   Out[period] = Histogram[period] -Histogram[period-1];
+	  
+	  if (period >= first && source.hasData(period)) 
+	  {	 
+	//Mov(B,5,S);Mov(B,15,S);B-Ref(B,-1);]] 	   		 
+        Short[period] = S.DATA[period];
+        Long[period] = L.DATA[period];
+       
+    }
+}
+

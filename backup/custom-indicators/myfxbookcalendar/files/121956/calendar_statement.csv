@@ -1,0 +1,132 @@
+Date,Event,Impact,Previous,Consensus,Actual,Currency
+"2018, November 05, 00:50","(Japan) BoJ Monetary Policy Meeting Minutes",High,,,,JPY
+"2018, November 05, 01:00","(Colombia) All Saints Day (Observed)",None,,,,COP
+"2018, November 05, 01:00","(Russia) Day of Unity ",None,,,,RUB
+"2018, November 05, 01:00","(Australia) TD Securities Inflation (YoY)",Low,2.1%,,1.9%,AUD
+"2018, November 05, 01:00","(Australia) TD Securities Inflation (MoM)",Low,0.3%,,0.1%,AUD
+"2018, November 05, 01:00","(New Zealand) ANZ Commodity Price",Low,-2.4%,,-2.4%,NZD
+"2018, November 05, 01:30","(Australia) ANZ Job Advertisements",Low,-0.7%,,0.2%,AUD
+"2018, November 05, 01:30","(Hong Kong SAR) Nikkei Manufacturing PMI",Low,47.90,,48.60,HKD
+"2018, November 05, 01:30","(Japan) Markit Services PMI",Low,50.20,,52.40,JPY
+"2018, November 05, 02:00","(Japan) Bank of Japan Governor Kuroda Speech",High,,,,JPY
+"2018, November 05, 02:45","(China) Caixin China Services PMI",Medium,53.10,,50.80,CNY
+"2018, November 05, 05:00","(Indonesia) Gross Domestic Product (QoQ)",Low,4.21%,4.08%,3.09%,IDR
+"2018, November 05, 05:00","(Indonesia) Gross Domestic Product (YoY)",Low,5.27%,5.15%,5.17%,IDR
+"2018, November 05, 07:00","(Ireland) Purchasing Manager Index Services",Low,58.70,,,EUR
+"2018, November 05, 08:00","(Brazil) Fipe's IPC Inflation",Low,0.39%,0.4%,0.48%,BRL
+"2018, November 05, 08:00","(Turkey) Producer Price Index (MoM)",Low,10.88%,,0.91%,TRY
+"2018, November 05, 08:00","(Turkey) Producer Price Index (YoY)",Low,46.15%,,45.01%,TRY
+"2018, November 05, 08:00","(Turkey) Consumer Price Index (YoY)",Low,24.52%,24.5%,25.24%,TRY
+"2018, November 05, 08:00","(Turkey) Consumer Price Index (MoM)",Low,6.3%,2.0%,2.67%,TRY
+"2018, November 05, 08:45","(France) Individual Investment (Current Year)",Low,4.0%,,,EUR
+"2018, November 05, 09:00","(Czech Republic) Retail Sales (YoY)",Low,4.2%,3.0%,1.4%,CZK
+"2018, November 05, 09:00","(Hungary) Purchasing Manager Index",Low,53.80,,57.30,HUF
+"2018, November 05, 09:00","(Spain) Unemployment Change",High,20.40K,,,EUR
+"2018, November 05, 10:30","(European Monetary Union) Sentix Investor Confidence",Low,11.40,10.1,,EUR
+"2018, November 05, 10:30","(United Kingdom) Markit Services PMI",Medium,53.90,53.3,,GBP
+"2018, November 05, 12:30","(Chile) IMACEC",Low,3.2%,3.2%,,CLP
+"2018, November 05, 14:10","(Canada) BoC Governor Poloz Speech",High,,,,CAD
+"2018, November 05, 15:45","(United States) Markit Services PMI",Medium,54.70,54.7,,USD
+"2018, November 05, 15:45","(United States) Markit PMI Composite",Medium,54.80,54.8,,USD
+"2018, November 05, 16:00","(United States) ISM Non-Manufacturing PMI",High,61.60,59.5,,USD
+"2018, November 05, 17:30","(United States) 3-Month Bill Auction",Low,2.305%,,,USD
+"2018, November 05, 17:30","(United States) 6-Month Bill Auction",Low,2.43%,,,USD
+"2018, November 05, 19:00","(United States) 3-Year Note Auction",Low,2.989%,,,USD
+"2018, November 05, 19:00","(United States) Loan Officer Survey",Low,,,,USD
+"2018, November 06, 00:00","(South Korea) Current Account Balance",Low,8.44B,,,KRW
+"2018, November 06, 00:30","(Japan) Overall Household Spending (YoY)",Medium,2.8%,1.6%,,JPY
+"2018, November 06, 01:00","(Singapore) Deepavali",None,,,,SGD
+"2018, November 06, 01:00","(United States) US Mid-term Elections",Medium,,,,USD
+"2018, November 06, 01:01","(United Kingdom) BRC Like-For-Like Retail Sales (YoY)",Medium,-0.2%,,,GBP
+"2018, November 06, 03:00","(New Zealand) RBNZ Inflation Expectations (QoQ)",Medium,2.0%,,,NZD
+"2018, November 06, 04:30","(Australia) RBA Rate Statement",High,,,,AUD
+"2018, November 06, 04:30","(Australia) RBA Interest Rate Decision",High,1.5%,1.5%,,AUD
+"2018, November 06, 06:30","(Netherlands, The) Consumer Price Index n.s.a (YoY)",Low,1.9%,,,EUR
+"2018, November 06, 07:00","(Russia) Purchasing Manager Index Services",Low,54.70,,,RUB
+"2018, November 06, 08:00","(Germany) Factory Orders n.s.a. (YoY)",Low,3.1%,,,EUR
+"2018, November 06, 08:00","(Germany) Factory Orders s.a. (MoM)",Low,2.0%,-0.6%,,EUR
+"2018, November 06, 09:00","(Czech Republic) Construction output (YoY)",Low,11.9%,,,CZK
+"2018, November 06, 09:00","(Czech Republic) Industrial Production (YoY)",Low,1.9%,,,CZK
+"2018, November 06, 09:00","(Czech Republic) Foreign Trade Balance (MoM)",Low,2.30B,1.0B,,CZK
+"2018, November 06, 09:15","(Spain) Markit Services PMI",High,52.50,51.8,,EUR
+"2018, November 06, 09:30","(Sweden) Industrial Production (MoM)",Low,0.6%,,,SEK
+"2018, November 06, 09:30","(Sweden) Industrial Production (YoY)",Low,2.9%,,,SEK
+"2018, November 06, 09:30","(Sweden) New Orders Manufacturing (YoY)",Low,2.0%,,,SEK
+"2018, November 06, 09:45","(Italy) Markit Services PMI",Low,53.30,52.0,,EUR
+"2018, November 06, 09:50","(France) Markit PMI Composite",Low,54.30,54.3,,EUR
+"2018, November 06, 09:50","(France) Markit Services PMI",Low,55.60,55.6,,EUR
+"2018, November 06, 09:55","(Germany) Markit Services PMI",Medium,53.60,53.6,,EUR
+"2018, November 06, 09:55","(Germany) Markit PMI Composite",Medium,52.70,52.7,,EUR
+"2018, November 06, 10:00","(European Monetary Union) Markit Services PMI",Medium,53.30,53.3,,EUR
+"2018, November 06, 10:00","(European Monetary Union) Markit PMI Composite",Medium,52.70,52.7,,EUR
+"2018, November 06, 10:00","(European Monetary Union) Markit Manufacturing PMI",Medium,52.10,,,EUR
+"2018, November 06, 10:35","(United Kingdom) 10-y Bond Auction",Low,1.6%,,,GBP
+"2018, November 06, 11:00","(European Monetary Union) Producer Price Index (YoY)",Low,4.2%,4.2%,,EUR
+"2018, November 06, 11:00","(European Monetary Union) Producer Price Index (MoM)",Low,0.3%,0.3%,,EUR
+"2018, November 06, 11:00","(United Kingdom) 10-y Bond Auction",Low,,,,GBP
+"2018, November 06, 13:00","(Romania) Interest rate decision",Low,2.5%,2.5%,,ROL
+"2018, November 06, 13:00","(European Monetary Union) ECB's Lautenschläger Speech",Medium,,,,EUR
+"2018, November 06, 14:00","(Russia) Consumer Price Index (MoM)",Low,0.2%,0.4%,,RUB
+"2018, November 06, 14:30","(Canada) Building Permits (MoM)",High,0.4%,,,CAD
+"2018, November 06, 14:55","(United States) Redbook index (YoY)",Low,5.9%,,,USD
+"2018, November 06, 14:55","(United States) Redbook index (MoM)",Low,0.1%,,,USD
+"2018, November 06, 15:00","(Mexico) Consumer Confidence",Low,101.70,,,MXN
+"2018, November 06, 15:00","(Mexico) Consumer Confidence s.a",Low,100.10,,,MXN
+"2018, November 06, 15:00","(New Zealand) GDT Price Index",Medium,-0.3%,,,NZD
+"2018, November 06, 16:00","(United States) IBD/TIPP Economic Optimism (MoM)",Low,57.80,,,USD
+"2018, November 06, 16:00","(United States) JOLTS Job Openings",High,7.14M,,,USD
+"2018, November 06, 17:30","(United States) 52-Week Bill auction",Low,2.58%,,,USD
+"2018, November 06, 17:30","(United States) 4-Week Bill Auction",Low,2.165%,,,USD
+"2018, November 06, 19:00","(United States) 10-Year Note Auction",Medium,3.225%,,,USD
+"2018, November 06, 22:30","(United States) API Weekly Crude Oil Stock",None,5.70M,,,USD
+"2018, November 06, 22:30","(Australia) AiG Performance of Construction Index",Medium,49.30,,,AUD
+"2018, November 06, 22:45","(New Zealand) Labour cost index (YoY)",Low,2.1%,1.9%,,NZD
+"2018, November 06, 22:45","(New Zealand) Labour cost index (QoQ)",Low,0.6%,0.6%,,NZD
+"2018, November 06, 22:45","(New Zealand) Participation Rate",Medium,70.9%,70.9%,,NZD
+"2018, November 06, 22:45","(New Zealand) Employment Change",High,0.5%,0.5%,,NZD
+"2018, November 06, 22:45","(New Zealand) Unemployment Rate",High,4.5%,4.5%,,NZD
+"2018, November 07, 01:00","(Japan) Labor Cash Earnings (YoY)",Low,0.8%,,,JPY
+"2018, November 07, 06:00","(Japan) Coincident Index",Medium,116.70,,,JPY
+"2018, November 07, 06:00","(Japan) Leading Economic Index",Medium,104.50,,,JPY
+"2018, November 07, 07:00","(South Africa) Gross $Gold & Forex Reserve ",Low,$50.39B,,,ZAR
+"2018, November 07, 07:00","(South Africa) Net $Gold & Forex Reserve",Low,$42.23B,,,ZAR
+"2018, November 07, 08:00","(Germany) Industrial Production s.a. (MoM)",Low,-0.3%,0.1%,,EUR
+"2018, November 07, 08:00","(Denmark) Industrial Production (MoM)",Low,-1.2%,,,DKK
+"2018, November 07, 08:00","(Finland) Trade Balance",Low,-€0.40B,,,EUR
+"2018, November 07, 08:00","(Norway) Manufacturing Output",Low,-0.1%,-0.2%,,NOK
+"2018, November 07, 08:00","(Germany) Industrial Production n.s.a. w.d.a. (YoY)",Medium,-0.1%,,,EUR
+"2018, November 07, 09:00","(Austria) Wholesale Prices n.s.a (YoY)",Low,4.8%,,,EUR
+"2018, November 07, 09:00","(Austria) Wholesale Prices n.s.a (MoM)",Low,0.6%,,,EUR
+"2018, November 07, 09:00","(Switzerland) Foreign Currency Reserves",Low,740.00B,,,CHF
+"2018, November 07, 09:00","(Hungary) Retail Sales (YoY)",Low,6.8%,,,HUF
+"2018, November 07, 09:00","(Slovakia) Foreign Trade Balance",Low,-€81.70M,,,EUR
+"2018, November 07, 09:00","(European Monetary Union) Non-monetary policy's ECB meeting",Medium,,,,EUR
+"2018, November 07, 09:30","(United Kingdom) Halifax House Prices (3m/YoY)",Low,2.5%,,,GBP
+"2018, November 07, 09:30","(United Kingdom) Halifax House Prices (MoM)",Low,-1.4%,,,GBP
+"2018, November 07, 09:55","(Iceland) CBI Interest Rate Decision",Low,4.25%,,,ISK
+"2018, November 07, 10:00","(Czech Republic) FX Reserves",Low,€123.13B,,,CZK
+"2018, November 07, 10:00","(Italy) Retail Sales s.a. (MoM)",Low,0.7%,,,EUR
+"2018, November 07, 10:00","(Italy) Retail Sales n.s.a (YoY)",Low,2.2%,,,EUR
+"2018, November 07, 10:00","(Singapore) Foreign Reserves (MoM)",Low,289.50B,,,SGD
+"2018, November 07, 10:30","(South Africa) Business Confidence Index",Low,93.30,,,ZAR
+"2018, November 07, 11:00","(China) Foreign Exchange Reserves (MoM)",Low,¥3.09T,¥3.068T,,CNY
+"2018, November 07, 11:00","(European Monetary Union) Retail Sales (MoM)",Low,-0.2%,0.1%,,EUR
+"2018, November 07, 11:00","(European Monetary Union) Retail Sales (YoY)",Low,1.8%,0.9%,,EUR
+"2018, November 07, 11:00","(Germany) 10-y Bond Auction",Medium,0.55%,,,EUR
+"2018, November 07, 12:00","(Brazil) IPCA Inflation",Low,0.48%,0.41%,,BRL
+"2018, November 07, 12:00","(Portugal) Unemployment Rate",Low,6.7%,,,EUR
+"2018, November 07, 12:10","(Poland) NBP Base rate",Low,1.5%,1.5%,,PLN
+"2018, November 07, 12:30","(India) M3 Money Supply",Low,10.0%,,,INR
+"2018, November 07, 13:00","(Chile) Trade Balance",Low,-$122.00M,,,CLP
+"2018, November 07, 13:00","(Poland) Central Bank FX Reserves",Low,€97.10B,,,PLN
+"2018, November 07, 13:00","(United States) MBA Mortgage Applications",Low,-2.5%,,,USD
+"2018, November 07, 15:30","(Turkey) Treasury Cash Balance",Low,-8.18B,,,TRY
+"2018, November 07, 16:00","(Canada) Ivey Purchasing Managers Index s.a",High,50.40,,,CAD
+"2018, November 07, 16:00","(Canada) Ivey Purchasing Managers Index",High,56.50,,,CAD
+"2018, November 07, 16:30","(United States) EIA Crude Oil Stocks change",Medium,3.22M,,,USD
+"2018, November 07, 19:00","(United States) 30-Year Bond Auction",Low,3.344%,,,USD
+"2018, November 07, 21:00","(United States) Consumer Credit Change",Medium,$20.08B,$17.25B,,USD
+"2018, November 07, 21:00","(New Zealand) RBNZ Interest Rate Decision",High,,,,NZD
+"2018, November 07, 21:00","(New Zealand) RBNZ Rate Statement",High,,,,NZD
+"2018, November 07, 21:00","(New Zealand) RBNZ Interest Rate Decision",High,1.75%,1.75%,,NZD
+

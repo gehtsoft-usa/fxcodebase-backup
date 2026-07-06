@@ -1,0 +1,427 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252" /><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><title>How to Support Localization?</title><style type="text/css">a, p, h1, h2, h3, h4, h5, h6, table, td, tr, li, ul, ol {
+    font-family: Verdana, Trebuchet MS, Arial;
+}
+
+a, p, td, tr, ul, ol, li {
+    font-size: 12pt;
+}
+
+h3 {
+    font-size: 13pt;
+}
+
+h2 {
+    font-size: 13pt;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+body {
+    color: #444444;
+    background-color: white;
+}
+
+A:link {
+    color: #0065b3;
+    cursor: pointer;
+}
+
+A:visited {
+    color: #0068be;
+    cursor: pointer;
+}
+
+a.action {
+  background-color: #0065b3;
+  color: white;
+  font-size: 10pt;
+  padding: 2px 2px;
+  width: 50pt;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px;
+}
+
+.side-icon {
+    float: left;
+}
+
+a.action [class*="dripicons-"]:before {
+    padding: 0 2px 0 0;
+    font-size: 12pt;
+    vertical-align: text-bottom;
+}
+
+.side-icon:after {
+  content: "";
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  border-left: 1.5px solid white;
+  transform: translate(-50%);
+}
+
+a.actiontab {
+  font-size: 10pt;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px 3px 0 0;
+}
+
+pre, code, code a {
+    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+    font-size: 12pt;
+}
+
+code.ctag {
+    background-color: #f1f1f1;
+    padding: .1em .2em;
+    border-radius: 3px;
+}
+
+pre {
+    background-color: white;
+}
+
+pre.example {
+    background-color: #f1f1f1;
+}
+
+ul {
+    list-style-type: disc;
+    margin-left: 18pt;
+}
+
+ol {
+    list-style-type: decimal;
+    margin-left: 18pt;
+}
+
+ul.hhc {
+    list-style-type: none;
+    margin-left: 1em;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+li.hhc {
+    margin-left: 0;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+table {
+  border-spacing: 0;
+  border-color: #dfe3e7;
+}
+
+tr + tr td {
+   border-top: 0;
+}
+
+tr td + td {
+  border-left: 0;
+}
+
+td {
+  border: 1px solid;
+  border-color: #dfe3e7;
+}
+
+tr:first-child td:first-child {
+   border-radius: 0.2em 0 0 0;
+}
+
+tr:first-child td:last-child {
+  border-radius: 0 0.2em 0 0;
+}
+
+tr:first-child td:only-child {
+  border-radius: 0.2em 0.2em 0 0;
+}
+
+tr:last-child td:first-child {
+    border-radius: 0 0 0 0.2em;
+}
+
+tr:last-child td:last-child {
+    border-radius: 0 0 0.2em 0;
+}
+
+tr:last-child td:only-child {
+    border-radius: 0 0 0.2em 0.2em;
+}
+
+tr:only-child td:only-child {
+    border-radius: 0.2em 0.2em 0.2em 0.2em;
+}
+
+tr:only-child td:first-child {
+   border-radius: 0.2em 0 0 0.2em;
+}
+
+tr:only-child td:last-child {
+  border-radius: 0 0.2em 0.2em 0;
+}
+
+
+td.tmain, td.tmain_nw, td.thdr {
+    background-color: rgb(255, 255, 255);
+    vertical-align: top;
+    padding: 3px;
+}
+
+td.tmain p, td.tmain_nw p, td.thdr p {
+    margin-top: 3pt;
+    margin-bottom: 3pt;
+}
+
+td.tmain_nw {
+    white-space: nowrap;
+}
+
+td.thdr {
+    background-color: #e3e3e3;
+}
+
+table.decl {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+    vertical-align: top;
+    padding: 3px;
+    width: 100%;
+}
+
+table.decl td {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+}
+
+div.note-quote {
+    border-left: 10px solid #ccc;
+    padding: 1em 10px .1em 10px;
+    margin: 1.5em 10px;
+    background-color: rgb(224, 224, 224);
+}
+
+div.note-note {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+div.note-warning {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #fff;
+    background-color: #ff6358;
+}
+div.note-warning code.ctag {
+    color: black;
+}</style>
+<link rel="stylesheet" href="res/dripicons.css"></head><body><script type="text/javascript">
+var highlighterEnabled = false;
+var maintopic = 'index';
+var helptitle = 'Indicore SDK 3';
+    function loadStarted() {
+    window.onload = loadCompleted;
+
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        var head = document.getElementsByTagName('head')[0];
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.min.js';
+        head.appendChild(script4);
+
+
+        var script2 = document.createElement('script');
+        script2.type = 'text/javascript';
+        script2.src = './highlighter/highlight.cshtml.js';
+        head.appendChild(script2);
+
+        var script3 = document.createElement('script');
+        script3.type = 'text/javascript';
+        script3.src = './highlighter/highlight.lua.js';
+        head.appendChild(script3);
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.luax.js';
+        head.appendChild(script4);
+    }
+}
+
+function loadCompleted() {
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        hljs.registerLanguage('cshtml-razor', window.hljsDefineCshtmlRazor);
+        hljs.registerLanguage('lua', window.hljsDefineLua);
+        hljs.registerLanguage('luax', window.hljsDefineLuaX);
+        x = document.querySelectorAll('pre code');
+        for (var i = 0; i < x.length; i++) {
+            if (x[i].hasAttribute('class')) {
+                hljs.highlightBlock(x[i]);
+            }
+        }
+    }
+}
+
+
+function hidediv(divname) {
+    document.getElementById(divname).style.display = 'none';
+}
+
+function showdiv(divname) {
+    document.getElementById(divname).style.display = 'inline';
+}
+
+function syncList() {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, null, document.title);
+    }
+}
+
+function syncList1(key) {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, key + '.html', document.title);
+    }
+}</script><script type="text/javascript">
+    loadStarted();
+</script><h1>How to Support Localization?</h1>
+<h2>Brief</h2>
+<p>The section provides guidlines for supporting localization of your indicator.</p>
+<h2>Details</h2><p>Your indicator has to return human-readable text such as the name of the indicator,
+its description and so on. The localization enables you to provide the same text in different
+languages.</p>
+<p>The first step is to translate this text into all languages you want to support.
+One of these languages must be used as the <b>default</b> language, i.e. the
+language in which the text must be shown in case you do not provide text of a particular
+language.</p>
+<p>The file with the text for all supported languages is called a <b>resource file</b>. The resource file must
+have exactly the same name as your indicator plus the extension <code class="ctag">.rc</code>. For example, if your indicator has
+the name <code class="ctag">mva.lua</code>, your resource file must have the name <code class="ctag">mva.lua.rc</code>. The resource file must be
+a text file in the UTF-8 encoding. You can use the <code class="ctag">notepad.exe</code> text editor to create resource files.
+The resource file must be placed into the same folder as your indicator.</p><div id="open7" style="display:none">
+  <p>Example of localization resources&nbsp;<a href="javascript: showdiv('close7'); hidediv('open7');" onclick="javascript: showdiv('close7'); hidediv('open7');" class="action">Show<span class="side-icon dripicons-chevron-right"></span></a></p>
+</div>
+<div id="close7" style="display:inline">
+  <p>Example of localization resources&nbsp;<a href="javascript: showdiv('open7'); hidediv('close7');" onclick="javascript: showdiv('open7'); hidediv('close7');" class="action">Hide<span class="side-icon dripicons-chevron-down"></span></a></p>
+  <pre class="example" id="example7"><code>default=enu
+[enu]
+codepage=1252
+name=Simple Moving Average
+param_N_name=Number of periods
+param_clrDIP_name=Line Color
+[esp]
+codepage=1252
+name=Media Movil Simple
+param_N_name=Numero Periodos
+param_clrDIP_name=Color de la linea
+[fra]
+codepage=1252
+name=Moyenne mobile simple
+param_N_name=Nombre de periodes
+param_clrDIP_name=Couleur de la ligne</code></pre>
+</div><p>The first line of the file declares the default language.</p>
+<p>All texts are grouped by the language. The identifier of the language is specified in square brackets
+before all texts. The line with the language identifier is followed by a line containing the code page
+of the language. All texts of type <code class="ctag">name=text</code> are specified one-by-one after the line containing the code page.
+The name of the text will be used in the indicator code instead of the text.</p><div id="open8" style="display:none">
+  <p>Example&nbsp;<a href="javascript: showdiv('close8'); hidediv('open8');" onclick="javascript: showdiv('close8'); hidediv('open8');" class="action">Show<span class="side-icon dripicons-chevron-right"></span></a></p>
+</div>
+<div id="close8" style="display:inline">
+  <p>Example&nbsp;<a href="javascript: showdiv('open8'); hidediv('close8');" onclick="javascript: showdiv('open8'); hidediv('close8');" class="action">Hide<span class="side-icon dripicons-chevron-down"></span></a></p>
+  <pre class="example" id="example8"><code>    function Init()
+    indicator:name(<b>resources:get</b>(<i>&quot;name&quot;</i>));
+    ...
+    indicator.parameters:addInteger(&quot;N&quot;, <b>resources:get</b>(<i>&quot;param_N_name&quot;</i>), &quot;&quot;), 7, 2, 10000);
+    indicator.parameters:addColor(&quot;clrDIP&quot;, <b>resources:get</b>(<i>&quot;param_clrDIP_name&quot;</i>), &quot;&quot;), core.rgb(255, 0, 0));
+    ...
+    end</code></pre>
+</div><p>The list of languages, their identifiers and code pages:</p><table class="tmain" width="100%">
+  <tr>
+    <td class="thdr"><p>Language</p></td>
+    <td class="thdr"><p>Language Identifier</p></td>
+    <td class="thdr"><p>Code Page</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>English</p></td>
+    <td class="tmain"><p>enu</p></td>
+    <td class="tmain"><p>1252</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Russian</p></td>
+    <td class="tmain"><p>rus</p></td>
+    <td class="tmain"><p>1251</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Chinese (Traditional)</p></td>
+    <td class="tmain"><p>cht</p></td>
+    <td class="tmain"><p>950</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Chinese (Simplified)</p></td>
+    <td class="tmain"><p>chs</p></td>
+    <td class="tmain"><p>936</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Japanese</p></td>
+    <td class="tmain"><p>jpn</p></td>
+    <td class="tmain"><p>932</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>French</p></td>
+    <td class="tmain"><p>fra</p></td>
+    <td class="tmain"><p>1252</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Spanish</p></td>
+    <td class="tmain"><p>esp</p></td>
+    <td class="tmain"><p>1252</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>German</p></td>
+    <td class="tmain"><p>deu</p></td>
+    <td class="tmain"><p>1252</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Arabic</p></td>
+    <td class="tmain"><p>ara</p></td>
+    <td class="tmain"><p>1256</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Chinese (Taiwan)</p></td>
+    <td class="tmain"><p>ctt</p></td>
+    <td class="tmain"><p>950</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Korean</p></td>
+    <td class="tmain"><p>kor</p></td>
+    <td class="tmain"><p>949</p></td>
+  </tr>
+</table><p>
+  <center><a href="sdk_main.html">back</a></center>
+</p><script language="javascript" type="text/javascript">if(window.parent.frames[0]) window.parent.frames[0].selectItem(window.location.href);</script></body></html>

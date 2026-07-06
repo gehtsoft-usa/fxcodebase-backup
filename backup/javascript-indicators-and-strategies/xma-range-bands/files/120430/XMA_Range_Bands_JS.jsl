@@ -1,0 +1,157 @@
+function Init()
+{
+    indicator.name("XMA_Range_Bands indicator");
+    indicator.description("XMA_Range_Bands indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addString("Method1", "Method1", "", "MVA");
+    indicator.parameters.addStringAlternative("Method1", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method1", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method1", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("Method1", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Method1", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method1", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Method1", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Method1", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Method1", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method1", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Method1", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Method1", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Method1", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Method1", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Method1", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Method1", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Method1", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Method1", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Method1", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Method1", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Method1", "JSmooth", "", "JSmooth");
+    indicator.parameters.addInteger("Period1", "Period1", "", 100);
+    indicator.parameters.addString("Price", "Price", "", "close");
+    indicator.parameters.addStringAlternative("Price", "close", "", "close");
+    indicator.parameters.addStringAlternative("Price", "open", "", "open");
+    indicator.parameters.addStringAlternative("Price", "high", "", "high");
+    indicator.parameters.addStringAlternative("Price", "low", "", "low");
+    indicator.parameters.addStringAlternative("Price", "median", "", "median");
+    indicator.parameters.addStringAlternative("Price", "typical", "", "typical");
+    indicator.parameters.addStringAlternative("Price", "weighted", "", "weighted");
+    indicator.parameters.addString("Method2", "Method2", "", "MVA");
+    indicator.parameters.addStringAlternative("Method2", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method2", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method2", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("Method2", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Method2", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method2", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Method2", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Method2", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Method2", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method2", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Method2", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Method2", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Method2", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Method2", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Method2", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Method2", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Method2", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Method2", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Method2", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Method2", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Method2", "JSmooth", "", "JSmooth");
+    indicator.parameters.addInteger("Period2", "Period2", "", 20);
+    indicator.parameters.addDouble("Deviation", "Deviation", "", 2);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("XMAclr", "XMA color", "XMA color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("Upperclr", "Upper color", "Upper color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("Lowerclr", "Lower color", "Lower color", core.rgb(0, 0, 255));
+    indicator.parameters.addInteger("XMAwidth", "XMA width", "XMA width", 2, 1, 5);
+    indicator.parameters.addInteger("XMAstyle", "XMA style", "XMA style", core.LINE_SOLID);
+    indicator.parameters.setFlag("XMAstyle", core.FLAG_LINE_STYLE);
+    indicator.parameters.addInteger("Bandwidth", "Band width", "Band width", 1, 1, 5);
+    indicator.parameters.addInteger("Bandstyle", "Band style", "Band style", core.LINE_DASH);
+    indicator.parameters.setFlag("Bandstyle", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Method1;
+var Period1;
+var Price;
+var Method2;
+var Period2;
+var Deviation;
+var Range;
+var MA1;
+var MA2;
+var XMA=null;
+var Upper=null;
+var Lower=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Method1=instance.parameters.Method1;
+    Period1=instance.parameters.Period1;
+    Price=instance.parameters.Price;
+    Method2=instance.parameters.Method2;
+    Period2=instance.parameters.Period2;
+    Deviation=instance.parameters.Deviation;
+    first = source.first()+2;
+    Range = instance.addInternalStream(first, 0);
+    if (Price=="open") 
+    {
+     MA1 = core.indicators.create("AVERAGES", source.open, Method1, Period1, false);
+    } 
+    else if (Price=="high") 
+    {
+     MA1 = core.indicators.create("AVERAGES", source.high, Method1, Period1, false);
+    } 
+    else if (Price=="low") 
+    {
+     MA1 = core.indicators.create("AVERAGES", source.low, Method1, Period1, false);
+    } 
+    else if (Price=="close") 
+    {
+     MA1 = core.indicators.create("AVERAGES", source.close, Method1, Period1, false);
+    } 
+    else if (Price=="median") 
+    {
+     MA1 = core.indicators.create("AVERAGES", source.median, Method1, Period1, false);
+    } 
+    else if (Price=="typical") 
+    {
+     MA1 = core.indicators.create("AVERAGES", source.typical, Method1, Period1, false);
+    } 
+    else
+    {
+     MA1 = core.indicators.create("AVERAGES", source.weighted, Method1, Period1, false);
+    } 
+    MA2 = core.indicators.create("AVERAGES", Range, Method2, Period2, false);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Method1 + ", " + instance.parameters.Period1 + ", " + instance.parameters.Price + ", " + instance.parameters.Method2 + ", " + instance.parameters.Period2 + ", " + instance.parameters.Deviation + ")";
+    instance.name(name);
+    XMA = instance.addStream("XMA", core.Line, name + ".XMA", "XMA", instance.parameters.XMAclr, first);
+    Upper = instance.addStream("Upper", core.Line, name + ".Upper", "Upper", instance.parameters.Upperclr, first);
+    Lower = instance.addStream("Lower", core.Line, name + ".Lower", "Lower", instance.parameters.Lowerclr, first);
+    XMA.setWidth(instance.parameters.XMAwidth);
+    XMA.setStyle(instance.parameters.XMAstyle);
+    Upper.setWidth(instance.parameters.Bandwidth);
+    Upper.setStyle(instance.parameters.Bandstyle);
+    Lower.setWidth(instance.parameters.Bandwidth);
+    Lower.setStyle(instance.parameters.Bandstyle);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    MA1.update(mode);
+    Range[period]=source.high[period]-source.low[period];
+    MA2.update(mode);
+    XMA[period]=MA1.DATA[period];
+    Upper[period]=MA1.DATA[period]+MA2.DATA[period];
+    Lower[period]=MA1.DATA[period]-MA2.DATA[period];
+   } 
+}
+

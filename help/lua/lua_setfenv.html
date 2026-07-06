@@ -1,0 +1,23 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_setfenv</title>
+</head>
+<body>
+<h3><a name="lua_setfenv"><code>lua_setfenv</code></a></h3>
+<pre>int lua_setfenv (lua_State *L, int index);</pre>
+
+<p>
+Pops a table from the stack and sets it as
+the new environment for the value at the given index.
+If the value at the given index is
+neither a function nor a thread nor a userdata,
+<a href="lua_setfenv.html"><code>lua_setfenv</code></a> returns 0.
+Otherwise it returns 1.
+
+
+
+
+
+<hr>
+</body>
+</html>

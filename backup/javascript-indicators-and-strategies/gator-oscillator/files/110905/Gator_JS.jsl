@@ -1,0 +1,167 @@
+//initializes the indicator
+function Init()
+{
+    indicator.name("Gator");
+    indicator.description("Gator Oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.setTag("group", "Bill Williams");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("JPeriod", "Alligator Jaw smoothing period", "Alligator Jaw smoothing period", 13);
+    indicator.parameters.addInteger("JShift", "Alligator Jaw shifting period", "Alligator Jaw shifting period", 8);
+    indicator.parameters.addInteger("TPeriod", "Alligator Teeth smoothing period", "Alligator Teeth smoothing period", 8);
+    indicator.parameters.addInteger("TShift", "Alligator Teeth shifting period", "Alligator Teeth shifting period", 5);
+    indicator.parameters.addInteger("LPeriod", "Alligator Lips smoothing period", "Alligator Lips smoothing period", 5);
+    indicator.parameters.addInteger("LShift", "Alligator Lips shifting period", "Alligator Lips shifting period", 3);
+    indicator.parameters.addString("MTH", "Smoothing method", "", "SMMA");
+    indicator.parameters.addStringAlternative("MTH", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("MTH", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("MTH", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("MTH", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("MTH", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("MTH", "Wilder", "", "Wilder");
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addString("Display", "Display mode", "Display mode", "L");
+    indicator.parameters.addStringAlternative("Display", "Line", "", "L");
+    indicator.parameters.addStringAlternative("Display", "Histogram", "", "H");
+
+    indicator.parameters.addColor("Uclr", "Up Line color", "Up Line color", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("Uwidth", "Up Line width", "Up Line width", 1, 1, 5);
+    indicator.parameters.addInteger("Ustyle", "Up Line style", "Up Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("Ustyle", core.FLAG_LEVEL_STYLE);
+    indicator.parameters.addColor("Dclr", "Down Line color", "Down Line color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("Dwidth", "Down Line width", "Down Line width", 1, 1, 5);
+    indicator.parameters.addInteger("Dstyle", "Down Line style", "Down Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("Dstyle", core.FLAG_LEVEL_STYLE);
+}
+
+var source;
+var first;
+var alligator;
+var jaws, teeth, lips;
+var UP, DOWN;
+var line;
+var Ufirst, Uextent;
+var Dfirst, Dextent;
+var CG, CF;
+
+//initializes the instance of the indicator
+function Prepare(onlyName)
+{
+    source = instance.source;
+    line = (instance.parameters.Display != "H");
+    JawN = instance.parameters.JPeriod;
+    JawS = instance.parameters.JShift;
+    TeethN = instance.parameters.TPeriod;
+    TeethS = instance.parameters.TShift;
+    LipsN = instance.parameters.LPeriod;
+    LipsS = instance.parameters.LShift;
+    JawSrc = core.indicators.create(instance.parameters.MTH, source.median, JawN, core.rgb(0, 0, 0));
+    TeethSrc = core.indicators.create(instance.parameters.MTH, source.median, TeethN, core.rgb(0, 0, 0));
+    LipsSrc = core.indicators.create(instance.parameters.MTH, source.median, LipsN, core.rgb(0, 0, 0));
+    var name = profile.id() + "(" + instance.source.name() + ")";
+    instance.name(name);
+  
+    if (onlyName == true)
+        return ;
+
+    var aprof, aparams;
+    aprof = core.indicators.findIndicator("ALLIGATOR");
+    aparams = aprof.parameters();
+
+    aparams.setInteger("JawN", JawN);
+    aparams.setInteger("JawS", JawS);
+    aparams.setInteger("TeethN", TeethN);
+    aparams.setInteger("TeethS", TeethS);
+    aparams.setInteger("LipsN", LipsN);
+    aparams.setInteger("LipsS", LipsS);
+    aparams.setString("MTH", instance.parameters.MTH);
+    alligator = aprof.createInstance(source, aparams);
+    jaws = alligator.getStream(0);
+    teeth = alligator.getStream(1);
+    lips = alligator.getStream(2);
+
+    Uextent = Math.min(JawS, TeethS);
+    Ufirst = Math.max(jaws.first(), teeth.first());
+    Dextent = Math.min(TeethS, LipsS);
+    Dfirst = Math.max(lips.first(), teeth.first());
+
+    var mode;
+    if (line)
+    {
+        mode = core.Line;
+    }
+    else
+    {
+        mode = core.Bar;
+    }
+
+    UP = instance.addStream("UP", mode, name + ".UP", "UP", instance.parameters.Uclr, Ufirst, Uextent);
+    DOWN = instance.addStream("DOWN", mode, name + ".DN", "DN", instance.parameters.Dclr, Dfirst, Dextent);
+    if (line)
+    {
+        UP.setWidth(instance.parameters.Uwidth);
+        UP.setStyle(instance.parameters.Ustyle);
+        DOWN.setWidth(instance.parameters.Dwidth);
+        DOWN.setStyle(instance.parameters.Dstyle);
+    }
+    CG = instance.parameters.Uclr;
+    CF = instance.parameters.Dclr;
+}
+
+// calculate the value
+function Update(period, mode)
+{
+    alligator.update(mode);
+    var p;
+
+    if (period >= Ufirst - Uextent)
+    {
+        p = period + Uextent;
+        UP[p] = Math.abs(jaws[p] - teeth[p]);
+        if (p > Ufirst)
+        {
+            if (UP[p] > UP[p - 1])
+            {
+                UP.setColor(p, CG);
+            }
+            else
+            {
+                if (UP[p] < UP[p - 1])
+                {
+                    UP.setColor(p, CF);
+                }
+                else
+                {
+                    UP.setColor(p, UP.colorI(p - 1));
+                }
+            }
+        }
+    }
+
+    if (period >= Dfirst - Dextent)
+    {
+        p = period + Dextent;
+        DOWN[p] = -Math.abs(teeth[p] - lips[p]);
+
+        if (p > Dfirst)
+        {
+            if (DOWN[p] < DOWN[p - 1])
+            {
+                DOWN.setColor(p, CG);
+            }
+            else
+            {
+                if (DOWN[p] > DOWN[p - 1])
+                {
+                    DOWN.setColor(p, CF);
+                }
+                else
+                {
+                    DOWN.setColor(p, DOWN.colorI(p - 1));
+                }
+            }
+        }
+    }
+}

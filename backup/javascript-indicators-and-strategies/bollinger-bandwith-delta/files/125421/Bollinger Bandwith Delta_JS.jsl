@@ -1,0 +1,91 @@
+function Init()
+{
+    indicator.name("Bollinger Bandwith Delta");
+    indicator.description("Bollinger Bandwith Delta");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+	indicator.parameters.addGroup("Calculation"); 
+    indicator.parameters.addInteger("Periods", "Period", "Period", 20);
+    indicator.parameters.addDouble("Deviations", "Deviation", "Deviation", 2);
+	 indicator.parameters.addInteger("Delta_Period", "Delta Period", "Period", 20);
+	 
+	 indicator.parameters.addString("Method", "Delta Method", "Method" , "Pips");
+    indicator.parameters.addStringAlternative("Method", "Percentage", "Percentage" , "Percentage");
+    indicator.parameters.addStringAlternative("Method", "Pips", "Pips" , "Pips");
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Delta_color_Up", "Color of Delta Up", "Color of Delta", core.rgb(0, 255, 0));
+	indicator.parameters.addColor("Delta_color_Down", "Color of Delta Down", "Color of Delta", core.rgb(255, 0 , 0));
+}
+
+var Periods;
+var Deviations;
+var Method;
+var first;
+var source = null;
+var Delta_Period;
+
+var Delta = null;
+var Bandwith;
+
+function Prepare(nameOnly)
+{
+    Periods = instance.parameters.Periods;
+    Deviations = instance.parameters.Deviations;
+	Delta_Period = instance.parameters.Delta_Period;
+	Method= instance.parameters.Method;
+    source = instance.source;
+    first = source.first()+Periods;
+	
+	Bandwith= instance.addInternalStream(first, 0);
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Periods) + ", " + tostring(Deviations) + ", " + tostring(Method) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        Delta = instance.addStream("Delta", core.Bar, name, "Delta", instance.parameters.Delta_color_Up, first+ Delta_Period);
+    }
+}
+
+function Update(period)
+{
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+	  var Central= Math.avg(source, period-Periods+1, period);
+        var stdev = Math.stdev(source,  period-Periods+1, period);
+
+        var TL = Central + Deviations * stdev;
+        var BL = Central - Deviations * stdev;
+ 
+     
+    	Bandwith[period] = ((TL - BL ) / Central)
+
+	if (period < first + Delta_Period)  
+	{
+	 return;
+	}	
+	
+	if (Method == "Percentage") 
+	{
+	 Delta[period] = (Bandwith[period]-Bandwith[period-Delta_Period+1] )/(Bandwith[period-Delta_Period+1]/100);
+	} 
+	else	
+	{
+     Delta[period] =(Bandwith[period]-Bandwith[period-Delta_Period+1] )/source.pipSize();
+    }
+	
+	if (Delta[period]> Delta[period-1]) 
+	{
+	 Delta.setColor(period, instance.parameters.Delta_color_Up);
+	} 
+	else
+	{
+	 Delta.setColor(period, instance.parameters.Delta_color_Down);
+    }
+}
+

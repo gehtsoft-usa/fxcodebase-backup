@@ -1,0 +1,51 @@
+function Init()
+{
+    indicator.name("Kaufman efficiency ratio indicator");
+    indicator.description("Kaufman efficiency ratio indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 10);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(255, 255, 0));
+}
+
+var first;
+var source = null;
+var Period;
+var DiffPrice;
+var KER=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    first = source.first()+2;
+    DiffPrice = instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ")";
+    instance.name(name);
+    KER = instance.addStream("KER", core.Bar, name + ".KER", "KER", instance.parameters.clr, first);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    DiffPrice[period]=Math.abs(source.close[period]-source.close[period-1]);
+   }
+   if (period>first+Period) 
+   {
+    var Vol=Math.avg(DiffPrice,core.rangeTo(period,Period));
+    if (Vol!=0) 
+    {
+     KER[period]=Math.abs(source.close[period]-source.close[period-Period])/Vol;
+    } 
+    else
+    {
+     KER[period]=null;
+    } 
+   } 
+}
+

@@ -1,0 +1,57 @@
+function Init()
+{
+    indicator.name("Range / Volume Ratio");
+    indicator.description("Range / Volume Ratio");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addString("Method", "Calculation Method", "Method" , "Open/Close");
+    indicator.parameters.addStringAlternative("Method", "High/Low", "High/Low" , "High/Low");
+    indicator.parameters.addStringAlternative("Method", "Open/Close", "Open/Close" , "Open/Close");
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Ratio_color", "Color of Ratio", "Color of Ratio", core.rgb(255, 0, 0));
+}
+
+var Method;
+
+var first;
+var source = null;
+
+var Ratio = null;
+
+function Prepare(nameOnly)
+{
+    Method = instance.parameters.Method;
+    source = instance.source;
+    first = source.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Method) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        Ratio = instance.addStream("Ratio", core.Bar, name, "Ratio", instance.parameters.Ratio_color, first);
+    }
+}
+
+function Update(period)
+{
+    
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+	if (Method == "High/Low") 
+    {
+	 Ratio[period]=(source.high[period]-source.low[period])/source.volume[period];
+    } 
+	else
+    {
+	 Ratio[period]=Math.abs(source.open[period]-source.close[period])/source.volume[period];
+	}
+	
+      
+    
+}
+

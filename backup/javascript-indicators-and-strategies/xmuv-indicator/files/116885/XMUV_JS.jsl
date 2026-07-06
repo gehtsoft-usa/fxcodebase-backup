@@ -1,0 +1,89 @@
+function Init()
+{
+    indicator.name("XMUV indicator");
+    indicator.description("XMUV indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addString("Method", "Method", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("Method", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Method", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Method", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Method", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Method", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Method", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Method", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Method", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Method", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Method", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Method", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Method", "JSmooth", "", "JSmooth");
+    indicator.parameters.addInteger("Period", "Period", "", 15);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(255, 255, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Method;
+var Period;
+var Price;
+var MA;
+var XMUV=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Method=instance.parameters.Method;
+    Period=instance.parameters.Period;
+    first = source.first()+2;
+    Price = instance.addInternalStream(first, 0);
+    MA = core.indicators.create("AVERAGES", Price, Method, Period, false);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Method + ", " + instance.parameters.Period + ")";
+    instance.name(name);
+    XMUV = instance.addStream("XMUV", core.Line, name + ".XMUV", "XMUV", instance.parameters.clr, first);
+    XMUV.setWidth(instance.parameters.widthLinReg);
+    XMUV.setStyle(instance.parameters.styleLinReg);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    var x;
+    if (source.close[period]<source.open[period]) 
+    {
+     x=(source.high[period]+source.close[period]+2*source.low[period])/2;
+    }
+    else if (source.close[period]>source.open[period]) 
+    {
+     x=(source.low[period]+source.close[period]+2*source.high[period])/2;
+    } 
+    else
+    {
+     x=(source.high[period]+source.low[period]+2*source.close[period])/2;
+    }
+    Price[period]=(2*x-source.low[period]-source.high[period])/2;
+    if (Price[period]==0) 
+    {
+     Price[period]=source.close[period];
+    }
+    MA.update(mode);
+    XMUV[period]=MA.DATA[period];
+   } 
+}
+

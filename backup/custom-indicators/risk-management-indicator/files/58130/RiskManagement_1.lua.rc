@@ -1,0 +1,393 @@
+﻿include=common.lua.rc
+default=enu
+[enu]
+codepage=1252
+name=Risk Management_1
+description=A tool which helps you analyze your risk in Trading.
+account=Account N°
+acc_ccy=Account Currency
+risk_percent=Risk Percent
+limit=Limit
+stop=Stop
+param_Font_Color=Font Color
+param_Font_Size=Font Size
+param_Position=Position in Chart
+param_Upper_Right=Upper-Right
+param_Upper_Left=Upper-Left
+param_Middle_Right=Middle-Right
+param_Middle_Left=Middle-Left
+param_Bottom_Right=Bottom-Right
+param_Bottom_Left=Bottom-Left
+label_Title_Label= FXCM Risk Calculator
+label_Inputs_Outputs= Inputs                       Outputs
+label_Risk_Percent= Risk % :    
+
+
+[rus]
+codepage=1251
+name=Risk Management_1
+description=A tool which helps you analyze your risk in Trading.
+account=Account N°
+acc_ccy=Account Currency
+risk_percent=Risk Percent
+limit=Limit
+stop=Stop
+param_Font_Color=Font Color
+param_Font_Size=Font Size
+param_Position=Position in Chart
+param_Upper_Right=Upper-Right
+param_Upper_Left=Upper-Left
+param_Middle_Right=Middle-Right
+param_Middle_Left=Middle-Left
+param_Bottom_Right=Bottom-Right
+param_Bottom_Left=Bottom-Left
+label_Title_Label= FXCM Risk Calculator
+label_Inputs_Outputs= Inputs                       Outputs
+label_Risk_Percent= Risk % :    
+
+
+[fra]
+codepage=1252
+name=Risk Management_1
+description=Aide à analyser et configurer le risque du Trading.
+account=Compte N°
+acc_ccy=Devise du Compte
+risk_percent=Pourcentage de Risque
+limit=Limite (TP)
+stop=Stop (SL)
+param_Font_Color=Couleur des Caractères
+param_Font_Size=Taille des Caractères
+param_Position=Position sur le Graphique
+param_Upper_Right=En Haut à Droite
+param_Upper_Left=En Haut à Gauche
+param_Middle_Right=Au Milieu à Droite
+param_Middle_Left=Au Milieu à Gauche
+param_Bottom_Right=En Bas à Droite
+param_Bottom_Left=En Bas à Gauche
+label_Title_Label= Calculateur de Risque FXCM
+label_Inputs_Outputs= Entrées                      Sorties
+label_Risk_Percent= % Risque :  
+
+
+[ara]
+codepage=1256
+name=Risk Management_1
+description=A tool which helps you analyze your risk in Trading.
+account=Account N°
+acc_ccy=Account Currency
+risk_percent=Risk Percent
+limit=Limit
+stop=Stop
+param_Font_Color=Font Color
+param_Font_Size=Font Size
+param_Position=Position in Chart
+param_Upper_Right=Upper-Right
+param_Upper_Left=Upper-Left
+param_Middle_Right=Middle-Right
+param_Middle_Left=Middle-Left
+param_Bottom_Right=Bottom-Right
+param_Bottom_Left=Bottom-Left
+label_Title_Label= FXCM Risk Calculator
+label_Inputs_Outputs= Inputs                       Outputs
+label_Risk_Percent= Risk % :    
+
+
+[chs]
+codepage=936
+name=Risk Management_1
+description=A tool which helps you analyze your risk in Trading.
+account=Account N°
+acc_ccy=Account Currency
+risk_percent=Risk Percent
+limit=Limit
+stop=Stop
+param_Font_Color=Font Color
+param_Font_Size=Font Size
+param_Position=Position in Chart
+param_Upper_Right=Upper-Right
+param_Upper_Left=Upper-Left
+param_Middle_Right=Middle-Right
+param_Middle_Left=Middle-Left
+param_Bottom_Right=Bottom-Right
+param_Bottom_Left=Bottom-Left
+label_Title_Label= FXCM Risk Calculator
+label_Inputs_Outputs= Inputs                       Outputs
+label_Risk_Percent= Risk % :    
+
+
+[cht]
+codepage=950
+name=Risk Management_1
+description=A tool which helps you analyze your risk in Trading.
+account=Account N°
+acc_ccy=Account Currency
+risk_percent=Risk Percent
+limit=Limit
+stop=Stop
+param_Font_Color=Font Color
+param_Font_Size=Font Size
+param_Position=Position in Chart
+param_Upper_Right=Upper-Right
+param_Upper_Left=Upper-Left
+param_Middle_Right=Middle-Right
+param_Middle_Left=Middle-Left
+param_Bottom_Right=Bottom-Right
+param_Bottom_Left=Bottom-Left
+label_Title_Label= FXCM Risk Calculator
+label_Inputs_Outputs= Inputs                       Outputs
+label_Risk_Percent= Risk % :    
+
+
+[esp]
+codepage=1252
+name=Risk Management_1
+description=Ayuda a analizar y configurar el Riesgo Trading.
+account=N° Cuenta
+acc_ccy=Moneda de la Cuenta
+risk_percent=Porcentaje de Riesgo
+limit=Limitar
+stop=Stop
+param_Font_Color=Color de la Fuente
+param_Font_Size=Tamaño de la Fuente
+param_Position=Posición en la Tabla
+param_Upper_Right=Top-Derecho
+param_Upper_Left=Top-Izquierda
+param_Middle_Right=Medio-Derecho
+param_Middle_Left=Medio-Izquierda
+param_Bottom_Right=Inferior-Derecho
+param_Bottom_Left=Inferior-Izquierda
+label_Title_Label= FXCM Risk Calculator
+label_Inputs_Outputs= Entradas                     Salidas
+label_Risk_Percent= Risk % :    
+
+
+[heb]
+codepage=1255
+name=Risk Management_1
+description=A tool which helps you analyze your risk in Trading.
+account=Account N°
+acc_ccy=Account Currency
+risk_percent=Risk Percent
+limit=Limit
+stop=Stop
+param_Font_Color=Font Color
+param_Font_Size=Font Size
+param_Position=Position in Chart
+param_Upper_Right=Upper-Right
+param_Upper_Left=Upper-Left
+param_Middle_Right=Middle-Right
+param_Middle_Left=Middle-Left
+param_Bottom_Right=Bottom-Right
+param_Bottom_Left=Bottom-Left
+label_Title_Label= FXCM Risk Calculator
+label_Inputs_Outputs= Inputs                       Outputs
+label_Risk_Percent= Risk % :    
+
+
+[ita]
+codepage=1252
+name=Risk Management_1
+description=Uno strumento che consente di analizzare il rischio di Trading.
+account=Conto N°
+acc_ccy=Valuta del Conto
+risk_percent=Percentuale di Rischio
+limit=Limitare
+stop=Stop
+param_Font_Color=Colore Carattere
+param_Font_Size=Dimensione Carattere
+param_Position=Posizione sul Grafico
+param_Upper_Right=In alto a destra
+param_Upper_Left=In alto a sinistra
+param_Middle_Right=Al centro a destra
+param_Middle_Left=Al centro a sinistra
+param_Bottom_Right=In basso a destra
+param_Bottom_Left=In basso a sinistra
+label_Title_Label= Rischio Calcolatrice FXCM
+label_Inputs_Outputs= Ingressi                      Uscite
+label_Risk_Percent= % Rischio : 
+
+
+[pol]
+codepage=1250
+name=Risk Management_1
+description=Pozwala na zbadanie i skonfigurować ryzyko Trading.
+account=Konta N°
+acc_ccy=Rachunek walutowy
+risk_percent=Odsetek ryzyka
+limit=Limit
+stop=Stop
+param_Font_Color=Postacie kolorów
+param_Font_Size=Wielkość znaków
+param_Position=Pozycja na wykresie
+param_Upper_Right=W prawym górnym rogu
+param_Upper_Left=u góry z lewej
+param_Middle_Right=Środkowa prawa
+param_Middle_Left=Środkowy lewej
+param_Bottom_Right=Prawy dolny
+param_Bottom_Left=Lewy dolny
+label_Title_Label= Kalkulator ryzyka FXCM
+label_Inputs_Outputs= Wejścia                      Wyjścia
+label_Risk_Percent= Ryzyka % :  
+
+
+[tur]
+codepage=1254
+name=Risk Management_1
+description=A tool which helps you analyze your risk in Trading.
+account=Account N°
+acc_ccy=Account Currency
+risk_percent=Risk Percent
+limit=Limit
+stop=Stop
+param_Font_Color=Font Color
+param_Font_Size=Font Size
+param_Position=Position in Chart
+param_Upper_Right=Upper-Right
+param_Upper_Left=Upper-Left
+param_Middle_Right=Middle-Right
+param_Middle_Left=Middle-Left
+param_Bottom_Right=Bottom-Right
+param_Bottom_Left=Bottom-Left
+label_Title_Label= FXCM Risk Calculator
+label_Inputs_Outputs= Inputs                       Outputs
+label_Risk_Percent= Risk % :    
+
+
+[cze]
+codepage=1250
+name=Risk Management_1
+description=Nástroj, který vám pomůže analyzovat vaše riziko v Trading.
+account=Účet N°
+acc_ccy=Měna účtu
+risk_percent=Risk Procento
+limit=Limit
+stop=Stop
+param_Font_Color=Barva písma
+param_Font_Size=Velikost písma
+param_Position=Pozice v grafu
+param_Upper_Right=Vpravo nahoře
+param_Upper_Left=Vlevo nahoře
+param_Middle_Right=Vpravo uprostřed
+param_Middle_Left=Vlevo uprostřed
+param_Bottom_Right=Vpravo dole
+param_Bottom_Left=Vleva dole
+label_Title_Label= FXCM Risk Calculator
+label_Inputs_Outputs= Vstupy                       Výstupy
+label_Risk_Percent= Risk % :    
+
+
+[gre]
+codepage=1253
+name=Risk Management_1
+description=A tool which helps you analyze your risk in Trading.
+account=Account N°
+acc_ccy=Account Currency
+risk_percent=Risk Percent
+limit=Limit
+stop=Stop
+param_Font_Color=Font Color
+param_Font_Size=Font Size
+param_Position=Position in Chart
+param_Upper_Right=Upper-Right
+param_Upper_Left=Upper-Left
+param_Middle_Right=Middle-Right
+param_Middle_Left=Middle-Left
+param_Bottom_Right=Bottom-Right
+param_Bottom_Left=Bottom-Left
+label_Title_Label= FXCM Risk Calculator
+label_Inputs_Outputs= Inputs                       Outputs
+label_Risk_Percent= Risk % :    
+
+
+[jpn]
+codepage=932
+name=Risk Management_1
+description=あなたが取引でリスクを分析するのに役立つツール
+account=アカウント N°
+acc_ccy=口座通貨
+risk_percent=危険度割合
+limit=制限
+stop=停止
+param_Font_Color=フォントの色
+param_Font_Size=フォントサイズ
+param_Position=チャート上の位置
+param_Upper_Right=右上
+param_Upper_Left=左上
+param_Middle_Right=真ん中右
+param_Middle_Left=左中央
+param_Bottom_Right=右下の
+param_Bottom_Left=左下
+label_Title_Label= FXCM のリスク計算
+label_Inputs_Outputs=        入力、                        出力
+label_Risk_Percent= 危険率（％）：     
+
+
+[por]
+codepage=1252
+name=Risk Management_1
+description=Uma ferramenta que ajuda você a analisar o seu risco na Trading.
+account=Conta N°
+acc_ccy=Hoje Conta
+risk_percent=Porcentagem de Risco
+limit=Limitar
+stop=Stop
+param_Font_Color=Cor da Fonte
+param_Font_Size=Tamanho da Fonte
+param_Position=Posição no Gráfico
+param_Upper_Right=Superior Direito
+param_Upper_Left=Superior Esquerdo
+param_Middle_Right=Médio Direito
+param_Middle_Left=Médio Esquerdo
+param_Bottom_Right=Inferior Direito
+param_Bottom_Left=Inferior Left
+label_Title_Label= Calculadora de risco FXCM
+label_Inputs_Outputs= Entradas                      Saídas
+label_Risk_Percent= % Risco :   
+
+
+[deu]
+codepage=1252
+name=Risk Management_1
+description=Ein Werkzeug, das hilft Ihnen bei der Analyse Ihrer Risiko Trading.
+account=Konto N°
+acc_ccy=Kontowährung
+risk_percent=Risiko Prozent
+limit=Limit
+stop=Stop
+param_Font_Color=Schriftfarbe
+param_Font_Size=Schriftgröße
+param_Position=Position auf dem Diagramm
+param_Upper_Right=Oben-Rechts
+param_Upper_Left=Oben-Links
+param_Middle_Right=Mitte-Rechts
+param_Middle_Left=Mitte-Links
+param_Bottom_Right=Unten-Rechts
+param_Bottom_Left=Unten-Links
+label_Title_Label= FXCM Risiko Rechner
+label_Inputs_Outputs= Eingänge                    Ausgänge
+label_Risk_Percent= % Risiko :  
+
+
+[hun]
+codepage=0
+name=Risk Management_1
+description=Egy eszköz, amely segít elemezni a kockázatot Trading.
+account=Fiók N °
+acc_ccy=Fiók Pénznem
+risk_percent=Risk Percent
+limit=Határ
+stop=Stop
+param_Font_Color=Betűszín
+param_Font_Size=Betűméret
+param_Position=Álláspontja a grafikonon
+param_Upper_Right=Jobb Felső
+param_Upper_Left=Balra Fent
+param_Middle_Right=Jobb Középső
+param_Middle_Left=Közel Balra
+param_Bottom_Right=Lent Jobbra
+param_Bottom_Left=Bal Alsó
+label_Title_Label= Kockázat kalkulátor FXCM
+label_Inputs_Outputs= Bemenetek                  Kimenetek
+label_Risk_Percent=Kockázati %: 
+
+

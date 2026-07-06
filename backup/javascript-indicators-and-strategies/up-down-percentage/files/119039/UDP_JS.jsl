@@ -1,0 +1,81 @@
+function Init()
+{
+    indicator.name("Up/Down Percentage");
+    indicator.description("Up/Down Percentage");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "Period", 14);
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("U", "Color of Up", "Color of Up", core.rgb(0, 255, 0));
+	indicator.parameters.addInteger("width1", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style1", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style1", core.FLAG_LINE_STYLE);
+	indicator.parameters.addColor("D", "Color of Down", "Color of Down", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width2", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style2", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style2", core.FLAG_LINE_STYLE);
+}
+
+var Period;
+
+var first;
+var source = null;
+
+
+var Up, Down, U, D;
+var UpFlag, DownFlag;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+	U = instance.parameters.U;
+	D = instance.parameters.D;
+    source = instance.source;
+    first = source.first()+Period;
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ")";
+    instance.name(name);
+	
+	UpFlag = instance.addInternalStream(0, 0);
+	DownFlag = instance.addInternalStream(0, 0);
+
+
+    if (!(nameOnly)) 
+    {
+        Up = instance.addStream("UP", core.Line, name, "UP", U, first);
+		Up.setWidth(instance.parameters.width1);
+        Up.setStyle(instance.parameters.style1);
+		
+		Down = instance.addStream("DOWN", core.Line, name, "DOWN", D, first);
+		Down.setWidth(instance.parameters.width1);
+        Down.setStyle(instance.parameters.style1);
+    }
+}
+
+function Update(period)
+{
+    UpFlag[period]= 0;
+	DownFlag[period]= 0;
+	
+    if (period < first) 
+    {
+	 return;
+	}
+	if (source[period]> source[period-1]) 
+	{
+	 UpFlag[period]= 1;
+	} 
+	else if (source[period] < source[period-1]) 
+	{
+	 DownFlag[period]= 1;
+	}
+	
+	 
+	Up[period]= Math.sum(UpFlag, period-Period+1, period) / (Period/100);
+	Down[period]=Math.sum(DownFlag, period-Period+1, period) / (Period/100);
+	
+	
+   
+}
+

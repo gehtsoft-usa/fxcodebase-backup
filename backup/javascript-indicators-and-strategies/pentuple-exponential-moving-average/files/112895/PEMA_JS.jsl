@@ -1,0 +1,83 @@
+function Init()
+{
+    indicator.name("Pentuple Exponential Moving Average indicator");
+    indicator.description("Pentuple Exponential Moving Average indicator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 14);
+    indicator.parameters.addString("Method", "Method", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("Method", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Method", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Method", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Method", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Method", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Method", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Method", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Method", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Method", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Method", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Method", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Method", "JSmooth", "", "JSmooth");
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period;
+var Method;
+var MA1, MA2, MA3, MA4, MA5, MA6, MA7, MA8;
+var PEMA=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    Method=instance.parameters.Method;
+    first = source.first()+2;
+    MA1 = core.indicators.create("AVERAGES", source, Method, Period, false);
+    MA2 = core.indicators.create("AVERAGES", MA1.DATA, Method, Period, false);
+    MA3 = core.indicators.create("AVERAGES", MA2.DATA, Method, Period, false);
+    MA4 = core.indicators.create("AVERAGES", MA3.DATA, Method, Period, false);
+    MA5 = core.indicators.create("AVERAGES", MA4.DATA, Method, Period, false);
+    MA6 = core.indicators.create("AVERAGES", MA5.DATA, Method, Period, false);
+    MA7 = core.indicators.create("AVERAGES", MA6.DATA, Method, Period, false);
+    MA8 = core.indicators.create("AVERAGES", MA7.DATA, Method, Period, false);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.Method + ")";
+    instance.name(name);
+    PEMA = instance.addStream("PEMA", core.Line, name + ".PEMA", "PEMA", instance.parameters.clr, first);
+    PEMA.setWidth(instance.parameters.widthLinReg);
+    PEMA.setStyle(instance.parameters.styleLinReg);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    MA1.update(mode);
+    MA2.update(mode);
+    MA3.update(mode);
+    MA4.update(mode);
+    MA5.update(mode);
+    MA6.update(mode);
+    MA7.update(mode);
+    MA8.update(mode);
+    PEMA[period]=8*MA1.DATA[period]-28*MA2.DATA[period]+56*MA3.DATA[period]-70*MA4.DATA[period]+56*MA5.DATA[period]-28*MA6.DATA[period]+8*MA7.DATA[period]-MA8.DATA[period];
+   } 
+}
+

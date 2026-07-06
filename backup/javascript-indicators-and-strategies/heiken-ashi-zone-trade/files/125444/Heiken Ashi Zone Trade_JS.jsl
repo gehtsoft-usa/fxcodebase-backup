@@ -1,0 +1,188 @@
+function Init()
+{
+    indicator.name("Heiken Ashi Zone Trade");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+	indicator.setTag("replaceSource", "t");
+	
+	indicator.parameters.addGroup("Calculation");
+	
+	indicator.parameters.addString("Source", "AO/AC Indicator Source Data", "Source Data" , "Price");
+    indicator.parameters.addStringAlternative("Source", "Price", "Price" , "Price");
+    indicator.parameters.addStringAlternative("Source", "HA", "HA" , "HA")
+	
+    indicator.parameters.addInteger("FM", "AC/AO fast moving average", "", 5);
+    indicator.parameters.addInteger("SM", "AC/AO slow moving average", "", 35);
+    indicator.parameters.addInteger("AM", "A/C moving average", "", 5);
+	indicator.parameters.addGroup("Zone Trade || AO && AC Separately");
+	indicator.parameters.addInteger("MT" , "Zone Trade", "" , 1);	
+    indicator.parameters.addIntegerAlternative("MT", "Awesome oscillator(AO)", "ZONE" , 2);
+    indicator.parameters.addIntegerAlternative("MT", "Acceleration/Deceleration (AC)", "" , 3);
+	indicator.parameters.addIntegerAlternative("MT", "B.W. Zone AC + AO", "" , 1);
+	
+	
+	
+	
+	indicator.parameters.addString("Method", "Presentation Method", "Method" , "Heiken Ashi");
+    indicator.parameters.addStringAlternative("Method", "Heiken Ashi", "Heiken Ashi" , "Heiken Ashi");
+    indicator.parameters.addStringAlternative("Method", "Price", "Price" , "Price")
+	
+	indicator.parameters.addGroup("Style");
+	indicator.parameters.addColor("Up", "Up Trend Color","Up Trend Color", core.rgb(0,255,0));
+	indicator.parameters.addColor("Down", "Down Trend Color","Down Trend Color", core.rgb(255,0,0));
+	indicator.parameters.addColor("Neutral", "Neutral Trend Color","Neutral Trend Color", core.rgb(128,128,128));
+	
+}
+
+var FM;
+var SM;
+var AM;
+
+var Method=null;
+
+var AO;
+var AC;
+
+var first;
+var source = null;
+var Source;
+
+var open=null;
+var close=null;
+var high=null;
+var low=null;
+var Up, Down, Neutral;
+var HA;
+
+function Prepare()
+{
+    FM = instance.parameters.FM;
+    SM = instance.parameters.SM;
+    AM = instance.parameters.AM;
+	MT= instance.parameters.MT;
+	Up = instance.parameters.Up;
+	Down = instance.parameters.Down;
+	Neutral = instance.parameters.Neutral; 
+	Method = instance.parameters.Method;
+	Source = instance.parameters.Source;
+	
+    source = instance.source;
+   
+ 
+	HA = core.indicators.create("HA", source);	
+	
+	if (Source == "Price") 
+	{
+     AC = core.indicators.create("AC", source, FM, SM, AM);
+     AO = core.indicators.create("AO", source, FM, SM);
+    } 
+	else
+	{
+	 AC = core.indicators.create("AC", HA.getCandleOutput(0), FM, SM, AM);
+     AO = core.indicators.create("AO", HA.getCandleOutput(0), FM, SM);
+	}
+
+    first = Math.max( AC.DATA.first(), AO.DATA.first(), HA.DATA.first());	
+
+    var name = profile.id() + "(" + source.name() + ", "  + FM + ", " + SM + ", " + AM + ")";
+    instance.name(name);
+    
+	
+	open = instance.addStream("open", core.Line, name, "open", core.rgb(0, 0, 0), first)
+    high = instance.addStream("high", core.Line, name, "high", core.rgb(0, 0, 0), first)
+    low = instance.addStream("low", core.Line, name, "low", core.rgb(0, 0, 0), first)
+    close = instance.addStream("close", core.Line, name, "close", core.rgb(0, 0, 0), first)
+    instance.createCandleGroup("ZONE", "", open, high, low, close);
+	
+	
+}
+
+function Update(period, mode)
+{
+    HA.update(mode);
+    AC.update(mode);
+    AO.update(mode);
+	
+	if (Method == "Price") 
+	{
+	 high[period]= source.high[period];
+	 low[period]= source.low[period];		   
+	 close[period] = source.close[period];
+	 open[period]  = source.open[period];	
+	} 
+	else		 
+	{
+	 high[period]= HA.high[period];
+	 low[period]= HA.low[period];		   
+	 close[period] = HA.close[period];
+	 open[period]  = HA.open[period];
+	}
+     
+	if (period < first  || !source.hasData(period)) 
+	{
+	 open.setColor(period, Neutral);		
+     return;
+    } 
+        var acdir, aodir;      
+		
+        if (AO.DATA[period] > AO.DATA[period - 1]) 
+        {
+            aodir = true;
+        }    
+        else if (AO.DATA[period] < AO.DATA[period - 1]) 
+        {
+            aodir = false;
+        }
+        if (AC.DATA[period] > AC.DATA[period - 1]) 
+        {
+            acdir = true;
+        }
+        else if (AC.DATA[period] < AC.DATA[period - 1]) 
+        {
+            acdir = false;
+        }
+		
+		
+		if (MT== 1) 
+		{
+				if (aodir  && acdir) 
+				{ 
+				 open.setColor(period, Up);
+				} 
+				else if (!aodir && !acdir) 
+				{
+				 open.setColor(period, Down);	
+				}
+				else
+				{	
+				 open.setColor(period, Neutral);
+				}
+		}		
+		else if (MT== 2) 
+		{
+		            
+				if (aodir)
+				{
+				 open.setColor(period, Up);
+				} 
+				else if (!aodir) 
+				{
+				 open.setColor(period, Down);				  
+		        }
+		}
+		else if (MT== 3) 
+		{
+		        if (acdir) 
+		        {
+				 open.setColor(period, Up);
+				} 
+				else if (!acdir) 
+				{
+				 open.setColor(period, Down);				  
+			    } 
+		}         
+				   
+				  
+    }
+

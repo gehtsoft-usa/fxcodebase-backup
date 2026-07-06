@@ -1,0 +1,42 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_pushfstring</title>
+</head>
+<body>
+<h3><a name="lua_pushfstring"><code>lua_pushfstring</code></a></h3>
+<pre>const char *lua_pushfstring (lua_State *L, const char *fmt, ...);</pre>
+
+<p>
+Pushes onto the stack a formatted string
+and returns a pointer to this string.
+It is similar to the C&nbsp;function <code>sprintf</code>,
+but has some important differences:
+
+<ul>
+
+<li>
+You do not have to allocate space for the result:
+the result is a Lua string and Lua takes care of memory allocation
+(and deallocation, through garbage collection).
+</li>
+
+<li>
+The conversion specifiers are quite restricted.
+There are no flags, widths, or precisions.
+The conversion specifiers can only be
+'<code>%%</code>' (inserts a '<code>%</code>' in the string),
+'<code>%s</code>' (inserts a zero-terminated string, with no size restrictions),
+'<code>%f</code>' (inserts a <a href="lua_Number.html"><code>lua_Number</code></a>),
+'<code>%p</code>' (inserts a pointer as a hexadecimal numeral),
+'<code>%d</code>' (inserts an <code>int</code>), and
+'<code>%c</code>' (inserts an <code>int</code> as a character).
+</li>
+
+</ul>
+
+
+
+
+<hr>
+</body>
+</html>

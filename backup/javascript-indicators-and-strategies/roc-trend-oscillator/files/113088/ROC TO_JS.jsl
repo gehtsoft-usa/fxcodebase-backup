@@ -1,0 +1,86 @@
+function Init()
+{
+    indicator.name("ROC Trend Oscillator");
+    indicator.description("ROC Trend Oscillator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+    
+	
+	indicator.parameters.addGroup("Calculation");	
+    indicator.parameters.addInteger("One", "1. ROC Period", " ", 14,2, 2000);
+    indicator.parameters.addInteger("Two", "2. ROC Period", " ", 21,2, 2000);
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Up", "Color of Up", "Color of Up", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("Down", "Color of Down", "Color of Down", core.rgb(255, 0, 0));
+	    indicator.parameters.addColor("No", "Color od Neutral", "Color of Neutral", core.rgb(128, 128, 128));
+
+}
+
+var One;
+var Two;
+
+var first;
+var source = null;
+var DATA={};
+
+// Streams block
+var TO = null;
+var RAW;
+var Up,Down, No;
+// Routine
+function Prepare()
+{
+    One = instance.parameters.One;
+    Two = instance.parameters.Two;
+	Up = instance.parameters.Up;
+	Down = instance.parameters.Down;
+	No = instance.parameters.No;
+    source = instance.source;
+    
+	
+	DATA[1] = core.indicators.create("ROC", source, One);
+	DATA[2] = core.indicators.create("ROC", source, Two);
+	
+	RAW=instance.addInternalStream(source.first(), 0);
+	
+	first = Math.max(DATA[1].DATA.first(),DATA[2].DATA.first())+1;
+
+    var name = profile.id() + "(" + source.name() + ", " + One + ", " + Two + ")";
+    instance.name(name);
+	
+    TO = instance.addStream("TO", core.Bar, name + ".ROC TO", "ROC TO", core.rgb(128, 128, 128), first);
+}
+
+function Update(period, mode)
+{
+   	
+	DATA[1].update(mode);
+	DATA[2].update(mode);
+	
+	 if (period < first || !source.hasData(period)) 
+	 {
+    	return;
+	 }
+	
+			
+			RAW[period]= DATA[1].DATA[period] - (0 - DATA[2].DATA[period]);
+			TO[period] = RAW[period];
+			
+		 
+					if  (RAW[period] > RAW[period-1]) 
+					{
+				     TO.setColor(period, Up); 
+				    } 
+					else if (RAW[period] <RAW[period-1]) 
+					{
+					 TO.setColor(period, Down); 
+					} 
+					else
+					{
+					 TO.setColor(period, No);
+					}
+			
+}
+        
+ 
+

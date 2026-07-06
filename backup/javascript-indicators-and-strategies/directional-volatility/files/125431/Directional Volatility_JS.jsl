@@ -1,0 +1,83 @@
+function Init()
+{
+    indicator.name("Directional Volatility");
+    indicator.description("Directional Volatility");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "Period", 14);
+    indicator.parameters.addInteger("Deviation", "Deviation", "Deviation", 3);
+	
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Long_color", "Color of Long", "Color of Long", core.rgb(0, 255, 0));
+	indicator.parameters.addInteger("width1", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style1", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style1", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Short_color", "Color of Short", "Color of Short", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width2", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style2", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style2", core.FLAG_LINE_STYLE);
+}
+
+var Period;
+var Deviation;
+
+var first;
+var source = null;
+
+var Long = null;
+var Short = null;
+var long,short;
+var longMA,shortMA;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+    Deviation = instance.parameters.Deviation;
+    source = instance.source;
+    first = source.first()+1;
+	long = instance.addInternalStream(first, 0);
+	short = instance.addInternalStream(first, 0);
+	
+	longMA= core.indicators.create("EMA", long, Period);
+	shortMA= core.indicators.create("EMA", short, Period);
+	
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ", " + tostring(Deviation) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        Long = instance.addStream("Long", core.Line, name + ".Long", "Long", instance.parameters.Long_color, longMA.DATA.first() +Period);
+		Long.setWidth(instance.parameters.width1);
+        Long.setStyle(instance.parameters.style1);
+        Short = instance.addStream("Short", core.Line, name + ".Short", "Short", instance.parameters.Short_color, longMA.DATA.first() +Period);
+		Short.setWidth(instance.parameters.width2);
+        Short.setStyle(instance.parameters.style2);
+    }
+}
+
+function Update(period,mode)
+{   
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+	 
+	long[period]= source.close[period-1]-source.low[period];
+	short[period]= source.high[period]- source.close[period-1];
+	
+	longMA.update(mode);
+	shortMA.update(mode);
+	
+	if (period < longMA.DATA.first() +Period) 
+    {
+	 return;
+	}
+        Long[period] = longMA.DATA[period]+Deviation*Math.stdev(longMA.DATA,period-Period+1,period);
+        Short[period] = shortMA.DATA[period]+Deviation*Math.stdev(shortMA.DATA,period-Period+1,period);
+ 
+	
+}
+

@@ -1,0 +1,43 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 2.10.1 - Garbage-Collection Metamethods</title>
+</head>
+<body>
+<h3>2.10.1 - <a name="2.10.1">Garbage-Collection Metamethods</a></h3>
+
+<p>
+Using the C&nbsp;API,
+you can set garbage-collector metamethods for userdata (see <a href="2.8.html">&sect;2.8</a>).
+These metamethods are also called <em>finalizers</em>.
+Finalizers allow you to coordinate Lua's garbage collection
+with external resource management
+(such as closing files, network or database connections,
+or freeing your own memory).
+
+
+<p>
+Garbage userdata with a field <code>__gc</code> in their metatables are not
+collected immediately by the garbage collector.
+Instead, Lua puts them in a list.
+After the collection,
+Lua does the equivalent of the following function
+for each userdata in that list:
+
+<pre>
+     function gc_event (udata)
+       local h = metatable(udata).__gc
+       if h then
+         h(udata)
+       end
+     end
+</pre>
+
+<p>
+At the end of each garbage-collection cycle,
+the finalizers for userdata are called in <em>reverse</em>
+order of their creation,
+among those collected in that cycle.
+That is, the first finalizer to be called is the one associated
+with the userdata created last in the program.
+</body>
+</html>

@@ -1,0 +1,185 @@
+function Init()
+{
+    indicator.name("ImpulseOsMA oscillator");
+    indicator.description("ImpulseOsMA oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addString("MACD_Method", "MACD method", "", "EMA");
+    indicator.parameters.addStringAlternative("MACD_Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("MACD_Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("MACD_Method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("MACD_Method", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("MACD_Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("MACD_Method", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("MACD_Method", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("MACD_Method", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("MACD_Method", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("MACD_Method", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("MACD_Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("MACD_Method", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("MACD_Method", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("MACD_Method", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("MACD_Method", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("MACD_Method", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("MACD_Method", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("MACD_Method", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("MACD_Method", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("MACD_Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("MACD_Method", "JSmooth", "", "JSmooth");
+    indicator.parameters.addInteger("Fast_Period", "Fast period", "", 12);
+    indicator.parameters.addInteger("Slow_Period", "Slow period", "", 26);
+    indicator.parameters.addString("MACD_Price", "MACD price", "", "close");
+    indicator.parameters.addStringAlternative("MACD_Price", "close", "", "close");
+    indicator.parameters.addStringAlternative("MACD_Price", "open", "", "open");
+    indicator.parameters.addStringAlternative("MACD_Price", "high", "", "high");
+    indicator.parameters.addStringAlternative("MACD_Price", "low", "", "low");
+    indicator.parameters.addStringAlternative("MACD_Price", "median", "", "median");
+    indicator.parameters.addStringAlternative("MACD_Price", "typical", "", "typical");
+    indicator.parameters.addStringAlternative("MACD_Price", "weighted", "", "weighted");
+    indicator.parameters.addString("Signal_Method", "Signal method", "", "EMA");
+    indicator.parameters.addStringAlternative("Signal_Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Signal_Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Signal_Method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("Signal_Method", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Signal_Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Signal_Method", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Signal_Method", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Signal_Method", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Signal_Method", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Signal_Method", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Signal_Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Signal_Method", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Signal_Method", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Signal_Method", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Signal_Method", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Signal_Method", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Signal_Method", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Signal_Method", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Signal_Method", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Signal_Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Signal_Method", "JSmooth", "", "JSmooth");
+    indicator.parameters.addInteger("Signal_Period", "Signal period", "", 9);
+    indicator.parameters.addString("MA_Method", "MA method", "", "EMA");
+    indicator.parameters.addStringAlternative("MA_Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("MA_Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("MA_Method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("MA_Method", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("MA_Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("MA_Method", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("MA_Method", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("MA_Method", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("MA_Method", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("MA_Method", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("MA_Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("MA_Method", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("MA_Method", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("MA_Method", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("MA_Method", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("MA_Method", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("MA_Method", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("MA_Method", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("MA_Method", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("MA_Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("MA_Method", "JSmooth", "", "JSmooth");
+    indicator.parameters.addInteger("MA_Period", "MA period", "", 12);
+    indicator.parameters.addString("MA_Price", "MA price", "", "close");
+    indicator.parameters.addStringAlternative("MA_Price", "close", "", "close");
+    indicator.parameters.addStringAlternative("MA_Price", "open", "", "open");
+    indicator.parameters.addStringAlternative("MA_Price", "high", "", "high");
+    indicator.parameters.addStringAlternative("MA_Price", "low", "", "low");
+    indicator.parameters.addStringAlternative("MA_Price", "median", "", "median");
+    indicator.parameters.addStringAlternative("MA_Price", "typical", "", "typical");
+    indicator.parameters.addStringAlternative("MA_Price", "weighted", "", "weighted");
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr1", "Color 1", "Color 1", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clr2", "Color 2", "Color 2", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("clr3", "Color 3", "Color 3", core.rgb(0, 0, 255));
+}
+
+var first;
+var source = null;
+var MACD_Method;
+var Fast_Period;
+var Slow_Period;
+var MACD_Price;
+var Signal_Method;
+var Signal_Period;
+var MA_Method;
+var MA_Period;
+var MA_Price;
+
+function Prepare()
+{
+    source = instance.source;
+    MACD_Method=instance.parameters.MACD_Method;
+    Fast_Period=instance.parameters.Fast_Period;
+    Slow_Period=instance.parameters.Slow_Period;
+    MACD_Price=instance.parameters.MACD_Price;
+    Signal_Method=instance.parameters.Signal_Method;
+    Signal_Period=instance.parameters.Signal_Period;
+    MA_Method=instance.parameters.MA_Method;
+    MA_Period=instance.parameters.MA_Period;
+    MA_Price=instance.parameters.MA_Price;
+    first = source.first()+2;
+    PosBuffer1 = instance.addInternalStream(first+RepulsePeriod1, 0);
+    NegBuffer1 = instance.addInternalStream(first+RepulsePeriod1, 0);
+    PosBuffer2 = instance.addInternalStream(first+RepulsePeriod2, 0);
+    NegBuffer2 = instance.addInternalStream(first+RepulsePeriod2, 0);
+    PosBuffer3 = instance.addInternalStream(first+RepulsePeriod3, 0);
+    NegBuffer3 = instance.addInternalStream(first+RepulsePeriod3, 0);
+    MAPos1 = core.indicators.create("EMA", PosBuffer1, RepulsePeriod1*5);
+    MANeg1 = core.indicators.create("EMA", NegBuffer1, RepulsePeriod1*5);
+    MAPos2 = core.indicators.create("EMA", PosBuffer2, RepulsePeriod2*5);
+    MANeg2 = core.indicators.create("EMA", NegBuffer2, RepulsePeriod2*5);
+    MAPos3 = core.indicators.create("EMA", PosBuffer3, RepulsePeriod3*5);
+    MANeg3 = core.indicators.create("EMA", NegBuffer3, RepulsePeriod3*5);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.MACD_Method + ", " + instance.parameters.Fast_Period + ", " + instance.parameters.Slow_Period + ", " + instance.parameters.MACD_Price + ", " + instance.parameters.Signal_Method + ", " + instance.parameters.Signal_Period + ", " + instance.parameters.MA_Method + ", " + instance.parameters.MA_Period + ", " + instance.parameters.MA_Price + ")";
+    instance.name(name);
+    Buff1 = instance.addStream("Buff1", core.Line, name + ".Buff1", "Buff1", instance.parameters.clr1, first);
+    Buff2 = instance.addStream("Buff2", core.Line, name + ".Buff2", "Buff2", instance.parameters.clr2, first);
+    Buff3 = instance.addStream("Buff3", core.Line, name + ".Buff3", "Buff3", instance.parameters.clr3, first);
+}
+
+function Update(period, mode)
+{
+   if (period>first+RepulsePeriod1) 
+   {
+    var tmp=Math.minmax(source, period-RepulsePeriod1+1, period);
+    var MinPrice1=tmp[0];
+    var MaxPrice1=tmp[1];
+    PosBuffer1[period]=(3.*source.close[period]-2.*MinPrice1-source.open[period])/source.close[period]*100.;
+    NegBuffer1[period]=(source.open[period]+2.*MaxPrice1-3.*source.close[period])/source.close[period]*100.;
+   } 
+   MAPos1.update(mode);
+   MANeg1.update(mode);
+   Buff1[period]=MAPos1.DATA[period]-MANeg1.DATA[period];
+   
+   if (period>first+RepulsePeriod2) 
+   { 
+    var tmp=Math.minmax(source, period-RepulsePeriod2+1, period);
+    var MinPrice2=tmp[0];
+    var MaxPrice2=tmp[1];
+    PosBuffer2[period]=(3.*source.close[period]-2.*MinPrice2-source.open[period-RepulsePeriod2])/source.close[period]*100.;
+    NegBuffer2[period]=(source.open[period-RepulsePeriod2]+2.*MaxPrice2-3.*source.close[period])/source.close[period]*100.;
+   } 
+   MAPos2.update(mode);
+   MANeg2.update(mode);
+   Buff2[period]=MAPos2.DATA[period]-MANeg2.DATA[period];
+
+   if (period>first+RepulsePeriod3) 
+   {    
+    var tmp=Math.minmax(source, period-RepulsePeriod3+1, period);
+    var MinPrice3=tmp[0];
+    var MaxPrice3=tmp[1];
+    PosBuffer3[period]=(3.*source.close[period]-2.*MinPrice3-source.open[period-RepulsePeriod3])/source.close[period]*100.;
+    NegBuffer3[period]=(source.open[period-RepulsePeriod3]+2.*MaxPrice3-3.*source.close[period])/source.close[period]*100.;
+   } 
+   MAPos3.update(mode);
+   MANeg3.update(mode);
+   Buff3[period]=MAPos3.DATA[period]-MANeg3.DATA[period];
+    
+}
+

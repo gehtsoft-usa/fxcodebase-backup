@@ -1,0 +1,85 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - require (modname)</title>
+</head>
+<body>
+<h3><a name="pdf-require"><code>require (modname)</code></a></h3>
+
+
+<p>
+Loads the given module.
+The function starts by looking into the table <a href="pdf-package.loaded.html"><code>package.loaded</code></a>
+to determine whether <code>modname</code> is already loaded.
+If it is, then <code>require</code> returns the value stored
+at <code>package.loaded[modname]</code>.
+Otherwise, it tries to find a <em>loader</em> for the module.
+
+
+<p>
+To find a loader,
+first <code>require</code> queries <code>package.preload[modname]</code>.
+If it has a value,
+this value (which should be a function) is the loader.
+Otherwise <code>require</code> searches for a Lua loader using the
+path stored in <a href="pdf-package.path.html"><code>package.path</code></a>.
+If that also fails, it searches for a C&nbsp;loader using the
+path stored in <a href="pdf-package.cpath.html"><code>package.cpath</code></a>.
+If that also fails,
+it tries an <em>all-in-one</em> loader (see below).
+
+
+<p>
+When loading a C&nbsp;library,
+<code>require</code> first uses a dynamic link facility to link the
+application with the library.
+Then it tries to find a C&nbsp;function inside this library to
+be used as the loader.
+The name of this C&nbsp;function is the string "<code>luaopen_</code>"
+concatenated with a copy of the module name where each dot
+is replaced by an underscore.
+Moreover, if the module name has a hyphen,
+its prefix up to (and including) the first hyphen is removed.
+For instance, if the module name is <code>a.v1-b.c</code>,
+the function name will be <code>luaopen_b_c</code>.
+
+
+<p>
+If <code>require</code> finds neither a Lua library nor a
+C&nbsp;library for a module,
+it calls the <em>all-in-one loader</em>.
+This loader searches the C&nbsp;path for a library for
+the root name of the given module.
+For instance, when requiring <code>a.b.c</code>,
+it will search for a C&nbsp;library for <code>a</code>.
+If found, it looks into it for an open function for
+the submodule;
+in our example, that would be <code>luaopen_a_b_c</code>.
+With this facility, a package can pack several C&nbsp;submodules
+into one single library,
+with each submodule keeping its original open function.
+
+
+<p>
+Once a loader is found,
+<code>require</code> calls the loader with a single argument, <code>modname</code>.
+If the loader returns any value,
+<code>require</code> assigns it to <code>package.loaded[modname]</code>.
+If the loader returns no value and
+has not assigned any value to <code>package.loaded[modname]</code>,
+then <code>require</code> assigns <b>true</b> to this entry.
+In any case, <code>require</code> returns the
+final value of <code>package.loaded[modname]</code>.
+
+
+<p>
+If there is any error loading or running the module,
+or if it cannot find any loader for the module,
+then <code>require</code> signals an error. 
+
+
+
+
+<p>
+<hr>
+</body>
+</html>

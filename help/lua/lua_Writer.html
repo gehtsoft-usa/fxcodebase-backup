@@ -1,0 +1,33 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_Writer</title>
+</head>
+<body>
+<h3><a name="lua_Writer"><code>lua_Writer</code></a></h3>
+<pre>typedef int (*lua_Writer) (lua_State *L,
+                           const void* p,
+                           size_t sz,
+                           void* ud);</pre>
+
+<p>
+The writer function used by <a href="lua_dump.html"><code>lua_dump</code></a>.
+Every time it produces another piece of chunk,
+<a href="lua_dump.html"><code>lua_dump</code></a> calls the writer,
+passing along the buffer to be written (<code>p</code>),
+its size (<code>sz</code>),
+and the <code>data</code> parameter supplied to <a href="lua_dump.html"><code>lua_dump</code></a>.
+
+
+<p>
+The writer returns an error code:
+0 means no errors;
+any other value means an error and stops <a href="lua_dump.html"><code>lua_dump</code></a> from
+calling the writer again.
+
+
+
+
+
+<hr>
+</body>
+</html>

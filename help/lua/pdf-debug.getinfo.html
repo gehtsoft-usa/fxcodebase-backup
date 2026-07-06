@@ -1,0 +1,48 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - debug.getinfo ([thread,] function [, what])</title>
+</head>
+<body>
+<h3><a name="pdf-debug.getinfo"><code>debug.getinfo ([thread,] function [, what])</code></a></h3>
+
+
+<p>
+Returns a table with information about a function.
+You can give the function directly,
+or you can give a number as the value of <code>function</code>,
+which means the function running at level <code>function</code> of the call stack
+of the given thread:
+level&nbsp;0 is the current function (<code>getinfo</code> itself);
+level&nbsp;1 is the function that called <code>getinfo</code>;
+and so on.
+If <code>function</code> is a number larger than the number of active functions,
+then <code>getinfo</code> returns <b>nil</b>.
+
+
+<p>
+The returned table may contain all the fields returned by <a href="lua_getinfo.html"><code>lua_getinfo</code></a>,
+with the string <code>what</code> describing which fields to fill in.
+The default for <code>what</code> is to get all information available,
+except the table of valid lines.
+If present,
+the option '<code>f</code>'
+adds a field named <code>func</code> with the function itself.
+If present,
+the option '<code>L</code>'
+adds a field named <code>activelines</code> with the table of
+valid lines.
+
+
+<p>
+For instance, the expression <code>debug.getinfo(1,"n").name</code> returns
+a name of the current function, if a reasonable name can be found,
+and <code>debug.getinfo(print)</code> returns a table with all available information
+about the <a href="pdf-print.html"><code>print</code></a> function.
+
+
+
+
+<p>
+<hr>
+</body>
+</html>

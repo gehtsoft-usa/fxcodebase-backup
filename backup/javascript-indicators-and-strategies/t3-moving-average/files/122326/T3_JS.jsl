@@ -1,0 +1,68 @@
+function Init()
+{
+    indicator.name("T3 Average");
+    indicator.description("T3 Average");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addDouble("VF", "Volume Factor", "Volume Factor", 0.7, 0, 1);
+    indicator.parameters.addInteger("F", "Period", "Period",20,2,2000);
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("T3_color", "Color of T3", "Color of T3", core.rgb(0, 255, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var b=null;
+var Frame=null;
+var T3=null;
+
+var first;
+var source = null;
+
+var GD1;
+var GD2;
+var GD3;
+
+function Prepare()
+{
+    b = instance.parameters.VF;
+    Frame = instance.parameters.F;
+    source = instance.source;
+   
+	
+	 	
+	 GD1 = core.indicators.create("GD", source, b, Frame);
+	 GD2 = core.indicators.create("GD", GD1.DATA, b, Frame);
+     GD3 = core.indicators.create("GD", GD2.DATA, b, Frame);
+	 
+	first = GD3.DATA.first();
+	
+
+    var name = profile.id() + "(" + source.name() + ", " + b + ", " + Frame + ")";
+    instance.name(name);
+    T3 = instance.addStream("T3", core.Line, name, "T3", instance.parameters.T3_color, first);
+	T3.setWidth(instance.parameters.width);
+    T3.setStyle(instance.parameters.style);
+}
+
+function Update(period,mode)
+{  
+    GD1.update(mode);
+	GD2.update(mode);
+	GD3.update(mode);
+	
+ 
+   if (period < first) 
+   {
+    return;
+   }
+   
+	
+    T3[period] = GD3.DATA[period];
+    
+}
+
+

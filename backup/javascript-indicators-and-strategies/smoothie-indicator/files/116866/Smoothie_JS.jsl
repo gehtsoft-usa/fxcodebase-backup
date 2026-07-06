@@ -1,0 +1,131 @@
+function Init()
+{
+    indicator.name("Smoothie");
+    indicator.description("Smoothie");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+	
+	
+	indicator.parameters.addInteger("F", "Averege Period", "Averege  Period", 20);
+	indicator.parameters.addInteger("Number", "Number of repetitions", "", 1, 1 , 1000);
+	indicator.parameters.addInteger("Shift", "Shift Backwards", "", 0 , 0 , 1000);
+	indicator.parameters.addString("Method", "Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "EMA" , "EMA");
+	indicator.parameters.addStringAlternative("Method", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method", "HMA", "HMA" , "HMA");
+    indicator.parameters.addStringAlternative("Method", "WMA", "WMA" , "WMA");
+	
+	indicator.parameters.addBoolean("Show", "Show only Last", "" , true); 
+   
+    indicator.parameters.addColor("S1_color", "Color of S1", "Color of S1", core.rgb(255, 0, 0));
+}
+
+var Frame=null;
+var Method=null;
+var Number
+var Count;
+
+var first;
+var source = null;
+
+var DATA = {};
+var indicator;
+var Smoothie= {};
+var Output={};
+var Show;
+var Shift=null;
+
+function Prepare()
+{
+    Shift= instance.parameters.Shift;
+    Show = instance.parameters.Show;
+    Number = instance.parameters.Number;
+	Frame = instance.parameters.F;
+	Method = instance.parameters.Method;
+    source = instance.source;
+    first = source.first();
+
+    var name = profile.id() + "(" + source.name() + ", " +Method +", " + Frame+", " + Number + ", "+ Shift+ ")";
+    instance.name(name);
+		
+	var i=1;
+	
+if (Number == 1) 
+{
+ Smoothie[i]= core.indicators.create(Method, source , Frame);
+ Output[i] = instance.addStream("OUT"+i, core.Line, name, Method + i , instance.parameters.S1_color, Smoothie[i].DATA.first());
+} 
+else
+{
+ for (i = 1; i<=Number; i++) 
+ {						
+  if (i == 1) 
+  {
+   Smoothie[i]= core.indicators.create(Method, source , Frame);
+   if (!Show) 
+   { 
+    Output[i] = instance.addStream("OUT"+i, core.Line, name, Method + i , instance.parameters.S1_color, Smoothie[i].DATA.first()); 
+   }
+  } 
+  else
+  {	
+   Smoothie[i]= core.indicators.create(Method, Smoothie[i-1].DATA , Frame);
+   if (!Show || i == Number) 
+   {
+    Output[i] = instance.addStream("OUT"+i, core.Line, name, Method + i, instance.parameters.S1_color, Smoothie[i].DATA.first());
+   }
+  } 
+ }
+}
+}
+
+function Update(period, mode)
+{
+    if (period >= first && source.hasData(period)) 
+    {
+	
+	var i;
+	
+	for (i = 1; i<=Number; i++) 
+	{
+	 Smoothie[i].update(mode);
+	}
+	
+	
+			
+			for (i = 1; i<=Number; i++) 
+			{
+			
+					if (!Show || i == Number) 
+					{
+					
+					
+							  if (Shift != 0) 
+							  {
+									if (period < Shift) 
+									{
+									 return;
+									}
+							}
+								
+					
+							if (Smoothie[i].DATA.hasData(period)) 
+							{
+							 Output[i][period-Shift] =  Smoothie[i].DATA[period];
+							} 
+							else
+							{
+							 Output[i][period-Shift]= null;
+							}
+					}
+			
+			}
+	
+		
+    }
+}
+

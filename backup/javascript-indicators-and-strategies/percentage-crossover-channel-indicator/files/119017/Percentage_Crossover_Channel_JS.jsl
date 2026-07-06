@@ -1,0 +1,74 @@
+function Init()
+{
+    indicator.name("Percentage Crossover Channel indicator");
+    indicator.description("Percentage Crossover Channel indicator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addDouble("percent", "percent", "", 1);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UpperClr", "Upper Color", "Upper Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("MiddleClr", "Middle Color", "Middle Color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("LowerClr", "Lower Color", "Lower Color", core.rgb(0, 0, 255));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var percent;
+var UpperBuff=null;
+var MiddleBuff=null;
+var LowerBuff=null;
+var PlusVar;
+var MinusVar;
+
+function Prepare()
+{
+    source = instance.source;
+    percent=instance.parameters.percent;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.percent + ")";
+    instance.name(name);
+    UpperBuff = instance.addStream("UpperBuff", core.Line, name + ".Upper", "Upper", instance.parameters.UpperClr, first);
+    MiddleBuff = instance.addStream("MiddleBuff", core.Line, name + ".Middle", "Middle", instance.parameters.MiddleClr, first);
+    LowerBuff = instance.addStream("LowerBuff", core.Line, name + ".Lower", "Lower", instance.parameters.LowerClr, first);
+    UpperBuff.setWidth(instance.parameters.widthLinReg);
+    UpperBuff.setStyle(instance.parameters.styleLinReg);
+    MiddleBuff.setWidth(instance.parameters.widthLinReg);
+    MiddleBuff.setStyle(instance.parameters.styleLinReg);
+    LowerBuff.setWidth(instance.parameters.widthLinReg);
+    LowerBuff.setStyle(instance.parameters.styleLinReg);
+    var var1=percent/100;
+    PlusVar=1+var1;
+    MinusVar=1-var1;
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    if (source[period]*MinusVar>MiddleBuff[period-1])
+    {
+     MiddleBuff[period]=source[period]*MinusVar;
+    }
+    else if (source[period]*PlusVar<MiddleBuff[period-1]) 
+    {
+     MiddleBuff[period]=source[period]*PlusVar;
+    }
+    else
+    {
+     MiddleBuff[period]=MiddleBuff[period-1];  
+    }
+    UpperBuff[period]=MiddleBuff[period]*(1+percent/100);
+    LowerBuff[period]=MiddleBuff[period]*(1-percent/100);
+   }
+   else if (period==first) 
+   {
+    MiddleBuff[period]=source[period];  
+   } 
+}
+

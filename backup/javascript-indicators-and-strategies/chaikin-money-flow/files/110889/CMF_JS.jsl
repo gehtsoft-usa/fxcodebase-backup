@@ -1,0 +1,106 @@
+//initializes the indicator
+function Init()
+{
+    indicator.name("CMF");
+    indicator.description("Chaikin Money Flow");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.setTag("group", "Volume Indicators");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("N", "Number of periods", "Number of periods", 21);
+    indicator.parameters.addString("ADMethod", "A/D calculation mode", "A/D calculation mode", "CI");
+    indicator.parameters.addStringAlternative("ADMethod", "Classic", "Classic", "CS");
+    indicator.parameters.addStringAlternative("ADMethod", "Classic incremental", "Classic incremental", "CI");
+    indicator.parameters.addStringAlternative("ADMethod", "Trade Station", "Trade Station", "TS");
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addString("Display", "Display mode", "Display mode", "L");
+    indicator.parameters.addStringAlternative("Display", "Line", "", "L");
+    indicator.parameters.addStringAlternative("Display", "Histogram", "", "H");
+    indicator.parameters.addColor("clr", "Line color", "Line color", core.rgb(128, 128, 128));
+    indicator.parameters.addInteger("width", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LEVEL_STYLE);
+    indicator.parameters.addColor("Uclr", "Upper bar color", "Upper bar color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("Lclr", "Lower bar color", "Lower bar color", core.rgb(255, 0, 0));
+}
+
+var first = 0;
+var source = null;
+var CMF = null;
+var AD, N;
+
+//initializes the instance of the indicator
+function Prepare(onlyName)
+{
+    source = instance.source;
+    first = source.first()+1;
+    N = instance.parameters.N;
+
+    var name = profile.id() + "(" + instance.source.name() + ")";
+    instance.name(name);
+  
+    if (onlyName == true)
+        return ;
+    AD = core.indicators.create("AD", source, instance.parameters.ADMethod);
+
+    first = Math.max(AD.DATA.first() + N, source.first() + N);
+    var mode;
+    if (instance.parameters.Display == "L")
+    {
+        mode = core.Line;
+        line = true;
+    }
+    else
+    {
+        mode = core.Bar;
+        line = false;
+    }
+
+    U = instance.parameters.Uclr;
+    D = instance.parameters.Lclr;
+
+    CMF = instance.addStream("CMF", mode, name, "CMF", instance.parameters.clr,  first)
+    if (instance.parameters.Display == "L")
+    {
+        CMF.setWidth(instance.parameters.width);
+    }
+    
+    CMF.setStyle(instance.parameters.style);
+    CMF.addLevel(0);
+}
+
+// calculate the value
+function Update(period, mode)
+{
+    AD.update(mode);
+
+    if (period >= first)
+    {
+        var from = period - N + 1;
+        var a, b;
+        a = Math.sum(AD.DATA, from, period);
+        b = Math.sum(source.volume, from, period);
+        if (b != 0)
+        {
+            CMF[period] = a / b;
+        }
+        else
+        {
+            CMF[period] = 0;
+        }
+
+        if (!line)
+        {
+            if (CMF[period] > 0)
+            {
+                CMF.setColor(period, U);
+            }
+            else
+            {
+                CMF.setColor(period, D);
+            }
+        }
+    }
+}

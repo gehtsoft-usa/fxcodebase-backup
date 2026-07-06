@@ -1,0 +1,69 @@
+function Init()
+{
+    indicator.name("Coral indicator");
+    indicator.description("Coral indicator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+    
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addDouble("Coeff", "Coefficient", "", 0.063492063492);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("width", "width", "width", 1, 1, 5);
+    indicator.parameters.addInteger("style", "style", "style", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LEVEL_STYLE);
+}
+
+var first;
+var source = null;
+var Coral=null;
+var Buff1=0;
+var Buff2=0;
+var Buff3=0;
+var Buff4=0;
+var Buff5=0;
+var Buff6=0;
+var Coeff;
+
+function Prepare()
+{
+    source = instance.source;
+    Coeff=instance.parameters.Coeff;
+    first = source.first()+2;
+    Buff1 = instance.addInternalStream(first, 0);
+    Buff2 = instance.addInternalStream(first, 0);
+    Buff3 = instance.addInternalStream(first, 0);
+    Buff4 = instance.addInternalStream(first, 0);
+    Buff5 = instance.addInternalStream(first, 0);
+    Buff6 = instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + Coeff + ")";
+    instance.name(name);
+    Coral = instance.addStream("Coral", core.Line, name + ".Coral", "Coral", instance.parameters.clr, first);
+    Coral.setWidth(instance.parameters.width);
+    Coral.setStyle(instance.parameters.style);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    Buff1[period]=Coeff*source[period]+(1-Coeff)*Buff1[period-1];
+    Buff2[period]=Coeff*Buff1[period]+(1-Coeff)*Buff2[period-1];
+    Buff3[period]=Coeff*Buff2[period]+(1-Coeff)*Buff3[period-1];
+    Buff4[period]=Coeff*Buff3[period]+(1-Coeff)*Buff4[period-1];
+    Buff5[period]=Coeff*Buff4[period]+(1-Coeff)*Buff5[period-1];
+    Buff6[period]=Coeff*Buff5[period]+(1-Coeff)*Buff6[period-1];
+    Coral[period]=(-0.064)*Buff6[period]+0.672*Buff5[period]-2.352*Buff4[period]+2.744*Buff3[period];
+   } 
+   else if (period==first) 
+   {
+    Buff1[period]=source[period]; 
+    Buff2[period]=source[period]; 
+    Buff3[period]=source[period]; 
+    Buff4[period]=source[period]; 
+    Buff5[period]=source[period]; 
+    Buff6[period]=source[period]; 
+   } 
+}
+

@@ -1,0 +1,61 @@
+function Init()
+{
+    indicator.name("Modified Advance/Decline Line");
+    indicator.description("Modified Advance/Decline Line");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");	
+    indicator.parameters.addInteger("Period", "Period", "Period", 14);
+	indicator.parameters.addGroup("Style");	
+    indicator.parameters.addColor("MAD_color", "Color of MAD", "Color of MAD", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var Period;
+
+var first;
+var source = null;
+
+var MAD = null;
+var MA;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+    source = instance.source;
+	
+	MA = core.indicators.create("MVA", source.volume, Period);
+    first = MA.DATA.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        MAD = instance.addStream("MAD", core.Line, name, "MAD", instance.parameters.MAD_color, first);
+		MAD.setWidth(instance.parameters.width);
+        MAD.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period, mode) 
+{
+    MA.update(mode);
+	
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+        if ((source.high[period]-source.low[period])==0) 
+        {
+		 MAD[period] =MAD[period-1] ;
+        } 
+		else
+        {
+         MAD[period] =  MAD[period-1] + ((source.close[period]-source.low[period])-(source.high[period]-source.close[period])/(source.high[period]-source.low[period]))*(source.volume[period]- MA.DATA[period]);
+        }
+}
+

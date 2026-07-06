@@ -1,0 +1,32 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 3 - The Application Program Interface</title>
+</head>
+<body>
+<h1>3 - <a name="3">The Application Program Interface</a></h1>
+
+<p>
+
+This section describes the C&nbsp;API for Lua, that is,
+the set of C&nbsp;functions available to the host program to communicate
+with Lua.
+All API functions and related types and constants
+are declared in the header file <a name="pdf-lua.h"><code>lua.h</code></a>.
+
+
+<p>
+Even when we use the term "function",
+any facility in the API may be provided as a macro instead.
+All such macros use each of their arguments exactly once
+(except for the first argument, which is always a Lua state),
+and so do not generate any hidden side-effects.
+
+
+<p>
+As in most C&nbsp;libraries,
+the Lua API functions do not check their arguments for validity or consistency.
+However, you can change this behavior by compiling Lua
+with a proper definition for the macro <a name="pdf-luai_apicheck"><code>luai_apicheck</code></a>,
+in file <code>luaconf.h</code>.
+</body>
+</html>

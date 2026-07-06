@@ -1,0 +1,27 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_tointeger</title>
+</head>
+<body>
+<h3><a name="lua_tointeger"><code>lua_tointeger</code></a></h3>
+<pre>lua_Integer lua_tointeger (lua_State *L, int idx);</pre>
+
+<p>
+Converts the Lua value at the given acceptable index
+to the signed integral type <a href="lua_Integer.html"><code>lua_Integer</code></a>.
+The Lua value must be a number or a string convertible to a number
+(see <a href="2.2.1.html">&sect;2.2.1</a>);
+otherwise, <a href="lua_tointeger.html"><code>lua_tointeger</code></a> returns&nbsp;0.
+
+
+<p>
+If the number is not an integer,
+it is truncated in some non-specified way.
+
+
+
+
+
+<hr>
+</body>
+</html>

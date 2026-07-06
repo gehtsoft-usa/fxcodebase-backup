@@ -1,0 +1,107 @@
+function Init()
+{
+    indicator.name("New High  New Low Index");
+    indicator.description("New High  New Low Index");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+	
+    indicator.parameters.addGroup("Calculation");	
+    indicator.parameters.addInteger("Period", "Period", "Period", 20);
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("C_color", "Index Color", "", core.rgb(0, 0, 255));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+	indicator.parameters.addColor("H_color", "Color of New Low", "", core.rgb(0, 255, 0));
+	indicator.parameters.addInteger("H_width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("H_style", "Line style", "", core.LINE_NONE);
+    indicator.parameters.setFlag("H_style", core.FLAG_LINE_STYLE);
+	indicator.parameters.addColor("L_color", "Color of New High", "", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("L_width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("L_style", "Line style", "", core.LINE_NONE);
+    indicator.parameters.setFlag("L_style", core.FLAG_LINE_STYLE);
+}
+
+var Period;
+
+var first;
+var source = null;
+
+var c, h, l;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+    source = instance.source;
+    first = source.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        c = instance.addStream("C", core.Line, name, "C", instance.parameters.C_color, first);
+		c.setWidth(instance.parameters.width);
+        c.setStyle(instance.parameters.style);
+		h = instance.addStream("H", core.Line, name, "H", instance.parameters.H_color, first);
+		h.setWidth(instance.parameters.H_width);
+        h.setStyle(instance.parameters.H_style);
+		l = instance.addStream("L", core.Line, name, "L", instance.parameters.L_color, first);
+		l.setWidth(instance.parameters.L_width);
+        l.setStyle(instance.parameters.L_style);
+    }
+}
+
+function Update(period)
+{
+    if (period < first || !source.hasData(period)) 
+    {
+	   return;
+	  }
+	
+	    h[period]= HIGH(period);
+	    l[period]= LOW(period);
+        c[period] = h[period]+l[period];    
+}
+
+function HIGH(period)
+{
+  var i;
+   var count=0;
+   
+   for (i = period-Period; i<=period-1; i++) 
+   {
+   
+   if (source.high[i] > source.high[i-1]) 
+   {
+    count = count+1;
+   }
+   
+   }
+   
+  return (count);   
+}
+
+function LOW(period)	
+{	
+	var i;
+   var count=0;
+   
+   for (i = period-Period; i<=period-1; i++) 
+   {
+   
+   if (source.low[i] < source.low[i-1]) 
+   {
+    count = count-1;
+   }
+   
+   }
+   
+  return (count); 
+	
+}
+
+
+
+

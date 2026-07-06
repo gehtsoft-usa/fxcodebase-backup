@@ -1,0 +1,134 @@
+function Init()
+{
+    indicator.name("WCCI_TLB indicator");
+    indicator.description("WCCI_TLB indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("CCI_Period", "Period of CCI", "", 14);
+    indicator.parameters.addInteger("limit", "limit for ZigZag", "", 90);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UP_color", "Color of UP", "Color of UP", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("DN_color", "Color of DN", "Color of DN", core.rgb(0, 0, 255));
+}
+
+var first;
+var source = null;
+var CCI_Period;
+var limit;
+var tt={};
+var CCI;
+
+function Prepare()
+{
+    source = instance.source;
+    CCI_Period=instance.parameters.CCI_Period;
+    limit=instance.parameters.limit;
+    CCI = core.indicators.create("CCI", source, CCI_Period);
+    first = CCI.DATA.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.CCI_Period + ", " + instance.parameters.limit + ")";
+    instance.name(name);
+    buffUp = instance.createTextOutput ("Up", "Up", "Wingdings", 10, core.H_Center, core.V_Center, instance.parameters.UP_color, first);
+    buffDn = instance.createTextOutput ("Dn", "Dn", "Wingdings", 10, core.H_Center, core.V_Center, instance.parameters.DN_color, first);
+}
+
+function Update(period, mode)
+{
+   CCI.update(mode);
+   if (period>first+20) 
+   {
+   var cciU=0;
+   var cciD=0;
+    for (i=0; i<=17; i++) 
+    {
+     tt[i]=CCI.DATA[period-i];
+     if (i<=8) 
+     {
+      if (tt[i]>=0) 
+      {
+       cciU=cciU+1;
+      } 
+      else
+      {
+       cciD=cciD+1;
+      }
+     }
+    }
+    tt[18]=0;
+    tt[19]=0;
+    var pmx1=0;
+    var pmx2=0;
+    var kmx=0;
+    var tmx1;
+    var tmx2;
+    if (cciD>=6) 
+    {
+     for (i=0; i<=17; i++) 
+     {
+      if (tt[i]<=tt[i+1] && tt[i+1]>=tt[i+2]) 
+      {
+       if (pmx1!=0 && pmx2==0) 
+       {
+        pmx2=tt[i+1];
+        tmx2=period-1-i;
+        kmx=100.*(pmx2-pmx1)/(tmx2-tmx1);
+       }
+       if (pmx1==0) 
+       {
+        pmx1=tt[i+1];
+        tmx1=period-1-i;
+       }
+      }
+     }
+    }
+    
+    var pmn1=0;
+    var pmn2=0;
+    var kmn=0;
+    var tmn1;
+    var tmn2;
+    if (cciU>=6) 
+    {
+     for (i=0; i<=17; i++) 
+     {
+      if (tt[i]>=tt[i+1] && tt[i+1]<=tt[i+2]) 
+      {
+       if (pmn1!=0 && pmn2==0) 
+       {
+        pmn2=tt[i+1];
+        tmn2=period-1-i;
+        kmn=100.*(pmn2-pmn1)/(tmn2-tmn1);
+       }
+       if (pmn1==0) 
+       {
+        pmn1=tt[i+1];
+        tmn1=period-1-i;
+       }
+      }
+     }
+    }
+    
+    var line;
+    if (kmx!=0 && cciD>=6 && (pmx1<-limit || pmx2<-limit)) 
+    {
+     line=(period-tmx1)*kmx/100.+pmx1;
+     if (tt[1]<line && tt[0]>=line) 
+     {
+      buffDn.set(period, source.low[period], "\225", "");
+     }
+    }
+    
+    if (kmn!=0 && cciU>=6 && (pmn1>limit || pmn2>limit)) 
+    {
+     line=(period-tmn1)*kmn/100.+pmn1;
+     if (tt[1]>line && tt[0]<=line) 
+     {
+      buffUp.set(period, source.high[period], "\226", "");
+     }
+    }
+   
+   }
+}
+

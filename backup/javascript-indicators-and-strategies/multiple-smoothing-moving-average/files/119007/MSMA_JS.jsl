@@ -1,0 +1,113 @@
+function Init()
+{
+    indicator.name("Multiple smoothing moving Average");
+    indicator.description("");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");	
+	indicator.parameters.addInteger("Period", "Average Period", "", 5, 2, 2000);
+	indicator.parameters.addInteger("Repetitions", "Number of Repetitions", "", 5, 1,1000);
+	indicator.parameters.addString("Method", " Average Method", "" , "MVA");	
+    indicator.parameters.addStringAlternative("Method", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "EMA" , "EMA");
+	indicator.parameters.addStringAlternative("Method", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method", "WMA", "WMA" , "WMA");
+	
+	
+	
+	indicator.parameters.addGroup("MSMA Line Style");	
+    indicator.parameters.addColor("MSMA", "Line Color", "", core.rgb(0, 255, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 2, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+	
+	indicator.parameters.addGroup("Intermediate Line Style");	
+	indicator.parameters.addBoolean("Show", "Show intermediate results", "", true);
+    indicator.parameters.addColor("Intermediate", "Line Color", "", core.rgb(128, 128, 128));
+	indicator.parameters.addInteger("iwidth", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("istyle", "Line style", "", core.LINE_DOT);
+    indicator.parameters.setFlag("istyle", core.FLAG_LINE_STYLE);
+	
+}
+
+var Method, Period,Repetitions;
+var first;
+var source = null;
+var MSMA;
+var MA={};
+var Show;
+var Intermediate={};
+
+function Prepare(nameOnly)
+{
+    Show = instance.parameters.Show;
+    Method = instance.parameters.Method;	
+	Period = instance.parameters.Period;	
+	Repetitions = instance.parameters.Repetitions;
+    source = instance.source;
+   
+	var i;
+	for (i = 1; i<=Repetitions; i++) 
+	{
+		if (i == 1) 
+		{
+		 MA[i]= core.indicators.create(Method, source, Period);
+		} 
+		else
+		{
+		 MA[i]= core.indicators.create(Method, MA[i-1].DATA, Period);
+		} 
+		
+		if (Show && i < Repetitions) 
+		{
+		 Intermediate[i] = instance.addStream(tostring( "Intermediate"+i), core.Line, i, i, instance.parameters.Intermediate, MA[i].DATA.first());
+		 Intermediate[i].setWidth(instance.parameters.iwidth);
+         Intermediate[i].setStyle(instance.parameters.istyle);
+		}
+	
+    }	
+	
+	
+	
+	first = MA[Repetitions].DATA.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Method)+ ", " + tostring(Period)+ ", " + tostring(Method)+ ", " + tostring(Repetitions)+ ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        MSMA = instance.addStream("MSMA", core.Line, name + ".MSMA", "MSMA", instance.parameters.MSMA, first);
+		MSMA.setWidth(instance.parameters.width);
+        MSMA.setStyle(instance.parameters.style);
+		
+    }
+}
+
+function Update(period, mode)
+{
+    if (period < first) 
+    {
+	 return;
+	}
+        
+	var i;
+	for (i = 1; i<=Repetitions; i++) 
+	{	
+	    MA[i].update(mode);
+		
+		if (Show && i < Repetitions) 
+		{
+		 Intermediate[i][period]= MA[i].DATA[period];
+		}
+		
+    }		
+		
+		MSMA[period] = MA[Repetitions].DATA[period] ;
+		
+ }
+

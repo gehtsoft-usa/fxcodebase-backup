@@ -1,0 +1,21 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_getfield</title>
+</head>
+<body>
+<h3><a name="lua_getfield"><code>lua_getfield</code></a></h3>
+<pre>void lua_getfield (lua_State *L, int index, const char *k);</pre>
+
+<p>
+Pushes onto the stack the value <code>t[k]</code>,
+where <code>t</code> is the value at the given valid index <code>index</code>.
+As in Lua, this function may trigger a metamethod
+for the "index" event (see <a href="2.8.html">&sect;2.8</a>).
+
+
+
+
+
+<hr>
+</body>
+</html>

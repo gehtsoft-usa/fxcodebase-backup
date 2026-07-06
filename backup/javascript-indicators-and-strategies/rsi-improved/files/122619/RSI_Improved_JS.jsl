@@ -1,0 +1,58 @@
+function Init()
+{
+    indicator.name("RSI Improved");
+    indicator.description("RSI Improved");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("OriginalPeriod", "Period of original RSI", "", 14);
+    indicator.parameters.addInteger("RotatedPeriod", "Period of rotated RSI", "", 7);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("OriginalClr", "Original Color", "Original Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("RotatedClr", "Rotated Color", "Rotated Color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("DeltaClr", "Delta Color", "Delta Color", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("DeltaSpeedClr", "Delta Speed Color", "Delta Speed Color", core.rgb(0, 255, 255));
+}
+
+var first;
+var source = null;
+var OriginalPeriod;
+var RotatedPeriod;
+var O_RSI;
+var R_RSI;
+var OriginalRSI=null;
+var RotatedRSI=null;
+var Delta=null;
+var SpeedDelta=null;
+
+function Prepare()
+{
+    source = instance.source;
+    OriginalPeriod=instance.parameters.OriginalPeriod;
+    RotatedPeriod=instance.parameters.RotatedPeriod;
+    first = source.first()+2;
+    O_RSI = core.indicators.create("RSI", source, OriginalPeriod);
+    R_RSI = core.indicators.create("RSI", source, RotatedPeriod);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.OriginalPeriod + ", " + instance.parameters.RotatedPeriod + ")";
+    instance.name(name);
+    OriginalRSI = instance.addStream("OriginalRSI", core.Line, name + ".OriginalRSI", "OriginalRSI", instance.parameters.OriginalClr, first);
+    RotatedRSI = instance.addStream("RotatedRSI", core.Line, name + ".RotatedRSI", "RotatedRSI", instance.parameters.RotatedClr, first);
+    Delta = instance.addStream("Delta", core.Bar, name + ".Delta", "Delta", instance.parameters.DeltaClr, first);
+    DeltaSpeed = instance.addStream("DeltaSpeed", core.Line, name + ".DeltaSpeed", "DeltaSpeed", instance.parameters.DeltaSpeedClr, first);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    O_RSI.update(mode);
+    R_RSI.update(mode);
+    OriginalRSI[period]=O_RSI.DATA[period];
+    RotatedRSI[period]=100-R_RSI.DATA[period];
+    Delta[period]=OriginalRSI[period]-RotatedRSI[period];
+    DeltaSpeed[period]=Delta[period-1]-Delta[period];
+   } 
+}
+

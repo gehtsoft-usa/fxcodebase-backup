@@ -1,0 +1,45 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - package.path</title>
+</head>
+<body>
+<h3><a name="pdf-package.path"><code>package.path</code></a></h3>
+
+
+<p>
+The path used by <a href="pdf-require.html"><code>require</code></a> to search for a Lua loader.
+
+
+<p>
+At start-up, Lua initializes this variable with
+the value of the environment variable <a name="pdf-LUA_PATH"><code>LUA_PATH</code></a> or
+with a default path defined in <code>luaconf.h</code>,
+if the environment variable is not defined.
+Any "<code>;;</code>" in the value of the environment variable
+is replaced by the default path.
+
+
+<p>
+A path is a sequence of <em>templates</em> separated by semicolons.
+For each template, <a href="pdf-require.html"><code>require</code></a> will change each interrogation
+mark in the template by <code>filename</code>,
+which is <code>modname</code> with each dot replaced by a
+"directory separator" (such as "<code>/</code>" in Unix);
+then it will try to load the resulting file name.
+So, for instance, if the Lua path is
+
+<pre>
+     "./?.lua;./?.lc;/usr/local/?/init.lua"
+</pre><p>
+the search for a Lua loader for module <code>foo</code>
+will try to load the files
+<code>./foo.lua</code>, <code>./foo.lc</code>, and
+<code>/usr/local/foo/init.lua</code>, in that order.
+
+
+
+
+<p>
+<hr>
+</body>
+</html>

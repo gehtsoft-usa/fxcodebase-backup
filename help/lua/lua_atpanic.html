@@ -1,0 +1,31 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_atpanic</title>
+</head>
+<body>
+<h3><a name="lua_atpanic"><code>lua_atpanic</code></a></h3>
+<pre>lua_CFunction lua_atpanic (lua_State *L, lua_CFunction panicf);</pre>
+
+<p>
+Sets a new panic function and returns the old one.
+
+
+<p>
+If an error happens outside any protected environment,
+Lua calls a <em>panic function</em>
+and then calls <code>exit(EXIT_FAILURE)</code>,
+thus exiting the host application.
+Your panic function may avoid this exit by
+never returning (e.g., doing a long jump).
+
+
+<p>
+The panic function can access the error message at the top of the stack.
+
+
+
+
+
+<hr>
+</body>
+</html>

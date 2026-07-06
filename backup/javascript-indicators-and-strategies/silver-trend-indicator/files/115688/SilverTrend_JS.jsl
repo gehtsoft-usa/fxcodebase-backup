@@ -1,0 +1,61 @@
+function Init()
+{
+    indicator.name("Silver Trend");
+    indicator.description("Silver Trend");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addInteger("SSP", "SSP", "", 6);
+    indicator.parameters.addDouble("Kmin", "Kmin", "", 1.6);
+    indicator.parameters.addDouble("Kmax", "Kmax", "", 50.6);
+    indicator.parameters.addColor("S1_color", "S1 Color", "", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("S2_color", "S2 Color", "", core.rgb(0, 255, 0));
+}
+
+var SSP;
+var Kmin;
+var Kmax;
+
+var first;
+var source = null;
+
+var S1 = null;
+var S2 = null;
+
+function Prepare()
+{
+    SSP = instance.parameters.SSP;
+    Kmin = instance.parameters.Kmin;
+    Kmax = instance.parameters.Kmax;
+    //Filter = instance.parameters.Filter;
+    source = instance.source;
+    first = source.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + SSP + ", " + Kmin + ", " + Kmax + ")";
+    instance.name(name);
+    S1 = instance.addStream("S1", core.Line, name + ".S1", "S1", instance.parameters.S1_color, first+SSP);
+    S2 = instance.addStream("S2", core.Line, name + ".S2", "S2", instance.parameters.S2_color, first);
+}
+
+function Update(period)
+{
+    if (period >= first+SSP && source.hasData(period)) 
+    {
+	        var tmp=Math.minmax(source,period-SSP,period);
+			var SsMax = tmp[1];
+			var SsMin = tmp[0];
+		   
+			var  smin =((SsMin - (SsMax - SsMin)*Kmin / 100));
+			var  smax = ((SsMax - (SsMax - SsMin)*Kmax / 100));
+			
+	
+        S1[period] = smax;
+        S2[period-SSP] = smax;
+    }
+}
+
+function round(num)
+{
+  return (Math.floor(num + 0.5));
+}
+

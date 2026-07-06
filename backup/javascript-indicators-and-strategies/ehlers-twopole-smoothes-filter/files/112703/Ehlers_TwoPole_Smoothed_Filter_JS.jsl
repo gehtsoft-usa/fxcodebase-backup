@@ -1,0 +1,58 @@
+function Init()
+{
+    indicator.name("Ehlers TwoPole smoothes filter");
+    indicator.description("Ehlers TwoPole smoothes filter");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    
+    indicator.parameters.addInteger("CuttOffPeriod", "CuttOffPeriod", "", 15);
+
+    indicator.parameters.addColor("clr_Line", "Color of Line", "Color of Line", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var CuttOffPeriod;
+var Price;
+var BuffLine=null;
+var a1;
+var b1;
+var coeff1, coeff2, coeff3;
+
+function Prepare()
+{
+    source = instance.source;
+    CuttOffPeriod=instance.parameters.CuttOffPeriod;
+    Price = instance.addInternalStream(0, 0);
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.CuttOffPeriod + ")";
+    instance.name(name);
+    BuffLine = instance.addStream("BuffLine", core.Line, name + ".BuffLine", "BuffLine", instance.parameters.clr_Line, first);
+    BuffLine.setWidth(instance.parameters.widthLinReg);
+    BuffLine.setStyle(instance.parameters.styleLinReg);
+    a1=Math.exp(-Math.sqrt(2.)*3.1415/CuttOffPeriod);
+    b1=2.*a1*Math.cos(3.1415*Math.sqrt(2.)/CuttOffPeriod);
+    coeff2=b1;
+    coeff3=-a1*a1;
+    coeff1=1.-coeff2-coeff3;
+}
+
+function Update(period, mode)
+{
+    Price[period]=(source.high[period]+source.low[period])/2.; 
+    if (period>first) 
+    {
+     if (period>first+4) 
+     {
+      BuffLine[period]=coeff1*Price[period]+coeff2*BuffLine[period-1]+coeff3*BuffLine[period-2];
+     } 
+     else
+     {
+      BuffLine[period]=Price[period];
+     } 
+    } 
+}
+

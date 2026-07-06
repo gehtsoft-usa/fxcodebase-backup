@@ -1,0 +1,59 @@
+function Init()
+{
+    indicator.name("BREAKOUT CANDLESTICKS");
+    indicator.description("BREAKOUT CANDLESTICKS");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+	indicator.setTag("replaceSource", "t");
+
+    indicator.parameters.addInteger("Period", "Period", "Period", 2);
+  
+}
+
+var Period;
+
+var first;
+var source = null;
+
+var open=null;
+var close=null;
+var high=null;
+var low=null;
+var volume=null;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+    source = instance.source;
+    first = source.first()+Period;
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+    open = instance.addStream("open", core.Line, name, "open", core.rgb(0, 0, 0), first)
+    high = instance.addStream("high", core.Line, name, "high", core.rgb(0, 0, 0), first)
+    low = instance.addStream("low", core.Line, name, "low", core.rgb(0, 0, 0), first)
+    close = instance.addStream("close", core.Line, name, "close", core.rgb(0, 0, 0), first)
+	volume = instance.addStream("volume", core.Line, name, "volume", core.rgb(0, 0, 0), first)
+    instance.createCandleGroup("ZONE", "Breakout Candlesticks", open, high, low, close,volume);
+    }
+}
+
+function Update(period)
+{
+    if (period < first || !source.hasData(period)) 
+    {
+     return;
+    }
+    var tmp=Math.minmax(source,period-Period+1, period );
+    var min=tmp[0];
+    var max=tmp[1];
+	high[period]= max
+	low[period]= min;		   
+	close[period] = source.close[period];
+	open[period]  = source.open[period-Period+1];
+	volume[period]= Math.sum(source.volume,period-Period+1, period );
+}
+

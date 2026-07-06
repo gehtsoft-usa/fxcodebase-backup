@@ -1,0 +1,63 @@
+function Init()
+{
+    indicator.name("FRASMA indicator");
+    indicator.description("FRASMA indicator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+    
+    indicator.parameters.addInteger("e_period", "e_period", "e_period", 30);
+    indicator.parameters.addInteger("normal_speed", "normal_speed", "normal_speed", 20);
+
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(0, 255, 0));
+}
+
+var first;
+var source = null;
+var e_period;
+var normal_speed;
+
+function Prepare()
+{
+    source = instance.source;
+    e_period=instance.parameters.e_period;
+    normal_speed=instance.parameters.normal_speed;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.e_period + ", " + instance.parameters.normal_speed + ")";
+    instance.name(name);
+    FRASMA = instance.addStream("FRASMA", core.Line, name + ".FRASMA", "FRASMA", instance.parameters.clr, first);
+}
+
+function Update(period, mode)
+{
+    if (period>first+e_period) 
+    {
+     var tmp=Math.minmax(source,core.rangeTo(period,e_period));
+     var priceMax=tmp[1];
+     var priceMin=tmp[0];
+     var length=0.;
+     var priorDiff=0.;
+     var diff=0.;
+     for (i=0; i<=e_period-2; i++) 
+     {
+      if (priceMax>priceMin) 
+      {
+       diff=(source[period-i]-priceMin)/(priceMax-priceMin);
+       if (i>0) 
+       {
+        length=length+Math.sqrt(Math.pow(diff-priorDiff,2)+(1./Math.pow(e_period,2)));
+       }
+       priorDiff=diff;
+      }
+     }
+     var fdi=0.;
+     if (length>0.) 
+     {
+      fdi=1.+(Math.log(length)+Math.log(2.))/Math.log(2.*e_period);
+     }
+     var trail_dim=1./(2.-fdi);
+     var alpha=trail_dim/2.;
+     var speed=Math.floor(normal_speed*alpha);
+     FRASMA[period]=Math.avg(source,core.rangeTo(period,speed));
+    } 
+}
+

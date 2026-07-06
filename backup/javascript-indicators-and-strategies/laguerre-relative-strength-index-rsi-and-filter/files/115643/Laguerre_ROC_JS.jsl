@@ -1,0 +1,114 @@
+function Init()
+{
+    indicator.name("Laguerre ROC oscillator");
+    indicator.description("Laguerre ROC oscillator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 5);
+    indicator.parameters.addDouble("Gamma", "Gamma", "", 0.5);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("PUPclr", "Positive UP color", "Positive UP color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("PDNclr", "Positive DN color", "Positive DN color", core.rgb(0, 128, 0));
+    indicator.parameters.addColor("NUPclr", "Negative UP color", "Negative UP color", core.rgb(128, 0, 0));
+    indicator.parameters.addColor("NDNclr", "Negative DN color", "Negative DN color", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+var Period;
+var Gamma;
+var L0, L1, L2, L3;
+var Laguerre_ROC=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    Gamma=instance.parameters.Gamma;
+    first = source.first()+2;
+    L0 = instance.addInternalStream(first, 0);
+    L1 = instance.addInternalStream(first, 0);
+    L2 = instance.addInternalStream(first, 0);
+    L3 = instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.Gamma + ")";
+    instance.name(name);
+    Laguerre_ROC = instance.addStream("Laguerre_ROC", core.Bar, name + ".Laguerre_ROC", "Laguerre_ROC", instance.parameters.PUPclr, first);
+}
+
+function Update(period, mode)
+{
+   if (period>first+Period) 
+   {
+    var ROC=(source[period]-source[period-Period])/source[period-Period];
+    L0[period]=(1-Gamma)*ROC+Gamma*L0[period-1];
+    L1[period]=L0[period-1]-Gamma*L0[period]+Gamma*L1[period-1];
+    L2[period]=L1[period-1]-Gamma*L1[period]+Gamma*L2[period-1];
+    L3[period]=L2[period-1]-Gamma*L2[period]+Gamma*L3[period-1];
+    
+    var CU=0;
+    var CD=0;
+    if (L0[period]>=L1[period]) 
+    {
+     CU=L0[period]-L1[period];
+    } 
+    else
+    {
+     CD=L1[period]-L0[period];
+    }
+    if (L1[period]>=L2[period]) 
+    {
+     CU=CU+L1[period]-L2[period];
+    } 
+    else
+    {
+     CD=CD+L2[period]-L1[period];
+    }
+    if (L2[period]>=L3[period]) 
+    {
+     CU=CU+L2[period]-L3[period];
+    } 
+    else
+    {
+     CD=CD+L3[period]-L2[period];
+    }
+    var LROC=0;
+    if (CU+CD!=0) 
+    {
+     LROC=CU/(CU+CD);
+    }
+    Laguerre_ROC[period]=LROC-0.5;
+    if (Laguerre_ROC[period]>0) 
+    {
+     if (Laguerre_ROC[period]>=Laguerre_ROC[period-1]) 
+     {
+      Laguerre_ROC.setColor(period, instance.parameters.PUPclr);
+     } 
+     else
+     {
+      Laguerre_ROC.setColor(period, instance.parameters.PDNclr);
+     }
+    } 
+    else
+    {
+     if (Laguerre_ROC[period]>=Laguerre_ROC[period-1]) 
+     {
+      Laguerre_ROC.setColor(period, instance.parameters.NUPclr);
+     } 
+     else
+     {
+      Laguerre_ROC.setColor(period, instance.parameters.NDNclr);
+     }
+    }
+   } 
+   else if (period==first+Period) 
+   {
+    L0[period]=0; 
+    L1[period]=0; 
+    L2[period]=0; 
+    L3[period]=0; 
+   } 
+}
+

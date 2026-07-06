@@ -1,0 +1,310 @@
+function Init()
+{
+    indicator.name("aNina indicator");
+    indicator.description("aNina indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 10);
+    indicator.parameters.addDouble("K", "K", "", 1);
+    indicator.parameters.addString("Method", "Method", "", "High/Low");
+    indicator.parameters.addStringAlternative("Method", "High/Low", "", "High/Low");
+    indicator.parameters.addStringAlternative("Method", "Close", "", "Close");
+    indicator.parameters.addInteger("Period_MA", "Period_MA", "", 50);
+    indicator.parameters.addInteger("Level", "Level", "", 20);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clrMin", "Color Min", "Color Min", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clrMid", "Color Mid", "Color Mid", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("clrB", "Color BUY", "Color BUY", core.rgb(255, 128, 0));
+    indicator.parameters.addColor("clrS", "Color SELL", "Color SELL", core.rgb(255, 0, 128));
+    indicator.parameters.addColor("clrE", "Color Exit", "Color Exit", core.rgb(128, 128, 0));
+    indicator.parameters.addInteger("DotSize", "Dot size", "Dot size", 3, 1, 5);
+}
+
+var first;
+var source = null;
+var Period;
+var K;
+var Method;
+var Level;
+var Period_MA;
+var WATR;
+var SmaxMin,SminMin,SmaxMax,SminMax,SmaxMid,SminMid;
+var TrendMin,TrendMax,TrendMid;
+var lineMin,lineMax,lineMid;
+var last;
+var MA;
+var BuffMin=null;
+var BuffMid=null;
+var BuffB=null;
+var BuffS=null;
+var BuffE=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    Period_MA=instance.parameters.Period_MA;
+    K=instance.parameters.K;
+    Method=instance.parameters.Method;
+    Level=instance.parameters.Level;
+    first = source.first()+2;
+    WATR = instance.addInternalStream(first+Period, 0);
+    SmaxMin = instance.addInternalStream(first+Period, 0);
+    SminMin = instance.addInternalStream(first+Period, 0);
+    SmaxMax = instance.addInternalStream(first+Period, 0);
+    SminMax = instance.addInternalStream(first+Period, 0);
+    SmaxMid = instance.addInternalStream(first+Period, 0);
+    SminMid = instance.addInternalStream(first+Period, 0);
+    TrendMin = instance.addInternalStream(first+Period, 0);
+    TrendMax = instance.addInternalStream(first+Period, 0);
+    TrendMid = instance.addInternalStream(first+Period, 0);
+    lineMin = instance.addInternalStream(first+Period, 0);
+    lineMax = instance.addInternalStream(first+Period, 0);
+    lineMid = instance.addInternalStream(first+Period, 0);
+    last = instance.addInternalStream(first+Period, 0);
+    MA = core.indicators.create("EMA", source.close, Period_MA);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.K + ", " + instance.parameters.Method + ", " + instance.parameters.Period_MA + ", " + instance.parameters.Level + ")";
+    instance.name(name);
+    BuffMin = instance.addStream("BuffMin", core.Line, name + ".Min", "Min", instance.parameters.clrMin, first);
+    BuffMid = instance.addStream("BuffMid", core.Line, name + ".Mid", "Mid", instance.parameters.clrMid, first);
+    BuffB = instance.addStream("BuffB", core.Dot, name + ".BUY", "BUY", instance.parameters.clrB, first);
+    BuffS = instance.addStream("BuffS", core.Dot, name + ".SELL", "SELL", instance.parameters.clrS, first);
+    BuffE = instance.addStream("BuffE", core.Dot, name + ".Exit", "Exit", instance.parameters.clrE, first);
+    BuffB.setWidth(instance.parameters.DotSize);
+    BuffS.setWidth(instance.parameters.DotSize);
+    BuffE.setWidth(instance.parameters.DotSize);
+}
+
+function Update(period, mode)
+{
+   if (period>first+Period) 
+   {
+    var Sum=0;
+    var i;
+    for (i=Period-1; i>=0; i--) 
+    {
+     Sum=Sum+(1+(Period-i)/Period)*Math.abs(source.high[period-i]-source.low[period-i]);
+    }
+    WATR[period]=Sum/Period;
+    
+    var tmp=Math.minmax(WATR,core.range(first+Period+1,period));
+    var WATRmax=tmp[1];
+    var WATRmin=tmp[0];
+
+    var min=K*WATRmin;
+    var max=K*WATRmax;
+    var mid=(min+max)/2;
+    var c=source.close[period];
+    var h=source.high[period];
+    var l=source.low[period];
+    if (Method=="High/Low") 
+    {
+     SmaxMin[period]=l+2*min;
+     SminMin[period]=h-2*min;
+     SmaxMax[period]=l+2*max;
+     SminMax[period]=h-2*max;
+     SmaxMid[period]=l+2*mid;
+     SminMid[period]=h-2*mid;
+    }
+    else
+    {
+     SmaxMin[period]=c+2*min;
+     SminMin[period]=c-2*min;
+     SmaxMax[period]=c+2*max;
+     SminMax[period]=c-2*max;
+     SmaxMid[period]=c+2*mid;
+     SminMid[period]=c-2*mid;
+    }
+    TrendMin[period]=TrendMin[period-1];
+    TrendMax[period]=TrendMax[period-1];
+    TrendMid[period]=TrendMid[period-1];
+    if (c>SmaxMin[period-1]) 
+    { 
+        TrendMin[period]=1; 
+    }
+    else if (c<SminMin[period-1]) 
+    { 
+        TrendMin[period]=-1; 
+    }
+    
+    if (c>SmaxMax[period-1]) 
+    { 
+        TrendMax[period]=1;
+    } 
+    else if (c<SminMax[period-1]) 
+    { 
+        TrendMax[period]=-1; 
+    }
+    
+    if (c>SmaxMid[period-1]) 
+    { 
+        TrendMid[period]=1;
+    } 
+    else if (c<SminMid[period-1]) 
+    { 
+        TrendMid[period]=-1; 
+    }
+    
+    if (TrendMin[period]>0 && SminMin[period]<SminMin[period-1]) 
+    { 
+        SminMin[period]=SminMin[period-1]; 
+    }
+
+    if (TrendMin[period]<0 && SmaxMin[period]>SmaxMin[period-1]) 
+    { 
+        SmaxMin[period]=SmaxMin[period-1]; 
+    }
+    
+    if (TrendMax[period]>0 && SminMax[period]<SminMax[period-1]) 
+    { 
+        SminMax[period]=SminMax[period-1]; 
+    }
+    
+    if (TrendMax[period]<0 && SmaxMax[period]>SmaxMax[period-1]) 
+    { 
+        SmaxMax[period]=SmaxMax[period-1]; 
+    }
+    
+    if (TrendMid[period]>0 && SminMid[period]<SminMid[period-1]) 
+    { 
+        SminMid[period]=SminMid[period-1]; 
+    }
+    
+    if (TrendMid[period]<0 && SmaxMid[period]>SmaxMid[period-1]) 
+    { 
+        SmaxMid[period]=SmaxMid[period-1]; 
+    }
+    
+    lineMin[period]=lineMin[period-1];
+    lineMax[period]=lineMax[period-1];
+    lineMid[period]=lineMid[period-1]
+    
+    if (TrendMin[period]>0) 
+    { 
+        lineMin[period]=SminMin[period]+min;
+    } 
+    else if (TrendMin[period]<0) 
+    { 
+        lineMin[period]=SmaxMin[period]-min; 
+    }
+
+    if (TrendMax[period]>0) 
+    { 
+        lineMax[period]=SminMax[period]+max;
+    } 
+    else if (TrendMax[period]<0) 
+    { 
+        lineMax[period]=SmaxMax[period]-max; 
+    }
+    
+    if (TrendMid[period]>0) 
+    { 
+        lineMid[period]=SminMid[period]+mid;
+    } 
+    else if (TrendMid[period]<0) 
+    { 
+        lineMid[period]=SmaxMid[period]-mid; 
+    }
+    
+    var bsMin=lineMax[period]-max;
+    var bsMax=lineMax[period]+max;
+    var Stoch1=(lineMin[period]-bsMin)/(2*max);
+    var Stoch2=(lineMid[period]-bsMin)/(2*max);
+    
+    BuffMin[period]=Stoch1;
+    BuffMid[period]=Stoch2;
+    
+    MA.update(mode);
+    var last_ma=FindLastMA(period);
+    last[period]=last[period-1];
+    if ((BuffMin[period]-BuffMid[period])*(BuffMin[period-1]-BuffMid[period-1])<0)
+    {
+     last[period]=0;
+     BuffE[period]=BuffMid[period];
+     if (BuffMin[period]>BuffMid[period]) 
+     {
+      if (last_ma!=0) 
+      {
+       if (MA.DATA[last_ma]<source.open[period]) 
+       {
+        BuffB[period]=BuffMid[period];
+        if (last_ma==period && Math.abs(MA.DATA[last_ma]-source.open[period])/source.pipSize()<Level) 
+        {
+         BuffE[period]=BuffMid[period];
+        }
+       }
+      }
+       else
+       {
+        last[period]=period;
+       }
+      }
+     else if (BuffMin[period]<BuffMid[period]) 
+     {
+      if (last_ma!=0) 
+      {
+       if (MA.DATA[last_ma]>source.open[period]) 
+       {
+        BuffS[period]=BuffMin[period];
+        if (last_ma==period && Math.abs(MA.DATA[last_ma]-source.open[period])/source.pipSize()<Level) 
+        {
+         BuffE[period]=BuffMin[period];
+        }
+        }
+    }
+       else
+       {
+        last[period]=-period;
+       }
+      } 
+     }
+    else
+    {
+     if (last[period]>0 && source.open[period]>MA.DATA[period]) 
+     {
+      BuffB[period]=BuffMid[period];
+      last[period]=0;
+     }
+     if (last[period]<0 && source.open[period]<MA.DATA[period]) 
+     {
+      BuffS[period]=BuffMin[period];
+      last[period]=0;
+     }
+    }
+    }
+    
+   else if (period==first+Period) 
+   {
+    SmaxMin[period]=0;
+    SminMin[period]=0;
+    SmaxMax[period]=0;
+    SminMax[period]=0;
+    SmaxMid[period]=0;
+    SminMid[period]=0;
+    TrendMin[period]=0;
+    TrendMax[period]=0;
+    TrendMid[period]=0;
+    lineMin[period]=0;
+    lineMax[period]=0;
+    lineMid[period]=0;
+    last[period]=0;
+   } 
+}
+
+function FindLastMA(period)
+{
+ var i=period;
+ while (i>=first) 
+ {
+  if ((source.close[i]-MA.DATA[i])*(source.open[i]-MA.DATA[i])<0)
+  {
+   return (i);
+  }
+  i=i-1;
+ }
+ return (0);
+}
+

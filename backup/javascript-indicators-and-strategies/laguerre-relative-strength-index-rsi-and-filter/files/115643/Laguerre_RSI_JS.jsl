@@ -1,0 +1,121 @@
+function Init()
+{
+    indicator.name("John Ehlers Laguerre Relative Strenght Index");
+    indicator.description("");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");
+
+    indicator.parameters.addDouble("GAMMA", "Gamma", "", 0.7, -0.5, 1.05);
+	indicator.parameters.addGroup("Style");
+
+    indicator.parameters.addColor("LRSI_color", "Color of LRSI", "Color of LRSI", core.rgb(255, 0, 128));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+	
+	indicator.parameters.addGroup("OB/OS Levels");	
+    indicator.parameters.addDouble("overbought", "Overbought Level","", 0.85);
+	indicator.parameters.addDouble("central","Central Level","", 0.45);
+    indicator.parameters.addDouble("oversold","Oversold Level","", 0.15);
+	indicator.parameters.addColor("level_overboughtsold_color", "Line Color","", core.rgb(128, 128, 128));
+    indicator.parameters.addInteger("level_overboughtsold_width","Line width","", 1, 1, 5);
+    indicator.parameters.addInteger("level_overboughtsold_style", "Line Style","", core.LINE_SOLID);
+    indicator.parameters.setFlag("level_overboughtsold_style", core.FLAG_LEVEL_STYLE);
+}
+
+var GAMMA;
+
+var first;
+var source = null;
+
+var LRSI = null;
+var L0;
+var L1;
+var L2;
+var L3;
+
+function Prepare()
+{
+    GAMMA = instance.parameters.GAMMA;
+    source = instance.source;
+    first = source.first() + 30;
+    var name = profile.id() + "(" + source.name() + ", " + GAMMA + ")";
+    instance.name(name);
+    LRSI = instance.addStream("LRSI", core.Line, name, "LRSI", instance.parameters.LRSI_color, first);
+	LRSI.setWidth(instance.parameters.width);
+    LRSI.setStyle(instance.parameters.style);
+	
+    LRSI.addLevel(instance.parameters.oversold, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);
+	LRSI.addLevel(instance.parameters.overbought, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);    
+    LRSI.addLevel(instance.parameters.central, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);    
+			
+  
+    L0 = instance.addInternalStream(0, 0);
+    L1 = instance.addInternalStream(0, 0);
+    L2 = instance.addInternalStream(0, 0);
+    L3 = instance.addInternalStream(0, 0);
+}
+
+function calc(period)
+{
+   L0[period] = (1.0 - GAMMA) * (source[period]) + GAMMA * L0[period - 1];
+   L1[period] = -GAMMA * L0[period] + L0[period - 1] + GAMMA * L1[period - 1];
+   L2[period] = -GAMMA * L1[period] + L1[period - 1] + GAMMA * L2[period - 1];
+   L3[period] = -GAMMA * L2[period] + L2[period - 1] + GAMMA * L3[period - 1];
+}
+
+function Update(period)
+{
+    if (period >= first) 
+    {
+        calc(period);
+        var CU, CD;
+        CU = 0;
+        CD = 0;
+        if (L0[period] >= L1[period]) 
+        {
+            CU = L0[period] - L1[period];
+        }    
+        else
+        {
+            CD = L1[period] - L0[period];
+        }
+        if (L1[period] >= L2[period]) 
+        {
+            CU = CU + L1[period] - L2[period];
+        }    
+        else
+        {
+            CD = CD + L2[period] - L1[period];
+        }
+        if (L2[period] >= L3[period]) 
+        {
+            CU = CU + L2[period] - L3[period];
+        }    
+        else
+        {
+            CD = CD + L3[period] - L2[period];
+        }
+        if ((CU + CD) != 0) 
+        {
+            LRSI[period] = CU / (CU + CD);
+        }    
+        else
+        {
+            LRSI[period] = 1;
+        }
+    }    
+    else if (period >= source.first() + 1) 
+    {
+        calc(period);
+    }    
+    else
+    {
+        L0[period] = 0;
+        L1[period] = 0;
+        L2[period] = 0;
+        L3[period] = 0;
+    }
+}
+

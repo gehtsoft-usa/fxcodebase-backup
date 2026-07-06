@@ -1,0 +1,154 @@
+function Init()
+{
+    indicator.name("ATR channels indicator");
+    indicator.description("ATR channels indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("ATR_Period", "Period of ATR", "", 26);
+    indicator.parameters.addInteger("MA_Period", "Period of MA", "", 16);
+    indicator.parameters.addString("MA_Method", "Method of MA", "", "MVA");
+    indicator.parameters.addStringAlternative("MA_Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("MA_Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("MA_Method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("MA_Method", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("MA_Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("MA_Method", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("MA_Method", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("MA_Method", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("MA_Method", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("MA_Method", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("MA_Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("MA_Method", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("MA_Method", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("MA_Method", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("MA_Method", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("MA_Method", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("MA_Method", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("MA_Method", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("MA_Method", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("MA_Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("MA_Method", "JSmooth", "", "JSmooth");
+    indicator.parameters.addString("MA_Price", "Price of MA", "", "close");
+    indicator.parameters.addStringAlternative("MA_Price", "close", "", "close");
+    indicator.parameters.addStringAlternative("MA_Price", "open", "", "open");
+    indicator.parameters.addStringAlternative("MA_Price", "high", "", "high");
+    indicator.parameters.addStringAlternative("MA_Price", "low", "", "low");
+    indicator.parameters.addStringAlternative("MA_Price", "median", "", "median");
+    indicator.parameters.addStringAlternative("MA_Price", "typical", "", "typical");
+    indicator.parameters.addStringAlternative("MA_Price", "weighted", "", "weighted");
+    indicator.parameters.addDouble("Mult_Factor1", "Mult_Factor1", "", 1.6);
+    indicator.parameters.addDouble("Mult_Factor2", "Mult_Factor2", "", 3.2);
+    indicator.parameters.addDouble("Mult_Factor3", "Mult_Factor3", "", 4.8);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("MainClr", "Main Color", "Main Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("Band1Clr", "Band1 Color", "Band1 Color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("Band2Clr", "Band2 Color", "Band2 Color", core.rgb(192, 0, 0));
+    indicator.parameters.addColor("Band3Clr", "Band3 Color", "Band3 Color", core.rgb(128, 0, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var ATR_Period;
+var MA_Period;
+var MA_Method;
+var MA_Price;
+var Mult_Factor1;
+var Mult_Factor2;
+var Mult_Factor3;
+var MA;
+var ATR;
+var Main=null;
+var UpperBand1=null;
+var UpperBand2=null;
+var UpperBand3=null;
+var LowerBand1=null;
+var LowerBand2=null;
+var LowerBand3=null;
+
+function Prepare()
+{
+    source = instance.source;
+    ATR_Period=instance.parameters.ATR_Period;
+    MA_Period=instance.parameters.MA_Period;
+    MA_Method=instance.parameters.MA_Method;
+    MA_Price=instance.parameters.MA_Price;
+    Mult_Factor1=instance.parameters.Mult_Factor1;
+    Mult_Factor2=instance.parameters.Mult_Factor2;
+    Mult_Factor3=instance.parameters.Mult_Factor3;
+    first = source.first()+2;
+    ATR = core.indicators.create("ATR", source, ATR_Period);
+    if (MA_Price=="close") 
+    {
+     MA = core.indicators.create("AVERAGES", source.close, MA_Method, MA_Period, false);
+    } 
+    else if (MA_Price=="open") 
+    {
+     MA = core.indicators.create("AVERAGES", source.open, MA_Method, MA_Period, false);
+    } 
+    else if (MA_Price=="high") 
+    {
+     MA = core.indicators.create("AVERAGES", source.high, MA_Method, MA_Period, false);
+    } 
+    else if (MA_Price=="low") 
+    {
+     MA = core.indicators.create("AVERAGES", source.low, MA_Method, MA_Period, false);
+    } 
+    else if (MA_Price=="median") 
+    {
+     MA = core.indicators.create("AVERAGES", source.median, MA_Method, MA_Period, false);
+    } 
+    else if (MA_Price=="typical") 
+    {
+     MA = core.indicators.create("AVERAGES", source.typical, MA_Method, MA_Period, false);
+    } 
+    else
+    {
+     MA = core.indicators.create("AVERAGES", source.weighted, MA_Method, MA_Period, false);
+    } 
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.ATR_Period + ", " + instance.parameters.MA_Period + ", " + instance.parameters.MA_Method + ", " + instance.parameters.MA_Price + ", " + instance.parameters.Mult_Factor1 + ", " + instance.parameters.Mult_Factor2 + ", " + instance.parameters.Mult_Factor3 + ")";
+    instance.name(name);
+    Main = instance.addStream("Main", core.Line, name + ".Main", "Main", instance.parameters.MainClr, first);
+    UpperBand1 = instance.addStream("UpperBand1", core.Line, name + ".UpperBand1", "UpperBand1", instance.parameters.Band1Clr, first);
+    UpperBand2 = instance.addStream("UpperBand2", core.Line, name + ".UpperBand2", "UpperBand2", instance.parameters.Band2Clr, first);
+    UpperBand3 = instance.addStream("UpperBand3", core.Line, name + ".UpperBand3", "UpperBand3", instance.parameters.Band3Clr, first);
+    LowerBand1 = instance.addStream("LowerBand1", core.Line, name + ".LowerBand1", "LowerBand1", instance.parameters.Band1Clr, first);
+    LowerBand2 = instance.addStream("LowerBand2", core.Line, name + ".LowerBand2", "LowerBand2", instance.parameters.Band2Clr, first);
+    LowerBand3 = instance.addStream("LowerBand3", core.Line, name + ".LowerBand3", "LowerBand3", instance.parameters.Band3Clr, first);
+    Main.setWidth(instance.parameters.widthLinReg);
+    Main.setStyle(instance.parameters.styleLinReg);
+    UpperBand1.setWidth(instance.parameters.widthLinReg);
+    UpperBand1.setStyle(instance.parameters.styleLinReg);
+    UpperBand2.setWidth(instance.parameters.widthLinReg);
+    UpperBand2.setStyle(instance.parameters.styleLinReg);
+    UpperBand3.setWidth(instance.parameters.widthLinReg);
+    UpperBand3.setStyle(instance.parameters.styleLinReg);
+    LowerBand1.setWidth(instance.parameters.widthLinReg);
+    LowerBand1.setStyle(instance.parameters.styleLinReg);
+    LowerBand2.setWidth(instance.parameters.widthLinReg);
+    LowerBand2.setStyle(instance.parameters.styleLinReg);
+    LowerBand3.setWidth(instance.parameters.widthLinReg);
+    LowerBand3.setStyle(instance.parameters.styleLinReg);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    MA.update(mode);
+    ATR.update(mode);
+    Main[period]=MA.DATA[period];
+    UpperBand1[period]=MA.DATA[period]+ATR.DATA[period]*Mult_Factor1;
+    UpperBand2[period]=MA.DATA[period]+ATR.DATA[period]*Mult_Factor2;
+    UpperBand3[period]=MA.DATA[period]+ATR.DATA[period]*Mult_Factor3;
+    LowerBand1[period]=MA.DATA[period]-ATR.DATA[period]*Mult_Factor1;
+    LowerBand2[period]=MA.DATA[period]-ATR.DATA[period]*Mult_Factor2;
+    LowerBand3[period]=MA.DATA[period]-ATR.DATA[period]*Mult_Factor3;
+   } 
+}
+

@@ -1,0 +1,64 @@
+function Init()
+{
+    indicator.name("Sensitive oscillator");
+    indicator.description("Sensitive oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 150);
+    indicator.parameters.addInteger("Sensitive", "Sensitive", "", 7);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP Color", "UP Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DNclr", "DN Color", "DN Color", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+var Period;
+var Sensitive;
+var Buff=null;
+var MAopen;
+var MAclose;
+var MAhigh;
+var MAlow;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    Sensitive=instance.parameters.Sensitive;
+    first = source.first()+2;
+    MAopen=core.indicators.create("MVA", source.open, Period);
+    MAclose=core.indicators.create("MVA", source.close, Period);
+    MAhigh=core.indicators.create("MVA", source.high, Period);
+    MAlow=core.indicators.create("MVA", source.low, Period);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.Sensitive + ")";
+    instance.name(name);
+    Buff = instance.addStream("Buff", core.Bar, name + ".Sensitive", "Sensitive", instance.parameters.UPclr, first);
+}
+
+function Update(period, mode)
+{
+   if (period>first+Period+Sensitive) 
+   {
+    MAopen.update(mode);
+    MAclose.update(mode);
+    MAhigh.update(mode);
+    MAlow.update(mode);
+    var tmp=Math.minmax(source, period-Sensitive+1, period);
+    var max=tmp[1];
+    var min=tmp[0];
+    Buff[period]=(5*MAclose.DATA[period]-5*MAopen.DATA[period]+max+min-MAhigh.DATA[period]-MAlow.DATA[period])*source.volume[period];
+    if (Buff[period]>0) 
+    {
+     Buff.setColor(period,instance.parameters.UPclr);
+    } 
+    else
+    {
+     Buff.setColor(period,instance.parameters.DNclr);
+    }
+   } 
+}
+

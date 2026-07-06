@@ -1,0 +1,153 @@
+function Init()
+{
+    indicator.name("Average Directional Movement Index (VTTrader version)");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+	indicator.parameters.addGroup("Calculation"); 
+    indicator.parameters.addInteger("SM1", "Smoothing periods 1", "", 14, 1, 100);
+    indicator.parameters.addInteger("SM2", "Smoothing periods 2", "", 14, 1, 100);
+	  indicator.parameters.addInteger("Level", "Level", "Level", 20, 1, 100);
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("ADX_color", "Color of ADX", "Color of ADX", core.rgb(255, 0, 0));
+	 indicator.parameters.addInteger("width", "Width", "Width", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Style", "Style", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var SM1;
+var SM2;
+
+var first;
+var firstTR;
+var firstDI;
+var source = null;
+
+var TR = null;
+var TR_W = null;
+var PlusDM = null;
+var PlusDM_W = null;
+var PlusDI = null;
+var MinusDM = null;
+var MinusDM_W = null;
+var MinusDI = null;
+var R = null;
+var R_W = null;
+var ADX = null;
+var H, L, C;
+var Level;
+
+function Prepare()
+{
+    Level = instance.parameters.Level;
+    SM1 = instance.parameters.SM1;
+    SM2 = instance.parameters.SM2;
+    source = instance.source;
+    firstTR = source.first() + 1;
+    H = source.high;
+    L = source.low;
+    C = source.close;
+
+    TR = instance.addInternalStream(firstTR, 0);
+    PlusDM = instance.addInternalStream(firstTR, 0);
+    MinusDM = instance.addInternalStream(firstTR, 0);
+	
+    TR_W = core.indicators.create("WMA", TR, SM1);
+    PlusDM_W = core.indicators.create("WMA", PlusDM, SM1);
+    MinusDM_W = core.indicators.create("WMA", MinusDM, SM1);
+
+    firstDI = TR_W.DATA.first();
+
+    PlusDI = instance.addInternalStream(firstDI, 0);
+    MinusDI = instance.addInternalStream(firstDI, 0);
+    R = instance.addInternalStream(firstDI, 0);
+
+    R_W = core.indicators.create("WMA", R, SM2);
+
+    first = R_W.DATA.first();
+    var name = profile.id() + "(" + source.name() + ", " + SM1 + ", " + SM2 + ")";
+    instance.name(name);
+    ADX = instance.addStream("ADX", core.Line, name, "ADX", instance.parameters.ADX_color, first);
+    ADX.addLevel(Level);
+	ADX.setWidth(instance.parameters.width);
+    ADX.setStyle(instance.parameters.style);
+}
+
+function Update(p, mode)
+{
+    if (p >= firstTR) 
+    {
+        var th, tl;
+
+        if (C[p - 1] > H[p]) 
+        {
+            th = C[p - 1];
+        }    
+        else
+        {
+            th = H[p];
+        }
+
+        if (C[p - 1] < L[p]) 
+        {
+            tl = C[p - 1];
+        }
+        else
+        {
+            tl = L[p];
+        }
+
+        TR[p] = th - tl;
+
+        if (H[p] > H[p - 1] && L[p] >= L[p - 1]) 
+        {
+            PlusDM[p] = H[p] - H[p - 1];
+        }
+        else if (H[p] > H[p - 1] && L[p] < L[p - 1] && ((H[p] - H[p - 1]) > (L[p - 1] - L[p]))) 
+        {
+            PlusDM[p] = H[p] - H[p - 1];
+        }
+        else
+        {
+            PlusDM[p] = 0;
+        }
+        if (L[p] < L[p - 1] && H[p] <= H[p - 1]) 
+        {
+            MinusDM[p] = L[p - 1] - L[p];
+        }
+        else if (L[p] < L[p - 1] && H[p] > H[p - 1] && ((H[p] - H[p - 1]) < (L[p - 1] - L[p]))) 
+        {
+            MinusDM[p] = L[p - 1] - L[p];
+        }
+        else
+        {
+            MinusDM[p] = 0;
+        }
+    }
+
+    TR_W.update(mode);
+    PlusDM_W.update(mode);
+    MinusDM_W.update(mode);
+
+    if (p >= firstDI) 
+    {
+        PlusDI[p] = 100 * PlusDM_W.DATA[p] / TR_W.DATA[p]
+        MinusDI[p] = 100 * MinusDM_W.DATA[p] / TR_W.DATA[p]
+
+        var diff, sum;
+
+        diff = Math.abs(PlusDI[p] - MinusDI[p]);
+        summ = PlusDI[p] + MinusDI[p];
+        R[p] = diff / summ;
+    }
+
+    R_W.update(mode);
+
+    if (p >= first) 
+    {
+        ADX[p] = 100 * R_W.DATA[p];		
+	
+    }
+}
+

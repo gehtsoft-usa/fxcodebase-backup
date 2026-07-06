@@ -1,0 +1,49 @@
+//initializes the indicator
+function Init()
+{
+    indicator.name("KRI");
+    indicator.description("Kairi Relative Index");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+    indicator.setTag("group", "Oscillators");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("N", "Number of periods", "The number of periods.", 14, 1, 10000);
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Line color", "Line color", core.rgb(219, 64, 0));
+    indicator.parameters.addInteger("width", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LEVEL_STYLE);
+}
+
+var first = 0;
+var n = 0;
+var source = null;
+var KRI = null;
+
+//initializes the instance of the indicator
+function Prepare(onlyName)
+{
+    source = instance.source;
+    n = instance.parameters.N;
+    var name = profile.id() + "(" + instance.source.name() + "," + n + ")";
+    instance.name(name);
+  
+    if (onlyName == true)
+        return ;
+    first = source.first() + 1;
+
+    KRI = instance.addStream("KRI", core.Line, name, "KRI", instance.parameters.clr,  first)
+    KRI.setWidth(instance.parameters.width);
+    KRI.setStyle(instance.parameters.style);
+}
+
+// calculate the value
+function Update(period, mode)
+{
+    if (period > first+n)
+    {
+        var mvaValue = Math.avg(source, period - n + 1, period);
+        KRI[period] = 100 * (source[period] - mvaValue) / mvaValue;
+    }
+}

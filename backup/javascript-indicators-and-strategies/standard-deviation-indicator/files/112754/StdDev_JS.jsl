@@ -1,0 +1,44 @@
+function Init()
+{
+    indicator.name("Standard Deviation Indicator");
+    indicator.description("Technical indicator named Standard Deviation (StdDev) measures the market volatility.");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+    
+    indicator.parameters.addInteger("N", "N", "Period", 20);
+
+    indicator.parameters.addColor("clrStdDev", "Color of StdDev", "Color of StdDev", core.rgb(0, 255, 0));
+}
+
+var first;
+var source = null;
+var MA;
+var N;
+
+function Prepare()
+{
+    source = instance.source;
+    N=instance.parameters.N;
+    MA = core.indicators.create("MVA", source, N);
+    first = MA.DATA.first()+N;
+    var name = profile.id() + "(" + source.name() + ", " + N + ")";
+    instance.name(name);
+    StdDev = instance.addStream("StdDev", core.Line, name + ".StdDev", "StdDev", instance.parameters.clrStdDev, first);
+}
+
+function Update(period, mode)
+{
+    MA.update(mode);
+    if (period>first+N)
+    {
+     var dAmount=0.;
+     var dMovingAverage=MA.DATA[period];
+     var i;
+     for (i=0; i<=N; i++)
+     {
+      dAmount=dAmount+Math.pow((source[period-i]-dMovingAverage),2);
+     }
+     StdDev[period]=Math.sqrt(dAmount/N);
+    } 
+}
+

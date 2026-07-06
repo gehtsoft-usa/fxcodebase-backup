@@ -1,0 +1,117 @@
+function Init()
+{
+    indicator.name("Gaussian Support Resistance Rate");
+    indicator.description("Gaussian Support Resistance Rate");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 20);
+    indicator.parameters.addInteger("Level", "Level", "", 5, 1, 20);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period;
+var Level;
+var S_H, S_L;
+var G_C={};
+var G_Rate=null;
+var G_Size;
+var MinF;
+
+function Get_G_Size(L)
+{
+ if (L<3) 
+ {
+  return (L);
+ } 
+ else
+ {
+  var a1=2;
+  var a2=3;
+  var i;
+  for (i=3; i<=L; i++) 
+  {
+   a2=a1+a2;
+   a1=a2-a1;
+  }
+  return (a2);
+ }
+}
+
+function InitG_C(Size)
+{
+ var i;
+ var sum=0;
+ for (i=0; i<=Size-1; i++) 
+ {
+  G_C[i]=Math.exp(-9*i*i/((Size+1)*(Size+1)));
+  sum=sum+G_C[i];
+ }
+ if (sum!=0) 
+ {
+  for (i=0; i<=Size-1; i++) 
+  {
+   G_C[i]=G_C[i]/sum;
+  }
+ } 
+ return;
+}
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    Level=instance.parameters.Level;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.Level + ")";
+    instance.name(name);
+    G_Size=Get_G_Size(Level);
+    MinF=Math.max(G_Size, Period);
+    first = source.first()+2;
+    S_H=instance.addInternalStream(first, 0);
+    S_L=instance.addInternalStream(first, 0);
+    InitG_C(G_Size);
+    G_Rate = instance.addStream("G_Rate", core.Line, name + ".G_Rate", "G_Rate", instance.parameters.clr, first);
+    G_Rate.setWidth(instance.parameters.widthLinReg);
+    G_Rate.setStyle(instance.parameters.styleLinReg);
+}
+
+function G_Value(src, period)
+{
+ var i;
+ var sum=0;
+ for (i=0; i<=G_Size-1; i++) 
+ {
+  sum=sum+G_C[i]*src[period-i];
+ }
+ return (sum);
+}
+
+function Update(period, mode)
+{
+   if (period>first+MinF) 
+   {
+    S_H[period]=G_Value(source.high, period);
+    S_L[period]=G_Value(source.low, period);
+    var tmp=Math.minmax(S_H, period-Period+1, period);
+    var Max=tmp[1];
+    tmp=Math.minmax(S_L, period-Period+1, period);
+    var Min = tmp[0];
+    if (Max==Min) 
+    {
+     G_Rate[period]=0;
+    } 
+    else
+    {
+     G_Rate[period]=(G_Value(source.weighted, period)-Min)/(Max-Min);
+    }
+   } 
+}
+

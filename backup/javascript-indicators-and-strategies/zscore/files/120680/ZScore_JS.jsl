@@ -1,0 +1,68 @@
+function Init()
+{
+    indicator.name("ZScore");
+    indicator.description("ZScore");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("PERIOD", "Period", "Period", 20);
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("ZScore_color", "Color of ZScore", "Color of ZScore", core.rgb(255, 0, 0));	
+	indicator.parameters.addInteger("Width", "Line Width", "", 1, 1, 5);
+    indicator.parameters.addInteger("Style", "Line Style", "", core.LINE_SOLID);
+	indicator.parameters.setFlag("Style", core.FLAG_LINE_STYLE);		
+	
+	 indicator.parameters.addGroup("Levels");
+
+    indicator.parameters.addDouble("overbought", "Overbought Level","", 2);
+    indicator.parameters.addDouble("oversold", "Oversold Level", "", -2 );
+    indicator.parameters.addInteger("level_overboughtsold_width", "Over Bought / Over Sold Line Width", "", 1, 1, 5);
+    indicator.parameters.addInteger("level_overboughtsold_style", "Over Bought / Over Sold Line Style", "", core.LINE_SOLID);
+    indicator.parameters.addColor("level_overboughtsold_color", "Over Bought / Over Sold  Line Color", "", core.rgb(255, 255, 0));
+    indicator.parameters.setFlag("level_overboughtsold_style", core.FLAG_LEVEL_STYLE);
+}
+
+var PERIOD;
+
+var first;
+var source = null;
+
+var ZScore = null;
+var  MVA;
+
+function Prepare(nameOnly)
+{
+    PERIOD = instance.parameters.PERIOD;
+    source = instance.source;
+	
+	MVA = core.indicators.create("MVA", source,PERIOD ); 
+    first = Math.max(MVA.DATA.first() , source.first()+ PERIOD-1);
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(PERIOD) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        ZScore = instance.addStream("ZScore", core.Line, name, "ZScore", instance.parameters.ZScore_color, first);
+		ZScore.setWidth(instance.parameters.Width);
+        ZScore.setStyle(instance.parameters.Style);
+		
+		ZScore.addLevel(instance.parameters.oversold, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);
+        ZScore.addLevel(instance.parameters.overbought, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);
+    }
+}
+
+function Update(period, mode)
+{
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+    }	
+
+     MVA.update(mode); 	
+	 
+	ZScore[period] = (source[period] - MVA.DATA[period])/ Math.stdev (source, period -PERIOD+1 , period);
+    
+	
+}
+

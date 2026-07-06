@@ -1,0 +1,72 @@
+function Init()
+{
+    indicator.name("William Blau Composite High-Low Momentum");
+    indicator.description("William Blau Composite High-Low Momentum");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 2);
+    indicator.parameters.addInteger("Smooth_Period1", "Smooth period 1", "", 20);
+    indicator.parameters.addInteger("Smooth_Period2", "Smooth period 2", "", 5);
+    indicator.parameters.addInteger("Smooth_Period3", "Smooth period 3", "", 3);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(255, 255, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period;
+var Smooth_Period1;
+var Smooth_Period2;
+var Smooth_Period3;
+var HLM;
+var EMA1, EMA2, EMA3;
+var Blau_HLM=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    Smooth_Period1=instance.parameters.Smooth_Period1;
+    Smooth_Period2=instance.parameters.Smooth_Period2;
+    Smooth_Period3=instance.parameters.Smooth_Period3;
+    first = source.first()+2;
+    HLM = instance.addInternalStream(first, 0);
+    EMA1 = core.indicators.create("EMA", HLM, Smooth_Period1);
+    EMA2 = core.indicators.create("EMA", EMA1.DATA, Smooth_Period2);
+    EMA3 = core.indicators.create("EMA", EMA2.DATA, Smooth_Period3);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.Smooth_Period1 + ", " + instance.parameters.Smooth_Period2 + ", " + instance.parameters.Smooth_Period3 + ")";
+    instance.name(name);
+    Blau_HLM = instance.addStream("Blau_HLM", core.Line, name + ".Blau_HLM", "Blau_HLM", instance.parameters.clr, first);
+    Blau_HLM.setWidth(instance.parameters.widthLinReg);
+    Blau_HLM.setStyle(instance.parameters.styleLinReg);
+}
+
+function Update(period, mode)
+{
+   if (period>first+Period) 
+   {
+    var HM, LM;
+    HM=source.high[period]-source.high[period-Period+1];
+    LM=source.low[period-Period+1]-source.low[period];
+    if (HM<0) 
+    {
+     HM=0;
+    }
+    if (LM<0) 
+    {
+     LM=0;
+    }
+    HLM[period]=HM-LM;
+    EMA1.update(mode);
+    EMA2.update(mode);
+    EMA3.update(mode);
+    Blau_HLM[period]=EMA3.DATA[period];
+   } 
+}
+

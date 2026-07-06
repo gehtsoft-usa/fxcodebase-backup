@@ -1,0 +1,78 @@
+function Init()
+{
+    indicator.name("Stochastic expansion indicator");
+    indicator.description("Stochastic expansion indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("KPeriod", "Period K", "", 13);
+    indicator.parameters.addInteger("Slowing", "Slowing", "", 6);
+    indicator.parameters.addInteger("NoiseFilter", "NoiseFilter", "", 6);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr1", "Color UP", "Color UP", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clrSig", "Signal Color", "Signal Color", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+var KPeriod;
+var Slowing;
+var NoiseFilter;
+var BuffK=null;
+var SigBuff=null;
+var LowBuff;
+var HighBuff;
+var KB;
+
+function Prepare()
+{
+    source = instance.source;
+    KPeriod=instance.parameters.KPeriod;
+    Slowing=instance.parameters.Slowing;
+    NoiseFilter=instance.parameters.NoiseFilter;
+    first = source.first()+2;
+    LowBuff = instance.addInternalStream(first, 0);
+    HighBuff = instance.addInternalStream(first, 0);
+    KB = instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.KPeriod + ", " + instance.parameters.Slowing + ", " + instance.parameters.NoiseFilter + ")";
+    instance.name(name);
+    BuffK = instance.addStream("BuffK", core.Line, name + ".K", "K", instance.parameters.clr1, first);
+    SigBuff = instance.addStream("SigBuff", core.Line, name + ".Signal", "Signal", instance.parameters.clrSig, first);
+}
+
+function Update(period, mode)
+{
+   if (period>first+Math.max(KPeriod, Slowing)) 
+   {
+    var tmp=Math.minmax(source, period-KPeriod+1, period);
+    LowBuff[period]=source.close[period]-tmp[0];
+    HighBuff[period]=tmp[1]-source.close[period];
+    var SumLow=Math.sum(LowBuff, period-Slowing+1, period);
+    var SumHigh=Math.sum(HighBuff, period-Slowing+1, period);
+    var KB1;
+    var KB2;
+    if (SumHigh==0) 
+    {
+     KB1=0;
+    } 
+    else
+    {
+     KB1=SumLow/SumHigh;
+    }
+    if (SumLow==0) 
+    {
+     KB2=0;
+    } 
+    else
+    {
+     KB2=-SumHigh/SumLow;
+    }
+    KB[period]=KB1+KB2;
+    var Avg=Math.avg(KB,core.range(Math.max(first,period-NoiseFilter),period));
+    SigBuff[period]=Avg;
+    BuffK[period]=KB[period];
+   } 
+}
+

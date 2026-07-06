@@ -1,0 +1,89 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 2.5 - Expressions</title>
+</head>
+<body>
+<h2>2.5 - <a name="2.5">Expressions</a></h2>
+
+<p>
+The basic expressions in Lua are the following:
+
+<pre>
+	exp ::= prefixexp
+	exp ::= <b>nil</b> | <b>false</b> | <b>true</b>
+	exp ::= Number
+	exp ::= String
+	exp ::= function
+	exp ::= tableconstructor
+	exp ::= `<b>...</b>&acute;
+	exp ::= exp binop exp
+	exp ::= unop exp
+	prefixexp ::= var | functioncall | `<b>(</b>&acute; exp `<b>)</b>&acute;
+</pre>
+
+<p>
+Numbers and literal strings are explained in <a href="2.1.html">&sect;2.1</a>;
+variables are explained in <a href="2.3.html">&sect;2.3</a>;
+function definitions are explained in <a href="2.5.9.html">&sect;2.5.9</a>;
+function calls are explained in <a href="2.5.8.html">&sect;2.5.8</a>;
+table constructors are explained in <a href="2.5.7.html">&sect;2.5.7</a>.
+Vararg expressions,
+denoted by three dots ('<code>...</code>'), can only be used inside
+vararg functions;
+they are explained in <a href="2.5.9.html">&sect;2.5.9</a>.
+
+
+<p>
+Binary operators comprise arithmetic operators (see <a href="2.5.1.html">&sect;2.5.1</a>),
+relational operators (see <a href="2.5.2.html">&sect;2.5.2</a>), logical operators (see <a href="2.5.3.html">&sect;2.5.3</a>),
+and the concatenation operator (see <a href="2.5.4.html">&sect;2.5.4</a>).
+Unary operators comprise the unary minus (see <a href="2.5.1.html">&sect;2.5.1</a>),
+the unary <b>not</b> (see <a href="2.5.3.html">&sect;2.5.3</a>),
+and the unary <em>length operator</em> (see <a href="2.5.5.html">&sect;2.5.5</a>).
+
+
+<p>
+Both function calls and vararg expressions may result in multiple values.
+If the expression is used as a statement (see <a href="2.4.6.html">&sect;2.4.6</a>)
+(only possible for function calls),
+then its return list is adjusted to zero elements,
+thus discarding all returned values.
+If the expression is used inside another expression
+or in the middle of a list of expressions,
+then its result list is adjusted to one element,
+thus discarding all values except the first one.
+If the expression is used as the last element of a list of expressions,
+then no adjustment is made,
+unless the call is enclosed in parentheses.
+
+
+<p>
+Here are some examples:
+
+<pre>
+     f()                -- adjusted to 0 results
+     g(f(), x)          -- f() is adjusted to 1 result
+     g(x, f())          -- g gets x plus all values returned by f()
+     a,b,c = f(), x     -- f() is adjusted to 1 result (c gets nil)
+     a,b = ...          -- a gets the first vararg parameter, b gets
+                        -- the second (both a and b may get nil if there is
+                        -- no corresponding vararg parameter)
+     a,b,c = x, f()     -- f() is adjusted to 2 results
+     a,b,c = f()        -- f() is adjusted to 3 results
+     return f()         -- returns all values returned by f()
+     return ...         -- returns all received vararg parameters
+     return x,y,f()     -- returns x, y, and all values returned by f()
+     {f()}              -- creates a list with all values returned by f()
+     {...}              -- creates a list with all vararg parameters
+     {f(), nil}         -- f() is adjusted to 1 result
+</pre>
+
+<p>
+An expression enclosed in parentheses always results in only one value.
+Thus,
+<code>(f(x,y,z))</code> is always a single value,
+even if <code>f</code> returns several values.
+(The value of <code>(f(x,y,z))</code> is the first value returned by <code>f</code>
+or <b>nil</b> if <code>f</code> does not return any values.)
+</body>
+</html>

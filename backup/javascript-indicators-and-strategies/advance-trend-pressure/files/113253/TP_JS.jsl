@@ -1,0 +1,77 @@
+function Init()
+{
+    indicator.name("Advance Trend Pressure");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+	 indicator.parameters.addInteger("Cut", "Cutoff Period", "", 14);
+	
+
+	indicator.parameters.addColor("Out_color", "Color of Sum", "Color of Sum", core.rgb(0, 0, 255));
+}
+
+var first;
+var source = null;
+
+var Out;
+var Cut;
+
+function Prepare()
+{
+    Cut = instance.parameters.Cut;
+    
+
+    source = instance.source;
+    first = source.first()+Cut;
+
+    var name = profile.id() + "(" + source.name()  + ", " + Cut + ")";
+    instance.name(name);
+
+	Out= instance.addStream("Out", core.Line, name + ".Out", "Out", instance.parameters.Out_color, first);
+}
+
+function Update(period)
+{
+    if (period >= first && source.hasData(period)) 
+    {
+	
+
+	var SumUp=0;
+	var SumDown=0;
+	var i=-1;
+
+	
+
+	
+			while (true) 
+			 {
+			
+								i = i+1;				
+								if (source.close[period-i] >   source.open[period-i]) 
+								{
+								 SumUp= SumUp + (source.close[period-i] - source.open[period-i]);
+								 SumUp= SumUp +  (source.open[period-i] - source.low[period-i]);
+								 SumDown= SumDown+ (source.high[period-i] - source.close[period-i]) ;
+												
+								}
+												
+								if (source.close[period-i] <   source.open[period-i]) 
+								{ 
+								 SumDown= SumDown + ( source.open[period-i] - source.close[period-i] );
+								 SumDown=SumDown + ( source.high[period-i]- source.open[period-i]) ;
+								 SumUp= SumUp + ( source.close[period-i]- source.low[period-i])  ;
+								}
+						
+						
+
+				if  (i >= Cut) 
+				{
+				 break;
+				}		
+			}
+       
+		Out[period]=   SumUp  -  SumDown;
+    }
+}
+

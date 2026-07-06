@@ -1,0 +1,61 @@
+function Init()
+{
+    indicator.name("Modified Moving Average");
+    indicator.description("Modified Moving Average");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Length", "Period", "Period", 5);
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("MMA_color", "Color of MMA", "Color of MMA", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var Length;
+
+var first;
+var source = null;
+
+var MMA = null;
+var SMA;
+
+function Prepare(nameOnly)
+{
+    Length = instance.parameters.Length;
+    source = instance.source;
+	SMA=core.indicators.create("MVA", source, Length);
+    first = SMA.DATA.first();
+	
+	var name = profile.id() + "(" + source.name() + ", " + tostring(Length) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        MMA = instance.addStream("MMA", core.Line, name, "MMA", instance.parameters.MMA_color, first);
+		MMA.setWidth(instance.parameters.width);
+        MMA.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period,mode)
+{
+    SMA.update(mode);
+	
+    if (period <  first || !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+	var Slope = 0;
+     for (value1 = 1; value1<=Length; value1++) 
+     {
+      Factor = 1 + (2 * (value1 - 1));
+      Slope = Slope + (source[period-(value1 - 1)] * ((Length - Factor)/2));
+     }
+
+        MMA[period] =  SMA.DATA[period] + (6 * Slope) / ((Length + 1) * Length);
+     
+}
+

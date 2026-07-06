@@ -1,0 +1,91 @@
+function Init()
+{
+    indicator.name("Kaufman CCI");
+    indicator.description("Kaufman CCI");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    
+    indicator.parameters.addInteger("periodAMA", "periodAMA", "period of AMA", 10);
+    indicator.parameters.addInteger("nfast", "nfast", "nfast", 2);
+    indicator.parameters.addInteger("nslow", "nslow", "nslow", 15);
+    indicator.parameters.addDouble("G", "G", "G", 6);
+    indicator.parameters.addDouble("dK", "dK", "dK", 10000);
+    indicator.parameters.addInteger("CCI", "CCI", "CCI", 250);
+
+    indicator.parameters.addColor("clr1", "Color of CCI_K", "Color of CCI_K", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clr2", "Color of CCI", "Color of CCI", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("clr3", "Up Color", "Up Color", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("clr4", "Dn Color", "Dn Color", core.rgb(0, 255, 255));
+}
+
+var first;
+var source = null;
+var periodAMA;
+var nfast;
+var nslow;
+var G;
+var dK;
+var CCI;
+var CCI_Ind;
+var buff1;
+var buff2;
+var buff3;
+var buff4;
+var AMA0;
+
+function Prepare()
+{
+    source = instance.source;
+    periodAMA=instance.parameters.periodAMA;
+    nfast=instance.parameters.nfast;
+    nslow=instance.parameters.nslow;
+    G=instance.parameters.G;
+    dK=instance.parameters.dK;
+    CCI=instance.parameters.CCI;
+    CCI_Ind = core.indicators.create("CCI", source, CCI);
+    first = CCI_Ind.DATA.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.periodAMA + ", " + instance.parameters.nfast + ", " + instance.parameters.nslow + ", " + instance.parameters.G + ", " + instance.parameters.dK + ", " + instance.parameters.CCI + ")";
+    instance.name(name);
+    buff1 = instance.addStream("buff1", core.Line, name + ".CCI_K", "CCI_K", instance.parameters.clr1, first);
+    buff2 = instance.addStream("buff2", core.Line, name + ".CCI", "CCI", instance.parameters.clr2, first);
+    buff3 = instance.createTextOutput ("Up", "Up", "Wingdings", 10, core.H_Center, core.V_Center, instance.parameters.clr3, first);
+    buff4 = instance.createTextOutput ("Dn", "Dn", "Wingdings", 10, core.H_Center, core.V_Center, instance.parameters.clr4, first);
+}
+
+function Update(period, mode)
+{
+    CCI_Ind.update(mode);
+    if (period>first+periodAMA) 
+    {
+     var slowSC=2./(nslow+1.);
+     var fastSC=2./(nfast+1.);
+     buff2[period]=CCI_Ind.DATA[period];
+     var signal=Math.abs(CCI_Ind.DATA[period]-CCI_Ind.DATA[period-periodAMA]);
+     var noise=0.000000001;
+     for (i=period-periodAMA+1; i<=period; i++) 
+     {
+      noise=noise+Math.abs(CCI_Ind.DATA[i]-CCI_Ind.DATA[i-1]);
+     }
+     var ER=signal/noise;
+     var dSC=fastSC-slowSC;
+     var ERSC=ER*dSC;
+     var SSC=ERSC+slowSC;
+     var AMA=AMA0+Math.pow(SSC,G)*(CCI_Ind.DATA[period]-AMA0);
+     buff1[period]=AMA;
+     var ddK=AMA-AMA0;
+     if (Math.abs(ddK)>dK*source.pipSize() && ddK>0.) 
+     {
+      buff3.set(period, AMA, "\159", "");
+     }
+     if (Math.abs(ddK)>dK*source.pipSize() && ddK<0.) 
+     {
+      buff4.set(period, AMA, "\159", "");
+     }
+     AMA0=AMA;
+    } 
+    else
+    {
+     AMA0=CCI_Ind.DATA[period-1]; 
+    } 
+}
+

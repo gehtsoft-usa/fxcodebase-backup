@@ -1,0 +1,78 @@
+function Init()
+{
+    indicator.name("Trade Volume Index");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addInteger("MTV", "Minimum Tick Value", "Minimum Tick Value",10);
+    indicator.parameters.addColor("TVI_color", "Color of TVI", "Color of TVI", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+var MTV;
+
+var TVI = null;
+var Direction;
+var ExtremePrice=0;
+
+function Prepare(nameOnly)
+{
+    source = instance.source;
+    first = source.first();
+	MTV=instance.parameters.MTV;
+	Direction = instance.addInternalStream(0, 0);
+	ExtremePrice = instance.addInternalStream(0, 0);
+
+    var name = profile.id() + "(" + source.name() + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        TVI = instance.addStream("TVI", core.Line, name, "TVI", instance.parameters.TVI_color, first);
+    }
+}
+
+function Update(period)
+{
+    if (period  <= first || !source.hasData(period)) 
+    {		
+	        	ExtremePrice[period]=source.close[period];		
+                Direction[period]=0;				
+		return;
+	}
+	 
+	var Change= (source.close[period]-ExtremePrice[period-1])/ source.pipSize()  ;
+	
+	if (Change > MTV) 
+	{
+	 Direction[period]=1;
+	 ExtremePrice[period]=source.close[period];
+	} 
+	else if (Change < -MTV) 
+	{	
+	 Direction[period]=-1;
+	 ExtremePrice[period]=source.close[period];
+	} 
+	else
+	{
+	 Direction[period]=Direction[period-1];
+	 ExtremePrice[period]=ExtremePrice[period-1]; 
+	}
+	
+	    if (Direction[period]== 1) 
+	    {
+		 TVI[period] = TVI[period-1]+source.volume[period];
+		} 
+		else if (Direction[period]== -1) 
+		{
+		 TVI[period] = TVI[period-1]-source.volume[period];
+		} 
+		else
+		{
+		 TVI[period]=TVI[period-1];
+		}
+        
+    
+}
+

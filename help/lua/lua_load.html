@@ -1,0 +1,58 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_load</title>
+</head>
+<body>
+<h3><a name="lua_load"><code>lua_load</code></a></h3>
+<pre>int lua_load (lua_State *L,
+              lua_Reader reader,
+              void *data,
+              const char *chunkname);</pre>
+
+<p>
+Loads a Lua chunk.
+If there are no errors,
+<a href="lua_load.html"><code>lua_load</code></a> pushes the compiled chunk as a Lua
+function on top of the stack.
+Otherwise, it pushes an error message.
+The return values of <a href="lua_load.html"><code>lua_load</code></a> are:
+
+<ul>
+
+<li><b>0:</b> no errors;</li>
+
+<li><b><a name="pdf-LUA_ERRSYNTAX"><code>LUA_ERRSYNTAX</code></a>:</b>
+syntax error during pre-compilation;</li>
+
+<li><b><a href="pdf-LUA_ERRMEM.html"><code>LUA_ERRMEM</code></a>:</b>
+memory allocation error.</li>
+
+</ul>
+
+<p>
+This function only loads a chunk;
+it does not run it.
+
+
+<p>
+<a href="lua_load.html"><code>lua_load</code></a> automatically detects whether the chunk is text or binary,
+and loads it accordingly (see program <code>luac</code>).
+
+
+<p>
+<a href="lua_load.html"><code>lua_load</code></a> uses a user-supplied <code>reader</code> function to read the chunk
+(see <a href="lua_Reader.html"><code>lua_Reader</code></a>).
+The <code>data</code> argument is an opaque value passed to the reader function.
+
+
+<p>
+The <code>chunkname</code> argument gives a name to the chunk,
+which is used for error messages and in debug information (see <a href="3.8.html">&sect;3.8</a>).
+
+
+
+
+
+<hr>
+</body>
+</html>

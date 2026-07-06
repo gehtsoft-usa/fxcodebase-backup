@@ -1,0 +1,70 @@
+function Init()
+{
+    indicator.name("Variable Moving Average ");
+    indicator.description("VARMA");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+
+	indicator.parameters.addGroup("Calculation"); 
+    indicator.parameters.addInteger("Frame", "Period", "", 9, 2, 2000);
+	indicator.parameters.addInteger("Smoothing", "Smoothing", "", 2, 1, 200);
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("color", "Color of VMA Line", "", core.rgb(255, 0, 0));	
+	indicator.parameters.addInteger("width", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var Frame;
+var Smoothing;
+var CMO;
+
+var first;
+var source = null;
+
+var VMA = null;
+var SC;
+
+function Prepare()
+{
+    Smoothing = instance.parameters.Smoothing;
+    Frame = instance.parameters.Frame;
+    source = instance.source;
+   	
+	CMO = core.indicators.create("CMO", source, Frame);
+	 first = CMO.DATA.first()+1;
+
+	 SC =2/(Smoothing+1);
+	  
+    var name = profile.id() + "(" + source.name() + ", " + Frame + ", "+ Smoothing+ ")";
+    instance.name(name);
+    VMA = instance.addStream("VMA", core.Line, name, "VMA", instance.parameters.color, first);
+	VMA.setWidth(instance.parameters.width);
+    VMA.setStyle(instance.parameters.style);
+}
+
+function Update(period,mode)
+{
+    if (period >= first && source.hasData(period)) 
+    {
+	
+	
+	    CMO.update(mode);
+			
+			
+		var AbsCMO = Math.abs(CMO.DATA[period])/ 100;
+		
+		if (period >first +Smoothing+2) 
+		{
+		 VMA[period] = (SC*AbsCMO*source[period])+(1-(SC*AbsCMO))*VMA[period-1]; 
+		} 
+		else
+		{	
+		 VMA[period]= source[period];
+		}
+		
+		
+    }
+}
+

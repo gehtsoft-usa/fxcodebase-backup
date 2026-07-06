@@ -1,0 +1,26 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 2.5.6 - Precedence</title>
+</head>
+<body>
+<h3>2.5.6 - <a name="2.5.6">Precedence</a></h3><p>
+Operator precedence in Lua follows the table below,
+from lower to higher priority:
+
+<pre>
+     or
+     and
+     &lt;     &gt;     &lt;=    &gt;=    ~=    ==
+     ..
+     +     -
+     *     /     %
+     not   #     - (unary)
+     ^
+</pre><p>
+As usual,
+you can use parentheses to change the precedences of an expression.
+The concatenation ('<code>..</code>') and exponentiation ('<code>^</code>')
+operators are right associative.
+All other binary operators are left associative.
+</body>
+</html>

@@ -1,0 +1,128 @@
+function Init()
+{
+    indicator.name("Know Sure Thing Oscillator");
+    indicator.description("Martin Pring's KST indicator combines the Rate Of Change Oscillator (ROC) for four different time periods into one smoothed indicator.");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    AddParam(1, "First", 10, 10);
+    AddParam(2, "Second", 15, 10);
+    AddParam(3, "Third", 20, 10);
+    AddParam(4, "Fourth", 30, 15);
+    AddParam("S", "Signal", null, 9);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clrKST", "Oscillator Line Color", "", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("widthKST", "Oscillator Line Width", "", 1, 1, 5);
+    indicator.parameters.addInteger("styleKST", "Oscillator Line Style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleKST", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("clrSIG", "Signal Line Color", "", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("widthSIG", "Signal Line Width", "", 1, 1, 5);
+    indicator.parameters.addInteger("styleSIG", "Signal Line Style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleSIG", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("clrLEV", "Level Line Color", "", core.rgb(96, 96, 138));
+    indicator.parameters.addInteger("widthLEV", "Level Line Width", "", 1, 1, 5);
+    indicator.parameters.addInteger("styleLEV", "Level Line Style", "", core.LINE_DOT);
+    indicator.parameters.setFlag("styleLEV", core.FLAG_LINE_STYLE);
+
+}
+
+function AddParam(id, name, defROC, defMA)
+{
+    if (defROC != null) 
+    {
+        indicator.parameters.addInteger("ROC" + id, name + " ROC Periods", "", defROC, 2, 300);
+    }
+    indicator.parameters.addInteger("MA" + id, name + " MA Periods", "The methods marked with (*) must be {wnloaded && installed", defMA, 1, 300);
+    indicator.parameters.addString("MET" + id, name + " Method", "", "MVA");
+    indicator.parameters.addStringAlternative("MET" + id, "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("MET" + id, "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("MET" + id, "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("MET" + id, "TMA", "", "TMA");
+    indicator.parameters.addStringAlternative("MET" + id, "SMMA(*)", "", "SMMA");
+    indicator.parameters.addStringAlternative("MET" + id, "Vidya (1995)*", "", "VIDYA");
+    indicator.parameters.addStringAlternative("MET" + id, "Vidya (1992)*", "", "VIDYA92");
+    indicator.parameters.addStringAlternative("MET" + id, "Wilders*", "", "WMA");
+}
+
+
+var source;
+var roc = {};
+var k = {};
+var mva = {};
+var kst, signal;
+var firstkst, firstsignal;
+
+function Prepare()
+{
+    source = instance.source;
+
+
+    var i, name, total;
+    var _roc, _ma, _met;
+    firstkst = 0;
+    total = 0;
+    name = profile.id() + "(";
+        k[1]=1;
+        k[2]=2;
+        k[3]=3;
+        k[4]=4;
+    for (i = 1; i<=4; i++) 
+    {
+        _roc = instance.parameters.getInteger("ROC" + i);
+        _ma = instance.parameters.getInteger("MA" + i);
+        _met = instance.parameters.getString("MET" + i);
+
+        roc[i] = core.indicators.create("ROC", source, _roc);
+        mva[i] = core.indicators.create(_met, roc[i].DATA, _ma);
+        firstkst = Math.max(firstkst, mva[i].DATA.first());
+        total = total + _roc;
+
+        if (i != 1) 
+        {
+            name = name + ",";
+        }
+        name = name + _met + "(ROC(" + _roc + ")," + _ma + ")";
+    }
+    _ma = instance.parameters.MAS;
+    _met = instance.parameters.METS;
+    name = name + "," + _met + "(" + _ma + "))";
+    instance.name(name);
+    kst = instance.addStream("KST", core.Line, name + ".KST", "KST", instance.parameters.clrKST, firstkst);
+    kst.setPrecision(4);
+    kst.addLevel(0, instance.parameters.styleLEV, instance.parameters.widthLEV, instance.parameters.clrLEV);
+    kst.setWidth(instance.parameters.widthKST);
+    kst.setStyle(instance.parameters.styleKST);
+
+    mva[5] = core.indicators.create(_met, kst, _ma);
+    firstsignal = mva[5].DATA.first();
+    signal = instance.addStream("SIG", core.Line, name + ".SIG", "SIG", instance.parameters.clrSIG, firstsignal);
+    signal.setWidth(instance.parameters.widthSIG);
+    signal.setStyle(instance.parameters.styleSIG);
+}
+
+function Update(period, mode)
+{
+    var i;
+    for (i = 1; i<=4; i++) 
+    {
+        roc[i].update(mode);
+        mva[i].update(mode);
+    }
+    if (period >= firstkst) 
+    {
+        kst[period] = mva[1].DATA[period] * k[1] + mva[2].DATA[period] * k[2] +
+                      mva[3].DATA[period] * k[3] + mva[4].DATA[period] * k[4];
+    }
+    mva[5].update(mode);
+    if (period >= firstsignal) 
+    {
+        signal[period] = mva[5].DATA[period];
+    }
+}
+
+
+
+
+

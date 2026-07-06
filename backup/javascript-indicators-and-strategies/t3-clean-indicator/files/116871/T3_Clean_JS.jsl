@@ -1,0 +1,78 @@
+function Init()
+{
+    indicator.name("T3 Clean indicator");
+    indicator.description("T3 Clean indicator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 14);
+    indicator.parameters.addDouble("b", "b", "", 0.618);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(255, 255, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period;
+var b;
+var ae1, ae2, ae3, ae4, ae5, ae6;
+var c1, c2, c3, c4;
+var w1, w2;
+var T3=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    b=instance.parameters.b;
+    first = source.first()+2;
+    ae1=instance.addInternalStream(first, 0);
+    ae2=instance.addInternalStream(first, 0);
+    ae3=instance.addInternalStream(first, 0);
+    ae4=instance.addInternalStream(first, 0);
+    ae5=instance.addInternalStream(first, 0);
+    ae6=instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.b + ")";
+    instance.name(name);
+    T3 = instance.addStream("T3", core.Line, name + ".T3", "T3", instance.parameters.clr, first);
+    T3.setWidth(instance.parameters.widthLinReg);
+    T3.setStyle(instance.parameters.styleLinReg);
+    var b2=b*b;
+    var b3=b*b2;
+    c1=-b3;
+    c2=3*(b2+b3);
+    c3=-3*(2*b2+b+b3);
+    c4=1+3*b+b3+3*b2;
+    w1=4/(Period+3);
+    w2=1-w1;
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    ae1[period]=w1*source[period]+w2*ae1[period-1];
+    ae2[period]=w1*ae1[period]+w2*ae2[period-1];
+    ae3[period]=w1*ae2[period]+w2*ae3[period-1];
+    ae4[period]=w1*ae3[period]+w2*ae4[period-1];
+    ae5[period]=w1*ae4[period]+w2*ae5[period-1];
+    ae6[period]=w1*ae5[period]+w2*ae6[period-1];
+    T3[period]=c1*ae6[period]+c2*ae5[period]+c3*ae4[period]+c4*ae3[period];
+   }
+   else if (period==first) 
+   {
+    ae1[period]=0;
+    ae2[period]=0;
+    ae3[period]=0;
+    ae4[period]=0;
+    ae5[period]=0;
+    ae6[period]=0;
+    T3[period]=null;
+   } 
+}
+

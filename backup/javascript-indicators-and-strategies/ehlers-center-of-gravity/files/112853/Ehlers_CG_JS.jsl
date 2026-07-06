@@ -1,0 +1,64 @@
+function Init()
+{
+    indicator.name("Ehlers CG Oscillator");
+    indicator.description("Ehlers CG Oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    
+    indicator.parameters.addInteger("Length", "Length", "", 10);
+
+    indicator.parameters.addColor("clr_buff1", "Color of Buff1", "Color of Buff1", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clr_buff2", "Color of Buff2", "Color of Buff2", core.rgb(0, 128, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Length;
+var Price;
+var Buff1=null;
+var Buff2=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Length=instance.parameters.Length;
+    Price = instance.addInternalStream(0, 0);
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Length + ")";
+    instance.name(name);
+    Buff1 = instance.addStream("Buff1", core.Line, name + ".Buff1", "Buff1", instance.parameters.clr_buff1, first);
+    Buff2 = instance.addStream("Buff2", core.Line, name + ".Buff2", "Buff2", instance.parameters.clr_buff2, first);
+    Buff1.setWidth(instance.parameters.widthLinReg);
+    Buff1.setStyle(instance.parameters.styleLinReg);
+    Buff2.setWidth(instance.parameters.widthLinReg);
+    Buff2.setStyle(instance.parameters.styleLinReg);
+    Buff1.addLevel(0);
+}
+
+function Update(period, mode)
+{
+    if (period>first+Length) 
+    {
+     var Num=0.;
+     var Demon=0.;
+     Price[period]=(source.high[period]+source.low[period])/2.;
+     for (i=0;i<=Length-1;i++) 
+     {
+      Num=Num+(i+1)*Price[period-i];
+      Demon=Demon+Price[period-i];
+     }
+     if (Demon!=0.) 
+     {
+      Buff1[period]=-Num/Demon+(Length+1.)/2.;
+     } 
+     else
+     {
+      Buff1[period]=0.;
+     }
+     Buff2[period]=Buff1[period-1];
+    } 
+}
+

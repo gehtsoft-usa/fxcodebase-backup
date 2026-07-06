@@ -1,0 +1,158 @@
+function Init()
+{
+    indicator.name("Trend continuation oscillator");
+    indicator.description("Trend continuation oscillator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+    
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 20);
+    indicator.parameters.addString("SMethod", "Smooth method", "", "MVA");
+    indicator.parameters.addStringAlternative("SMethod", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("SMethod", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("SMethod", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("SMethod", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("SMethod", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("SMethod", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("SMethod", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("SMethod", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("SMethod", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("SMethod", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("SMethod", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("SMethod", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("SMethod", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("SMethod", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("SMethod", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("SMethod", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("SMethod", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("SMethod", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("SMethod", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("SMethod", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("SMethod", "JSmooth", "", "JSmooth");
+    indicator.parameters.addInteger("SPeriod", "Smooth period", "", 5);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP color", "UP color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DNclr", "DN color", "DN color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("Transparency", "Transparency", "", 50,0,100);
+}
+
+var first;
+var source = null;
+var Period;
+var SMethod;
+var SPeriod;
+var Pbuff=null;
+var Mbuff=null;
+var Count={};
+var Change_p={};
+var Change_n={};
+var CF_p={};
+var CF_n={};
+var k_p;
+var k_n;
+var MAp, MAn;
+var pipSize;
+var count=1;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    SMethod=instance.parameters.SMethod;
+    SPeriod=instance.parameters.SPeriod;
+    first = source.first()+2;
+    k_p = instance.addInternalStream(first, 0);
+    k_n = instance.addInternalStream(first, 0);
+    MAp = core.indicators.create("AVERAGES", k_p, SMethod, SPeriod, false);
+    MAn = core.indicators.create("AVERAGES", k_n, SMethod, SPeriod, false);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.SMethod + ", " + instance.parameters.SPeriod + ")";
+    instance.name(name);
+    Pbuff = instance.addStream("Pbuff", core.Line, name + ".Pbuff", "Pbuff", instance.parameters.UPclr, first);
+    Mbuff = instance.addStream("Mbuff", core.Line, name + ".Mbuff", "Mbuff", instance.parameters.UPclr, first);
+    instance.createChannelGroup("TC","TC" , Pbuff, Mbuff, instance.parameters.UPclr, 100-instance.parameters.Transparency);
+    var i;
+    pipSize=source.pipSize();
+    for (i=0; i<=Period+1; i++) 
+    {
+     Count[i]=0;
+     Change_p[i]=0;
+     Change_n[i]=0;
+     CF_p[i]=0;
+     CF_n[i]=0;
+    }
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    var dprice=source[period]-source[period-1];
+    var i0=Count[0];
+    var i1=Count[1];
+    Change_p[i0]=0;
+    CF_p[i0]=0;
+    Change_n[i0]=0;
+    CF_n[i0]=0;
+    if (dprice>0) 
+    {
+     Change_p[i0]=-dprice;
+     CF_p[i0]=Change_p[i0]+CF_p[i1];
+    } 
+    else if (dprice<0) 
+    {
+     Change_n[i0]=dprice;
+     CF_n[i0]=Change_n[i0]+CF_n[i1];
+    }
+    var ch_p=0;
+    var ch_n=0;
+    var cff_p=0;
+    var cff_n=0;
+    var i;
+    for (i=0; i<=Period; i++) 
+    {
+     ch_p=ch_p+Change_p[i];
+     ch_n=ch_n+Change_n[i];
+     cff_p=cff_p+CF_p[i];
+     cff_n=cff_n+CF_n[i];
+    }
+    k_p[period]=ch_p-cff_n;
+    k_n[period]=ch_n-cff_p;
+    MAp.update(mode);
+    MAn.update(mode);
+    Pbuff[period]=MAp.DATA[period]/pipSize;
+    Mbuff[period]=MAn.DATA[period]/pipSize;
+    
+    if (period!=source.size()-1) 
+    {
+     count=count-1;
+     if (count<0) 
+     {
+      count=Period-1;
+     }
+     for (i=0; i<=Period-1; i++) 
+     {
+      if (i+count>Period-1) 
+      {
+       Count[i]=i+count-Period;
+      } 
+      else
+      {
+       Count[i]=i+count;
+      }
+     }
+    }
+    
+    if (Pbuff[period]>Mbuff[period]) 
+    {
+     Pbuff.setColor(period, instance.parameters.UPclr);
+     Mbuff.setColor(period, instance.parameters.UPclr);
+    } 
+    else
+    {
+     Pbuff.setColor(period, instance.parameters.DNclr);
+     Mbuff.setColor(period, instance.parameters.DNclr);
+    }
+   } 
+}
+

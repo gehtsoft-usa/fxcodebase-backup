@@ -1,0 +1,22 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - getfenv (f)</title>
+</head>
+<body>
+<h3><a name="pdf-getfenv"><code>getfenv (f)</code></a></h3>
+Returns the current environment in use by the function.
+<code>f</code> can be a Lua function or a number
+that specifies the function at that stack level:
+Level&nbsp;1 is the function calling <code>getfenv</code>.
+If the given function is not a Lua function,
+or if <code>f</code> is 0,
+<code>getfenv</code> returns the global environment.
+The default for <code>f</code> is 1.
+
+
+
+
+<p>
+<hr>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_createtable</title>
+</head>
+<body>
+<h3><a name="lua_createtable"><code>lua_createtable</code></a></h3>
+<pre>void lua_createtable (lua_State *L, int narr, int nrec);</pre>
+
+<p>
+Creates a new empty table and pushes it onto the stack.
+The new table has space pre-allocated
+for <code>narr</code> array elements and <code>nrec</code> non-array elements.
+This pre-allocation is useful when you know exactly how many elements
+the table will have.
+Otherwise you can use the function <a href="lua_newtable.html"><code>lua_newtable</code></a>.
+
+
+
+
+
+<hr>
+</body>
+</html>

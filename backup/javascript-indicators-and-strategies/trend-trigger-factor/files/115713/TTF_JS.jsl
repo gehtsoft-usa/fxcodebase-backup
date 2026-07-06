@@ -1,0 +1,65 @@
+function Init()
+{
+    indicator.name("Trend Trigger Factor");
+    indicator.description("Trend Trigger Factor");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculate");
+    indicator.parameters.addInteger("Period", "Period", "Period", 15);
+	indicator.parameters.addDouble("OB", "OB/OS Level", "", 100);
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("TTF_color", "Color of TTF", "Color of TTF", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+	
+	
+	indicator.parameters.addColor("Zcolor", "OS/OB Level Line Color", "OS/OB Level Line Color", core.rgb(128, 128, 128));
+	 indicator.parameters.addInteger("Zwidth", "OS/OB Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("Zstyle", "OS/OB Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("Zstyle", core.FLAG_LINE_STYLE);
+}
+
+var Period;
+var OB;
+var first;
+var source = null;
+
+var TTF = null;
+
+function Prepare(nameOnly)
+{
+    OB = instance.parameters.OB;
+    Period = instance.parameters.Period;
+    source = instance.source;
+    first = source.first()+2*Period;
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        TTF = instance.addStream("TTF", core.Line, name, "TTF", instance.parameters.TTF_color, first);
+		TTF.setWidth(instance.parameters.width);
+        TTF.setStyle(instance.parameters.style);
+		TTF.addLevel(OB, instance.parameters.Zstyle, instance.parameters.Zwidth, instance.parameters.Zcolor);    
+		TTF.addLevel(-OB, instance.parameters.Zstyle, instance.parameters.Zwidth, instance.parameters.Zcolor);    
+    }
+}
+
+function Update(period)
+{
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+    
+     var tmp1 =Math.minmax(source,period-Period+1,  period); 
+     var tmp2 =Math.minmax(source,period-2*Period+1,  period-Period+1); 
+     var bp =tmp1[1]-tmp2[0]; 
+     var sp =tmp2[1]-tmp1[0]; 
+
+    TTF[period]=((bp-sp)/(0.5*(bp+sp)))*100;  
+    
+}
+

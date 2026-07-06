@@ -1,0 +1,73 @@
+function Init()
+{
+    indicator.name("Ultimate Oscillator");
+    indicator.description("Ultimate Oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    
+    indicator.parameters.addInteger("FastPeriod", "FastPeriod", "Fast period", 7);
+    indicator.parameters.addInteger("MiddlePeriod", "MiddlePeriod", "Middle period", 14);
+    indicator.parameters.addInteger("SlowPeriod", "SlowPeriod", "Slow period", 28);
+    indicator.parameters.addInteger("FastK", "FastK", "Fast K", 4);
+    indicator.parameters.addInteger("MiddleK", "Middle K", "Middle K", 2);
+    indicator.parameters.addInteger("SlowK", "SlowK", "Slow K", 1);
+
+    indicator.parameters.addColor("clrUO", "Color of Ultimate Oscillator", "Color of Ultimate Oscillator", core.rgb(0, 255, 0));
+}
+
+var first;
+var source = null;
+var FastPeriod;
+var MiddlePeriod;
+var SlowPeriod;
+var FastK;
+var MiddleK;
+var SlowK;
+var BPBuffer;
+var FastMA;
+var MiddleMA;
+var SlowMA;
+var FastATR;
+var MiddleATR;
+var SlowATR;
+
+function Prepare()
+{
+    source = instance.source;
+    FastPeriod=instance.parameters.FastPeriod;
+    MiddlePeriod=instance.parameters.MiddlePeriod;
+    SlowPeriod=instance.parameters.SlowPeriod;
+    FastK=instance.parameters.FastK;
+    MiddleK=instance.parameters.MiddleK;
+    SlowK=instance.parameters.SlowK;
+    BPBuffer = instance.addInternalStream(0, 0);
+    FastMA = core.indicators.create("MVA", BPBuffer, FastPeriod);
+    MiddleMA = core.indicators.create("MVA", BPBuffer, MiddlePeriod);
+    SlowMA = core.indicators.create("MVA", BPBuffer, SlowPeriod);
+    FastATR = core.indicators.create("ATR", source, FastPeriod);
+    MiddleATR = core.indicators.create("ATR", source, MiddlePeriod);
+    SlowATR = core.indicators.create("ATR", source, SlowPeriod);
+    first=Math.max(FastMA.DATA.first(),MiddleMA.DATA.first(),SlowMA.DATA.first(),FastATR.DATA.first(),MiddleATR.DATA.first(),SlowATR.DATA.first())+2;
+    var name = profile.id() + "(" + source.name() + ", " + FastPeriod + ", " + MiddlePeriod + ", " + SlowPeriod + ", " + FastK + ", " + MiddleK + ", " + SlowK + ")";
+    instance.name(name);
+    UO = instance.addStream("UltimateOscillator", core.Line, name + ".Ultimate Oscillator", "Ultimate Oscillator", instance.parameters.clrUO, first);
+    UO.addLevel(30);
+    UO.addLevel(70);
+}
+
+
+function Update(period, mode)
+{
+    if (period>=first) 
+    {
+     BPBuffer[period]=source.close[period]-Math.min(source.low[period],source.close[period-1]);
+     FastMA.update(mode);
+     MiddleMA.update(mode);
+     SlowMA.update(mode);
+     FastATR.update(mode);
+     MiddleATR.update(mode);
+     SlowATR.update(mode);
+     UO[period]=(FastK*FastMA.DATA[period]/FastATR.DATA[period]+MiddleK*MiddleMA.DATA[period]/MiddleATR.DATA[period]+SlowK*SlowMA.DATA[period]/SlowATR.DATA[period])*100./(FastK+MiddleK+SlowK);
+    } 
+}
+

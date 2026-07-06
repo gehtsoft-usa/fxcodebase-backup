@@ -1,0 +1,103 @@
+function Init()
+{
+    indicator.name("Magic Trend");
+    indicator.description("Magic Trend");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+	  indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("CCIF", "CCI period", "No description", 50, 2, 2000);
+    indicator.parameters.addInteger("ATRF", "ATR Period", "No description", 5, 2, 2000);
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("MT_UP", "Color of Rising Magic Trend Line", "", core.rgb(0, 255, 0));
+	 indicator.parameters.addColor("MT_DN", "Color of Falling Magic Trend Line", "", core.rgb(255, 0, 0));
+	  indicator.parameters.addColor("MT_NO", "Color of Neutral Magic Trend Line", "", core.rgb(128, 128, 128));
+	
+	indicator.parameters.addInteger("width", "Line Width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line Style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var CCIF;
+var ATRF;
+
+var first;
+var source = null;
+
+var MT = null;
+
+var ATR;
+var CCI;
+
+function Prepare()
+{
+    CCIF = instance.parameters.CCIF;
+    ATRF = instance.parameters.ATRF;
+    source = instance.source;
+    
+	
+	ATR = core.indicators.create("ATR", source,  ATRF );
+	CCI = core.indicators.create("CCI", source,  CCIF );
+	
+	first = Math.max(source.first(), ATR.DATA.first(),CCI.DATA.first() )+1;
+
+    var name = profile.id() + "(" + source.name() + ", " + CCIF + ", " + ATRF + ")";
+    instance.name(name);
+    MT = instance.addStream("MT", core.Line, name, "MT", core.rgb(128, 128, 128), first);
+	MT.setWidth(instance.parameters.width);
+    MT.setStyle(instance.parameters.style);
+}
+
+function Update(period, mode)
+{
+    if (period >= first && source.hasData(period)) 
+    {
+	
+	ATR.update(mode);
+	CCI.update(mode);
+	
+	if (!ATR.DATA.hasData(period) || !CCI.DATA.hasData(period)) 
+	{
+	 return;
+	}
+	
+	
+	        if (MT[period-1] == 0) 
+	        {
+			
+					if (CCI.DATA[period-1] > 0) 
+					{
+						MT[period-1] =  source.low[period-1]- ATR.DATA[period-1] ; 
+					}	
+					else
+					{
+						MT[period-1] =source.high[period-1]+ ATR.DATA[period-1] ; 
+					}
+            }			
+
+			if (CCI.DATA[period] > 0) 
+			{
+			    MT[period] = Math.max(MT[period-1], source.low[period]- ATR.DATA[period] ); 
+			}    
+			else
+			{
+			    MT[period] = Math.min(MT[period-1], source.high[period]+ ATR.DATA[period] ); 
+			}
+			    
+			 if (MT[period] >  MT[period-1]) 
+			 {
+			  MT.setColor(period, instance.parameters.MT_UP);
+			 } 
+			 else if (MT[period] <  MT[period-1]) 
+			 {
+			  MT.setColor(period, instance.parameters.MT_DN);
+			 } 
+			 else
+			 {
+			  MT.setColor(period, instance.parameters.MT_NO);
+			 }
+    
+    }
+}
+

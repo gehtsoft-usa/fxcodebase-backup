@@ -1,0 +1,91 @@
+function Init()
+{
+    indicator.name("Linear_Sinus_FT indicator");
+    indicator.description("Linear_Sinus_FT indicator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 100);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("SinClr", "Sin Color", "Sin Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("OutClr", "Out Color", "Out Color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period;
+var Sin=null;
+var Out=null;
+var n, n2;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ")";
+    instance.name(name);
+    Sin = instance.addStream("Sin", core.Line, name + ".Sin", "Sin", instance.parameters.SinClr, first);
+    Out = instance.addStream("Out", core.Line, name + ".Out", "Out", instance.parameters.OutClr, first);
+    Sin.setWidth(instance.parameters.widthLinReg);
+    Sin.setStyle(instance.parameters.styleLinReg);
+    Out.setWidth(instance.parameters.widthLinReg);
+    Out.setStyle(instance.parameters.styleLinReg);
+    n=Math.floor(Period/2);
+    n2=n*2;
+}
+
+function Update(period, mode)
+{
+   if (period>first+Period && period==source.size()-1) 
+   {
+    var i, j;
+    var Num;
+    var Den;
+    for (j=n2; j>=0; j--) 
+    {
+     Num=0;
+     Den=0;
+     for (i=n2; i>=0; i--) 
+     {
+      Num=Num+Math.sin(i*3.1415926/n2)*source[period-i-j];
+      Den=Den+Math.sin(i*3.1415926/n2);
+     }
+     Sin[period-j-n]=Num/Den;
+     for (i=n; i>=0; i--) 
+     {
+      Sin[period-i]=Sin[period-n]+(Sin[period-n]-Sin[period-n-1])*(n-i);
+     }
+    }
+    
+    var t=n2+1;
+    var t2=Math.floor(t/2);
+    var stti=(t*t*t-t)/12;
+    var stttti=(3*t*t*t*t*t-10*t*t*t+7*t)/240;
+    var sOuti=0;
+    var si=0;
+    var sOutti=0;
+    var sOuttti=0;
+    for (i=n2; i>=0; i--) 
+    {
+     sOuti=sOuti+Sin[period-i];
+     si=si+(t2-i);
+     sOutti=sOutti+(Sin[period-i]*(t2-i));
+     sOuttti=sOuttti+(Sin[period-i]*(t2-i)*(t2-i));
+    }
+    var b=sOutti/stti;
+    var c=-((sOuti/t)-(sOuttti/stti))/Math.abs((stti/t)-(stttti/stti));
+    var a=(sOuti-stti*c)/t;
+    for (i=n2; i>=0; i--) 
+    {
+     Out[period-i]=a+b*(-i+(t/2))+c*(-i+(t/2))*(-i+(t/2));
+    }
+
+   } 
+}
+

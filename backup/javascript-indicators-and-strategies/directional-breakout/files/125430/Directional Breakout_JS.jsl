@@ -1,0 +1,110 @@
+function Init()
+{
+    indicator.name("Directional Breakout");
+    indicator.description("Directional Breakout");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+	indicator.parameters.addGroup("Calculation");	
+	indicator.parameters.addString("Price", "Price Source", "", "close");
+    indicator.parameters.addStringAlternative("Price", "OPEN", "", "open");
+    indicator.parameters.addStringAlternative("Price", "HIGH", "", "high");
+    indicator.parameters.addStringAlternative("Price", "LOW", "", "low");
+    indicator.parameters.addStringAlternative("Price","CLOSE", "", "close");
+    indicator.parameters.addStringAlternative("Price", "MEDIAN", "", "median");
+    indicator.parameters.addStringAlternative("Price", "TYPICAL", "", "typical");
+    indicator.parameters.addStringAlternative("Price", "WEIGHTED", "", "weighted");	
+
+	indicator.parameters.addString("Method", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method", "WMA", "WMA" , "WMA");
+    indicator.parameters.addInteger("Period", "Period", "Period", 20);
+	
+	indicator.parameters.addGroup("Style");	
+    indicator.parameters.addColor("Positiv", "Color of Positiv", "Color of Positiv", core.rgb(0, 255, 0));
+	indicator.parameters.addColor("Neutral", "Color of Neutral", "Color of Neutral", core.rgb(255, 128, 0));
+	indicator.parameters.addColor("Negativ", "Color of Negativ", "Color of Negativ", core.rgb(255, 0, 0));
+}
+
+var Period;
+var Price;
+var first;
+var source = null;
+var Method;
+
+var open, close, high, low, dummy;
+var MA;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+	Price = instance.parameters.Price;
+	Method = instance.parameters.Method;
+    source = instance.source;
+	
+	MA = core.indicators.create("EMA", source[Price], Period);
+
+    first = MA.DATA.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Price)+ ", " + tostring(Method)+ ", " + tostring(Period) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+	
+	   open = instance.addInternalStream(first, 0);
+	   close = instance.addInternalStream(first, 0);
+	   high = instance.addInternalStream(first, 0);
+       low = instance.addInternalStream(first, 0);
+
+	   instance.createCandleGroup ("DB", "DB", open, high, low, close);
+       dummy = instance.addStream("d", core.Line, name, "", instance.parameters.Neutral, first);
+	   dummy.setWidth(core.LINE_NONE);
+
+    }
+}
+
+function Update(period, mode)
+{
+    if (period < first) 
+    {
+	 return;
+	}
+
+	MA.update(mode);
+
+	if (source.low[period]>MA.DATA[period]) 
+	{	   
+	    open.setColor(period, instance.parameters.Positiv);
+		open[period] = 2;
+        close[period] = 0;
+		high[period] = 2;
+        low[period] = 0;	
+    }    
+	else if (source.high[period]<MA.DATA[period]) 
+	{
+	    open.setColor(period, instance.parameters.Negativ);
+		open[period] = 0;
+        close[period] = -2;
+		high[period] = 0;
+        low[period] = -2;		
+    }    
+	else
+	{	
+	    open.setColor(period, instance.parameters.Neutral);
+	     open[period] = 1;
+        close[period] = -1;
+		high[period] = 1;
+        low[period] = -1;	
+		
+	}	
+	
+	
+}
+

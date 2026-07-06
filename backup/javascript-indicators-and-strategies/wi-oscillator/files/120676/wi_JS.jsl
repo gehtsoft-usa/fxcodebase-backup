@@ -1,0 +1,102 @@
+function Init()
+{
+    indicator.name("Wi indicator");
+    indicator.description("Wi indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addString("Method", "Method", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Method", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Method", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Method", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Method", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Method", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Method", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Method", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Method", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Method", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Method", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Method", "JSmooth", "", "JSmooth");
+    indicator.parameters.addInteger("Period", "Period", "", 10);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clrUP_P", "Color Up +", "Color Up +", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clrDN_P", "Color Dn +", "Color Dn +", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("clrEQ_P", "Color Eq +", "Color Eq +", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("clrUP_M", "Color Up -", "Color Up -", core.rgb(128, 255, 128));
+    indicator.parameters.addColor("clrDN_M", "Color Dn -", "Color Dn -", core.rgb(255, 128, 64));
+    indicator.parameters.addColor("clrEQ_M", "Color Eq -", "Color Eq -", core.rgb(0, 0, 255));
+}
+
+var first;
+var source = null;
+var Period;
+var Method;
+var APrice;
+var MA;
+var Buff=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    Method=instance.parameters.Method;
+    first = source.first()+2;
+    APrice = instance.addInternalStream(first, 0);
+    MA = core.indicators.create("AVERAGES", APrice, Method, Period, false);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.Method + ")";
+    instance.name(name);
+    Buff = instance.addStream("Buff", core.Bar, name + ".Buff", "Buff", instance.parameters.clrUP_P, first);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    APrice[period]=2*source.close[period]-source.high[period]-source.low[period];
+    MA.update(mode);
+    Buff[period]=MA.DATA[period];
+    if (Buff[period]>0) 
+    {
+     if (Buff[period]>Buff[period-1]) 
+     {
+      Buff.setColor(period,instance.parameters.clrUP_P);
+     } 
+     else if (Buff[period]<Buff[period-1]) 
+     {
+      Buff.setColor(period,instance.parameters.clrDN_P);
+     } 
+     else
+     {
+      Buff.setColor(period,instance.parameters.clrEQ_P);
+     }
+    } 
+    else
+    {
+     if (Buff[period]>Buff[period-1]) 
+     {
+      Buff.setColor(period,instance.parameters.clrUP_M);
+     } 
+     else if (Buff[period]<Buff[period-1]) 
+     {
+      Buff.setColor(period,instance.parameters.clrDN_M);
+     } 
+     else
+     {
+      Buff.setColor(period,instance.parameters.clrEQ_M);
+     }
+    }
+   }    
+    
+}
+

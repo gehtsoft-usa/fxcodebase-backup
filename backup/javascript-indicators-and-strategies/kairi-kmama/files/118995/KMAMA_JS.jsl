@@ -1,0 +1,78 @@
+function Init()
+{
+    indicator.name("KMAMA");
+    indicator.description("KMAMA");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addInteger("Short", "Short Period", "Short Period", 25);
+	indicator.parameters.addInteger("Long", "Long Period", "Long Period", 50);
+    indicator.parameters.addColor("Up", "Color of Up", "", core.rgb(0, 255, 0));
+	indicator.parameters.addColor("Down", "Color of Down", "", core.rgb(255, 0, 0));
+}
+
+var Short, SHORT;
+var Long, LONG;
+
+var first;
+var source = null;
+
+var KMAMA = null;
+var HZU, HZL;
+
+function Prepare(nameOnly)
+{
+    Short = instance.parameters.Short;
+	Long = instance.parameters.Long;
+    source = instance.source;   
+	
+	
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Short)+ ", " + tostring(Long) + ")";
+    instance.name(name);
+	
+	SHORT = core.indicators.create("MVA", source.close, Short);
+	LONG = core.indicators.create("MVA", source.close, Long);
+	
+	 first = Math.max(SHORT.DATA.first(), LONG.DATA.first());
+
+    if (!(nameOnly)) 
+    {
+	    KMAMA =instance.addInternalStream(0, 0);
+		
+	HZU = instance.addStream("HZU", core.Bar, name + "HZU", "", core.rgb(0, 0, 0), first);
+    HZL = instance.addStream("HZL", core.Bar, name + "HZL", "", core.rgb(0, 0, 0), first);	
+    instance.createFromToBarGroup("KMAMA", "", HZU, HZL, core.rgb(0, 0, 0));
+	
+    }
+}
+
+function Update(period, mode)
+{
+    if (period <  first &&  !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+	SHORT.update(mode);
+	LONG.update(mode);
+	
+        KMAMA[period] = 100* (SHORT.DATA[period]/LONG.DATA[period]);
+		
+
+		
+    	if (KMAMA[period] > KMAMA[period-1]) 
+    	{
+		 HZU.setColor(period,instance.parameters.Up);
+         HZU[period]=	KMAMA[period];	
+		 HZL[period]=	100;
+		} 
+		else
+		{
+		 HZU.setColor(period,instance.parameters.Down);
+	  	 HZL[period]=	KMAMA[period];	
+		 HZU[period]=	100;
+		 }
+		
+}
+

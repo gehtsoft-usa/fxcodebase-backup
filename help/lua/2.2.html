@@ -1,0 +1,111 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 2.2 - Values and Types</title>
+</head>
+<body>
+<h2>2.2 - <a name="2.2">Values and Types</a></h2>
+
+<p>
+Lua is a <em>dynamically typed language</em>.
+This means that
+variables do not have types; only values do.
+There are no type definitions in the language.
+All values carry their own type.
+
+
+<p>
+All values in Lua are <em>first-class values</em>.
+This means that all values can be stored in variables,
+passed as arguments to other functions, and returned as results.
+
+
+<p>
+There are eight basic types in Lua:
+<em>nil</em>, <em>boolean</em>, <em>number</em>,
+<em>string</em>, <em>function</em>, <em>userdata</em>,
+<em>thread</em>, and <em>table</em>.
+<em>Nil</em> is the type of the value <b>nil</b>,
+whose main property is to be different from any other value;
+it usually represents the absence of a useful value.
+<em>Boolean</em> is the type of the values <b>false</b> and <b>true</b>.
+Both <b>nil</b> and <b>false</b> make a condition false;
+any other value makes it true.
+<em>Number</em> represents real (double-precision floating-point) numbers.
+(It is easy to build Lua interpreters that use other
+internal representations for numbers,
+such as single-precision float or long integers;
+see file <code>luaconf.h</code>.)
+<em>String</em> represents arrays of characters.
+
+Lua is 8-bit clean:
+strings may contain any 8-bit character,
+including embedded zeros ('<code>\0</code>') (see <a href="2.1.html">&sect;2.1</a>).
+
+
+<p>
+Lua can call (and manipulate) functions written in Lua and
+functions written in C
+(see <a href="2.5.8.html">&sect;2.5.8</a>).
+
+
+<p>
+The type <em>userdata</em> is provided to allow arbitrary C&nbsp;data to
+be stored in Lua variables.
+This type corresponds to a block of raw memory
+and has no pre-defined operations in Lua,
+except assignment and identity test.
+However, by using <em>metatables</em>,
+the programmer can define operations for userdata values
+(see <a href="2.8.html">&sect;2.8</a>).
+Userdata values cannot be created or modified in Lua,
+only through the C&nbsp;API.
+This guarantees the integrity of data owned by the host program.
+
+
+<p>
+The type <em>thread</em> represents independent threads of execution
+and it is used to implement coroutines (see <a href="2.11.html">&sect;2.11</a>).
+Do not confuse Lua threads with operating-system threads.
+Lua supports coroutines on all systems,
+even those that do not support threads.
+
+
+<p>
+The type <em>table</em> implements associative arrays,
+that is, arrays that can be indexed not only with numbers,
+but with any value (except <b>nil</b>).
+Tables can be <em>heterogeneous</em>;
+that is, they can contain values of all types (except <b>nil</b>).
+Tables are the sole data structuring mechanism in Lua;
+they may be used to represent ordinary arrays,
+symbol tables, sets, records, graphs, trees, etc.
+To represent records, Lua uses the field name as an index.
+The language supports this representation by
+providing <code>a.name</code> as syntactic sugar for <code>a["name"]</code>.
+There are several convenient ways to create tables in Lua
+(see <a href="2.5.7.html">&sect;2.5.7</a>).
+
+
+<p>
+Like indices,
+the value of a table field can be of any type (except <b>nil</b>).
+In particular,
+because functions are first-class values,
+table fields may contain functions.
+Thus tables may also carry <em>methods</em> (see <a href="2.5.9.html">&sect;2.5.9</a>).
+
+
+<p>
+Tables, functions, threads, and (full) userdata values are <em>objects</em>:
+variables do not actually <em>contain</em> these values,
+only <em>references</em> to them.
+Assignment, parameter passing, and function returns
+always manipulate references to such values;
+these operations do not imply any kind of copy.
+
+
+<p>
+The library function <a href="pdf-type.html"><code>type</code></a> returns a string describing the type
+of a given value.
+</body>
+</html>

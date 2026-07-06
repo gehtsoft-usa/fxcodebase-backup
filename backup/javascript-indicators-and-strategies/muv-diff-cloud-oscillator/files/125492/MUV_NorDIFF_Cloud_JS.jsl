@@ -1,0 +1,169 @@
+function Init()
+{
+    indicator.name("MUV_NorDIFF_Cloud oscillator");
+    indicator.description("MUV_NorDIFF_Cloud oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("MA_Period", "MA period", "", 14);
+    indicator.parameters.addInteger("Momentum", "Momentum", "", 1);
+    indicator.parameters.addInteger("K_Period", "K period", "", 14);
+	
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP color", "UP color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DNclr", "DN color", "DN color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("Transparency", "Transparency", "", 50,0,100);
+    indicator.parameters.addColor("Levelclr", "Level color", "Level color", core.rgb(128, 128, 0));
+    indicator.parameters.addInteger("Lwidth", "Level width", "Level width", 1, 1, 5);
+    indicator.parameters.addInteger("Lstyle", "Level style", "Level style", core.LINE_DASH);
+    indicator.parameters.setFlag("Lstyle", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Uclr", "Upper {t color", "Upper {t color", core.rgb(0, 128, 0));
+    indicator.parameters.addColor("Lclr", "Lower {t color", "Lower {t color", core.rgb(128, 0, 0));
+    indicator.parameters.addInteger("DotSize", "Dot size", "Dot size", 3, 1, 5);
+}
+
+var first;
+var source = null;
+var MA_Period;
+var Momentum;
+var K_Period;
+var MA1;
+var MA2;
+var Pbuff=null;
+var Mbuff=null;
+var SMA_Value={};
+var EMA_Value={};
+var Count={};
+var count;
+var Ubuff=null;
+var Lbuff=null;
+
+function Prepare()
+{
+    source = instance.source;
+    MA_Period=instance.parameters.MA_Period;
+    Momentum=instance.parameters.Momentum;
+    K_Period=instance.parameters.K_Period;
+    first = source.first()+2;
+    MA1 = core.indicators.create("XMUV", source, "MVA", MA_Period);
+    MA2 = core.indicators.create("XMUV", source, "EMA", MA_Period);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.MA_Period + ", " + instance.parameters.Momentum + ", " + instance.parameters.K_Period + ")";
+    instance.name(name);
+    Pbuff = instance.addStream("Pbuff", core.Line, name + ".Pbuff", "Pbuff", instance.parameters.UPclr, first);
+    Mbuff = instance.addStream("Mbuff", core.Line, name + ".Mbuff", "Mbuff", instance.parameters.UPclr, first);
+    instance.createChannelGroup("TC","TC" , Pbuff, Mbuff, instance.parameters.UPclr, 100-instance.parameters.Transparency);
+    var i;
+    for (i=0; i<=K_Period; i++) 
+    {
+     Count[i]=0;
+     SMA_Value[i]=0;
+     EMA_Value[i]=0;
+    }
+    count=1;
+    Pbuff.addLevel(100, instance.parameters.Lstyle, instance.parameters.Lwidth, instance.parameters.Levelclr);
+    Pbuff.addLevel(-100, instance.parameters.Lstyle, instance.parameters.Lwidth, instance.parameters.Levelclr);
+    Ubuff = instance.addStream("Ubuff", core.Dot, name + ".Ubuff", "Ubuff", instance.parameters.Uclr, first);
+    Lbuff = instance.addStream("Lbuff", core.Dot, name + ".Lbuff", "Lbuff", instance.parameters.Lclr, first);
+    Ubuff.setWidth(instance.parameters.DotSize);
+    Lbuff.setWidth(instance.parameters.DotSize);
+}
+
+function ArrayMinMax(Arr, BeginPos, EndPos)
+{
+ var i;
+ var MaxV = -100000000;
+ var MinV = 10000000;
+ for (i=BeginPos; i<=EndPos; i++) 
+ {
+  MaxV=Math.max(MaxV, Arr[i]);
+  MinV=Math.min(MinV, Arr[i]);
+ }
+ var tmp={};
+ tmp[0]=MinV;
+ tmp[1]=MaxV;
+ return (tmp);
+}
+
+function Update(period, mode)
+{
+   if (period>first+Math.max(Momentum, K_Period)) 
+   {
+    MA1.update(mode);
+    MA2.update(mode);
+    SMA_Value[Count[0]]=MA1.DATA[period]-MA1.DATA[period-Momentum];
+    EMA_Value[Count[0]]=MA2.DATA[period]-MA2.DATA[period-Momentum];
+    var tmp=ArrayMinMax(SMA_Value, 0, K_Period-1);
+    var SMA_Min=tmp[0];
+    var SMA_Max=tmp[1];
+    tmp=ArrayMinMax(EMA_Value, 0, K_Period-1);
+    var EMA_Min=tmp[0];
+    var EMA_Max=tmp[1];
+    var SMA_Range=SMA_Max-SMA_Min;
+    var EMA_Range=EMA_Max-EMA_Min;
+    var SMA_Res=100;
+    if (SMA_Range>0) 
+    {
+     SMA_Res=100-200*(SMA_Max-SMA_Value[Count[0]])/SMA_Range;
+    }
+    var EMA_Res=100;
+    if (EMA_Range>0) 
+    {
+     EMA_Res=100-200*(EMA_Max-EMA_Value[Count[0]])/EMA_Range;
+    }
+    
+    Pbuff[period]=EMA_Res;
+    Mbuff[period]=SMA_Res;
+    
+    if (Pbuff[period]>Mbuff[period]) 
+    {
+     Pbuff.setColor(period, instance.parameters.UPclr);
+     Mbuff.setColor(period, instance.parameters.UPclr);
+    } 
+    else
+    {
+     Pbuff.setColor(period, instance.parameters.DNclr);
+     Mbuff.setColor(period, instance.parameters.DNclr);
+    }
+    
+    if (SMA_Res==100 || EMA_Res==100) 
+    {
+     Ubuff[period]=100;
+    } 
+    else
+    {
+     Ubuff[period]=null;
+    }
+    if (SMA_Res==-100 || EMA_Res==-100) 
+    {
+     Lbuff[period]=-100;
+    } 
+    else
+    {
+     Lbuff[period]=null;
+    }
+    
+    if (period!=source.size()-1) 
+    {
+     count=count-1;
+     if (count<0) 
+     {
+      count=K_Period-1;
+     }
+     var i;
+     for (i=0; i<=K_Period-1; i++) 
+     {
+      if (i+count>K_Period-1) 
+      {
+       Count[i]=i+count-K_Period;
+      } 
+      else
+      {
+       Count[i]=i+count;
+      }
+     }
+    }
+    
+   } 
+}
+

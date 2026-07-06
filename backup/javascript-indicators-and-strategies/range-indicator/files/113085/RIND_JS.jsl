@@ -1,0 +1,113 @@
+function Init()
+{
+    indicator.name("Range Indicator");
+    indicator.description("Compares the intraday range (high - low) to the inter-day (close - previous close) range. When the intraday range is greater than the inter-day range, the Range Indicator will be a high value. This signals an } to the current trend. When the Range Indicator is at a low level, a new trend is about to start.");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+	indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("periodQ", "periodQ", "periodQ", 3);
+    indicator.parameters.addInteger("smooth", "smooth", "smooth", 10);
+	indicator.parameters.addString("Method", "MA Method", "Method" , "EMA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method", "WMA", "WMA" , "WMA");
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("RIND_color", "Color of RIND", "Color of RIND", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var periodQ;
+var smooth;
+var Method;
+var stochRange;
+var val1;
+
+var first;
+var source = null;
+
+// Streams block
+var RIND = null;
+var MA;
+// Routine
+function Prepare(nameOnly)
+{
+    periodQ = instance.parameters.periodQ;
+	Method = instance.parameters.Method;
+    smooth = instance.parameters.smooth;
+    source = instance.source;
+	
+	stochRange = instance.addInternalStream(0, 0);
+	val1 = instance.addInternalStream(0, 0);
+	MA = core.indicators.create(Method, stochRange, smooth);
+    first = source.first()+1;
+	
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(periodQ) + ", " + tostring(smooth)  + ", " + tostring(Method)+ ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        RIND = instance.addStream("RIND", core.Line, name, "RIND", instance.parameters.RIND_color, MA.DATA.first());
+		RIND.setWidth(instance.parameters.width);
+        RIND.setStyle(instance.parameters.style);
+	}	
+		 
+}
+
+function Update(period, mode)
+{
+   if (period <=first) 
+   {	
+	stochRange[period]=50;			
+	return;
+   }
+	
+	
+	var  trueRange = Math.max(source.high[period], source.close[period-1]) - Math.min(source.low[period], source.close[period-1]);
+
+			if (source.close[period] > source.close[period-1]) 
+			{
+				val1[period]=(trueRange / (source.close[period] - source.close[period-1]));
+			}	
+			else
+			{
+				val1[period]=trueRange;
+            }	
+	
+	if (period < first+periodQ) 
+	{
+	 return;
+	}
+	
+			var  tmp = Math.minmax(val1, period-periodQ, period);
+			var val2=tmp[0];
+			var val3=tmp[1];
+
+			if ((val3 - val2) > 0) 
+			{
+				stochRange[period]=(100 * ((val1[period] - val2) / (val3 - val2)));
+			}
+			else
+			{
+				stochRange[period]=(100 * (val1[period] - val2));
+			}
+			
+		 MA.update(mode);	
+
+		if (period < MA.DATA.first()) 
+		{
+         return;
+        }		
+	
+        RIND[period] = MA.DATA[period];
+   
+}
+

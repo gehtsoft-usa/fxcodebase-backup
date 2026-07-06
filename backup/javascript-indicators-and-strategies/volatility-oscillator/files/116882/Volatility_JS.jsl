@@ -1,0 +1,101 @@
+// Indicator profile initialization routine
+// Defines indicator profile properties && indicator parameters
+// TODO. Add minimal && maximal value of numeric parameters && default color of the streams
+function Init()
+{
+    indicator.name("Volatility");
+    indicator.description("Volatility");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+     indicator.parameters.addGroup("Calculation");	
+    indicator.parameters.addInteger("AveragePeriod", "Average Period", "Average Period", 25);
+	indicator.parameters.addString("Method", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method", "WMA", "WMA" , "WMA");
+	
+		
+    indicator.parameters.addInteger("ShiftPeriod", "Shift Period", "Shift Period", 12);
+    indicator.parameters.addInteger("SummarizingPeriod", "Summarizing Period", "Summarizing Period", 50);
+	
+	 indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Volatility_color", "Color of Volatility", "Color of Volatility", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var AveragePeriod;
+var ShiftPeriod;
+var SummarizingPeriod;
+var Method;
+var first;
+var source = null;
+
+var Volatility = null;
+var MA,yom,yomyom,som, Avg,varyom;
+
+function Prepare(nameOnly)
+{
+    AveragePeriod = instance.parameters.AveragePeriod;
+    ShiftPeriod = instance.parameters.ShiftPeriod;
+	Method = instance.parameters.Method;
+    SummarizingPeriod = instance.parameters.SummarizingPeriod;
+    source = instance.source;
+	
+	yom= instance.addInternalStream(0, 0);
+	yomyom= instance.addInternalStream(0, 0);
+	som= instance.addInternalStream(0, 0);
+	varyom = instance.addInternalStream(0, 0);
+	
+    MA = core.indicators.create( Method, source, AveragePeriod);
+	Avg = core.indicators.create( Method, som, AveragePeriod);
+    first = MA.DATA.first()+ShiftPeriod;
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(AveragePeriod) + ", " + tostring(Method) + ", " + tostring(ShiftPeriod) + ", " + tostring(SummarizingPeriod) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        Volatility = instance.addStream("Volatility", core.Line, name, "Volatility", instance.parameters.Volatility_color,Avg.DATA.first());
+		Volatility.setWidth(instance.parameters.width);
+        Volatility.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period, mode)
+{
+    MA.update(mode);
+	
+    if (period < first) 
+    {
+	 return;
+	}
+	
+	yom[period]= 100*(source[period]-MA.DATA[period-ShiftPeriod+1])/MA.DATA[period-ShiftPeriod+1];
+	yomyom[period]=yom[period]*yom[period];
+	
+	if (period < first  +  SummarizingPeriod) 
+	{
+	 return;
+	}
+	
+	var avyom= Math.sum(yom, period-SummarizingPeriod+1, period)/SummarizingPeriod;
+	 varyom[period] = Math.sum(yomyom,period-SummarizingPeriod+1, period)/50-avyom*avyom;
+	som[period]= Math.sqrt(varyom[period-ShiftPeriod+1]) ;
+	
+	Avg.update(mode);
+	
+	if (period < Avg.DATA.first()) 
+	{
+	 return;
+	}
+	
+        Volatility[period] = Avg.DATA[period];
+    
+}

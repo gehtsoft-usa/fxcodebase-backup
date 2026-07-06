@@ -1,0 +1,52 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - os.date ([format [, time]])</title>
+</head>
+<body>
+<h3><a name="pdf-os.date"><code>os.date ([format [, time]])</code></a></h3>
+
+
+<p>
+Returns a string or a table containing date and time,
+formatted according to the given string <code>format</code>.
+
+
+<p>
+If the <code>time</code> argument is present,
+this is the time to be formatted
+(see the <a href="pdf-os.time.html"><code>os.time</code></a> function for a description of this value).
+Otherwise, <code>date</code> formats the current time.
+
+
+<p>
+If <code>format</code> starts with '<code>!</code>',
+then the date is formatted in Coordinated Universal Time.
+After this optional character,
+if <code>format</code> is <code>*t</code>,
+then <code>date</code> returns a table with the following fields:
+<code>year</code> (four digits), <code>month</code> (1--12), <code>day</code> (1--31),
+<code>hour</code> (0--23), <code>min</code> (0--59), <code>sec</code> (0--61),
+<code>wday</code> (weekday, Sunday is&nbsp;1),
+<code>yday</code> (day of the year),
+and <code>isdst</code> (daylight saving flag, a boolean).
+
+
+<p>
+If <code>format</code> is not <code>*t</code>,
+then <code>date</code> returns the date as a string,
+formatted according to the same rules as the C&nbsp;function <code>strftime</code>.
+
+
+<p>
+When called without arguments,
+<code>date</code> returns a reasonable date and time representation that depends on
+the host system and on the current locale
+(that is, <code>os.date()</code> is equivalent to <code>os.date("%c")</code>).
+
+
+
+
+<p>
+<hr>
+</body>
+</html>

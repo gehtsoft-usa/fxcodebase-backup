@@ -1,0 +1,422 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252" /><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><title>Edit Order</title><style type="text/css">a, p, h1, h2, h3, h4, h5, h6, table, td, tr, li, ul, ol {
+    font-family: Verdana, Trebuchet MS, Arial;
+}
+
+a, p, td, tr, ul, ol, li {
+    font-size: 12pt;
+}
+
+h3 {
+    font-size: 13pt;
+}
+
+h2 {
+    font-size: 13pt;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+body {
+    color: #444444;
+    background-color: white;
+}
+
+A:link {
+    color: #0065b3;
+    cursor: pointer;
+}
+
+A:visited {
+    color: #0068be;
+    cursor: pointer;
+}
+
+a.action {
+  background-color: #0065b3;
+  color: white;
+  font-size: 10pt;
+  padding: 2px 2px;
+  width: 50pt;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px;
+}
+
+.side-icon {
+    float: left;
+}
+
+a.action [class*="dripicons-"]:before {
+    padding: 0 2px 0 0;
+    font-size: 12pt;
+    vertical-align: text-bottom;
+}
+
+.side-icon:after {
+  content: "";
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  border-left: 1.5px solid white;
+  transform: translate(-50%);
+}
+
+a.actiontab {
+  font-size: 10pt;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px 3px 0 0;
+}
+
+pre, code, code a {
+    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+    font-size: 12pt;
+}
+
+code.ctag {
+    background-color: #f1f1f1;
+    padding: .1em .2em;
+    border-radius: 3px;
+}
+
+pre {
+    background-color: white;
+}
+
+pre.example {
+    background-color: #f1f1f1;
+}
+
+ul {
+    list-style-type: disc;
+    margin-left: 18pt;
+}
+
+ol {
+    list-style-type: decimal;
+    margin-left: 18pt;
+}
+
+ul.hhc {
+    list-style-type: none;
+    margin-left: 1em;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+li.hhc {
+    margin-left: 0;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+table {
+  border-spacing: 0;
+  border-color: #dfe3e7;
+}
+
+tr + tr td {
+   border-top: 0;
+}
+
+tr td + td {
+  border-left: 0;
+}
+
+td {
+  border: 1px solid;
+  border-color: #dfe3e7;
+}
+
+tr:first-child td:first-child {
+   border-radius: 0.2em 0 0 0;
+}
+
+tr:first-child td:last-child {
+  border-radius: 0 0.2em 0 0;
+}
+
+tr:first-child td:only-child {
+  border-radius: 0.2em 0.2em 0 0;
+}
+
+tr:last-child td:first-child {
+    border-radius: 0 0 0 0.2em;
+}
+
+tr:last-child td:last-child {
+    border-radius: 0 0 0.2em 0;
+}
+
+tr:last-child td:only-child {
+    border-radius: 0 0 0.2em 0.2em;
+}
+
+tr:only-child td:only-child {
+    border-radius: 0.2em 0.2em 0.2em 0.2em;
+}
+
+tr:only-child td:first-child {
+   border-radius: 0.2em 0 0 0.2em;
+}
+
+tr:only-child td:last-child {
+  border-radius: 0 0.2em 0.2em 0;
+}
+
+
+td.tmain, td.tmain_nw, td.thdr {
+    background-color: rgb(255, 255, 255);
+    vertical-align: top;
+    padding: 3px;
+}
+
+td.tmain p, td.tmain_nw p, td.thdr p {
+    margin-top: 3pt;
+    margin-bottom: 3pt;
+}
+
+td.tmain_nw {
+    white-space: nowrap;
+}
+
+td.thdr {
+    background-color: #e3e3e3;
+}
+
+table.decl {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+    vertical-align: top;
+    padding: 3px;
+    width: 100%;
+}
+
+table.decl td {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+}
+
+div.note-quote {
+    border-left: 10px solid #ccc;
+    padding: 1em 10px .1em 10px;
+    margin: 1.5em 10px;
+    background-color: rgb(224, 224, 224);
+}
+
+div.note-note {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+div.note-warning {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #fff;
+    background-color: #ff6358;
+}
+div.note-warning code.ctag {
+    color: black;
+}</style>
+<link rel="stylesheet" href="res/dripicons.css"></head><body><script type="text/javascript">
+var highlighterEnabled = false;
+var maintopic = 'index';
+var helptitle = 'Indicore SDK 3';
+    function loadStarted() {
+    window.onload = loadCompleted;
+
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        var head = document.getElementsByTagName('head')[0];
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.min.js';
+        head.appendChild(script4);
+
+
+        var script2 = document.createElement('script');
+        script2.type = 'text/javascript';
+        script2.src = './highlighter/highlight.cshtml.js';
+        head.appendChild(script2);
+
+        var script3 = document.createElement('script');
+        script3.type = 'text/javascript';
+        script3.src = './highlighter/highlight.lua.js';
+        head.appendChild(script3);
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.luax.js';
+        head.appendChild(script4);
+    }
+}
+
+function loadCompleted() {
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        hljs.registerLanguage('cshtml-razor', window.hljsDefineCshtmlRazor);
+        hljs.registerLanguage('lua', window.hljsDefineLua);
+        hljs.registerLanguage('luax', window.hljsDefineLuaX);
+        x = document.querySelectorAll('pre code');
+        for (var i = 0; i < x.length; i++) {
+            if (x[i].hasAttribute('class')) {
+                hljs.highlightBlock(x[i]);
+            }
+        }
+    }
+}
+
+
+function hidediv(divname) {
+    document.getElementById(divname).style.display = 'none';
+}
+
+function showdiv(divname) {
+    document.getElementById(divname).style.display = 'inline';
+}
+
+function syncList() {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, null, document.title);
+    }
+}
+
+function syncList1(key) {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, key + '.html', document.title);
+    }
+}</script><script type="text/javascript">
+    loadStarted();
+</script><h1>Edit Order</h1><p>Only Entry Stop (SE), Entry Limit (LE), Stop (S) and Limit (L) orders (and all their modifications)
+in the waiting (&quot;W&quot;) fix status can be changed.</p>
+<p>To edit an order, please fill the following values in the value map:</p><table class="tmain">
+  <tr>
+    <td class="thdr"><p>Valuemap field</p></td>
+    <td class="thdr"><p>Datatype</p></td>
+    <td class="thdr"><p>Description</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Command</p></td>
+    <td class="tmain"><p>string</p></td>
+    <td class="tmain"><p>The command. Must be <code class="ctag">EditOrder</code>.</p>
+<p>The field is obligatory.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>OrderID</p></td>
+    <td class="tmain"><p>string</p></td>
+    <td class="tmain"><p>The identifier of the order to be changed.</p>
+<p>The field is obligatory.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>AcctID</p></td>
+    <td class="tmain"><p>string</p></td>
+    <td class="tmain"><p>The identifier of the account the order was placed for.
+The value must be obtained from the &quot;Accounts&quot; table, the <code class="ctag">AccountID</code> column.</p>
+<p>Please note that the account identifier may not necessarily be equal to the account name
+which is shown in the Trading Station application.</p>
+<p>The field is obligatory.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Rate</p></td>
+    <td class="tmain"><p>number</p></td>
+    <td class="tmain"><p>A new rate for the order.</p>
+<p>For sell stop and buy limit orders, the rate must be below the market.</p>
+<p>For sell limit and buy stop orders, the rate must be above the market.</p>
+<p>If you want to change the rate of the order, you must specify
+either <code class="ctag">Rate</code> or a pair of <code class="ctag">PegPriceOffsetPips</code> and <code class="ctag">PegType</code> fields. If
+none of the three fields are specified, the price will not be changed.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>PegType</p></td>
+    <td class="tmain"><p>string</p></td>
+    <td class="tmain"><p>The type of the pegged (relative to market) price. Possible values:</p><table class="tmain">
+  <tr>
+    <td class="tmain"><p><code class="ctag">O</code></p></td>
+    <td class="tmain"><p>Can be used only for stop and limit orders attached to the trade. In that case
+the offset will be added to the open price of the trade.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">M</code></p></td>
+    <td class="tmain"><p>Can be used for any order. In that case the offset will be added to the market price.</p></td>
+  </tr>
+</table><p>Please note that only stop and limit orders which are attached to the entry order can be
+kept in the pegged price. For all other kinds of the orders, the pegged price will
+be automatically converted to a regular price.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>PegPriceOffsetPips</p></td>
+    <td class="tmain"><p>number</p></td>
+    <td class="tmain"><p>An offset, expressed in pips, against the price specified in the <code class="ctag">PegType</code> parameter.</p>
+<p>For sell stop and buy limit orders, the offset must be negative.</p>
+<p>For sell limit and buy stop orders, the offset must be positive.</p>
+<p>Price can be specified as an offset to the market only for Stop or Limit orders attached to
+an entry order.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>TrailUpdatePips</p></td>
+    <td class="tmain"><p>number</p></td>
+    <td class="tmain"><p>The value can be changed for an entry order or for a stop order.</p>
+<p>The value specifies the maximum change of the market price after that the rate of the order
+will be changed as well.</p>
+<p>The value is expressed in pips.</p>
+<p>If the value is 1, it means that the dynamic trailing mode is used, i.e. the order rate is changed
+with every change of the market price. Please note that in some systems, only dynamic
+trailing mode is supported. See <a href="host.execute_getTradingProperty.html"><code>core.host:execute(&quot;getTradingProperty&quot;, ...)</code></a>
+for details about permitted types of the trailing mode. In case only dynamic trailing stop is supported, any non-zero value
+of this parameter will cause creating a dynamic trailing stop.</p>
+<p>The value is optional. By default, this value is 0. 0 means no-trailing order.</p>
+<p>The trailing mode can be changed for the SE, LE and S orders only.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Quantity</p></td>
+    <td class="tmain"><p>number</p></td>
+    <td class="tmain"><p>The quantity of the instrument to be bought or sold. The quantity is expressed in contracts and must
+be divisible by the value of the lot size (see <code class="ctag">baseUnitSize</code> trading option in the following call:
+<a href="host.execute_getTradingProperty.html"><code>core.host:execute(&quot;getTradingProperty&quot;, ...)</code></a>).</p>
+<p>The quantity can be changed for entry orders which are not in the netting mode.</p>
+<p>If value is not specified, the order amount will not be changed.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>CustomID</p></td>
+    <td class="tmain"><p>number</p></td>
+    <td class="tmain"><p>The custom identifier of the order. This value will be populated into all
+order-related QTXT columns of the following tables: &quot;Orders&quot;, &quot;Trades&quot;, and &quot;Closed Trades&quot;.</p>
+<p>If value is not specified, the custom identifier of the order will not be changed.</p></td>
+  </tr>
+</table><p>Not all combinations of the fields can be used. Please follow the rules below:</p>
+<p>1) Rate can be changed either using the Rate field or a pair of PegType and PegPriceOffsetPips fields. Pegged price (a price
+expressed as the distance in pips) can be changed only for the S or L orders attached to entry orders. For all other
+kinds of the order the Rate must be used to change the order rate. If rate is changed, the TrailUpdatePips must be also specified.
+If you omit TrailUpdatePips field, the trailing mode of the order will be reset, even if order was trailing. Moreover, even
+if you need change only trailing mode, the rate must be specified.</p>
+<p>2) You can change as both rate (plus trailing mode) and quantity, as well as only rate or quantity.</p>
+<p>For example on how to edit the order please the the following examples:</p><ul class="main">
+  <li><p><a href="TradingCommandsCreateOrder_SE.html">Create Order, Net Stop Netting Entry example</a></p></li>
+  <li><p><a href="TradingCommandsCreateOrder_L.html">Create Order, Limit example</a></p></li>
+  <li><p><a href="TradingCommandsCreateOrder_S.html">Create Order, Stop example</a></p></li>
+</ul><p>
+  <center><a href="TradingCommands.html">back</a></center>
+</p><script language="javascript" type="text/javascript">if(window.parent.frames[0]) window.parent.frames[0].selectItem(window.location.href);</script></body></html>

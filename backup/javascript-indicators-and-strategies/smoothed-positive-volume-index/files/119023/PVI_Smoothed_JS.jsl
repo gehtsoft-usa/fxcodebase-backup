@@ -1,0 +1,74 @@
+function Init()
+{
+    indicator.name("Smoothed Positive Volume Index");
+    indicator.description("Smoothed Positive Volume Index");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addInteger("PVI_Period", "Smooth period", "", 5);
+    indicator.parameters.addInteger("S_Period", "Signal seriod", "", 15);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("PVIclr", "PVI color", "PVI color", core.rgb(255, 255, 0));
+    indicator.parameters.addInteger("PVIwidth", "PVI line width", "PVI line width", 1, 1, 5);
+    indicator.parameters.addInteger("PVIstyle", "PVI line style", "PVI line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("PVIstyle", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Sclr", "Signal line color", "Signal line color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("Swidth", "Signal line width", "Signal line width", 1, 1, 5);
+    indicator.parameters.addInteger("Sstyle", "Signal line style", "Signal line style", core.LINE_DASH);
+    indicator.parameters.setFlag("Sstyle", core.FLAG_LINE_STYLE);
+}
+
+var PVI_Period;
+var S_Period;
+var first;
+var source = null;
+var PVI_St;
+var MVA;
+var EMA;
+var PVI=null;
+var Signal=null;
+
+function Prepare()
+{
+    PVI_Period=instance.parameters.PVI_Period;
+    S_Period=instance.parameters.S_Period;
+    source = instance.source;
+    first = source.first()+2;
+    PVI_St=instance.addInternalStream(first, 0);
+    MVA=core.indicators.create("MVA", PVI_St, PVI_Period);
+    EMA=core.indicators.create("EMA", MVA.DATA, S_Period);
+    var name = profile.id() + "(" + source.name() + ")";
+    instance.name(name);
+    PVI = instance.addStream("PVI", core.Line, name + ".Smoothed PVI", "Smoothed PVI", instance.parameters.PVIclr, first);
+    PVI.setWidth(instance.parameters.PVIwidth);
+    PVI.setStyle(instance.parameters.PVIstyle);
+    Signal = instance.addStream("Signal", core.Line, name + ".Signal", "Signal", instance.parameters.Sclr, first);
+    Signal.setWidth(instance.parameters.Swidth);
+    Signal.setStyle(instance.parameters.Sstyle);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    if (source.volume[period]>source.volume[period-1]) 
+    {
+     PVI_St[period]=PVI_St[period-1]*(1+((source.close[period]-source.close[period-1])/source.close[period-1]));
+    }
+    else
+    {
+     PVI_St[period]=PVI_St[period-1];
+    }
+   }
+   else if (period==first) 
+   {
+    PVI_St[period]=1;
+   } 
+   
+   MVA.update(mode);
+   EMA.update(mode);
+   PVI[period]=MVA.DATA[period];
+   Signal[period]=EMA.DATA[period];
+}
+

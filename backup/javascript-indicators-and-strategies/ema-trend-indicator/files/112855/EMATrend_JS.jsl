@@ -1,0 +1,133 @@
+function Init()
+{
+    indicator.name("MA Trend Indicator");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    
+	indicator.parameters.addGroup("Calculation");	
+    indicator.parameters.addInteger("FastMA", "Fast Moving Average Periods", "", 21, 1, 100);
+    indicator.parameters.addInteger("SlowMA", "Slow Moving Average Period", "", 34, 1, 100);
+	
+	indicator.parameters.addString("Method1", "Fast MA Method", "Method" , "EMA");
+    indicator.parameters.addStringAlternative("Method1", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method1", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method1", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method1", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method1", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method1", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method1", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method1", "WMA", "WMA" , "WMA");
+	
+	indicator.parameters.addString("Method2", "Slow MA Method", "Method" , "EMA");
+    indicator.parameters.addStringAlternative("Method2", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method2", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method2", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method2", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method2", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method2", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method2", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method2", "WMA", "WMA" , "WMA");
+
+	indicator.parameters.addGroup("Style");	
+	
+    var yellow = core.rgb(255, 255, 128);
+    var purple = core.rgb(128, 0, 255);
+
+    indicator.parameters.addColor("FH_color", "Color of FH", "Color of FH", purple);
+	indicator.parameters.addInteger("width1", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style1", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style1", core.FLAG_LINE_STYLE);
+
+    indicator.parameters.addColor("FL_color", "Color of FL", "Color of FL", yellow);
+	indicator.parameters.addInteger("width2", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style2", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style2", core.FLAG_LINE_STYLE);
+	
+    indicator.parameters.addColor("SH_color", "Color of SH", "Color of SH", yellow);
+	indicator.parameters.addInteger("width3", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style3", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style3", core.FLAG_LINE_STYLE);
+	
+    indicator.parameters.addColor("SL_color", "Color of SL", "Color of SL", purple);
+	indicator.parameters.addInteger("width4", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style4", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style4", core.FLAG_LINE_STYLE);
+}
+
+var FastMA;
+var SlowMA;
+var Method1,Method2;
+var firstFast;
+var firstSlow;
+var source = null;
+
+// Streams block
+var FH = null;
+var FL = null;
+var SH = null;
+var SL = null;
+
+var EFH = null;
+var EFL = null;
+var ESH = null;
+var ESL = null;
+
+
+// Routine
+function Prepare()
+{
+    FastMA = instance.parameters.FastMA;
+    SlowMA = instance.parameters.SlowMA;
+	Method1 = instance.parameters.Method1;
+	Method2 = instance.parameters.Method2;
+    source = instance.source;
+
+    var name = profile.id() + "(" + source.name() + ", " + FastMA + ", " + FastMA+ ", " + Method1+ ", " + Method2  + ")";
+    instance.name(name);
+
+    EFH = core.indicators.create(Method1, source.high, FastMA);	
+    EFL = core.indicators.create(Method1, source.low, FastMA);
+    ESH = core.indicators.create(Method2, source.high, SlowMA);
+    ESL = core.indicators.create(Method2, source.low, SlowMA);
+
+    firstFast = EFH.DATA.first();
+    firstSlow = ESH.DATA.first();
+
+    FH = instance.addStream("FH", core.Line, name + ".FH", "FH", instance.parameters.FH_color, firstFast);
+	FH.setWidth(instance.parameters.width1);
+    FH.setStyle(instance.parameters.style1);
+		
+    FL = instance.addStream("FL", core.Line, name + ".FL", "FL", instance.parameters.FL_color, firstFast);
+	FL.setWidth(instance.parameters.width2);
+    FL.setStyle(instance.parameters.style2);
+		
+    SH = instance.addStream("SH", core.Line, name + ".SH", "SH", instance.parameters.SH_color, firstSlow);
+	SH.setWidth(instance.parameters.width3);
+    SH.setStyle(instance.parameters.style3);
+		
+    SL = instance.addStream("SL", core.Line, name + ".SL", "SL", instance.parameters.SL_color, firstSlow);
+	SL.setWidth(instance.parameters.width4);
+    SL.setStyle(instance.parameters.style4);
+}
+
+// Indicator calculation routine
+function Update(period, mode)
+{
+    EFH.update(mode);
+    EFL.update(mode);
+    ESH.update(mode);
+    ESL.update(mode);
+
+    if (period >= firstFast) 
+    {
+        FH[period] = EFH.DATA[period];
+        FL[period] = EFL.DATA[period];
+    }
+    if (period >= firstSlow) 
+    {
+        SH[period] = ESH.DATA[period];
+        SL[period] = ESL.DATA[period];
+    }
+}
+

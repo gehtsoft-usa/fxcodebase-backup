@@ -1,0 +1,98 @@
+function Init()
+{
+    indicator.name("Intraday Momentum Index");
+    indicator.description("Intraday Momentum Index");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 14, 2, 1000);
+	
+	
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clrIMI", "Indicator color","", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+    
+    indicator.parameters.addGroup("OB/OS Levels");	
+    indicator.parameters.addDouble("overbought", "Overbought Level","", 70);
+    indicator.parameters.addDouble("oversold","Oversold Level","", 30);
+	 indicator.parameters.addColor("level_overboughtsold_color", "Line Color","", core.rgb(128, 128, 128));
+    indicator.parameters.addInteger("level_overboughtsold_width","Line width","", 1, 1, 5);
+    indicator.parameters.addInteger("level_overboughtsold_style", "Line Style","", core.LINE_SOLID);
+    indicator.parameters.setFlag("level_overboughtsold_style", core.FLAG_LEVEL_STYLE);
+}
+
+var Period=null;
+var first;
+var source = null;
+var Up, Down;
+var IMI = null;
+
+function Prepare()
+{
+
+    assert(instance.parameters.oversold < instance.parameters.overbought, "Overbought level must be higher than oversold");
+
+    Period = instance.parameters.Period;
+    source = instance.source;
+    first = source.first() + Period;
+
+    var name = profile.id() + "(" + source.name() + ", " + Period + ")";
+    instance.name(name);
+	
+	Up = instance.addInternalStream(0, 0);
+	Down = instance.addInternalStream(0, 0);
+
+    IMI = instance.addStream("IMI", core.Line, name, "IMI", instance.parameters.clrIMI, first);	
+	IMI.setWidth(instance.parameters.width);
+    IMI.setStyle(instance.parameters.style);
+	
+    IMI.setPrecision(4);    
+    IMI.addLevel(0);
+    IMI.addLevel(50);   
+    IMI.addLevel(100);
+	
+	IMI.addLevel(instance.parameters.oversold, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);
+	IMI.addLevel(instance.parameters.overbought, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);    
+}
+
+function Update(period, mode)
+{
+   
+            if (source.close[period]> source.open[period]) 
+            { 
+                Up[period] = source.close[period] - source.open[period];
+				Down[period]=0;
+            }
+            else if (source.open[period] > source.close[period]) 
+            {
+                Up[period]=0;
+				Down[period]=source.open[period] - source.close[period];
+            }       
+     
+	if (period < first) 
+    {
+	 return;
+	}
+		
+		 
+		
+		var UP= Math.sum(Up, period-Period+1, period);
+		var DOWN= Math.sum(Down, period-Period+1, period);
+		
+		
+        IMI[period] = 100 *( UP / (UP+DOWN));
+        
+    
+}
+
+
+
+
+
+
+
+

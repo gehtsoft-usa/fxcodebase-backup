@@ -1,0 +1,70 @@
+function Init()
+{
+    indicator.name("Volatility Stop");
+    indicator.description("Volatility Stop");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addDouble("Multiplier", "Multiplier", "Multiplier", 2);
+	 indicator.parameters.addInteger("Period", "Period", "Period", 20);
+	 
+	 
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("VolatilityStop_color", "Color of VolatilityStop", "Color of VolatilityStop", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width1", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style1", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style1", core.FLAG_LINE_STYLE);
+	indicator.parameters.addColor("Volatility_color", "Color of Volatility", "Color of Volatility", core.rgb(255, 0, 0));	
+	indicator.parameters.addInteger("width2", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style2", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style2", core.FLAG_LINE_STYLE);
+}
+
+var Multiplier;
+
+var first;
+var source = null;
+var Period;
+
+var VolatilityStop = null;
+var Volatility;
+var HiLoDiff = null;
+
+function Prepare(nameOnly)
+{
+    Multiplier = instance.parameters.Multiplier;
+	Period= instance.parameters.Period;
+    source = instance.source;
+    first = source.first()+Period;
+	
+	HiLoDiff = instance.addInternalStream(0, 0);
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Multiplier)+ ", " + tostring(Period) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        VolatilityStop = instance.addStream("VolatilityStop", core.Line, name, "VolatilityStop", instance.parameters.VolatilityStop_color, first);
+		VolatilityStop.setWidth(instance.parameters.width1);
+        VolatilityStop.setStyle(instance.parameters.style1);
+		core.host.execute ("attachOuputToChart", "VolatilityStop");
+		Volatility = instance.addStream("Volatility", core.Line, name, "Volatility", instance.parameters.Volatility_color, first);
+		Volatility.setWidth(instance.parameters.width2);
+        Volatility.setStyle(instance.parameters.style2);
+    }
+}
+
+function Update(period)
+{
+    HiLoDiff[period]=source.high[period]-source.low[period];
+	
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+	
+        VolatilityStop[period] = source.close[period]-Multiplier*Math.avg(HiLoDiff, period-Period+1, period);
+        Volatility[period] = (source.close[period]-VolatilityStop[period])/source.close[period];
+}
+

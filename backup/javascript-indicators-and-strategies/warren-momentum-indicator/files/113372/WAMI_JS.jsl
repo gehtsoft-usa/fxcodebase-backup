@@ -1,0 +1,130 @@
+function Init()
+{
+    indicator.name("Warren Momentum Indicator");
+    indicator.description("Warren Momentum Indicator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");	
+    indicator.parameters.addInteger("L", "1. Period", "L", 4);
+	indicator.parameters.addString("Method1", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method1", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method1", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method1", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method1", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method1", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method1", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method1", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method1", "WMA", "WMA" , "WMA");
+    indicator.parameters.addInteger("M", "2. Period", "M", 13);
+	indicator.parameters.addString("Method2", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method2", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method2", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method2", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method2", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method2", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method2", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method2", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method2", "WMA", "WMA" , "WMA");
+    indicator.parameters.addInteger("N", "3. Period", "N", 13);
+	indicator.parameters.addString("Method3", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method3", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method3", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method3", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method3", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method3", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method3", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method3", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method3", "WMA", "WMA" , "WMA");
+    indicator.parameters.addInteger("S", "Signal Line Period", "Signal", 4);
+	indicator.parameters.addString("Method4", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method4", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method4", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method4", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method4", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method4", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method4", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method4", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method4", "WMA", "WMA" , "WMA");
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("WAMI_color", "Color of WAMI", "Color of WAMI", core.rgb(0, 255, 0));
+	indicator.parameters.addInteger("width1", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style1", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style1", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Signal_color", "Color of Signal", "Color of Signal", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width2", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style2", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style2", core.FLAG_LINE_STYLE);
+}
+
+var L;
+var M;
+var N;
+var S;
+var Method4,Method3, Method2,Method1;
+var first;
+var source = null;
+
+// Streams block
+var WAMI = null;
+var Signal = null;
+var Difference;
+// Routine
+function Prepare(nameOnly)
+{
+    L = instance.parameters.L;
+    M = instance.parameters.M;
+    N = instance.parameters.N;
+    S = instance.parameters.S;
+	Method4 = instance.parameters.Method4;
+	Method3 = instance.parameters.Method3;
+	Method2 = instance.parameters.Method2;
+	Method1 = instance.parameters.Method1; 
+	
+	source = instance.source;
+	Difference = instance.addInternalStream(0, 0);
+	M1 = core.indicators.create(Method1,Difference, L);
+	M2 = core.indicators.create(Method2,M1.DATA, M);
+	M3 = core.indicators.create(Method3,M2.DATA, N);
+	M4 = core.indicators.create(Method4,M3.DATA, S);
+    first = M3.DATA.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(L)+ ", " + tostring(Method1) 
+	+ ", " + tostring(M)+ ", " + tostring(Method2)  
+	+ ", " + tostring(N) + ", " + tostring(Method3) 
+	+ ", " + tostring(S)+ ", " + tostring(Method4)  + ")";
+    instance.name(name);
+
+    if (not (nameOnly)) 
+    {
+        WAMI = instance.addStream("WAMI", core.Line, name + ".WAMI", "WAMI", instance.parameters.WAMI_color, first);
+		WAMI.setWidth(instance.parameters.width1);
+        WAMI.setStyle(instance.parameters.style1);
+        Signal = instance.addStream("Signal", core.Line, name + ".Signal", "Signal", instance.parameters.Signal_color, M4.DATA.first());
+		WAMI.setWidth(instance.parameters.width2);
+        WAMI.setStyle(instance.parameters.style2);
+    }
+}
+
+function Update(period, mode)
+{
+    Difference[period]= source[period]-source[period-1];
+	
+    if (period < first) 
+    {
+	 return;
+	}
+	M1.update(mode)
+	M2.update(mode);
+	M3.update(mode);
+	M4.update(mode);
+	WAMI[period]=M3.DATA[period];
+	if (period < M3.DATA.first()) 
+    {
+	 return;
+	}
+		
+        Signal[period] = M4.DATA[period];
+    
+}
+

@@ -1,0 +1,44 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - string.gmatch (s, pattern)</title>
+</head>
+<body>
+<h3><a name="pdf-string.gmatch"><code>string.gmatch (s, pattern)</code></a></h3>
+Returns an iterator function that,
+each time it is called,
+returns the next captures from <code>pattern</code> over string <code>s</code>.
+
+
+<p>
+If <code>pattern</code> specifies no captures,
+then the whole match is produced in each call.
+
+
+<p>
+As an example, the following loop
+
+<pre>
+     s = "hello world from Lua"
+     for w in string.gmatch(s, "%a+") do
+       print(w)
+     end
+</pre><p>
+will iterate over all the words from string <code>s</code>,
+printing one per line.
+The next example collects all pairs <code>key=value</code> from the
+given string into a table:
+
+<pre>
+     t = {}
+     s = "from=world, to=Lua"
+     for k, v in string.gmatch(s, "(%w+)=(%w+)") do
+       t[k] = v
+     end
+</pre>
+
+
+
+<p>
+<hr>
+</body>
+</html>

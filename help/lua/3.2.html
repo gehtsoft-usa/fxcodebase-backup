@@ -1,0 +1,39 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 3.2 - Stack Size</title>
+</head>
+<body>
+<h2>3.2 - <a name="3.2">Stack Size</a></h2>
+
+<p>
+When you interact with Lua API,
+you are responsible for ensuring consistency.
+In particular,
+<em>you are responsible for controlling stack overflow</em>.
+You can use the function <a href="lua_checkstack.html"><code>lua_checkstack</code></a>
+to grow the stack size.
+
+
+<p>
+Whenever Lua calls C,
+it ensures that at least <a name="pdf-LUA_MINSTACK"><code>LUA_MINSTACK</code></a> stack positions are available.
+<code>LUA_MINSTACK</code> is defined as 20,
+so that usually you do not have to worry about stack space
+unless your code has loops pushing elements onto the stack.
+
+
+<p>
+Most query functions accept as indices any value inside the
+available stack space, that is, indices up to the maximum stack size
+you have set through <a href="lua_checkstack.html"><code>lua_checkstack</code></a>.
+Such indices are called <em>acceptable indices</em>.
+More formally, we define an <em>acceptable index</em>
+as follows:
+
+<pre>
+     (index &lt; 0 &amp;&amp; abs(index) &lt;= top) ||
+     (index &gt; 0 &amp;&amp; index &lt;= stackspace)
+</pre><p>
+Note that 0 is never an acceptable index.
+</body>
+</html>

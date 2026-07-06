@@ -1,0 +1,90 @@
+function Init()
+{
+    indicator.name("Relative Spread Strength");
+    indicator.description("Relative Spread Strength");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");	
+    indicator.parameters.addInteger("Short", "Short MA Period", "Short MA Period", 10);
+    indicator.parameters.addInteger("Long", "Long Period MA", "Long Period MA", 50);
+    indicator.parameters.addInteger("RSI", "RSI Period", "RSI Period", 5);
+	indicator.parameters.addInteger("Smoothing", "Smoothing Period", "Smoothing Period", 5);
+	indicator.parameters.addGroup("Style");	
+    indicator.parameters.addColor("RSS_color", "Color of RSS", "Color of RSS", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+	
+	 indicator.parameters.addGroup("OB/OS Levels");	
+    indicator.parameters.addDouble("overbought", "Overbought Level","", 70);
+    indicator.parameters.addDouble("oversold","Oversold Level","", 30);
+	indicator.parameters.addColor("level_overboughtsold_color", "Line Color","", core.rgb(128, 128, 128));
+    indicator.parameters.addInteger("level_overboughtsold_width","Line width","", 1, 1, 5);
+    indicator.parameters.addInteger("level_overboughtsold_style", "Line Style","", core.LINE_SOLID);
+    indicator.parameters.setFlag("level_overboughtsold_style", core.FLAG_LEVEL_STYLE);
+}
+
+var Short;
+var Long;
+var RSI, rsi, ma;
+var Smoothing;
+var first;
+var source = null;
+var short, long;
+// Streams block
+var RSS = null;
+var Spread;
+// Routine
+function Prepare(nameOnly)
+{
+    Short = instance.parameters.Short;
+	Smoothing = instance.parameters.Smoothing;
+    Long = instance.parameters.Long;
+    RSI = instance.parameters.RSI;
+    source = instance.source;
+	short = core.indicators.create("EMA",source, Short);	
+	long = core.indicators.create("EMA", source, Long);
+
+    first = Math.max(short.DATA.first(), long.DATA.first());
+	
+	Spread = instance.addInternalStream(0, 0);
+	rsi = core.indicators.create("RSI", Spread, RSI);
+	ma = core.indicators.create("MVA", rsi.DATA,Smoothing);
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Short) + ", " + tostring(Long) + ", " + tostring(RSI) + ", " + tostring(Smoothing) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        RSS = instance.addStream("RSS", core.Line, name, "RSS", instance.parameters.RSS_color, ma.DATA.first());
+		RSS.setWidth(instance.parameters.width);
+        RSS.setStyle(instance.parameters.style);
+		
+        RSS.addLevel(instance.parameters.oversold, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);
+		RSS.addLevel(instance.parameters.overbought, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);    
+		
+    }
+}
+
+function Update(period, mode)
+{    
+    short.update(mode);
+	long.update(mode);
+
+	
+    if (period < first) 
+    {
+	 return;
+	}
+	
+	Spread[period]=short.DATA[period]-long.DATA[period];
+	rsi.update(mode);
+	ma.update(mode);
+	
+	if (period < ma.DATA.first())
+	{
+	 return;
+	}
+    RSS[period] = ma.DATA[period];
+}
+

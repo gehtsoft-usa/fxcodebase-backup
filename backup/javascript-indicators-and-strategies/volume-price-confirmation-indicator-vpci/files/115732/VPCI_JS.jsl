@@ -1,0 +1,61 @@
+function Init()
+{
+    indicator.name("VPCI indicator");
+    indicator.description("VPCI indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Slow_Period", "Slow_Period", "", 50);
+    indicator.parameters.addInteger("Fast_Period", "Fast_Period", "", 10);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(0, 255, 0));
+}
+
+var first;
+var source = null;
+var Slow_Period;
+var Fast_Period;
+var Buff=null;
+var CV;
+
+function Prepare()
+{
+    source = instance.source;
+    Slow_Period=instance.parameters.Slow_Period;
+    Fast_Period=instance.parameters.Fast_Period;
+    first = source.first()+2;
+    CV = instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Slow_Period + ", " + instance.parameters.Fast_Period + ")";
+    instance.name(name);
+    Buff = instance.addStream("Buff", core.Line, name + ".VPCI", "VPCI", instance.parameters.clr, first);
+    Buff.addLevel(0);
+}
+
+function Update(period, mode)
+{
+   CV[period]=source.close[period]*source.volume[period];
+   if (period>first+Math.max(Slow_Period,Fast_Period)) 
+   {
+    var Volume_Slow=Math.sum(source.volume, period-Slow_Period+1, period);
+    var Volume_Fast=Math.sum(source.volume, period-Fast_Period+1, period);
+    var VWMA_Slow=Math.sum(CV, period-Slow_Period+1, period)/Volume_Slow;
+    var VWMA_Fast=Math.sum(CV, period-Fast_Period+1, period)/Volume_Fast;
+    var SMA_Slow=Math.avg(source.close, period-Slow_Period+1, period);
+    var SMA_Fast=Math.avg(source.close, period-Fast_Period+1, period);
+    var VPC=VWMA_Slow-SMA_Slow;
+    var VPR=1;
+    if (SMA_Fast!=0) 
+    {
+     VPR=VWMA_Fast/SMA_Fast;
+    }
+    var VM=1;
+    if (Volume_Slow!=0) 
+    {
+     VM=(Volume_Fast*Slow_Period)/(Volume_Slow*Fast_Period);
+    }
+    Buff[period]=VPC*VPR*VM;
+   } 
+}
+

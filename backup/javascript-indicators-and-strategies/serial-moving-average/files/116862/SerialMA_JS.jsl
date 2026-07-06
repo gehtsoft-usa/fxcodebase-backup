@@ -1,0 +1,61 @@
+function Init()
+{
+    indicator.name("Serial MA indicator");
+    indicator.description("Serial MA indicator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("CrossClr", "Cross Color", "Cross Color", core.rgb(255, 255, 0));
+    indicator.parameters.addInteger("DotSize", "Dot size", "Dot size", 3, 1, 5);
+}
+
+var first;
+var source = null;
+var LastCross;
+var SerialMA=null;
+var Cross=null;
+
+function Prepare()
+{
+    source = instance.source;
+    first = source.first()+2;
+    LastCross = instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ")";
+    instance.name(name);
+    SerialMA = instance.addStream("SerialMA", core.Line, name + ".SerialMA", "SerialMA", instance.parameters.clr, first);
+    SerialMA.setWidth(instance.parameters.widthLinReg);
+    SerialMA.setStyle(instance.parameters.styleLinReg);
+    Cross = instance.addStream("Cross", core.Dot, name + ".Cross", "Cross", instance.parameters.CrossClr, first);
+    Cross.setWidth(instance.parameters.DotSize);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    LastCross[period]=LastCross[period-1];
+    SerialMA[period]=Math.avg(source, LastCross[period], period);
+    if ((SerialMA[period-1]-source[period-1])*(SerialMA[period]-source[period])<0)
+    {
+     LastCross[period]=period;
+     Cross[period]=source[period];
+     SerialMA[period]=source[period];
+    } 
+    else
+    {
+     Cross[period]=null;
+    }
+   } 
+   else if (period==first) 
+   {
+    LastCross[period]=period;
+    SerialMA[period]=source[period];
+    Cross[period]=source[period];
+   } 
+}
+

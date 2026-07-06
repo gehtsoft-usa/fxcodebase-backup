@@ -1,0 +1,71 @@
+function Init()
+{
+    indicator.name("Sine-Weighted Moving Average");
+    indicator.description("Sine-Weighted Moving Average");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+    indicator.parameters.addGroup("Calculation");	
+    indicator.parameters.addInteger("Period", "Period", "Period", 14);
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("SWMA_color", "Color of SWMA", "Color of SWMA", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var Period;
+
+var first;
+var source = null;
+
+var SWMA = null;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+    source = instance.source;
+    first = source.first()+Period;
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        SWMA = instance.addStream("SWMA", core.Line, name, "SWMA", instance.parameters.SWMA_color, first);
+		SWMA.setWidth(instance.parameters.width);
+        SWMA.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period)
+{
+    if (period < first)
+    {
+	 return;
+	}
+	
+	var  Numerator = 0; 
+    var  Denominator = 0; 
+	
+	var i;
+	for (i =1; i<=Period;i++) 
+    {	
+	     Numerator  =  Numerator +  Math.sin(3.1415926 * (Period - i + 1) / (Period + 1))*source[period-Period+i];
+        Denominator  = Denominator +  Math.sin(3.1415926 * (Period - i + 1) / (Period + 1));
+	}
+	
+	if (Denominator != 0) 
+    {
+        SWMA[period] = Numerator / Denominator;
+    }
+}
+
+ 
+
+
+  
+      
+   
+  
+ 
+

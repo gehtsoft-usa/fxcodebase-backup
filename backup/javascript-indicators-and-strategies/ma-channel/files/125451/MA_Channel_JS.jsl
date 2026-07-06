@@ -1,0 +1,94 @@
+function Init()
+{
+    indicator.name("MA channel indicator");
+    indicator.description("MA channel indicator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Number", "Number of MAs", "Number of MAs", 10);
+    indicator.parameters.addInteger("Period", "MA Period", "MA Period", 15);
+    indicator.parameters.addString("Method", "Method", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("Method", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Method", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Method", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Method", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Method", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Method", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Method", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Method", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Method", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Method", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Method", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Method", "JSmooth", "", "JSmooth");
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Uclr", "Upper line color", "Upper line color", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("Uwidth", "Upper line width", "Upper line width", 1, 1, 5);
+    indicator.parameters.addInteger("Ustyle", "Upper line style", "Upper line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("Ustyle", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Lclr", "Lower line color", "Lower line color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("Lwidth", "Lower line width", "Lower line width", 1, 1, 5);
+    indicator.parameters.addInteger("Lstyle", "Lower line style", "Lower line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("Lstyle", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Number;
+var Period;
+var Method;
+var MAs={};
+var Upper=null;
+var Lower=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Number=instance.parameters.Number;
+    Period=instance.parameters.Period;
+    Method=instance.parameters.Method;
+    first = source.first()+2;
+    var i;
+    MAs[0] = core.indicators.create("AVERAGES", source, Method, Period, false);
+    for (i=1; i<=Number-1; i++) 
+    {
+     MAs[i]= core.indicators.create("AVERAGES", MAs[i-1].DATA, Method, Period, false);
+    }
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Number + ", " + instance.parameters.Period + ", " + instance.parameters.Method + ")";
+    instance.name(name);
+    Upper = instance.addStream("Upper", core.Line, name + ".Upper", "Upper", instance.parameters.Uclr, first);
+    Upper.setWidth(instance.parameters.Uwidth);
+    Upper.setStyle(instance.parameters.Ustyle);
+    Lower = instance.addStream("Lower", core.Line, name + ".Lower", "Lower", instance.parameters.Lclr, first);
+    Lower.setWidth(instance.parameters.Lwidth);
+    Lower.setStyle(instance.parameters.Lstyle);
+}
+
+function Update(period, mode)
+{
+   if (period>first+Period) 
+   {
+    var i;
+    var Min = 10000000;
+    var Max=0;
+    for (i=0; i<=Number-1; i++) 
+    {
+     MAs[i].update(mode);
+     Min=Math.min(Min, MAs[i].DATA[period]);
+     Max=Math.max(Max, MAs[i].DATA[period]);
+    }
+    Upper[period]=Max;
+    Lower[period]=Min;
+   } 
+}
+

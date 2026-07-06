@@ -1,0 +1,22 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_touserdata</title>
+</head>
+<body>
+<h3><a name="lua_touserdata"><code>lua_touserdata</code></a></h3>
+<pre>void *lua_touserdata (lua_State *L, int index);</pre>
+
+<p>
+If the value at the given acceptable index is a full userdata,
+returns its block address.
+If the value is a light userdata,
+returns its pointer.
+Otherwise, returns <code>NULL</code>.
+
+
+
+
+
+<hr>
+</body>
+</html>

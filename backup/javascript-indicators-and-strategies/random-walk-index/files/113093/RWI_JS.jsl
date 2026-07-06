@@ -1,0 +1,94 @@
+function Init()
+{
+    indicator.name("Random Walk Index");
+    indicator.description("Random Walk Index");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addInteger("RWIFrame", "Period", "Period", 64);
+    indicator.parameters.addColor("RWIH_color", "Color of RWIH", "Color of RWIH", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("RWIL_color", "Color of RWIL", "Color of RWIL", core.rgb(255, 0, 0));
+}
+
+var Frame=null;
+var High=null;
+var Low=null;
+var ATRFrame=null;
+
+var first;
+var source = null;
+
+// Streams block
+var RWIH = null;
+var RWIL = null;
+var ATR=null;
+var TR=null;
+
+// Routine
+function Prepare()
+{
+    var i;
+	High = instance.parameters.RWIH_color;
+    Low = instance.parameters.RWIL_color;
+	Frame = instance.parameters.RWIFrame;
+    source = instance.source;
+    first = source.first();
+	
+	TR=instance.addInternalStream(0,0);
+	ATR={};
+	
+    var name = profile.id() + "(" + source.name() + ", " + Frame  + ")";
+    instance.name(name);
+    RWIH = instance.addStream("RWIH", core.Line, name + "High", "High", High, first);
+    RWIL = instance.addStream("RWIL", core.Line, name + "Low", "Low", Low, first);
+}
+
+function Update(period)
+{
+
+if (period > 2) 
+{
+ TR[period]=Math.max(source.high[period]-source.low[period],Math.abs(source.high[period]-source.close[period-1]),Math.abs(source.close[period-1]-source.low[period]));
+}
+
+
+var i=0;
+
+
+			if (period >= Frame && source.hasData(period)) 
+			{
+			
+					 
+						for  (i = 1; i<=Frame; i++) 
+						{
+					
+						  ATR[i]= Math.avg (TR, period-i, period);
+					
+									if (ATR[i]!= 0) 
+									{
+									
+											
+													if (i== 0) 
+													{
+													 RWIH[period] = ((source.high[period] - source.low[period-i]) / (ATR[i] / Math.sqrt(i+1)));
+													 RWIL[period] = ((source.high[period-i] - source.low[period]) / (ATR[i] / Math.sqrt(i+1)));
+													}
+											
+													 if (RWIH[period] < ((source.high[period] - source.low[period-i]) / (ATR[i] / Math.sqrt(i+1)))) 
+													 {
+														 RWIH[period]= ((source.high[period] - source.low[period-i]) / (ATR[i] / Math.sqrt(i+1))); 
+													 }
+													 
+													 if (RWIL[period] <((source.high[period-i] - source.low[period]) / (ATR[i] / Math.sqrt(i+1)))) 
+													 {
+														RWIL[period]=((source.high[period-i] - source.low[period]) / (ATR[i] / Math.sqrt(i+1)));
+													 }
+										
+											
+									}							
+						}	
+			}
+	
+	
+}
+

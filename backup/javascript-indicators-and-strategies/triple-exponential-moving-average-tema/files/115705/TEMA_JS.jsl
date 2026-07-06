@@ -1,0 +1,56 @@
+function Init()
+{
+    indicator.name("Triple Exponential Moving Average ");
+    indicator.description("Triple Exponential Moving Average ");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addInteger("Frame", "Period", "Period", 50,2,2000);
+    indicator.parameters.addColor("TC", "Color of TEMA", "Color of TEMA", core.rgb(0, 255, 0));
+}
+
+var Frame;
+
+var first;
+var source = null;
+
+var TEMA = null;
+var AVG,AVGofAVG, AVGofAVGofAVG ;
+var TC=null;
+
+function Prepare()
+{
+    Frame = instance.parameters.Frame;
+	TC = instance.parameters.TC;
+    source = instance.source;
+    first = source.first();
+	
+	AVG = core.indicators.create("EMA", source.close, Frame);
+	AVGofAVG = core.indicators.create("EMA", AVG.DATA, Frame);
+	AVGofAVGofAVG = core.indicators.create("EMA", AVGofAVG.DATA, Frame);
+
+    var name = profile.id() + "(" + source.name() + ", " + Frame + ")";
+    instance.name(name);
+    TEMA = instance.addStream("TEMA", core.Line, name, "TEMA", TC, first);
+}
+
+function Update(period,mode)
+{
+     if (period >= Frame && source.hasData(period)) 
+     {
+	
+	   AVG.update(mode);
+	   
+	   if (period >= Frame*2) 
+	   {
+	        AVGofAVG.update(mode);
+	   
+	        if (period >= Frame*3) 
+	        {
+	         AVGofAVGofAVG.update(mode);
+	         TEMA[period] = 3*AVG.DATA[period]-3*AVGofAVG.DATA[period]+AVGofAVGofAVG.DATA[period];
+			}
+	   }
+    }
+}
+

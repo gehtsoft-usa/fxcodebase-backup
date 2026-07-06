@@ -1,0 +1,28 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - luaL_callmeta</title>
+</head>
+<body>
+<h3><a name="luaL_callmeta"><code>luaL_callmeta</code></a></h3>
+<pre>int luaL_callmeta (lua_State *L, int obj, const char *e);</pre>
+
+<p>
+Calls a metamethod.
+
+
+<p>
+If the object at index <code>obj</code> has a metatable and this
+metatable has a field <code>e</code>,
+this function calls this field and passes the object as its only argument.
+In this case this function returns 1 and pushes onto the
+stack the value returned by the call.
+If there is no metatable or no metamethod,
+this function returns 0 (without pushing any value on the stack).
+
+
+
+
+
+<hr>
+</body>
+</html>

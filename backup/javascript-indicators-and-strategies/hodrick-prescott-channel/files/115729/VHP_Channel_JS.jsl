@@ -1,0 +1,157 @@
+function Init()
+{
+    indicator.name("VHP channel");
+    indicator.description("VHP channel");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Fast_Period", "Fast_Period", "", 21);
+    indicator.parameters.addInteger("Slow_Period", "Slow_Period", "", 144);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("HPclr", "HP color", "HP color", core.rgb(255, 255, 0));
+    indicator.parameters.addInteger("HPwidth", "HP width", "HP width", 1, 1, 5);
+    indicator.parameters.addInteger("HPstyle", "HP style", "HP style", core.LINE_SOLID);
+    indicator.parameters.setFlag("HPstyle", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("HPSclr", "HP slow color", "HP slow color", core.rgb(128, 128, 128));
+    indicator.parameters.addInteger("HPSwidth", "HP slow width", "HP slow width", 1, 1, 5);
+    indicator.parameters.addInteger("HPSstyle", "HP slow style", "HP slow style", core.LINE_DASH);
+    indicator.parameters.setFlag("HPSstyle", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Uclr", "Upper edge color", "Upper edge color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("Uwidth", "Upper edge width", "Upper edge width", 2, 1, 5);
+    indicator.parameters.addInteger("Ustyle", "Upper edge style", "Upper edge style", core.LINE_SOLID);
+    indicator.parameters.setFlag("Ustyle", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Lclr", "Lower edge color", "Lower edge color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("Lwidth", "Lower edge width", "Lower edge width", 2, 1, 5);
+    indicator.parameters.addInteger("Lstyle", "Lower edge style", "Lower edge style", core.LINE_SOLID);
+    indicator.parameters.setFlag("Lstyle", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Fast_Period;
+var Slow_Period;
+var HP=null;
+var HPS=null;
+var Upper=null;
+var Lower=null;
+var Lambda_F, Lambda_S;
+
+function Prepare()
+{
+    source = instance.source;
+    Fast_Period=instance.parameters.Fast_Period;
+    Slow_Period=instance.parameters.Slow_Period;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Fast_Period + ", " + instance.parameters.Slow_Period + ")";
+    instance.name(name);
+    HP = instance.addStream("HP", core.Line, name + ".HP", "HP", instance.parameters.HPclr, first);
+    HP.setWidth(instance.parameters.HPwidth);
+    HP.setStyle(instance.parameters.HPstyle);
+    HPS = instance.addStream("HPS", core.Line, name + ".HP slow", "HP slow", instance.parameters.HPSclr, first);
+    HPS.setWidth(instance.parameters.HPSwidth);
+    HPS.setStyle(instance.parameters.HPSstyle);
+    Upper = instance.addStream("Upper", core.Line, name + ".Upper", "Upper", instance.parameters.Uclr, first);
+    Upper.setWidth(instance.parameters.Uwidth);
+    Upper.setStyle(instance.parameters.Ustyle);
+    Lower = instance.addStream("Lower", core.Line, name + ".Lower", "Lower", instance.parameters.Lclr, first);
+    Lower.setWidth(instance.parameters.Lwidth);
+    Lower.setStyle(instance.parameters.Lstyle);
+    Lambda_F = 0.0625/Math.pow(Math.sin(3.1415926/Fast_Period), 4);
+    Lambda_S = 0.0625/Math.pow(Math.sin(3.1415926/Slow_Period), 4);
+}
+
+function CalcHP(Count, Lambda, src, Buff)
+{
+ var a={};
+ var b={};
+ var c={};
+ var i;
+ 
+ a[0]=1+Lambda;
+ b[0]=-2*Lambda;
+ c[0]=Lambda;
+ for (i=1; i<=Count-3; i++) 
+ {
+  a[i]=6*Lambda+1;
+  b[i]=-4*Lambda;
+  c[i]=Lambda;
+ }
+ a[1]=5*Lambda+1;
+ a[Count-1]=1+Lambda;
+ a[Count-2]=5*Lambda+1;
+ b[Count-2]=-2*Lambda;
+ b[Count-1]=0;
+ c[Count-2]=0;
+ c[Count-1]=0;
+ var H1, H2, H3, H4, H5, HH1, HH2, HH3, HH5, HB, HC, Z;
+ H1=0;
+ H2=0;
+ H3=0;
+ H4=0;
+ H5=0;
+ HH1=0;
+ HH2=0;
+ HH3=0;
+ HH5=0;
+ HB=0;
+ HC=0;
+ Z=0;
+
+ var srcLast=src.size()-1;
+ 
+ for (i=0; i<=Count-1; i++) 
+ {
+  Z=a[i]-H4*H1-HH5*HH2;
+  HB=b[i];
+  HH1=H1;
+  H1=(HB-H4*H2)/Z;
+  b[i]=H1;
+  HC=c[i];
+  HH2=H2;
+  H2=HC/Z;
+  c[i]=H2;
+  a[i]=(src[srcLast-i]-HH3*HH5-H3*H4)/Z;
+  HH3=H3;
+  H3=a[i];
+  H4=HB-H5*HH1;
+  HH5=H5;
+  H5=HC;
+ }
+ 
+ H2=0;
+ H1=a[Count-1];
+ Buff[srcLast-Count+1]=H1;
+ for (i=Count-2; i>=0; i--) 
+ {
+  Buff[srcLast-i]=a[i]-b[i]*H1-c[i]*H2;
+  H2=H1;
+  H1=Buff[srcLast-i];
+ }
+ 
+}
+
+function Update(period, mode)
+{
+   if (period==source.size()-1) 
+   {
+    CalcHP(Slow_Period, Lambda_F, source.close, HP);
+    CalcHP(Slow_Period, Lambda_S, source.close, HPS);
+    
+    var disp=0;
+    var i;
+    for (i=0; i<=Slow_Period-1; i++) 
+    {
+     disp=disp+(HP[period-i]-HPS[period-i])*(HP[period-i]-HPS[period-i]);
+    }
+    disp=disp/(Slow_Period-1);
+    var dev=2*Math.sqrt(disp);
+    for (i=0; i<=Slow_Period-1; i++) 
+    {
+     Upper[period-i]=HPS[period-i]+dev;
+     Lower[period-i]=HPS[period-i]-dev;
+    }
+   } 
+}
+

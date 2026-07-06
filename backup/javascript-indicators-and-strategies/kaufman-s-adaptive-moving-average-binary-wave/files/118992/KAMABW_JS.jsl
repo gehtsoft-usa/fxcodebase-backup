@@ -1,0 +1,121 @@
+function Init()
+{
+    indicator.name("Kaufman_s Adaptive Moving Average Binary Wave");
+    indicator.description("Kaufman_s Adaptive Moving Average Binary Wave");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+     indicator.parameters.addGroup("Calculation");	
+    indicator.parameters.addInteger("Period", "Period", "Period", 20);
+    indicator.parameters.addDouble("FilterPercent", "Filter Percent", "Filter Percent", 10);
+	indicator.parameters.addGroup("Style");	
+
+    indicator.parameters.addColor("KAMABW_color", "Color of KAMABW", "Color of KAMABW", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var Period;
+var FilterPercent;
+
+var first;
+var source = null;
+var diff;
+
+var KAMABW = null;
+var ama;
+var  amaLow,amaHigh,Raw;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+    FilterPercent = instance.parameters.FilterPercent;
+    source = instance.source;
+    first = source.first() +1;
+	
+	diff= instance.addInternalStream(0, 0);
+	ama= instance.addInternalStream(0, 0);
+	amaLow= instance.addInternalStream(0, 0);
+	amaHigh= instance.addInternalStream(0, 0);
+	Raw= instance.addInternalStream(0, 0);
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ", " + tostring(FilterPercent) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        KAMABW = instance.addStream("KAMABW", core.Line, name, "KAMABW", instance.parameters.KAMABW_color, first+Period+1 +Period);
+		KAMABW.setWidth(instance.parameters.width);
+        KAMABW.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period)
+{
+ if (period < first) 
+ {
+  return;
+ }
+	
+ diff[period] = Math.abs(source[period] - source[period-1]);
+	
+ if (period < first+Period) 
+ {
+  return;
+ }
+	
+ var signal = Math.abs(source[period] - source[period-Period]);
+ var noise = Math.sum (diff,period-Period+1, period);
+ var efRatio = signal / noise;
+ var fastSC = 0.6022;
+ var slowSC = 0.0645;
+ var smooth = Math.pow (efRatio * fastSC + slowSC, 2);
+	
+ if (period < first+Period+1) 
+ {
+  return;
+ }
+	
+ ama[period]=  ama[period-1] + smooth * (source[period] - ama[period-1]);   
+ Raw[period]= ama[period] - ama[period-1]
+   
+ if (period < first+Period+1 +Period)
+ {
+  return;
+ }
+  
+ var filter = FilterPercent/100 * Math.stdev( Raw, period-Period+1, period);
+
+ if (ama[period] < ama[period-1]) 
+ {
+  amaLow[period] =  ama[period]
+ } 
+ else
+ { 
+  amaLow[period]= amaLow[period-1];
+ }
+
+ if (ama[period] > ama[period-1]) 
+ {
+  amaHigh[period] =ama[period]
+ } 
+ else
+ {
+  amaHigh[period]= amaHigh[period-1];
+ }
+
+ if (ama[period] - amaLow[period] > filter) 
+ {
+  KAMABW[period]=1;
+ } 
+ else if (amaHigh[period] - ama[period] > filter) 
+ {
+  KAMABW[period]=-1; 
+ } 
+ else
+ {
+  KAMABW[period]=0;
+ }
+ 
+}
+

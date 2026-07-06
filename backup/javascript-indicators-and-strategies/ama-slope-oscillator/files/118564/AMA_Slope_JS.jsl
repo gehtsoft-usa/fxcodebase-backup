@@ -1,0 +1,78 @@
+function Init()
+{
+    indicator.name("AMA slope oscillator");
+    indicator.description("AMA slope oscillator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("AMA_Period", "AMA period", "", 9);
+    indicator.parameters.addInteger("Fast_MA_Period", "Fast MA period", "", 2);
+    indicator.parameters.addInteger("Slow_MA_Period", "Slow MA period", "", 30);
+    indicator.parameters.addDouble("G", "G", "", 2);
+    indicator.parameters.addDouble("dK", "dK", "", 1);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(255, 255, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var AMA_Period;
+var Fast_MA_Period;
+var Slow_MA_Period;
+var G;
+var dK;
+var slowSC, fastSC;
+var dSC;
+var AMA;
+var pipSize;
+var AMA_Slope=null;
+
+function Prepare()
+{
+    source = instance.source;
+    AMA_Period=instance.parameters.AMA_Period;
+    Fast_MA_Period=instance.parameters.Fast_MA_Period;
+    Slow_MA_Period=instance.parameters.Slow_MA_Period;
+    G=instance.parameters.G;
+    dK=instance.parameters.dK;
+    first = source.first()+2;
+    AMA=instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.AMA_Period + ", " + instance.parameters.Fast_MA_Period + ", " + instance.parameters.Slow_MA_Period + ", " + instance.parameters.G + ", " + instance.parameters.dK + ")";
+    instance.name(name);
+    AMA_Slope = instance.addStream("AMA_Slope", core.Line, name + ".AMA_Slope", "AMA_Slope", instance.parameters.clr, first);
+    AMA_Slope.setWidth(instance.parameters.widthLinReg);
+    AMA_Slope.setStyle(instance.parameters.styleLinReg);
+    slowSC=2/(Slow_MA_Period+1);
+    fastSC=2/(Fast_MA_Period+1);
+    dSC=fastSC-slowSC;
+    pipSize=source.pipSize();
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    var i;
+    var noise=0;
+    for (i=0; i<=AMA_Period-1; i++) 
+    {
+     noise=noise+Math.abs(source[period-i]-source[period-i-1]);
+    }
+    var signal=Math.abs(source[period]-source[period-AMA_Period]);
+    var ER=signal/noise;
+    var ERSC=ER*dSC;
+    var SSC=ERSC+slowSC;
+    AMA[period]=AMA[period-1]+Math.pow(SSC, G)*(source[period]-AMA[period-1]);
+    AMA_Slope[period]=(AMA[period]-AMA[period-1])/pipSize;
+   }
+   else if (period==first) 
+   {
+    AMA[period]=source[period];
+   } 
+}
+

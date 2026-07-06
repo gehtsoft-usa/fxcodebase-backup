@@ -1,0 +1,92 @@
+function Init()
+{
+    indicator.name("Vortext Indicator Difference");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+	indicator.parameters.addGroup("Calculation");
+	indicator.parameters.addInteger("N", "Length of the vortex", "No description", 14);
+	indicator.parameters.addGroup("Style");
+	indicator.parameters.addColor("UP", "Up Histogram  in Up Trend", "The color of Up Histogram.", core.rgb(0, 255, 0));
+	indicator.parameters.addColor("UPDOWN", "Down Histogram in Up Trend", "The color of Up Histogram.", core.rgb(0, 200, 0));	
+	indicator.parameters.addColor("DOWNUP", "Up Histogram in Down Trend", "The color of Down Histogram.", core.rgb(255, 0, 0));
+	indicator.parameters.addColor("DOWN", "Down Histogram in Down Trend", "The color of Down Histogram.", core.rgb(200, 0, 0));
+}
+
+var N;
+
+var first;
+var source = null;
+var DIF;
+
+var VIP = null;
+var VIM = null;
+var iVIP = null;
+var iVIN = null;
+var iATR = null;
+
+function Prepare()
+{
+    N = instance.parameters.N;
+    source = instance.source;
+    iATR = core.indicators.create("ATR", instance.source, 1);
+ 
+    first = iATR.DATA.first() + N; 
+
+    var name = profile.id() + "(" + source.name() + ", " + N + ")";
+    instance.name(name);
+    VIP =    instance.addInternalStream(0, 0);
+	VIM =    instance.addInternalStream(0, 0);
+    DIF = instance.addStream("DIF", core.Bar, name + ".Dif", "VI-", instance.parameters.UP, first);
+
+    iVIP = instance.addInternalStream(1, 0);
+    iVIM = instance.addInternalStream(1, 0);
+}
+
+function Update(period, mode)
+{
+    iATR.update(mode);
+    if (period >= 1) 
+    {
+        iVIP[period] = Math.abs(source.high[period] - source.low[period - 1]);
+        iVIM[period] = Math.abs(source.low[period] - source.high[period - 1]);
+    }
+    if (period >= first) 
+    {
+        var svip, svim, satr;
+        var range;
+        svip = Math.sum(iVIP, period-N+1, period);
+        svim = Math.sum(iVIM, period-N+1, period);
+        satr = Math.sum(iATR.DATA, period-N+1, period);
+
+        VIP[period] = svip / satr * 100;
+        VIM[period] = svim / satr * 100;
+		
+		DIF [period] = VIP[period] -VIM[period];
+		
+		                 if (DIF[period] > 0) 
+                         {
+							  if (DIF[period] > DIF[period-1]) 
+                              {
+							   DIF.setColor(period, instance.parameters.UP);
+                              } 
+							  else
+                              {
+							   DIF.setColor(period, instance.parameters.UPDOWN);
+							  }
+                            }
+						 else
+                         {
+						     if (DIF[period] < DIF[period-1]) 
+                             {
+							  DIF.setColor(period, instance.parameters.DOWN);
+                            }
+							  else
+                              {
+							   DIF.setColor(period, instance.parameters.DOWNUP);
+							  }
+						 }
+		
+    }
+}
+

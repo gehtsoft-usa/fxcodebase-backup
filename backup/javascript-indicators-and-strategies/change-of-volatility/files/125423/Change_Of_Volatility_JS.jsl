@@ -1,0 +1,90 @@
+function Init()
+{
+    indicator.name("Change of Volatility indicator");
+    indicator.description("Change of Volatility indicator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+    
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("MPeriod", "Momentum Period", "", 1);
+    indicator.parameters.addInteger("Short", "Short", "", 6);
+    indicator.parameters.addInteger("Long", "Long", "", 100);
+    indicator.parameters.addInteger("MaxTrendLevel", "Max. trend level", "", 80);
+    indicator.parameters.addInteger("MiddleTrendLevel", "Middle trend level", "", 50);
+    indicator.parameters.addInteger("FlatLevel", "Flat level", "", 30);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("MaxTrendClr", "Max trend Color", "Max trend Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("MiddleTrendClr", "Middle trend Color", "Middle trend Color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("FlatClr", "Flat Color", "Flat Color", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("NeutralClr", "Neutral Color", "Neutral Color", core.rgb(192, 192, 192));
+}
+
+var first;
+var source = null;
+var MPeriod;
+var Short;
+var Long;
+var MaxTrendLevel;
+var MiddleTrendLevel;
+var FlatLevel;
+var CoV=null;
+var Momentum;
+var StdDev_Short;
+var StdDev_Long;
+
+function Prepare()
+{
+    source = instance.source;
+    MPeriod=instance.parameters.MPeriod;
+    Short=instance.parameters.Short;
+    Long=instance.parameters.Long;
+    MaxTrendLevel=instance.parameters.MaxTrendLevel;
+    MiddleTrendLevel=instance.parameters.MiddleTrendLevel;
+    FlatLevel=instance.parameters.FlatLevel;
+    first = source.first()+2;
+    Momentum = core.indicators.create("MOMENTUM", source, MPeriod);
+    StdDev_Short = core.indicators.create("STDDEV", Momentum.DATA, Short);
+    StdDev_Long = core.indicators.create("STDDEV", Momentum.DATA, Long);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.MPeriod + ", " + instance.parameters.Short + ", " + instance.parameters.Long + ", " + instance.parameters.MaxTrendLevel + ", " + instance.parameters.MiddleTrendLevel + ", " + instance.parameters.FlatLevel + ")";
+    instance.name(name);
+    CoV = instance.addStream("CoV", core.Bar, name + ".CoV", "CoV", instance.parameters.NeutralClr, first);
+    CoV.addLevel(FlatLevel);
+    CoV.addLevel(MiddleTrendLevel);
+    CoV.addLevel(MaxTrendLevel);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    Momentum.update(mode);
+    StdDev_Short.update(mode);
+    StdDev_Long.update(mode);
+    if (StdDev_Long.DATA[period]!=0) 
+    {
+     CoV[period]=100*StdDev_Short.DATA[period]/StdDev_Long.DATA[period];
+    } 
+    else
+    {
+     CoV[period]=0;
+    }
+    if (CoV[period]>MaxTrendLevel) 
+    {
+     CoV.setColor(period,instance.parameters.MaxTrendClr);
+    } 
+    else if (CoV[period]>MiddleTrendLevel) 
+    {
+     CoV.setColor(period,instance.parameters.MiddleTrendClr);
+    } 
+    else if (CoV[period]>FlatLevel) 
+    {
+     CoV.setColor(period,instance.parameters.FlatClr);
+    } 
+    else
+    {
+     CoV.setColor(period,instance.parameters.NeutralClr);
+    }
+   } 
+}
+

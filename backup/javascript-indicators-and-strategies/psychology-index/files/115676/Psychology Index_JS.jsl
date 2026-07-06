@@ -1,0 +1,79 @@
+function Init()
+{
+    indicator.name("Psychology Index");
+    indicator.description("Psychology Index");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation"); 
+    indicator.parameters.addInteger("Period", "Lookback Period", "Lookback Period", 12);
+	indicator.parameters.addGroup("Style"); 
+    indicator.parameters.addColor("PsychologyIndex_color", "Color of PsychologyIndex", "Color of PsychologyIndex", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+	
+	
+	 indicator.parameters.addGroup("OB/OS Levels");	
+    indicator.parameters.addDouble("overbought", "Upper threshold (%)","", 75);
+    indicator.parameters.addDouble("oversold","Lower threshold (%)","", 25);
+	    indicator.parameters.addColor("level_overboughtsold_color", "Line Color","", core.rgb(128, 128, 128));
+    indicator.parameters.addInteger("level_overboughtsold_width","Line width","", 1, 1, 5);
+    indicator.parameters.addInteger("level_overboughtsold_style", "Line Style","", core.LINE_SOLID);
+    indicator.parameters.setFlag("level_overboughtsold_style", core.FLAG_LEVEL_STYLE);
+}
+
+var Period;
+
+var first;
+var source = null;
+
+var PsychologyIndex = null;
+var UpDay;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;  
+    source = instance.source;
+    first = source.first();
+	
+	UpDay= instance.addInternalStream(0, 0);
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period)  + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        PsychologyIndex = instance.addStream("PsychologyIndex", core.Line, name, "PsychologyIndex", instance.parameters.PsychologyIndex_color, first);
+		PsychologyIndex.setWidth(instance.parameters.width);
+        PsychologyIndex.setStyle(instance.parameters.style);		
+        PsychologyIndex.addLevel(instance.parameters.oversold, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);
+		PsychologyIndex.addLevel(instance.parameters.overbought, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);    
+		
+    }
+}
+
+function Update(period)
+{
+    if (period < first) 
+    {
+	 return;
+	}	
+	 
+	if (source[period] > source[period-1]) 
+    {
+	 UpDay[period]=1;
+    } 
+	else
+    {
+	 UpDay[period]=0;
+	}
+	
+	if (period < Period) 
+    {
+	 return;
+	}
+	
+    PsychologyIndex[period] = Math.sum(UpDay, period-Period+1, period)/Period*100;
+ 
+}
+

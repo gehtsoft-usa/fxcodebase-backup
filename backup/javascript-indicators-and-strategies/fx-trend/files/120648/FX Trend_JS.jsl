@@ -1,0 +1,82 @@
+function Init()
+{
+    indicator.name("FX Trend");
+    indicator.description("FX Trend");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");	
+    indicator.parameters.addInteger("Short_Period", "Short Period", "", 7);
+	indicator.parameters.addInteger("Mid_Period", "Mid Period", "", 14);
+	indicator.parameters.addInteger("Long_Period", "Long Period", "", 28);
+	
+	indicator.parameters.addGroup("Style");	
+    indicator.parameters.addColor("color", "Color of FX_Trend", "", core.rgb(255, 0, 0));
+	
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var Short_Period;
+var Mid_Period;
+var Long_Period;
+var Constant;
+
+var first;
+var source = null;
+
+var FX_Trend = null;
+
+function Prepare()
+{
+    Short_Period = instance.parameters.Short_Period;
+	Mid_Period = instance.parameters.Mid_Period;
+	Long_Period = instance.parameters.Long_Period;
+	
+    source = instance.source;
+    first = Math.max(Short_Period, Mid_Period, Long_Period );
+	
+	 Constant = 100 / (1.0 / Short_Period + 1.0 / Mid_Period + 1.0 / Long_Period);
+
+    var name = profile.id() + "(" + source.name() + ", " + Short_Period+ ", " + Mid_Period+ ", " + Long_Period + ")";
+    instance.name(name);
+    FX_Trend = instance.addStream("FX_Trend", core.Line, name, "FX_Trend", instance.parameters.color, first);
+	FX_Trend.setWidth(instance.parameters.width);
+    FX_Trend.setStyle(instance.parameters.style);
+	
+	FX_Trend.addLevel(50);
+}
+
+function Update(period)
+{
+    if (period >= first && source.hasData(period)) 
+    {
+	
+	var ll1, hh1;
+	var ll2, hh2;
+	var ll3, hh3;
+	var tmp;
+	
+	tmp=Math.minmax(source, period -Short_Period,  period);
+	ll1=tmp[0];
+	hh1=tmp[1];
+	tmp=Math.minmax(source, period -Mid_Period,  period);
+	ll2=tmp[0];
+	hh2=tmp[1];
+	tmp=Math.minmax(source, period -Long_Period,  period);
+	ll3=tmp[0];
+	hh3=tmp[1];
+	 
+    var  dif1 = hh1 - ll1;
+    var dif2 = hh2 - ll2;
+    var dif3 = hh3 - ll3;
+	
+	FX_Trend[period] = Constant * ((source.close[period] - ll1) / dif1 / Short_Period +
+                       (source.close[period] - ll2) / dif2 / Mid_Period +
+                       (source.close[period] - ll3) / dif3 / Long_Period);
+	
+	
+        
+    }
+}
+

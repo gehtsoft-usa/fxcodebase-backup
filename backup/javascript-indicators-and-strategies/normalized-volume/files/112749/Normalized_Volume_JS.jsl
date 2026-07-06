@@ -1,0 +1,66 @@
+function Init()
+{
+    indicator.name("Normalized volume");
+    indicator.description("Normalized volume");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addString("Period", "Period", "", "Hour");
+    indicator.parameters.addStringAlternative("Period", "Minute", "", "Minute");
+    indicator.parameters.addStringAlternative("Period", "Hour", "", "Hour");
+    indicator.parameters.addStringAlternative("Period", "Day", "", "Day");
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(0, 255, 0));
+}
+
+var first;
+var source = null;
+var Coeff;
+var NV=null;
+
+function Prepare()
+{
+    source = instance.source;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ")";
+    instance.name(name);
+    NV = instance.addStream("NV", core.Bar, name + ".NV", "NV", instance.parameters.clr, first);
+    if (instance.parameters.Period=="Minute") 
+    {
+     Coeff=1440;
+    }
+    else
+    {
+     if (instance.parameters.Period=="Hour") 
+     {
+      Coeff=24;
+     } 
+     else
+     {
+      Coeff=1;
+     } 
+    }
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    var T;
+    if (period==source.size()-1) 
+    {
+     T=core.now()-source.date(period-1);
+    } 
+    else
+    {
+     T=source.date(period)-source.date(period-1);
+    }
+    if (T>0) 
+    {
+     NV[period]=source.volume[period]/(T*Coeff);
+    } 
+   } 
+}
+

@@ -1,0 +1,74 @@
+function Init()
+{
+    indicator.name("Lentz Volatility");
+    indicator.description("Lentz Volatility");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+	
+	indicator.parameters.addGroup("Calculation");	
+    indicator.parameters.addInteger("AP", "ATR Period", "", 20);
+	indicator.parameters.addString("Method", "Method", "Method" , "EMA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "EMA" , "EMA");
+	indicator.parameters.addStringAlternative("Method", "LWMA", "LWMA" , "LWMA");
+	indicator.parameters.addInteger("MP", "EMA Period", "", 20);
+	indicator.parameters.addGroup("Style");	
+    indicator.parameters.addColor("UP", "Positiv  Color", "", core.rgb(0, 255, 0));
+	indicator.parameters.addColor("DOWN", "Negativ Color", "", core.rgb(255, 0, 0));
+}
+
+var AP;
+var MP;
+var Method;
+var first;
+var source = null;
+var ATR;
+var MA;
+
+var LVI = null;
+
+function Prepare(nameOnly)
+{
+    Method = instance.parameters.Method;
+    MP = instance.parameters.MP;
+	 AP= instance.parameters.AP;
+    source = instance.source;
+    
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(AP)+ ", " + tostring(Method) + ", " + tostring(MP)+ ")";
+    instance.name(name);
+	
+	ATR= core.indicators.create("ATR",source , AP);
+	MA= core.indicators.create(Method,ATR.DATA , MP);
+	
+	first = MA.DATA.first();
+
+    if (!(nameOnly)) 
+    {
+        LVI = instance.addStream("LVI", core.Bar, name, "LVI", instance.parameters.UP, first);
+    }
+}
+
+function Update(period, mode)
+{
+    if (period >= first && source.hasData(period)) 
+    {
+	
+	ATR.update(mode);
+    MA.update(mode);
+		
+        LVI[period] = MA.DATA[period]- ATR.DATA[period];
+		
+		if (LVI[period]> 0) 
+		{
+		 LVI.setColor(period, instance.parameters.UP);	
+		}
+		else
+		{
+		 LVI.setColor(period, instance.parameters.DOWN);
+		}
+		
+    } 
+}
+

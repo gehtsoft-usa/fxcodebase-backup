@@ -1,0 +1,23 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_objlen</title>
+</head>
+<body>
+<h3><a name="lua_objlen"><code>lua_objlen</code></a></h3>
+<pre>size_t lua_objlen (lua_State *L, int index);</pre>
+
+<p>
+Returns the "length" of the value at the given acceptable index:
+for strings, this is the string length;
+for tables, this is the result of the length operator ('<code>#</code>');
+for userdata, this is the size of the block of memory allocated
+for the userdata;
+for other values, it is&nbsp;0.
+
+
+
+
+
+<hr>
+</body>
+</html>

@@ -1,0 +1,233 @@
+function Init()
+{
+    indicator.name("Linear Regression Channel");
+    indicator.description("Linear Regrasion Channel");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+	indicator.parameters.addGroup("Calculation"); 
+    indicator.parameters.addInteger("period", "Period", "Period", 50);	
+	
+	indicator.parameters.addString("Raff", "Raff Channel", "Raff Channel Y/N" , "Yes");
+    indicator.parameters.addStringAlternative("Raff", "Yes", "Raff Channel Yes" , "Yes");
+	indicator.parameters.addStringAlternative("Raff", "No", "Raff Channel No" , "No");
+	
+	indicator.parameters.addString("HighLowClose", "Close || High && Low ", "Close || High && Low" , "HighLow");
+    indicator.parameters.addStringAlternative("HighLowClose", "High/Low", "High/Low" , "HighLow");
+	indicator.parameters.addStringAlternative("HighLowClose", "Close", "Close" , "Close");
+	
+	indicator.parameters.addGroup("Channel Mode");
+	indicator.parameters.addString("Model", "HighLow / Deviation ", "" , "HighLow");
+    indicator.parameters.addStringAlternative("Model", "High/Low", "High/Low" , "HighLow");
+	indicator.parameters.addStringAlternative("Model", "Deviation", "" , "Deviation");
+	 indicator.parameters.addDouble("Multiplier", "Deviation Multiplier", "If Deviation", 1.0, 0.0, 100.0);
+	
+	
+	indicator.parameters.addGroup("Top Line Style");
+	indicator.parameters.addColor("top_color", "Color of Top", "", core.rgb(0, 255, 0));
+	indicator.parameters.addInteger("widthT", "Width Top Line", "Width", 1, 1, 5);
+    indicator.parameters.addInteger("styleT", "Style Top Line", "Style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleT", core.FLAG_LINE_STYLE);
+	
+	
+	indicator.parameters.addGroup("Cental Line Style");
+	 indicator.parameters.addColor("out_color", "Color of Central Line", "", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("widthC", "Width Central Line", "Width", 1, 1, 5);
+    indicator.parameters.addInteger("styleC", "Style Central Line", "Style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleC", core.FLAG_LINE_STYLE);
+	
+	
+	
+	indicator.parameters.addGroup("Bottom Line Style");
+	indicator.parameters.addColor("bottom_color", "Color of Bottom", "", core.rgb(0, 0, 255));
+	indicator.parameters.addInteger("widthB", "Width Bottom Line", "Width", 1, 1, 5);
+    indicator.parameters.addInteger("styleB", "Style Bottom Line", "Style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleB", core.FLAG_LINE_STYLE);
+	
+	
+}
+
+var first;
+var source = null;
+
+var a=0;
+var b=0;
+var c=0;
+var petlja=0;
+var oldx=0;
+var oldy=0;
+var frame=0;
+var w=0;
+var maksimum=0;
+var minimum=0;
+var dd=0;
+var dl=0;
+var gl=0;
+var gd=0;
+var gornja=0;
+var doljnja=0;
+var raff;
+var CloseHighLow;
+var h=0;
+var i=0;
+var last_period=null;
+var Top, Bottom,Mid;
+var Model=null;
+var Multiplier;
+
+function Prepare()
+{    
+    Multiplier =instance.parameters.Multiplier;
+    Model =instance.parameters.Model;
+    frame = instance.parameters.period;
+	raff = instance.parameters.Raff;
+    source = instance.source;
+	CloseHighLow=instance.parameters.HighLowClose;
+	
+	
+    first = source.first();
+	
+	x = instance.addInternalStream(0, 0);
+	y = instance.addInternalStream(0, 0);
+	xy = instance.addInternalStream(0, 0);
+	x2 = instance.addInternalStream(0, 0);
+	
+	 var name;
+	 
+	if (Model == "Deviation") 
+	{
+     name = profile.id() + "(" + source.name() + ", " + frame +", " +   Model + ", "  +Multiplier + ")";
+    } 
+	else
+	{
+	 name = profile.id() + "(" + source.name() + ", " + frame +", " +   Model + ")";
+	}
+	
+    instance.name(name);	
+	
+	Mid = instance.addStream("Central", core.Line, name, "Central", instance.parameters.out_color, first);
+	Mid.setWidth(instance.parameters.widthC);
+    Mid.setStyle(instance.parameters.styleC);
+	
+	if (raff =="Yes") 
+	{
+	
+	Bottom = instance.addStream("Bottom", core.Line, name, "Bottom", instance.parameters.bottom_color, first);
+	Bottom.setWidth(instance.parameters.widthB);
+    Bottom.setStyle(instance.parameters.styleB);
+	
+	Top = instance.addStream("Top", core.Line, name, "Top", instance.parameters.top_color, first);
+	Top.setWidth(instance.parameters.widthT);
+    Top.setStyle(instance.parameters.styleT);
+	
+	}
+	
+    		
+	last_period =null;
+}
+
+function Update(period)
+{
+    if (period  < frame) 
+    { 
+	 return;
+	}
+		 if (period == source.size() -1) 
+		 {
+		    if (last_period !=  source.serial(period)) 
+		    {
+			 last_period =  source.serial(period)
+			 Clear(period);
+			}
+	
+			oldx=period- frame;
+
+						
+			for (i= 0; i<=frame; i++) 
+			{
+			 y[period-frame+i] = source.close[period-frame+i];
+			 xy[period-frame+i]=source.close[period-frame+i]*i;
+			 x[period-frame+i]=i;
+			 x2[period-frame+i]=i*i;
+			}		
+
+		c=((Math.sum(x2, period-frame+1, period)) *frame-(Math.sum(x, period-frame+1, period)) *(Math.sum(x, period-frame+1, period)) );
+		b=(Math.sum (xy, period-frame+1, period) *frame-Math.sum(x, period-frame+1, period) *Math.sum(y, period-frame+1, period) )/c;		
+		a=(Math.sum(y, period-frame+1, period) -Math.sum(x, period-frame+1, period)*b) /frame;
+		w=a+b*frame;
+		
+		 oldy=a;
+		
+		core.drawLine(Mid, core.range(oldx, period), oldy, oldx, w,period);               
+				
+				if (raff =="Yes" && Model =="HighLow") 
+				{
+																		 
+					for (petlja =1; petlja<=frame; petlja++) 
+					{
+					
+						            if (CloseHighLow=="Close") 
+						            {
+									 h=source.close[period-frame+petlja];
+									 l=source.close[period-frame+petlja]
+									} 
+									else
+									{
+									 h=source.high[period-frame+petlja];
+									 l=source.low[period-frame+petlja]
+									}
+																	
+									if (petlja==1) 
+									{ 
+									 maksimum = h - Mid[period-frame+petlja]; 
+									 minimum  =  Mid[period-frame+petlja] -l;
+									}															
+													
+							if ((h - Mid[period-frame+petlja]) > maksimum) 
+								{ 
+									maksimum = (h - Mid[period-frame+petlja]); 
+								}
+							if ((Mid[period-frame+petlja]- l )> minimum) 
+								{ 
+									minimum = (Mid[period-frame+petlja]- l); 
+								}
+						}	 				
+											
+						  lg=(Mid[oldx] + maksimum );
+						  dg=(Mid[period]+maksimum );
+						 ld=(Mid[oldx]-minimum);
+						 dd=(Mid[period] -minimum);											 
+								 
+						
+                     
+                           core.drawLine(Top, core.range(oldx, period), lg, oldx, dg,period);	
+					         core.drawLine(Bottom, core.range(oldx, period), ld, oldx, dd,period);	
+					}	
+                    else if (raff =="Yes" && Model != "HighLow") 
+                    { 
+					
+				        var SD = Math.stdev(source.close, period - frame , period);
+						
+						
+						  lg=(Mid[oldx] + SD * Multiplier );
+						  dg=(Mid[period]+SD * Multiplier );
+						 ld=(Mid[oldx]-SD * Multiplier);
+						 dd=(Mid[period] -SD * Multiplier);		
+					
+					           core.drawLine(Top, core.range(oldx, period), lg, oldx, dg,period);	
+					         core.drawLine(Bottom, core.range(oldx, period), ld, oldx, dd,period);		
+							 
+											 
+					}
+			
+			
+		}
+    
+}
+
+function Clear(p)
+{
+ Top[p-frame-1] = null;
+ Bottom[p-frame-1] = null;
+ Mid[p-frame-1] = null;
+}

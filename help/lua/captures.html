@@ -1,0 +1,29 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - Captures:</title>
+</head>
+<body>
+<h4>Captures:</h4><p>
+A pattern may contain sub-patterns enclosed in parentheses;
+they describe <em>captures</em>.
+When a match succeeds, the substrings of the subject string
+that match captures are stored (<em>captured</em>) for future use.
+Captures are numbered according to their left parentheses.
+For instance, in the pattern <code>"(a*(.)%w(%s*))"</code>,
+the part of the string matching <code>"a*(.)%w(%s*)"</code> is
+stored as the first capture (and therefore has number&nbsp;1);
+the character matching "<code>.</code>" is captured with number&nbsp;2,
+and the part matching "<code>%s*</code>" has number&nbsp;3.
+
+
+<p>
+As a special case, the empty capture <code>()</code> captures
+the current string position (a number).
+For instance, if we apply the pattern <code>"()aa()"</code> on the
+string <code>"flaaap"</code>, there will be two captures: 3&nbsp;and&nbsp;5.
+
+
+<p>
+A pattern cannot contain embedded zeros.  Use <code>%z</code> instead.
+</body>
+</html>

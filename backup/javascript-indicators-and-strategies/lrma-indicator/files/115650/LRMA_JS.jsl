@@ -1,0 +1,60 @@
+function Init()
+{
+    indicator.name("LRMA indicator");
+    indicator.description("LRMA indicator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 34);
+    indicator.parameters.addInteger("Signal", "Signal", "", 5);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("LRMAclr", "Color of LRMA", "Color of LRMA", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("SIGNALclr", "Color of Signal", "Color of Signal", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period;
+var Signal;
+var SMA;
+var LWMA;
+var LRMA=null;
+var SigBuff=null;
+var SignalMA;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    Signal=instance.parameters.Signal;
+    first = source.first()+2;
+    SMA = core.indicators.create("MVA", source, Period);
+    LWMA = core.indicators.create("LWMA", source, Period);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.Signal + ")";
+    instance.name(name);
+    LRMA = instance.addStream("LRMA", core.Line, name + ".LRMA", "LRMA", instance.parameters.LRMAclr, first);
+    SigBuff = instance.addStream("SigBuff", core.Line, name + ".Signal", "Signal", instance.parameters.SIGNALclr, first);
+    SignalMA = core.indicators.create("MVA", LRMA, Signal);
+    LRMA.setWidth(instance.parameters.widthLinReg);
+    LRMA.setStyle(instance.parameters.styleLinReg);
+    SigBuff.setWidth(instance.parameters.widthLinReg);
+    SigBuff.setStyle(instance.parameters.styleLinReg);
+}
+
+function Update(period, mode)
+{
+   if (period>first+Math.max(Period,Signal)) 
+   {
+    SMA.update(mode);
+    LWMA.update(mode);
+    LRMA[period]=3*LWMA.DATA[period]-2*SMA.DATA[period];
+    SignalMA.update(mode);
+    SigBuff[period]=SignalMA.DATA[period];
+   } 
+}
+

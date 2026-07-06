@@ -1,0 +1,92 @@
+function Init()
+{
+    indicator.name("Damiani volatmeter oscillator");
+    indicator.description("Damiani volatmeter oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Viscosity", "Viscosity", "", 7);
+    indicator.parameters.addInteger("Sedimentation", "Sedimentation", "", 50);
+    indicator.parameters.addDouble("Threshold_level", "Threshold level", "", 1.1);
+    indicator.parameters.addBoolean("Lag_suppressor", "Lag suppressor", "", true);
+	
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP color", "UP color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DNclr", "DN color", "DN color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("Transparency", "Transparency", "", 50,0,100);
+}
+
+var first;
+var source = null;
+var Viscosity;
+var Sedimentation;
+var Threshold_level;
+var Lag_suppressor;
+var ATR_V;
+var ATR_S;
+var StdDev_V;
+var StdDev_S;
+var ClBuffer;
+
+function Prepare()
+{
+    source = instance.source;
+    Viscosity=instance.parameters.Viscosity;
+    Sedimentation=instance.parameters.Sedimentation;
+    Threshold_level=instance.parameters.Threshold_level;
+    Lag_suppressor=instance.parameters.Lag_suppressor;
+    ATR_V = core.indicators.create("ATR", source, Viscosity);
+    ATR_S = core.indicators.create("ATR", source, Sedimentation);
+    StdDev_V = core.indicators.create("STDDEV2", source.typical, Viscosity, "LWMA");
+    StdDev_S = core.indicators.create("STDDEV2", source.typical, Sedimentation, "LWMA");
+    first = Math.max(ATR_V.DATA.first(), ATR_S.DATA.first())+2;
+    ClBuffer = instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Viscosity + ", " + instance.parameters.Sedimentation + ", " + instance.parameters.Threshold_level + ")";
+    instance.name(name);
+    Pbuff = instance.addStream("Pbuff", core.Line, name + ".Pbuff", "Pbuff", instance.parameters.UPclr, first);
+    Mbuff = instance.addStream("Mbuff", core.Line, name + ".Mbuff", "Mbuff", instance.parameters.UPclr, first);
+    instance.createChannelGroup("TC","TC" , Pbuff, Mbuff, instance.parameters.UPclr, 100-instance.parameters.Transparency);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    ATR_V.update(mode);
+    ATR_S.update(mode);
+    StdDev_V.update(mode);
+    StdDev_S.update(mode);
+    
+    var s1=ClBuffer[period-1];
+    var s3=ClBuffer[period-3];
+
+    var vol;
+    if (Lag_suppressor) 
+    {
+     vol=ATR_V.DATA[period]/ATR_S.DATA[period]+(s1-s3)/2;
+    } 
+    else
+    {
+     vol=ATR_V.DATA[period]/ATR_S.DATA[period];
+    }
+    
+    var t=Threshold_level-StdDev_V.DATA[period]/StdDev_S.DATA[period];
+    ClBuffer[period]=vol;
+    
+    Pbuff[period]=vol;
+    Mbuff[period]=t;
+    
+    if (Pbuff[period]>Mbuff[period]) 
+    {
+     Pbuff.setColor(period, instance.parameters.UPclr);
+     Mbuff.setColor(period, instance.parameters.UPclr);
+    } 
+    else
+    {
+     Pbuff.setColor(period, instance.parameters.DNclr);
+     Mbuff.setColor(period, instance.parameters.DNclr);
+    }
+   } 
+}
+

@@ -1,0 +1,71 @@
+function Init()
+{
+    indicator.name("D oscillator");
+    indicator.description("D oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("RSI_Period", "RSI_Period", "", 14);
+    indicator.parameters.addInteger("D_Period", "D_Period", "", 14);
+    indicator.parameters.addInteger("CCI_Period", "CCI_Period", "", 14);
+    indicator.parameters.addDouble("CCI_Coeff", "CCI_Coeff", "", 0.6);
+    indicator.parameters.addInteger("Smooth", "Smooth", "", 14);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr1", "Color 1", "Color 1", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clr2", "Color 2", "Color 2", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+var RSI_Period;
+var D_Period;
+var CCI_Period;
+var CCI_Coeff;
+var Smooth;
+var RSI;
+var CCI;
+var Buff1=null;
+var Buff2=null;
+
+function Prepare()
+{
+    source = instance.source;
+    RSI_Period=instance.parameters.RSI_Period;
+    D_Period=instance.parameters.D_Period;
+    CCI_Period=instance.parameters.CCI_Period;
+    CCI_Coeff=instance.parameters.CCI_Coeff;
+    Smooth=instance.parameters.Smooth;
+    RSI = core.indicators.create("RSI", source.close, RSI_Period);
+    CCI = core.indicators.create("CCI", source, CCI_Period);
+    first = Math.max(RSI.DATA.first(),CCI.DATA.first())+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.RSI_Period + ", " + instance.parameters.D_Period + ", " + instance.parameters.CCI_Period + ", " + instance.parameters.CCI_Coeff + ", " + instance.parameters.Smooth + ")";
+    instance.name(name);
+    Buff1 = instance.addStream("Buff1", core.Line, name + ".Buff1", "Buff1", instance.parameters.clr1, first);
+    Buff2 = instance.addStream("Buff2", core.Line, name + ".Buff2", "Buff2", instance.parameters.clr2, first);
+}
+
+function Update(period, mode)
+{
+   if (period>first+D_Period) 
+   {
+    RSI.update(mode);
+    CCI.update(mode);
+    var tmp=Math.minmax(RSI.DATA, period-D_Period+1, period);
+    var MaxRSI=tmp[1];
+    var MinRSI=tmp[0];
+    var StRSI=(RSI.DATA[period]-MinRSI)*200/(MaxRSI-MinRSI)-100;
+    var StCCI=CCI_Coeff*CCI.DATA[period]+(1-CCI_Coeff)*StRSI;
+    var sk=2/(Smooth+1);
+    var sk2=2/(Smooth*0.8+1);
+    Buff1[period]=sk*StCCI+(1-sk)*Buff1[period-1];
+    Buff2[period]=sk2*Buff1[period-1]+(1-sk2)*Buff2[period-1];
+   } 
+   else if (period==first) 
+   {
+    Buff1[period]=0;
+    Buff2[period]=0; 
+   } 
+}
+

@@ -1,0 +1,26 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - coroutine.status (co)</title>
+</head>
+<body>
+<h3><a name="pdf-coroutine.status"><code>coroutine.status (co)</code></a></h3>
+
+
+<p>
+Returns the status of coroutine <code>co</code>, as a string:
+<code>"running"</code>,
+if the coroutine is running (that is, it called <code>status</code>);
+<code>"suspended"</code>, if the coroutine is suspended in a call to <code>yield</code>,
+or if it has not started running yet;
+<code>"normal"</code> if the coroutine is active but not running
+(that is, it has resumed another coroutine);
+and <code>"dead"</code> if the coroutine has finished its body function,
+or if it has stopped with an error.
+
+
+
+
+<p>
+<hr>
+</body>
+</html>

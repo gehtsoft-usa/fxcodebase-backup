@@ -1,0 +1,92 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 8 - The Complete Syntax of Lua</title>
+</head>
+<body>
+<h1>8 - <a name="8">The Complete Syntax of Lua</a></h1>
+
+<p>
+Here is the complete syntax of Lua in extended BNF.
+(It does not describe operator precedences.)
+
+
+
+
+<pre>
+
+	chunk ::= {stat [`<b>;</b>&acute;]} [laststat [`<b>;</b>&acute;]]
+
+	block ::= chunk
+
+	stat ::=  varlist1 `<b>=</b>&acute; explist1 | 
+		 functioncall | 
+		 <b>do</b> block <b>end</b> | 
+		 <b>while</b> exp <b>do</b> block <b>end</b> | 
+		 <b>repeat</b> block <b>until</b> exp | 
+		 <b>if</b> exp <b>then</b> block {<b>elseif</b> exp <b>then</b> block} [<b>else</b> block] <b>end</b> | 
+		 <b>for</b> Name `<b>=</b>&acute; exp `<b>,</b>&acute; exp [`<b>,</b>&acute; exp] <b>do</b> block <b>end</b> | 
+		 <b>for</b> namelist <b>in</b> explist1 <b>do</b> block <b>end</b> | 
+		 <b>function</b> funcname funcbody | 
+		 <b>local</b> <b>function</b> Name funcbody | 
+		 <b>local</b> namelist [`<b>=</b>&acute; explist1] 
+
+	laststat ::= <b>return</b> [explist1] | <b>break</b>
+
+	funcname ::= Name {`<b>.</b>&acute; Name} [`<b>:</b>&acute; Name]
+
+	varlist1 ::= var {`<b>,</b>&acute; var}
+
+	var ::=  Name | prefixexp `<b>[</b>&acute; exp `<b>]</b>&acute; | prefixexp `<b>.</b>&acute; Name 
+
+	namelist ::= Name {`<b>,</b>&acute; Name}
+
+	explist1 ::= {exp `<b>,</b>&acute;} exp
+
+	exp ::=  <b>nil</b> | <b>false</b> | <b>true</b> | Number | String | `<b>...</b>&acute; | function | 
+		 prefixexp | tableconstructor | exp binop exp | unop exp 
+
+	prefixexp ::= var | functioncall | `<b>(</b>&acute; exp `<b>)</b>&acute;
+
+	functioncall ::=  prefixexp args | prefixexp `<b>:</b>&acute; Name args 
+
+	args ::=  `<b>(</b>&acute; [explist1] `<b>)</b>&acute; | tableconstructor | String 
+
+	function ::= <b>function</b> funcbody
+
+	funcbody ::= `<b>(</b>&acute; [parlist1] `<b>)</b>&acute; block <b>end</b>
+
+	parlist1 ::= namelist [`<b>,</b>&acute; `<b>...</b>&acute;] | `<b>...</b>&acute;
+
+	tableconstructor ::= `<b>{</b>&acute; [fieldlist] `<b>}</b>&acute;
+
+	fieldlist ::= field {fieldsep field} [fieldsep]
+
+	field ::= `<b>[</b>&acute; exp `<b>]</b>&acute; `<b>=</b>&acute; exp | Name `<b>=</b>&acute; exp | exp
+
+	fieldsep ::= `<b>,</b>&acute; | `<b>;</b>&acute;
+
+	binop ::= `<b>+</b>&acute; | `<b>-</b>&acute; | `<b>*</b>&acute; | `<b>/</b>&acute; | `<b>^</b>&acute; | `<b>%</b>&acute; | `<b>..</b>&acute; | 
+		 `<b>&lt;</b>&acute; | `<b>&lt;=</b>&acute; | `<b>&gt;</b>&acute; | `<b>&gt;=</b>&acute; | `<b>==</b>&acute; | `<b>~=</b>&acute; | 
+		 <b>and</b> | <b>or</b>
+
+	unop ::= `<b>-</b>&acute; | <b>not</b> | `<b>#</b>&acute;
+
+</pre>
+
+<p>
+
+
+
+
+
+
+<HR>
+<SMALL>
+Last update:
+Mon Jun  5 17:05:27 BRT 2006
+</SMALL>
+
+
+</body></html>
+</body>
+</html>

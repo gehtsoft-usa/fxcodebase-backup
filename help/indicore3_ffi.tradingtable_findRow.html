@@ -1,0 +1,443 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252" /><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><title>indicore3_ffi.tradingtable_findRow</title><style type="text/css">a, p, h1, h2, h3, h4, h5, h6, table, td, tr, li, ul, ol {
+    font-family: Verdana, Trebuchet MS, Arial;
+}
+
+a, p, td, tr, ul, ol, li {
+    font-size: 12pt;
+}
+
+h3 {
+    font-size: 13pt;
+}
+
+h2 {
+    font-size: 13pt;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+body {
+    color: #444444;
+    background-color: white;
+}
+
+A:link {
+    color: #0065b3;
+    cursor: pointer;
+}
+
+A:visited {
+    color: #0068be;
+    cursor: pointer;
+}
+
+a.action {
+  background-color: #0065b3;
+  color: white;
+  font-size: 10pt;
+  padding: 2px 2px;
+  width: 50pt;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px;
+}
+
+.side-icon {
+    float: left;
+}
+
+a.action [class*="dripicons-"]:before {
+    padding: 0 2px 0 0;
+    font-size: 12pt;
+    vertical-align: text-bottom;
+}
+
+.side-icon:after {
+  content: "";
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  border-left: 1.5px solid white;
+  transform: translate(-50%);
+}
+
+a.actiontab {
+  font-size: 10pt;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px 3px 0 0;
+}
+
+pre, code, code a {
+    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+    font-size: 12pt;
+}
+
+code.ctag {
+    background-color: #f1f1f1;
+    padding: .1em .2em;
+    border-radius: 3px;
+}
+
+pre {
+    background-color: white;
+}
+
+pre.example {
+    background-color: #f1f1f1;
+}
+
+ul {
+    list-style-type: disc;
+    margin-left: 18pt;
+}
+
+ol {
+    list-style-type: decimal;
+    margin-left: 18pt;
+}
+
+ul.hhc {
+    list-style-type: none;
+    margin-left: 1em;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+li.hhc {
+    margin-left: 0;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+table {
+  border-spacing: 0;
+  border-color: #dfe3e7;
+}
+
+tr + tr td {
+   border-top: 0;
+}
+
+tr td + td {
+  border-left: 0;
+}
+
+td {
+  border: 1px solid;
+  border-color: #dfe3e7;
+}
+
+tr:first-child td:first-child {
+   border-radius: 0.2em 0 0 0;
+}
+
+tr:first-child td:last-child {
+  border-radius: 0 0.2em 0 0;
+}
+
+tr:first-child td:only-child {
+  border-radius: 0.2em 0.2em 0 0;
+}
+
+tr:last-child td:first-child {
+    border-radius: 0 0 0 0.2em;
+}
+
+tr:last-child td:last-child {
+    border-radius: 0 0 0.2em 0;
+}
+
+tr:last-child td:only-child {
+    border-radius: 0 0 0.2em 0.2em;
+}
+
+tr:only-child td:only-child {
+    border-radius: 0.2em 0.2em 0.2em 0.2em;
+}
+
+tr:only-child td:first-child {
+   border-radius: 0.2em 0 0 0.2em;
+}
+
+tr:only-child td:last-child {
+  border-radius: 0 0.2em 0.2em 0;
+}
+
+
+td.tmain, td.tmain_nw, td.thdr {
+    background-color: rgb(255, 255, 255);
+    vertical-align: top;
+    padding: 3px;
+}
+
+td.tmain p, td.tmain_nw p, td.thdr p {
+    margin-top: 3pt;
+    margin-bottom: 3pt;
+}
+
+td.tmain_nw {
+    white-space: nowrap;
+}
+
+td.thdr {
+    background-color: #e3e3e3;
+}
+
+table.decl {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+    vertical-align: top;
+    padding: 3px;
+    width: 100%;
+}
+
+table.decl td {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+}
+
+div.note-quote {
+    border-left: 10px solid #ccc;
+    padding: 1em 10px .1em 10px;
+    margin: 1.5em 10px;
+    background-color: rgb(224, 224, 224);
+}
+
+div.note-note {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+div.note-warning {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #fff;
+    background-color: #ff6358;
+}
+div.note-warning code.ctag {
+    color: black;
+}</style>
+<link rel="stylesheet" href="res/dripicons.css"></head><body><script type="text/javascript">
+var highlighterEnabled = false;
+var maintopic = 'index';
+var helptitle = 'Indicore SDK 3';
+    function loadStarted() {
+    window.onload = loadCompleted;
+
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        var head = document.getElementsByTagName('head')[0];
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.min.js';
+        head.appendChild(script4);
+
+
+        var script2 = document.createElement('script');
+        script2.type = 'text/javascript';
+        script2.src = './highlighter/highlight.cshtml.js';
+        head.appendChild(script2);
+
+        var script3 = document.createElement('script');
+        script3.type = 'text/javascript';
+        script3.src = './highlighter/highlight.lua.js';
+        head.appendChild(script3);
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.luax.js';
+        head.appendChild(script4);
+    }
+}
+
+function loadCompleted() {
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        hljs.registerLanguage('cshtml-razor', window.hljsDefineCshtmlRazor);
+        hljs.registerLanguage('lua', window.hljsDefineLua);
+        hljs.registerLanguage('luax', window.hljsDefineLuaX);
+        x = document.querySelectorAll('pre code');
+        for (var i = 0; i < x.length; i++) {
+            if (x[i].hasAttribute('class')) {
+                hljs.highlightBlock(x[i]);
+            }
+        }
+    }
+}
+
+
+function hidediv(divname) {
+    document.getElementById(divname).style.display = 'none';
+}
+
+function showdiv(divname) {
+    document.getElementById(divname).style.display = 'inline';
+}
+
+function syncList() {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, null, document.title);
+    }
+}
+
+function syncList1(key) {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, key + '.html', document.title);
+    }
+}</script><script type="text/javascript">
+    loadStarted();
+</script><h1><code>static public method <b>indicore3_ffi.tradingtable_findRow</b></code></h1><h2>Brief</h2>
+<p>The function searches the trading table for a row with the specified column value.</p>
+<table class="tmain" width="100%">
+  <tr>
+    <td class="thdr"><b>Declaration</b></td>
+  </tr>
+  <tr>
+    <td class="tmain"><table class="decl">
+  <tr>
+    <td>Lua</td>
+  </tr>
+  <tr>
+    <td><code>void *&nbsp;indicore3_ffi.<b>tradingtable_findRow</b> (void *table, const char *column, void *key)</code></td>
+  </tr>
+</table></td>
+  </tr>
+</table><p></p>
+<table class="tmain" width="100%">
+  <tr>
+    <td colspan="2" class="thdr"><b>Parameters</b></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>table</code></td>
+    <td class="tmain" width="69%"><p>A pointer to the table in which the row is searched.
+The pointer must be obtained by using the
+<a href="indicore3_ffi.host_getTradingTable.html">indicore3_ffi.host_getTradingTable()</a>
+function.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>column</code></td>
+    <td class="tmain" width="69%"><p>A name of the table column by which the row is searched.
+The following columns can be used:</p><table class="tmain">
+  <tr>
+    <td class="thdr"><p>Table</p></td>
+    <td class="thdr"><p>Columns</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Accounts</p></td>
+    <td class="tmain"><p>AccountID, AccountName</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Offers</p></td>
+    <td class="tmain"><p>OfferID, Instrument</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Orders</p></td>
+    <td class="tmain"><p>OrderID, OfferID, TradeID, AccountID, RequestID, OCOBulkID</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Trades</p></td>
+    <td class="tmain"><p>TradeID, AccountID, OfferID, OpenOrderID, OpenOrderReqID</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Closed Trades</p></td>
+    <td class="tmain"><p>TradeID, AccountID, OfferID, OpenOrderID, OpenOrderReqID, CloseOrderID,
+CloseOrderReqID</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Messages</p></td>
+    <td class="tmain"><p>MsgID</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>key</code></td>
+    <td class="tmain" width="69%"><p>A pointer to the value to be searched in the specified column.
+Depending on the data type of the column, the pointer must be obtained by using the one of
+the following functions:</p><ul class="main">
+  <li><p><a href="indicore3_ffi.parameterconstant_new_int.html">indicore3_ffi.parameterconstant_new_int()</a>.</p></li>
+  <li><p><a href="indicore3_ffi.parameterconstant_new_double.html">indicore3_ffi.parameterconstant_new_double()</a>.</p></li>
+  <li><p><a href="indicore3_ffi.parameterconstant_new_bool.html">indicore3_ffi.parameterconstant_new_bool()</a>.</p></li>
+  <li><p><a href="indicore3_ffi.parameterconstant_new_string.html">indicore3_ffi.parameterconstant_new_string()</a>.</p></li>
+</ul><p>A value returned by the <a href="indicore3_ffi.tradingtablerow_value.html">indicore3_ffi.tradingtablerow_value()</a>
+function can be also used as the parameter value.</p>
+<p>Note that the <code class="ctag">key</code> value must be deleted when it is no longer needed by using the
+<a href="indicore3_ffi.parameterconstant_delete.html">indicore3_ffi.parameterconstant_delete()</a>
+function.</p></td>
+  </tr>
+</table><p><b>Returns</b></p><p>The function returns a pointer to the row if the row is founded.
+<br>The function returns <code class="ctag">nil</code> if the row that matches the searching criteria does
+not exist.</p><h2>Details</h2><p>The following functions are intended to work with the row:</p><table class="tmain">
+  <tr>
+    <td class="thdr"><p>Function</p></td>
+    <td class="thdr"><p>Description</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><a href="indicore3_ffi.tradingtablerow_value.html">indicore3_ffi.tradingtablerow_value()</a></p></td>
+    <td class="tmain"><p>The function returns a cell value of the row.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><a href="indicore3_ffi.tradingtablerow_refresh.html">indicore3_ffi.tradingtablerow_refresh()</a></p></td>
+    <td class="tmain"><p>The function refreshes data in the row.</p></td>
+  </tr>
+</table><p>The row must be released when it is no longer needed by using the
+<a href="indicore3_ffi.core_object_release.html">indicore3_ffi.core_object_release()</a>
+function.</p>
+<p>Note that if the table contains more than one row that matches the searching criteria,
+for example, there are number of trades that have been opened by one and the same order,
+the function returns only the first encountered row.
+In such cases, the
+<a href="indicore3_ffi.tradingtable_findAll.html">indicore3_ffi.tradingtable_findAll()</a>
+function can be used.</p><div id="open77" style="display:none">
+  <p>The example shows how to find <code class="ctag">OfferID</code> for the instrument at which the indicator is applied.&nbsp;<a href="javascript: showdiv('close77'); hidediv('open77');" onclick="javascript: showdiv('close77'); hidediv('open77');" class="action">Show<span class="side-icon dripicons-chevron-right"></span></a></p>
+</div>
+<div id="close77" style="display:inline">
+  <p>The example shows how to find <code class="ctag">OfferID</code> for the instrument at which the indicator is applied.&nbsp;<a href="javascript: showdiv('open77'); hidediv('close77');" onclick="javascript: showdiv('open77'); hidediv('close77');" class="action">Hide<span class="side-icon dripicons-chevron-down"></span></a></p>
+  <pre class="example" id="example77"><code>   ...
+   local ffi_instance;
+   local ffi_host;
+   local offerId;
+   ...
+   local pv = ffi.typeof(&quot;void *&quot;);
+   ffi_instance = ffi.cast(pv, instance.ffi_ptr);
+   ffi_host = ffi.cast(pv, core.host.ffi_ptr);
+   ...
+   local ffi_offers_table, ffi_offer, ffi_offers_row, ffi_offerId
+   ffi_offers_table = indicore3_ffi.host_getTradingTable(ffi_host, ffi_instance, &quot;offers&quot;);
+   ffi_offer = indicore3_ffi.parameterconstant_new_string(source:instrument());
+   ffi_offers_row = indicore3_ffi.tradingtable_findRow(ffi_offers_table, &quot;Instrument&quot;, ffi_offer);
+   indicore3_ffi.core_object_release(ffi_offers_table);
+   indicore3_ffi.parameterconstant_delete(ffi_offer);
+   ffi_offerId = indicore3_ffi.tradingtablerow_value(ffi_offers_row, &quot;OfferID&quot;);
+   indicore3_ffi.core_object_release(ffi_offers_row);
+   offerId = ffi.string(indicore3_ffi.parameterconstant_get_string(ffi_offerId));
+   indicore3_ffi.parameterconstant_delete(ffi_offerId);
+   ...
+ </code></pre>
+</div><p>Declared in <a href="indicore3_ffi.html">indicore3_ffi</a></p>
+<p>
+  <center><a href="indicore3_ffi.html">back</a></center>
+</p><script language="javascript" type="text/javascript">syncList1('indicore3_ffi');</script></body></html>

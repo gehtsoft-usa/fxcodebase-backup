@@ -1,0 +1,23 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_setglobal</title>
+</head>
+<body>
+<h3><a name="lua_setglobal"><code>lua_setglobal</code></a></h3>
+<pre>void lua_setglobal (lua_State *L, const char *name);</pre>
+
+<p>
+Pops a value from the stack and
+sets it as the new value of global <code>name</code>.
+It is defined as a macro:
+
+<pre>
+     #define lua_setglobal(L,s)   lua_setfield(L, LUA_GLOBALSINDEX, s)
+</pre>
+
+
+
+
+<hr>
+</body>
+</html>

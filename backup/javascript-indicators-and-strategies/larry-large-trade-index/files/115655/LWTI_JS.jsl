@@ -1,0 +1,66 @@
+function Init()
+{
+    indicator.name("Larry Large Trade Index");
+    indicator.description("Larry Large Trade Index");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "Period", 8);
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("LWPI_color", "Color of LWTI", "Color of LWTI", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var Period;
+
+var first;
+var source = null;
+
+var LWPI = null;
+var ATR, MA,Raw;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+    source = instance.source;
+   
+	
+	Raw = instance.addInternalStream(0, 0);
+	MA = core.indicators.create("MVA", Raw, Period);	
+    ATR = core.indicators.create("ATR", source, Period);
+	
+	 first = Math.max(MA.DATA.first(), ATR.DATA.first())
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        LWPI = instance.addStream("LWTI", core.Line, name, "LWTI", instance.parameters.LWPI_color, first);
+		LWPI.setWidth(instance.parameters.width);
+        LWPI.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period, mode)
+{
+   if (period < source.first() + Period) 
+   {
+	 return;
+   }
+
+    Raw[period]= source.close[period]-source.close[period-Period+1];
+	
+	ATR.update(mode);
+	MA.update(mode);
+	
+    if (period < first) 
+    {
+	 return;
+	}
+	
+	    LWPI[period] = MA.DATA[period]/ATR.DATA[period]*50+50; 
+		
+}
+

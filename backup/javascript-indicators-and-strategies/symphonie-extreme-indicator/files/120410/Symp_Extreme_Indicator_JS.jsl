@@ -1,0 +1,95 @@
+function Init()
+{
+    indicator.name("Symphonie Extreme indicator");
+    indicator.description("Symphonie Extreme indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("r", "r", "", 12);
+    indicator.parameters.addInteger("s", "s", "", 12);
+    indicator.parameters.addInteger("u", "u", "", 5);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UpPosClr", "Up Positive Color", "Up Positive Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("UpNegClr", "Up Negative Color", "Up Negative Color", core.rgb(0, 128, 0));
+    indicator.parameters.addColor("DnPosClr", "Dn Positive Color", "Dn Positive Color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("DnNegClr", "Dn Negative Color", "Dn Negative Color", core.rgb(128, 0, 0));
+}
+
+var first;
+var source = null;
+var r, s, u;
+var UpTicks, DnTicks;
+var UpEMA, DnEMA;
+var UpDEMA, DnDEMA;
+var TVI;
+var pipSize;
+var Symp_Extreme=null;
+
+function Prepare()
+{
+    source = instance.source;
+    r=instance.parameters.r;
+    s=instance.parameters.s;
+    u=instance.parameters.u;
+    first = source.first()+2;
+    UpTicks=instance.addInternalStream(first, 0);
+    DnTicks=instance.addInternalStream(first, 0);
+    UpEMA=core.indicators.create("EMA", UpTicks, r);
+    DnEMA=core.indicators.create("EMA", DnTicks, r);
+    UpDEMA=core.indicators.create("EMA", UpEMA.DATA, s);
+    DnDEMA=core.indicators.create("EMA", DnEMA.DATA, s);
+    TVI_Raw=instance.addInternalStream(first, 0);
+    TVI=core.indicators.create("EMA", TVI_Raw, u);
+    var name = profile.id() + "(" + source.name() + ", " + r + ", " + s + ", " + u + ")";
+    instance.name(name);
+    Symp_Extreme = instance.addStream("Symp_Extreme", core.Bar, name + ".Symp_Extreme", "Symp_Extreme", instance.parameters.UpPosClr, first);
+    pipSize=source.pipSize();
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    UpTicks[period]=(source.volume[period]+(source.close[period]-source.open[period])/pipSize)/2;
+    DnTicks[period]=source.volume[period]-UpTicks[period];
+    UpEMA.update(mode);
+    DnEMA.update(mode);
+    UpDEMA.update(mode);
+    DnDEMA.update(mode);
+    if (UpDEMA.DATA[period]+DnDEMA.DATA[period]!=0) 
+    {
+     TVI_Raw[period]=100*(UpDEMA.DATA[period]-DnDEMA.DATA[period])/(UpDEMA.DATA[period]+DnDEMA.DATA[period]);
+    } 
+    else
+    {
+     TVI_Raw[period]=0;
+    } 
+    TVI.update(mode);
+    Symp_Extreme[period]=TVI.DATA[period];
+    if (TVI.DATA[period]>TVI.DATA[period-1]) 
+    {
+     if (TVI.DATA[period]>=0) 
+     {
+      Symp_Extreme.setColor(period,instance.parameters.UpPosClr);
+     } 
+     else
+     {
+      Symp_Extreme.setColor(period,instance.parameters.UpNegClr);
+     }
+    } 
+    else
+    {
+     if (TVI.DATA[period]>=0) 
+     {
+      Symp_Extreme.setColor(period,instance.parameters.DnPosClr);
+     } 
+     else
+     {
+      Symp_Extreme.setColor(period,instance.parameters.DnNegClr);
+     }
+    }
+   } 
+}
+

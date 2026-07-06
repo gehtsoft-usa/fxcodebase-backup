@@ -1,0 +1,133 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 2.4.5 - For Statement</title>
+</head>
+<body>
+<h3>2.4.5 - <a name="2.4.5">For Statement</a></h3>
+
+<p>
+
+The <b>for</b> statement has two forms:
+one numeric and one generic.
+
+
+<p>
+The numeric <b>for</b> loop repeats a block of code while a
+control variable runs through an arithmetic progression.
+It has the following syntax:
+
+<pre>
+	stat ::= <b>for</b> Name `<b>=</b>&acute; exp `<b>,</b>&acute; exp [`<b>,</b>&acute; exp] <b>do</b> block <b>end</b>
+</pre><p>
+The <em>block</em> is repeated for <em>name</em> starting at the value of
+the first <em>exp</em>, until it passes the second <em>exp</em> by steps of the
+third <em>exp</em>.
+More precisely, a <b>for</b> statement like
+
+<pre>
+     for var = e1, e2, e3 do block end
+</pre><p>
+is equivalent to the code:
+
+<pre>
+     do
+       local _var, _limit, _step = tonumber(e1), tonumber(e2), tonumber(e3)
+       if not (_var and _limit and _step) then error() end
+       while (_step&gt;0 and _var&lt;=_limit) or (_step&lt;=0 and _var&gt;=_limit) do
+         local var = _var
+         <em>block</em>
+         _var = _var + _step
+       end
+     end
+</pre><p>
+Note the following:
+
+<ul>
+
+<li>
+All three control expressions are evaluated only once,
+before the loop starts.
+They must all result in numbers.
+</li>
+
+<li>
+<code>_var</code>, <code>_limit</code>, and <code>_step</code> are invisible variables.
+The names are here for explanatory purposes only.
+</li>
+
+<li>
+If the third expression (the step) is absent,
+then a step of&nbsp;1 is used.
+</li>
+
+<li>
+You can use <b>break</b> to exit a <b>for</b> loop.
+</li>
+
+<li>
+The loop variable <code>var</code> is local to the loop;
+you cannot use its value after the <b>for</b> ends or is broken.
+If you need the value of the loop variable <code>var</code>,
+then assign it to another variable before breaking or exiting the loop.
+</li>
+
+</ul>
+
+<p>
+The generic <b>for</b> statement works over functions,
+called <em>iterators</em>.
+On each iteration, the iterator function is called to produce a new value,
+stopping when this new value is <b>nil</b>.
+The generic <b>for</b> loop has the following syntax:
+
+<pre>
+	stat ::= <b>for</b> namelist <b>in</b> explist1 <b>do</b> block <b>end</b>
+	namelist ::= Name {`<b>,</b>&acute; Name}
+</pre><p>
+A <b>for</b> statement like
+
+<pre>
+     for var_1, &middot;&middot;&middot;, var_n in explist do block end
+</pre><p>
+is equivalent to the code:
+
+<pre>
+     do
+       local _f, _s, _var = explist
+       while true do
+         local var_1, &middot;&middot;&middot;, var_n = _f(_s, _var)
+         _var = var_1
+         if _var == nil then break end
+         block
+       end
+     end
+</pre><p>
+Note the following:
+
+<ul>
+
+<li>
+<code>explist</code> is evaluated only once.
+Its results are an <em>iterator</em> function,
+a <em>state</em>, and an initial value for the first <em>iterator variable</em>.
+</li>
+
+<li>
+<code>_f</code>, <code>_s</code>, and <code>_var</code> are invisible variables.
+The names are here for explanatory purposes only.
+</li>
+
+<li>
+You can use <b>break</b> to exit a <b>for</b> loop.
+</li>
+
+<li>
+The loop variables <code>var_i</code> are local to the loop;
+you cannot use their values after the <b>for</b> ends.
+If you need these values,
+then assign them to other variables before breaking or exiting the loop.
+</li>
+
+</ul>
+</body>
+</html>

@@ -1,0 +1,134 @@
+function Init()
+{
+    indicator.name("Finite Volume Elements");
+    indicator.description("Finite Volume Elements");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+     indicator.parameters.addGroup("FVE Calculation");	
+    indicator.parameters.addInteger("Period1", "Period", "Period", 22);
+	
+	indicator.parameters.addString("Method1", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method1", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method1", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method1", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method1", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method1", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method1", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method1", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method1", "WMA", "WMA" , "WMA");
+	
+	 indicator.parameters.addGroup("Smoothing Calculation");	
+	indicator.parameters.addInteger("Period2", "Period", "Period", 22);
+	
+	indicator.parameters.addString("Method2", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method2", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method2", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method2", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method2", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method2", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method2", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method2", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method2", "WMA", "WMA" , "WMA");
+	 indicator.parameters.addGroup("Style");	
+    indicator.parameters.addColor("FVE_color", "Color of FVE", "Color of FVE", core.rgb(0, 255, 0));
+	indicator.parameters.addInteger("width1", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style1", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style1", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Signal_color", "Color of Signal", "Color of Signal", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width2", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style2", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style2", core.FLAG_LINE_STYLE);
+}
+
+var Period1, Method1;
+var Period2, Method2;
+var first;
+var source = null;
+
+var FVE = null;
+var Signal = null;
+var INTRA,INTER, VE;
+var MA1, MA2;
+
+function Prepare(nameOnly)
+{
+    Period1 = instance.parameters.Period1;
+	Method1 = instance.parameters.Method1;
+	Period2 = instance.parameters.Period2;
+	Method2 = instance.parameters.Method2;
+    source = instance.source;
+    first = source.first()+Period1;
+	
+	 assert(source.supportsVolume(), "The source must have volume");
+	 
+	INTRA = instance.addInternalStream(0, 0);
+	INTER = instance.addInternalStream(0, 0);
+    VE= instance.addInternalStream(0, 0);
+	
+	MA1 = core.indicators.create(Method1, source.volume, Period1);
+	
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period1) + ", " + tostring(Method1)+ ", " + tostring(Period2) + ", " + tostring(Method2)+ ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        FVE = instance.addStream("FVE", core.Line, name + ".FVE", "FVE", instance.parameters.FVE_color, Math.max(Period1+1,  MA1.DATA.first()));
+		FVE.setWidth(instance.parameters.width1);
+        FVE.setStyle(instance.parameters.style1);
+		if (Period2 > 0) 
+        { 
+		 MA2 = core.indicators.create(Method2, FVE, Period2);
+         Signal = instance.addStream("Signal", core.Line, name + ".Signal", "Signal", instance.parameters.Signal_color, MA2.DATA.first());
+		 Signal.setWidth(instance.parameters.width2);
+         Signal.setStyle(instance.parameters.style2);
+		}
+    }
+}
+
+function Update(period, mode)
+{
+    INTRA[period] = Math.log(source.high[period]) - Math.log(source.low[period]);
+	INTER[period] = Math.log(source.typical[period]) -Math.log(source.typical[period-1]);
+	
+	
+	if (period < first) 
+    {
+	 return;
+	}
+	var VINTRA = Math.stdev  (INTRA, period-Period1+1, period);	
+	var VINTER = Math.stdev  (INTER, period-Period1+1, period);
+ 
+    var CUTOFF = 0.1 * (VINTER + VINTRA) * source.close[period];
+    var MF = source.close[period] - (source.high[period] + source.low[period])/2 + source.typical[period] - source.typical[period-1];
+	
+	if (MF > CUTOFF) 
+    {
+     VE[period] = source.volume[period];
+    } 
+    else if (MF < -CUTOFF) 
+    {
+     VE[period] = -source.volume[period];
+    } 
+    else
+    {
+     VE[period] = 0;
+	}
+	
+	 MA1.update(mode);
+	
+	if (period < MA1.DATA.first()) 
+    {
+	 return;
+	}
+	
+         FVE[period] = 100 * Math.sum (VE, period-Period1+1, period) / (MA1.DATA[period] * Period1) ;
+		 
+		 
+		if (Period2 > 0) 
+        {		
+		 MA2.update(mode);
+         Signal[period] =  MA2.DATA[period];
+		}
+    
+}

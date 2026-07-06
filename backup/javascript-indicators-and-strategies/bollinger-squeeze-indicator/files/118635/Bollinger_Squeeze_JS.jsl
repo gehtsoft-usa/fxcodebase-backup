@@ -1,0 +1,123 @@
+function Init()
+{
+    indicator.name("Bollinger Squeeze Indicator");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    
+    indicator.parameters.addInteger("triggerType", "triggerType", "1-Stochastic, 2-CCI, 3-RSI", 1);
+    indicator.parameters.addInteger("Stochastic_K", "Stochastic_K", "Number of periods for %K", 14);
+    indicator.parameters.addInteger("Stochastic_SD", "Stochastic_SD", "The number of periods for %K", 3);
+    indicator.parameters.addInteger("Stochastic_D", "Stochastic_D", "%D slowing periods", 3);
+    indicator.parameters.addInteger("CCI_N", "CCI_N", "Period for CCI", 50);
+    indicator.parameters.addInteger("RSI_N", "RSI_N", "Period for RSI", 14);
+    indicator.parameters.addInteger("ATR_N", "ATR_N", "Period for ATR", 20);
+    indicator.parameters.addInteger("StdDev_N", "StdDev_N", "Period for StdDev", 20);
+    indicator.parameters.addDouble("ATR_Coeff", "ATR_Coeff", "Coefficient of ATR", 1.5);
+    indicator.parameters.addDouble("StdDev_Coeff", "StdDev_Coeff", "Coefficient of StdDev", 2);
+
+    indicator.parameters.addColor("upB_color", "Color of upB", "Color of upB", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("loB_color", "Color of loB", "Color of loB", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("upB2_color", "Color of upB2", "Color of upB2", core.rgb(0, 64, 0));
+    indicator.parameters.addColor("loB2_color", "Color of loB2", "Color of loB2", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("line_color", "Color of line", "Color of line", core.rgb(128, 128, 128));
+}
+
+var first;
+var source = null;
+var D = null;
+var triggerType;
+var ATR=null;
+var StdDev=null;
+
+function Prepare()
+{
+    source = instance.source;
+    triggerType=instance.parameters.triggerType;
+    if (triggerType==1) 
+    {
+     D = core.indicators.create("STOCHASTIC", source, instance.parameters.Stochastic_K, instance.parameters.Stochastic_SD, instance.parameters.Stochastic_D);
+    }
+    else if (triggerType==2) 
+    {
+     D = core.indicators.create("CCI", source, instance.parameters.CCI_N);
+    }
+    else if (triggerType==3) 
+    {
+     D = core.indicators.create("RSI", source.close, instance.parameters.RSI_N);
+    } 
+    ATR = core.indicators.create("ATR", source, instance.parameters.ATR_N);
+    StdDev = core.indicators.create("STDDEV", source.close, instance.parameters.StdDev_N);
+    first = Math.max(D.DATA.first(),ATR.DATA.first(),StdDev.DATA.first())+2;
+    var name = profile.id() + "(" + source.name() + ", " + triggerType + ")";
+    instance.name(name);
+    upB = instance.addStream("upB", core.Bar, name + ".upB", "upB", instance.parameters.upB_color, first);
+    loB = instance.addStream("loB", core.Bar, name + ".loB", "loB", instance.parameters.loB_color, first);
+    upB2 = instance.addStream("upB2", core.Bar, name + ".upB2", "upB2", instance.parameters.upB2_color, first);
+    loB2 = instance.addStream("loB2", core.Bar, name + ".loB2", "loB2", instance.parameters.loB2_color, first);
+    cciline = instance.addStream("cciline", core.Line, name + ".cciline", "cciline", instance.parameters.line_color, first);
+}
+
+function Update(period, mode)
+{
+    D.update(mode);
+    ATR.update(mode);
+    StdDev.update(mode);
+    if (period>first) 
+    {
+     if (triggerType==2) 
+     {
+      cciline[period]=D.DATA[period];
+     }
+     else
+     {
+      cciline[period]=D.DATA[period]-50;
+     } 
+     if (cciline[period]>0) 
+     {
+      upB[period]=cciline[period];
+     } 
+     else
+     {
+      loB[period]=cciline[period];
+     }
+     var bbs=instance.parameters.StdDev_Coeff*StdDev.DATA[period]/(ATR.DATA[period]*instance.parameters.ATR_Coeff);
+      if (bbs<1) 
+      {
+       if (cciline[period]>0) 
+       {
+        upB2[period]=cciline[period];
+        loB[period]=null;
+        loB2[period]=null;
+        upB[period]=null;
+       }
+       else
+       {
+        loB2[period]=cciline[period];
+        loB[period]=null;
+        upB[period]=null;
+        upB2[period]=null;
+       }
+      } 
+      else
+      {
+       if (cciline[period]>0) 
+       {
+        upB[period]=cciline[period];
+        upB2[period]=null;
+        loB[period]=null;
+        loB2[period]=null;
+       } 
+       else
+       {
+        loB[period]=cciline[period];
+        loB2[period]=null;
+        upB[period]=null;
+	    upB2[period]=null;
+       }
+      }
+     
+    
+    }
+}
+

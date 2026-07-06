@@ -1,0 +1,101 @@
+function Init()
+{
+    indicator.name("Waddah Attar ADXxBollinger");
+    indicator.description("Waddah Attar ADXxBollinger");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    
+	indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("ADXP", "ADX Period", "ADX Period", 14);
+	
+    indicator.parameters.addInteger("BBP", "Bollinger Period", "Bollinger Period", 20);
+	indicator.parameters.addString("Price", "Bollinger Price Source", "", "close");
+    indicator.parameters.addStringAlternative("Price", "OPEN", "", "open");
+    indicator.parameters.addStringAlternative("Price", "HIGH", "", "high");
+    indicator.parameters.addStringAlternative("Price", "LOW", "", "low");
+    indicator.parameters.addStringAlternative("Price","CLOSE", "", "close");
+    indicator.parameters.addStringAlternative("Price", "MEDIAN", "", "median");
+    indicator.parameters.addStringAlternative("Price", "TYPICAL", "", "typical");
+    indicator.parameters.addStringAlternative("Price", "WEIGHTED", "", "weighted");	
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Up", "Color of Up WAAB", "Color of WAAB", core.rgb(0, 255, 0));
+	indicator.parameters.addColor("Dn", "Color of Down WAAB", "Color of WAAB", core.rgb( 255, 0, 0));
+	indicator.parameters.addColor("No", "Color of Neutral WAAB", "Color of WAAB", core.rgb( 128, 128, 128));
+}
+
+var ADXP;
+var BBP;
+
+var first;
+var source = null;
+
+var WAAB = null;
+var ADX, DIP, DIM, TL, BL;
+var Indicator={};
+var Price;
+var Up, Dn, No;
+
+function Prepare(nameOnly)
+{
+    ADXP = instance.parameters.ADXP;
+    BBP = instance.parameters.BBP;
+	Price = instance.parameters.Price;
+    source = instance.source;
+    Up = instance.parameters.Up;
+	Dn = instance.parameters.Dn;
+	No = instance.parameters.No;
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(ADXP) + ", " + tostring(BBP)+ ", " + tostring(Price) + ")";
+    instance.name(name);
+	
+	Indicator[1] = core.indicators.create("ADX", source, ADXP);
+	ADX= Indicator[1].DATA;
+	
+	Indicator[2] = core.indicators.create("DMI", source, ADXP);
+	DIP= Indicator[2].DIP;
+	DIM= Indicator[2].DIM;
+	
+	Indicator[3] = core.indicators.create("BB", source[Price], BBP);
+	TL = Indicator[3].TL;
+	BL = Indicator[3].BL;
+	first = Math.max(Indicator[1].DATA.first(),Indicator[2].DATA.first() ,Indicator[3].DATA.first() );
+
+
+    if (!(nameOnly)) 
+    {
+        WAAB = instance.addStream("WAAB", core.Bar, name, "WAAB", No, first);
+    }
+}
+
+function Update(period, mode) 
+{
+	Indicator[1].update(mode);
+	Indicator[2].update(mode);
+	Indicator[3].update(mode);
+	
+	
+    if (period < first) 
+    {
+	 WAAB.setColor(period, No);	
+	 return;
+	}
+	
+    var  Explo = TL[period] -  BL[period];
+	
+	WAAB[period] = Explo*ADX[period] ; 
+	
+	if (DIP[period]> DIM[period]) 
+	{
+	 WAAB.setColor(period, Up);
+	} 
+	else if (DIP[period]< DIM[period]) 
+	{
+	 WAAB.setColor(period, Dn);
+	} 
+	else
+	{
+	 WAAB.setColor(period, No);	
+	}
+}
+

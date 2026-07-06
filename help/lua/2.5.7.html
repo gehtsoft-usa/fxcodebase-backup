@@ -1,0 +1,64 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 2.5.7 - Table Constructors</title>
+</head>
+<body>
+<h3>2.5.7 - <a name="2.5.7">Table Constructors</a></h3><p>
+Table constructors are expressions that create tables.
+Every time a constructor is evaluated, a new table is created.
+Constructors can be used to create empty tables,
+or to create a table and initialize some of its fields.
+The general syntax for constructors is
+
+<pre>
+	tableconstructor ::= `<b>{</b>&acute; [fieldlist] `<b>}</b>&acute;
+	fieldlist ::= field {fieldsep field} [fieldsep]
+	field ::= `<b>[</b>&acute; exp `<b>]</b>&acute; `<b>=</b>&acute; exp | Name `<b>=</b>&acute; exp | exp
+	fieldsep ::= `<b>,</b>&acute; | `<b>;</b>&acute;
+</pre>
+
+<p>
+Each field of the form <code>[exp1] = exp2</code> adds to the new table an entry
+with key <code>exp1</code> and value <code>exp2</code>.
+A field of the form <code>name = exp</code> is equivalent to
+<code>["name"] = exp</code>.
+Finally, fields of the form <code>exp</code> are equivalent to
+<code>[i] = exp</code>, where <code>i</code> are consecutive numerical integers,
+starting with 1.
+Fields in the other formats do not affect this counting.
+For example,
+
+<pre>
+     a = { [f(1)] = g; "x", "y"; x = 1, f(x), [30] = 23; 45 }
+</pre><p>
+is equivalent to
+
+<pre>
+     do
+       local t = {}
+       t[f(1)] = g
+       t[1] = "x"         -- 1st exp
+       t[2] = "y"         -- 2nd exp
+       t.x = 1            -- t["x"] = 1
+       t[3] = f(x)        -- 3rd exp
+       t[30] = 23
+       t[4] = 45          -- 4th exp
+       a = t
+     end
+</pre>
+
+<p>
+If the last field in the list has the form <code>exp</code>
+and the expression is a function call or a vararg expression,
+then all values returned by this expression enter the list consecutively
+(see <a href="2.5.8.html">&sect;2.5.8</a>).
+To avoid this,
+enclose the function call (or the vararg expression)
+in parentheses (see <a href="2.5.html">&sect;2.5</a>).
+
+
+<p>
+The field list may have an optional trailing separator,
+as a convenience for machine-generated code.
+</body>
+</html>

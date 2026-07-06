@@ -1,0 +1,180 @@
+function Init()
+{
+    indicator.name("Stochastic color candle");
+    indicator.description("Stochastic color candle");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("K", "K", "K", 5, 2, 1000);
+    indicator.parameters.addInteger("SD", "SD", "SD", 3, 2, 1000);
+    indicator.parameters.addInteger("D", "D", "D", 3, 2, 1000);
+    indicator.parameters.addDouble("Level1", "Level1", "Level1", 20);
+    indicator.parameters.addDouble("Level2", "Level2", "Level2", 80);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr1Up", "Color 1 Up", "Color 1 Up", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clr2Up", "Color 2 Up", "Color 2 Up", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("clr3Up", "Color 3 Up", "Color 3 Up", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("clr1Dn", "Color 1 Dn", "Color 1 Dn", core.rgb(0, 180, 0));
+    indicator.parameters.addColor("clr2Dn", "Color 2 Dn", "Color 2 Dn", core.rgb(180, 0, 0));
+    indicator.parameters.addColor("clr3Dn", "Color 3 Dn", "Color 3 Dn", core.rgb(0, 0, 180));
+}
+
+var first;
+var source = null;
+var K;
+var SD;
+var D;
+var Level1;
+var Level2;
+var Stoch;
+var H1Up=null;
+var L1Up=null;
+var H2Up=null;
+var L2Up=null;
+var H3Up=null;
+var L3Up=null;
+var H1Dn=null;
+var L1Dn=null;
+var H2Dn=null;
+var L2Dn=null;
+var H3Dn=null;
+var L3Dn=null;
+
+function Prepare()
+{
+    source = instance.source;
+    K=instance.parameters.K;
+    SD=instance.parameters.SD;
+    D=instance.parameters.D;
+    Level1=instance.parameters.Level1;
+    Level2=instance.parameters.Level2;
+    first = source.first()+2;
+    Stoch = core.indicators.create("STOCHASTIC", source, K, SD, D);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.K + ", " + instance.parameters.SD + ", " + instance.parameters.D + ", " + instance.parameters.Level1 + ", " + instance.parameters.Level2 + ")";
+    instance.name(name);
+    H1Up=instance.addInternalStream(first, 0);
+    L1Up=instance.addInternalStream(first, 0);
+    H2Up=instance.addInternalStream(first, 0);
+    L2Up=instance.addInternalStream(first, 0);
+    H3Up=instance.addInternalStream(first, 0);
+    L3Up=instance.addInternalStream(first, 0);
+    H1Dn=instance.addInternalStream(first, 0);
+    L1Dn=instance.addInternalStream(first, 0);
+    H2Dn=instance.addInternalStream(first, 0);
+    L2Dn=instance.addInternalStream(first, 0);
+    H3Dn=instance.addInternalStream(first, 0);
+    L3Dn=instance.addInternalStream(first, 0);
+    instance.createFromToBarGroup("Gr1Up","Gr1Up" , H1Up, L1Up, instance.parameters.clr1Up);
+    instance.createFromToBarGroup("Gr2Up","Gr2Up" , H2Up, L2Up, instance.parameters.clr2Up);
+    instance.createFromToBarGroup("Gr3Up","Gr3Up" , H3Up, L3Up, instance.parameters.clr3Up);
+    instance.createFromToBarGroup("Gr1Dn","Gr1Dn" , H1Dn, L1Dn, instance.parameters.clr1Dn);
+    instance.createFromToBarGroup("Gr2Dn","Gr2Dn" , H2Dn, L2Dn, instance.parameters.clr2Dn);
+    instance.createFromToBarGroup("Gr3Dn","Gr3Dn" , H3Dn, L3Dn, instance.parameters.clr3Dn);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    Stoch.update(mode);
+    if (Stoch.K[period]>Stoch.D[period]) 
+    {
+     if (Stoch.D[period]<Level1) 
+     {
+      H1Up[period]=Math.max(source.open[period],source.close[period]);
+      L1Up[period]=Math.min(source.open[period],source.close[period]);
+      H2Up[period]=null;
+      L2Up[period]=null;
+      H3Up[period]=null;
+      L3Up[period]=null;
+      H1Dn[period]=null;
+      L1Dn[period]=null;
+      H2Dn[period]=null;
+      L2Dn[period]=null;
+      H3Dn[period]=null;
+      L3Dn[period]=null;
+     }
+     else if (Stoch.D[period]>=Level1 && Stoch.D[period]<=Level2) 
+     {
+      H2Up[period]=Math.max(source.open[period],source.close[period]);
+      L2Up[period]=Math.min(source.open[period],source.close[period]);
+      H1Up[period]=null;
+      L1Up[period]=null;
+      H3Up[period]=null;
+      L3Up[period]=null;
+      H1Dn[period]=null;
+      L1Dn[period]=null;
+      H2Dn[period]=null;
+      L2Dn[period]=null;
+      H3Dn[period]=null;
+      L3Dn[period]=null;
+     }
+     else if (Stoch.D[period]>Level2) 
+     {
+      H3Up[period]=Math.max(source.open[period],source.close[period]);
+      L3Up[period]=Math.min(source.open[period],source.close[period]);
+      H1Up[period]=null;
+      L1Up[period]=null;
+      H2Up[period]=null;
+      L2Up[period]=null;
+      H1Dn[period]=null;
+      L1Dn[period]=null;
+      H2Dn[period]=null;
+      L2Dn[period]=null;
+      H3Dn[period]=null;
+      L3Dn[period]=null;
+     }
+    } 
+    else
+    {
+     if (Stoch.D[period]<Level1) 
+     {
+      H1Dn[period]=Math.max(source.open[period],source.close[period]);
+      L1Dn[period]=Math.min(source.open[period],source.close[period]);
+      H2Dn[period]=null;
+      L2Dn[period]=null;
+      H3Dn[period]=null;
+      L3Dn[period]=null;
+      H1Up[period]=null;
+      L1Up[period]=null;
+      H2Up[period]=null;
+      L2Up[period]=null;
+      H3Up[period]=null;
+      L3Up[period]=null;
+     } 
+     else if (Stoch.D[period]>=Level1 && Stoch.D[period]<=Level2) 
+     {
+      H2Dn[period]=Math.max(source.open[period],source.close[period]);
+      L2Dn[period]=Math.min(source.open[period],source.close[period]);
+      H1Dn[period]=null;
+      L1Dn[period]=null;
+      H3Dn[period]=null;
+      L3Dn[period]=null;
+      H1Up[period]=null;
+      L1Up[period]=null;
+      H2Up[period]=null;
+      L2Up[period]=null;
+      H3Up[period]=null;
+      L3Up[period]=null;
+     } 
+     else if (Stoch.D[period]>Level2) 
+     {
+      H3Dn[period]=Math.max(source.open[period],source.close[period]);
+      L3Dn[period]=Math.min(source.open[period],source.close[period]);
+      H1Dn[period]=null;
+      L1Dn[period]=null;
+      H2Dn[period]=null;
+      L2Dn[period]=null;
+      H1Up[period]=null;
+      L1Up[period]=null;
+      H2Up[period]=null;
+      L2Up[period]=null;
+      H3Up[period]=null;
+      L3Up[period]=null;
+     }
+    } 
+   } 
+}
+

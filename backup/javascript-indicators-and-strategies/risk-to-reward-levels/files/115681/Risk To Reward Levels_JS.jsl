@@ -1,0 +1,134 @@
+function Init()
+{
+    indicator.name("Risk To Reward Levels");
+    indicator.description("Risk To Reward Levels");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+	
+	indicator.parameters.addString("Side", "Buy || Sell", "", "Buy");
+	indicator.parameters.addStringAlternative("Side", "Buy", "Buy" , "Buy");
+    indicator.parameters.addStringAlternative("Side", "Sell", "Sell" , "Sell");
+	
+ 	indicator.parameters.addString("Model", "Pips || Dollars", "", "Pips");
+	indicator.parameters.addStringAlternative("Model", "Pips", "" , "Pips");
+    indicator.parameters.addStringAlternative("Model", "Dollars", "" , "Dollars");
+
+	 
+	indicator.parameters.addInteger("PipsAtRisk", "Value/Pips at Risk", "Value/Pips at Risk", 100,0,10000);	
+	indicator.parameters.addDouble("Level", "Entry Order Level (0 || Value)", "Entry Order", 0);
+		
+	indicator.parameters.addGroup("Style");
+	indicator.parameters.addColor("Entry", "Entry", "Entry", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("Stop", "Stop", "Stop", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("Levels", "Levels", "Levels", core.rgb(255, 255, 0));
+	indicator.parameters.addColor("Label", "Label", "Label", core.rgb(0, 0, 0));
+	indicator.parameters.addInteger("Size", "Font Size", "Font Size", 15);
+ 	
+}
+
+var Side; 
+var Level;
+var Model;
+var PipsAtRisk;
+  
+var font;
+var name;
+var first;
+var source = null;
+var PipCost;
+var Size; 
+
+function Prepare()
+{   
+	Size = instance.parameters.Size;
+	font = core.host.execute("createFont", "Arial", Size, true, false);
+    Side = instance.parameters.Side; 
+	   
+    Level = instance.parameters.Level;    	
+	Model = instance.parameters.Model;
+	PipsAtRisk = instance.parameters.PipsAtRisk;	
+
+    source = instance.source;
+    first = source.first();
+	
+	PipCost   = core.host.findTable("offers").find("Instrument", source.instrument()).PipCost;
+		
+	name = profile.id() + "(" + source.name() +") ";
+	instance.name(name);
+}
+
+function Update(period)
+{
+  if (period < source.size()-1) 
+  {
+   return;
+  }
+  
+ core.host.execute ("removeAll")
+ 
+   var price=0;
+     if (Level==0) 
+     {	
+	  price=source[period];
+	 } 
+	 else
+	 {
+	  price=Level;
+	 } 
+	 
+
+ var stop;
+						
+						if (Model=="Pips") 
+						{ 							
+								 stop=(PipsAtRisk )*source.pipSize();			 
+						}		 
+						 else
+						 {  						         
+								 stop=((PipsAtRisk/PipCost) )*source.pipSize();
+						 }
+						
+					
+						var s;
+											
+		
+				
+					 if (Side == "Buy") 
+					 {
+					  s=price- stop;
+					 } 
+					 else
+					 {
+					  s=price+ stop;
+					 }
+					 
+					 
+		core.host.execute("drawLine", 1, source.date(first), s, source.date(period), s, instance.parameters.Stop);	
+		core.host.execute("drawLabel1", 2, source.date(period) , core.CR_CHART, s, core.CR_CHART, core.H_Right, core.V_Top,font, instance.parameters.Label, "Stop ("  + s + ")  " );	
+		
+		 core.host.execute("drawLine", 3, source.date(first), price, source.date(period), price, instance.parameters.Entry);		 
+		 core.host.execute("drawLabel1", 4, source.date(period) , core.CR_CHART, price, core.CR_CHART, core.H_Right, core.V_Top,font, instance.parameters.Label,"  Entry (" + price + ")" );	
+
+
+       for (i= 1; i<=10; i++) 
+       {
+	   
+	                 if  (Side == "Buy") 
+	                 {
+					  PriceLevel=price+ stop*i;
+					 } 
+					 else
+					 {
+					  PriceLevel=price- stop*i;
+					 }
+					 
+       core.host.execute("drawLine", 10+i, source.date(first), PriceLevel, source.date(period), PriceLevel, instance.parameters.Levels);		 
+	   core.host.execute("drawLabel1", 20+i, source.date(period) , core.CR_CHART, PriceLevel, core.CR_CHART, core.H_Right, core.V_Top,font, instance.parameters.Label, i+ ". Level (" + PriceLevel + ")" );	
+       }	   
+	
+}
+
+function ReleaseInstance()
+{
+       core.host.execute("deleteFont", font);
+}

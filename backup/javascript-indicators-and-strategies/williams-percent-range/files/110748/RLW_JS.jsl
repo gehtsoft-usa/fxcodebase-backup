@@ -1,0 +1,78 @@
+//initializes the indicator
+function Init()
+{
+    indicator.name("%R Larry Williams");
+    indicator.description("%R Larry Williams");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.setTag("group", "Classic Oscillators");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("N", "Number of periods", "The number of periods.", 10, 1, 10000);
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Line color", "The color of line", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("width", "Line width", "The width of line", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "The style of line", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LEVEL_STYLE);
+
+    indicator.parameters.addGroup("Levels");
+    indicator.parameters.addInteger("Overbought", "Overbought level", "Overbought level", -20, -100, 0);
+    indicator.parameters.addInteger("Oversold", "Oversold level", "Oversold level", -80, -100, 0);
+    indicator.parameters.addColor("OBclr", "Overbought level color", "The color of Overbought level", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("OBwidth", "Overbought level width", "The width of Overbought level", 1, 1, 5);
+    indicator.parameters.addInteger("OBstyle", "Overbought level style", "The style of Overbought level", core.LINE_SOLID);
+    indicator.parameters.setFlag("OBstyle", core.FLAG_LEVEL_STYLE);
+    indicator.parameters.addColor("OSclr", "Oversold level color", "The color of Oversold level", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("OSwidth", "Oversold level width", "The width of Oversold level", 1, 1, 5);
+    indicator.parameters.addInteger("OSstyle", "Oversold level style", "The style of Oversold level", core.LINE_SOLID);
+    indicator.parameters.setFlag("OSstyle", core.FLAG_LEVEL_STYLE);
+
+}
+
+var first = 0;
+var n = 0;
+var source = null;
+var out = null;
+
+//initializes the instance of the indicator
+function Prepare(onlyName)
+{
+    source = instance.source;
+    n = instance.parameters.N;
+    var name = profile.id() + "(" + instance.source.name() + "," + n + ")";
+    instance.name(name);
+  
+    if (onlyName == true)
+        return ;
+
+    first = source.first();
+
+    out = instance.addStream("RLW", core.Line, name, "RLW", instance.parameters.clr,  first)
+    out.setWidth(instance.parameters.width);
+    out.setStyle(instance.parameters.style);
+    out.addLevel(0);
+    out.addLevel(instance.parameters.Oversold, instance.parameters.OSstyle, instance.parameters.OSwidth, instance.parameters.OSclr);
+    out.addLevel(instance.parameters.Overbought, instance.parameters.OBstyle, instance.parameters.OBwidth, instance.parameters.OBclr);
+}
+
+// calculate the value
+function Update(period, mode)
+{
+    if (period >= first+n)
+    {
+        var from = period - n + 1;
+        var tmp = Math.minmax(source, core.range(from, period));
+        var low=tmp[0];
+        var high=tmp[1];
+        var diff = high - low;
+        if (diff == 0)
+        {
+            out[period] = 0;
+        }
+        else
+        {
+            out[period] = (-100) * (high - source.close[period]) / diff;
+        }
+    }
+
+}

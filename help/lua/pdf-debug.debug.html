@@ -1,0 +1,29 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - debug.debug ()</title>
+</head>
+<body>
+<h3><a name="pdf-debug.debug"><code>debug.debug ()</code></a></h3>
+
+
+<p>
+Enters an interactive mode with the user,
+running each string that the user enters.
+Using simple commands and other debug facilities,
+the user can inspect global and local variables,
+change their values, evaluate expressions, and so on.
+A line containing only the word <code>cont</code> finishes this function,
+so that the caller continues its execution.
+
+
+<p>
+Note that commands for <code>debug.debug</code> are not lexically nested
+within any function, and so have no direct access to local variables.
+
+
+
+
+<p>
+<hr>
+</body>
+</html>

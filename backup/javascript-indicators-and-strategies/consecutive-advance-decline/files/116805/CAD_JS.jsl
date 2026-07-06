@@ -1,0 +1,70 @@
+function Init()
+{
+    indicator.name("Consecutive Advance / Decline");
+    indicator.description("Consecutive Advance / Decline");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+
+    indicator.parameters.addColor("Advance", "Color of Advance", "Color of Advance", core.rgb(0, 255, 0));
+	indicator.parameters.addInteger("width1", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style1", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style1", core.FLAG_LINE_STYLE);
+	
+	
+	 indicator.parameters.addColor("Decline", "Color of Decline", "Color of Decline", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width2", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style2", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style2", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+
+var Advance, Decline;
+
+function Prepare(nameOnly)
+{   
+    source = instance.source;
+    first = source.first();
+	 
+    var name = profile.id() + "(" + source.name()  + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        Advance = instance.addStream("Advance", core.Line, name, "Advance", instance.parameters.Advance, first);
+		Advance.setWidth(instance.parameters.width1);
+        Advance.setStyle(instance.parameters.style1);
+		
+		Decline = instance.addStream("Decline", core.Line, name, "Decline", instance.parameters.Decline, first);
+		Decline.setWidth(instance.parameters.width2);
+        Decline.setStyle(instance.parameters.style2);
+    }
+}
+
+function Update(period)
+{
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+	if (source[period]>source[period-1]) 
+	{
+	 Advance[period]= Advance[period-1]+1;
+	 Decline[period]= 0;
+	} 
+	else if (source[period]<source[period-1]) 
+	{
+	 Decline[period]= Decline[period-1]+1;
+	 Advance[period]= 0;
+	} 
+	else
+	{
+	 Advance[period]= 0;
+	 Decline[period]= 0;
+	}
+	
+}
+

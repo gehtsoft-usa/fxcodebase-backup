@@ -1,0 +1,27 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_State</title>
+</head>
+<body>
+<h3><a name="lua_State"><code>lua_State</code></a></h3>
+<pre>typedef struct lua_State lua_State;</pre>
+
+<p>
+Opaque structure that keeps the whole state of a Lua interpreter.
+The Lua library is fully reentrant:
+it has no global variables.
+All information about a state is kept in this structure.
+
+
+<p>
+A pointer to this state must be passed as the first argument to
+every function in the library, except to <a href="lua_newstate.html"><code>lua_newstate</code></a>,
+which creates a Lua state from scratch.
+
+
+
+
+
+<hr>
+</body>
+</html>

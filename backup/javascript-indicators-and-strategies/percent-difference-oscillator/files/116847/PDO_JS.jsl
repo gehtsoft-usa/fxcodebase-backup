@@ -1,0 +1,62 @@
+function Init()
+{
+    indicator.name("Percent Difference Oscillator");
+    indicator.description("Percent Difference Oscillator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "Period", 14);
+	indicator.parameters.addString("Method", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "EMA" , "EMA");
+ indicator.parameters.addStringAlternative("Method", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method", "WMA", "WMA" , "WMA");
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("PDO_color", "Color of PDO", "Color of PDO", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var Period;
+var Method;
+var first;
+var source = null;
+var MA;
+
+var PDO = null;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+	Method = instance.parameters.Method;
+    source = instance.source;
+	MA = core.indicators.create(Method, source, Period);
+    first = MA.DATA.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ", " + tostring(Method)+ ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        PDO = instance.addStream("PDO", core.Line, name, "PDO", instance.parameters.PDO_color, first);
+		PDO.setWidth(instance.parameters.width);
+        PDO.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period, mode)  
+{
+    MA.update(mode);
+    if (period < first) 
+    {
+	 return;
+	}
+    PDO[period] = 100*(source[period]-MA.DATA[period])/MA.DATA[period];
+    
+}
+

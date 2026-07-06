@@ -1,0 +1,57 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - luaL_Buffer</title>
+</head>
+<body>
+<h3><a name="luaL_Buffer"><code>luaL_Buffer</code></a></h3>
+<pre>typedef struct luaL_Buffer luaL_Buffer;</pre>
+
+<p>
+Type for a <em>string buffer</em>.
+
+
+<p>
+A string buffer allows C&nbsp;code to build Lua strings piecemeal.
+Its pattern of use is as follows:
+
+<ul>
+
+<li>First you declare a variable <code>b</code> of type <a href="luaL_Buffer.html"><code>luaL_Buffer</code></a>.</li>
+
+<li>Then you initialize it with a call <code>luaL_buffinit(L, &amp;b)</code>.</li>
+
+<li>
+Then you add string pieces to the buffer calling any of
+the <code>luaL_add*</code> functions.
+</li>
+
+<li>
+You finish by calling <code>luaL_pushresult(&amp;b)</code>.
+This call leaves the final string on the top of the stack.
+</li>
+
+</ul>
+
+<p>
+During its normal operation,
+a string buffer uses a variable number of stack slots.
+So, while using a buffer, you cannot assume that you know where
+the top of the stack is.
+You can use the stack between successive calls to buffer operations
+as long as that use is balanced;
+that is,
+when you call a buffer operation,
+the stack is at the same level
+it was immediately after the previous buffer operation.
+(The only exception to this rule is <a href="luaL_addvalue.html"><code>luaL_addvalue</code></a>.)
+After calling <a href="luaL_pushresult.html"><code>luaL_pushresult</code></a> the stack is back to its
+level when the buffer was initialized,
+plus the final string on its top.
+
+
+
+
+
+<hr>
+</body>
+</html>

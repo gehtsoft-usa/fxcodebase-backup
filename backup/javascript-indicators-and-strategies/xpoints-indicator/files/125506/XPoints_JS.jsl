@@ -1,0 +1,120 @@
+function Init()
+{
+    indicator.name("XPoints indicator");
+    indicator.description("XPoints indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 3);
+    indicator.parameters.addDouble("xrate", "xrate", "", 1.5);
+    indicator.parameters.addDouble("xsize", "xsize", "", 5);
+    indicator.parameters.addDouble("xslope", "xslope", "", 0);
+    indicator.parameters.addDouble("xminupdn", "xminupdn", "", 10);
+    indicator.parameters.addInteger("xindent", "xindent", "", 15);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Uclr", "Upper line color", "Upper line color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("Mclr", "Middle line color", "Middle line color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("Lclr", "Lower line color", "Lower line color", core.rgb(0, 0, 255));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("UPclr", "UP arrow color", "UP arrow color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DNclr", "DN arrow color", "DN arrow color", core.rgb(0, 0, 255));
+    indicator.parameters.addInteger("ArrowSize", "Arrow size", "Arrow size", 10);
+}
+
+var first;
+var source = null;
+var Period;
+var xrate;
+var xsize;
+var xslope;
+var xminupdn;
+var xindent;
+var Upper=null;
+var Lower=null;
+var Middle=null;
+var UpArrow=null;
+var DnArrow=null;
+var pipSize;
+var xslopeP;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    xrate=instance.parameters.xrate;
+    xsize=instance.parameters.xsize;
+    xslope=instance.parameters.xslope;
+    xminupdn=instance.parameters.xminupdn;
+    xindent=instance.parameters.xindent;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.xrate + ", " + instance.parameters.xsize + ", " + instance.parameters.xslope + ", " + instance.parameters.xminupdn + ", " + instance.parameters.xindent + ")";
+    instance.name(name);
+    Upper = instance.addStream("Upper", core.Line, name + ".Upper", "Upper", instance.parameters.Uclr, first);
+    Middle = instance.addStream("Middle", core.Line, name + ".Middle", "Middle", instance.parameters.Mclr, first);
+    Lower = instance.addStream("Lower", core.Line, name + ".Lower", "Lower", instance.parameters.Lclr, first);
+    Upper.setWidth(instance.parameters.widthLinReg);
+    Upper.setStyle(instance.parameters.styleLinReg);
+    Middle.setWidth(instance.parameters.widthLinReg);
+    Middle.setStyle(instance.parameters.styleLinReg);
+    Lower.setWidth(instance.parameters.widthLinReg);
+    Lower.setStyle(instance.parameters.styleLinReg);
+    UpArrow = instance.createTextOutput ("UpArrow", "UpArrow", "Wingdings", instance.parameters.ArrowSize, core.H_Center, core.V_Top, instance.parameters.UPclr, 0);
+    DnArrow = instance.createTextOutput ("DnArrow", "DnArrow", "Wingdings", instance.parameters.ArrowSize, core.H_Center, core.V_Top, instance.parameters.DNclr, 0);
+    pipSize=source.pipSize();
+    xslopeP=xslope*pipSize;
+}
+
+function Update(period, mode)
+{
+   if (period>first+Period) 
+   {
+    var tmp=Math.minmax(source, period-Period+1, period);
+    var Min=tmp[0];
+    var Max=tmp[1];
+    Upper[period]=Max;
+    Lower[period]=Min;
+    Middle[period]=(Max+Min)/2;
+    
+    var HeightHL0 = (source.high[period]-source.low[period])/pipSize; 
+    var HeightHL1 = (source.high[period-1]-source.low[period-1])/pipSize;
+
+    var HeightCO0 = (source.close[period]-source.open[period])/pipSize; 
+    var HeightCO1 = (source.close[period-1]-source.open[period-1])/pipSize; 
+
+    var CenterHL0 = (source.high[period]+source.low[period])/2;
+    var CenterHL1 = (source.high[period-1]+source.low[period-1])/2;
+      
+    var CenterCO0 = (source.open[period]+source.close[period])/2; 
+    var CenterCO1 = (source.open[period-1]+source.close[period-1])/2; 
+    
+    if (HeightHL1>=xsize) 
+    {
+     var xrate1=HeightCO1/HeightHL1;
+     if (Math.abs(xrate1)<=1/xrate) 
+     {
+      if (source.low[period-1]<=Lower[period-1] && source.high[period-1]<Upper[period-1] && source.low[period]>=source.low[period-1]+xslopeP && (CenterCO1<=Middle[period-1] || CenterCO0>=CenterCO1+xslopeP || CenterHL0>=CenterHL1+xslopeP)) 
+      {
+       UpArrow.set(period, source.low[period]-xindent*pipSize, "\225");
+      } 
+      else
+      {
+       UpArrow.setNoData(period);
+      }
+      if (source.high[period-1]>=Upper[period-1] && source.low[period-1]>Lower[period-1] && source.high[period]<=source.high[period-1]-xslopeP && (CenterCO1>=Middle[period-1] || CenterCO0<=CenterCO1-xslopeP || CenterHL0<=CenterHL1-xslopeP)) 
+      {
+       DnArrow.set(period, source.high[period]+xindent*pipSize, "\226");
+      } 
+      else
+      {
+       DnArrow.setNoData(period);
+      }
+     }
+    }
+    
+   } 
+}
+

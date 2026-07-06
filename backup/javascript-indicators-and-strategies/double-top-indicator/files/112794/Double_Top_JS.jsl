@@ -1,0 +1,178 @@
+function Init()
+{
+    indicator.name("Double top indicator");
+    indicator.description("Double top indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("MinHeight", "Min. height of peak (in pips)", "", 10);
+    indicator.parameters.addInteger("MaxDist", "Max. distance between peaks (in bars)", "", 20);
+    indicator.parameters.addInteger("MinBars", "Min. number of bars after the peak (in bars)", "", 3);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Tclr1", "Top color", "Top color", core.rgb(0, 128, 0));
+    indicator.parameters.addColor("Tclr2", "Double top color", "Double top color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("Bclr1", "Bottom color", "Bottom color", core.rgb(128, 0, 0));
+    indicator.parameters.addColor("Bclr2", "Double bottom color", "Double bottom color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("DotSize", "Dot size", "Dot size", 3, 1, 5);
+}
+
+var first;
+var source = null;
+var MinHeight;
+var MaxDist;
+var MinBars;
+var MinHeightPip;
+var Top=null;
+var DoubleTop=null;
+var Bottom=null;
+var DoubleBottom=null;
+
+function Prepare()
+{
+    source = instance.source;
+    MinHeight=instance.parameters.MinHeight;
+    MaxDist=instance.parameters.MaxDist;
+    MinBars=instance.parameters.MinBars;
+    MinHeightPip=MinHeight*source.pipSize();
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.MinHeight + ", " + instance.parameters.MaxDist + ")";
+    instance.name(name);
+    Top = instance.addStream("Top", core.Dot, name + ".Top", "Top", instance.parameters.Tclr1, first);
+    DoubleTop = instance.addStream("DoubleTop", core.Dot, name + ".DoubleTop", "DoubleTop", instance.parameters.Tclr2, first);
+    Bottom = instance.addStream("Bottom", core.Dot, name + ".Bottom", "Bottom", instance.parameters.Bclr1, first);
+    DoubleBottom = instance.addStream("DoubleBottom", core.Dot, name + ".DoubleBottom", "DoubleBottom", instance.parameters.Bclr2, first);
+    Top.setWidth(instance.parameters.DotSize);
+    DoubleTop.setWidth(instance.parameters.DotSize);
+    Bottom.setWidth(instance.parameters.DotSize);
+    DoubleBottom.setWidth(instance.parameters.DotSize);
+}
+
+function Update(period, mode)
+{
+   if (period>first+MinBars) 
+   {
+    if (IsTop(period-MinBars)) 
+    {
+     Top[period-MinBars]=source.high[period-MinBars];
+    } 
+    else
+    {
+     Top[period-MinBars]=null; 
+    }
+    if (IsBottom(period-MinBars)) 
+    {
+     Bottom[period-MinBars]=source.low[period-MinBars];
+    }
+    else
+    {
+     Bottom[period-MinBars]=null; 
+    }
+    var Res;
+    if (Top[period-MinBars]==source.high[period-MinBars]) 
+    {
+     Res=FindPrevTop(period-MinBars);
+     if (Res!=null) 
+     {
+      DoubleTop[period-MinBars]=source.high[period-MinBars];
+     }
+    }
+    if (Bottom[period-MinBars]==source.low[period-MinBars]) 
+    {
+     Res=FindPrevBottom(period-MinBars);
+     if (Res!=null) 
+     {
+      DoubleBottom[period-MinBars]=source.low[period-MinBars];
+     }
+    }
+   } 
+}
+
+function FindPrevTop(index)
+{
+ var i=index-1;
+ while (i>first && i>=index-MaxDist) 
+ {
+  if (Top[i]==source.high[i]) 
+  {
+   return (i);
+  }
+  i=i-1;
+ }
+ return (null);
+}
+
+function FindPrevBottom(index)
+{
+ var i=index-1;
+ while (i>first && i>=index-MaxDist) 
+ {
+  if (Bottom[i]==source.low[i]) 
+  {
+   return (i);
+  }
+  i=i-1;
+ }
+ return (null);
+}
+
+function IsTop(index)
+{
+ var i;
+ var Fl=true;
+ for (i=1;i<=MinBars;i++) 
+ {
+  if (source.high[index+i]>=source.high[index]) 
+  {
+   Fl=false;
+  }
+ }
+ if (Fl) 
+ {
+  i=index-1;
+  while (i>first) 
+  {
+   if (source.high[i]>=source.high[index]) 
+   {
+    return (false);
+   }
+   if (source.high[index]-source.low[i]>=MinHeightPip) 
+   {
+    return (true);
+   }
+   i=i-1;
+  }
+ }
+ return (false);
+}
+
+function IsBottom(index)
+{
+ var i;
+ var Fl=true;
+ for (i=1;i<=MinBars;i++) 
+ {
+  if (source.low[index+i]<=source.low[index]) 
+  {
+   Fl=false;
+  }
+ }
+ if (Fl) 
+ {
+  i=index-1;
+  while (i>first) 
+  {
+   if (source.low[i]<=source.low[index]) 
+   {
+    return (false);
+   }
+   if (source.high[i]-source.low[index]>=MinHeightPip) 
+   {
+    return (true);
+   }
+   i=i-1;
+  }
+ }
+ return (false);
+}

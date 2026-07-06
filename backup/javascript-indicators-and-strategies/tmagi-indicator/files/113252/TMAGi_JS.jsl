@@ -1,0 +1,81 @@
+function Init()
+{
+    indicator.name("TMAGi indicator");
+    indicator.description("TMAGi indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    
+    indicator.parameters.addInteger("FastMA", "FastMA", "FastMA", 8);
+    indicator.parameters.addInteger("MidMA", "MidMA", "MidMA", 16);
+    indicator.parameters.addInteger("SlowMA", "SlowMA", "SlowMA", 25);
+    indicator.parameters.addInteger("SlowingSMA", "SlowingSMA", "SlowingSMA", 3);
+    indicator.parameters.addInteger("SlowingLWMA", "SlowingLWMA", "SlowingLWMA", 8);
+    indicator.parameters.addInteger("ADX_Period", "ADX_Period", "ADX_Period", 14);
+
+    indicator.parameters.addColor("clr_1", "Color 1", "Color 1", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("clr_2", "Color 2", "Color 2", core.rgb(0, 255, 0));
+}
+
+var first;
+var source = null;
+var FastMA;
+var MidMA;
+var SlowMA;
+var SlowingSMA;
+var SlowingLWMA;
+var ADX_Period;
+var buff_1=null;
+var buff_2=null;
+var Buff;
+var MA_S;
+var MA_M;
+var MA_F;
+var ADX_H;
+var ADX_L;
+var MA_Res1;
+var MA_Res2;
+
+
+function Prepare()
+{
+    source = instance.source;
+    FastMA=instance.parameters.FastMA;
+    MidMA=instance.parameters.MidMA;
+    SlowMA=instance.parameters.SlowMA;
+    SlowingSMA=instance.parameters.SlowingSMA;
+    SlowingLWMA=instance.parameters.SlowingLWMA;
+    ADX_Period=instance.parameters.ADX_Period;
+    MA_F = core.indicators.create("MVA", source.close, FastMA);
+    MA_M = core.indicators.create("MVA", source.close, MidMA);
+    MA_S = core.indicators.create("MVA", source.close, SlowMA);
+    ADX_H = core.indicators.create("DMI", source, ADX_Period);
+    ADX_L = core.indicators.create("DMI", source, ADX_Period);
+    Buff = instance.addInternalStream(0, 0);
+    MA_Res1 = core.indicators.create("MVA", Buff, SlowingSMA);
+    MA_Res2 = core.indicators.create("LWMA", Buff, SlowingLWMA);
+    first = Math.max(MA_F.DATA.first(),MA_M.DATA.first(),MA_S.DATA.first())+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.FastMA + ", " + instance.parameters.MidMA + ", " + instance.parameters.SlowMA + ", " + instance.parameters.SlowingSMA + ", " + instance.parameters.SlowingLWMA + ")";
+    instance.name(name);
+    buff_1 = instance.addStream("buff_1", core.Line, name + ".buff1", "buff2", instance.parameters.clr_1, first);
+    buff_2 = instance.addStream("buff_2", core.Line, name + ".buff1", "buff2", instance.parameters.clr_2, first);
+}
+
+function Update(period, mode)
+{
+    if (period>first) 
+    {
+     MA_F.update(mode);
+     MA_M.update(mode);
+     MA_S.update(mode);
+     ADX_H.update(mode);
+     ADX_L.update(mode);
+     var di=ADX_H.DIP[period]-ADX_L.DIM[period];
+     Buff[period]=(Math.abs(MA_F.DATA[period]-MA_M.DATA[period])+Math.abs(MA_F.DATA[period]-MA_S.DATA[period])+Math.abs(MA_M.DATA[period]-MA_S.DATA[period]))*di/source.pipSize();
+     MA_Res1.update(mode);
+     MA_Res2.update(mode);
+     buff_1[period]=MA_Res1.DATA[period];
+     buff_2[period]=MA_Res2.DATA[period];
+    
+    } 
+}
+

@@ -1,0 +1,829 @@
+<html>
+
+<OBJECT type="text/site properties"></OBJECT>
+<UL>
+    <li><object type="text/sitemap"><param name="Name" value="The Indicore SDK User Guide"><param name="Local" value="index.html"></object><a href="index.html">The Indicore SDK User Guide</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="The Indicore SDK"><param name="Local" value="sdk_main.html"></object><a href="sdk_main.html">The Indicore SDK</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="What Should You Do to Create an Indicator?"><param name="Local" value="what.html"></object><a href="what.html">What Should You Do to Create an Indicator?</a>
+    <li><object type="text/sitemap"><param name="Name" value="About Forex"><param name="Local" value="about_forex.html"></object><a href="about_forex.html">About Forex</a>
+    <li><object type="text/sitemap"><param name="Name" value="Definitions"><param name="Local" value="major_terms.html"></object><a href="major_terms.html">Definitions</a>
+    <li><object type="text/sitemap"><param name="Name" value="Stream Indexing"><param name="Local" value="indexing.html"></object><a href="indexing.html">Stream Indexing</a>
+    <li><object type="text/sitemap"><param name="Name" value="The Structure of an Indicator Program"><param name="Local" value="struct.html"></object><a href="struct.html">The Structure of an Indicator Program</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="Init()"><param name="Local" value="Init.html"></object><a href="Init.html">Init()</a>
+    <li><object type="text/sitemap"><param name="Name" value="Prepare(nameOnly)"><param name="Local" value="Prepare.html"></object><a href="Prepare.html">Prepare(nameOnly)</a>
+    <li><object type="text/sitemap"><param name="Name" value="Update(period, mode)"><param name="Local" value="Update.html"></object><a href="Update.html">Update(period, mode)</a>
+    <li><object type="text/sitemap"><param name="Name" value="ReleaseInstance()"><param name="Local" value="ReleaseInstance.html"></object><a href="ReleaseInstance.html">ReleaseInstance()</a>
+    <li><object type="text/sitemap"><param name="Name" value="AsyncOperationFinished(cookie, success, message, message1, message2)"><param name="Local" value="AsyncOperationFinished.html"></object><a href="AsyncOperationFinished.html">AsyncOperationFinished(cookie, success, message, message1, message2)</a>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="How to Use Another Indicator in Your Code?"><param name="Local" value="art3_how_to_use_indicator.html"></object><a href="art3_how_to_use_indicator.html">How to Use Another Indicator in Your Code?</a>
+    <li><object type="text/sitemap"><param name="Name" value="How to Support Localization?"><param name="Local" value="art4_how_to_use_localization.html"></object><a href="art4_how_to_use_localization.html">How to Support Localization?</a>
+    <li><object type="text/sitemap"><param name="Name" value="How to use 3rd party modules"><param name="Local" value="art5_how_to_use_3rdparty.html"></object><a href="art5_how_to_use_3rdparty.html">How to use 3rd party modules</a>
+    <li><object type="text/sitemap"><param name="Name" value="The advanced indicator techniques"><param name="Local" value="adv_indi.html"></object><a href="adv_indi.html">The advanced indicator techniques</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="View Indicators"><param name="Local" value="view_indicators.html"></object><a href="view_indicators.html">View Indicators</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="How to Create View Indicator?"><param name="Local" value="create_view_indi.html"></object><a href="create_view_indi.html">How to Create View Indicator?</a>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="Owner-drawn Indicators"><param name="Local" value="od_indicators.html"></object><a href="od_indicators.html">Owner-drawn Indicators</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="How to create an owner-drawn indicator."><param name="Local" value="what_is_view_indi.html"></object><a href="what_is_view_indi.html">How to create an owner-drawn indicator.</a>
+    <li><object type="text/sitemap"><param name="Name" value="Draw(stage, context) function"><param name="Local" value="Draw.html"></object><a href="Draw.html">Draw(stage, context) function</a>
+    <li><object type="text/sitemap"><param name="Name" value="Drawing Concepts"><param name="Local" value="od_concepts.html"></object><a href="od_concepts.html">Drawing Concepts</a>
+    <li><object type="text/sitemap"><param name="Name" value="Drawing and Performance"><param name="Local" value="od_performance.html"></object><a href="od_performance.html">Drawing and Performance</a>
+    
+        </UL>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="How to Install and Use Your Indicator in Marketscope?"><param name="Local" value="art6_how_to_deploy.html"></object><a href="art6_how_to_deploy.html">How to Install and Use Your Indicator in Marketscope?</a>
+    <li><object type="text/sitemap"><param name="Name" value="What is SDK?"><param name="Local" value="sdk_det.html"></object><a href="sdk_det.html">What is SDK?</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="How to Start Creating an Indicator in SDK?"><param name="Local" value="start.html"></object><a href="start.html">How to Start Creating an Indicator in SDK?</a>
+    <li><object type="text/sitemap"><param name="Name" value="How to Debug an Indicator?"><param name="Local" value="debug.html"></object><a href="debug.html">How to Debug an Indicator?</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="The Main Features of Indicore 3 Lua Editor/Debugger"><param name="Local" value="main_features.html"></object><a href="main_features.html">The Main Features of Indicore 3 Lua Editor/Debugger</a>
+    <li><object type="text/sitemap"><param name="Name" value="Indicore 3 Lua Editor/Debugger Window"><param name="Local" value="debugger_window.html"></object><a href="debugger_window.html">Indicore 3 Lua Editor/Debugger Window</a>
+    <li><object type="text/sitemap"><param name="Name" value="How to Execute an Indicator or Strategy Program?"><param name="Local" value="start_debugging.html"></object><a href="start_debugging.html">How to Execute an Indicator or Strategy Program?</a>
+    <li><object type="text/sitemap"><param name="Name" value="How to Use Breakpoints?"><param name="Local" value="breakpoints.html"></object><a href="breakpoints.html">How to Use Breakpoints?</a>
+    <li><object type="text/sitemap"><param name="Name" value="How to Watch an Expression?"><param name="Local" value="watches.html"></object><a href="watches.html">How to Watch an Expression?</a>
+    <li><object type="text/sitemap"><param name="Name" value="Debugging a View Indicator"><param name="Local" value="debug_view.html"></object><a href="debug_view.html">Debugging a View Indicator</a>
+    <li><object type="text/sitemap"><param name="Name" value="Debugging an Owner-drawn Indicator"><param name="Local" value="debug_od.html"></object><a href="debug_od.html">Debugging an Owner-drawn Indicator</a>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="How to Protect Strategy or Indicator Source Code?"><param name="Local" value="protect.html"></object><a href="protect.html">How to Protect Strategy or Indicator Source Code?</a>
+    <li><object type="text/sitemap"><param name="Name" value="How to Work with Project?"><param name="Local" value="project.html"></object><a href="project.html">How to Work with Project?</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="How to Add/Remove Indicator to Project?"><param name="Local" value="addremovefileproject.html"></object><a href="addremovefileproject.html">How to Add/Remove Indicator to Project?</a>
+    <li><object type="text/sitemap"><param name="Name" value="How to Select Nested Indicators to be Debugged?"><param name="Local" value="indicatortstodebug.html"></object><a href="indicatortstodebug.html">How to Select Nested Indicators to be Debugged?</a>
+    <li><object type="text/sitemap"><param name="Name" value="How to Create Package?"><param name="Local" value="createpackage.html"></object><a href="createpackage.html">How to Create Package?</a>
+    
+        </UL>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="Signals and Strategies"><param name="Local" value="signals.html"></object><a href="signals.html">Signals and Strategies</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="The Structure of a Strategy Program"><param name="Local" value="signal_struct.html"></object><a href="signal_struct.html">The Structure of a Strategy Program</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="Init()"><param name="Local" value="signal_Init.html"></object><a href="signal_Init.html">Init()</a>
+    <li><object type="text/sitemap"><param name="Name" value="Prepare(nameOnly)"><param name="Local" value="signal_Prepare.html"></object><a href="signal_Prepare.html">Prepare(nameOnly)</a>
+    <li><object type="text/sitemap"><param name="Name" value="Update()"><param name="Local" value="signal_Update.html"></object><a href="signal_Update.html">Update()</a>
+    <li><object type="text/sitemap"><param name="Name" value="ReleaseInstance()"><param name="Local" value="signal_ReleaseInstance.html"></object><a href="signal_ReleaseInstance.html">ReleaseInstance()</a>
+    <li><object type="text/sitemap"><param name="Name" value="AsyncOperationFinished(cookie, successful, message, message1, message2)"><param name="Local" value="signal_AsyncOperationFinished.html"></object><a href="signal_AsyncOperationFinished.html">AsyncOperationFinished(cookie, successful, message, message1, message2)</a>
+    <li><object type="text/sitemap"><param name="Name" value="CheckParameters(parameters)"><param name="Local" value="signal_CheckParameters.html"></object><a href="signal_CheckParameters.html">CheckParameters(parameters)</a>
+    <li><object type="text/sitemap"><param name="Name" value="ChangeParameters()"><param name="Local" value="signal_ChangeParameters.html"></object><a href="signal_ChangeParameters.html">ChangeParameters()</a>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="Applying the strategy on candle data using the helper."><param name="Local" value="signal_helper.html"></object><a href="signal_helper.html">Applying the strategy on candle data using the helper.</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="ExtSubscribe function of helper.lua"><param name="Local" value="ExtSubscribe.html"></object><a href="ExtSubscribe.html">ExtSubscribe function of helper.lua</a>
+    <li><object type="text/sitemap"><param name="Name" value="ExtSubscribe1 function of helper.lua"><param name="Local" value="ExtSubscribe1.html"></object><a href="ExtSubscribe1.html">ExtSubscribe1 function of helper.lua</a>
+    <li><object type="text/sitemap"><param name="Name" value="ExtUpdate function"><param name="Local" value="ExtUpdate.html"></object><a href="ExtUpdate.html">ExtUpdate function</a>
+    <li><object type="text/sitemap"><param name="Name" value="ExtAsyncOperationFinished function"><param name="Local" value="ExtAsyncOperationFinished.html"></object><a href="ExtAsyncOperationFinished.html">ExtAsyncOperationFinished function</a>
+    
+        </UL>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="Trading"><param name="Local" value="trading.html"></object><a href="trading.html">Trading</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="Trading Tables"><param name="Local" value="TradingTables.html"></object><a href="TradingTables.html">Trading Tables</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="Accounts(table)"><param name="Local" value="TTAccounts.html"></object><a href="TTAccounts.html">Accounts(table)</a>
+    <li><object type="text/sitemap"><param name="Name" value="Orders(table)"><param name="Local" value="TTOrders.html"></object><a href="TTOrders.html">Orders(table)</a>
+    <li><object type="text/sitemap"><param name="Name" value="Offers(table)"><param name="Local" value="TTOffers.html"></object><a href="TTOffers.html">Offers(table)</a>
+    <li><object type="text/sitemap"><param name="Name" value="Trades(table)"><param name="Local" value="TTTrades.html"></object><a href="TTTrades.html">Trades(table)</a>
+    <li><object type="text/sitemap"><param name="Name" value="Summary(table)"><param name="Local" value="TTSummary.html"></object><a href="TTSummary.html">Summary(table)</a>
+    <li><object type="text/sitemap"><param name="Name" value="Closed Trades(table)"><param name="Local" value="TTClosedTrades.html"></object><a href="TTClosedTrades.html">Closed Trades(table)</a>
+    <li><object type="text/sitemap"><param name="Name" value="Messages(table)"><param name="Local" value="TTMessages.html"></object><a href="TTMessages.html">Messages(table)</a>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="Orders in the FXCM's trading system"><param name="Local" value="OrdersSys.html"></object><a href="OrdersSys.html">Orders in the FXCM's trading system</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="Order Types"><param name="Local" value="OrderTypes.html"></object><a href="OrderTypes.html">Order Types</a>
+    <li><object type="text/sitemap"><param name="Name" value="NFA Compliance Rule 2-43(b) (FIFO rule)"><param name="Local" value="nfa.html"></object><a href="nfa.html">NFA Compliance Rule 2-43(b) (FIFO rule)</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="Using Net Orders for FIFO accounts"><param name="Local" value="Net_Orders.html"></object><a href="Net_Orders.html">Using Net Orders for FIFO accounts</a>
+    <li><object type="text/sitemap"><param name="Name" value="Using ELS Orders for FIFO accounts"><param name="Local" value="ELS_Orders.html"></object><a href="ELS_Orders.html">Using ELS Orders for FIFO accounts</a>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="Open/Close Market Order"><param name="Local" value="FXCMOpenCloseMarketOrder.html"></object><a href="FXCMOpenCloseMarketOrder.html">Open/Close Market Order</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="Open/Close Market Order"><param name="Local" value="OpenCloseMarketOrder.html"></object><a href="OpenCloseMarketOrder.html">Open/Close Market Order</a>
+    <li><object type="text/sitemap"><param name="Name" value="Open/Close Market Order Execution Scenarios"><param name="Local" value="OpenCloseMarketOrderExecScenarios.html"></object><a href="OpenCloseMarketOrderExecScenarios.html">Open/Close Market Order Execution Scenarios</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="Scenario 1"><param name="Local" value="OpenCloseMarketOrderScenario1.html"></object><a href="OpenCloseMarketOrderScenario1.html">Scenario 1</a>
+    <li><object type="text/sitemap"><param name="Name" value="Scenario 2"><param name="Local" value="OpenCloseMarketOrderScenario2.html"></object><a href="OpenCloseMarketOrderScenario2.html">Scenario 2</a>
+    <li><object type="text/sitemap"><param name="Name" value="Scenario 3"><param name="Local" value="OpenCloseMarketOrderScenario3.html"></object><a href="OpenCloseMarketOrderScenario3.html">Scenario 3</a>
+    <li><object type="text/sitemap"><param name="Name" value="Scenario 4"><param name="Local" value="OpenCloseMarketOrderScenario4.html"></object><a href="OpenCloseMarketOrderScenario4.html">Scenario 4</a>
+    <li><object type="text/sitemap"><param name="Name" value="Scenario 5"><param name="Local" value="OpenCloseMarketOrderScenario5.html"></object><a href="OpenCloseMarketOrderScenario5.html">Scenario 5</a>
+    <li><object type="text/sitemap"><param name="Name" value="Scenario 6"><param name="Local" value="OpenCloseMarketOrderScenario6.html"></object><a href="OpenCloseMarketOrderScenario6.html">Scenario 6</a>
+    <li><object type="text/sitemap"><param name="Name" value="Scenario 7"><param name="Local" value="OpenCloseMarketOrderScenario7.html"></object><a href="OpenCloseMarketOrderScenario7.html">Scenario 7</a>
+    <li><object type="text/sitemap"><param name="Name" value="Scenario 8"><param name="Local" value="OpenCloseMarketOrderScenario8.html"></object><a href="OpenCloseMarketOrderScenario8.html">Scenario 8</a>
+    
+        </UL>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="Open/Close, Open/Close Limit, Open/Close Range Orders"><param name="Local" value="FXCMOpenCloseOrder.html"></object><a href="FXCMOpenCloseOrder.html">Open/Close, Open/Close Limit, Open/Close Range Orders</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="Open/Close, Open/Close Limit, Open/Close Range Orders"><param name="Local" value="OpenCloseOrder.html"></object><a href="OpenCloseOrder.html">Open/Close, Open/Close Limit, Open/Close Range Orders</a>
+    <li><object type="text/sitemap"><param name="Name" value="Open/Close, Open/Close Limit, Open/Close Range Orders Execution Scenarios"><param name="Local" value="OpenCloseOrderExecScenarios.html"></object><a href="OpenCloseOrderExecScenarios.html">Open/Close, Open/Close Limit, Open/Close Range Orders Execution Scenarios</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="Scenario 1"><param name="Local" value="OpenCloseOrderScenario1.html"></object><a href="OpenCloseOrderScenario1.html">Scenario 1</a>
+    <li><object type="text/sitemap"><param name="Name" value="Scenario 2"><param name="Local" value="OpenCloseOrderScenario2.html"></object><a href="OpenCloseOrderScenario2.html">Scenario 2</a>
+    <li><object type="text/sitemap"><param name="Name" value="Scenario 3"><param name="Local" value="OpenCloseOrderScenario3.html"></object><a href="OpenCloseOrderScenario3.html">Scenario 3</a>
+    <li><object type="text/sitemap"><param name="Name" value="Scenario 4"><param name="Local" value="OpenCloseOrderScenario4.html"></object><a href="OpenCloseOrderScenario4.html">Scenario 4</a>
+    <li><object type="text/sitemap"><param name="Name" value="Scenario 5"><param name="Local" value="OpenCloseOrderScenario5.html"></object><a href="OpenCloseOrderScenario5.html">Scenario 5</a>
+    <li><object type="text/sitemap"><param name="Name" value="Scenario 6"><param name="Local" value="OpenCloseOrderScenario6.html"></object><a href="OpenCloseOrderScenario6.html">Scenario 6</a>
+    <li><object type="text/sitemap"><param name="Name" value="Scenario 7"><param name="Local" value="OpenCloseOrderScenario7.html"></object><a href="OpenCloseOrderScenario7.html">Scenario 7</a>
+    
+        </UL>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="Stop/Entry Stop Orders"><param name="Local" value="FXCMStopEntryStopOrders.html"></object><a href="FXCMStopEntryStopOrders.html">Stop/Entry Stop Orders</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="Stop/Entry Stop Orders"><param name="Local" value="StopEntryStopOrders.html"></object><a href="StopEntryStopOrders.html">Stop/Entry Stop Orders</a>
+    <li><object type="text/sitemap"><param name="Name" value="Stop/Entry Stop Order Execution Scenarios"><param name="Local" value="StopEntryStopOrderExecScenarios.html"></object><a href="StopEntryStopOrderExecScenarios.html">Stop/Entry Stop Order Execution Scenarios</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="Scenario 1"><param name="Local" value="StopEntryStopOrderScenario1.html"></object><a href="StopEntryStopOrderScenario1.html">Scenario 1</a>
+    <li><object type="text/sitemap"><param name="Name" value="Scenario 2"><param name="Local" value="StopEntryStopOrderScenario2.html"></object><a href="StopEntryStopOrderScenario2.html">Scenario 2</a>
+    <li><object type="text/sitemap"><param name="Name" value="Scenario 3"><param name="Local" value="StopEntryStopOrderScenario3.html"></object><a href="StopEntryStopOrderScenario3.html">Scenario 3</a>
+    <li><object type="text/sitemap"><param name="Name" value="Scenario 4"><param name="Local" value="StopEntryStopOrderScenario4.html"></object><a href="StopEntryStopOrderScenario4.html">Scenario 4</a>
+    <li><object type="text/sitemap"><param name="Name" value="Scenario 5"><param name="Local" value="StopEntryStopOrderScenario5.html"></object><a href="StopEntryStopOrderScenario5.html">Scenario 5</a>
+    <li><object type="text/sitemap"><param name="Name" value="Scenario 6"><param name="Local" value="StopEntryStopOrderScenario6.html"></object><a href="StopEntryStopOrderScenario6.html">Scenario 6</a>
+    
+        </UL>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="Limit/Entry Limit Orders"><param name="Local" value="FXCMLimitEntryLimitOrders.html"></object><a href="FXCMLimitEntryLimitOrders.html">Limit/Entry Limit Orders</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="Limit/Entry Limit Orders"><param name="Local" value="LimitEntryLimitOrders.html"></object><a href="LimitEntryLimitOrders.html">Limit/Entry Limit Orders</a>
+    <li><object type="text/sitemap"><param name="Name" value="Limit/Entry Limit Order Execution Scenarios"><param name="Local" value="LimitEntryLimitOrderExecScenarios.html"></object><a href="LimitEntryLimitOrderExecScenarios.html">Limit/Entry Limit Order Execution Scenarios</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="Scenario 1"><param name="Local" value="LimitEntryLimitOrderScenario1.html"></object><a href="LimitEntryLimitOrderScenario1.html">Scenario 1</a>
+    <li><object type="text/sitemap"><param name="Name" value="Scenario 2"><param name="Local" value="LimitEntryLimitOrderScenario2.html"></object><a href="LimitEntryLimitOrderScenario2.html">Scenario 2</a>
+    <li><object type="text/sitemap"><param name="Name" value="Scenario 3"><param name="Local" value="LimitEntryLimitOrderScenario3.html"></object><a href="LimitEntryLimitOrderScenario3.html">Scenario 3</a>
+    <li><object type="text/sitemap"><param name="Name" value="Scenario 4"><param name="Local" value="LimitEntryLimitOrderScenario4.html"></object><a href="LimitEntryLimitOrderScenario4.html">Scenario 4</a>
+    <li><object type="text/sitemap"><param name="Name" value="Scenario 5"><param name="Local" value="LimitEntryLimitOrderScenario5.html"></object><a href="LimitEntryLimitOrderScenario5.html">Scenario 5</a>
+    <li><object type="text/sitemap"><param name="Name" value="Scenario 6"><param name="Local" value="LimitEntryLimitOrderScenario6.html"></object><a href="LimitEntryLimitOrderScenario6.html">Scenario 6</a>
+    
+        </UL>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="Range Entry Orders"><param name="Local" value="FXCMRangeEntryOrders.html"></object><a href="FXCMRangeEntryOrders.html">Range Entry Orders</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="Range Entry Orders"><param name="Local" value="RangeEntryOrders.html"></object><a href="RangeEntryOrders.html">Range Entry Orders</a>
+    <li><object type="text/sitemap"><param name="Name" value="Range Entry Order Execution Scenarios"><param name="Local" value="RangeEntryOrderExecScenarios.html"></object><a href="RangeEntryOrderExecScenarios.html">Range Entry Order Execution Scenarios</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="Scenario 1"><param name="Local" value="RangeEntryExecScenario1.html"></object><a href="RangeEntryExecScenario1.html">Scenario 1</a>
+    <li><object type="text/sitemap"><param name="Name" value="Scenario 2"><param name="Local" value="RangeEntryExecScenario2.html"></object><a href="RangeEntryExecScenario2.html">Scenario 2</a>
+    <li><object type="text/sitemap"><param name="Name" value="Scenario 3"><param name="Local" value="RangeEntryExecScenario3.html"></object><a href="RangeEntryExecScenario3.html">Scenario 3</a>
+    <li><object type="text/sitemap"><param name="Name" value="Scenario 4"><param name="Local" value="RangeEntryExecScenario4.html"></object><a href="RangeEntryExecScenario4.html">Scenario 4</a>
+    
+        </UL>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="ELS (Entry-with-Limit-and-Stop) Contingent Order"><param name="Local" value="FXCMELSOrder.html"></object><a href="FXCMELSOrder.html">ELS (Entry-with-Limit-and-Stop) Contingent Order</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="ELS (Entry-with-Limit-and-Stop) Contingent Order"><param name="Local" value="ELSContingentOrder.html"></object><a href="ELSContingentOrder.html">ELS (Entry-with-Limit-and-Stop) Contingent Order</a>
+    <li><object type="text/sitemap"><param name="Name" value="ELS (Entry-with-Limit-and-Stop) Order Execution Scenarios"><param name="Local" value="ELSOrderExecScenarios.html"></object><a href="ELSOrderExecScenarios.html">ELS (Entry-with-Limit-and-Stop) Order Execution Scenarios</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="Scenario 1"><param name="Local" value="ELSOrderScenario1.html"></object><a href="ELSOrderScenario1.html">Scenario 1</a>
+    <li><object type="text/sitemap"><param name="Name" value="Scenario 2"><param name="Local" value="ELSOrderScenario2.html"></object><a href="ELSOrderScenario2.html">Scenario 2</a>
+    <li><object type="text/sitemap"><param name="Name" value="Scenario 3"><param name="Local" value="ELSOrderScenario3.html"></object><a href="ELSOrderScenario3.html">Scenario 3</a>
+    <li><object type="text/sitemap"><param name="Name" value="Scenario 4"><param name="Local" value="ELSOrderScenario4.html"></object><a href="ELSOrderScenario4.html">Scenario 4</a>
+    <li><object type="text/sitemap"><param name="Name" value="Scenario 5"><param name="Local" value="ELSOrderScenario5.html"></object><a href="ELSOrderScenario5.html">Scenario 5</a>
+    
+        </UL>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="OCO (One-Cancels-the-Other) Contingent Order"><param name="Local" value="FXCMOCOOrder.html"></object><a href="FXCMOCOOrder.html">OCO (One-Cancels-the-Other) Contingent Order</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="OCO (One-Cancels-the-Other) Contingent Order"><param name="Local" value="OCOContingentOrder.html"></object><a href="OCOContingentOrder.html">OCO (One-Cancels-the-Other) Contingent Order</a>
+    <li><object type="text/sitemap"><param name="Name" value="OCO (One-Cancels-the-Other) Contingent Order Execution Scenarios"><param name="Local" value="OCOOrderExecScenarios.html"></object><a href="OCOOrderExecScenarios.html">OCO (One-Cancels-the-Other) Contingent Order Execution Scenarios</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="Scenario 1"><param name="Local" value="OCOOrderScenario1.html"></object><a href="OCOOrderScenario1.html">Scenario 1</a>
+    <li><object type="text/sitemap"><param name="Name" value="Scenario 2"><param name="Local" value="OCOOrderScenario2.html"></object><a href="OCOOrderScenario2.html">Scenario 2</a>
+    
+        </UL>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="OTO (One-Triggers-the-Other) Contingent Order"><param name="Local" value="FXCMOTOOrder.html"></object><a href="FXCMOTOOrder.html">OTO (One-Triggers-the-Other) Contingent Order</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="OTO (One-Triggers-the-Other) Contingent Order"><param name="Local" value="OTOContingentOrder.html"></object><a href="OTOContingentOrder.html">OTO (One-Triggers-the-Other) Contingent Order</a>
+    <li><object type="text/sitemap"><param name="Name" value="OTO (One-Triggers-the-Other) Order Execution Scenarios"><param name="Local" value="OTOOrderExecScenarios.html"></object><a href="OTOOrderExecScenarios.html">OTO (One-Triggers-the-Other) Order Execution Scenarios</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="Scenario 1"><param name="Local" value="OTOOrderScenario1.html"></object><a href="OTOOrderScenario1.html">Scenario 1</a>
+    <li><object type="text/sitemap"><param name="Name" value="Scenario 2"><param name="Local" value="OTOOrderScenario2.html"></object><a href="OTOOrderScenario2.html">Scenario 2</a>
+    <li><object type="text/sitemap"><param name="Name" value="Scenario 3"><param name="Local" value="OTOOrderScenario3.html"></object><a href="OTOOrderScenario3.html">Scenario 3</a>
+    <li><object type="text/sitemap"><param name="Name" value="Scenario 4"><param name="Local" value="OTOOrderScenario4.html"></object><a href="OTOOrderScenario4.html">Scenario 4</a>
+    
+        </UL>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="Order Execution Errors"><param name="Local" value="OrderExecutionErrors.html"></object><a href="OrderExecutionErrors.html">Order Execution Errors</a>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="Account Mathematics"><param name="Local" value="account_math.html"></object><a href="account_math.html">Account Mathematics</a>
+    <li><object type="text/sitemap"><param name="Name" value="Trading Commands"><param name="Local" value="TradingCommands.html"></object><a href="TradingCommands.html">Trading Commands</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="Create Order"><param name="Local" value="TradingCommandsCreateOrder.html"></object><a href="TradingCommandsCreateOrder.html">Create Order</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="Create a True Market Order"><param name="Local" value="TradingCommandsCreateOrder_OM.html"></object><a href="TradingCommandsCreateOrder_OM.html">Create a True Market Order</a>
+    <li><object type="text/sitemap"><param name="Name" value="Create a Market Order"><param name="Local" value="TradingCommandsCreateOrder_O.html"></object><a href="TradingCommandsCreateOrder_O.html">Create a Market Order</a>
+    <li><object type="text/sitemap"><param name="Name" value="Create a Market Range Order (Using Two Prices)"><param name="Local" value="TradingCommandsCreateOrder_OR1.html"></object><a href="TradingCommandsCreateOrder_OR1.html">Create a Market Range Order (Using Two Prices)</a>
+    <li><object type="text/sitemap"><param name="Name" value="Create a Market Range Order (Using Price and Distance)"><param name="Local" value="TradingCommandsCreateOrder_OR2.html"></object><a href="TradingCommandsCreateOrder_OR2.html">Create a Market Range Order (Using Price and Distance)</a>
+    <li><object type="text/sitemap"><param name="Name" value="Create a True Market Close Order"><param name="Local" value="TradingCommandsCreateOrder_CM.html"></object><a href="TradingCommandsCreateOrder_CM.html">Create a True Market Close Order</a>
+    <li><object type="text/sitemap"><param name="Name" value="Create a Market Close Order"><param name="Local" value="TradingCommandsCreateOrder_C.html"></object><a href="TradingCommandsCreateOrder_C.html">Create a Market Close Order</a>
+    <li><object type="text/sitemap"><param name="Name" value="Create a Market Range Close Order (Using Two Prices)"><param name="Local" value="TradingCommandsCreateOrder_CR1.html"></object><a href="TradingCommandsCreateOrder_CR1.html">Create a Market Range Close Order (Using Two Prices)</a>
+    <li><object type="text/sitemap"><param name="Name" value="Create a Market Range Close Order (Using Price and Distance)"><param name="Local" value="TradingCommandsCreateOrder_CR2.html"></object><a href="TradingCommandsCreateOrder_CR2.html">Create a Market Range Close Order (Using Price and Distance)</a>
+    <li><object type="text/sitemap"><param name="Name" value="Create an Entry Limit Order"><param name="Local" value="TradingCommandsCreateOrder_LE.html"></object><a href="TradingCommandsCreateOrder_LE.html">Create an Entry Limit Order</a>
+    <li><object type="text/sitemap"><param name="Name" value="Create an Entry Stop Order"><param name="Local" value="TradingCommandsCreateOrder_SE.html"></object><a href="TradingCommandsCreateOrder_SE.html">Create an Entry Stop Order</a>
+    <li><object type="text/sitemap"><param name="Name" value="Create an Range Entry Order"><param name="Local" value="TradingCommandsCreateOrder_RE.html"></object><a href="TradingCommandsCreateOrder_RE.html">Create an Range Entry Order</a>
+    <li><object type="text/sitemap"><param name="Name" value="Create a Limit Order"><param name="Local" value="TradingCommandsCreateOrder_L.html"></object><a href="TradingCommandsCreateOrder_L.html">Create a Limit Order</a>
+    <li><object type="text/sitemap"><param name="Name" value="Create a Stop Order"><param name="Local" value="TradingCommandsCreateOrder_S.html"></object><a href="TradingCommandsCreateOrder_S.html">Create a Stop Order</a>
+    <li><object type="text/sitemap"><param name="Name" value="Attach Stop and/or Limit Orders to the Command"><param name="Local" value="TradingCommandsCreateOrder_A.html"></object><a href="TradingCommandsCreateOrder_A.html">Attach Stop and/or Limit Orders to the Command</a>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="Create OCO orders"><param name="Local" value="CreateOCO.html"></object><a href="CreateOCO.html">Create OCO orders</a>
+    <li><object type="text/sitemap"><param name="Name" value="Create OTO orders"><param name="Local" value="CreateOTO.html"></object><a href="CreateOTO.html">Create OTO orders</a>
+    <li><object type="text/sitemap"><param name="Name" value="Create a new contingency group"><param name="Local" value="JoinToNewContingencyGroup.html"></object><a href="JoinToNewContingencyGroup.html">Create a new contingency group</a>
+    <li><object type="text/sitemap"><param name="Name" value="Add existing orders into an existing contingency group"><param name="Local" value="JoinToExistingContingencyGroup.html"></object><a href="JoinToExistingContingencyGroup.html">Add existing orders into an existing contingency group</a>
+    <li><object type="text/sitemap"><param name="Name" value="Remove orders from an existing contingency group"><param name="Local" value="RemoveFromContingencyGroup.html"></object><a href="RemoveFromContingencyGroup.html">Remove orders from an existing contingency group</a>
+    <li><object type="text/sitemap"><param name="Name" value="Edit Order"><param name="Local" value="TradingCommandsEditOrder.html"></object><a href="TradingCommandsEditOrder.html">Edit Order</a>
+    <li><object type="text/sitemap"><param name="Name" value="Delete Order"><param name="Local" value="TradingCommandsDeleteOrder.html"></object><a href="TradingCommandsDeleteOrder.html">Delete Order</a>
+    
+        </UL>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="Lua Tables"></object>Lua Tables
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="array"><param name="Local" value="array.html"></object><a href="array.html">array</a>
+    <li><object type="text/sitemap"><param name="Name" value="bar_stream"><param name="Local" value="bar_stream.html"></object><a href="bar_stream.html">bar_stream</a>
+    <li><object type="text/sitemap"><param name="Name" value="context"><param name="Local" value="context.html"></object><a href="context.html">context</a>
+    <li><object type="text/sitemap"><param name="Name" value="core"><param name="Local" value="core.html"></object><a href="core.html">core</a>
+    <li><object type="text/sitemap"><param name="Name" value="host"><param name="Local" value="host.html"></object><a href="host.html">host</a>
+    <li><object type="text/sitemap"><param name="Name" value="http_loader"><param name="Local" value="http_loader.html"></object><a href="http_loader.html">http_loader</a>
+    <li><object type="text/sitemap"><param name="Name" value="indicator"><param name="Local" value="indicator.html"></object><a href="indicator.html">indicator</a>
+    <li><object type="text/sitemap"><param name="Name" value="indicator_manager"><param name="Local" value="indicator_manager.html"></object><a href="indicator_manager.html">indicator_manager</a>
+    <li><object type="text/sitemap"><param name="Name" value="indicore3_ffi"><param name="Local" value="indicore3_ffi.html"></object><a href="indicore3_ffi.html">indicore3_ffi</a>
+    <li><object type="text/sitemap"><param name="Name" value="instance"><param name="Local" value="instance.html"></object><a href="instance.html">instance</a>
+    <li><object type="text/sitemap"><param name="Name" value="instance (strategy or signal)"><param name="Local" value="instance_strategy.html"></object><a href="instance_strategy.html">instance (strategy or signal)</a>
+    <li><object type="text/sitemap"><param name="Name" value="instance_impl"><param name="Local" value="instance_impl.html"></object><a href="instance_impl.html">instance_impl</a>
+    <li><object type="text/sitemap"><param name="Name" value="interop"><param name="Local" value="interop.html"></object><a href="interop.html">interop</a>
+    <li><object type="text/sitemap"><param name="Name" value="interop_instance"><param name="Local" value="interop_instance.html"></object><a href="interop_instance.html">interop_instance</a>
+    <li><object type="text/sitemap"><param name="Name" value="math2d"><param name="Local" value="math2d.html"></object><a href="math2d.html">math2d</a>
+    <li><object type="text/sitemap"><param name="Name" value="mathex"><param name="Local" value="mathex.html"></object><a href="mathex.html">mathex</a>
+    <li><object type="text/sitemap"><param name="Name" value="output_stream"><param name="Local" value="output_stream.html"></object><a href="output_stream.html">output_stream</a>
+    <li><object type="text/sitemap"><param name="Name" value="output_stream_impl"><param name="Local" value="output_stream_impl.html"></object><a href="output_stream_impl.html">output_stream_impl</a>
+    <li><object type="text/sitemap"><param name="Name" value="ownerdraw_points"><param name="Local" value="ownerdraw_points.html"></object><a href="ownerdraw_points.html">ownerdraw_points</a>
+    <li><object type="text/sitemap"><param name="Name" value="parameters"><param name="Local" value="parameters.html"></object><a href="parameters.html">parameters</a>
+    <li><object type="text/sitemap"><param name="Name" value="profile"><param name="Local" value="profile.html"></object><a href="profile.html">profile</a>
+    <li><object type="text/sitemap"><param name="Name" value="resources"><param name="Local" value="resources.html"></object><a href="resources.html">resources</a>
+    <li><object type="text/sitemap"><param name="Name" value="strategy"><param name="Local" value="strategy.html"></object><a href="strategy.html">strategy</a>
+    <li><object type="text/sitemap"><param name="Name" value="terminal"><param name="Local" value="terminal.html"></object><a href="terminal.html">terminal</a>
+    <li><object type="text/sitemap"><param name="Name" value="text_output"><param name="Local" value="text_output.html"></object><a href="text_output.html">text_output</a>
+    <li><object type="text/sitemap"><param name="Name" value="text_output_impl"><param name="Local" value="text_output_impl.html"></object><a href="text_output_impl.html">text_output_impl</a>
+    <li><object type="text/sitemap"><param name="Name" value="tick_stream"><param name="Local" value="tick_stream.html"></object><a href="tick_stream.html">tick_stream</a>
+    <li><object type="text/sitemap"><param name="Name" value="tradingtable"><param name="Local" value="tradingtable.html"></object><a href="tradingtable.html">tradingtable</a>
+    <li><object type="text/sitemap"><param name="Name" value="tradingtable_enum"><param name="Local" value="tradingtable_enum.html"></object><a href="tradingtable_enum.html">tradingtable_enum</a>
+    <li><object type="text/sitemap"><param name="Name" value="tradingtable_row"><param name="Local" value="tradingtable_row.html"></object><a href="tradingtable_row.html">tradingtable_row</a>
+    <li><object type="text/sitemap"><param name="Name" value="valuemap"><param name="Local" value="valuemap.html"></object><a href="valuemap.html">valuemap</a>
+    <li><object type="text/sitemap"><param name="Name" value="win32"><param name="Local" value="win32.html"></object><a href="win32.html">win32</a>
+    
+        </UL>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="Extension Kit"><param name="Local" value="ext_kit.html"></object><a href="ext_kit.html">Extension Kit</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="Persistent Storage"><param name="Local" value="ext_kit_storagedb.html"></object><a href="ext_kit_storagedb.html">Persistent Storage</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="Lua Tables"></object>Lua Tables
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="db"><param name="Local" value="ext_kit_storagedb.db.html"></object><a href="ext_kit_storagedb.db.html">db</a>
+    <li><object type="text/sitemap"><param name="Name" value="storagedb"><param name="Local" value="ext_kit_storagedb.storagedb.html"></object><a href="ext_kit_storagedb.storagedb.html">storagedb</a>
+    
+        </UL>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="XML Parser"><param name="Local" value="ext_kit_xml.html"></object><a href="ext_kit_xml.html">XML Parser</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="The list of encoding supported."><param name="Local" value="xml_encodings.html"></object><a href="xml_encodings.html">The list of encoding supported.</a>
+    <li><object type="text/sitemap"><param name="Name" value="Lua Tables"></object>Lua Tables
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="expat_lua"><param name="Local" value="ext_kit_xml.expat_lua.html"></object><a href="ext_kit_xml.expat_lua.html">expat_lua</a>
+    <li><object type="text/sitemap"><param name="Name" value="xmldocument"><param name="Local" value="ext_kit_xml.xmldocument.html"></object><a href="ext_kit_xml.xmldocument.html">xmldocument</a>
+    <li><object type="text/sitemap"><param name="Name" value="xmlelement"><param name="Local" value="ext_kit_xml.xmlelement.html"></object><a href="ext_kit_xml.xmlelement.html">xmlelement</a>
+    <li><object type="text/sitemap"><param name="Name" value="xmlhandler"><param name="Local" value="ext_kit_xml.xmlhandler.html"></object><a href="ext_kit_xml.xmlhandler.html">xmlhandler</a>
+    <li><object type="text/sitemap"><param name="Name" value="xmlnode"><param name="Local" value="ext_kit_xml.xmlnode.html"></object><a href="ext_kit_xml.xmlnode.html">xmlnode</a>
+    
+        </UL>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="Http/Https loader"><param name="Local" value="ext_kit_http.html"></object><a href="ext_kit_http.html">Http/Https loader</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="Lua Tables"></object>Lua Tables
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="http_lua"><param name="Local" value="ext_kit_http.http_lua.html"></object><a href="ext_kit_http.http_lua.html">http_lua</a>
+    <li><object type="text/sitemap"><param name="Name" value="http_request"><param name="Local" value="ext_kit_http.http_request.html"></object><a href="ext_kit_http.http_request.html">http_request</a>
+    
+        </UL>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="Perl compatible regular expression."><param name="Local" value="ext_kit_pcre.html"></object><a href="ext_kit_pcre.html">Perl compatible regular expression.</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="Lua Tables"></object>Lua Tables
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="pcre_lua"><param name="Local" value="ext_kit_pcre.pcre_lua.html"></object><a href="ext_kit_pcre.pcre_lua.html">pcre_lua</a>
+    <li><object type="text/sitemap"><param name="Name" value="regexp"><param name="Local" value="ext_kit_pcre.regexp.html"></object><a href="ext_kit_pcre.regexp.html">regexp</a>
+    
+        </UL>
+    
+        </UL>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="Lua 5.1 documentation"><param name="Local" value="lua.html"></object><a href="lua.html">Lua 5.1 documentation</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="Lua 5.1 Reference Manual"><param name="Local" value="lua/lua_51_reference_manual.html"></object><a href="lua/lua_51_reference_manual.html">Lua 5.1 Reference Manual</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="1 - Introduction"><param name="Local" value="lua/1.html"></object><a href="lua/1.html">1 - Introduction</a>
+    <li><object type="text/sitemap"><param name="Name" value="2 - The Language"><param name="Local" value="lua/2.html"></object><a href="lua/2.html">2 - The Language</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="2.1 - Lexical Conventions"><param name="Local" value="lua/2.1.html"></object><a href="lua/2.1.html">2.1 - Lexical Conventions</a>
+    <li><object type="text/sitemap"><param name="Name" value="2.2 - Values and Types"><param name="Local" value="lua/2.2.html"></object><a href="lua/2.2.html">2.2 - Values and Types</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="2.2.1 - Coercion"><param name="Local" value="lua/2.2.1.html"></object><a href="lua/2.2.1.html">2.2.1 - Coercion</a>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="2.3 - Variables"><param name="Local" value="lua/2.3.html"></object><a href="lua/2.3.html">2.3 - Variables</a>
+    <li><object type="text/sitemap"><param name="Name" value="2.4 - Statements"><param name="Local" value="lua/2.4.html"></object><a href="lua/2.4.html">2.4 - Statements</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="2.4.1 - Chunks"><param name="Local" value="lua/2.4.1.html"></object><a href="lua/2.4.1.html">2.4.1 - Chunks</a>
+    <li><object type="text/sitemap"><param name="Name" value="2.4.2 - Blocks"><param name="Local" value="lua/2.4.2.html"></object><a href="lua/2.4.2.html">2.4.2 - Blocks</a>
+    <li><object type="text/sitemap"><param name="Name" value="2.4.3 - Assignment"><param name="Local" value="lua/2.4.3.html"></object><a href="lua/2.4.3.html">2.4.3 - Assignment</a>
+    <li><object type="text/sitemap"><param name="Name" value="2.4.4 - Control Structures"><param name="Local" value="lua/2.4.4.html"></object><a href="lua/2.4.4.html">2.4.4 - Control Structures</a>
+    <li><object type="text/sitemap"><param name="Name" value="2.4.5 - For Statement"><param name="Local" value="lua/2.4.5.html"></object><a href="lua/2.4.5.html">2.4.5 - For Statement</a>
+    <li><object type="text/sitemap"><param name="Name" value="2.4.6 - Function Calls as Statements"><param name="Local" value="lua/2.4.6.html"></object><a href="lua/2.4.6.html">2.4.6 - Function Calls as Statements</a>
+    <li><object type="text/sitemap"><param name="Name" value="2.4.7 - Local Declarations"><param name="Local" value="lua/2.4.7.html"></object><a href="lua/2.4.7.html">2.4.7 - Local Declarations</a>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="2.5 - Expressions"><param name="Local" value="lua/2.5.html"></object><a href="lua/2.5.html">2.5 - Expressions</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="2.5.1 - Arithmetic Operators"><param name="Local" value="lua/2.5.1.html"></object><a href="lua/2.5.1.html">2.5.1 - Arithmetic Operators</a>
+    <li><object type="text/sitemap"><param name="Name" value="2.5.2 - Relational Operators"><param name="Local" value="lua/2.5.2.html"></object><a href="lua/2.5.2.html">2.5.2 - Relational Operators</a>
+    <li><object type="text/sitemap"><param name="Name" value="2.5.3 - Logical Operators"><param name="Local" value="lua/2.5.3.html"></object><a href="lua/2.5.3.html">2.5.3 - Logical Operators</a>
+    <li><object type="text/sitemap"><param name="Name" value="2.5.4 - Concatenation"><param name="Local" value="lua/2.5.4.html"></object><a href="lua/2.5.4.html">2.5.4 - Concatenation</a>
+    <li><object type="text/sitemap"><param name="Name" value="2.5.5 - The Length Operator"><param name="Local" value="lua/2.5.5.html"></object><a href="lua/2.5.5.html">2.5.5 - The Length Operator</a>
+    <li><object type="text/sitemap"><param name="Name" value="2.5.6 - Precedence"><param name="Local" value="lua/2.5.6.html"></object><a href="lua/2.5.6.html">2.5.6 - Precedence</a>
+    <li><object type="text/sitemap"><param name="Name" value="2.5.7 - Table Constructors"><param name="Local" value="lua/2.5.7.html"></object><a href="lua/2.5.7.html">2.5.7 - Table Constructors</a>
+    <li><object type="text/sitemap"><param name="Name" value="2.5.8 - Function Calls"><param name="Local" value="lua/2.5.8.html"></object><a href="lua/2.5.8.html">2.5.8 - Function Calls</a>
+    <li><object type="text/sitemap"><param name="Name" value="2.5.9 - Function Definitions"><param name="Local" value="lua/2.5.9.html"></object><a href="lua/2.5.9.html">2.5.9 - Function Definitions</a>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="2.6 - Visibility Rules"><param name="Local" value="lua/2.6.html"></object><a href="lua/2.6.html">2.6 - Visibility Rules</a>
+    <li><object type="text/sitemap"><param name="Name" value="2.7 - Error Handling"><param name="Local" value="lua/2.7.html"></object><a href="lua/2.7.html">2.7 - Error Handling</a>
+    <li><object type="text/sitemap"><param name="Name" value="2.8 - Metatables"><param name="Local" value="lua/2.8.html"></object><a href="lua/2.8.html">2.8 - Metatables</a>
+    <li><object type="text/sitemap"><param name="Name" value="2.9 - Environments"><param name="Local" value="lua/2.9.html"></object><a href="lua/2.9.html">2.9 - Environments</a>
+    <li><object type="text/sitemap"><param name="Name" value="2.10 - Garbage Collection"><param name="Local" value="lua/2.10.html"></object><a href="lua/2.10.html">2.10 - Garbage Collection</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="2.10.1 - Garbage-Collection Metamethods"><param name="Local" value="lua/2.10.1.html"></object><a href="lua/2.10.1.html">2.10.1 - Garbage-Collection Metamethods</a>
+    <li><object type="text/sitemap"><param name="Name" value="2.10.2 - Weak Tables"><param name="Local" value="lua/2.10.2.html"></object><a href="lua/2.10.2.html">2.10.2 - Weak Tables</a>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="2.11 - Coroutines"><param name="Local" value="lua/2.11.html"></object><a href="lua/2.11.html">2.11 - Coroutines</a>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="3 - The Application Program Interface"><param name="Local" value="lua/3.html"></object><a href="lua/3.html">3 - The Application Program Interface</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="3.1 - The Stack"><param name="Local" value="lua/3.1.html"></object><a href="lua/3.1.html">3.1 - The Stack</a>
+    <li><object type="text/sitemap"><param name="Name" value="3.2 - Stack Size"><param name="Local" value="lua/3.2.html"></object><a href="lua/3.2.html">3.2 - Stack Size</a>
+    <li><object type="text/sitemap"><param name="Name" value="3.3 - Pseudo-Indices"><param name="Local" value="lua/3.3.html"></object><a href="lua/3.3.html">3.3 - Pseudo-Indices</a>
+    <li><object type="text/sitemap"><param name="Name" value="3.4 - C Closures"><param name="Local" value="lua/3.4.html"></object><a href="lua/3.4.html">3.4 - C Closures</a>
+    <li><object type="text/sitemap"><param name="Name" value="3.5 - Registry"><param name="Local" value="lua/3.5.html"></object><a href="lua/3.5.html">3.5 - Registry</a>
+    <li><object type="text/sitemap"><param name="Name" value="3.6 - Error Handling in C"><param name="Local" value="lua/3.6.html"></object><a href="lua/3.6.html">3.6 - Error Handling in C</a>
+    <li><object type="text/sitemap"><param name="Name" value="3.7 - Functions and Types"><param name="Local" value="lua/3.7.html"></object><a href="lua/3.7.html">3.7 - Functions and Types</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="lua_Alloc"><param name="Local" value="lua/lua_Alloc.html"></object><a href="lua/lua_Alloc.html">lua_Alloc</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_atpanic"><param name="Local" value="lua/lua_atpanic.html"></object><a href="lua/lua_atpanic.html">lua_atpanic</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_call"><param name="Local" value="lua/lua_call.html"></object><a href="lua/lua_call.html">lua_call</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_CFunction"><param name="Local" value="lua/lua_CFunction.html"></object><a href="lua/lua_CFunction.html">lua_CFunction</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_checkstack"><param name="Local" value="lua/lua_checkstack.html"></object><a href="lua/lua_checkstack.html">lua_checkstack</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_close"><param name="Local" value="lua/lua_close.html"></object><a href="lua/lua_close.html">lua_close</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_concat"><param name="Local" value="lua/lua_concat.html"></object><a href="lua/lua_concat.html">lua_concat</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_cpcall"><param name="Local" value="lua/lua_cpcall.html"></object><a href="lua/lua_cpcall.html">lua_cpcall</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_createtable"><param name="Local" value="lua/lua_createtable.html"></object><a href="lua/lua_createtable.html">lua_createtable</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_dump"><param name="Local" value="lua/lua_dump.html"></object><a href="lua/lua_dump.html">lua_dump</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_equal"><param name="Local" value="lua/lua_equal.html"></object><a href="lua/lua_equal.html">lua_equal</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_error"><param name="Local" value="lua/lua_error.html"></object><a href="lua/lua_error.html">lua_error</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_gc"><param name="Local" value="lua/lua_gc.html"></object><a href="lua/lua_gc.html">lua_gc</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_getallocf"><param name="Local" value="lua/lua_getallocf.html"></object><a href="lua/lua_getallocf.html">lua_getallocf</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_getfenv"><param name="Local" value="lua/lua_getfenv.html"></object><a href="lua/lua_getfenv.html">lua_getfenv</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_getfield"><param name="Local" value="lua/lua_getfield.html"></object><a href="lua/lua_getfield.html">lua_getfield</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_getglobal"><param name="Local" value="lua/lua_getglobal.html"></object><a href="lua/lua_getglobal.html">lua_getglobal</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_getmetatable"><param name="Local" value="lua/lua_getmetatable.html"></object><a href="lua/lua_getmetatable.html">lua_getmetatable</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_gettable"><param name="Local" value="lua/lua_gettable.html"></object><a href="lua/lua_gettable.html">lua_gettable</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_gettop"><param name="Local" value="lua/lua_gettop.html"></object><a href="lua/lua_gettop.html">lua_gettop</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_insert"><param name="Local" value="lua/lua_insert.html"></object><a href="lua/lua_insert.html">lua_insert</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_Integer"><param name="Local" value="lua/lua_Integer.html"></object><a href="lua/lua_Integer.html">lua_Integer</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_isboolean"><param name="Local" value="lua/lua_isboolean.html"></object><a href="lua/lua_isboolean.html">lua_isboolean</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_iscfunction"><param name="Local" value="lua/lua_iscfunction.html"></object><a href="lua/lua_iscfunction.html">lua_iscfunction</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_isfunction"><param name="Local" value="lua/lua_isfunction.html"></object><a href="lua/lua_isfunction.html">lua_isfunction</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_islightuserdata"><param name="Local" value="lua/lua_islightuserdata.html"></object><a href="lua/lua_islightuserdata.html">lua_islightuserdata</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_isnil"><param name="Local" value="lua/lua_isnil.html"></object><a href="lua/lua_isnil.html">lua_isnil</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_isnumber"><param name="Local" value="lua/lua_isnumber.html"></object><a href="lua/lua_isnumber.html">lua_isnumber</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_isstring"><param name="Local" value="lua/lua_isstring.html"></object><a href="lua/lua_isstring.html">lua_isstring</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_istable"><param name="Local" value="lua/lua_istable.html"></object><a href="lua/lua_istable.html">lua_istable</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_isthread"><param name="Local" value="lua/lua_isthread.html"></object><a href="lua/lua_isthread.html">lua_isthread</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_isuserdata"><param name="Local" value="lua/lua_isuserdata.html"></object><a href="lua/lua_isuserdata.html">lua_isuserdata</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_lessthan"><param name="Local" value="lua/lua_lessthan.html"></object><a href="lua/lua_lessthan.html">lua_lessthan</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_load"><param name="Local" value="lua/lua_load.html"></object><a href="lua/lua_load.html">lua_load</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_newstate"><param name="Local" value="lua/lua_newstate.html"></object><a href="lua/lua_newstate.html">lua_newstate</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_newtable"><param name="Local" value="lua/lua_newtable.html"></object><a href="lua/lua_newtable.html">lua_newtable</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_newthread"><param name="Local" value="lua/lua_newthread.html"></object><a href="lua/lua_newthread.html">lua_newthread</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_newuserdata"><param name="Local" value="lua/lua_newuserdata.html"></object><a href="lua/lua_newuserdata.html">lua_newuserdata</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_next"><param name="Local" value="lua/lua_next.html"></object><a href="lua/lua_next.html">lua_next</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_Number"><param name="Local" value="lua/lua_Number.html"></object><a href="lua/lua_Number.html">lua_Number</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_objlen"><param name="Local" value="lua/lua_objlen.html"></object><a href="lua/lua_objlen.html">lua_objlen</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_pcall"><param name="Local" value="lua/lua_pcall.html"></object><a href="lua/lua_pcall.html">lua_pcall</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_pop"><param name="Local" value="lua/lua_pop.html"></object><a href="lua/lua_pop.html">lua_pop</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_pushboolean"><param name="Local" value="lua/lua_pushboolean.html"></object><a href="lua/lua_pushboolean.html">lua_pushboolean</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_pushcclosure"><param name="Local" value="lua/lua_pushcclosure.html"></object><a href="lua/lua_pushcclosure.html">lua_pushcclosure</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_pushcfunction"><param name="Local" value="lua/lua_pushcfunction.html"></object><a href="lua/lua_pushcfunction.html">lua_pushcfunction</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_pushfstring"><param name="Local" value="lua/lua_pushfstring.html"></object><a href="lua/lua_pushfstring.html">lua_pushfstring</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_pushinteger"><param name="Local" value="lua/lua_pushinteger.html"></object><a href="lua/lua_pushinteger.html">lua_pushinteger</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_pushlightuserdata"><param name="Local" value="lua/lua_pushlightuserdata.html"></object><a href="lua/lua_pushlightuserdata.html">lua_pushlightuserdata</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_pushlstring"><param name="Local" value="lua/lua_pushlstring.html"></object><a href="lua/lua_pushlstring.html">lua_pushlstring</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_pushnil"><param name="Local" value="lua/lua_pushnil.html"></object><a href="lua/lua_pushnil.html">lua_pushnil</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_pushnumber"><param name="Local" value="lua/lua_pushnumber.html"></object><a href="lua/lua_pushnumber.html">lua_pushnumber</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_pushstring"><param name="Local" value="lua/lua_pushstring.html"></object><a href="lua/lua_pushstring.html">lua_pushstring</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_pushthread"><param name="Local" value="lua/lua_pushthread.html"></object><a href="lua/lua_pushthread.html">lua_pushthread</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_pushvalue"><param name="Local" value="lua/lua_pushvalue.html"></object><a href="lua/lua_pushvalue.html">lua_pushvalue</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_pushvfstring"><param name="Local" value="lua/lua_pushvfstring.html"></object><a href="lua/lua_pushvfstring.html">lua_pushvfstring</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_rawequal"><param name="Local" value="lua/lua_rawequal.html"></object><a href="lua/lua_rawequal.html">lua_rawequal</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_rawget"><param name="Local" value="lua/lua_rawget.html"></object><a href="lua/lua_rawget.html">lua_rawget</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_rawgeti"><param name="Local" value="lua/lua_rawgeti.html"></object><a href="lua/lua_rawgeti.html">lua_rawgeti</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_rawset"><param name="Local" value="lua/lua_rawset.html"></object><a href="lua/lua_rawset.html">lua_rawset</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_rawseti"><param name="Local" value="lua/lua_rawseti.html"></object><a href="lua/lua_rawseti.html">lua_rawseti</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_Reader"><param name="Local" value="lua/lua_Reader.html"></object><a href="lua/lua_Reader.html">lua_Reader</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_register"><param name="Local" value="lua/lua_register.html"></object><a href="lua/lua_register.html">lua_register</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_remove"><param name="Local" value="lua/lua_remove.html"></object><a href="lua/lua_remove.html">lua_remove</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_replace"><param name="Local" value="lua/lua_replace.html"></object><a href="lua/lua_replace.html">lua_replace</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_resume"><param name="Local" value="lua/lua_resume.html"></object><a href="lua/lua_resume.html">lua_resume</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_setallocf"><param name="Local" value="lua/lua_setallocf.html"></object><a href="lua/lua_setallocf.html">lua_setallocf</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_setfenv"><param name="Local" value="lua/lua_setfenv.html"></object><a href="lua/lua_setfenv.html">lua_setfenv</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_setfield"><param name="Local" value="lua/lua_setfield.html"></object><a href="lua/lua_setfield.html">lua_setfield</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_setglobal"><param name="Local" value="lua/lua_setglobal.html"></object><a href="lua/lua_setglobal.html">lua_setglobal</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_setmetatable"><param name="Local" value="lua/lua_setmetatable.html"></object><a href="lua/lua_setmetatable.html">lua_setmetatable</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_settable"><param name="Local" value="lua/lua_settable.html"></object><a href="lua/lua_settable.html">lua_settable</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_settop"><param name="Local" value="lua/lua_settop.html"></object><a href="lua/lua_settop.html">lua_settop</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_State"><param name="Local" value="lua/lua_State.html"></object><a href="lua/lua_State.html">lua_State</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_status"><param name="Local" value="lua/lua_status.html"></object><a href="lua/lua_status.html">lua_status</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_toboolean"><param name="Local" value="lua/lua_toboolean.html"></object><a href="lua/lua_toboolean.html">lua_toboolean</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_tocfunction"><param name="Local" value="lua/lua_tocfunction.html"></object><a href="lua/lua_tocfunction.html">lua_tocfunction</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_tointeger"><param name="Local" value="lua/lua_tointeger.html"></object><a href="lua/lua_tointeger.html">lua_tointeger</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_tolstring"><param name="Local" value="lua/lua_tolstring.html"></object><a href="lua/lua_tolstring.html">lua_tolstring</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_tonumber"><param name="Local" value="lua/lua_tonumber.html"></object><a href="lua/lua_tonumber.html">lua_tonumber</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_topointer"><param name="Local" value="lua/lua_topointer.html"></object><a href="lua/lua_topointer.html">lua_topointer</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_tostring"><param name="Local" value="lua/lua_tostring.html"></object><a href="lua/lua_tostring.html">lua_tostring</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_tothread"><param name="Local" value="lua/lua_tothread.html"></object><a href="lua/lua_tothread.html">lua_tothread</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_touserdata"><param name="Local" value="lua/lua_touserdata.html"></object><a href="lua/lua_touserdata.html">lua_touserdata</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_type"><param name="Local" value="lua/lua_type.html"></object><a href="lua/lua_type.html">lua_type</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_typename"><param name="Local" value="lua/lua_typename.html"></object><a href="lua/lua_typename.html">lua_typename</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_Writer"><param name="Local" value="lua/lua_Writer.html"></object><a href="lua/lua_Writer.html">lua_Writer</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_xmove"><param name="Local" value="lua/lua_xmove.html"></object><a href="lua/lua_xmove.html">lua_xmove</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_yield"><param name="Local" value="lua/lua_yield.html"></object><a href="lua/lua_yield.html">lua_yield</a>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="3.8 - The Debug Interface"><param name="Local" value="lua/3.8.html"></object><a href="lua/3.8.html">3.8 - The Debug Interface</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="lua_Debug"><param name="Local" value="lua/lua_Debug.html"></object><a href="lua/lua_Debug.html">lua_Debug</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_gethook"><param name="Local" value="lua/lua_gethook.html"></object><a href="lua/lua_gethook.html">lua_gethook</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_gethookcount"><param name="Local" value="lua/lua_gethookcount.html"></object><a href="lua/lua_gethookcount.html">lua_gethookcount</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_gethookmask"><param name="Local" value="lua/lua_gethookmask.html"></object><a href="lua/lua_gethookmask.html">lua_gethookmask</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_getinfo"><param name="Local" value="lua/lua_getinfo.html"></object><a href="lua/lua_getinfo.html">lua_getinfo</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_getlocal"><param name="Local" value="lua/lua_getlocal.html"></object><a href="lua/lua_getlocal.html">lua_getlocal</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_getstack"><param name="Local" value="lua/lua_getstack.html"></object><a href="lua/lua_getstack.html">lua_getstack</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_getupvalue"><param name="Local" value="lua/lua_getupvalue.html"></object><a href="lua/lua_getupvalue.html">lua_getupvalue</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_Hook"><param name="Local" value="lua/lua_Hook.html"></object><a href="lua/lua_Hook.html">lua_Hook</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_sethook"><param name="Local" value="lua/lua_sethook.html"></object><a href="lua/lua_sethook.html">lua_sethook</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_setlocal"><param name="Local" value="lua/lua_setlocal.html"></object><a href="lua/lua_setlocal.html">lua_setlocal</a>
+    <li><object type="text/sitemap"><param name="Name" value="lua_setupvalue"><param name="Local" value="lua/lua_setupvalue.html"></object><a href="lua/lua_setupvalue.html">lua_setupvalue</a>
+    
+        </UL>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="4 - The Auxiliary Library"><param name="Local" value="lua/4.html"></object><a href="lua/4.html">4 - The Auxiliary Library</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="4.1 - Functions and Types"><param name="Local" value="lua/4.1.html"></object><a href="lua/4.1.html">4.1 - Functions and Types</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="luaL_addchar"><param name="Local" value="lua/luaL_addchar.html"></object><a href="lua/luaL_addchar.html">luaL_addchar</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_addlstring"><param name="Local" value="lua/luaL_addlstring.html"></object><a href="lua/luaL_addlstring.html">luaL_addlstring</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_addsize"><param name="Local" value="lua/luaL_addsize.html"></object><a href="lua/luaL_addsize.html">luaL_addsize</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_addstring"><param name="Local" value="lua/luaL_addstring.html"></object><a href="lua/luaL_addstring.html">luaL_addstring</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_addvalue"><param name="Local" value="lua/luaL_addvalue.html"></object><a href="lua/luaL_addvalue.html">luaL_addvalue</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_argcheck"><param name="Local" value="lua/luaL_argcheck.html"></object><a href="lua/luaL_argcheck.html">luaL_argcheck</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_argerror"><param name="Local" value="lua/luaL_argerror.html"></object><a href="lua/luaL_argerror.html">luaL_argerror</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_Buffer"><param name="Local" value="lua/luaL_Buffer.html"></object><a href="lua/luaL_Buffer.html">luaL_Buffer</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_buffinit"><param name="Local" value="lua/luaL_buffinit.html"></object><a href="lua/luaL_buffinit.html">luaL_buffinit</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_callmeta"><param name="Local" value="lua/luaL_callmeta.html"></object><a href="lua/luaL_callmeta.html">luaL_callmeta</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_checkany"><param name="Local" value="lua/luaL_checkany.html"></object><a href="lua/luaL_checkany.html">luaL_checkany</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_checkint"><param name="Local" value="lua/luaL_checkint.html"></object><a href="lua/luaL_checkint.html">luaL_checkint</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_checkinteger"><param name="Local" value="lua/luaL_checkinteger.html"></object><a href="lua/luaL_checkinteger.html">luaL_checkinteger</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_checklong"><param name="Local" value="lua/luaL_checklong.html"></object><a href="lua/luaL_checklong.html">luaL_checklong</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_checklstring"><param name="Local" value="lua/luaL_checklstring.html"></object><a href="lua/luaL_checklstring.html">luaL_checklstring</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_checknumber"><param name="Local" value="lua/luaL_checknumber.html"></object><a href="lua/luaL_checknumber.html">luaL_checknumber</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_checkoption"><param name="Local" value="lua/luaL_checkoption.html"></object><a href="lua/luaL_checkoption.html">luaL_checkoption</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_checkstack"><param name="Local" value="lua/luaL_checkstack.html"></object><a href="lua/luaL_checkstack.html">luaL_checkstack</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_checkstring"><param name="Local" value="lua/luaL_checkstring.html"></object><a href="lua/luaL_checkstring.html">luaL_checkstring</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_checktype"><param name="Local" value="lua/luaL_checktype.html"></object><a href="lua/luaL_checktype.html">luaL_checktype</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_checkudata"><param name="Local" value="lua/luaL_checkudata.html"></object><a href="lua/luaL_checkudata.html">luaL_checkudata</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_dofile"><param name="Local" value="lua/luaL_dofile.html"></object><a href="lua/luaL_dofile.html">luaL_dofile</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_dostring"><param name="Local" value="lua/luaL_dostring.html"></object><a href="lua/luaL_dostring.html">luaL_dostring</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_error"><param name="Local" value="lua/luaL_error.html"></object><a href="lua/luaL_error.html">luaL_error</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_getmetafield"><param name="Local" value="lua/luaL_getmetafield.html"></object><a href="lua/luaL_getmetafield.html">luaL_getmetafield</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_getmetatable"><param name="Local" value="lua/luaL_getmetatable.html"></object><a href="lua/luaL_getmetatable.html">luaL_getmetatable</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_gsub"><param name="Local" value="lua/luaL_gsub.html"></object><a href="lua/luaL_gsub.html">luaL_gsub</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_loadbuffer"><param name="Local" value="lua/luaL_loadbuffer.html"></object><a href="lua/luaL_loadbuffer.html">luaL_loadbuffer</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_loadfile"><param name="Local" value="lua/luaL_loadfile.html"></object><a href="lua/luaL_loadfile.html">luaL_loadfile</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_loadstring"><param name="Local" value="lua/luaL_loadstring.html"></object><a href="lua/luaL_loadstring.html">luaL_loadstring</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_newmetatable"><param name="Local" value="lua/luaL_newmetatable.html"></object><a href="lua/luaL_newmetatable.html">luaL_newmetatable</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_newstate"><param name="Local" value="lua/luaL_newstate.html"></object><a href="lua/luaL_newstate.html">luaL_newstate</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_openlibs"><param name="Local" value="lua/luaL_openlibs.html"></object><a href="lua/luaL_openlibs.html">luaL_openlibs</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_optint"><param name="Local" value="lua/luaL_optint.html"></object><a href="lua/luaL_optint.html">luaL_optint</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_optinteger"><param name="Local" value="lua/luaL_optinteger.html"></object><a href="lua/luaL_optinteger.html">luaL_optinteger</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_optlong"><param name="Local" value="lua/luaL_optlong.html"></object><a href="lua/luaL_optlong.html">luaL_optlong</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_optlstring"><param name="Local" value="lua/luaL_optlstring.html"></object><a href="lua/luaL_optlstring.html">luaL_optlstring</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_optnumber"><param name="Local" value="lua/luaL_optnumber.html"></object><a href="lua/luaL_optnumber.html">luaL_optnumber</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_optstring"><param name="Local" value="lua/luaL_optstring.html"></object><a href="lua/luaL_optstring.html">luaL_optstring</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_prepbuffer"><param name="Local" value="lua/luaL_prepbuffer.html"></object><a href="lua/luaL_prepbuffer.html">luaL_prepbuffer</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_pushresult"><param name="Local" value="lua/luaL_pushresult.html"></object><a href="lua/luaL_pushresult.html">luaL_pushresult</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_ref"><param name="Local" value="lua/luaL_ref.html"></object><a href="lua/luaL_ref.html">luaL_ref</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_Reg"><param name="Local" value="lua/luaL_Reg.html"></object><a href="lua/luaL_Reg.html">luaL_Reg</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_register"><param name="Local" value="lua/luaL_register.html"></object><a href="lua/luaL_register.html">luaL_register</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_typename"><param name="Local" value="lua/luaL_typename.html"></object><a href="lua/luaL_typename.html">luaL_typename</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_typerror"><param name="Local" value="lua/luaL_typerror.html"></object><a href="lua/luaL_typerror.html">luaL_typerror</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_unref"><param name="Local" value="lua/luaL_unref.html"></object><a href="lua/luaL_unref.html">luaL_unref</a>
+    <li><object type="text/sitemap"><param name="Name" value="luaL_where"><param name="Local" value="lua/luaL_where.html"></object><a href="lua/luaL_where.html">luaL_where</a>
+    
+        </UL>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="5 - Standard Libraries"><param name="Local" value="lua/5.html"></object><a href="lua/5.html">5 - Standard Libraries</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="5.1 - Basic Functions"><param name="Local" value="lua/5.1.html"></object><a href="lua/5.1.html">5.1 - Basic Functions</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="assert (v [, message])"><param name="Local" value="lua/pdf-assert.html"></object><a href="lua/pdf-assert.html">assert (v [, message])</a>
+    <li><object type="text/sitemap"><param name="Name" value="collectgarbage (opt [, arg])"><param name="Local" value="lua/pdf-collectgarbage.html"></object><a href="lua/pdf-collectgarbage.html">collectgarbage (opt [, arg])</a>
+    <li><object type="text/sitemap"><param name="Name" value="dofile (filename)"><param name="Local" value="lua/pdf-dofile.html"></object><a href="lua/pdf-dofile.html">dofile (filename)</a>
+    <li><object type="text/sitemap"><param name="Name" value="error (message [, level])"><param name="Local" value="lua/pdf-error.html"></object><a href="lua/pdf-error.html">error (message [, level])</a>
+    <li><object type="text/sitemap"><param name="Name" value="_G"><param name="Local" value="lua/pdf-_G.html"></object><a href="lua/pdf-_G.html">_G</a>
+    <li><object type="text/sitemap"><param name="Name" value="getfenv (f)"><param name="Local" value="lua/pdf-getfenv.html"></object><a href="lua/pdf-getfenv.html">getfenv (f)</a>
+    <li><object type="text/sitemap"><param name="Name" value="getmetatable (object)"><param name="Local" value="lua/pdf-getmetatable.html"></object><a href="lua/pdf-getmetatable.html">getmetatable (object)</a>
+    <li><object type="text/sitemap"><param name="Name" value="ipairs (t)"><param name="Local" value="lua/pdf-ipairs.html"></object><a href="lua/pdf-ipairs.html">ipairs (t)</a>
+    <li><object type="text/sitemap"><param name="Name" value="load (func [, chunkname])"><param name="Local" value="lua/pdf-load.html"></object><a href="lua/pdf-load.html">load (func [, chunkname])</a>
+    <li><object type="text/sitemap"><param name="Name" value="loadfile ([filename])"><param name="Local" value="lua/pdf-loadfile.html"></object><a href="lua/pdf-loadfile.html">loadfile ([filename])</a>
+    <li><object type="text/sitemap"><param name="Name" value="loadstring (string [, chunkname])"><param name="Local" value="lua/pdf-loadstring.html"></object><a href="lua/pdf-loadstring.html">loadstring (string [, chunkname])</a>
+    <li><object type="text/sitemap"><param name="Name" value="next (table [, index])"><param name="Local" value="lua/pdf-next.html"></object><a href="lua/pdf-next.html">next (table [, index])</a>
+    <li><object type="text/sitemap"><param name="Name" value="pairs (t)"><param name="Local" value="lua/pdf-pairs.html"></object><a href="lua/pdf-pairs.html">pairs (t)</a>
+    <li><object type="text/sitemap"><param name="Name" value="pcall (f, arg1, ...)"><param name="Local" value="lua/pdf-pcall.html"></object><a href="lua/pdf-pcall.html">pcall (f, arg1, ...)</a>
+    <li><object type="text/sitemap"><param name="Name" value="print (...)"><param name="Local" value="lua/pdf-print.html"></object><a href="lua/pdf-print.html">print (...)</a>
+    <li><object type="text/sitemap"><param name="Name" value="rawequal (v1, v2)"><param name="Local" value="lua/pdf-rawequal.html"></object><a href="lua/pdf-rawequal.html">rawequal (v1, v2)</a>
+    <li><object type="text/sitemap"><param name="Name" value="rawget (table, index)"><param name="Local" value="lua/pdf-rawget.html"></object><a href="lua/pdf-rawget.html">rawget (table, index)</a>
+    <li><object type="text/sitemap"><param name="Name" value="rawset (table, index, value)"><param name="Local" value="lua/pdf-rawset.html"></object><a href="lua/pdf-rawset.html">rawset (table, index, value)</a>
+    <li><object type="text/sitemap"><param name="Name" value="select (index, ...)"><param name="Local" value="lua/pdf-select.html"></object><a href="lua/pdf-select.html">select (index, ...)</a>
+    <li><object type="text/sitemap"><param name="Name" value="setfenv (f, table)"><param name="Local" value="lua/pdf-setfenv.html"></object><a href="lua/pdf-setfenv.html">setfenv (f, table)</a>
+    <li><object type="text/sitemap"><param name="Name" value="setmetatable (table, metatable)"><param name="Local" value="lua/pdf-setmetatable.html"></object><a href="lua/pdf-setmetatable.html">setmetatable (table, metatable)</a>
+    <li><object type="text/sitemap"><param name="Name" value="tonumber (e [, base])"><param name="Local" value="lua/pdf-tonumber.html"></object><a href="lua/pdf-tonumber.html">tonumber (e [, base])</a>
+    <li><object type="text/sitemap"><param name="Name" value="tostring (e)"><param name="Local" value="lua/pdf-tostring.html"></object><a href="lua/pdf-tostring.html">tostring (e)</a>
+    <li><object type="text/sitemap"><param name="Name" value="type (v)"><param name="Local" value="lua/pdf-type.html"></object><a href="lua/pdf-type.html">type (v)</a>
+    <li><object type="text/sitemap"><param name="Name" value="unpack (list [, i [, j]])"><param name="Local" value="lua/pdf-unpack.html"></object><a href="lua/pdf-unpack.html">unpack (list [, i [, j]])</a>
+    <li><object type="text/sitemap"><param name="Name" value="_VERSION"><param name="Local" value="lua/pdf-_VERSION.html"></object><a href="lua/pdf-_VERSION.html">_VERSION</a>
+    <li><object type="text/sitemap"><param name="Name" value="xpcall (f, err)"><param name="Local" value="lua/pdf-xpcall.html"></object><a href="lua/pdf-xpcall.html">xpcall (f, err)</a>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="5.2 - Coroutine Manipulation"><param name="Local" value="lua/5.2.html"></object><a href="lua/5.2.html">5.2 - Coroutine Manipulation</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="coroutine.create (f)"><param name="Local" value="lua/pdf-coroutine.create.html"></object><a href="lua/pdf-coroutine.create.html">coroutine.create (f)</a>
+    <li><object type="text/sitemap"><param name="Name" value="coroutine.resume (co [, val1, ...])"><param name="Local" value="lua/pdf-coroutine.resume.html"></object><a href="lua/pdf-coroutine.resume.html">coroutine.resume (co [, val1, ...])</a>
+    <li><object type="text/sitemap"><param name="Name" value="coroutine.running ()"><param name="Local" value="lua/pdf-coroutine.running.html"></object><a href="lua/pdf-coroutine.running.html">coroutine.running ()</a>
+    <li><object type="text/sitemap"><param name="Name" value="coroutine.status (co)"><param name="Local" value="lua/pdf-coroutine.status.html"></object><a href="lua/pdf-coroutine.status.html">coroutine.status (co)</a>
+    <li><object type="text/sitemap"><param name="Name" value="coroutine.wrap (f)"><param name="Local" value="lua/pdf-coroutine.wrap.html"></object><a href="lua/pdf-coroutine.wrap.html">coroutine.wrap (f)</a>
+    <li><object type="text/sitemap"><param name="Name" value="coroutine.yield (...)"><param name="Local" value="lua/pdf-coroutine.yield.html"></object><a href="lua/pdf-coroutine.yield.html">coroutine.yield (...)</a>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="5.3 - Modules"><param name="Local" value="lua/5.3.html"></object><a href="lua/5.3.html">5.3 - Modules</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="module (name [, ...])"><param name="Local" value="lua/pdf-module.html"></object><a href="lua/pdf-module.html">module (name [, ...])</a>
+    <li><object type="text/sitemap"><param name="Name" value="require (modname)"><param name="Local" value="lua/pdf-require.html"></object><a href="lua/pdf-require.html">require (modname)</a>
+    <li><object type="text/sitemap"><param name="Name" value="package.cpath"><param name="Local" value="lua/pdf-package.cpath.html"></object><a href="lua/pdf-package.cpath.html">package.cpath</a>
+    <li><object type="text/sitemap"><param name="Name" value="package.loaded"><param name="Local" value="lua/pdf-package.loaded.html"></object><a href="lua/pdf-package.loaded.html">package.loaded</a>
+    <li><object type="text/sitemap"><param name="Name" value="package.loadlib (libname, funcname)"><param name="Local" value="lua/pdf-package.loadlib.html"></object><a href="lua/pdf-package.loadlib.html">package.loadlib (libname, funcname)</a>
+    <li><object type="text/sitemap"><param name="Name" value="package.path"><param name="Local" value="lua/pdf-package.path.html"></object><a href="lua/pdf-package.path.html">package.path</a>
+    <li><object type="text/sitemap"><param name="Name" value="package.preload"><param name="Local" value="lua/pdf-package.preload.html"></object><a href="lua/pdf-package.preload.html">package.preload</a>
+    <li><object type="text/sitemap"><param name="Name" value="package.seeall (module)"><param name="Local" value="lua/pdf-package.seeall.html"></object><a href="lua/pdf-package.seeall.html">package.seeall (module)</a>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="5.4 - String Manipulation"><param name="Local" value="lua/5.4.html"></object><a href="lua/5.4.html">5.4 - String Manipulation</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="string.byte (s [, i [, j]])"><param name="Local" value="lua/pdf-string.byte.html"></object><a href="lua/pdf-string.byte.html">string.byte (s [, i [, j]])</a>
+    <li><object type="text/sitemap"><param name="Name" value="string.char (...)"><param name="Local" value="lua/pdf-string.char.html"></object><a href="lua/pdf-string.char.html">string.char (...)</a>
+    <li><object type="text/sitemap"><param name="Name" value="string.dump (function)"><param name="Local" value="lua/pdf-string.dump.html"></object><a href="lua/pdf-string.dump.html">string.dump (function)</a>
+    <li><object type="text/sitemap"><param name="Name" value="string.find (s, pattern [, init [, plain]])"><param name="Local" value="lua/pdf-string.find.html"></object><a href="lua/pdf-string.find.html">string.find (s, pattern [, init [, plain]])</a>
+    <li><object type="text/sitemap"><param name="Name" value="string.format (formatstring, ...)"><param name="Local" value="lua/pdf-string.format.html"></object><a href="lua/pdf-string.format.html">string.format (formatstring, ...)</a>
+    <li><object type="text/sitemap"><param name="Name" value="string.gmatch (s, pattern)"><param name="Local" value="lua/pdf-string.gmatch.html"></object><a href="lua/pdf-string.gmatch.html">string.gmatch (s, pattern)</a>
+    <li><object type="text/sitemap"><param name="Name" value="string.gsub (s, pattern, repl [, n])"><param name="Local" value="lua/pdf-string.gsub.html"></object><a href="lua/pdf-string.gsub.html">string.gsub (s, pattern, repl [, n])</a>
+    <li><object type="text/sitemap"><param name="Name" value="string.len (s)"><param name="Local" value="lua/pdf-string.len.html"></object><a href="lua/pdf-string.len.html">string.len (s)</a>
+    <li><object type="text/sitemap"><param name="Name" value="string.lower (s)"><param name="Local" value="lua/pdf-string.lower.html"></object><a href="lua/pdf-string.lower.html">string.lower (s)</a>
+    <li><object type="text/sitemap"><param name="Name" value="string.match (s, pattern [, init])"><param name="Local" value="lua/pdf-string.match.html"></object><a href="lua/pdf-string.match.html">string.match (s, pattern [, init])</a>
+    <li><object type="text/sitemap"><param name="Name" value="string.rep (s, n)"><param name="Local" value="lua/pdf-string.rep.html"></object><a href="lua/pdf-string.rep.html">string.rep (s, n)</a>
+    <li><object type="text/sitemap"><param name="Name" value="string.reverse (s)"><param name="Local" value="lua/pdf-string.reverse.html"></object><a href="lua/pdf-string.reverse.html">string.reverse (s)</a>
+    <li><object type="text/sitemap"><param name="Name" value="string.sub (s, i [, j])"><param name="Local" value="lua/pdf-string.sub.html"></object><a href="lua/pdf-string.sub.html">string.sub (s, i [, j])</a>
+    <li><object type="text/sitemap"><param name="Name" value="string.upper (s)"><param name="Local" value="lua/pdf-string.upper.html"></object><a href="lua/pdf-string.upper.html">string.upper (s)</a>
+    <li><object type="text/sitemap"><param name="Name" value="5.4.1 - Patterns"><param name="Local" value="lua/5.4.1.html"></object><a href="lua/5.4.1.html">5.4.1 - Patterns</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="Character Class:"><param name="Local" value="lua/character_class.html"></object><a href="lua/character_class.html">Character Class:</a>
+    <li><object type="text/sitemap"><param name="Name" value="Pattern Item:"><param name="Local" value="lua/pattern_item.html"></object><a href="lua/pattern_item.html">Pattern Item:</a>
+    <li><object type="text/sitemap"><param name="Name" value="Pattern:"><param name="Local" value="lua/pattern.html"></object><a href="lua/pattern.html">Pattern:</a>
+    <li><object type="text/sitemap"><param name="Name" value="Captures:"><param name="Local" value="lua/captures.html"></object><a href="lua/captures.html">Captures:</a>
+    
+        </UL>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="5.5 - Table Manipulation"><param name="Local" value="lua/5.5.html"></object><a href="lua/5.5.html">5.5 - Table Manipulation</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="table.concat (table [, sep [, i [, j]]])"><param name="Local" value="lua/pdf-table.concat.html"></object><a href="lua/pdf-table.concat.html">table.concat (table [, sep [, i [, j]]])</a>
+    <li><object type="text/sitemap"><param name="Name" value="table.insert (table, [pos,] value)"><param name="Local" value="lua/pdf-table.insert.html"></object><a href="lua/pdf-table.insert.html">table.insert (table, [pos,] value)</a>
+    <li><object type="text/sitemap"><param name="Name" value="table.maxn (table)"><param name="Local" value="lua/pdf-table.maxn.html"></object><a href="lua/pdf-table.maxn.html">table.maxn (table)</a>
+    <li><object type="text/sitemap"><param name="Name" value="table.remove (table [, pos])"><param name="Local" value="lua/pdf-table.remove.html"></object><a href="lua/pdf-table.remove.html">table.remove (table [, pos])</a>
+    <li><object type="text/sitemap"><param name="Name" value="table.sort (table [, comp])"><param name="Local" value="lua/pdf-table.sort.html"></object><a href="lua/pdf-table.sort.html">table.sort (table [, comp])</a>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="5.6 - Mathematical Functions"><param name="Local" value="lua/5.6.html"></object><a href="lua/5.6.html">5.6 - Mathematical Functions</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="math.abs (x)"><param name="Local" value="lua/pdf-math.abs.html"></object><a href="lua/pdf-math.abs.html">math.abs (x)</a>
+    <li><object type="text/sitemap"><param name="Name" value="math.acos (x)"><param name="Local" value="lua/pdf-math.acos.html"></object><a href="lua/pdf-math.acos.html">math.acos (x)</a>
+    <li><object type="text/sitemap"><param name="Name" value="math.asin (x)"><param name="Local" value="lua/pdf-math.asin.html"></object><a href="lua/pdf-math.asin.html">math.asin (x)</a>
+    <li><object type="text/sitemap"><param name="Name" value="math.atan (x)"><param name="Local" value="lua/pdf-math.atan.html"></object><a href="lua/pdf-math.atan.html">math.atan (x)</a>
+    <li><object type="text/sitemap"><param name="Name" value="math.atan2 (x, y)"><param name="Local" value="lua/pdf-math.atan2.html"></object><a href="lua/pdf-math.atan2.html">math.atan2 (x, y)</a>
+    <li><object type="text/sitemap"><param name="Name" value="math.ceil (x)"><param name="Local" value="lua/pdf-math.ceil.html"></object><a href="lua/pdf-math.ceil.html">math.ceil (x)</a>
+    <li><object type="text/sitemap"><param name="Name" value="math.cos (x)"><param name="Local" value="lua/pdf-math.cos.html"></object><a href="lua/pdf-math.cos.html">math.cos (x)</a>
+    <li><object type="text/sitemap"><param name="Name" value="math.cosh (x)"><param name="Local" value="lua/pdf-math.cosh.html"></object><a href="lua/pdf-math.cosh.html">math.cosh (x)</a>
+    <li><object type="text/sitemap"><param name="Name" value="math.deg (x)"><param name="Local" value="lua/pdf-math.deg.html"></object><a href="lua/pdf-math.deg.html">math.deg (x)</a>
+    <li><object type="text/sitemap"><param name="Name" value="math.exp (x)"><param name="Local" value="lua/pdf-math.exp.html"></object><a href="lua/pdf-math.exp.html">math.exp (x)</a>
+    <li><object type="text/sitemap"><param name="Name" value="math.floor (x)"><param name="Local" value="lua/pdf-math.floor.html"></object><a href="lua/pdf-math.floor.html">math.floor (x)</a>
+    <li><object type="text/sitemap"><param name="Name" value="math.fmod (x, y)"><param name="Local" value="lua/pdf-math.fmod.html"></object><a href="lua/pdf-math.fmod.html">math.fmod (x, y)</a>
+    <li><object type="text/sitemap"><param name="Name" value="math.frexp (x)"><param name="Local" value="lua/pdf-math.frexp.html"></object><a href="lua/pdf-math.frexp.html">math.frexp (x)</a>
+    <li><object type="text/sitemap"><param name="Name" value="math.huge"><param name="Local" value="lua/pdf-math.huge.html"></object><a href="lua/pdf-math.huge.html">math.huge</a>
+    <li><object type="text/sitemap"><param name="Name" value="math.ldexp (m, e)"><param name="Local" value="lua/pdf-math.ldexp.html"></object><a href="lua/pdf-math.ldexp.html">math.ldexp (m, e)</a>
+    <li><object type="text/sitemap"><param name="Name" value="math.log (x)"><param name="Local" value="lua/pdf-math.log.html"></object><a href="lua/pdf-math.log.html">math.log (x)</a>
+    <li><object type="text/sitemap"><param name="Name" value="math.log10 (x)"><param name="Local" value="lua/pdf-math.log10.html"></object><a href="lua/pdf-math.log10.html">math.log10 (x)</a>
+    <li><object type="text/sitemap"><param name="Name" value="math.max (x, ...)"><param name="Local" value="lua/pdf-math.max.html"></object><a href="lua/pdf-math.max.html">math.max (x, ...)</a>
+    <li><object type="text/sitemap"><param name="Name" value="math.min (x, ...)"><param name="Local" value="lua/pdf-math.min.html"></object><a href="lua/pdf-math.min.html">math.min (x, ...)</a>
+    <li><object type="text/sitemap"><param name="Name" value="math.modf (x)"><param name="Local" value="lua/pdf-math.modf.html"></object><a href="lua/pdf-math.modf.html">math.modf (x)</a>
+    <li><object type="text/sitemap"><param name="Name" value="math.pi"><param name="Local" value="lua/pdf-math.pi.html"></object><a href="lua/pdf-math.pi.html">math.pi</a>
+    <li><object type="text/sitemap"><param name="Name" value="math.pow (x, y)"><param name="Local" value="lua/pdf-math.pow.html"></object><a href="lua/pdf-math.pow.html">math.pow (x, y)</a>
+    <li><object type="text/sitemap"><param name="Name" value="math.rad (x)"><param name="Local" value="lua/pdf-math.rad.html"></object><a href="lua/pdf-math.rad.html">math.rad (x)</a>
+    <li><object type="text/sitemap"><param name="Name" value="math.random ([m [, n]])"><param name="Local" value="lua/pdf-math.random.html"></object><a href="lua/pdf-math.random.html">math.random ([m [, n]])</a>
+    <li><object type="text/sitemap"><param name="Name" value="math.randomseed (x)"><param name="Local" value="lua/pdf-math.randomseed.html"></object><a href="lua/pdf-math.randomseed.html">math.randomseed (x)</a>
+    <li><object type="text/sitemap"><param name="Name" value="math.sin (x)"><param name="Local" value="lua/pdf-math.sin.html"></object><a href="lua/pdf-math.sin.html">math.sin (x)</a>
+    <li><object type="text/sitemap"><param name="Name" value="math.sinh (x)"><param name="Local" value="lua/pdf-math.sinh.html"></object><a href="lua/pdf-math.sinh.html">math.sinh (x)</a>
+    <li><object type="text/sitemap"><param name="Name" value="math.sqrt (x)"><param name="Local" value="lua/pdf-math.sqrt.html"></object><a href="lua/pdf-math.sqrt.html">math.sqrt (x)</a>
+    <li><object type="text/sitemap"><param name="Name" value="math.tan (x)"><param name="Local" value="lua/pdf-math.tan.html"></object><a href="lua/pdf-math.tan.html">math.tan (x)</a>
+    <li><object type="text/sitemap"><param name="Name" value="math.tanh (x)"><param name="Local" value="lua/pdf-math.tanh.html"></object><a href="lua/pdf-math.tanh.html">math.tanh (x)</a>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="5.7 - Input and Output Facilities"><param name="Local" value="lua/5.7.html"></object><a href="lua/5.7.html">5.7 - Input and Output Facilities</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="io.close ([file])"><param name="Local" value="lua/pdf-io.close.html"></object><a href="lua/pdf-io.close.html">io.close ([file])</a>
+    <li><object type="text/sitemap"><param name="Name" value="io.flush ()"><param name="Local" value="lua/pdf-io.flush.html"></object><a href="lua/pdf-io.flush.html">io.flush ()</a>
+    <li><object type="text/sitemap"><param name="Name" value="io.input ([file])"><param name="Local" value="lua/pdf-io.input.html"></object><a href="lua/pdf-io.input.html">io.input ([file])</a>
+    <li><object type="text/sitemap"><param name="Name" value="io.lines ([filename])"><param name="Local" value="lua/pdf-io.lines.html"></object><a href="lua/pdf-io.lines.html">io.lines ([filename])</a>
+    <li><object type="text/sitemap"><param name="Name" value="io.open (filename [, mode])"><param name="Local" value="lua/pdf-io.open.html"></object><a href="lua/pdf-io.open.html">io.open (filename [, mode])</a>
+    <li><object type="text/sitemap"><param name="Name" value="io.output ([file])"><param name="Local" value="lua/pdf-io.output.html"></object><a href="lua/pdf-io.output.html">io.output ([file])</a>
+    <li><object type="text/sitemap"><param name="Name" value="io.popen ([prog [, mode]])"><param name="Local" value="lua/pdf-io.popen.html"></object><a href="lua/pdf-io.popen.html">io.popen ([prog [, mode]])</a>
+    <li><object type="text/sitemap"><param name="Name" value="io.read (...)"><param name="Local" value="lua/pdf-io.read.html"></object><a href="lua/pdf-io.read.html">io.read (...)</a>
+    <li><object type="text/sitemap"><param name="Name" value="io.tmpfile ()"><param name="Local" value="lua/pdf-io.tmpfile.html"></object><a href="lua/pdf-io.tmpfile.html">io.tmpfile ()</a>
+    <li><object type="text/sitemap"><param name="Name" value="io.type (obj)"><param name="Local" value="lua/pdf-io.type.html"></object><a href="lua/pdf-io.type.html">io.type (obj)</a>
+    <li><object type="text/sitemap"><param name="Name" value="io.write (...)"><param name="Local" value="lua/pdf-io.write.html"></object><a href="lua/pdf-io.write.html">io.write (...)</a>
+    <li><object type="text/sitemap"><param name="Name" value="file table"><param name="Local" value="lua/pdf-file.html"></object><a href="lua/pdf-file.html">file table</a>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="5.8 - Operating System Facilities"><param name="Local" value="lua/5.8.html"></object><a href="lua/5.8.html">5.8 - Operating System Facilities</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="os.clock ()"><param name="Local" value="lua/pdf-os.clock.html"></object><a href="lua/pdf-os.clock.html">os.clock ()</a>
+    <li><object type="text/sitemap"><param name="Name" value="os.date ([format [, time]])"><param name="Local" value="lua/pdf-os.date.html"></object><a href="lua/pdf-os.date.html">os.date ([format [, time]])</a>
+    <li><object type="text/sitemap"><param name="Name" value="os.difftime (t2, t1)"><param name="Local" value="lua/pdf-os.difftime.html"></object><a href="lua/pdf-os.difftime.html">os.difftime (t2, t1)</a>
+    <li><object type="text/sitemap"><param name="Name" value="os.execute ([command])"><param name="Local" value="lua/pdf-os.execute.html"></object><a href="lua/pdf-os.execute.html">os.execute ([command])</a>
+    <li><object type="text/sitemap"><param name="Name" value="os.exit ([code])"><param name="Local" value="lua/pdf-os.exit.html"></object><a href="lua/pdf-os.exit.html">os.exit ([code])</a>
+    <li><object type="text/sitemap"><param name="Name" value="os.getenv (varname)"><param name="Local" value="lua/pdf-os.getenv.html"></object><a href="lua/pdf-os.getenv.html">os.getenv (varname)</a>
+    <li><object type="text/sitemap"><param name="Name" value="os.remove (filename)"><param name="Local" value="lua/pdf-os.remove.html"></object><a href="lua/pdf-os.remove.html">os.remove (filename)</a>
+    <li><object type="text/sitemap"><param name="Name" value="os.rename (oldname, newname)"><param name="Local" value="lua/pdf-os.rename.html"></object><a href="lua/pdf-os.rename.html">os.rename (oldname, newname)</a>
+    <li><object type="text/sitemap"><param name="Name" value="os.setlocale (locale [, category])"><param name="Local" value="lua/pdf-os.setlocale.html"></object><a href="lua/pdf-os.setlocale.html">os.setlocale (locale [, category])</a>
+    <li><object type="text/sitemap"><param name="Name" value="os.time ([table])"><param name="Local" value="lua/pdf-os.time.html"></object><a href="lua/pdf-os.time.html">os.time ([table])</a>
+    <li><object type="text/sitemap"><param name="Name" value="os.tmpname ()"><param name="Local" value="lua/pdf-os.tmpname.html"></object><a href="lua/pdf-os.tmpname.html">os.tmpname ()</a>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="5.9 - The Debug Library"><param name="Local" value="lua/5.9.html"></object><a href="lua/5.9.html">5.9 - The Debug Library</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="debug.debug ()"><param name="Local" value="lua/pdf-debug.debug.html"></object><a href="lua/pdf-debug.debug.html">debug.debug ()</a>
+    <li><object type="text/sitemap"><param name="Name" value="debug.getfenv (o)"><param name="Local" value="lua/pdf-debug.getfenv.html"></object><a href="lua/pdf-debug.getfenv.html">debug.getfenv (o)</a>
+    <li><object type="text/sitemap"><param name="Name" value="debug.gethook ([thread])"><param name="Local" value="lua/pdf-debug.gethook.html"></object><a href="lua/pdf-debug.gethook.html">debug.gethook ([thread])</a>
+    <li><object type="text/sitemap"><param name="Name" value="debug.getinfo ([thread,] function [, what])"><param name="Local" value="lua/pdf-debug.getinfo.html"></object><a href="lua/pdf-debug.getinfo.html">debug.getinfo ([thread,] function [, what])</a>
+    <li><object type="text/sitemap"><param name="Name" value="debug.getlocal ([thread,] level, local)"><param name="Local" value="lua/pdf-debug.getlocal.html"></object><a href="lua/pdf-debug.getlocal.html">debug.getlocal ([thread,] level, local)</a>
+    <li><object type="text/sitemap"><param name="Name" value="debug.getmetatable (object)"><param name="Local" value="lua/pdf-debug.getmetatable.html"></object><a href="lua/pdf-debug.getmetatable.html">debug.getmetatable (object)</a>
+    <li><object type="text/sitemap"><param name="Name" value="debug.getregistry ()"><param name="Local" value="lua/pdf-debug.getregistry.html"></object><a href="lua/pdf-debug.getregistry.html">debug.getregistry ()</a>
+    <li><object type="text/sitemap"><param name="Name" value="debug.getupvalue (func, up)"><param name="Local" value="lua/pdf-debug.getupvalue.html"></object><a href="lua/pdf-debug.getupvalue.html">debug.getupvalue (func, up)</a>
+    <li><object type="text/sitemap"><param name="Name" value="debug.setfenv (object, table)"><param name="Local" value="lua/pdf-debug.setfenv.html"></object><a href="lua/pdf-debug.setfenv.html">debug.setfenv (object, table)</a>
+    <li><object type="text/sitemap"><param name="Name" value="debug.sethook ([thread,] hook, mask [, count])"><param name="Local" value="lua/pdf-debug.sethook.html"></object><a href="lua/pdf-debug.sethook.html">debug.sethook ([thread,] hook, mask [, count])</a>
+    <li><object type="text/sitemap"><param name="Name" value="debug.setlocal ([thread,] level, local, value)"><param name="Local" value="lua/pdf-debug.setlocal.html"></object><a href="lua/pdf-debug.setlocal.html">debug.setlocal ([thread,] level, local, value)</a>
+    <li><object type="text/sitemap"><param name="Name" value="debug.setmetatable (object, table)"><param name="Local" value="lua/pdf-debug.setmetatable.html"></object><a href="lua/pdf-debug.setmetatable.html">debug.setmetatable (object, table)</a>
+    <li><object type="text/sitemap"><param name="Name" value="debug.setupvalue (func, up, value)"><param name="Local" value="lua/pdf-debug.setupvalue.html"></object><a href="lua/pdf-debug.setupvalue.html">debug.setupvalue (func, up, value)</a>
+    <li><object type="text/sitemap"><param name="Name" value="debug.traceback ([thread,] [message])"><param name="Local" value="lua/pdf-debug.traceback.html"></object><a href="lua/pdf-debug.traceback.html">debug.traceback ([thread,] [message])</a>
+    
+        </UL>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="6 - Lua Stand-alone"><param name="Local" value="lua/6.html"></object><a href="lua/6.html">6 - Lua Stand-alone</a>
+    <li><object type="text/sitemap"><param name="Name" value="7 - Incompatibilities with the Previous Version"><param name="Local" value="lua/7.html"></object><a href="lua/7.html">7 - Incompatibilities with the Previous Version</a>
+    
+        <UL>
+            <li><object type="text/sitemap"><param name="Name" value="7.1 - Changes in the Language"><param name="Local" value="lua/7.1.html"></object><a href="lua/7.1.html">7.1 - Changes in the Language</a>
+    <li><object type="text/sitemap"><param name="Name" value="7.2 - Changes in the Libraries"><param name="Local" value="lua/7.2.html"></object><a href="lua/7.2.html">7.2 - Changes in the Libraries</a>
+    <li><object type="text/sitemap"><param name="Name" value="7.3 - Changes in the API"><param name="Local" value="lua/7.3.html"></object><a href="lua/7.3.html">7.3 - Changes in the API</a>
+    
+        </UL>
+    <li><object type="text/sitemap"><param name="Name" value="8 - The Complete Syntax of Lua"><param name="Local" value="lua/8.html"></object><a href="lua/8.html">8 - The Complete Syntax of Lua</a>
+    
+        </UL>
+    
+        </UL>
+    
+        </UL>
+    
+</UL>
+</html>
+    

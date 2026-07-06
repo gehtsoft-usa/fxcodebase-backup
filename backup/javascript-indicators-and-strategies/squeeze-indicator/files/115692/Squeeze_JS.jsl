@@ -1,0 +1,57 @@
+function Init()
+{
+    indicator.name("Squeeze");
+    indicator.description("Presented by ForPipSake");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addInteger("N", "Number of bars", "No description", 5);
+}
+
+var N;
+
+var first;
+var source = null;
+
+var O = null;
+var H = null;
+var L = null;
+var C = null;
+
+function Prepare()
+{
+    N = instance.parameters.N;
+    source = instance.source;
+    first = source.first() + N;
+
+    var name = profile.id() + "(" + source.name() + ", " + N + ")";
+    instance.name(name);
+    O = instance.addStream("O", core.Line, name + ".O", "O", 0, first);
+    H = instance.addStream("H", core.Line, name + ".H", "H", 0, first);
+    L = instance.addStream("L", core.Line, name + ".L", "L", 0, first);
+    C = instance.addStream("C", core.Line, name + ".C", "C", 0, first);
+    O.addLevel(8);
+    O.addLevel(6);
+    O.addLevel(0);
+    O.addLevel(-6);
+    O.addLevel(-8);
+    instance.createCandleGroup("BT", "BT", O, H, L, C);
+}
+
+function Update(period)
+{
+    if (period >= first) 
+    {
+        var range, sumhigh, sumlow, avg1, avg2;
+        sumhigh = Math.sum(source.high, period-N+1, period);
+        sumlow = Math.sum(source.low, period-N+1, period);
+        avg1 = (sumhigh + sumlow) / (2 * N);
+        avg2 = (sumhigh - sumlow) / (5 * N);
+
+        O[period] = (source.open[period] - avg1) / avg2;
+        H[period] = (source.high[period] - avg1) / avg2;
+        L[period] = (source.low[period] - avg1) / avg2;
+        C[period] = (source.close[period] - avg1) / avg2;
+    }
+}
+

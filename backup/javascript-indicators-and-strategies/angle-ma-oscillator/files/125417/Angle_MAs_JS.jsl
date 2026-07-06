@@ -1,0 +1,89 @@
+function Init()
+{
+    indicator.name("Angle MAs 1 oscillator");
+    indicator.description("Angle MAs 1 oscillator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addString("Method", "Method", "", "EMA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("Method", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Method", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Method", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Method", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Method", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Method", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Method", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Method", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Method", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Method", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Method", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Method", "JSmooth", "", "JSmooth");
+    indicator.parameters.addInteger("Period", "Period", "", 21);
+    indicator.parameters.addInteger("SmoothPeriod", "Smooth period", "", 4);
+    indicator.parameters.addInteger("Coeff", "Coeff", "", 2);
+    indicator.parameters.addDouble("VisualFactor", "Visual factor", "", 0.8);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Method;
+var Period;
+var SmoothPeriod;
+var Coeff;
+var VisualFactor;
+var MA;
+var A_MA;
+var EMA;
+var pipSize;
+var AngleMA=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Method=instance.parameters.Method;
+    Period=instance.parameters.Period;
+    SmoothPeriod=instance.parameters.SmoothPeriod;
+    Coeff=instance.parameters.Coeff;
+    VisualFactor=instance.parameters.VisualFactor;
+    first = source.first()+2;
+    A_MA=instance.addInternalStream(first, 0);
+    MA = core.indicators.create("AVERAGES", source, Method, Period, false);
+    EMA = core.indicators.create("EMA", A_MA, SmoothPeriod);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Method + ", " + instance.parameters.Period + ", " + instance.parameters.SmoothPeriod + ", " + instance.parameters.Coeff + ", " + instance.parameters.VisualFactor + ")";
+    instance.name(name);
+    AngleMA = instance.addStream("AngleMA", core.Line, name + ".AngleMA", "AngleMA", instance.parameters.clr, first);
+    AngleMA.setWidth(instance.parameters.widthLinReg);
+    AngleMA.setStyle(instance.parameters.styleLinReg);
+    pipSize=source.pipSize();
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    MA.update(mode);
+    var incr=(MA.DATA[period]-MA.DATA[period-Coeff])/pipSize;
+    var barSize=(source.date(period)-source.date(period-1))*1440;
+    var tang=incr/(Coeff*barSize);
+    A_MA[period]=Math.atan(tang)/3.1415926*180*VisualFactor;
+    EMA.update(mode);
+    AngleMA[period]=EMA.DATA[period];
+   } 
+}
+

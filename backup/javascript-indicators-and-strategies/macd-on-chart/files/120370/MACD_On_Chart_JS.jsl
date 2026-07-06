@@ -1,0 +1,76 @@
+function Init()
+{
+    indicator.name("MACD on chart");
+    indicator.description("MACD on chart");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("ShortEMA", "Short EMA period", "", 12);
+    indicator.parameters.addInteger("LongEMA", "Long EMA period", "", 26);
+    indicator.parameters.addInteger("SignalPeriod", "Signal period", "", 9);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Fast_Clr", "Fast color", "Fast color", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("Fast_Width", "Fast width", "Fast width", 1, 1, 5);
+    indicator.parameters.addInteger("Fast_Style", "Fast style", "Fast style", core.LINE_SOLID);
+    indicator.parameters.setFlag("Fast_Style", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Slow_Clr", "Slow color", "Slow color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("Slow_Width", "Slow width", "Slow width", 1, 1, 5);
+    indicator.parameters.addInteger("Slow_Style", "Slow style", "Slow style", core.LINE_SOLID);
+    indicator.parameters.setFlag("Slow_Style", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Signal_Clr", "Signal color", "Signal color", core.rgb(0, 0, 255));
+    indicator.parameters.addInteger("Signal_Width", "Signal width", "Signal width", 2, 1, 5);
+    indicator.parameters.addInteger("Signal_Style", "Signal style", "Signal style", core.LINE_DASH);
+    indicator.parameters.setFlag("Signal_Style", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var ShortEMA;
+var LongEMA;
+var SignalPeriod;
+var Fast = null;
+var Slow = null;
+var Signal = null;
+var S_EMA, L_EMA, Sig_MVA;
+var MACD;
+
+function Prepare()
+{
+    source = instance.source;
+    first = source.first();
+    ShortEMA=instance.parameters.ShortEMA;
+    LongEMA=instance.parameters.LongEMA;
+    SignalPeriod=instance.parameters.SignalPeriod;
+    S_EMA = core.indicators.create("EMA", source, ShortEMA);
+    L_EMA = core.indicators.create("EMA", source, LongEMA);
+    MACD = instance.addInternalStream(first, 0);
+    Sig_MVA = core.indicators.create("MVA", MACD, SignalPeriod);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.ShortEMA + ", " + instance.parameters.LongEMA + ", " + instance.parameters.SignalPeriod + ")";
+    instance.name(name);
+    Fast = instance.addStream("Fast", core.Line, name + ".Fast", "Fast", instance.parameters.Fast_Clr, first);
+    Slow = instance.addStream("Slow", core.Line, name + ".Slow", "Slow", instance.parameters.Slow_Clr, first);
+    Signal = instance.addStream("Signal", core.Line, name + ".Signal", "Signal", instance.parameters.Signal_Clr, first);
+    Fast.setWidth(instance.parameters.Fast_Width);
+    Fast.setStyle(instance.parameters.Fast_Style);
+    Slow.setWidth(instance.parameters.Slow_Width);
+    Slow.setStyle(instance.parameters.Slow_Style);
+    Signal.setWidth(instance.parameters.Signal_Width);
+    Signal.setStyle(instance.parameters.Signal_Style);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    S_EMA.update(mode);
+    L_EMA.update(mode);
+    Fast[period] = S_EMA.DATA[period];
+    Slow[period] = L_EMA.DATA[period];
+    MACD[period] = Slow[period]-Fast[period];
+    Sig_MVA.update(mode);
+    Signal[period] = Fast[period]-MACD[period]+Sig_MVA.DATA[period];
+   } 
+}
+

@@ -1,0 +1,121 @@
+function Init()
+{
+    indicator.name("Cash Cow Indicator ");
+    indicator.description("Cash Cow Indicator ");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addInteger("Short", "Short Moving Average Period", "Short Moving Average Period", 5,2,2000);
+	indicator.parameters.addInteger("Long", " Long Moving Average Period", "Long Moving Average Period", 20,2,2000);
+    indicator.parameters.addDouble("Bottom", "Band Offset in percent", "Band Offset in percent", 1.2,0,100);
+    indicator.parameters.addDouble("Top", "Band Offset in percent", "Band Offset in percent", 0.6,0,100);
+	indicator.parameters.addBoolean("SE", "Show the Envelopes", "Show the Envelopes", false);
+}
+
+var ShortFrame;
+var LongFrame;
+var Top;
+var Bottom;
+var Envelopes;
+
+var first;
+var source = null;
+
+var High = null;
+var Low = null;
+var Central=null;
+var ShortSMA=null;
+var LongSMA=null;
+var BUY,SELL;
+
+function Prepare()
+{
+    ShortFrame = instance.parameters.Short;
+	Envelopes = instance.parameters.SE;
+	LongFrame = instance.parameters.Long;
+    Top = instance.parameters.Top;
+    Bottom = instance.parameters.Bottom;
+    source = instance.source;
+    first = source.first();
+	
+	ShortSMA = core.indicators.create("MVA", source.close, ShortFrame);
+	LongSMA = core.indicators.create("MVA", source.close, LongFrame);
+	
+
+    var name = profile.id() + "(" + source.name() + ", " + ShortFrame + ", " + LongFrame + ", " + Top + ", " + Bottom + ")";
+    instance.name(name);
+	
+	if (Envelopes) 
+	{
+	 High = instance.addStream("High", core.Line, name + ".High", "", core.rgb(0, 255, 0), first);
+	 Central = instance.addStream("Central", core.Line, name + ".Central", "", core.rgb(255, 255, 0), first);
+     Low = instance.addStream("Low", core.Line, name + ".Low", "", core.rgb(255, 0, 0), first);
+    } 
+	else
+	{
+	 High=instance.addInternalStream(0, 0);
+	 Central=instance.addInternalStream(0, 0);
+	 Low=instance.addInternalStream(0, 0);	
+	}
+	
+	BUY = instance.createTextOutput ("BUY", "BUY", "Wingdings", 10, core.H_Center, core.V_Bottom, core.rgb(0, 255, 0), 0);
+    SELL = instance.createTextOutput ("SELL", "SELL", "Wingdings", 10, core.H_Center, core.V_Top,core.rgb(255, 0, 0), 0);
+}
+
+function Update(period,mode)
+{
+ ShortSMA.update(mode);
+ LongSMA.update(mode);
+
+
+
+var UP,DOWN;
+
+
+
+
+    if (period >= LongFrame && source.hasData(period)) 
+    {
+	
+	    if (ShortSMA.DATA[period] >  LongSMA.DATA[period]) 
+	    {
+		
+			UP= (Top+ 100)/100;
+			DOWN=  (100-Bottom)/100;
+			
+			High[period]=  ShortSMA.DATA[period]*UP;
+			Central[period]=ShortSMA.DATA[period];
+			Low[period]=  ShortSMA.DATA[period]*DOWN;
+			
+			if (source.high[period] <  High[period] &&  source.high[period] > Central[period] &&  source.close[period] < Central[period] &&  source.close[period] > Low[period])
+			{
+			     if (ShortSMA.DATA[period] > ShortSMA.DATA[period-1] && LongSMA.DATA[period] > LongSMA.DATA[period-1]) 
+			     {
+			      BUY.set(period, source.low[period], "\225");
+				 }
+			}
+		}
+		
+		else if (ShortSMA.DATA[period] <  LongSMA.DATA[period]) 
+		{
+		
+		   UP= (Bottom+ 100)/100;
+			DOWN=  (100-Top)/100;
+		    
+			Low[period]=  ShortSMA.DATA[period]*UP;
+			Central[period]=ShortSMA.DATA[period];
+			High[period]=  ShortSMA.DATA[period]*DOWN;
+			
+			if (source.low[period] >  High[period] &&  source.low[period] < Central[period] &&  source.close[period] > Central[period] &&  source.close[period] < Low[period])
+			{
+				if (ShortSMA.DATA[period] < ShortSMA.DATA[period-1] && LongSMA.DATA[period] < LongSMA.DATA[period-1]) 
+				{
+				 SELL.set(period, source.high[period], "\226");
+				}
+			}
+			
+		}
+		
+	}
+}
+

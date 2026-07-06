@@ -1,0 +1,87 @@
+function Init()
+{
+    indicator.name("Fibo Candles indicator");
+    indicator.description("Fibo Candles indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 10);
+    indicator.parameters.addString("FiboLevel", "Fibo level", "Fibo level", "0.236");
+    indicator.parameters.addStringAlternative("FiboLevel", "0.236", "", "0.236");
+    indicator.parameters.addStringAlternative("FiboLevel", "0.382", "", "0.382");
+    indicator.parameters.addStringAlternative("FiboLevel", "0.500", "", "0.500");
+    indicator.parameters.addStringAlternative("FiboLevel", "0.618", "", "0.618");
+    indicator.parameters.addStringAlternative("FiboLevel", "0.762", "", "0.762");
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP Color", "UP Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DNclr", "DN Color", "DN Color", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+var Period;
+var FiboLevel;
+var trend;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    FiboLevel=tonumber(instance.parameters.FiboLevel);
+    first = source.first()+2;
+    trend = instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.FiboLevel + ")";
+    instance.name(name);
+    open = instance.addStream("open", core.Line, name, "open", core.rgb(0, 0, 0), first)
+    high = instance.addStream("high", core.Line, name, "high", core.rgb(0, 0, 0), first)
+    low = instance.addStream("low", core.Line, name, "low", core.rgb(0, 0, 0), first)
+    close = instance.addStream("close", core.Line, name, "close", core.rgb(0, 0, 0), first)
+    instance.createCandleGroup("CCI color candle", "", open, high, low, close);
+}
+
+function Update(period, mode)
+{
+   if (period>first+Period) 
+   {
+    open[period]=source.open[period];
+    close[period]=source.close[period];
+    high[period]=source.high[period];
+    low[period]=source.low[period];
+   
+    var tmp=Math.minmax(source, period-Period+1, period); 
+    var MaxHigh=tmp[1];
+    var MinLow=tmp[0];
+    var range=MaxHigh-MinLow;
+    trend[period]=trend[period-1];
+    if (source.open[period]>source.close[period]) 
+    {
+     if (range*FiboLevel>=source.close[period]-MinLow) 
+     {
+      trend[period]=1; 
+     }
+    } 
+    else
+    {
+     if (range*FiboLevel>=MaxHigh-source.close[period]) 
+     {
+      trend[period]=-1;
+     }
+    }
+    
+    if (trend[period]==1) 
+    {
+     open.setColor(period,instance.parameters.DNclr)
+    } 
+    else if (trend[period]==-1) 
+    {
+     open.setColor(period,instance.parameters.UPclr)
+    }
+   } 
+   else if (period==first) 
+   {
+    trend[period]=0; 
+   } 
+}
+

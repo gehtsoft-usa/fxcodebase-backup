@@ -1,0 +1,33 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - load (func [, chunkname])</title>
+</head>
+<body>
+<h3><a name="pdf-load"><code>load (func [, chunkname])</code></a></h3>
+
+
+<p>
+Loads a chunk using function <code>func</code> to get its pieces.
+Each call to <code>func</code> must return a string that concatenates
+with previous results.
+A return of <b>nil</b> (or no value) signals the end of the chunk.
+
+
+<p>
+If there are no errors, 
+returns the compiled chunk as a function;
+otherwise, returns <b>nil</b> plus the error message.
+The environment of the returned function is the global environment.
+
+
+<p>
+<code>chunkname</code> is used as the chunk name for error messages
+and debug information.
+
+
+
+
+<p>
+<hr>
+</body>
+</html>

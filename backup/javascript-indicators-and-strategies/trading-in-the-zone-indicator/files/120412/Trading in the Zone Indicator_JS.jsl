@@ -1,0 +1,160 @@
+function Init()
+{
+    indicator.name("Trading in the Zone Indicator");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+	
+	indicator.parameters.addGroup("Zone Trade Calculation Parameters");
+    indicator.parameters.addInteger("FM", "AC/AO fast moving average", "", 5);
+    indicator.parameters.addInteger("SM", "AC/AO slow moving average", "", 35);
+    indicator.parameters.addInteger("AM", "A/C moving average", "", 5);
+	
+	indicator.parameters.addGroup("Signal Type  Selector");
+	indicator.parameters.addInteger("MT" , "Zone Trade", "" , 1);	
+    indicator.parameters.addIntegerAlternative("MT", "Awesome oscillator(AO)", "ZONE" , 2);
+    indicator.parameters.addIntegerAlternative("MT", "Acceleration/Deceleration (AC)", "" , 3);
+	indicator.parameters.addIntegerAlternative("MT", "B.W. Zone AC + AO", "" , 1);
+	
+	
+	indicator.parameters.addGroup("Style Option");	
+	indicator.parameters.addColor("Up", "Up Trend Color", "", core.rgb( 0, 255, 0));
+	indicator.parameters.addColor("Down", "Down Trend Color", "", core.rgb( 255, 0, 0));
+	indicator.parameters.addColor("No", "undefined Trend  Color", "", core.rgb( 128, 128, 128));
+	
+}
+
+var FM;
+var SM;
+var AM;
+
+var Up, Down, No;
+
+var Method=null;
+
+var AO;
+var AC;
+
+var first;
+var source = null;
+
+var HZU = null;
+var HZL = null;
+
+var open=null;
+var close=null;
+var high=null;
+var low=null;
+
+function Prepare()
+{
+    Up = instance.parameters.Up;
+	Down = instance.parameters.Down;
+	No = instance.parameters.No;
+    FM = instance.parameters.FM;
+    SM = instance.parameters.SM;
+    AM = instance.parameters.AM;
+	Method= instance.parameters.MT;
+	
+    source = instance.source;
+   
+	
+    AC = core.indicators.create("AC", source, FM, SM, AM);
+    AO = core.indicators.create("AO", source, FM, SM);
+	
+	 first = Math.max(AC.DATA.first(), AO.DATA.first());	
+    
+
+    var name = profile.id() + "(" + source.name() + ", "  + FM + ", " + SM + ", " + AM + ")";
+    instance.name(name);
+   
+   
+	
+	open = instance.addStream("open", core.Line, name, "open", No, first)
+    high = instance.addStream("high", core.Line, name, "high", No, first)
+    low = instance.addStream("low", core.Line, name, "low", No, first)
+    close = instance.addStream("close", core.Line, name, "close", No , first)
+    instance.createCandleGroup("ZONE", "", open, high, low, close);
+	
+	
+}
+
+function Update(period, mode)
+{
+	high[period]= source.high[period];
+	low[period]= source.low[period];		   
+	close[period] = source.close[period];
+	open[period]  = source.open[period];	
+     
+	if (period < first  || !source.hasData(period)) 
+	{
+	 open.setColor(period, No);	
+     return;
+    } 
+ 
+    AC.update(mode);
+    AO.update(mode);
+   
+        var acdir, aodir;      
+		
+        if (AO.DATA[period] > AO.DATA[period - 1]) 
+        {
+            aodir = true;
+        }
+        else if (AO.DATA[period] < AO.DATA[period - 1]) 
+        {
+            aodir = false;
+        }
+        if (AC.DATA[period] > AC.DATA[period - 1]) 
+        {
+            acdir = true;
+        }
+        else if (AC.DATA[period] < AC.DATA[period - 1]) 
+        {
+            acdir = false;
+        }
+		
+		
+		if (Method== 1) 
+		{
+				if (aodir  && acdir) 
+				{ 
+				 open.setColor(period, Up);
+				}
+				else if (!aodir  && !acdir) 
+				{
+				 open.setColor(period, Down);	
+				}
+				else
+				{
+				 open.setColor(period, No);
+				}
+			}
+		else if (Method== 2) 
+		{
+		            
+				if (aodir) 
+				{
+				 open.setColor(period, Up);
+				}
+				else if (!aodir) 
+				{
+				 open.setColor(period, Down);				  
+		        }
+		  }
+		else if (Method== 3) 
+		{
+		
+		        if (acdir) 
+		        {
+				 open.setColor(period, Up);
+				} 
+				else if (!acdir) 
+				{
+				open.setColor(period, Down);				  
+			    } 
+		}          
+				   
+				  
+    }
+

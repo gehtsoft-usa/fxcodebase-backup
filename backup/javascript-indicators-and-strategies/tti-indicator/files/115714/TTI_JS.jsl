@@ -1,0 +1,269 @@
+function Init()
+{
+    indicator.name("RichardTaoTrailingIndicator");
+    indicator.description("Richard Tao Trailing Indicator.");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    indicator.setTag("group", "Tao");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("N", "Number of periods", "", 20);
+    indicator.parameters.addInteger("M", "Periods for Smooth", "", 2);
+    indicator.parameters.addInteger("D", "Distance deviation percentage", "", 100);
+    indicator.parameters.addInteger("C", "Coefficient percentage", "", 100);
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addBoolean("ShowTF", "Show T && F", "", false);   
+    indicator.parameters.addBoolean("ShowTag", "Show Tag", "", false);   
+    indicator.parameters.addColor("clrT", "LineColor of the T", "", core.rgb(0, 64, 128));
+    indicator.parameters.addColor("clrF", "LineColor of the F", "", core.rgb(128, 64, 0));
+    indicator.parameters.addColor("clrS", "LineColor of the S", "", core.rgb(128, 128, 0));   
+}
+
+var n;
+var m;
+var mm;
+var B = 2;
+
+var firstPeriod;
+var source = null;
+var ShowTag = false;
+
+var T = null;
+var F = null;
+var S = null;
+var tl = null;
+var bl = null;
+var al = null;
+var tp = null;
+
+function Prepare()
+{
+    n = instance.parameters.N;
+    m = instance.parameters.M;
+    if (m < 4) 
+    { 
+        mm = 3;
+    }
+    else
+    { 
+        mm = m; 
+    }
+    
+    ShowTag = instance.parameters.ShowTag;
+    source = instance.source;
+    firstPeriod = source.first() + n - 1;
+
+    var name = profile.id() + "(" + source.name() + ", " + n + ")";
+    instance.name(name);
+    
+    al = instance.addInternalStream(firstPeriod, 0);
+    bl = instance.addInternalStream(firstPeriod, 0);
+    tl = instance.addInternalStream(firstPeriod, 0);
+    tp = instance.addInternalStream(firstPeriod, 0);
+    
+    T = instance.addStream("T", core.Line, name + ".T", "T", instance.parameters.clrT, firstPeriod+m)	
+    F = instance.addStream("F", core.Line, name + ".F", "F", instance.parameters.clrF, T.first())
+    S = instance.addStream("S", core.Line, name + ".S", "S", instance.parameters.clrS, T.first())	
+    if (instance.parameters.ShowTF == false) 
+    {
+     T.setStyle(core.LINE_NONE);
+     F.setStyle(core.LINE_NONE);
+    } 
+    if (ShowTag) 
+    { 
+     lbl = instance.createTextOutput("TG", "TG", "Arial", 8, core.H_Center, core.V_Center, core.rgb(0, 0, 0), 0);
+    }
+}
+
+var oSignal = {};
+
+function Update(period)
+{
+    if (period >= firstPeriod) 
+    { 
+        var ma = Math.avg(source.close, period-n+1, period);
+        var sd = Math.stdev(source.close, period-n+1, period);
+        
+        al[period] = ma;
+        bl[period] = ma - B * sd;
+        tl[period] = ma + B * sd;
+        tp[period] = source.typical[period];
+        if (period == firstPeriod) 
+        {
+            oSignal = ResetInfo(oSignal); 
+            oSignal.prehilo = 0;
+        }
+        
+        if (period >= T.first()) 
+        {
+            T[period] = Math.avg(tp, period-m+1, period);
+        }
+        if (period >= T.first()+mm) 
+        {
+            F[period] = GetFastSignal(T, al, F, sd*instance.parameters.D/100, instance.parameters.C/100, period);
+            S[period] = GetSlowSignal(T, al, bl, tl, S, sd*instance.parameters.D/100, instance.parameters.C/100, oSignal, period);
+        }
+
+    }
+}
+
+function GetFastSignal(T, AL, F, dist, coef, period)
+{
+    var cent = AL[period];
+    var dift = (T[period] - T[period-1]);
+    var thet = T[period];
+    var pres = cent;
+    if (F.hasData(period-1)) 
+    { 
+        pres = F[period-1];
+    }
+    
+    var signal = pres;
+    var dire = 0;
+    
+    if ((thet-pres)*dift > 0) 
+    {
+        if ((thet-cent)*dift>0 && Math.abs(thet-cent)-dist>0) 
+        { 
+            dire=0.4;
+        }    
+        else
+        { 
+            dire=0.1;
+        }
+    }    
+    else
+    {
+        if ((thet-cent)*dift<0) 
+        { 
+            dire=0.3;
+        }
+    }
+
+    signal = pres + (thet-pres)*dire*coef;
+    
+    return (signal);
+}
+
+function ResetInfo(oSignal)
+{
+    oSignal.cross = 0;
+    oSignal.croslevel = 0;
+    oSignal.freeze = 0;
+    oSignal.frozlevel = 0;
+    return (oSignal);
+}
+
+function GetSlowSignal(T, AL, BL, TL, S, dist, coef, oSignal, period)
+{
+    var cent = AL[period];
+    var dift = (T[period] - T[period-1]);
+    var difm = (AL[period] - AL[period-1]);
+    var difb = (BL[period] - BL[period-1]);
+    var difu = (TL[period] - TL[period-1]);
+    var tag = "";    
+    
+    var thet = T[period];
+    var pret = T[period-1];
+    var pres = cent;
+    if (S.hasData(period-1)) 
+    { 
+        pres = S[period-1];
+    }
+    var signal = pres; 
+
+    if (dift<0) 
+    { 
+        if (oSignal.freeze==0) 
+        { 
+            signal = pres + difm + difu*coef; 
+        }
+    }    
+    else
+    {
+        if (oSignal.freeze==0) 
+        { 
+            signal = pres + difm + difb*coef; 
+        }
+    }
+
+    if (oSignal.prehilo<=0 && oSignal.frozlevel>0 && (signal-oSignal.frozlevel)+dist<0) 
+    { 
+        signal=pres; 
+        tag=tag + "B" 
+    } 
+    if (oSignal.prehilo>=0 && oSignal.frozlevel>0 && (signal-oSignal.frozlevel)-dist>0) 
+    { 
+        signal=pres; 
+        tag=tag + "B" 
+    } 
+
+    if (oSignal.prehilo<=0 && oSignal.frozlevel==0 && pret-pres<0 && thet-signal>0) 
+    { 
+        oSignal.frozlevel=signal; 
+        tag=tag + "X" 
+    } 
+    if (oSignal.prehilo>=0 && oSignal.frozlevel==0 && pret-pres>0 && thet-signal<0) 
+    { 
+        oSignal.frozlevel=signal; 
+        tag=tag + "X" 
+    } 
+
+    if (oSignal.freeze<0 && (thet-pres)+dist<0) 
+    { 
+        oSignal.freeze=0; 
+        tag=tag + "U"; 
+    } 
+    if (oSignal.freeze>0 && (thet-pres)-dist>0) 
+    { 
+        oSignal.freeze=0; 
+        tag=tag + "U"; 
+    } 
+    if (oSignal.freeze<0 && pret-pres<0 && thet-signal>0) 
+    { 
+        oSignal.freeze=0; 
+        tag=tag + "U"; 
+    } 
+    if (oSignal.freeze>0 && pret-pres>0 && thet-signal<0) 
+    { 
+        oSignal.freeze=0; 
+        tag=tag + "U"; 
+    } 
+    
+    if (oSignal.prehilo<=0 && oSignal.frozlevel>0 && pret-pres>0 && thet-signal<0)
+    { 
+        signal=oSignal.frozlevel; 
+        oSignal.frozlevel=0; 
+        oSignal.freeze=-1; 
+        tag=tag + "Z"; 
+    } 
+    if (oSignal.prehilo>=0 && oSignal.frozlevel>0 && pret-pres<0 && thet-signal>0)
+    { 
+        signal=oSignal.frozlevel; 
+        oSignal.frozlevel=0; 
+        oSignal.freeze=1; 
+        tag=tag + "Z" 
+    } 
+
+    if (oSignal.prehilo<=0 && (thet-cent)-dist>0) 
+    { 
+        signal=thet-dist*2; 
+        ResetInfo(oSignal); 
+        oSignal.prehilo=1; 
+        tag=tag + "R" 
+    }
+    if (oSignal.prehilo>=0 && (thet-cent)+dist<0) 
+    { 
+        signal=thet+dist*2; 
+        ResetInfo(oSignal); 
+        oSignal.prehilo=-1; 
+        tag=tag + "R" 
+    }
+    
+    if (ShowTag && tag!="") 
+    { 
+     lbl.set(period, source.low[period], tag); 
+    }
+
+    return (signal);
+}

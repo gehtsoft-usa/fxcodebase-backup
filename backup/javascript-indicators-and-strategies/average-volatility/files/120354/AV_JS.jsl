@@ -1,0 +1,57 @@
+function Init()
+{
+    indicator.name("Average  Volatility");
+    indicator.description("Average  Volatility");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+	 indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "Period", 5);
+	
+	 indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("color", "Line color", "", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var Period;
+
+var first;
+var source = null;
+
+var AV = null;
+var Volatility;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+    source = instance.source;
+    first = source.first()+Period-1;
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+	    
+		Volatility= instance.addInternalStream(0, 0);
+        AV = instance.addStream("AV", core.Line, name, "AV", instance.parameters.color, first);
+		AV.setWidth(instance.parameters.width);
+        AV.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period)
+{
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+   
+   Volatility[period]= source.high[period]-  source.low[period];
+
+    AV[period] = Math.avg (Volatility, period-Period+1, period);
+    
+}
+

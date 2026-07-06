@@ -1,0 +1,100 @@
+function Init()
+{
+    indicator.name("SSL channel");
+    indicator.description("SSL channel");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 13);
+    indicator.parameters.addBoolean("NRTR", "NRTR mode", "", false);
+	
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP color", "UP color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DNclr", "DN color", "DN color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("Transparency", "Transparency", "", 50,0,100);
+}
+
+var first;
+var source = null;
+var Period;
+var NRTR;
+var Ubuff=null;
+var Lbuff=null;
+var HMA;
+var LMA;
+var trend;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    NRTR=instance.parameters.NRTR;
+    first = source.first()+2;
+    trend=instance.addInternalStream(first, 0);
+    HMA = core.indicators.create("LWMA", source.high, Period);
+    LMA = core.indicators.create("LWMA", source.low, Period);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ")";
+    instance.name(name);
+    Pbuff = instance.addStream("Pbuff", core.Line, name + ".Pbuff", "Pbuff", instance.parameters.UPclr, first);
+    Mbuff = instance.addStream("Mbuff", core.Line, name + ".Mbuff", "Mbuff", instance.parameters.UPclr, first);
+    instance.createChannelGroup("TC","TC" , Pbuff, Mbuff, instance.parameters.UPclr, 100-instance.parameters.Transparency);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    HMA.update(mode);
+    LMA.update(mode);
+    if (source.close[period]>HMA.DATA[period-1]) 
+    {
+     trend[period]=1;
+    }
+    else if (source.close[period]<LMA.DATA[period-1]) 
+    {
+     trend[period]=-1;
+    } 
+    else
+    {
+     trend[period]=trend[period-1];
+    }
+    if (trend[period]==-1) 
+    {
+     if (NRTR) 
+     {
+      Pbuff[period]=Math.min(HMA.DATA[period-1], Pbuff[period-1]);
+      Mbuff[period]=Math.min(LMA.DATA[period-1], Mbuff[period-1]);
+     } 
+     else
+     {
+      Pbuff[period]=HMA.DATA[period-1];
+      Mbuff[period]=LMA.DATA[period-1];
+     }
+    } 
+    else
+    {
+     if (NRTR) 
+     {
+      Pbuff[period]=Math.max(LMA.DATA[period-1], Pbuff[period-1]);
+      Mbuff[period]=Math.max(HMA.DATA[period-1], Mbuff[period-1]);
+     } 
+     else
+     {
+      Mbuff[period]=HMA.DATA[period-1];
+      Pbuff[period]=LMA.DATA[period-1];
+     }
+    }
+    if (Mbuff[period]>Pbuff[period]) 
+    {
+     Pbuff.setColor(period, instance.parameters.UPclr);
+     Mbuff.setColor(period, instance.parameters.UPclr);
+    } 
+    else
+    {
+     Pbuff.setColor(period, instance.parameters.DNclr);
+     Mbuff.setColor(period, instance.parameters.DNclr);
+    }
+   } 
+}
+

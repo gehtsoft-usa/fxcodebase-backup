@@ -1,0 +1,90 @@
+function Init()
+{
+    indicator.name("Waddah Attar's Explosion Oscillator");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addInteger("Sen", "Sensitivity", "", 150);
+    indicator.parameters.addInteger("DeadZonePip", "Dead Zone in pips", "", 30);
+    indicator.parameters.addColor("TG_color", "Color of postive trend", "", core.rgb(0, 192, 0));
+    indicator.parameters.addColor("TR_color", "Color of negative trend", "", core.rgb(192, 0, 0));
+    indicator.parameters.addColor("E_color", "Color of explosion line", "", core.rgb(128, 64, 0));
+}
+
+var Sen;
+var DeadZonePip;
+
+var first;
+var firstBB;
+var source = null;
+
+var TG = null;
+var TR = null;
+var E = null;
+
+var EMAF = null;
+var EMAS = null;
+var BB_H = null;
+var BB_L = null;
+
+function Prepare()
+{
+    Sen = instance.parameters.Sen;
+    DeadZonePip = instance.parameters.DeadZonePip;
+    source = instance.source;
+
+    EMAF = core.indicators.create("EMA", source.close, 20);
+    EMAS = core.indicators.create("EMA", source.close, 40);
+    first = EMAS.DATA.first() + 2;
+    firstBB = source.first() + 20;
+    BB_H = instance.addInternalStream(firstBB, 0);
+    BB_L = instance.addInternalStream(firstBB, 0);
+
+    var name = profile.id() + "(" + source.name() + ", " + Sen + ", " + DeadZonePip + ")";
+    instance.name(name);
+    TG = instance.addStream("TG", core.Bar, name + ".TG", "TG", instance.parameters.TG_color, first);
+    TR = instance.addStream("TR", core.Bar, name + ".TR", "TR", instance.parameters.TR_color, first);
+    E = instance.addStream("E", core.Line, name + ".E", "E", instance.parameters.E_color, first);
+    E.addLevel(0);
+    E.addLevel(DeadZonePip * source.pipSize());
+}
+
+function Update(period, mode)
+{
+    EMAF.update(mode);
+    EMAS.update(mode);
+
+    if (period >= firstBB) 
+    {
+        var ml = Math.avg(source.close, period-19, period);
+        var d = Math.stdev(source.close, period-19, period);
+        BB_H[period] = ml + 2 * d;
+        BB_L[period] = ml - 2 * d;
+    }
+
+    if (period >= first) 
+    {
+        var trend, explosion;
+        trend = (MACD(period) - MACD(period - 1)) * Sen;
+        explosion = BB_H[period] - BB_L[period];
+        if (trend > 0) 
+        {
+            TG[period] = trend;
+            TR[period] = 0;
+        }    
+        else if (trend < 0) 
+        {
+            TG[period] = 0;
+            TR[period] = -trend;
+        }
+        E[period] = explosion;
+    }
+}
+
+function MACD(period)
+{
+    return EMAF.DATA[period] - EMAS.DATA[period];
+}
+
+

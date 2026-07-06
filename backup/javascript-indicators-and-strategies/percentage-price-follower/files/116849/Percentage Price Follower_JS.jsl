@@ -1,0 +1,82 @@
+function Init()
+{
+    indicator.name("Percentage Price Follower"); // % Slow moving price follower
+    indicator.description("Percentage Price Follower");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    
+	indicator.parameters.addString("Type", "Two", "", "One");
+    indicator.parameters.addStringAlternative("Type", "One", "", "One");
+    indicator.parameters.addStringAlternative("Type", "Two", "", "Two");
+	
+	indicator.parameters.addInteger("N", "One  % movement", "Percentage", 10, 1, 100);
+	indicator.parameters.addInteger("M", "Two  % movement", "Percentage", 90, 1, 100);
+		
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clrDIP", "Color", "Color", core.rgb(255, 0, 255));
+    indicator.parameters.addInteger("widthDIP", "Width", "Width", 1, 1, 5);
+    indicator.parameters.addInteger("styleDIP", "Style", "Style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleDIP", core.FLAG_LINE_STYLE);
+}
+
+var Type;
+var first;
+var n;
+var source = null;
+var out = null;
+
+function Prepare()     
+{
+    source = instance.source;   
+	Type=instance.parameters.Type;	 
+	if (Type == "One") 
+  {
+	 n = instance.parameters.N;
+  } 
+	else
+  {
+	 n = instance.parameters.M;
+	}
+	 
+    first = n + source.first() - 1;
+    var name = profile.id() + "(" + source.name() + "," + n + ")";
+    instance.name(name);
+    out = instance.addStream("SMPF", core.Line, name, "SMPF", instance.parameters.clrDIP, first)
+    out.setWidth(instance.parameters.widthDIP);
+    out.setStyle(instance.parameters.styleDIP);
+}
+
+function Update(period)
+{     
+   if (period < 2) 
+   { 
+    out[period]=source.close[period];
+    return;
+   }
+   
+   if (Type == "One") 
+   {
+	   
+		   if (out[period-1] < source.close[period]) 
+       {
+			  out[period] = out[period-1] +(((source.high[period] - source.low[period])/100)*n);
+       } 
+		   else if (out[period-1] > source.close[period]) 
+       {
+			  out[period] = out[period-1] -(((source.high[period] - source.low[period])/100)*n)
+       } 
+			else
+      {
+			out[period] = out[period-1];
+		   }
+       }   
+   else
+   { 
+ 
+    out[period] = out[period-1] +(((source.close[period] - source.open[period])/100)*n);    
+	}
+
+    
+}

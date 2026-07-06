@@ -1,0 +1,31 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - os.setlocale (locale [, category])</title>
+</head>
+<body>
+<h3><a name="pdf-os.setlocale"><code>os.setlocale (locale [, category])</code></a></h3>
+
+
+<p>
+Sets the current locale of the program.
+<code>locale</code> is a string specifying a locale;
+<code>category</code> is an optional string describing which category to change:
+<code>"all"</code>, <code>"collate"</code>, <code>"ctype"</code>,
+<code>"monetary"</code>, <code>"numeric"</code>, or <code>"time"</code>;
+the default category is <code>"all"</code>.
+The function returns the name of the new locale,
+or <b>nil</b> if the request cannot be honored.
+
+
+<p>
+When called with <b>nil</b> as the first argument,
+this function only returns the name of the current locale
+for the given category.
+
+
+
+
+<p>
+<hr>
+</body>
+</html>

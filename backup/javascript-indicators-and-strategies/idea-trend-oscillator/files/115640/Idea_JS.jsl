@@ -1,0 +1,77 @@
+function Init()
+{
+    indicator.name("Idea");
+    indicator.description("Idea");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+	indicator.parameters.addGroup("Calculation"); 
+    indicator.parameters.addInteger("PERIOD", "Period", "", 20);
+	indicator.parameters.addDouble("Level", "Level", "", 1);
+	indicator.parameters.addString("Method", "Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "EMA" , "EMA");
+	indicator.parameters.addStringAlternative("Method", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "SMMA" , "SMMA"); 
+    indicator.parameters.addStringAlternative("Method", "WMA", "WMA" , "WMA");	
+	
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Up", "Color of Up Trend", "", core.rgb(0, 255, 0));
+	 indicator.parameters.addColor("Down", "Color of Down Trend", "", core.rgb(255, 0, 0));
+}
+
+var PERIOD;
+var Level;
+var Method;
+
+var first;
+var source = null;
+
+var Idea = null;
+var Indicator= {};
+
+function Prepare()
+{
+    Method = instance.parameters.Method;
+    PERIOD = instance.parameters.PERIOD;
+    source = instance.source;
+    Level = instance.parameters.Level;
+	
+	Indicator["High"] = core.indicators.create(Method, source.high, PERIOD);
+	Indicator["Low"] = core.indicators.create(Method, source.low, PERIOD);
+	Indicator["Close"] = core.indicators.create(Method, source.close, PERIOD);
+	
+	first = Indicator["Close"].DATA.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + PERIOD + ", " + Level + ", " + Method + ")";
+    instance.name(name);
+    Idea = instance.addStream("Idea", core.Bar, name, "Idea", instance.parameters.Up, first);
+}
+
+function Update(period,mode)
+{
+    if (period < first ||  !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+	  Indicator["High"].update(mode);
+	  Indicator["Low"].update(mode);
+	  Indicator["Close"].update(mode);
+	  
+
+        Idea[period] = ( Indicator["High"].DATA[period]- Indicator["Close"].DATA[period] ) / ( Indicator["Close"].DATA[period]- Indicator["Low"].DATA[period]);
+		
+		if (Idea[period] < Level) 
+		{
+		 Idea.setColor(period, instance.parameters.Up);	
+		} 
+		else
+		{
+		 Idea.setColor(period, instance.parameters.Down);	
+		}
+    
+}
+

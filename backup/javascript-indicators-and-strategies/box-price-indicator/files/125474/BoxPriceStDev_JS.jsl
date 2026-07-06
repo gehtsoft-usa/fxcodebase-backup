@@ -1,0 +1,71 @@
+function Init()
+{
+    indicator.name("BoxPrice with StDev indicator");
+    indicator.description("BoxPrice with StDev indicator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addDouble("Dev", "Deviation", "", 2);
+    indicator.parameters.addInteger("Period", "Period for StDev", "", 20);
+    indicator.parameters.addInteger("BarsBack", "BarsBack", "", 20);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clrUp", "Color Up", "Color Up", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clrDn", "Color Dn", "Color Dn", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("clrCloud", "Color cloud", "Color cloud", core.rgb(0, 0, 255));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 3, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+    indicator.parameters.addInteger("Transparency", "Transparency", "", 50,0,100);
+}
+
+var first;
+var source = null;
+var Dev;
+var Period;
+var BarsBack;
+var UpLine=null;
+var DnLine=null;
+var UpCloud=null;
+var DnCloud=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Dev=instance.parameters.Dev;
+    Period=instance.parameters.Period;
+    BarsBack=instance.parameters.BarsBack;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.Dev + ")";
+    instance.name(name);
+    UpLine = instance.addStream("UpLine", core.Line, name + ".UpLine", "UpLine", instance.parameters.clrUp, first);
+    DnLine = instance.addStream("DnLine", core.Line, name + ".DnLine", "DnLine", instance.parameters.clrDn, first);
+    UpCloud=instance.addInternalStream(0, 0);
+    DnCloud=instance.addInternalStream(0, 0);
+    instance.createChannelGroup("CloudGroup","Cloud" , UpCloud, DnCloud, instance.parameters.clrCloud, 100-instance.parameters.Transparency);
+    UpLine.setWidth(instance.parameters.widthLinReg);
+    UpLine.setStyle(instance.parameters.styleLinReg);
+    DnLine.setWidth(instance.parameters.widthLinReg);
+    DnLine.setStyle(instance.parameters.styleLinReg);
+}
+
+function Update(period, mode)
+{
+   if (period==source.size()-1 && period>first+Period) 
+   {
+    var StDev=Math.stdev(source, period-Period+1, period);
+    var HighPrice=source[period]+StDev*Dev;
+    var LowPrice=source[period]-StDev*Dev;
+    var First=Math.max(first+1,period-BarsBack);
+    core.drawLine(UpLine,core.range(First,period),HighPrice,First,HighPrice,period);
+    core.drawLine(DnLine,core.range(First,period),LowPrice,First,LowPrice,period);
+    core.drawLine(UpCloud,core.range(First,period),HighPrice,First,HighPrice,period);
+    core.drawLine(DnCloud,core.range(First,period),LowPrice,First,LowPrice,period);
+    UpLine[First-1]=null;
+    DnLine[First-1]=null;
+    UpCloud[First-1]=null;
+    DnCloud[First-1]=null;
+   } 
+}
+

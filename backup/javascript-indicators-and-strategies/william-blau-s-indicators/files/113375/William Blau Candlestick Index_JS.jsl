@@ -1,0 +1,114 @@
+function Init()
+{
+    indicator.name("Candlestick Index");
+    indicator.description("Candlestick Index");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+	
+	
+     indicator.parameters.addGroup("Momentum");
+   indicator.parameters.addInteger("Period", "Period", "Period", 1);
+   
+   indicator.parameters.addString("Price", "CLOSE", "", "close");
+    indicator.parameters.addStringAlternative("Price", "OPEN", "", "open");
+    indicator.parameters.addStringAlternative("Price", "HIGH", "", "high");
+    indicator.parameters.addStringAlternative("Price", "LOW", "", "low");
+    indicator.parameters.addStringAlternative("Price","CLOSE", "", "close");
+    indicator.parameters.addStringAlternative("Price", "MEDIAN", "", "median");
+    indicator.parameters.addStringAlternative("Price", "TYPICAL", "", "typical");
+    indicator.parameters.addStringAlternative("Price", "WEIGHTED", "", "weighted");
+   
+     indicator.parameters.addGroup("Smoothing");
+   indicator.parameters.addInteger("A", "First Smoothing Period", "", 20);
+   indicator.parameters.addInteger("B", "Second Smoothing Period", "", 5);
+   indicator.parameters.addInteger("C", "Third  Smoothing Period", "", 3);
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("S1_color", "Color of CI Line", "", core.rgb(255, 0, 0));
+	
+	indicator.parameters.addGroup("Levels");
+	indicator.parameters.addDouble("Up", "Up Level", "", 25);
+	indicator.parameters.addDouble("Down", "Down Level", "", -25);
+}
+
+var Period;
+var Price;
+var first;
+var source = null;
+
+var CI = null;
+var Up, Down;
+	
+var CM;
+var MinMax;
+var EMA_C, EMA_B, EMA_A, EMA_3, EMA_2, EMA_1;
+var A,B,C;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+    source = instance.source;
+    first = source.first()+Period;	
+	
+		Up = instance.parameters.Up;
+	Down = instance.parameters.Down;
+
+	Price = instance.parameters.Price;
+	
+	A = instance.parameters.A;
+	B = instance.parameters.B;
+	C = instance.parameters.C;
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period)+ ", " + tostring(A)+ ", " + tostring(B)+ ", " + tostring(C) + ")";
+    instance.name(name);
+	
+	MinMax = instance.addInternalStream(0, 0);
+	CM = instance.addInternalStream(0, 0);
+	
+	EMA_A = core.indicators.create("EMA", CM, A);
+	EMA_B = core.indicators.create("EMA", EMA_A.DATA, B);
+	EMA_C = core.indicators.create("EMA", EMA_B.DATA, C);
+	EMA_1 = core.indicators.create("EMA", MinMax , A);
+	EMA_2 = core.indicators.create("EMA", EMA_1.DATA, B);
+	EMA_3 = core.indicators.create("EMA", EMA_2.DATA, C);
+
+    if (!(nameOnly)) 
+    {
+        CI = instance.addStream("CI", core.Line, name, "CI", instance.parameters.S1_color, EMA_3.DATA.first() );
+		CI.addLevel(Up);
+        CI.addLevel(Down); 
+    }
+}
+
+function Update(period, mode)
+{
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+	var min, max;	
+	var tmp = Math.minmax(source, period - Period + 1, period);
+	min=tmp[0];
+	max=tmp[1];
+	
+	CM[period] =  source[Price][period] -  source[Price][period-Period];
+	MinMax[period] = max-min;
+	
+	     EMA_A.update(mode);
+	     EMA_B.update(mode);
+	     EMA_C.update(mode);
+		 
+		 EMA_1.update(mode);
+	     EMA_2.update(mode);
+	     EMA_3.update(mode);
+		 
+		 if (period < EMA_3.DATA.first()) 
+		 {
+		  return;
+		 }
+	
+        CI[period] = (100 * EMA_C.DATA[period]) / EMA_3.DATA[period];
+		
+}
+

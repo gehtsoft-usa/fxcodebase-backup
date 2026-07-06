@@ -1,0 +1,74 @@
+function Init()
+{
+    indicator.name("Inverse Distance Weighted Moving Average");
+    indicator.description("Inverse Distance Weighted Moving Average");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+
+	indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "Period", 14);
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("IDWMA_color", "Color of IDWMA", "Color of IDWMA", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var Period;
+
+var first;
+var source = null;
+
+var IDWMA = null;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+    source = instance.source;
+    first = source.first()+Period;
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        IDWMA = instance.addStream("IDWMA", core.Line, name, "IDWMA", instance.parameters.IDWMA_color, first);
+        IDWMA.setWidth(instance.parameters.width);
+        IDWMA.setStyle(instance.parameters.style);
+	}
+}
+
+function Update(period)
+{
+    if (period < first) 
+    {
+	 return;
+	}
+	
+	var  Ewx=0;
+    var  Ew=0; 
+	var iLimit = period - Period;
+	var iWeight;
+	
+	for (iWeight= period; iWeight>=iLimit; iWeight--) 
+	{
+		
+	var Ed = 0;
+	
+	var iDist;
+			 for (iDist = period; iDist>=iLimit; iDist--) 
+			 { 
+							Ed = Ed + Math.abs(source[iWeight] - source[iDist]);
+			 }
+		 
+	var  w = (Period - 1) / Math.max(Ed, source.pipSize());
+                Ew  = Ew+w;
+                Ewx = Ewx + w * source[iWeight];
+				
+				
+	
+	}
+	
+        IDWMA[period] = Ewx / Ew;
+    
+}

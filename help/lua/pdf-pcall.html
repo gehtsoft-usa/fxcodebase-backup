@@ -1,0 +1,27 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - pcall (f, arg1, &middot;&middot;&middot;)</title>
+</head>
+<body>
+<h3><a name="pdf-pcall"><code>pcall (f, arg1, &middot;&middot;&middot;)</code></a></h3>
+
+
+<p>
+Calls function <code>f</code> with
+the given arguments in <em>protected mode</em>.
+This means that any error inside&nbsp;<code>f</code> is not propagated;
+instead, <code>pcall</code> catches the error
+and returns a status code.
+Its first result is the status code (a boolean),
+which is true if the call succeeds without errors.
+In such case, <code>pcall</code> also returns all results from the call,
+after this first result.
+In case of any error, <code>pcall</code> returns <b>false</b> plus the error message.
+
+
+
+
+<p>
+<hr>
+</body>
+</html>

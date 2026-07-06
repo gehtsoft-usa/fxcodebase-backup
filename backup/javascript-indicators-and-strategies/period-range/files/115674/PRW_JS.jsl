@@ -1,0 +1,84 @@
+function Init()
+{
+    indicator.name("Period Range");
+    indicator.description("Average Period Range");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+	
+    indicator.parameters.addGroup("Calculation"); 
+ 
+     indicator.parameters.addInteger("Period", "Period", "Period", 14, 1, 2000);
+ 
+	
+	indicator.parameters.addGroup("Style"); 
+	indicator.parameters.addColor("Central_color", "Color of Central", "Color of Central", core.rgb(  0, 0, 255));
+	indicator.parameters.addInteger("style", "Line Style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LEVEL_STYLE);	
+	indicator.parameters.addInteger("width", "Line Width", "", 3, 1, 5);
+	
+	indicator.parameters.addGroup("Levels")
+	indicator.parameters.addInteger("UL", "Upper Line", "", 20);
+	indicator.parameters.addInteger("LL", "Lower Line", "", 0);
+	indicator.parameters.addColor("LC", "Line Color", "Line Color", core.rgb(255, 0, 0));
+}
+
+var Period;
+ 
+var first;
+var source;
+ 
+var Top, Bottom,Central;
+ 
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+    source = instance.source;	  
+    first = source.first()+Period+1;
+
+    var name = profile.id() + "(" + source.name()  + ", " + tostring(Period) + ")";
+    instance.name(name);
+	
+	K = instance.addStream("K", core.Line, name + ".K", "K", instance.parameters.LC, first);
+    K.addLevel(instance.parameters.UL, core.LINE_SOLID, 1, instance.parameters.LC);
+	K.addLevel(-instance.parameters.LL, core.LINE_SOLID, 1, instance.parameters.LC);
+
+    if (!(nameOnly)) 
+    {
+		
+		Central = instance.addStream("Central", core.Line, name, "Central", instance.parameters.Central_color, first);
+		Central.setWidth(instance.parameters.width);
+        Central.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period)
+{
+    if (period < first) 
+    {
+	 return;
+	} 
+  
+ var tmp= Math.minmax(source, period-Period, period-1 );		
+ 
+ var min=tmp[0];
+ var max=tmp[1];
+ 
+ if (max == min) 
+ {
+  Central[period]= Math.huge;
+ } 
+ else
+ {
+  Central[period]=((source.close[period]-min) /((max-min)/100));
+ }
+ 
+ if (Central[period] > 50) 
+ {
+  Central[period]=((Central[period]-50)/50*10) 
+ } 
+ else if (Central[period]< 50) 
+ {
+  Central[period]=((50-Central[period])/50*10)
+ }  
+}
+ 

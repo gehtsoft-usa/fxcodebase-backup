@@ -1,0 +1,99 @@
+function Init()
+{
+    indicator.name("Linda's Coil");
+    indicator.description("Linda's Coil");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+	
+ 
+	indicator.parameters.addGroup( "Calculation");
+	indicator.parameters.addInteger("Period", " Period ", "", 3);
+	
+	indicator.parameters.addString("Method", "Method", "Method" , "Engulfed || Equal");
+    indicator.parameters.addStringAlternative("Method", "Engulfed || Equal", "Engulfed || Equal" , "Engulfed || Equal");
+    indicator.parameters.addStringAlternative("Method", "Engulfed", "Engulfed" , "Engulfed");
+	
+	indicator.parameters.addString("Type", "Type", "Type" , "Previous");
+    indicator.parameters.addStringAlternative("Type", "In relation to the Previous Candle", "In relation to the Previous Candle" , "Previous");
+    indicator.parameters.addStringAlternative("Type", "In relation to the Starting Candle", "In relation to the Starting Candle" , "Starting");
+  
+	indicator.parameters.addGroup(  "Style");	
+	indicator.parameters.addColor("CoilColor", "Coil Color", "Coil Color", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("Size", "Size", "Size", 20);
+	
+}
+
+var CoilColor ;
+var first;
+var source = null;
+var Period;
+var Type;
+var Method; 
+
+var Coil; 
+var Size; 
+var Flag;
+ 
+function Prepare()
+{
+    source = instance.source;
+	Period= instance.parameters.Period;
+	Method= instance.parameters.Method;
+	Type= instance.parameters.Type;
+	Size= instance.parameters.Size;
+    CoilColor= instance.parameters.CoilColor;
+	first=source.first()+Period;
+		
+    var name = profile.id() + "(" + source.name() + "," +  Period  + "," +  Method  + "," +  Type  + ")";
+    instance.name(name);
+	
+	Coil  = instance.createTextOutput ("Coil" , "Coil", "Wingdings", Size , core.H_Center, core.V_Bottom, CoilColor , source.first());
+}
+
+function Update(period )
+{ 	
+	if (period < first) 
+	{
+	 return;
+	}
+	
+    Calculation (period);
+	
+}
+
+function Calculation( End )
+{   
+   var  Start = End-Period+1;
+   
+   var Flag= true;
+   
+   var period;
+    for (period  = Start+1; period<=End; period++) 
+    {
+	
+	
+	        if (Type== "Previous") 
+	        {
+					if ((((source.high[period]>= source.high[period-1] ) || (source.low[period]<= source.low[period-1] ) ) && Method== "Engulfed") || (((source.high[period]> source.high[period-1] ) || (source.low[period]< source.low[period-1] ) ) && Method== "Engulfed || Equal"))			
+					{
+					 Flag=false;
+					}
+			}		
+			else
+			{
+			        if ((((source.high[period]>= source.high[Start]) || (source.low[period]<= source.low[Start] ) ) && Method== "Engulfed") || (((source.high[period]> source.high[Start]) || (source.low[period]< source.low[Start] ) ) && Method== "Engulfed || Equal"))
+					{
+					 Flag=false;
+					}
+            }			
+	
+	}	 
+	 
+	 Coil.setNoData (End);	
+	
+	 if (Flag) 
+	 {
+	  Coil.set(End, source.low[End], "\254");	
+	 }
+}
+ 

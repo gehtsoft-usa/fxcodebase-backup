@@ -1,0 +1,85 @@
+function Init()
+{
+    indicator.name("Fibo MA fan");
+    indicator.description("");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addString("Method", "Method", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("Method", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Method", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Method", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Method", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Method", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Method", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Method", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Method", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Method", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Method", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Method", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Method", "JSmooth", "", "JSmooth");
+
+    indicator.parameters.addInteger("N", "Count of MA", "No description", 5);
+
+    indicator.parameters.addColor("Color", "Color", "Color", core.rgb(255, 255, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var Method;
+var N;
+
+var first;
+var source = null;
+var MA={};
+
+var Inds={};
+
+function Prepare()
+{
+    N = instance.parameters.N;
+    Method = instance.parameters.Method;
+    source = instance.source;
+    first = source.first();
+    var Period=1;
+    var Prev_Period=1;
+    var New_Period;
+    var Ind;
+    var name = profile.id() + "(" + source.name() + ", " + Method + N + ")";
+    for (i=1; i<=N; i++)
+    {
+     Ind=core.indicators.create("AVERAGES", source, Method, Period, false);
+     Inds[i]=Ind;
+     MA[i]=instance.addStream("MA" + Period, core.Line, name + ".MA" + Period, "MA" + Period, instance.parameters.Color, first);
+     MA[i].setWidth(instance.parameters.widthLinReg);
+     MA[i].setStyle(instance.parameters.styleLinReg);
+     New_Period=Prev_Period+Period;
+     Prev_Period=Period;
+     Period=New_Period;
+    }
+    instance.name(name);
+}
+
+function Update(period, mode)
+{
+ if (period>first) 
+ {
+  var i;
+  for (i=1; i<=N; i++) 
+  {
+   Inds[i].update(mode);
+   MA[i][period]=Inds[i].DATA[period];
+  }
+ } 
+}
+

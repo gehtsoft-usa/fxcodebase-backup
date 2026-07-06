@@ -1,0 +1,90 @@
+function Init()
+{
+    indicator.name("RSI Overboat/Oversold Levels Price Overlay");
+    indicator.description("RSI Overboat/Oversold Levels Price Overlay");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addInteger("Frame", "RSI Period", "RSI Period", 14);
+	indicator.parameters.addInteger("S", "MVA Period", "MVA Period", 3);
+
+}
+
+var Frame;
+
+var first;
+var source = null;
+
+var Top=null;
+var Bottom=null;
+
+var RSIOpen = null;
+var RSIClose = null;
+var RSIHigh = null;
+var RSILow = null;
+
+var RSIDifference=null;
+var PriceDifference=null;
+
+var MATop=null;
+var MABottom =null;
+var RawTop=null;
+var RawBottom=null;
+
+var S=null;
+
+function Prepare()
+{
+    Frame = instance.parameters.Frame;
+	S = instance.parameters.S;
+    source = instance.source;
+	
+	
+    first = source.first()+Frame;
+     
+    RSIOpen = core.indicators.create("RSI", source.open, first);
+	RSIClose = core.indicators.create("RSI", source.close, first);	
+	
+	RSIDifference=instance.addInternalStream(first, 0);
+	PriceDifference=instance.addInternalStream(first, 0);
+	
+	RawTop= instance.addInternalStream(first, 0);
+	RawBottom=instance.addInternalStream(first, 0);
+	
+	MATop = core.indicators.create("EMA", RawTop, first + S );
+	MABottom = core.indicators.create("EMA", RawBottom, first + S   );
+		
+    var name = profile.id() + "(" + source.name() + ", " + Frame +", "+S + ")";
+    instance.name(name);
+	
+	 Top = instance.addStream("Top", core.Line, name + "Top", "Top", core.rgb(0, 255, 0), first + S );
+	 Bottom = instance.addStream("Bottom", core.Line, name + "Bottom", "Bottom", core.rgb(255, 0, 0), first + S );
+		
+}
+
+function Update(period,mode)
+{
+    if (period >= first && source.hasData(period)) 
+    {
+	
+	RSIOpen.update(mode);
+	RSIClose.update(mode);
+			
+	RSIDifference[period]=Math.abs(RSIOpen.DATA[period]-RSIClose.DATA[period]);
+	PriceDifference[period]=Math.abs(source.open[period]-source.close[period]);
+	RawTop[period]=source.close[period]+PriceDifference[period]*((70-RSIClose.DATA[period])/RSIDifference[period]);
+	RawBottom[period]=source.close[period]-PriceDifference[period]*((RSIClose.DATA[period]-30)/RSIDifference[period]);
+		
+	if (period  >= first + S) 
+	{
+		
+	MATop.update(mode);	
+	MABottom.update(mode);
+	
+	Top[period]=MATop.DATA[period];
+	Bottom[period]=MABottom.DATA[period];
+    }
+				
+   }
+}
+

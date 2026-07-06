@@ -1,0 +1,133 @@
+function Init()
+{
+    indicator.name("RSI Bar");
+    indicator.description("");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("RSI", "RSI Period", "", 14);
+    indicator.parameters.addInteger("MA", "MA Period", "", 14);
+   
+    indicator.parameters.addString("Type", "MA Method", "MA Method" , "EMA");
+    indicator.parameters.addStringAlternative("Type", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Type", "EMA", "EMA" , "EMA");
+	indicator.parameters.addStringAlternative("Type", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Type", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Type", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Type", "WMA", "WMA" , "WMA");
+  
+	
+	indicator.parameters.addDouble("Overbought", "Overbought Level", "", 70);
+	  indicator.parameters.addDouble("Oversold", " Oversold Level", "",  30);
+	  
+	  
+ 
+	indicator.parameters.addGroup("Style");
+	 indicator.parameters.addColor("UpOB", "Color for Up in Overbought", "", core.rgb(0, 255, 0));
+	  indicator.parameters.addColor("DnOB", "Color for Down in Overbought", "", core.rgb(0, 200, 0));
+	  
+	  indicator.parameters.addColor("UpOS", "Color for Up in Oversold", "", core.rgb(255, 0,0));
+	  indicator.parameters.addColor("DnOS", "Color for  Down in Oversold", "", core.rgb(200,0, 0)); 
+	  
+	   indicator.parameters.addColor("UpOF", "Color for Up over cental line", "", core.rgb(192, 192, 192));
+	  indicator.parameters.addColor("DnOF", "Color for Down over cental line", "", core.rgb(137,137, 137)); 
+	  
+	   indicator.parameters.addColor("UpUF", "Color for Up under cental line", "", core.rgb(255,128, 0));
+	  indicator.parameters.addColor("DnUF", "Color for Down under cental line", "", core.rgb(255,255, 0)); 
+}
+
+var RSI;
+var MA;
+var Type;
+var first;
+var source = null;
+var Indicator={};
+var Out = null;
+var Overbought;
+var Oversold;
+
+function Prepare(nameOnly)
+{
+    Overbought = instance.parameters.Overbought;
+	Oversold = instance.parameters.Oversold;
+	RSI = instance.parameters.RSI;
+    MA = instance.parameters.MA;
+	Type = instance.parameters.Type;
+    source = instance.source;
+    
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(RSI) + ", " + tostring(Overbought)+ ", " + tostring(Oversold)+ ", " + tostring(MA) + ", " + tostring(Type) + ")";
+    instance.name(name);
+	
+	 Indicator["RSI"] = core.indicators.create("RSI", source, RSI);
+	 Indicator["MA"] = core.indicators.create(Type, Indicator["RSI"].DATA, MA);
+	
+	 
+	 first = Math.max(Indicator["RSI"].DATA.first(),Indicator["MA"].DATA.first());
+
+    if (!(nameOnly)) 
+    {
+        Out = instance.addStream("RB", core.Bar, name, "RB", instance.parameters.UpOB, first);
+    }
+}
+
+function Update(period, mode)
+{
+    if (period < period ||  !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+	 Indicator["RSI"].update(mode);
+	 Indicator["MA"].update(mode);
+	
+	 
+	  Out[period] = 1;
+	 
+	 if (Indicator["MA"].DATA[period] > Overbought) 
+	 {
+			  if (Indicator["MA"].DATA[period] > Indicator["MA"].DATA[period-1 ]) 
+			  {
+			   Out.setColor(period, instance.parameters.UpOB); 
+			  } 
+			  else
+			  {	  
+			   Out.setColor(period, instance.parameters.DnOB);
+			  }
+	 }		  
+	 else if (Indicator["MA"].DATA[period]  <  Oversold) 
+	 {
+	           if (Indicator["MA"].DATA[period] > Indicator["MA"].DATA[period-1 ]) 
+	           {
+			    Out.setColor(period, instance.parameters.UpOS);  
+			   } 
+			  else
+			  {
+			   Out.setColor(period, instance.parameters.DnOS); 
+			  }
+	 }
+	 else if (Indicator["MA"].DATA[period]  > 50) 
+	 {
+	 
+	          if (Indicator["MA"].DATA[period] > Indicator["MA"].DATA[period-1 ]) 
+	          {
+			   Out.setColor(period, instance.parameters.UpOF); 
+			  } 
+              else
+              {			  
+			   Out.setColor(period, instance.parameters.DnOF);
+			  }
+	}
+	 else if (Indicator["MA"].DATA[period] < 50) 
+	 {		  
+			    if (Indicator["MA"].DATA[period] > Indicator["MA"].DATA[period-1 ]) 
+			    {
+			     Out.setColor(period, instance.parameters.UpUF); 
+			 }
+              else
+              {			  
+			   Out.setColor(period, instance.parameters.DnUF);
+			  }
+	 }
+}
+

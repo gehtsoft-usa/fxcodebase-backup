@@ -1,0 +1,81 @@
+function Init()
+{
+    indicator.name("Fractal Bar Indicator");
+    indicator.description("Fractal Bar Indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addColor("Up_color", "Color of Up", "Color of Up", core.rgb(0, 255, 0));
+	indicator.parameters.addColor("Down_color", "Color of Down", "Color of Down", core.rgb(255, 0, 0));
+	indicator.parameters.addColor("Neutral_color", "Color of Neutral", "Color of Neutral", core.rgb(128, 128,128));
+}
+
+var first;
+var source = null;
+
+var Out = null;
+
+function Prepare(nameOnly)
+{
+    source = instance.source;
+    first = source.first()+6;
+
+    var name = profile.id() + "(" + source.name() + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        Out = instance.addStream("Out", core.Bar, name, "Fractal Bar", instance.parameters.Neutral_color, first);
+    }
+	
+	Up=null;
+	Down=null;
+}
+
+function Update(period)
+{
+    Out[period]=1;
+	Out.setColor(period,instance.parameters.Neutral_color);
+	
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+    
+	
+	Calculate(period);
+	
+	if (Up== null || Down==null)
+	{
+  	 return;
+  	}
+	
+	if (source.close[period] > source.high[Up]) 
+	{
+	 Out.setColor(period,instance.parameters.Up_color);
+	}
+	if (source.close[period] < source.low[Down]) 
+	{
+	 Out.setColor(period,instance.parameters.Down_color);
+	} 
+		
+     
+}
+
+function Calculate(period)
+{ 
+        var curr = source.high[period - 2];
+        if ((curr > source.high[period - 4] && curr > source.high[period - 3] && curr > source.high[period - 1] && curr > source.high[period])) 
+        {
+             
+            Up=period-2;
+       
+        }
+        curr = source.low[period - 2];
+        if ((curr < source.low[period - 4] && curr < source.low[period - 3] && curr < source.low[period - 1] && curr < source.low[period])) 
+        {
+             
+           Down=period-2;
+        }
+}
+

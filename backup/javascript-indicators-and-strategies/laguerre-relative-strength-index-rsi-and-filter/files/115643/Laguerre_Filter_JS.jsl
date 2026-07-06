@@ -1,0 +1,65 @@
+function Init()
+{
+    indicator.name("John Ehlers Laguerre Filter ");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addDouble("GAMMA", "Gamma", "No description", 0.7, -0.5, 1.05);
+    indicator.parameters.addColor("LF_color", "Color of LF", "Color of LF", core.rgb(255, 0, 128));
+}
+
+var GAMMA;
+
+var first;
+var source = null;
+
+var LF = null;
+var L0;
+var L1;
+var L2;
+var L3;
+
+
+function Prepare()
+{
+    GAMMA = instance.parameters.GAMMA;
+    source = instance.source;
+    first = source.first() + 30;
+    var name = profile.id() + "(" + source.name() + ", " + GAMMA + ")";
+    instance.name(name);
+    LF = instance.addStream("LF", core.Line, name, "LF", instance.parameters.LF_color, first);
+    L0 = instance.addInternalStream(0, 0);
+    L1 = instance.addInternalStream(0, 0);
+    L2 = instance.addInternalStream(0, 0);
+    L3 = instance.addInternalStream(0, 0);
+}
+
+function calc(period)
+{
+   L0[period] = (1.0 - GAMMA) * (source.high[period] + source.low[period]) / 2 + GAMMA * L0[period - 1];
+   L1[period] = -GAMMA * L0[period] + L0[period - 1] + GAMMA * L1[period - 1];
+   L2[period] = -GAMMA * L1[period] + L1[period - 1] + GAMMA * L2[period - 1];
+   L3[period] = -GAMMA * L2[period] + L2[period - 1] + GAMMA * L3[period - 1];
+}
+
+function Update(period)
+{
+    if (period >= first) 
+    {
+        calc(period);
+        LF[period] = (L0[period] + 2 * L1[period] + 2 * L2[period] + L3[period]) / 6;
+    }    
+    else if (period >= source.first() + 1) 
+    {
+        calc(period);
+    }    
+    else
+    {
+        L0[period] = 0;
+        L1[period] = 0;
+        L2[period] = 0;
+        L3[period] = 0;
+    }
+}
+

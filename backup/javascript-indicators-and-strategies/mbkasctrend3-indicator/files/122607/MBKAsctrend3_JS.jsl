@@ -1,0 +1,117 @@
+function Init()
+{
+    indicator.name("MBKAsctrend3 indicator");
+    indicator.description("MBKAsctrend3 indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("WPRPeriod1", "Period for WPR1", "", 9);
+    indicator.parameters.addInteger("WPRPeriod2", "Period for WPR2", "", 33);
+    indicator.parameters.addInteger("WPRPeriod3", "Period for WPR3", "", 77);
+    indicator.parameters.addInteger("Swing", "Swing", "", 3);
+    indicator.parameters.addInteger("AverSwing", "Average swing", "", -5);
+    indicator.parameters.addInteger("W1", "Weight for WPR1", "", 1);
+    indicator.parameters.addInteger("W2", "Weight for WPR2", "", 3);
+    indicator.parameters.addInteger("W3", "Weight for WPR3", "", 1);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP Color", "UP Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DNclr", "DN Color", "DN Color", core.rgb(255, 255, 0));
+    indicator.parameters.addInteger("DotSize", "Dot size", "Dot size", 3, 1, 5);
+}
+
+var first;
+var source = null;
+var WPRPeriod1;
+var WPRPeriod2;
+var WPRPeriod3;
+var Swing;
+var AverSwing;
+var W1;
+var W2;
+var W3;
+var MBKAsctrend=null;
+var WPR1;
+var WPR2;
+var WPR3;
+var MaxPeriod;
+var UpLevel;
+var DnLevel;
+var Up1Level;
+var Dn1Level;
+var trend;
+var RangeStream;
+var SSP;
+
+function Prepare()
+{
+    source = instance.source;
+    WPRPeriod1=instance.parameters.WPRPeriod1;
+    WPRPeriod2=instance.parameters.WPRPeriod2;
+    WPRPeriod3=instance.parameters.WPRPeriod3;
+    Swing=instance.parameters.Swing;
+    AverSwing=instance.parameters.AverSwing;
+    var SumWeight=instance.parameters.W1+instance.parameters.W2+instance.parameters.W3;
+    W1=instance.parameters.W1/SumWeight;
+    W2=instance.parameters.W2/SumWeight;
+    W3=instance.parameters.W3/SumWeight;
+    first = source.first()+2;
+    MaxPeriod=Math.max(WPRPeriod1,WPRPeriod2,WPRPeriod3);
+    WPR1 = core.indicators.create("RLW", source, WPRPeriod1);
+    WPR2 = core.indicators.create("RLW", source, WPRPeriod2);
+    WPR3 = core.indicators.create("RLW", source, WPRPeriod3);
+    trend = instance.addInternalStream(first, 0);
+    RangeStream = instance.addInternalStream(first, 0);
+    UpLevel=67+Swing;
+    DnLevel=33-Swing;
+    Up1Level=50-AverSwing;
+    Dn1Level=50+AverSwing;
+    SSP=10;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.WPRPeriod1 + ", " + instance.parameters.WPRPeriod2 + ", " + instance.parameters.WPRPeriod3 + ", " + instance.parameters.Swing + ", " + instance.parameters.AverSwing + ", " + instance.parameters.W1 + ", " + instance.parameters.W2 + ", " + instance.parameters.W3 + ")";
+    instance.name(name);
+    MBKAsctrend = instance.addStream("MBKAsctrend", core.Dot, name + ".MBKAsctrend", "MBKAsctrend", instance.parameters.UPclr, first);
+    MBKAsctrend.setWidth(instance.parameters.DotSize);
+}
+
+function Update(period, mode)
+{
+   if (period>first+MaxPeriod) 
+   {
+    RangeStream[period]=source.high[period]-source.low[period];
+    WPR1.update(mode);
+    WPR2.update(mode);
+    WPR3.update(mode);
+    var WPRvalue=W1*(WPR1.DATA[period]+100)+W2*(WPR2.DATA[period]+100)+W3*(WPR3.DATA[period]+100);
+    var WPRlong=WPR3.DATA[period]+100;
+    trend[period]=trend[period-1];
+    if (WPRvalue<DnLevel && WPRlong<=Dn1Level) 
+    {
+     trend[period]=-1;
+    }
+    if (WPRvalue>UpLevel && WPRlong>=Up1Level) 
+    {
+     trend[period]=1;
+    }
+    if (trend[period-1]!=trend[period]) 
+    {
+     var Range=Math.avg(RangeStream,period-SSP+1, period);
+     if (trend[period]>0) 
+     {
+      MBKAsctrend[period]=source.low[period]-Range*0.8;
+      MBKAsctrend.setColor(period,instance.parameters.UPclr)
+     } 
+     else
+     {
+      MBKAsctrend[period]=source.high[period]+Range*0.8;
+      MBKAsctrend.setColor(period,instance.parameters.DNclr)
+     }
+    }
+   } 
+   else if (period>=first) 
+   {
+    trend[period]=0; 
+    RangeStream[period]=source.high[period]-source.low[period];
+   } 
+}
+

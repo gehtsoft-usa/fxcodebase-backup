@@ -1,0 +1,93 @@
+function Init()
+{
+    indicator.name("Linear regression MACD oscillator");
+    indicator.description("Linear regression MACD oscillator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("ShortPeriod", "Short period", "", 12);
+    indicator.parameters.addInteger("LongPeriod", "Long period", "", 26);
+    indicator.parameters.addInteger("SignalPeriod", "Signal period", "", 9);
+    indicator.parameters.addString("SignalMethod", "Signal method", "", "MVA");
+    indicator.parameters.addStringAlternative("SignalMethod", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("SignalMethod", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("SignalMethod", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("SignalMethod", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("SignalMethod", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("SignalMethod", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("SignalMethod", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("SignalMethod", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("SignalMethod", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("SignalMethod", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("SignalMethod", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("SignalMethod", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("SignalMethod", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("SignalMethod", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("SignalMethod", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("SignalMethod", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("SignalMethod", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("SignalMethod", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("SignalMethod", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("SignalMethod", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("SignalMethod", "JSmooth", "", "JSmooth");
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("MACDclr", "MACD color", "MACD color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("MACDwidth", "MACD width", "MACD width", 1, 1, 5);
+    indicator.parameters.addInteger("MACDstyle", "MACD style", "MACD style", core.LINE_SOLID);
+    indicator.parameters.setFlag("MACDstyle", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Sclr", "Signal color", "Signal color", core.rgb(0, 0, 255));
+    indicator.parameters.addInteger("Swidth", "Signal width", "Signal width", 1, 1, 5);
+    indicator.parameters.addInteger("Sstyle", "Signal style", "Signal style", core.LINE_SOLID);
+    indicator.parameters.setFlag("Sstyle", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Hclr", "Histogram color", "Histogram color", core.rgb(0, 255, 0));
+}
+
+var first;
+var source = null;
+var ShortPeriod;
+var LongPeriod;
+var SignalPeriod;
+var SignalMethod;
+var ShortLR, LongLR;
+var SignalMA;
+var MACD=null;
+var Signal=null;
+var Histogram=null;
+
+function Prepare()
+{
+    source = instance.source;
+    ShortPeriod=instance.parameters.ShortPeriod;
+    LongPeriod=instance.parameters.LongPeriod;
+    SignalPeriod=instance.parameters.SignalPeriod;
+    SignalMethod=instance.parameters.SignalMethod;
+    first = source.first()+2;
+    ShortLR = core.indicators.create("LINEAR REGRESSION LINE", source, ShortPeriod);
+    LongLR = core.indicators.create("LINEAR REGRESSION LINE", source, LongPeriod);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.ShortPeriod + ", " + instance.parameters.LongPeriod + ", " + instance.parameters.SignalPeriod + ", " + instance.parameters.SignalMethod + ")";
+    instance.name(name);
+    MACD = instance.addStream("MACD", core.Line, name + ".MACD", "MACD", instance.parameters.MACDclr, first);
+    MACD.setWidth(instance.parameters.MACDwidth);
+    MACD.setStyle(instance.parameters.MACDstyle);
+    Signal = instance.addStream("Signal", core.Line, name + ".Signal", "Signal", instance.parameters.Sclr, first);
+    Signal.setWidth(instance.parameters.Swidth);
+    Signal.setStyle(instance.parameters.Sstyle);
+    Histogram = instance.addStream("Histogram", core.Bar, name + ".Histogram", "Histogram", instance.parameters.Hclr, first);
+    SignalMA = core.indicators.create("AVERAGES", MACD, SignalMethod, SignalPeriod, false);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    ShortLR.update(mode);
+    LongLR.update(mode);
+    MACD[period]=ShortLR.DATA[period]-LongLR.DATA[period];
+    SignalMA.update(mode);
+    Signal[period]=SignalMA.DATA[period];
+    Histogram[period]=MACD[period]-Signal[period];
+   } 
+}
+

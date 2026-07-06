@@ -1,0 +1,21 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_remove</title>
+</head>
+<body>
+<h3><a name="lua_remove"><code>lua_remove</code></a></h3>
+<pre>void lua_remove (lua_State *L, int index);</pre>
+
+<p>
+Removes the element at the given valid index,
+shifting down the elements above this index to fill the gap.
+Cannot be called with a pseudo-index,
+because a pseudo-index is not an actual stack position.
+
+
+
+
+
+<hr>
+</body>
+</html>

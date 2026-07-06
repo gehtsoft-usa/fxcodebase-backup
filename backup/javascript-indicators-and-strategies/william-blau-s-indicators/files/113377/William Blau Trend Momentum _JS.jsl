@@ -1,0 +1,67 @@
+function Init()
+{
+    indicator.name("Trend Momentum ");
+    indicator.description("Up/ Down Trend Momentum");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+	indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "Period", 14);
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UDM_color", "Color of UDM", "", core.rgb(0, 0, 255));
+}
+
+var Period;
+
+var first;
+var source = null;
+
+var UDM = null;
+var High, Low;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+    source = instance.source;
+    first = source.first()+Period;
+	
+	var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ")";
+    instance.name(name);
+	
+	High = instance.addInternalStream(0, 0);
+	Low = instance.addInternalStream(0, 0);
+	
+    if (!(nameOnly)) 
+    {
+        UDM = instance.addStream("UDM", core.Line, name, "UDM", instance.parameters.UDM_color, first);
+    }
+}
+
+function Update(period)
+{
+    if (period >= first && source.hasData(period)) 
+    {
+       
+	if (source.high[period] -  source.high[period-Period] > 0) 
+	{  
+	 High[period] = source.high[period] -  source.high[period-Period];
+	} 
+	else
+	{
+	 High[period]= 0;
+	}
+
+	if (source.low[period] -  source.low[period-Period] < 0) 
+	{  
+	 Low[period] = -( source.low[period] -  source.low[period-Period]);
+	} 
+	else
+	{
+	 Low[period]= 0;
+	}
+	
+	   
+	    UDM[period] = High[period]-Low[period];
+    }
+}
+

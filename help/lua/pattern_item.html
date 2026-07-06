@@ -1,0 +1,59 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - Pattern Item:</title>
+</head>
+<body>
+<h4>Pattern Item:</h4><p>
+A <em>pattern item</em> may be
+
+<ul>
+
+<li>
+a single character class,
+which matches any single character in the class;
+</li>
+
+<li>
+a single character class followed by '<code>*</code>',
+which matches 0 or more repetitions of characters in the class.
+These repetition items will always match the longest possible sequence;
+</li>
+
+<li>
+a single character class followed by '<code>+</code>',
+which matches 1 or more repetitions of characters in the class.
+These repetition items will always match the longest possible sequence;
+</li>
+
+<li>
+a single character class followed by '<code>-</code>',
+which also matches 0 or more repetitions of characters in the class.
+Unlike '<code>*</code>',
+these repetition items will always match the <em>shortest</em> possible sequence;
+</li>
+
+<li>
+a single character class followed by '<code>?</code>',
+which matches 0 or 1 occurrence of a character in the class;
+</li>
+
+<li>
+<code>%<em>n</em></code>, for <em>n</em> between 1 and 9;
+such item matches a substring equal to the <em>n</em>-th captured string
+(see below);
+</li>
+
+<li>
+<code>%b<em>xy</em></code>, where <em>x</em> and <em>y</em> are two distinct characters;
+such item matches strings that start with&nbsp;<em>x</em>, end with&nbsp;<em>y</em>,
+and where the <em>x</em> and <em>y</em> are <em>balanced</em>.
+This means that, if one reads the string from left to right,
+counting <em>+1</em> for an <em>x</em> and <em>-1</em> for a <em>y</em>,
+the ending <em>y</em> is the first <em>y</em> where the count reaches 0.
+For instance, the item <code>%b()</code> matches expressions with
+balanced parentheses.
+</li>
+
+</ul>
+</body>
+</html>

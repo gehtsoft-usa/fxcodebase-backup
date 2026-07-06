@@ -1,0 +1,38 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_getlocal</title>
+</head>
+<body>
+<h3><a name="lua_getlocal"><code>lua_getlocal</code></a></h3>
+<pre>const char *lua_getlocal (lua_State *L, const lua_Debug *ar, int n);</pre>
+
+<p>
+Gets information about a local variable of a given activation record.
+The parameter <code>ar</code> must be a valid activation record that was
+filled by a previous call to <a href="lua_getstack.html"><code>lua_getstack</code></a> or
+given as argument to a hook (see <a href="lua_Hook.html"><code>lua_Hook</code></a>).
+The index <code>n</code> selects which local variable to inspect
+(1 is the first parameter or active local variable, and so on,
+until the last active local variable).
+<a href="lua_getlocal.html"><code>lua_getlocal</code></a> pushes the variable's value onto the stack
+and returns its name.
+
+
+<p>
+Variable names starting with '<code>(</code>' (open parentheses)
+represent internal variables
+(loop control variables, temporaries, and C&nbsp;function locals).
+
+
+<p>
+Returns <code>NULL</code> (and pushes nothing)
+when the index is greater than
+the number of active local variables.
+
+
+
+
+
+<hr>
+</body>
+</html>

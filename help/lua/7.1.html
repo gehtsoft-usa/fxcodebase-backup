@@ -1,0 +1,29 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 7.1 - Changes in the Language</title>
+</head>
+<body>
+<h2>7.1 - <a name="7.1">Changes in the Language</a></h2>
+<ul>
+
+<li>
+The vararg system changed from the pseudo-argument <code>arg</code> with a
+table with the extra arguments to the vararg expression.
+(Option <code>LUA_COMPAT_VARARG</code> in <code>luaconf.h</code>.)
+</li>
+
+<li>
+There was a subtle change in the scope of the implicit
+variables of the <b>for</b> statement and for the <b>repeat</b> statement.
+</li>
+
+<li>
+The long string/long comment syntax (<code>[[<em>string</em>]]</code>)
+does not allow nesting.
+You can use the new syntax (<code>[=[<em>string</em>]=]</code>) in these cases.
+(Option <code>LUA_COMPAT_LSTR</code> in <code>luaconf.h</code>.)
+</li>
+
+</ul>
+</body>
+</html>

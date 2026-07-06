@@ -1,0 +1,114 @@
+function Init()
+{
+    indicator.name("Range indicator");
+    indicator.description("Range indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    indicator.setTag("replaceSource", "t");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("RangeSize", "Range of bar in pips", "", 10);
+
+}
+
+var first;
+var source = null;
+var RangeSize;
+var BuffUP=null;
+var BuffDN=null;
+var open_t = null;
+var high_t = null;
+var low_t = null;
+var close_t = null;
+var Count_t;
+var i;
+var open = null;
+var high = null;
+var low = null;
+var close = null;
+
+
+function Prepare()
+{
+    source = instance.source;
+    RangeSize=instance.parameters.RangeSize;
+    first = source.first()+2;
+    open_t = instance.addInternalStream(first, 0);
+    high_t = instance.addInternalStream(first, 0);
+    low_t = instance.addInternalStream(first, 0);
+    close_t = instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.RangeSize + ")";
+    instance.name(name);
+    open = instance.addStream("open", core.Line, name, "open", core.rgb(0, 0, 0), first)
+    high = instance.addStream("high", core.Line, name, "high", core.rgb(0, 0, 0), first)
+    low = instance.addStream("low", core.Line, name, "low", core.rgb(0, 0, 0), first)
+    close = instance.addStream("close", core.Line, name, "close", core.rgb(0, 0, 0), first)
+    instance.createCandleGroup("RB", "RB", open, high, low, close);
+}
+
+function CheckBuff(period)
+{
+ var ii;
+ if (Count_t>period) 
+ {
+  for (ii=first+1; ii<=period; ii++) 
+  {
+   open_t[ii-1]=open_t[ii];
+   high_t[ii-1]=high_t[ii];
+   low_t[ii-1]=low_t[ii];
+   close_t[ii-1]=close_t[ii];
+  }
+  Count_t=Count_t-1;
+ }
+}
+
+function Update(period, mode)
+{
+   if (period==source.size()-1) 
+   {
+    Count_t=first;
+    open_t[Count_t]=source.open[first];
+    high_t[Count_t]=source.high[first];
+    low_t[Count_t]=source.low[first];
+    close_t[Count_t]=source.close[first];
+    for (i=first+1; i<=period; i++) 
+    {
+     if (high_t[Count_t]-low_t[Count_t]>=RangeSize*source.pipSize()) 
+     {
+      Count_t=Count_t+1;
+      CheckBuff(period);
+      open_t[Count_t]=source.open[i];
+      high_t[Count_t]=source.high[i];
+      low_t[Count_t]=source.low[i];
+      close_t[Count_t]=source.close[i];
+     }
+     else
+     {
+      high_t[Count_t]=Math.max(high_t[Count_t],source.high[i]);
+      low_t[Count_t]=Math.min(low_t[Count_t],source.low[i]);
+      close_t[Count_t]=source.close[i];
+     }
+    } 
+
+    for (i=first; i<=period; i++) 
+    {
+     var NewPos=i-period+Count_t;
+     if (NewPos<=first) 
+     {
+      open[i]=null;
+      high[i]=null;
+      low[i]=null;
+      close[i]=null;
+     }
+     else
+     {
+      open[i]=open_t[NewPos];
+      high[i]=high_t[NewPos];
+      low[i]=low_t[NewPos];
+      close[i]=close_t[NewPos];
+     }
+    }    
+
+   } 
+}
+

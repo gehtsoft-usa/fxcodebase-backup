@@ -1,0 +1,152 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 2.5.9 - Function Definitions</title>
+</head>
+<body>
+<h3>2.5.9 - <a name="2.5.9">Function Definitions</a></h3>
+
+<p>
+The syntax for function definition is
+
+<pre>
+	function ::= <b>function</b> funcbody
+	funcbody ::= `<b>(</b>&acute; [parlist1] `<b>)</b>&acute; block <b>end</b>
+</pre>
+
+<p>
+The following syntactic sugar simplifies function definitions:
+
+<pre>
+	stat ::= <b>function</b> funcname funcbody
+	stat ::= <b>local</b> <b>function</b> Name funcbody
+	funcname ::= Name {`<b>.</b>&acute; Name} [`<b>:</b>&acute; Name]
+</pre><p>
+The statement
+
+<pre>
+     function f () <em>body</em> end
+</pre><p>
+translates to
+
+<pre>
+     f = function () <em>body</em> end
+</pre><p>
+The statement
+
+<pre>
+     function t.a.b.c.f () <em>body</em> end
+</pre><p>
+translates to
+
+<pre>
+     t.a.b.c.f = function () <em>body</em> end
+</pre><p>
+The statement
+
+<pre>
+     local function f () <em>body</em> end
+</pre><p>
+translates to
+
+<pre>
+     local f; f = function () <em>body</em> end
+</pre><p>
+<em>not</em> to
+
+<pre>
+     local f = function () <em>body</em> end
+</pre><p>
+(This only makes a difference when the body of the function
+contains references to <code>f</code>.)
+
+
+<p>
+A function definition is an executable expression,
+whose value has type <em>function</em>.
+When Lua pre-compiles a chunk,
+all its function bodies are pre-compiled too.
+Then, whenever Lua executes the function definition,
+the function is <em>instantiated</em> (or <em>closed</em>).
+This function instance (or <em>closure</em>)
+is the final value of the expression.
+Different instances of the same function
+may refer to different  external local variables
+and may have different environment tables.
+
+
+<p>
+Parameters act as local variables that are
+initialized with the argument values:
+
+<pre>
+	parlist1 ::= namelist [`<b>,</b>&acute; `<b>...</b>&acute;] | `<b>...</b>&acute;
+</pre><p>
+When a function is called,
+the list of arguments is adjusted to
+the length of the list of parameters,
+unless the function is a variadic or <em>vararg function</em>,
+which is
+indicated by three dots ('<code>...</code>') at the end of its parameter list.
+A vararg function does not adjust its argument list;
+instead, it collects all extra arguments and supplies them
+to the function through a <em>vararg expression</em>,
+which is also written as three dots.
+The value of this expression is a list of all actual extra arguments,
+similar to a function with multiple results.
+If a vararg expression is used inside another expression
+or in the middle of a list of expressions,
+then its return list is adjusted to one element.
+If the expression is used as the last element of a list of expressions,
+then no adjustment is made
+(unless the call is enclosed in parentheses).
+
+
+<p>
+As an example, consider the following definitions:
+
+<pre>
+     function f(a, b) end
+     function g(a, b, ...) end
+     function r() return 1,2,3 end
+</pre><p>
+Then, we have the following mapping from arguments to parameters and
+to the vararg expression:
+
+<pre>
+     CALL            PARAMETERS
+     
+     f(3)             a=3, b=nil
+     f(3, 4)          a=3, b=4
+     f(3, 4, 5)       a=3, b=4
+     f(r(), 10)       a=1, b=10
+     f(r())           a=1, b=2
+     
+     g(3)             a=3, b=nil, ... --&gt;  (nothing)
+     g(3, 4)          a=3, b=4,   ... --&gt;  (nothing)
+     g(3, 4, 5, 8)    a=3, b=4,   ... --&gt;  5  8
+     g(5, r())        a=5, b=1,   ... --&gt;  2  3
+</pre>
+
+<p>
+Results are returned using the <b>return</b> statement (see <a href="2.4.4.html">&sect;2.4.4</a>).
+If control reaches the end of a function
+without encountering a <b>return</b> statement,
+then the function returns with no results.
+
+
+<p>
+The <em>colon</em> syntax
+is used for defining <em>methods</em>,
+that is, functions that have an implicit extra parameter <code>self</code>.
+Thus, the statement
+
+<pre>
+     function t.a.b.c:f (<em>params</em>) <em>body</em> end
+</pre><p>
+is syntactic sugar for
+
+<pre>
+     t.a.b.c.f = function (self, <em>params</em>) <em>body</em> end
+</pre>
+</body>
+</html>

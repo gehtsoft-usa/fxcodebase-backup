@@ -1,0 +1,84 @@
+function Init()
+{
+    indicator.name("Shmen Resistance");
+    indicator.description("Shmen Resistance");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addString("Method", "Calculation Method", "Method" , "Open/Close");
+    indicator.parameters.addStringAlternative("Method", "High/Low", "High/Low" , "High/Low");
+    indicator.parameters.addStringAlternative("Method", "Open/Close", "Open/Close" , "Open/Close");
+	
+	indicator.parameters.addBoolean("RPath", "RPath", "", true);
+    indicator.parameters.addDouble("MinPips", "MinPips", "", 5);	
+    indicator.parameters.addDouble("MinVol", "MinVol", "", 5);	
+ 
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Ratio_color", "Color of Ratio", "Color of Ratio", core.rgb(255, 0, 0));
+}
+
+var Method;
+var RPath;
+var first;
+var source = null;
+var MinPips;
+var MinVol;
+
+var Ratio = null;
+
+function Prepare(nameOnly)
+{
+    Method = instance.parameters.Method;
+	MinPips = instance.parameters.MinPips;
+	MinVol = instance.parameters.MinVol;
+	RPath = instance.parameters.RPath;
+    source = instance.source;
+    first = source.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Method) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        Ratio = instance.addStream("Ratio", core.Bar, name, "Ratio", instance.parameters.Ratio_color, first);
+    }
+}
+
+function Update(period)
+{   
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+	if (Method == "High/Low") 
+    {
+	 Dif=(source.high[period]-source.low[period])/source.pipSize();
+    } 
+	else if (Method == "Open/Close") 
+    {
+	 Dif=Math.abs(source.close[period]-source.open[period])/source.pipSize();
+	}
+	 
+    if (Dif < MinPips) 
+    { 
+        Dif = MinPips; 
+    }
+	  
+    var Volume= source.volume[period];
+	  
+    if (Volume < MinVol) 
+    { 
+        Volume = MinVol; 
+    }
+    if (RPath) 
+    { 
+        Ratio[period] = Dif/Volume; 
+    }
+    else
+    { 
+        Ratio[period] = Volume/Dif; 
+    }
+       
+}
+

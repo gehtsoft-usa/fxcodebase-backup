@@ -1,0 +1,62 @@
+function Init()
+{
+    indicator.name("Bollinger Band Decimal - Bandwidth Oscillator");
+    indicator.description("Decimal. Provides a bandwidth histogram between two Bollinger Bands.");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addDouble("N", "Number of periods", "Number of periods", 20.0);
+    indicator.parameters.addDouble("Dev", "Number of standard deviations", "Number of standard deviations", 2.0);
+    indicator.parameters.addColor("clrBBB", "Bandwidth histogram color", "The color of the histogram.", core.rgb(0, 255, 0));
+}
+
+var N;
+var D;
+
+var firstPeriod;
+var source = null;
+
+var TL = null;
+var AL = null;
+var BL = null;
+
+var BAND = null;
+
+function Prepare()
+{
+    N = instance.parameters.N;
+    D = instance.parameters.Dev;
+    source = instance.source;
+    firstPeriod = source.first() + N - 1;
+
+    var name = "Bollinger Bands Decimal - Bandwidth Oscillator (" + N + ", " + D + ")";
+    instance.name(name);
+    
+    TL = instance.addInternalStream(firstPeriod)
+    BL = instance.addInternalStream(firstPeriod)
+    AL = instance.addInternalStream(firstPeriod)
+    
+    BAND = instance.addStream("Bandwidth", core.Bar, name + ".BANDWIDTH", "BBBandwidth", instance.parameters.clrBBB, firstPeriod);
+}
+
+function Update(period)
+{
+    if (period >= firstPeriod) 
+    {
+        var ml = Math.avg(source, period-N+1, period);
+        var d = Math.stdev(source, period-N+1, period);
+
+        TL[period] = ml + D * d;
+        BL[period] = ml - D * d;
+        AL[period] = ml;
+    }
+        
+    if (period >= firstPeriod) 
+    {
+    	BAND[period] = ((TL[period] - BL[period]) / AL[period])
+    }  
+}
+
+
+
+
+

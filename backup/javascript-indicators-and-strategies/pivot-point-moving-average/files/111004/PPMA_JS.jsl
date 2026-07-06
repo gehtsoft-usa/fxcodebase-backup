@@ -1,0 +1,51 @@
+//initializes the indicator
+function Init()
+{
+    indicator.name("Pivot Point Moving Average");
+    indicator.description("Pivot Point Moving Average");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    indicator.setTag("group", "Moving Averages");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("N", "Number of periods", "The number of periods.", 14, 1, 10000);
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Line color", "The color of line", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("width", "Line width", "The width of line", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "The style of line", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LEVEL_STYLE);
+}
+
+var first = 0;
+var ppmaFirst;
+var n = 0;
+var source = null;
+var PPMA;
+
+//initializes the instance of the indicator
+function Prepare(onlyName)
+{
+    source = instance.source;
+    n = instance.parameters.N;
+    var name = profile.id() + "(" + instance.source.name() + "," + n + ")";
+    instance.name(name);
+  
+    if (onlyName == true)
+        return ;
+    first = n + source.first() - 1;
+
+    PPMA = instance.addStream("PPMA", core.Line, name, "PPMA", instance.parameters.clr,  first);
+    PPMA.setWidth(instance.parameters.width);
+    PPMA.setStyle(instance.parameters.style);
+    ppmaFirst = PPMA.first();
+}
+
+// calculate the value
+function Update(period, mode)
+{
+    if (period >= ppmaFirst)
+    {
+        PPMA[period] = Math.avg(source.typical, period - n + 1, period);
+    }
+    
+}

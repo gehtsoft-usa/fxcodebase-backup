@@ -1,0 +1,183 @@
+-- Id: 10849
+-- More information about this indicator can be found at:
+-- http://fxcodebase.com/code/viewtopic.php?f=17&t=10878
+
+
+--+------------------------------------------------------------------+
+--|                               Copyright © 2018, Gehtsoft USA LLC | 
+--|                                            http://fxcodebase.com |
+--+------------------------------------------------------------------+
+--|                                 Support our efforts by donating  | 
+--|                                    Paypal: https://goo.gl/9Rj74e |
+--|                    BitCoin : 15VCJTLaz12Amr7adHSBtL9v8XomURo9RF  |  
+--|                BitCoin Cash: 1BEtS465S3Su438Kc58h2sqvVvHK9Mijtg  | 
+--|           Ethereum : 0x8C110cD61538fb6d7A2B47858F0c0AaBd663068D  |  
+--|                   LiteCoin : LLU8PSY2vsq7B9kRELLZQcKf5nJQrdeqwD  |  
+--+------------------------------------------------------------------+
+ 
+function Init()
+    indicator:name("Blau Stochastic Index oscillator");
+    indicator:description("Blau Stochastic Index oscillator");
+    indicator:requiredSource(core.Bar);
+    indicator:type(core.Oscillator);
+
+    indicator.parameters:addGroup("Calculation");
+    indicator.parameters:addInteger("Period", "Period", "", 10);
+    indicator.parameters:addInteger("Period1", "First smooth period", "", 5);
+    indicator.parameters:addInteger("Period2", "Second smooth period", "", 15);
+    indicator.parameters:addInteger("SignalPeriod", "Signal period", "", 10);
+    indicator.parameters:addString("Method", "Method", "", "MVA");
+    indicator.parameters:addStringAlternative("Method", "MVA", "", "MVA");
+    indicator.parameters:addStringAlternative("Method", "EMA", "", "EMA");
+    indicator.parameters:addStringAlternative("Method", "KAMA", "", "KAMA");
+    indicator.parameters:addStringAlternative("Method", "Wilder", "", "Wilder");
+    indicator.parameters:addStringAlternative("Method", "LWMA", "", "LWMA");
+    indicator.parameters:addStringAlternative("Method", "SineWMA", "", "SineWMA");
+    indicator.parameters:addStringAlternative("Method", "TriMA", "", "TriMA");
+    indicator.parameters:addStringAlternative("Method", "LSMA", "", "LSMA");
+    indicator.parameters:addStringAlternative("Method", "SMMA", "", "SMMA");
+    indicator.parameters:addStringAlternative("Method", "HMA", "", "HMA");
+    indicator.parameters:addStringAlternative("Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters:addStringAlternative("Method", "DEMA", "", "DEMA");
+    indicator.parameters:addStringAlternative("Method", "T3", "", "T3");
+    indicator.parameters:addStringAlternative("Method", "ITrend", "", "ITrend");
+    indicator.parameters:addStringAlternative("Method", "Median", "", "Median");
+    indicator.parameters:addStringAlternative("Method", "GeoMean", "", "GeoMean");
+    indicator.parameters:addStringAlternative("Method", "REMA", "", "REMA");
+    indicator.parameters:addStringAlternative("Method", "ILRS", "", "ILRS");
+    indicator.parameters:addStringAlternative("Method", "IE/2", "", "IE/2");
+    indicator.parameters:addStringAlternative("Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters:addStringAlternative("Method", "JSmooth", "", "JSmooth");
+
+    indicator.parameters:addGroup("Style");
+    indicator.parameters:addColor("Sclr", "Stochastic color", "Stochastic color", core.rgb(0, 255, 0));
+    indicator.parameters:addInteger("Swidth", "Stochastic width", "Stochastic width", 1, 1, 5);
+    indicator.parameters:addInteger("Sstyle", "Stochastic style", "Stochastic style", core.LINE_SOLID);
+    indicator.parameters:setFlag("Sstyle", core.FLAG_LINE_STYLE);
+    indicator.parameters:addColor("S1clr", "Smooth 1 color", "Smooth 1 color", core.rgb(255, 0, 0));
+    indicator.parameters:addInteger("S1width", "Smooth 1 width", "Smooth 1 width", 1, 1, 5);
+    indicator.parameters:addInteger("S1style", "Smooth 1 style", "Smooth 1 style", core.LINE_SOLID);
+    indicator.parameters:setFlag("S1style", core.FLAG_LINE_STYLE);
+    indicator.parameters:addColor("S2clr", "Smooth 2 color", "Smooth 2 color", core.rgb(255, 128, 64));
+    indicator.parameters:addInteger("S2width", "Smooth 2 width", "Smooth 2 width", 1, 1, 5);
+    indicator.parameters:addInteger("S2style", "Smooth 2 style", "Smooth 2 style", core.LINE_SOLID);
+    indicator.parameters:setFlag("S2style", core.FLAG_LINE_STYLE);
+    indicator.parameters:addColor("Signalclr1", "Signal color 1", "Signal color 1", core.rgb(0, 0, 255));
+    indicator.parameters:addColor("Signalclr2", "Signal color 2", "Signal color 2", core.rgb(0, 255, 255));
+    indicator.parameters:addColor("Signalclr3", "Signal color 3", "Signal color 3", core.rgb(255, 255, 0));
+    indicator.parameters:addColor("Signalclr4", "Signal color 4", "Signal color 4", core.rgb(255, 0, 255));
+end
+
+local first;
+local source = nil;
+local Period;
+local Period1;
+local Period2;
+local SignalPeriod;
+local Method;
+local Diff, Range;
+local Diff_MA1, Range_MA1;
+local Diff_MA2, Range_MA2;
+local Diff_MA3, Range_MA3;
+local Stochastic=nil;
+local Smooth1=nil;
+local Smooth2=nil;
+local Signal=nil;
+
+function Prepare(nameOnly)  
+    source = instance.source;
+    Period=instance.parameters.Period;
+    Period1=instance.parameters.Period1;
+    Period2=instance.parameters.Period2;
+    SignalPeriod=instance.parameters.SignalPeriod;
+    Method=instance.parameters.Method;
+    first = source:first()+2;
+	
+	local name = profile:id() .. "(" .. source:name() .. ", " .. instance.parameters.Period .. ", " .. instance.parameters.Period1 .. ", " .. instance.parameters.Period2 .. ", " .. instance.parameters.SignalPeriod .. ", " .. instance.parameters.Method .. ")";
+    instance:name(name);
+	
+	if   (nameOnly) then
+        return;
+    end
+	
+	
+	
+    Diff = instance:addInternalStream(first, 0);
+    Range = instance:addInternalStream(first, 0);
+	
+	assert(core.indicators:findIndicator("AVERAGES") ~= nil, "Please, download and install AVERAGES.LUA indicator");    
+
+	
+	
+    Diff_MA1 = core.indicators:create("AVERAGES", Diff, Method, Period1, false);
+    Range_MA1 = core.indicators:create("AVERAGES", Range, Method, Period1, false);
+    Diff_MA2 = core.indicators:create("AVERAGES", Diff_MA1.DATA, Method, Period2, false);
+    Range_MA2 = core.indicators:create("AVERAGES", Range_MA1.DATA, Method, Period2, false);
+    Diff_MA3 = core.indicators:create("AVERAGES", Diff_MA2.DATA, Method, SignalPeriod, false);
+    Range_MA3 = core.indicators:create("AVERAGES", Range_MA2.DATA, Method, SignalPeriod, false);
+    
+    Stochastic = instance:addStream("Stochastic", core.Line, name .. ".Stochastic", "Stochastic", instance.parameters.Sclr, first);
+    Stochastic:setWidth(instance.parameters.Swidth);
+    Stochastic:setStyle(instance.parameters.Sstyle);
+    Smooth1 = instance:addStream("Smooth1", core.Line, name .. ".Smooth1", "Smooth1", instance.parameters.S1clr, first);
+    Smooth1:setWidth(instance.parameters.S1width);
+    Smooth1:setStyle(instance.parameters.S1style);
+    Smooth2 = instance:addStream("Smooth2", core.Line, name .. ".Smooth2", "Smooth2", instance.parameters.S2clr, first);
+    Smooth2:setWidth(instance.parameters.S2width);
+    Smooth2:setStyle(instance.parameters.S2style);
+    Signal = instance:addStream("Signal", core.Bar, name .. ".Signal", "Signal", instance.parameters.Signalclr1, first);
+	
+	
+	Stochastic:setPrecision(math.max(2, instance.source:getPrecision()));
+	Smooth1:setPrecision(math.max(2, instance.source:getPrecision()));
+	Smooth2:setPrecision(math.max(2, instance.source:getPrecision()));
+	Signal:setPrecision(math.max(2, instance.source:getPrecision()));
+end
+
+function Update(period, mode)
+   if period>first+Period then
+    local Min, Max=mathex.minmax(source, period-Period+1, period);
+    Diff[period]=source.close[period]-Min;
+    Range[period]=Max-Min;
+    if Range[period]~=0 then
+     Stochastic[period]=100*Diff[period]/Range[period]-50;
+    else
+     Stochastic[period]=0;
+    end 
+    Diff_MA1:update(mode);
+    Range_MA1:update(mode);
+    Diff_MA2:update(mode);
+    Range_MA2:update(mode);
+    Diff_MA3:update(mode);
+    Range_MA3:update(mode);
+    if Range_MA1.DATA[period]~=0 then
+     Smooth1[period]=100*Diff_MA1.DATA[period]/Range_MA1.DATA[period]-50;
+    else
+     Smooth1[period]=0;
+    end
+    if Range_MA2.DATA[period]~=0 then
+     Smooth2[period]=100*Diff_MA2.DATA[period]/Range_MA2.DATA[period]-50;
+    else
+     Smooth2[period]=0;
+    end
+    if Range_MA3.DATA[period]~=0 then
+     Signal[period]=100*Diff_MA3.DATA[period]/Range_MA3.DATA[period]-50;
+    else
+     Signal[period]=0;
+    end
+    if Signal[period]>0 then
+     if Signal[period]>=Signal[period-1] then
+      Signal:setColor(period, instance.parameters.Signalclr1);
+     else
+      Signal:setColor(period, instance.parameters.Signalclr2);
+     end
+    else
+     if Signal[period]>=Signal[period-1] then
+      Signal:setColor(period, instance.parameters.Signalclr3);
+     else
+      Signal:setColor(period, instance.parameters.Signalclr4);
+     end
+    end
+   end 
+end
+

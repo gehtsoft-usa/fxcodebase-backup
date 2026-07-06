@@ -1,0 +1,26 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 2.4.2 - Blocks</title>
+</head>
+<body>
+<h3>2.4.2 - <a name="2.4.2">Blocks</a></h3><p>
+A block is a list of statements;
+syntactically, a block is the same as a chunk:
+
+<pre>
+	block ::= chunk
+</pre>
+
+<p>
+A block may be explicitly delimited to produce a single statement:
+
+<pre>
+	stat ::= <b>do</b> block <b>end</b>
+</pre><p>
+Explicit blocks are useful
+to control the scope of variable declarations.
+Explicit blocks are also sometimes used to
+add a <b>return</b> or <b>break</b> statement in the middle
+of another block (see <a href="2.4.4.html">&sect;2.4.4</a>).
+</body>
+</html>

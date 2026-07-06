@@ -1,0 +1,56 @@
+# Anina / Stochastic Strategy
+
+> Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=60818  
+> Forum: 31 · Topic 60818 · 2 post(s)
+
+
+---
+
+## Anina / Stochastic Strategy
+
+**Apprentice** · Fri Jun 13, 2014 8:06 am
+
+![ANINA - STOCHASTIC STRATEGY.png](images/94485/ANINA%20-%20STOCHASTIC%20STRATEGY.png)
+
+
+
+1. ANINA INDICATOR WITH DEFAULT PARAMETERS
+BUY LEVEL: 0.5
+SELL LEVEL:0.5
+2.STOCHASTIC INDICATOR WITH DEFAULT PARAMETERS
+OB LEVEL:80
+OS LEVEL:20
+
+BUY:
+1.MIN LINE>MID LINE IN ANINA INDICATOR
+2.MIN LINE > BUY LEVEL IN ANINA INDICATOR
+3.STOCHASTIC D LINE CROSS OVER OS LEVEL
+
+SELL:
+1.MIN LINE < MID LINE IN ANINA INDICATOR
+2.MIN LINE < SELL LEVEL IN ANINA INDICATOR
+3.STOCHASTIC D LINE CROSS UNDER OB LEVEL
+
+EXIT BUY:
+1. MIN LINE CROSS UNDER MID LINE IN ANINA INDICATOR OR
+2.STOCHASTIC K LINE CROSS UNDER D LINE AND D LINE > OB LEVEL
+
+EXIT SELL:
+1. MIN LINE CROSS OVER MID LINE IN ANINA INDICATOR OR
+2. STOCHASTIC K LINE CROSS OVER D LINE AND D LINE < OS LEVEL
+
+ [ANINA - STOCHASTIC STRATEGY.lua](files/94485/ANINA%20-%20STOCHASTIC%20STRATEGY.lua)
+
+ANINA indicator can be found here.
+[viewtopic.php?f=17&t=6493](https://fxcodebase.com/code/viewtopic.php?f=17&t=6493)
+
+The Strategy was revised and updated on December 11, 2018.
+
+
+---
+
+## Re: Anina / Stochastic Strategy
+
+**Apprentice** · Sun Dec 11, 2016 7:45 am
+
+Strategy was revised and updated.

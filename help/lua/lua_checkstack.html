@@ -1,0 +1,22 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_checkstack</title>
+</head>
+<body>
+<h3><a name="lua_checkstack"><code>lua_checkstack</code></a></h3>
+<pre>int lua_checkstack (lua_State *L, int extra);</pre>
+
+<p>
+Ensures that there are at least <code>extra</code> free stack slots in the stack.
+It returns false if it cannot grow the stack to that size.
+This function never shrinks the stack;
+if the stack is already larger than the new size,
+it is left unchanged.
+
+
+
+
+
+<hr>
+</body>
+</html>

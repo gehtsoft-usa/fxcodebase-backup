@@ -1,0 +1,169 @@
+function Init()
+{
+    indicator.name("Smoothed CCI");
+    indicator.description("");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+ 
+	
+	indicator.parameters.addGroup("Pre Smoothing");
+	indicator.parameters.addBoolean("PreFlag", "Use Pre Smoothing", "", false);
+	
+	indicator.parameters.addInteger("PrePeriod", "Period","", 14, 2, 1000);
+	
+	indicator.parameters.addString("PreMethod", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("PreMethod", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("PreMethod", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("PreMethod", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("PreMethod", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("PreMethod", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("PreMethod", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("PreMethod", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("PreMethod", "WMA", "WMA" , "WMA");
+	
+
+    indicator.parameters.addGroup("CCI Calculation");
+    indicator.parameters.addInteger("N", "CCI Period","", 14, 2, 1000);
+	
+	indicator.parameters.addGroup("Post Smoothing");
+	indicator.parameters.addBoolean("PostFlag", "Use Post Smoothing", "", false);
+	indicator.parameters.addInteger("PostPeriod", "Period","", 14, 2, 1000);
+	
+	indicator.parameters.addString("PostMethod", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("PostMethod", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("PostMethod", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("PostMethod", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("PostMethod", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("PostMethod", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("PostMethod", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("PostMethod", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("PostMethod", "WMA", "WMA" , "WMA");
+	
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clrCCI", "Line Color", "", core.rgb(0, 255, 255));
+    indicator.parameters.addInteger("widthCCI", "Line Width","", 1, 1, 5);
+    indicator.parameters.addInteger("styleCCI", "Line Style","", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleCCI", core.FLAG_LEVEL_STYLE);
+
+    indicator.parameters.addGroup("Levels");
+    // Overbought/oversold level
+    indicator.parameters.addInteger("overbought", "Overbought Level","", 100, -1000, 1000);
+    indicator.parameters.addInteger("oversold", "Oversold Level","", -100, -1000, 1000);
+	
+    indicator.parameters.addInteger("level_overboughtsold_width", "Line Width","", 1, 1, 5);
+    indicator.parameters.addInteger("level_overboughtsold_style", "Line Style","", core.LINE_SOLID);
+	 indicator.parameters.setFlag("level_overboughtsold_style", core.FLAG_LEVEL_STYLE);
+    indicator.parameters.addColor("level_overboughtsold_color", "Line Color","", core.rgb(255, 255, 0));
+   
+}
+
+var n;
+var first;
+var source = null;
+var Source = null;
+var PreMethod,PrePeriod,Pre;
+var PostMethod,PostPeriod,Post;
+var pre, post;
+
+var CCI = null;
+var RawCCI=null;
+
+function Prepare()  
+{
+    n = instance.parameters.N;
+    source = instance.source;
+	PreFlag=instance.parameters.PreFlag;
+	PrePeriod=instance.parameters.PrePeriod;
+	PreMethod=instance.parameters.PreMethod;
+	PostFlag=instance.parameters.PostFlag;
+	PostPeriod=instance.parameters.PostPeriod;
+	PostMethod=instance.parameters.PostMethod;	
+	
+	if (PreFlag) 
+	{
+	 pre=core.indicators.create(PreMethod,source,PrePeriod);
+	 Source=pre.DATA;
+	} 
+	else	
+	{
+	 Source=source;
+	}
+
+    var name = profile.id() + "(" + source.name() + ", " + n + ")";
+    instance.name(name);
+	
+    if (PostFlag) 
+    {		
+	 RawCCI = instance.addInternalStream(Source.first()+n-1, 0);
+     post=core.indicators.create(PreMethod,RawCCI,PrePeriod); 
+	 first= post.DATA.first();
+	} 
+	else
+	{
+	 first= Source.first()+n-1;
+	 RawCCI = instance.addInternalStream(first, 0);
+    }
+	
+    CCI = instance.addStream("CCI", core.Line, name, "CCI", instance.parameters.clrCCI, first);
+    CCI.setWidth(instance.parameters.widthCCI);
+    CCI.setStyle(instance.parameters.styleCCI);
+    CCI.setPrecision(2);
+
+    CCI.addLevel(instance.parameters.oversold, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);
+    CCI.addLevel(0);
+    CCI.addLevel(instance.parameters.overbought, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);
+}
+
+function Update(period,mode)
+{
+    if (PreFlag) 
+    {
+	 pre.update(mode);
+	}
+	
+	if (period < Source.first() +n-1) 
+	{
+	 return;
+	}
+    var from = period - n + 1;
+        var to = period;
+
+        var mean = Math.avg(Source, from, to);
+        var meandev = Math.meandev(Source, from, to);
+
+
+		
+        if (meandev == 0) 
+        {
+            RawCCI[period] = 0;
+        }    
+        else
+        {
+            RawCCI[period] = (Source[period] - mean) / (meandev * 0.015);
+        }
+		
+		
+	if (PostFlag) 
+	{
+	 post.update(mode); 
+	
+		if (period < post.DATA.first()) 
+		{
+		 return;
+		}
+	
+	CCI[period]=post.DATA[period];
+}
+	else
+	{
+	 CCI[period]=RawCCI[period];
+	}	
+    
+}
+
+
+
+
+
+
+

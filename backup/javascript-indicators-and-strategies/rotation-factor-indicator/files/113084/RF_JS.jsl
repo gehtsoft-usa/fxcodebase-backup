@@ -1,0 +1,92 @@
+function Init()
+{
+    indicator.name("Rotation Factor");
+    indicator.description("Rotation Factor");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+  
+	
+	indicator.parameters.addGroup("Style");
+	indicator.parameters.addColor("Up", "Up color", "", core.rgb(0, 255, 0));
+	indicator.parameters.addColor("Dn", "Down color", "", core.rgb(255, 0, 0));
+	indicator.parameters.addColor("No", "Neutral color", "", core.rgb(0, 0, 255));
+}
+
+var first;
+var source = null;
+
+// Streams block
+var o = null;
+var c = null;
+var h = null;
+var l = null;
+var RF;
+// Routine
+function Prepare(nameOnly)
+{
+    source = instance.source;
+    first = source.first();
+
+    var name = profile.id() + "(" + source.name() + ")";
+    instance.name(name);
+	
+	RF = instance.addInternalStream(first, 0);
+
+    if (!(nameOnly)) 
+    {
+        o = instance.addStream("o", core.Line, name + ".o", "o",  core.rgb(0, 0, 0), first);
+        c = instance.addStream("c", core.Line, name + ".c", "c", core.rgb(0, 0, 0), first);
+        h = instance.addStream("h", core.Line, name + ".h", "h", core.rgb(0, 0, 0), first);
+        l = instance.addStream("l", core.Line, name + ".l", "l", core.rgb(0, 0, 0), first);
+		 instance.createCandleGroup("RF", "RF", o, h, l, c);
+    }
+}
+
+function Update(period)
+{
+    if (period <  first || !source.hasData(period)) 
+    {
+	 o.setColor(period, instance.parameters.No);		
+	 return;
+	}
+	
+	   RF[period]= RF[period-1];
+	   
+	   if (source.high[period] > source.high[period-1]) 
+	   {
+	    RF[period]=RF[period]+1;
+	   } 
+	   else if (source.high[period]  <  source.high[period-1]) 
+	   {
+	    RF[period]=RF[period]-1;
+       }
+	   
+	   if (source.low[period] > source.low[period-1]) 
+	   {
+	    RF[period]=RF[period]+1;
+	   } 
+	   else if (source.low[period]  <  source.low[period-1]) 
+	   {
+	    RF[period]=RF[period]-1;
+       }	   
+	
+        o[period] = source.open[period];
+        c[period] = source.close[period];
+        h[period] = source.high[period];
+        l[period] = source.low[period];
+		
+		if  (RF[period] > RF[period-1]) 
+		{		
+		 o.setColor(period, instance.parameters.Up);
+		} 
+        else if (RF[period] < RF[period-1]) 
+        {
+		 o.setColor(period, instance.parameters.Dn);
+		} 
+		else
+		{
+		 o.setColor(period, instance.parameters.No);			
+		}
+}
+

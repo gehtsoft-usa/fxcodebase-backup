@@ -1,0 +1,153 @@
+function Init()
+{
+    indicator.name("Average Sentiment Oscillator");
+    indicator.description("Average Sentiment Oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");	
+
+    indicator.parameters.addInteger("Period1", "Range Period", "Period", 10);
+	indicator.parameters.addInteger("Period2", "Smoothing Period", "Period", 10);
+	indicator.parameters.addInteger("Mode", "Algoritam", "", 1);
+	indicator.parameters.addIntegerAlternative("Mode"," Combined", "", 1);
+    indicator.parameters.addIntegerAlternative("Mode", "Intra-bar algorithm", "", 2);
+    indicator.parameters.addIntegerAlternative("Mode", "Group algorithm", "", 3);
+	
+	indicator.parameters.addString("Method", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method", "WMA", "WMA" , "WMA");
+  
+	indicator.parameters.addGroup("Style");	
+
+    indicator.parameters.addColor("Up_color", "Color of Up", "Color of Up", core.rgb(0, 255, 0));
+	indicator.parameters.addInteger("width1", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style1", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style1", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Down_color", "Color of Down", "Color of Down", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width2", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style2", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style2", core.FLAG_LINE_STYLE);
+}
+
+var Period1, Period2;
+var Mode;
+var first;
+var source = null;
+var Method;
+
+var Bears = null;
+var Bulls = null;
+
+var BearsMA = null;
+var BullsMA = null;
+
+var TempBufferBulls,TempBufferBears;
+
+function Prepare(nameOnly)
+{
+    Period1 = instance.parameters.Period1;
+	 Period2 = instance.parameters.Period2;
+	Mode= instance.parameters.Mode;
+	Method= instance.parameters.Method;
+    source = instance.source;
+    first = source.first()+Period1;
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period1) + ", " + tostring(Period2)+ ", " + tostring(Mode) + ")";
+    instance.name(name);
+	
+	TempBufferBulls = instance.addInternalStream(0, 0);
+	TempBufferBears = instance.addInternalStream(0, 0);
+	BullsMA = core.indicators.create(Method, TempBufferBulls, Period2);
+	BearsMA = core.indicators.create(Method, TempBufferBears, Period2);
+	
+
+    if (!(nameOnly)) 
+    {
+         Bulls = instance.addStream("Bulls", core.Line, name + ". Bulls", " Bulls", instance.parameters.Up_color, BullsMA.DATA.first() );
+		 Bulls.setWidth(instance.parameters.width1);
+         Bulls.setStyle(instance.parameters.style1);
+        Bears = instance.addStream("Bears", core.Line, name + ".Bears", "Bears", instance.parameters.Down_color, BullsMA.DATA.first() );
+		Bears.setWidth(instance.parameters.width2);
+        Bears.setStyle(instance.parameters.style2);
+    }
+}
+
+function Update(period, mode)
+{
+    if (period < first) 
+    {
+	   return;
+	  }
+      var intrahigh=source.high[period];
+      var intralow =source.low[period];
+      var intraopen=source.open[period];
+      var close =source.close[period];
+      var intrarange = intrahigh-intralow;
+      var tmp=Math.minmax(source,period-Period1+1, period);
+      var grouplow = tmp[0];
+      var grouphigh = tmp[1];
+      var groupopen = source.open[ period-Period1];
+      var grouprange = grouphigh-grouplow;
+	  
+	  
+      if (intrarange==0) 
+        { 
+          intrarange=1;
+        }
+      if (grouprange==0)  
+        { 
+          grouprange=1;
+        }
+	  
+	  
+      var intrabarbulls = ((((close-intralow)+(intrahigh-intraopen))/2)*100)/intrarange;
+      var groupbulls = ((((close-grouplow)+(grouphigh-groupopen))/2)*100)/grouprange;
+      var intrabarbears = ((((intrahigh-close)+(intraopen-intralow))/2)*100)/intrarange;      
+      var groupbears = ((((grouphigh-close)+(groupopen-grouplow))/2)*100)/grouprange;   
+	  
+	     if (Mode==1) 
+        {  
+          TempBufferBulls[period]=(intrabarbulls+groupbulls)/2; 
+        }
+         if (Mode==1) 
+          {  
+            TempBufferBears[period]=(intrabarbears+groupbears)/2; 
+          }
+         if (Mode==2) 
+          {  
+            TempBufferBulls[period]=intrabarbulls; 
+          }
+         if (Mode==2) 
+          {  
+            TempBufferBears[period]=intrabarbears; 
+          }
+         if (Mode==3) 
+          {  
+            TempBufferBulls[period]=groupbulls; 
+          }
+         if (Mode==3) 
+          {  
+            TempBufferBears[period]=groupbears; 
+          }
+		 
+		 
+		 
+      BullsMA.update(mode);
+	  BearsMA.update(mode);
+	  
+	  if (period < BullsMA.DATA.first()) 
+    {
+	   return;
+	  }
+	  
+       Bulls[period] =  BullsMA.DATA[period];
+       Bears[period] = BearsMA.DATA[period];
+    
+}
+

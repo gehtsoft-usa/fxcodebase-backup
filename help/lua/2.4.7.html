@@ -1,0 +1,27 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 2.4.7 - Local Declarations</title>
+</head>
+<body>
+<h3>2.4.7 - <a name="2.4.7">Local Declarations</a></h3><p>
+Local variables may be declared anywhere inside a block.
+The declaration may include an initial assignment:
+
+<pre>
+	stat ::= <b>local</b> namelist [`<b>=</b>&acute; explist1]
+</pre><p>
+If present, an initial assignment has the same semantics
+of a multiple assignment (see <a href="2.4.3.html">&sect;2.4.3</a>).
+Otherwise, all variables are initialized with <b>nil</b>.
+
+
+<p>
+A chunk is also a block (see <a href="2.4.1.html">&sect;2.4.1</a>),
+and so local variables can be declared in a chunk outside any explicit block.
+The scope of such local variables extends until the end of the chunk.
+
+
+<p>
+The visibility rules for local variables are explained in <a href="2.6.html">&sect;2.6</a>.
+</body>
+</html>

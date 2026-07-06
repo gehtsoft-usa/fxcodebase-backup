@@ -1,0 +1,59 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_Alloc</title>
+</head>
+<body>
+<h3><a name="lua_Alloc"><code>lua_Alloc</code></a></h3>
+<pre>typedef void * (*lua_Alloc) (void *ud,
+                             void *ptr,
+                             size_t osize,
+                             size_t nsize);</pre>
+
+<p>
+The type of the memory-allocation function used by Lua states.
+The allocator function must provide a
+functionality similar to <code>realloc</code>,
+but not exactly the same.
+Its arguments are
+<code>ud</code>, an opaque pointer passed to <a href="lua_newstate.html"><code>lua_newstate</code></a>;
+<code>ptr</code>, a pointer to the block being allocated/reallocated/freed;
+<code>osize</code>, the original size of the block;
+<code>nsize</code>, the new size of the block.
+<code>ptr</code> is <code>NULL</code> if and only if <code>osize</code> is zero.
+When <code>nsize</code> is zero, the allocator must return <code>NULL</code>;
+if <code>osize</code> is not zero,
+it should free the block pointed to by <code>ptr</code>.
+When <code>nsize</code> is not zero, the allocator returns <code>NULL</code>
+if and only if it cannot fill the request.
+When <code>nsize</code> is not zero and <code>osize</code> is zero,
+the allocator should behave like <code>malloc</code>.
+When <code>nsize</code> and <code>osize</code> are not zero,
+the allocator behaves like <code>realloc</code>.
+Lua assumes that the allocator never fails when
+<code>osize &gt;= nsize</code>.
+
+
+<p>
+Here is a simple implementation for the allocator function.
+It is used in the auxiliary library by <a href="lua_newstate.html"><code>lua_newstate</code></a>.
+
+<pre>
+     static void *l_alloc (void *ud, void *ptr, size_t osize, size_t nsize) {
+       (void)ud;     /* not used */
+       (void)osize;  /* not used */
+       if (nsize == 0) {
+         free(ptr);  /* ANSI requires that free(NULL) has no effect */
+         return NULL;
+       }
+       else
+         /* ANSI requires that realloc(NULL, size) == malloc(size) */
+         return realloc(ptr, nsize);
+     }
+</pre>
+
+
+
+
+<hr>
+</body>
+</html>

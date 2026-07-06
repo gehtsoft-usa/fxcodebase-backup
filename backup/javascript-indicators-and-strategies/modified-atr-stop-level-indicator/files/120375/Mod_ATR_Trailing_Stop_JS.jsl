@@ -1,0 +1,97 @@
+function Init()
+{
+    indicator.name("Modified ATR Trailing Stop indicator");
+    indicator.description("Modified ATR Trailing Stop indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 10);
+    indicator.parameters.addDouble("Coeff", "Coeff", "", 4);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP color", "UP color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DNclr", "DN color", "DN color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period;
+var Coeff;
+var HL;
+var Diff;
+var MVA;
+var Wilder;
+var TS=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    Coeff=instance.parameters.Coeff;
+    first = source.first()+2;
+    HL=instance.addInternalStream(first, 0);
+    Diff=instance.addInternalStream(first, 0);
+    MVA=core.indicators.create("MVA", HL, Period);
+    Wilder=core.indicators.create("AVERAGES", Diff, "Wilder", Period, false);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.Coeff + ")";
+    instance.name(name);
+    TS = instance.addStream("TS", core.Line, name + ".TS", "TS", instance.parameters.UPclr, first);
+    TS.setWidth(instance.parameters.widthLinReg);
+    TS.setStyle(instance.parameters.styleLinReg);
+}
+
+function Update(period, mode)
+{
+   if (period>first+Period) 
+   {
+    HL[period]=source.high[period]-source.low[period];
+    MVA.update(mode);
+    var HiLo=Math.min(HL[period], MVA.DATA[period]);
+    var Href;
+    if (source.low[period]<=source.high[period-1]) 
+    {
+     Href=source.high[period]-source.close[period-1];
+    } 
+    else
+    {
+     Href=(HL[period]-source.close[period-1]+source.high[period-1])/2;
+    }
+    var Lref;
+    if (source.high[period]>=source.low[period-1]) 
+    {
+     Lref=source.close[period-1]-source.low[period];
+    } 
+    else
+    {
+     Lref=(source.close[period-1]-source.low[period-1]+HL[period])/2;
+    }
+    Diff[period]=Math.max(HiLo, Href, Lref);
+    Wilder.update(mode);
+    var loss=Coeff*Wilder.DATA[period];
+    if (source.close[period]>TS[period-1] && source.close[period-1]>TS[period-1]) 
+    {
+     TS[period]=Math.max(TS[period-1], source.close[period]-loss);
+     TS.setColor(period, instance.parameters.DNclr);
+    } 
+    else if (source.close[period]<TS[period-1] && source.close[period-1]<TS[period-1]) 
+    {
+     TS[period]=Math.min(TS[period-1], source.close[period]+loss);
+     TS.setColor(period, instance.parameters.UPclr);
+    } 
+    else if (source.close[period]>TS[period-1]) 
+    {
+     TS[period]=source.close[period]-loss;
+     TS.setColor(period, instance.parameters.DNclr);
+    } 
+    else
+    {
+     TS[period]=source.close[period]+loss;
+     TS.setColor(period, instance.parameters.UPclr);
+    }
+   } 
+}
+

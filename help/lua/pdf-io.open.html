@@ -1,0 +1,39 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - io.open (filename [, mode])</title>
+</head>
+<body>
+<h3><a name="pdf-io.open"><code>io.open (filename [, mode])</code></a></h3>
+
+
+<p>
+This function opens a file,
+in the mode specified in the string <code>mode</code>.
+It returns a new file handle,
+or, in case of errors, <b>nil</b> plus an error message.
+
+
+<p>
+The <code>mode</code> string can be any of the following:
+
+<ul>
+<li><b>"r":</b> read mode (the default);</li>
+<li><b>"w":</b> write mode;</li>
+<li><b>"a":</b> append mode;</li>
+<li><b>"r+":</b> update mode, all previous data is preserved;</li>
+<li><b>"w+":</b> update mode, all previous data is erased;</li>
+<li><b>"a+":</b> append update mode, previous data is preserved,
+  writing is only allowed at the end of file.</li>
+</ul><p>
+The <code>mode</code> string may also have a '<code>b</code>' at the end,
+which is needed in some systems to open the file in binary mode.
+This string is exactly what is used in the
+standard&nbsp;C function <code>fopen</code>.
+
+
+
+
+<p>
+<hr>
+</body>
+</html>

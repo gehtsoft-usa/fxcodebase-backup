@@ -1,0 +1,81 @@
+function Init()
+{
+    indicator.name("The20s indicator");
+    indicator.description("The20s indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addBoolean("Variation", "Variation", "", false);
+    indicator.parameters.addDouble("StopLevel", "Stop level", "", 0.2);
+    indicator.parameters.addInteger("Range", "Range", "", 10);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP color", "UP color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("DNclr", "DN color", "DN color", core.rgb(0, 0, 255));
+    indicator.parameters.addInteger("DotSize", "Dot size", "Dot size", 3, 1, 5);
+}
+
+var first;
+var source = null;
+var Variation;
+var StopLevel;
+var Range;
+var PriceRange;
+var UP=null;
+var DN=null;
+var PRange;
+
+function Prepare()
+{
+    source = instance.source;
+    Variation=instance.parameters.Variation;
+    StopLevel=instance.parameters.StopLevel;
+    Range=instance.parameters.Range;
+    PRange=Range*source.pipSize();
+    first = source.first()+5;
+    PriceRange = instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.StopLevel + ", " + instance.parameters.Range + ")";
+    instance.name(name);
+    UP = instance.addStream("UP", core.Dot, name + ".UP", "UP", instance.parameters.UPclr, first);
+    DN = instance.addStream("DN", core.Dot, name + ".DN", "DN", instance.parameters.DNclr, first);
+    UP.setWidth(instance.parameters.DotSize);
+    DN.setWidth(instance.parameters.DotSize);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    PriceRange[period]=source.high[period]-source.low[period];
+    var LastBarsRange=PriceRange[period-1];
+    var Top20=source.high[period-1]-LastBarsRange*StopLevel;
+    var Bottom20=source.low[period-1]+LastBarsRange*StopLevel;
+    if (Variation) 
+    {
+     if (PriceRange[period-4]>LastBarsRange && PriceRange[period-3]>LastBarsRange && PriceRange[period-2]>LastBarsRange && source.high[period-2]>source.high[period-1] && source.low[period-2]<source.low[period-1]) 
+     {
+      if (source.open[period]<=Bottom20) 
+      {
+       DN[period]=source.low[period];
+      } 
+      else if (source.open[period]>=Top20) 
+      {
+       UP[period]=source.high[period];
+      }
+     }
+    } 
+    else
+    {
+     if (source.open[period-1]>=Top20 && source.close[period-1]<=Bottom20 && source.low[period]<=source.low[period-1]+PRange) 
+     {
+      DN[period]=source.low[period];
+     } 
+     else if (source.open[period-1]<=Bottom20 && source.close[period-1]>=Top20 && source.high[period]>=source.high[period-1]+PRange) 
+     {
+      UP[period]=source.high[period];
+     }
+    }
+   } 
+}
+

@@ -1,0 +1,199 @@
+function Init()
+{
+    indicator.name("Keltner Band");
+    indicator.description("No description");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addInteger("NM", "Number of the periods to smooth the center line", "", 50);
+    indicator.parameters.addInteger("NB", "Number of periods to smooth deviation", "", 50);
+    indicator.parameters.addDouble("F", "Factor which is used to apply the deviation", "", 1);
+
+    indicator.parameters.addString("SRC", "The center line source", "", "C");
+    indicator.parameters.addStringAlternative("SRC", "Close", "", "C");
+    indicator.parameters.addStringAlternative("SRC", "Median (H+L)/2", "", "M1");
+    indicator.parameters.addStringAlternative("SRC", "Median (H+L+C)/3", "", "M2");
+
+    indicator.parameters.addBoolean("SC", "Show the center line", "", true);
+    indicator.parameters.addString("MS", "The center line smoothing method", "", "MVA");
+    indicator.parameters.addStringAlternative("MS", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("MS", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("MS", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("MS", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("MS", "Wilders", "", "WMA");
+
+    indicator.parameters.addString("MV", "Variation Method", "", "AHL");
+    indicator.parameters.addStringAlternative("MV", "Smoothed H-L", "", "AHL");
+    indicator.parameters.addStringAlternative("MV", "ATR of source", "", "ATR");
+     indicator.parameters.addGroup("Upper Band Style");
+    indicator.parameters.addColor("H_color", "Color of Upper Band Line", "", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("H_width", "Line Width", "", 1, 1, 5);
+    indicator.parameters.addInteger("H_style", "Line Style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("H_style", core.FLAG_LINE_STYLE);
+	 indicator.parameters.addGroup("Middle Band Style");
+    indicator.parameters.addColor("M_color", "Color of Middle Band Line", "", core.rgb(0, 255, 255));
+	indicator.parameters.addInteger("M_width", "Line Width", "", 1, 1, 5);
+    indicator.parameters.addInteger("M_style", "Line Style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("M_style", core.FLAG_LINE_STYLE);
+	 indicator.parameters.addGroup("Lower Band Style");
+    indicator.parameters.addColor("L_color", "Color of Lower Band Line", "", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("L_width", "Line Width", "", 1, 1, 5);
+    indicator.parameters.addInteger("L_style", "Line Style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("L_style", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("UpperCloudClr", "Upper cloud color", "Upper cloud color", core.rgb(128, 255, 255));
+    indicator.parameters.addColor("LowerCloudClr", "Lower cloud color", "Lower cloud color", core.rgb(255, 128, 64));
+    indicator.parameters.addInteger("Transparency", "Transparency", "", 80,0,100);
+}
+
+var NM;
+var NB;
+var MS;
+var MV;
+var SRC;
+var F;
+var SC;
+
+var first;
+var source = null;
+
+var H = null;
+var M = null;
+var M2 = null;
+var L = null;
+
+var AS;           
+var MI;           
+
+var VM1;          
+var VMI;          
+var ATR;          
+
+function Prepare()
+{
+    SC = instance.parameters.SC;
+    NM = instance.parameters.NM;
+    NB = instance.parameters.NB;
+    SRC = instance.parameters.SRC;
+    F = instance.parameters.F;
+    MV = instance.parameters.MV;
+    MS = instance.parameters.MS;
+    source = instance.source;
+
+    var name = profile.id() + "(" + source.name() + "." + SRC + ", "
+
+    if (SRC == "C") 
+    {
+        AS = source.close;
+    }
+    else if (SRC == "M1" || SRC == "M2") 
+    {
+        AS = instance.addInternalStream(source.first(), 0);
+    }
+    else
+    {
+        assert(false, "The source method is unknown");
+    }
+
+    name = name + MS + "(" + NM + "), "
+    MI = core.indicators.create(MS, AS, NM);
+    first = MI.DATA.first();
+
+    if (MV == "AHL") 
+    {
+        name = name + MS + "(H-L, " + NB + "), "
+        VM1 = instance.addInternalStream(source.first(), 0);
+        VMI = core.indicators.create(MS, VM1, NB);
+        if (VMI.DATA.first() > first) 
+        {
+            first = MI.DATA.first();
+        }
+    }
+    else if (MV == "ATR") 
+    {
+        name = name + "ATR(" + NB + "), "
+        ATR = core.indicators.create("ATR", source, NB);
+        if (ATR.DATA.first() > first) 
+        {
+            first = ATR.DATA.first();
+        }
+    }
+    else
+    {
+        assert(false, "The variation method is unknown");
+    }
+    name = name + F;
+    name = name + ")";
+    instance.name(name);
+    H = instance.addStream("H", core.Line, name + ".H", "H", instance.parameters.H_color, first);
+	H.setWidth(instance.parameters.H_width);
+    H.setStyle(instance.parameters.H_style);
+    if (SC) 
+    {
+        M = instance.addStream("M", core.Line, name + ".M", "M", instance.parameters.M_color, first);
+		M.setWidth(instance.parameters.M_width);
+        M.setStyle(instance.parameters.M_style);
+    }
+    else
+    {
+        M = instance.addInternalStream(first, 0);
+    }
+    M2 = instance.addInternalStream(first, 0);
+    L = instance.addStream("L", core.Line, name + ".L", "L", instance.parameters.L_color, first);
+	L.setWidth(instance.parameters.L_width);
+    L.setStyle(instance.parameters.L_style);
+    if (SC) 
+    {
+     instance.createChannelGroup("UpperGroup","Upper" , H, M, instance.parameters.UpperCloudClr, 100-instance.parameters.Transparency);
+     instance.createChannelGroup("LowerGroup","Lower" , M2, L, instance.parameters.LowerCloudClr, 100-instance.parameters.Transparency);
+    }
+    else
+    {
+     instance.createChannelGroup("Band","Band" , H, L, instance.parameters.UpperCloudClr, 100-instance.parameters.Transparency);
+    } 
+}
+
+function Update(period, mode)
+{
+    if (period >= source.first()) 
+    {
+        if (SRC == "M1") 
+        {
+            AS[period] = (source.high[period] + source.low[period]) / 2;
+        }
+        else if (SRC == "M2") 
+        {
+            AS[period] = (source.high[period] + source.low[period] + source.close[period]) / 3;
+        }
+
+        MI.update(mode);
+
+        if (MV == "AHL") 
+        {
+            VM1[period] = source.high[period] - source.low[period];
+            VMI.update(mode);
+        }
+        else if (MV == "ATR") 
+        {
+            ATR.update(mode);
+        }
+    }
+
+    if (period >= first) 
+    {
+        var v;
+        M[period] = MI.DATA[period];
+        M2[period] = MI.DATA[period];
+        if (MV == "AHL") 
+        {
+            VM1[period] = source.high[period] - source.low[period];
+            v = VMI.DATA[period];
+        }
+        else if (MV == "ATR") 
+        {
+            v = ATR.DATA[period];
+        }
+        H[period] = M[period] + v * F;
+        L[period] = M[period] - v * F;
+    }
+}
+

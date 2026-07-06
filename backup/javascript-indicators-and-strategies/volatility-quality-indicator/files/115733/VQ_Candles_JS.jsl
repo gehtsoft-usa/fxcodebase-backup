@@ -1,0 +1,126 @@
+function Init()
+{
+    indicator.name("Volatility Quality indicator");
+    indicator.description("Volatility Quality indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Length", "Length", "", 5);
+    indicator.parameters.addString("Method", "Method", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("Method", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Method", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Method", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Method", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Method", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Method", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Method", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Method", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Method", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Method", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Method", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Method", "JSmooth", "", "JSmooth");
+    indicator.parameters.addInteger("Smoothing", "Smoothing", "", 1);
+    indicator.parameters.addInteger("Filter", "Filter", "", 5);
+    indicator.parameters.addString("MainPrice", "Main price", "", "close");
+    indicator.parameters.addStringAlternative("MainPrice", "close", "", "close");
+    indicator.parameters.addStringAlternative("MainPrice", "median", "", "median");
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP Color", "UP Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DNclr", "DN Color", "DN Color", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+var Length;
+var Method;
+var Smoothing;
+var Filter;
+var MainPrice;
+var Dir;
+var MA_H, MA_L, MA_O, MA_C;
+
+function Prepare()
+{
+    source = instance.source;
+    Length=instance.parameters.Length;
+    Method=instance.parameters.Method;
+    Smoothing=instance.parameters.Smoothing;
+    Filter=instance.parameters.Filter;
+    MainPrice=instance.parameters.MainPrice;
+    first = source.first()+2;
+    Dir = instance.addInternalStream(first, 0);
+    MA_H = core.indicators.create("AVERAGES", source.high, Method, Length, false);
+    MA_L = core.indicators.create("AVERAGES", source.low, Method, Length, false);
+    MA_O = core.indicators.create("AVERAGES", source.open, Method, Length, false);
+    if (MainPrice=="close") 
+    {
+     MA_C = core.indicators.create("AVERAGES", source.close, Method, Length, false);
+    } 
+    else
+    {
+     MA_C = core.indicators.create("AVERAGES", source.median, Method, Length, false);
+    } 
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Length + ", " + instance.parameters.Method + ", " + instance.parameters.Smoothing + ", " + instance.parameters.Filter + ", " + instance.parameters.MainPrice + ")";
+    instance.name(name);
+    open = instance.addStream("open", core.Line, name, "open", core.rgb(0, 0, 0), first)
+    high = instance.addStream("high", core.Line, name, "high", core.rgb(0, 0, 0), first)
+    low = instance.addStream("low", core.Line, name, "low", core.rgb(0, 0, 0), first)
+    close = instance.addStream("close", core.Line, name, "close", core.rgb(0, 0, 0), first)
+    instance.createCandleGroup("CCI color candle", "", open, high, low, close);
+}
+
+function Update(period, mode)
+{
+   if (period>first+Smoothing) 
+   {
+    open[period]=source.open[period];
+    close[period]=source.close[period];
+    high[period]=source.high[period];
+    low[period]=source.low[period];
+    MA_H.update(mode);
+    MA_L.update(mode);
+    MA_O.update(mode);
+    MA_C.update(mode);
+    var Max=Math.max(MA_H.DATA[period]-MA_L.DATA[period],MA_H.DATA[period]-MA_C.DATA[period-Smoothing],MA_C.DATA[period-Smoothing]-MA_L.DATA[period]);
+    var VQ_=0.25*Math.abs((MA_C.DATA[period]-MA_C.DATA[period-Smoothing])/Max+(MA_C.DATA[period]-MA_O.DATA[period])/(MA_H.DATA[period]-MA_L.DATA[period]))*(2*MA_C.DATA[period]-MA_C.DATA[period-Smoothing]-MA_O.DATA[period]);
+    if (Math.abs(VQ_)<Filter*source.pipSize()) 
+    {
+     Dir[period]=Dir[period-1];
+    } 
+    else
+    { 
+     if (VQ_>0) 
+     {
+      Dir[period]=1;
+     } 
+     else
+     {
+      Dir[period]=-1;
+     }
+    } 
+    if (Dir[period]>0) 
+    { 
+     open.setColor(period,instance.parameters.UPclr);
+    } 
+    else if (Dir[period]<0) 
+    {
+     open.setColor(period,instance.parameters.DNclr);
+    }
+   } 
+   else if (period<=first+Smoothing) 
+   {
+    Dir[period]=0; 
+   } 
+}
+

@@ -1,0 +1,113 @@
+function Init()
+{
+    indicator.name("IINWMARROWS indicator");
+    indicator.description("IINWMARROWS indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Fast_MA_Period", "Fast MA period", "", 13);
+    indicator.parameters.addString("Fast_MA_Method", "Fast MA method", "", "EMA");
+    indicator.parameters.addStringAlternative("Fast_MA_Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Fast_MA_Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Fast_MA_Method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("Fast_MA_Method", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Fast_MA_Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Fast_MA_Method", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Fast_MA_Method", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Fast_MA_Method", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Fast_MA_Method", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Fast_MA_Method", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Fast_MA_Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Fast_MA_Method", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Fast_MA_Method", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Fast_MA_Method", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Fast_MA_Method", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Fast_MA_Method", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Fast_MA_Method", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Fast_MA_Method", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Fast_MA_Method", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Fast_MA_Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Fast_MA_Method", "JSmooth", "", "JSmooth");
+    indicator.parameters.addInteger("Slow_MA_Period", "Slow MA period", "", 13);
+    indicator.parameters.addString("Slow_MA_Method", "Slow MA method", "", "EMA");
+    indicator.parameters.addStringAlternative("Slow_MA_Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Slow_MA_Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Slow_MA_Method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("Slow_MA_Method", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Slow_MA_Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Slow_MA_Method", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Slow_MA_Method", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Slow_MA_Method", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Slow_MA_Method", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Slow_MA_Method", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Slow_MA_Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Slow_MA_Method", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Slow_MA_Method", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Slow_MA_Method", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Slow_MA_Method", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Slow_MA_Method", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Slow_MA_Method", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Slow_MA_Method", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Slow_MA_Method", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Slow_MA_Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Slow_MA_Method", "JSmooth", "", "JSmooth");
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP color", "UP color", core.rgb(255, 255, 0));
+    indicator.parameters.addColor("DNclr", "DN color", "DN color", core.rgb(255, 0, 255));
+    indicator.parameters.addInteger("ArrowSize", "Arrow size", "", 10);
+}
+
+var first;
+var source = null;
+var Fast_MA_Period;
+var Fast_MA_Method;
+var Slow_MA_Period;
+var Slow_MA_Method;
+var Fast_MA, Slow_MA;
+var UP=null;
+var DN=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Fast_MA_Period=instance.parameters.Fast_MA_Period;
+    Fast_MA_Method=instance.parameters.Fast_MA_Method;
+    Slow_MA_Period=instance.parameters.Slow_MA_Period;
+    Slow_MA_Method=instance.parameters.Slow_MA_Method;
+    first = source.first()+2;
+    Fast_MA = core.indicators.create("AVERAGES", source.close, Fast_MA_Method, Fast_MA_Period, false);
+    Slow_MA = core.indicators.create("AVERAGES", source.open, Slow_MA_Method, Slow_MA_Period, false);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Fast_MA_Period + ", " + instance.parameters.Fast_MA_Method + ", " + instance.parameters.Slow_MA_Period + ", " + instance.parameters.Slow_MA_Method + ")";
+    instance.name(name);
+    UP=instance.createTextOutput ("UP", "UP", "Wingdings", instance.parameters.ArrowSize, core.H_Center, core.V_Bottom, instance.parameters.UPclr, 0);
+    DN=instance.createTextOutput ("DN", "DN", "Wingdings", instance.parameters.ArrowSize, core.H_Center, core.V_Top, instance.parameters.DNclr, 0);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    Fast_MA.update(mode);
+    Slow_MA.update(mode);
+    if (Fast_MA.DATA[period-1]>Slow_MA.DATA[period-1] && Fast_MA.DATA[period-2]<Slow_MA.DATA[period-2] && Fast_MA.DATA[period]>Slow_MA.DATA[period]) 
+    {
+     UP.set(period, source.low[period], "\225");
+    } 
+    else
+    {
+     UP.setNoData(period);
+    }
+
+    if (Fast_MA.DATA[period-1]<Slow_MA.DATA[period-1] && Fast_MA.DATA[period-2]>Slow_MA.DATA[period-2] && Fast_MA.DATA[period]<Slow_MA.DATA[period]) 
+    {
+     DN.set(period, source.high[period], "\226");
+    } 
+    else
+    {
+     DN.setNoData(period);
+    }
+   } 
+}
+

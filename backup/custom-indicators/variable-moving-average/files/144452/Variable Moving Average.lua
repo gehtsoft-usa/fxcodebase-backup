@@ -1,0 +1,155 @@
+-- More information about this indicator can be found at:
+-- https://fxcodebase.com/code/viewtopic.php?f=17&t=71704
+
+--+------------------------------------------------------------------------------------------------+
+--|                                                            Copyright © 2021, Gehtsoft USA LLC  | 
+--|                                                                         http://fxcodebase.com  |
+--+------------------------------------------------------------------------------------------------+
+--|                                                              Support our efforts by donating   | 
+--|                                                                 Paypal: https://goo.gl/9Rj74e  |
+--+------------------------------------------------------------------------------------------------+
+--|                                                                   Developed by : Mario Jemic   |                    
+--|                                                                       mario.jemic@gmail.com    |
+--|                                                        https://AppliedMachineLearning.systems  |
+--|                                                             Patreon :  https://goo.gl/GdXWeN   |  
+--+------------------------------------------------------------------------------------------------+
+
+--Your donations will allow the service to continue onward.
+--+------------------------------------------------------------------------------------------------+
+--|BitCoin                    : 15VCJTLaz12Amr7adHSBtL9v8XomURo9RF                                 |  
+--|Ethereum                   : 0x8C110cD61538fb6d7A2B47858F0c0AaBd663068D                         |  
+--|SOL Address                : 4tJXw7JfwF3KUPSzrTm1CoVq6Xu4hYd1vLk3VF2mjMYh                       |
+--|Cardano/ADA                : addr1v868jza77crzdc87khzpppecmhmrg224qyumud6utqf6f4s99fvqv         |  
+--|Dogecoin Address           : DBGXP1Nc18ZusSRNsj49oMEYFQgAvgBVA8                                 |
+--|SHIB Address               : 0x1817D9ebb000025609Bf5D61E269C64DC84DA735                         |              
+--|Binance(ERC20 & BSC only)  : 0xe84751063de8ade7c5fbff5e73f6502f02af4e2c                         | 
+--|BitCoin Cash               : 1BEtS465S3Su438Kc58h2sqvVvHK9Mijtg                                 | 
+--|LiteCoin                   : LLU8PSY2vsq7B9kRELLZQcKf5nJQrdeqwD                                 |  
+--+------------------------------------------------------------------------------------------------+
+
+
+-- Indicator profile initialization routine
+
+function Init()
+    indicator:name("Variable Moving Average");
+    indicator:description("");
+    indicator:requiredSource(core.Tick);
+    indicator:type(core.Indicator);
+	
+ 	indicator.parameters:addGroup("Calculation"); 	
+	indicator.parameters:addInteger("Period", "Period", "", 6);	
+	indicator.parameters:addGroup("Style"); 	
+    indicator.parameters:addColor("color", "Line Color", "", core.rgb(255, 0, 0));
+	indicator.parameters:addInteger("style", "Line Style", "", core.LINE_SOLID);
+    indicator.parameters:setFlag("style", core.FLAG_LEVEL_STYLE);	
+	indicator.parameters:addInteger("width", "Line Width", "", 3, 1, 5);
+	
+end
+
+-- Indicator instance initialization routine
+-- Processes indicator parameters and creates output streams
+-- Parameters block
+
+ 
+local l;
+ 
+local first;
+local source = nil;
+ 
+local Line;  
+ 
+-- Routine
+ function Prepare(nameOnly)   
+ 
+  
+    Period=instance.parameters.Period;
+	
+	local Parameters= Period;
+ 
+    local name = profile:id() .. "(" ..  instance.source:name() ..  ", " ..  Parameters .. ")";
+    instance:name(name); 
+
+
+    if   (nameOnly) then
+        return;
+    end
+    k = 1.0/Period
+ 
+			
+    source = instance.source; 
+    first=source:first()+1 ;
+
+	pdmS= instance:addInternalStream(0, 0); 
+	mdmS= instance:addInternalStream(0, 0);
+	pdiS= instance:addInternalStream(0, 0); 
+	mdiS= instance:addInternalStream(0, 0);	
+	
+	iS= instance:addInternalStream(0, 0);	
+	
+	Line = instance:addStream("Line" , core.Line, " Line"," Line",instance.parameters.color, first+Period );
+	Line:setWidth(instance.parameters.width);
+    Line:setStyle(instance.parameters.style);
+    Line:setPrecision(math.max(2, source:getPrecision()));
+	
+	
+end
+
+-- Indicator calculation routine
+function Update(period, mode)
+
+ 
+	if period < first
+	then
+	return;
+	end
+	 
+		
+    local pdm = math.max((source[period] - source[period-1]), 0);
+    local mdm = math.max((source[period-1] - source[period]), 0);
+	 
+	if period < first+1
+	then
+	return;
+	end
+	
+	pdmS[period] = ((1 - k)*(pdmS[period-1]) + k*pdm)
+    mdmS[period] = ((1 - k)*(mdmS[period-1]) + k*mdm)
+ 
+	local s = pdmS[period] + mdmS[period]
+	local pdi = pdmS[period]/s
+	local mdi = mdmS[period]/s	
+	
+	if period < first+2
+	then
+	return;
+	end
+
+	pdiS[period] = ((1 - k)*(pdiS[period-1]) + k*pdi)
+	mdiS[period] = ((1 - k)*(mdiS[period-1]) + k*mdi)	
+	
+	
+	local d = math.abs(pdiS[period] - mdiS[period])
+    local s1 = pdiS[period] + mdiS[period]
+	
+	if period < first+3
+	then
+	return;
+	end
+	
+	iS[period] = ((1 - k)*(iS[period-1]) + k*d/s1)
+	
+	if period < first+Period
+	then
+	return;
+	end
+	
+	local llv, hhv= mathex.minmax(iS, period-Period+1, period);
+ 
+    local d1 = hhv - llv
+    local vI = (iS[period] - llv)/d1
+    Line[period] = (1 - k*vI)*(Line[period-1]) + k*vI*source[period];
+ 
+ 
+end
+
+

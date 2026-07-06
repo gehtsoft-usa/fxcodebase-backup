@@ -1,0 +1,190 @@
+function Init()
+{
+    indicator.name("Wave Tool");
+    indicator.description("Wave Tool");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+	
+	indicator.parameters.addString("Type", "Wave Type", "", "Relative");
+    indicator.parameters.addStringAlternative("Type", "Absolute", "", "Absolute");
+	indicator.parameters.addStringAlternative("Type", "Relative", "", "Relative");
+
+	indicator.parameters.addBoolean("Overlay", "Show Overlay", "", false);
+	indicator.parameters.addBoolean("Asymmetric", "Use Asymmetric", "", false);
+	indicator.parameters.addDouble("Correction" , "Correction (%)", "", 10, -50, 50);
+    indicator.parameters.addColor("Wave_color", "Color of Wave", "", core.rgb(255, 0, 0));
+	
+}
+
+var first;
+var source = null;
+var Type;
+var Overlay;
+
+var Wave;
+var T;
+var OverlayData;
+var Asymmetric;
+var Correction;
+
+function Prepare()
+{
+    Correction = instance.parameters.Correction;
+    Asymmetric = instance.parameters.Asymmetric;
+    Overlay = instance.parameters.Overlay;
+    Type = instance.parameters.Type;
+    source = instance.source;
+    first = source.first();
+
+    var name = profile.id() + "(" + source.name()  + ")";
+    instance.name(name);
+     
+	
+	T=instance.addInternalStream (0, 0); 
+	
+			Wave = instance.addStream("Wave", core.Line, name, "Wave", instance.parameters.Wave_color, first);
+			
+		
+	if (Overlay) 
+	{	
+	 OverlayData = instance.addStream("Overlay", core.Line, name, "Overlay", instance.parameters.Wave_color, first);
+	 core.host.execute ("attachOuputToChart", "Overlay");	
+	}
+
+}
+var Phase;
+
+function Update(period)
+{
+    if (period < source.size()-1) 
+    {
+	 return;
+	}
+
+  
+	
+	     var min, max, minpos, maxpos; 
+	     var tmp  = Math.minmax(source, first, source.size()-1 );
+	     min=tmp[0];
+	     max=tmp[1];
+	     minpos=tmp[2];
+	     maxpos=tmp[3];
+		 
+		
+		 var Amplitude;
+           if (Type == "Relative") 
+           {
+		    Amplitude= (max-min)/2;
+		   } 
+		   else
+		   {
+		    Amplitude= 1;
+		   }
+		   
+	
+		
+		SET(minpos, maxpos);
+		  
+		 
+		 
+		 var j;
+		 
+		 
+		  for (j = 1; j<=source.size()-1; j++) 
+		  {
+		  
+		                         
+											Wave[j] = Amplitude * Math.sin((T[j]*3.141)/180);	
+											if (Overlay) 
+											{	
+											 OverlayData[j]= (min+max)/2 +  ( (max-min)/2) *  Math.sin((T[j]*3.141)/180); 
+											}	
+                                 								
+           }
+}
+
+
+
+
+
+function SET ( minpos, maxpos)
+{
+var i;
+var  Temp;
+var Step=180 / Math.abs(minpos- maxpos);
+    
+	for (i =  maxpos; i<=source.size()-1; i++) 
+	{
+			if (i ==  maxpos) 
+			{
+			 T[i]= 90;
+			} 
+			else
+			{
+			         if (Asymmetric) 
+			         {
+							if (T[i-1] > 90 && T[i-1] < 270) 
+							{
+							 Temp= Step +(Step /100)*Correction;
+							} 
+							else
+							{
+							 Temp= Step -(Step /100)*Correction;	
+							}
+						}		
+					   else
+					   {	
+					    Temp= Step;	
+					   }  	
+			
+			T[i]= T[i-1] +Temp;
+			}
+			
+			
+			
+			
+			if (T[i] >=  360) 
+			{
+			 T[i] =  0;
+			 }
+			
+			
+	}
+	
+	for (i =  maxpos; i>=first; i--) 
+	{
+			if (i ==  maxpos) 
+			{
+			 T[i]= 90;
+			} 
+			else
+			{
+					  if (Asymmetric) 
+					  {
+							if (T[i+1] > 90 && T[i+1] < 270) 
+							{
+							 Temp= Step +(Step /100)*Correction;
+							} 
+							else
+							{	
+							 Temp= Step -(Step /100)*Correction;	
+							}
+						}		
+					   else
+					   {	
+					    Temp= Step;
+					   }  	
+			
+			T[i]= T[i+1] -Temp;
+			}			
+			
+			if (T[i] <=  0) 
+			{
+			 T[i] =  360;
+			 }		 
+            
+			
+	}
+
+}

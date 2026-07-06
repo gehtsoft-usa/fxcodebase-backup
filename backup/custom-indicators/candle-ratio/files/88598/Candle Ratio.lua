@@ -1,0 +1,137 @@
+-- Id: 9751
+-- More information about this indicator can be found at:
+-- http://fxcodebase.com/code/viewtopic.php?f=17&t=59136
+
+
+--+------------------------------------------------------------------+
+--|                               Copyright © 2018, Gehtsoft USA LLC | 
+--|                                            http://fxcodebase.com |
+--+------------------------------------------------------------------+
+--|                                      Developed by : Mario Jemic  |                    
+--|                                          mario.jemic@gmail.com   |
+--+------------------------------------------------------------------+
+--|                                 Support our efforts by donating  | 
+--|                                    Paypal: https://goo.gl/9Rj74e |
+--+------------------------------------------------------------------+
+--|                                Patreon :  https://goo.gl/GdXWeN  |  
+--|                    BitCoin : 15VCJTLaz12Amr7adHSBtL9v8XomURo9RF  |  
+--|                BitCoin Cash: 1BEtS465S3Su438Kc58h2sqvVvHK9Mijtg  | 
+--|           Ethereum : 0x8C110cD61538fb6d7A2B47858F0c0AaBd663068D  |  
+--|                   LiteCoin : LLU8PSY2vsq7B9kRELLZQcKf5nJQrdeqwD  |  
+--+------------------------------------------------------------------+
+
+-- Indicator profile initialization routine
+-- Defines indicator profile properties and indicator parameters
+-- TODO: Add minimal and maximal value of numeric parameters and default color of the streams
+function Init()
+    indicator:name("Candle Ratio");
+    indicator:description("Candle Ratio");
+    indicator:requiredSource(core.Bar);
+    indicator:type(core.Oscillator);
+	indicator.parameters:addGroup("Calculation");
+    indicator.parameters:addInteger("Period", "Candle Ratio Period", "Period", 21);
+	indicator.parameters:addInteger("MA_Period", "MA Period", "Period", 21);
+	
+	indicator.parameters:addString("Method", "MA Method", "Method" , "MVA");
+    indicator.parameters:addStringAlternative("Method", "MVA", "MVA" , "MVA");
+    indicator.parameters:addStringAlternative("Method", "EMA", "EMA" , "EMA");
+ indicator.parameters:addStringAlternative("Method", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters:addStringAlternative("Method", "TMA", "TMA" , "TMA");
+    indicator.parameters:addStringAlternative("Method", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters:addStringAlternative("Method", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters:addStringAlternative("Method", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters:addStringAlternative("Method", "WMA", "WMA" , "WMA");
+
+	
+	indicator.parameters:addGroup("Style");
+    indicator.parameters:addColor("Up", "Color of Ratio", "Color of Ratio", core.rgb(0, 255, 0));
+	indicator.parameters:addInteger("width1", "Line width", "", 1, 1, 5);
+    indicator.parameters:addInteger("style1", "Line style", "", core.LINE_SOLID);
+    indicator.parameters:setFlag("style1", core.FLAG_LINE_STYLE);
+	indicator.parameters:addColor("Dn", "Color of Signal Line", "Color of Signal Line", core.rgb(255, 0, 0));
+	indicator.parameters:addInteger("width2", "Line width", "", 1, 1, 5);
+    indicator.parameters:addInteger("style2", "Line style", "", core.LINE_SOLID);
+    indicator.parameters:setFlag("style2", core.FLAG_LINE_STYLE);
+end
+
+-- Indicator instance initialization routine
+-- Processes indicator parameters and creates output streams
+-- TODO: Refine the first period calculation for each of the output streams.
+-- TODO: Calculate all constants, create instances all subsequent indicators and load all required libraries
+-- Parameters block
+local Period;
+local MA_Period;
+local first;
+local source = nil;
+
+-- Streams block
+local Ratio = nil;
+local Up, Dn;
+local Method, MA, ma;
+-- Routine
+function Prepare(nameOnly)
+    Period = instance.parameters.Period;
+	Method = instance.parameters.Method;
+	MA_Period = instance.parameters.MA_Period;
+    source = instance.source;
+    first = source:first()+Period;
+	
+	local name = profile:id() .. "(" .. source:name() .. ", " .. tostring(Period) .. ", " .. tostring(Method) .. ", " .. tostring(MA_Period).. ")";
+    instance:name(name);
+	
+	if   (nameOnly) then
+        return;
+    end
+	
+	Up = instance:addInternalStream(0, 0);
+	Dn = instance:addInternalStream(0, 0);
+
+    
+
+  
+        Ratio = instance:addStream("Ratio", core.Line, name, "Ratio", instance.parameters.Up, first);
+		Ratio:setWidth(instance.parameters.width1);
+        Ratio:setStyle(instance.parameters.style1);
+		
+		ma = core.indicators:create(Method, Ratio, MA_Period);
+		
+		MA = instance:addStream("MA", core.Line, name, "MA", instance.parameters.Dn, ma.DATA:first());
+		MA:setWidth(instance.parameters.width2);
+        MA:setStyle(instance.parameters.style2);
+		
+		Ratio:setPrecision(math.max(2, instance.source:getPrecision()));
+		MA:setPrecision(math.max(2, instance.source:getPrecision()));
+   
+end
+
+-- Indicator calculation routine
+-- TODO: Add your code for calculation output values
+function Update(period, mode)
+
+
+    if source.close[period] > source.open[period] then
+    Up[period]=source.close[period]-source.open[period];
+	Dn[period]=0;
+	else
+	Dn[period]=source.open[period]-source.close[period];
+	Up[period]=0;
+	end
+	
+    if period < first  then
+	return;
+	end
+	
+	
+	
+        Ratio[period] = mathex.sum(Up, period-Period+1, period)/mathex.sum(Dn, period-Period+1, period);
+		
+		ma:update(mode);
+		
+		if period < ma.DATA:first() then
+        return;
+        end
+  		
+		MA[period]= ma.DATA[period];
+    
+end
+

@@ -1,0 +1,72 @@
+function Init()
+{
+    indicator.name("Trend Id without Log" );
+    indicator.description("");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+      indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("MVAP", "MVA Period", "", 200);
+    indicator.parameters.addInteger("STDEVP", "Standard Deviation Period ", " ", 20);
+	 indicator.parameters.addInteger("AVGP", "Difference  Smoothing Period ", " ", 20);
+	indicator.parameters.addDouble("Multiplier", "Standard Deviation Multiplier ", " ", 2);
+	
+	 indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("One_color", "Color of Deviation Line ", "", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("Two_color", "Color of Percent Difference", "", core.rgb(255, 0, 0));
+}
+
+var MVAP;
+var STDEVP;
+
+var first;
+var source = null;
+
+var One = null;
+var Two = null;
+var AVGP;
+var Raw ;
+var MVA;
+var Multiplier;
+var Average;
+var Three;
+
+function Prepare()
+{
+    AVGP= instance.parameters.AVGP;
+    MVAP = instance.parameters.MVAP;
+    STDEVP = instance.parameters.STDEVP;
+	Multiplier= instance.parameters.Multiplier;
+    source = instance.source;
+   
+   	Raw = instance.addInternalStream(0, 0);
+	MVA=core.indicators.create("MVA", source, MVAP );
+	Average =core.indicators.create("MVA", Raw, AVGP );
+	
+	 first = Average.DATA.first() +  STDEVP;
+	
+    var name = profile.id() + "(" + source.name() + ", " + MVAP + ", " + STDEVP + ", " + AVGP + ")";
+    instance.name(name);
+    One = instance.addStream("Deviation", core.Line, name + ".Deviation", "Deviation", instance.parameters.One_color, first);
+    Two = instance.addStream("Positiv", core.Line, name + ".Difference Positiv", "Difference", instance.parameters.Two_color, first);
+	Three = instance.addStream("Negativ", core.Line, name + ".Difference Negativ", "Difference", instance.parameters.One_color, first);
+}
+
+function Update(period, mode)
+{
+    if (period < first || !source.hasData(period)) 
+    {
+     return;
+	}
+	
+	 MVA.update(mode);
+	 Average.update(mode);
+	 
+	Raw [period] = ( source[period] - MVA.DATA[period]) / (MVA.DATA[period] /100 );
+	 
+	  var d = Math.stdev(Average.DATA, period - STDEVP + 1, period);
+
+    	One[period] = d*Multiplier;
+        Two[period] = Average.DATA [period];
+        Three[period] =  -d*Multiplier;
+}
+

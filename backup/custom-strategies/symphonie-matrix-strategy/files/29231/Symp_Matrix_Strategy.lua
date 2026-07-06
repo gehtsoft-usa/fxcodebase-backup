@@ -1,0 +1,493 @@
+-- Id: 6292
+-- More information about this indicator can be found at:
+-- http://fxcodebase.com/code/viewtopic.php?f=31&t=15512
+
+--+------------------------------------------------------------------+
+--|                               Copyright © 2018, Gehtsoft USA LLC |
+--|                                            http://fxcodebase.com |
+--+------------------------------------------------------------------+
+--|                                 Support our efforts by donating  |
+--|                                    Paypal: https://goo.gl/9Rj74e |
+--+------------------------------------------------------------------+
+--|                                Patreon :  https://goo.gl/GdXWeN  |
+--|                    BitCoin : 15VCJTLaz12Amr7adHSBtL9v8XomURo9RF  |
+--|                BitCoin Cash: 1BEtS465S3Su438Kc58h2sqvVvHK9Mijtg  |
+--|           Ethereum : 0x8C110cD61538fb6d7A2B47858F0c0AaBd663068D  |
+--|                   LiteCoin : LLU8PSY2vsq7B9kRELLZQcKf5nJQrdeqwD  |
+--+------------------------------------------------------------------+
+
+function Init() --The strategy profile initialization
+    strategy:name("Symphonie Matrix strategy")
+    strategy:description("Symphonie Matrix strategy")
+    strategy:setTag("Version", "2")
+    strategy:setTag("NonOptimizableParameters", "Email,SendEmail,SoundFile,RecurrentSound,PlaySound, ShowAlert")
+
+    strategy.parameters:addGroup("Parameters")
+    strategy.parameters:addBoolean("Enable_Emotion", "Enable Emotion", "", true)
+    strategy.parameters:addInteger("Emotion_SSP", "SSP (Emotion)", "", 7)
+    strategy.parameters:addDouble("Emotion_Kmax", "Kmax (Emotion)", "", 50.6)
+
+    strategy.parameters:addBoolean("Enable_Extreme", "Enable Extreme", "", true)
+    strategy.parameters:addInteger("Extreme_r", "r (Extreme)", "", 12)
+    strategy.parameters:addInteger("Extreme_s", "s (Extreme)", "", 12)
+    strategy.parameters:addInteger("Extreme_u", "u (Extreme)", "", 5)
+
+    strategy.parameters:addBoolean("Enable_Sentiment", "Enable Sentiment", "", true)
+    strategy.parameters:addInteger("Sentiment_Period", "Period (Sentiment)", "", 12)
+
+    strategy.parameters:addBoolean("Enable_Trendline", "Enable Trendline", "", true)
+    strategy.parameters:addInteger("Trendline_CCI_Period", "Period of CCI (Trendline)", "", 63)
+
+    strategy.parameters:addGroup("Strategy Parameters")
+    strategy.parameters:addString("TypeSignal", "Type of signal", "", "direct")
+    strategy.parameters:addStringAlternative("TypeSignal", "direct", "", "direct")
+    strategy.parameters:addStringAlternative("TypeSignal", "reverse", "", "reverse")
+
+    strategy.parameters:addGroup("Price Parameters")
+    strategy.parameters:addString("TF", "Time Frame", "", "m15")
+    strategy.parameters:setFlag("TF", core.FLAG_PERIODS)
+
+    strategy.parameters:addGroup("Trading Parameters")
+    strategy.parameters:addBoolean("AllowTrade", "Allow strategy to trade", "", false)
+    strategy.parameters:setFlag("AllowTrade", core.FLAG_ALLOW_TRADE)
+
+    strategy.parameters:addString("Account", "Account to trade on", "", "")
+    strategy.parameters:setFlag("Account", core.FLAG_ACCOUNT)
+    strategy.parameters:addInteger("Amount", "Trade Amount in Lots", "", 1, 1, 1000000)
+    strategy.parameters:addBoolean("SetLimit", "Set Limit Orders", "", false)
+    strategy.parameters:addInteger("Limit", "Limit Order in pips", "", 30, 1, 10000)
+    strategy.parameters:addBoolean("SetStop", "Set Stop Orders", "", false)
+    strategy.parameters:addInteger("Stop", "Stop Order in pips", "", 30, 1, 10000)
+    strategy.parameters:addBoolean("TrailingStop", "Trailing stop order", "", false)
+    strategy.parameters:addString("AllowDirection", "Allow direction for positions", "", "Both")
+    strategy.parameters:addStringAlternative("AllowDirection", "Both", "", "Both")
+    strategy.parameters:addStringAlternative("AllowDirection", "Long", "", "Long")
+    strategy.parameters:addStringAlternative("AllowDirection", "Short", "", "Short")
+
+    strategy.parameters:addGroup("Signal Parameters")
+    strategy.parameters:addBoolean("ShowAlert", "Show Alert", "", true)
+    strategy.parameters:addBoolean("PlaySound", "Play Sound", "", false)
+    strategy.parameters:addFile("SoundFile", "Sound File", "", "")
+    strategy.parameters:setFlag("SoundFile", core.FLAG_SOUND)
+    strategy.parameters:addBoolean("Recurrent", "RecurrentSound", "", false)
+
+    strategy.parameters:addGroup("Email Parameters")
+    strategy.parameters:addBoolean("SendEmail", "Send email", "", false)
+    strategy.parameters:addString("Email", "Email address", "", "")
+    strategy.parameters:setFlag("Email", core.FLAG_EMAIL)
+end
+
+-- Signal Parameters
+local ShowAlert
+local SoundFile
+local RecurrentSound
+local SendEmail, Email
+
+-- Internal indicators
+local Symp_Emotion = nil
+local Symp_Extreme = nil
+local Symp_Sentiment = nil
+local Symp_Trendline = nil
+
+-- Strategy parameters
+local openLevel = 0
+local closeLevel = 0
+local confirmTrend
+
+-- Trading parameters
+local AllowTrade = nil
+local Account = nil
+local Amount = nil
+local BaseSize = nil
+local PipSize
+local SetLimit = nil
+local Limit = nil
+local SetStop = nil
+local Stop = nil
+local TrailingStop = nil
+local CanClose = nil
+local AllowDirection
+
+--
+--
+--
+function Prepare(nameOnly)
+    ShowAlert = instance.parameters.ShowAlert
+    AllowDirection = instance.parameters.AllowDirection
+    local PlaySound = instance.parameters.PlaySound
+    if PlaySound then
+        SoundFile = instance.parameters.SoundFile
+    else
+        SoundFile = nil
+    end
+    assert(not (PlaySound) or SoundFile ~= "", "Sound file must be chosen")
+    RecurrentSound = instance.parameters.Recurrent
+
+    local SendEmail = instance.parameters.SendEmail
+    if SendEmail then
+        Email = instance.parameters.Email
+    else
+        Email = nil
+    end
+    assert(not (SendEmail) or Email ~= "", "Email address must be specified")
+    assert(instance.parameters.TF ~= "t1", "The time frame must not be tick")
+
+    local name
+    name = profile:id() .. "(" .. instance.bid:name() .. "." .. instance.parameters.TF .. "," .. ")"
+    instance:name(name)
+    if nameOnly then
+        return
+    end
+
+    AllowTrade = instance.parameters.AllowTrade
+    if AllowTrade then
+        Account = instance.parameters.Account
+        Amount = instance.parameters.Amount
+        BaseSize = core.host:execute("getTradingProperty", "baseUnitSize", instance.bid:instrument(), Account)
+        Offer = core.host:findTable("offers"):find("Instrument", instance.bid:instrument()).OfferID
+        CanClose = core.host:execute("getTradingProperty", "canCreateMarketClose", instance.bid:instrument(), Account)
+        PipSize = instance.bid:pipSize()
+        SetLimit = instance.parameters.SetLimit
+        Limit = instance.parameters.Limit
+        SetStop = instance.parameters.SetStop
+        Stop = instance.parameters.Stop
+        TrailingStop = instance.parameters.TrailingStop
+    end
+
+    assert(
+        core.indicators:findIndicator("SYMP_EMOTION_INDICATOR") ~= nil,
+        "Please, download and install SYMP_EMOTION_INDICATOR.LUA indicator"
+    )
+    assert(
+        core.indicators:findIndicator("SYMP_EXTREME_INDICATOR") ~= nil,
+        "Please, download and install SYMP_EXTREME_INDICATOR.LUA indicator"
+    )
+    assert(
+        core.indicators:findIndicator("SYMP_SENTIMENT_INDICATOR") ~= nil,
+        "Please, download and install SYMP_SENTIMENT_INDICATOR.LUA indicator"
+    )
+
+    Source = ExtSubscribe(2, nil, instance.parameters.TF, true, "bar")
+    Symp_Emotion =
+        core.indicators:create(
+        "SYMP_EMOTION_INDICATOR",
+        Source,
+        instance.parameters.Emotion_SSP,
+        instance.parameters.Emotion_Kmax
+    )
+    Symp_Extreme =
+        core.indicators:create(
+        "SYMP_EXTREME_INDICATOR",
+        Source,
+        instance.parameters.Extreme_r,
+        instance.parameters.Extreme_s,
+        instance.parameters.Extreme_u
+    )
+    Symp_Sentiment = core.indicators:create("SYMP_SENTIMENT_INDICATOR", Source, instance.parameters.Sentiment_Period)
+    Symp_Trendline = core.indicators:create("CCI", Source, instance.parameters.Trendline_CCI_Period)
+
+    ExtSetupSignal(profile:id() .. ":", ShowAlert)
+    ExtSetupSignalMail(name)
+end
+
+function Conditions(period)
+    local Tr_Emotion = 0
+    local Tr_Extreme = 0
+    local Tr_Sentiment = 0
+    local Tr_Trendline = 0
+
+    if instance.parameters.Enable_Emotion then
+        if Symp_Emotion.DATA[period] >= Symp_Emotion.DATA[period - instance.parameters.Emotion_SSP] then
+            Tr_Emotion = 1
+        else
+            Tr_Emotion = -1
+        end
+    end
+
+    if instance.parameters.Enable_Extreme then
+        if Symp_Extreme.DATA[period] >= Symp_Extreme.DATA[period - 1] then
+            Tr_Extreme = 1
+        else
+            Tr_Extreme = -1
+        end
+    end
+
+    if instance.parameters.Enable_Sentiment then
+        if Symp_Sentiment.DATA[period] >= 0 then
+            Tr_Sentiment = 1
+        else
+            Tr_Sentiment = -1
+        end
+    end
+
+    if instance.parameters.Enable_Trendline then
+        if Symp_Trendline.DATA[period] >= 0 then
+            Tr_Trendline = 1
+        else
+            Tr_Trendline = -1
+        end
+    end
+
+    if
+        (Tr_Emotion == 1 or Tr_Extreme == 1 or Tr_Sentiment == 1 or Tr_Trendline == 1) and Tr_Emotion ~= -1 and
+            Tr_Extreme ~= -1 and
+            Tr_Sentiment ~= -1 and
+            Tr_Trendline ~= -1
+     then
+        return 1
+    end
+
+    if
+        (Tr_Emotion == -1 or Tr_Extreme == -1 or Tr_Sentiment == -1 or Tr_Trendline == -1) and Tr_Emotion ~= 1 and
+            Tr_Extreme ~= 1 and
+            Tr_Sentiment ~= 1 and
+            Tr_Trendline ~= 1
+     then
+        return -1
+    end
+    return 0
+end
+
+function haveTrades(BuySell)
+    local enum = core.host:findTable("trades"):enumerator()
+    local row = enum:next()
+    while (not found) and (row ~= nil) do
+        if row.AccountID == Account and (row.BS == BuySell or BuySell == nil) then
+            return true;
+        end
+        row = enum:next()
+    end
+    return false
+end
+
+function ExtUpdate(id, source, period) -- The method called every time when a new bid or ask price appears.
+    Symp_Emotion:update(core.UpdateLast)
+    Symp_Extreme:update(core.UpdateLast)
+    Symp_Sentiment:update(core.UpdateLast)
+    Symp_Trendline:update(core.UpdateLast)
+
+    -- Check that we have enough data
+    if (Symp_Emotion.DATA:first() > (period - 1)) then
+        return
+    end
+    if (Symp_Extreme.DATA:first() > (period - 1)) then
+        return
+    end
+    if (Symp_Sentiment.DATA:first() > (period - 1)) then
+        return
+    end
+    if (Symp_Trendline.DATA:first() > (period - 1)) then
+        return
+    end
+
+    local pipSize = instance.bid:pipSize()
+
+    local trades = core.host:findTable("trades")
+
+    local MustOpenB = false
+    local MustOpenS = false
+
+    if Conditions(period) == 1 and Conditions(period - 1) ~= 1 then
+        if instance.parameters.TypeSignal == "direct" then
+            MustOpenB = true
+        else
+            MustOpenS = true
+        end
+    end
+
+    if Conditions(period) == -1 and Conditions(period - 1) ~= -1 then
+        if instance.parameters.TypeSignal == "direct" then
+            MustOpenS = true
+        else
+            MustOpenB = true
+        end
+    end
+
+    if (haveTrades()) then
+        local enum = trades:enumerator()
+        while true do
+            local row = enum:next()
+            if row == nil then
+                break
+            end
+
+            if row.AccountID == Account and row.OfferID == Offer then
+                -- Close position if we have corresponding closing conditions.
+                if row.BS == "B" then
+                    if MustOpenS then
+                        if ShowAlert then
+                            if instance.parameters.AllowDirection == "Long" then
+                                ExtSignal(source, period, "Close BUY", SoundFile, Email, RecurrentSound)
+                            else
+                                ExtSignal(source, period, "Close BUY and SELL", SoundFile, Email, RecurrentSound)
+                            end
+                        end
+
+                        if AllowTrade then
+                            Close(row)
+                            if instance.parameters.AllowDirection ~= "Long" then
+                                Open("S")
+                            end
+                        end
+                    end
+                elseif row.BS == "S" then
+                    if MustOpenB then
+                        if ShowAlert then
+                            if instance.parameters.AllowDirection == "Short" then
+                                ExtSignal(source, period, "Close SELL", SoundFile, Email, RecurrentSound)
+                            else
+                                ExtSignal(source, period, "Close SELL and BUY", SoundFile, Email, RecurrentSound)
+                            end
+                        end
+
+                        if AllowTrade then
+                            Close(row)
+                            if instance.parameters.AllowDirection ~= "Short" then
+                                Open("B")
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    else
+        if MustOpenB == true and instance.parameters.AllowDirection ~= "Short" then
+            if ShowAlert then
+                ExtSignal(source, period, "BUY", SoundFile, Email, RecurrentSound)
+            end
+
+            if AllowTrade then
+                Open("B")
+            end
+        end
+
+        if MustOpenS == true and instance.parameters.AllowDirection ~= "Long" then
+            if ShowAlert then
+                ExtSignal(source, period, "SELL", SoundFile, Email, RecurrentSound)
+            end
+
+            if AllowTrade then
+                Open("S")
+            end
+        end
+    end
+end
+
+-- The strategy instance finalization.
+function ReleaseInstance()
+end
+
+-- The method enters to the market
+function Open(side)
+    local valuemap
+
+    valuemap = core.valuemap()
+    valuemap.OrderType = "OM"
+    valuemap.OfferID = Offer
+    valuemap.AcctID = Account
+    valuemap.Quantity = Amount * BaseSize
+    valuemap.CustomID = CID
+    valuemap.BuySell = side
+    valuemap.QTXT = "1"
+    if SetStop and CanClose then
+        valuemap.PegTypeStop = "O"
+        if side == "B" then
+            valuemap.PegPriceOffsetPipsStop = -Stop
+        else
+            valuemap.PegPriceOffsetPipsStop = Stop
+        end
+        if TrailingStop then
+            valuemap.TrailStepStop = 1
+        end
+    end
+    if SetLimit and CanClose then
+        valuemap.PegTypeLimit = "O"
+        if side == "B" then
+            valuemap.PegPriceOffsetPipsLimit = Limit
+        else
+            valuemap.PegPriceOffsetPipsLimit = -Limit
+        end
+    end
+    success, msg = terminal:execute(200, valuemap)
+    assert(success, msg)
+
+    -- FIFO Account, in that case we have to open Net Limit and Stop Orders
+    if not (CanClose) then
+        if SetStop then
+            valuemap = core.valuemap()
+            valuemap.OrderType = "SE"
+            valuemap.OfferID = Offer
+            valuemap.AcctID = Account
+            valuemap.NetQtyFlag = "y"
+            if side == "B" then
+                valuemap.BuySell = "S"
+                rate = instance.ask[NOW] - Stop * PipSize
+                valuemap.Rate = rate
+            elseif side == "S" then
+                valuemap.BuySell = "B"
+                rate = instance.bid[NOW] + Stop * PipSize
+                valuemap.Rate = rate
+            end
+            if TrailingStop then
+                valuemap.TrailUpdatePips = 1
+            end
+            success, msg = terminal:execute(200, valuemap)
+            --core.host:trace('Set stop @ ' .. rate);
+            assert(success, msg)
+        end
+        if SetLimit then
+            valuemap = core.valuemap()
+            valuemap.OrderType = "LE"
+            valuemap.OfferID = Offer
+            valuemap.AcctID = Account
+            valuemap.NetQtyFlag = "y"
+            if side == "B" then
+                valuemap.BuySell = "S"
+                rate = instance.ask[NOW] + Limit * PipSize
+                valuemap.Rate = rate
+            elseif side == "S" then
+                valuemap.BuySell = "B"
+                rate = instance.bid[NOW] - Limit * PipSize
+                valuemap.Rate = rate
+            end
+            success, msg = terminal:execute(200, valuemap)
+            --core.host:trace('Set limit @ ' .. rate);
+            assert(success, msg)
+        end
+    end
+end
+
+-- Closes specific position
+function Close(trade)
+    local valuemap
+    valuemap = core.valuemap()
+
+    if CanClose then
+        -- non-FIFO account, create a close market order
+        valuemap.OrderType = "CM"
+        valuemap.TradeID = trade.TradeID
+    else
+        -- FIFO account, create an opposite market order
+        valuemap.OrderType = "OM"
+    end
+
+    valuemap.OfferID = trade.OfferID
+    valuemap.AcctID = trade.AccountID
+    valuemap.Quantity = trade.Lot
+    valuemap.CustomID = trade.QTXT
+    if trade.BS == "B" then
+        valuemap.BuySell = "S"
+    else
+        valuemap.BuySell = "B"
+    end
+    success, msg = terminal:execute(200, valuemap)
+    assert(success, msg)
+end
+
+function AsyncOperationFinished(cookie, successful, message)
+    if not successful then
+        core.host:trace("Error: " .. message)
+    end
+end
+
+dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua")

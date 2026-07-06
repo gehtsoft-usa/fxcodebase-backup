@@ -1,0 +1,45 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_next</title>
+</head>
+<body>
+<h3><a name="lua_next"><code>lua_next</code></a></h3>
+<pre>int lua_next (lua_State *L, int index);</pre>
+
+<p>
+Pops a key from the stack,
+and pushes a key-value pair from the table at the given index
+(the "next" pair after the given key).
+If there are no more elements in the table,
+then <a href="lua_next.html"><code>lua_next</code></a> returns 0 (and pushes nothing).
+
+
+<p>
+A typical traversal looks like this:
+
+<pre>
+     /* table is in the stack at index 't' */
+     lua_pushnil(L);  /* first key */
+     while (lua_next(L, t) != 0) {
+       /* 'key' is at index -2 and 'value' at index -1 */
+       printf("%s - %s\n",
+         lua_typename(L, lua_type(L, -2)), lua_typename(L, lua_type(L, -1)));
+       lua_pop(L, 1);  /* removes 'value'; keeps 'key' for next iteration */
+     }
+</pre>
+
+<p>
+While traversing a table,
+do not call <a href="lua_tolstring.html"><code>lua_tolstring</code></a> directly on a key,
+unless you know that the key is actually a string.
+Recall that <a href="lua_tolstring.html"><code>lua_tolstring</code></a> <em>changes</em>
+the value at the given index;
+this confuses the next call to <a href="lua_next.html"><code>lua_next</code></a>.
+
+
+
+
+
+<hr>
+</body>
+</html>

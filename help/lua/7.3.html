@@ -1,0 +1,44 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 7.3 - Changes in the API</title>
+</head>
+<body>
+<h2>7.3 - <a name="7.3">Changes in the API</a></h2>
+<ul>
+
+<li>
+The <code>luaopen_*</code> functions (to open libraries)
+cannot be called directly,
+like a regular C function.
+They must be called through Lua,
+like a Lua function.
+</li>
+
+<li>
+Function <code>lua_open</code> was replaced by <a href="lua_newstate.html"><code>lua_newstate</code></a> to
+allow the user to set a memory-allocation function.
+You can use <a href="luaL_newstate.html"><code>luaL_newstate</code></a> from the standard library to
+create a state with a standard allocation function
+(based on <code>realloc</code>).
+</li>
+
+<li>
+Functions <code>luaL_getn</code> and <code>luaL_setn</code>
+(from the auxiliary library) are deprecated.
+Use <a href="lua_objlen.html"><code>lua_objlen</code></a> instead of <code>luaL_getn</code>
+and nothing instead of <code>luaL_setn</code>.
+</li>
+
+<li>
+Function <code>luaL_openlib</code> was replaced by <a href="luaL_register.html"><code>luaL_register</code></a>.
+</li>
+
+<li>
+Function <code>luaL_checkudata</code> now throws an error when the given value
+is not a userdata of the expected type.
+(In Lua&nbsp;5.0 it returned <code>NULL</code>.)
+</li>
+
+</ul>
+</body>
+</html>

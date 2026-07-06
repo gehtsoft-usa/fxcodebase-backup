@@ -1,0 +1,81 @@
+function Init()
+{
+    indicator.name("Fractal AMA indicator");
+    indicator.description("Fractal AMA indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 16);
+    indicator.parameters.addDouble("Multiplier", "Multiplier", "", 5);
+    indicator.parameters.addDouble("SMultiplier", "Signal multiplier", "", 2);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Aclr", "AMA color", "AMA color", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("Awidth", "AMA width", "AMA width", 1, 1, 5);
+    indicator.parameters.addInteger("Astyle", "AMA style", "AMA style", core.LINE_SOLID);
+    indicator.parameters.setFlag("Astyle", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Sclr", "Signal color", "Signal color", core.rgb(255, 255, 0));
+    indicator.parameters.addInteger("Swidth", "Signal width", "Signal width", 1, 1, 5);
+    indicator.parameters.addInteger("Sstyle", "Signal style", "Signal style", core.LINE_DASH);
+    indicator.parameters.setFlag("Sstyle", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period;
+var Multiplier;
+var SMultiplier;
+var AMA=null;
+var Signal=null;
+var n2;
+var log2;
+
+function Prepare()
+{
+    source = instance.source;
+    n2=Math.floor(instance.parameters.Period/2);
+    n2=Math.max(n2, 1);
+    Period=n2*2;
+    Multiplier=instance.parameters.Multiplier;
+    SMultiplier=instance.parameters.SMultiplier;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.Multiplier + ", " + instance.parameters.SMultiplier + ")";
+    instance.name(name);
+    AMA = instance.addStream("AMA", core.Line, name + ".AMA", "AMA", instance.parameters.Aclr, first);
+    AMA.setWidth(instance.parameters.Awidth);
+    AMA.setStyle(instance.parameters.Astyle);
+    Signal = instance.addStream("Signal", core.Line, name + ".Signal", "Signal", instance.parameters.Sclr, first);
+    Signal.setWidth(instance.parameters.Swidth);
+    Signal.setStyle(instance.parameters.Sstyle);
+    n2=Math.floor(Period/2);
+    log2=1/Math.log(2);
+}
+
+function Range(index1, index2)
+{
+ var tmp=Math.minmax(source, index1, index2);
+ return (tmp[1]-tmp[0]);
+}
+
+function Update(period, mode)
+{
+   if (period>first+Period) 
+   {
+    var R3=Range(period-Period+1, period)/Period;
+    var R1=Range(period-n2+1, period)/n2;
+    var R2=Range(period-Period+1, period-n2)/n2;
+    var DE=(Math.log(R1+R2)-Math.log(R3))*log2;
+    var Alpha=Math.exp(-Multiplier*(DE-1));
+    var Alphas=Math.exp(-SMultiplier*(DE-1));
+    Alpha=Math.min(Math.max(Alpha, 0.01), 1);
+    AMA[period]=Alpha*source.close[period]+(1-Alpha)*AMA[period-1];
+    Signal[period]=Alphas*AMA[period]+(1-Alphas)*Signal[period-1];
+   } 
+   else if (period>=first) 
+   {
+    AMA[period]=source.close[period];
+    Signal[period]=source.close[period]; 
+   } 
+}
+

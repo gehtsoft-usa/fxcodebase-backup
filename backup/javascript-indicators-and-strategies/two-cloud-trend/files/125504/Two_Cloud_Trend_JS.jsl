@@ -1,0 +1,158 @@
+function Init()
+{
+    indicator.name("Two cloud trend indicator");
+    indicator.description("Two cloud trend indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 50);
+    indicator.parameters.addInteger("ATR_Period", "ATR_Period", "", 10);
+    indicator.parameters.addInteger("D_Period", "D_Period", "", 34);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("lowess1_clr", "TCT Trend High Color", "TCT Trend High Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("lowess2_clr", "TCT Trend Low Color", "TCT Trend Low Color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("DH_clr", "TCT High trigger Color", "TCT High trigger Color", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("DL_clr", "TCT Low trigger Color", "TCT Low trigger Color", core.rgb(0, 255, 255));
+    indicator.parameters.addColor("FU_clr", "TCT Donchian High Color", "TCT Donchian High Color", core.rgb(255, 255, 0));
+    indicator.parameters.addColor("FL_clr", "TCT Donchian Low Color", "TCT Donchian Low Color", core.rgb(255, 0, 255));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("UPclr", "UP cloud Color", "UP cloud Color", core.rgb(128, 128, 0));
+    indicator.parameters.addColor("DNclr", "DN cloud Color", "DN cloud Color", core.rgb(0, 128, 128));
+    indicator.parameters.addInteger("Transparency", "Transparency", "", 50,0,100);
+}
+
+var first;
+var source = null;
+var Period;
+var ATR_Period;
+var D_Period;
+var ATR;
+var MA;
+var lowess1=null;
+var lowess2=null;
+var DH=null;
+var DL=null;
+var FU=null;
+var FL=null;
+var n;
+var p;
+var co;
+var MaxPeriod;
+var H1, H2, L1, L2;
+var w={};
+var a, b, e, abe;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    n=Period*2-4;
+    ATR_Period=instance.parameters.ATR_Period;
+    D_Period=instance.parameters.D_Period;
+    first = source.first()+2;
+    ATR = core.indicators.create("ATR", source, ATR_Period);
+    MA = core.indicators.create("MVA", source.close, n);
+    flag=instance.addInternalStream(first, 0);
+    co=instance.addInternalStream(first, 0);
+    H1=instance.addInternalStream(first, 0);
+    H2=instance.addInternalStream(first, 0);
+    L1=instance.addInternalStream(first, 0);
+    L2=instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.ATR_Period + ")";
+    instance.name(name);
+    lowess1 = instance.addStream("lowess1", core.Line, name + ".TCT Trend High", "TCT Trend High", instance.parameters.lowess1_clr, first);
+    lowess2 = instance.addStream("lowess2", core.Line, name + ".TCT Trend Low", "TCT Trend Low", instance.parameters.lowess2_clr, first);
+    DH = instance.addStream("DH", core.Line, name + ".TCT High trigger", "TCT High trigger", instance.parameters.DH_clr, first);
+    DL = instance.addStream("DL", core.Line, name + ".TCT Low trigger", "TCT Low trigger", instance.parameters.DL_clr, first);
+    FU = instance.addStream("FU", core.Line, name + ".TCT Donchian High", "TCT Donchian High", instance.parameters.FU_clr, first);
+    FL = instance.addStream("FL", core.Line, name + ".TCT Donchian Low", "TCT Donchian Low", instance.parameters.FL_clr, first);
+    lowess1.setWidth(instance.parameters.widthLinReg);
+    lowess1.setStyle(instance.parameters.styleLinReg);
+    lowess2.setWidth(instance.parameters.widthLinReg);
+    lowess2.setStyle(instance.parameters.styleLinReg);
+    DH.setWidth(instance.parameters.widthLinReg);
+    DH.setStyle(instance.parameters.styleLinReg);
+    DL.setWidth(instance.parameters.widthLinReg);
+    DL.setStyle(instance.parameters.styleLinReg);
+    FU.setWidth(instance.parameters.widthLinReg);
+    FU.setStyle(instance.parameters.styleLinReg);
+    FL.setWidth(instance.parameters.widthLinReg);
+    FL.setStyle(instance.parameters.styleLinReg);
+    p=Math.floor(Period/2);
+    Period=2*p+1;
+    MaxPeriod=Math.max(p,D_Period);
+    instance.createChannelGroup("HGroup","HG" , H1, H2, instance.parameters.UPclr, 100-instance.parameters.Transparency);
+    instance.createChannelGroup("LGroup","LG" , L1, L2, instance.parameters.UPclr, 100-instance.parameters.Transparency);
+    var i;
+    a=0;
+    b=0;
+    e=0;
+    for (i=1; i<=Period; i++) 
+    {
+     var ww=Math.abs((p-i)/p);
+     ww=ww*ww*ww;
+     ww=1-ww;
+     w[Period-i+1]=ww*ww*ww;
+     a=a+w[Period-i+1];
+     b=b+w[Period-i+1]*(Period-i+1);
+     e=e+w[Period-i+1]*(Period-i+1)*(Period-i+1);
+    }
+    abe=a*e-b*b;
+}
+
+function Update(period, mode)
+{
+   if (period>first+MaxPeriod) 
+   {
+    ATR.update(mode);
+    MA.update(mode);
+
+    co[period]=(MA.DATA[period]-MA.DATA[period-1]+source.close[period-p]/n)*n;
+    
+    var c=0;
+    var d=0;
+    var i, z;
+    for (i=1; i<=Period; i++) 
+    {
+     z=period-i+1;
+     c=c+co[z]*w[i];
+     d=d+co[z]*w[i]*i;
+    }
+    var alpha=(a*d-b*c)/abe;
+    var beta=(c*e-b*d)/abe;
+    var lowess=alpha*(p+1)+beta;
+    lowess1[period]=lowess+ATR.DATA[period]*1.8;
+    lowess2[period]=lowess-ATR.DATA[period]*1.8;
+    var tmp=Math.minmax(source, period-D_Period+1, period);
+    FL[period]=tmp[0];
+    FU[period]=tmp[1];
+    var R=FU[period]-FL[period];
+    DL[period]=FL[period]+R*0.236;
+    DH[period]=FL[period]+R*0.786;
+    H1[period]=lowess1[period];
+    H2[period]=DH[period];
+    L1[period]=lowess2[period];
+    L2[period]=DL[period];
+    if (H1[period]>H2[period]) 
+    {
+     H1.setColor(period,instance.parameters.UPclr);
+    } 
+    else
+    {
+     H1.setColor(period,instance.parameters.DNclr);
+    }
+    if (L1[period]>L2[period]) 
+    {
+     L1.setColor(period,instance.parameters.UPclr);
+    } 
+    else
+    {
+     L1.setColor(period,instance.parameters.DNclr);
+    }
+   } 
+}
+

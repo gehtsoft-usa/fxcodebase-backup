@@ -1,0 +1,377 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252" /><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><title>Drawing Concepts</title><style type="text/css">a, p, h1, h2, h3, h4, h5, h6, table, td, tr, li, ul, ol {
+    font-family: Verdana, Trebuchet MS, Arial;
+}
+
+a, p, td, tr, ul, ol, li {
+    font-size: 12pt;
+}
+
+h3 {
+    font-size: 13pt;
+}
+
+h2 {
+    font-size: 13pt;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+body {
+    color: #444444;
+    background-color: white;
+}
+
+A:link {
+    color: #0065b3;
+    cursor: pointer;
+}
+
+A:visited {
+    color: #0068be;
+    cursor: pointer;
+}
+
+a.action {
+  background-color: #0065b3;
+  color: white;
+  font-size: 10pt;
+  padding: 2px 2px;
+  width: 50pt;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px;
+}
+
+.side-icon {
+    float: left;
+}
+
+a.action [class*="dripicons-"]:before {
+    padding: 0 2px 0 0;
+    font-size: 12pt;
+    vertical-align: text-bottom;
+}
+
+.side-icon:after {
+  content: "";
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  border-left: 1.5px solid white;
+  transform: translate(-50%);
+}
+
+a.actiontab {
+  font-size: 10pt;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px 3px 0 0;
+}
+
+pre, code, code a {
+    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+    font-size: 12pt;
+}
+
+code.ctag {
+    background-color: #f1f1f1;
+    padding: .1em .2em;
+    border-radius: 3px;
+}
+
+pre {
+    background-color: white;
+}
+
+pre.example {
+    background-color: #f1f1f1;
+}
+
+ul {
+    list-style-type: disc;
+    margin-left: 18pt;
+}
+
+ol {
+    list-style-type: decimal;
+    margin-left: 18pt;
+}
+
+ul.hhc {
+    list-style-type: none;
+    margin-left: 1em;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+li.hhc {
+    margin-left: 0;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+table {
+  border-spacing: 0;
+  border-color: #dfe3e7;
+}
+
+tr + tr td {
+   border-top: 0;
+}
+
+tr td + td {
+  border-left: 0;
+}
+
+td {
+  border: 1px solid;
+  border-color: #dfe3e7;
+}
+
+tr:first-child td:first-child {
+   border-radius: 0.2em 0 0 0;
+}
+
+tr:first-child td:last-child {
+  border-radius: 0 0.2em 0 0;
+}
+
+tr:first-child td:only-child {
+  border-radius: 0.2em 0.2em 0 0;
+}
+
+tr:last-child td:first-child {
+    border-radius: 0 0 0 0.2em;
+}
+
+tr:last-child td:last-child {
+    border-radius: 0 0 0.2em 0;
+}
+
+tr:last-child td:only-child {
+    border-radius: 0 0 0.2em 0.2em;
+}
+
+tr:only-child td:only-child {
+    border-radius: 0.2em 0.2em 0.2em 0.2em;
+}
+
+tr:only-child td:first-child {
+   border-radius: 0.2em 0 0 0.2em;
+}
+
+tr:only-child td:last-child {
+  border-radius: 0 0.2em 0.2em 0;
+}
+
+
+td.tmain, td.tmain_nw, td.thdr {
+    background-color: rgb(255, 255, 255);
+    vertical-align: top;
+    padding: 3px;
+}
+
+td.tmain p, td.tmain_nw p, td.thdr p {
+    margin-top: 3pt;
+    margin-bottom: 3pt;
+}
+
+td.tmain_nw {
+    white-space: nowrap;
+}
+
+td.thdr {
+    background-color: #e3e3e3;
+}
+
+table.decl {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+    vertical-align: top;
+    padding: 3px;
+    width: 100%;
+}
+
+table.decl td {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+}
+
+div.note-quote {
+    border-left: 10px solid #ccc;
+    padding: 1em 10px .1em 10px;
+    margin: 1.5em 10px;
+    background-color: rgb(224, 224, 224);
+}
+
+div.note-note {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+div.note-warning {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #fff;
+    background-color: #ff6358;
+}
+div.note-warning code.ctag {
+    color: black;
+}</style>
+<link rel="stylesheet" href="res/dripicons.css"></head><body><script type="text/javascript">
+var highlighterEnabled = false;
+var maintopic = 'index';
+var helptitle = 'Indicore SDK 3';
+    function loadStarted() {
+    window.onload = loadCompleted;
+
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        var head = document.getElementsByTagName('head')[0];
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.min.js';
+        head.appendChild(script4);
+
+
+        var script2 = document.createElement('script');
+        script2.type = 'text/javascript';
+        script2.src = './highlighter/highlight.cshtml.js';
+        head.appendChild(script2);
+
+        var script3 = document.createElement('script');
+        script3.type = 'text/javascript';
+        script3.src = './highlighter/highlight.lua.js';
+        head.appendChild(script3);
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.luax.js';
+        head.appendChild(script4);
+    }
+}
+
+function loadCompleted() {
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        hljs.registerLanguage('cshtml-razor', window.hljsDefineCshtmlRazor);
+        hljs.registerLanguage('lua', window.hljsDefineLua);
+        hljs.registerLanguage('luax', window.hljsDefineLuaX);
+        x = document.querySelectorAll('pre code');
+        for (var i = 0; i < x.length; i++) {
+            if (x[i].hasAttribute('class')) {
+                hljs.highlightBlock(x[i]);
+            }
+        }
+    }
+}
+
+
+function hidediv(divname) {
+    document.getElementById(divname).style.display = 'none';
+}
+
+function showdiv(divname) {
+    document.getElementById(divname).style.display = 'inline';
+}
+
+function syncList() {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, null, document.title);
+    }
+}
+
+function syncList1(key) {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, key + '.html', document.title);
+    }
+}</script><script type="text/javascript">
+    loadStarted();
+</script><h1>Drawing Concepts</h1><p><b>Canvas</b></p>
+<p>The <a href="context.html">context table</a> provides access to the drawing <i>canvas</i>. The canvas is a graphic surface at which
+the chart and its surrounding is drawn. The canvas positions are referred by pixel coordinates. The top-left corner of the canvas
+has coordinates 0, 0. The X axis extends to right, the Y axis extends to bottom. The chart area itself is a part of the whole canvas.
+You can get the coordinates of the chart area using the <a href="context.top.html"><code>top()</code></a>, <a href="context.left.html"><code>left()</code></a>,
+<a href="context.bottom.html"><code>bottom()</code></a> and <a href="context.bottom.html"><code>right()</code></a> methods of the context.</p>
+<p>The chart itself is usually referred in bar index and price coordinates. The bar axis also extends left to right as X coordinate of the canvas.
+The price coordinate extends bottom to up, in opposite direction to Y coordinate of the canvas. To convert canvas coordinates into chart axis
+coordinates and back use the <a href="context.indexOfBar.html"><code>indexOfBar()</code></a>, <a href="context.positionOfBar.html"><code>positionOfBar()</code></a>,
+<a href="context.priceOfPoint.html"><code>priceOfPoint()</code></a> and <a href="context.pointOfPrice.html"><code>pointOfPrice()</code></a> methods of the context.</p>
+<p>The ranges of the chart axis can be obtained using the <a href="context.firstBar.html"><code>firstBar()</code></a>, <a href="context.lastBar.html"><code>lastBar()</code></a>,
+<a href="context.minPrice.html"><code>minPrice()</code></a>, and <a href="context.maxPrice.html"><code>maxPrice()</code></a> methods of the context.</p>
+<p>As you know from older tools provided by Indicore SDK to draw shapes, there is another way of defining the coordinates and sizes of the object -
+points. A point is a polygraph measure which is equal to 1/72 of an inch. To convert points into pixels and back you can use
+<a href="context.pointsToPixels.html"><code>pointsToPixels()</code></a> and <a href="context.pixelsToPoints.html"><code>pixelsToPoints()</code></a> methods of the context.</p>
+<p><img src="img/od_canvas.png"></p>
+<p><b>Bar cell</b></p>
+<p>The bar at chart is not a pixel, but a cell. Every bar cell on the chart has the same width. The candle (or bar) does not use the whole cell, there is
+a gap between candle border and the cell borders.</p>
+<p>So bar cell has five coordinates (see the <a href="context.nextBar.html"><code>nextBar()</code></a> method of the context) - the
+left and right coordinates of the cell itself, the middle coordinate of the candle and the left and right coordinates of the candle.</p>
+<p><img src="img/od_barcell.png"></p>
+<p><b>Drawing Shapes</b></p>
+<p>The context table allows you to draw different shapes - <a href="context.drawLine.html"><code>lines</code></a>, <a href="context.drawRectangle.html"><code>rectangles</code></a>,
+<a href="context.drawEllipse.html"><code>ellipses</code></a> (or circles, because a circle is an ellipse bounded by a square),
+<a href="context.drawArc.html"><code>arcs</code></a>, <a href="context.drawPolygon.html"><code>polygons</code></a>, and <a href="context.drawPolyline.html"><code>polylines</code></a>.</p>
+<p>To draw a shape you can use <i>tools</i>. A <a href="context.createPen.html"><code>pen</code></a> is used to draw the shape outline and defines width, color and style
+of the outline and a <a href="context.createSolidBrush.html"><code>solid</code></a> or <a href="context.createHatchBrush.html"><code>hatched</code></a> brush is used to fill the
+shape interior. These tools are called GDI objects (GDI stands for graphic device interface of Windows). You are allowed to have up to 64 tools
+per an instance of the indicator. The limitation is introduced because the total number of GDI objects in the operating system is strictly limited
+and is this limit is exhausted, the system can get into unstable state.
+Once created the tool exists until another tool with the same number is created, or a tool is deleted, or the indicator instance is removed from the
+chart.</p>
+<p>The tools are referred by the index, a number between 0 and 63. There is no different numeration for pens, brushes and other tools. For example,
+if you created a pen with index 1 and then created a brush with index 1, the previously created pen will be destroyed.</p>
+<p>The tool destruction does not affect anything already drawn using this tool. So, you can use unlimited number of the objects, you just cannot have
+more than 64 of them at the time.</p>
+<p><b>Other Objects</b></p>
+<p>In addition to the shapes, you can use the following operations to draw your chart:</p>
+<p>- You can <a href="context.loadPicture.html">load</a> and <a href="context.drawPicture.html">draw</a> a picture (bmp, png or jpg file).</p>
+<p>- You can <a href="context.loadIcon.html">load</a> and <a href="context.drawIcon.html">draw</a> an icon (ico file)</p>
+<p>- You can <a href="context.drawText.html">draw</a> a text using different <a href="context.createFont.html">fonts</a>.</p>
+<p>The images and fonts used for these operations are also GDI objects (drawing tools) and are managed in the same manner as brushes and pens.</p>
+<p><b>Transparency</b></p>
+<p>There are two way of using of the transparency of the objects.</p>
+<p>1) Shapes can use -1 instead of the index of the brush to use a hollow (transparent) brush to fill the shape.</p>
+<p>2) Images can be drawn with using one of the colors as a transparent color.</p>
+<p>3) And, finally, all shapes and objects can be drawn with partial transparency.</p>
+<p>See examples of the transparency at the image below. Left to right, the first row: a picture drawn without transparency, a picture
+drawn with using light cyan (rgb(0, 255, 255)) as a transparent color, a picture drawn with a transparent color and 80% transparency.
+Left to right, the second row: a shape drawn using a solid brush, a shape drawn using a hollow brush, a shape drawn using a solid brush and
+80% transparency.</p>
+<p><img src="img/od_transp.png"></p>
+<p><b>Gradients</b></p>
+<p>The context is able to perform very complex operation of gradient drawing. It can <a href="context.drawGradientRectangle.html"><code>a gradient-filled rectangle</code></a>
+which has different colors for all four corners. Using this function you can create almost any gradient you may need.</p>
+<p>See examples of the gradient fills. Left to right, corners are listed from top-left, clockwise: <br>
+1) red, red, green, green (vertical gradient)<br>
+2) red, green, green, red (horizontal gradient)<br>
+3) red, green, blue, cyan <br>
+4) red, red, red, blue<br>
+5) blue, red, blue, red<br>
+<img src="img/od_grad.png"></p><p>
+  <center><a href="od_indicators.html">back</a></center>
+</p><script language="javascript" type="text/javascript">if(window.parent.frames[0]) window.parent.frames[0].selectItem(window.location.href);</script></body></html>

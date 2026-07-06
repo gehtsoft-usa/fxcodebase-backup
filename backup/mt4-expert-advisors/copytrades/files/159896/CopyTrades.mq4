@@ -1,0 +1,1873 @@
+//Available @  https://fxcodebase.com/code/viewtopic.php?f=38&t=76145
+
+// +------------------------------------------------------------------------------------------------+
+// |                                                            Copyright © 2025, Gehtsoft USA LLC   | 
+// |                                                                         http://fxcodebase.com   |
+// |                                                               PayPal: https://goo.gl/9Rj74e     |
+// +------------------------------------------------------------------------------------------------+
+// |                                                                   Developed by: Mario Jemic     |                    
+// |                                                                     mario.jemic@gmail.com       |
+// |                                                                 https://mario-jemic.com/        | 
+// |                                                             Patreon: http://tiny.cc/1ybwxz      |   
+// |                                                      Buy Me a Coffee: http://tiny.cc/bj7vxz     |  
+// +-----------------+----------------------+---------------------------------------------------------+
+// |  Cryptocurrency |  Network             |  Address                                                |
+// +-----------------+----------------------+---------------------------------------------------------+
+// |  BTC            |  BTC                 |  16F5k43RXibTmna4np8bPVgmXM1CzjXFJJ                     | 
+// |  SOL            |  SOL                 |  3nh5rpUKopcYLNU4zGCdUFAkM3iRQq8VVUmuzVG6VDf2           | 
+// |  ETH            |  ERC20               |  0xe53aab6bc468a963a02d1319660ee60cf80fc8e7             |
+// |  BNB            |  BEP20               |  0xe53aab6bc468a963a02d1319660ee60cf80fc8e7             | 
+// |  USDT           |  BEP20               |  0xe53aab6bc468a963a02d1319660ee60cf80fc8e7             | 
+// |  XRP            |  BEP20               |  0xe53aab6bc468a963a02d1319660ee60cf80fc8e7             | 
+// +-----------------+----------------------+---------------------------------------------------------+
+
+
+#property copyright "Copyright © 2025, Gehtsoft USA LLC"
+#property link      "http://fxcodebase.com"
+#property version "1.0"
+
+#property strict
+
+// Inputs:
+//+------------------------------------------------------------------+
+enum ModoDeTrabajo { 
+    EMISOR, // Emiter
+    RECEPTOR, // Receiver
+};
+input ModoDeTrabajo Modo = EMISOR; // WORK MODE:
+// #include "Emisor.mqh"
+// #include "Receptor.mqh"
+// #include "ReceptorInverso.mqh"
+int deIniReason;
+
+// ------------------------------------------------------------------
+#define _receptor
+#ifdef _receptor
+//+------------------------------------------------------------------+
+//|                                                     Receptor.mqh |
+//|                                  Copyright 2021, Carlos Vallogia |
+//|                                 https://www.thetradingrobots.com |
+//+------------------------------------------------------------------+
+
+// Inputs:
+//+------------------------------------------------------------------+
+// input string Modo_Receptor = "==== Modo Receptor ===="; // -----------------
+// input int    NroID = 1;                                // Nro de Receptor:
+// input string UserEqIndices;                            // Nombres Equivalentes Indices:
+// input string UserEqGold;                               // Nombres Equivalentes Oro:
+// input string UserEqOtras;                              // Nombres Equivalentes Otras:
+// input double inpLotIndices;                            // Lotaje Equivalencias Indices:
+// input double inpLotOro;                                // Lotaje Equivalencias Oro:
+// input double inpLotOtras;                              // Lotaje Equivalencias Otras:
+// input double inpLotbyDefault;                          // Lotaje por Defecto:
+
+input string Modo_Receptor = "<< setup Receiver Mode: >>"; // -----------------
+input int    NroID         = 1;                            // Receiver No.:
+input string UserEqIndices;                                // Index Equivalent Names:
+input string UserEqGold;                                   // Gold Equivalent Names:
+input string UserEqOtras;                                  // Other Equivalent Names:
+input double inpLotIndices;                                // Lotage Equivalences Indices:
+input double inpLotOro;                                    // Gold Equivalences lot:
+input double inpLotOtras;                                  // Lotage Equivalences Others:
+input double inpLotbyDefault;                              // Default Lotage:
+
+input bool   TpByDefaultOn = true;         // TP by Deafault?
+input double uTpPips       = 20;           // TP pips:
+input bool   SlByDefaultOn = true;         // SL by Default?
+input double uSlPips       = 20;           // SL pips:
+string       uComentario   = "Edu_Trader"; // Comments:
+
+//--- Clase CReceptor
+//+------------------------------------------------------------------+
+class CReceptor
+{
+  private:
+    struct TradeInfo {
+        int             tkEmisor;
+        string          par;
+        double          entry;
+        double          sl;
+        double          tp;
+        ENUM_ORDER_TYPE tipo;
+        double          lots;
+        string          coment;
+        bool            enviado;
+        int             tkReceptor;
+    };
+    TradeInfo Trades[];
+    int       id;
+
+    struct NombreEquivalencia {
+        string enEmisor;
+        string enReceptor;
+        double lotEq;
+    };
+    NombreEquivalencia equivalencia[];
+
+  public:
+    CReceptor();
+    ~CReceptor();
+    void Reiniciar(void)
+    {
+        controlarID();
+        GetEquivalenciasyLots();
+    } // para cuando se reinicia el EA
+    void   idReceptor(int Id) { id = Id; }
+    int    idReceptor(void) { return id; }
+    bool   controlarID(void);
+    void   GetEquivalencias(void);
+    void   GetEquivalenciasyLots(void);
+    void   LeerArchivo(void);
+    void   ProcesarInfo(string &array[][]);
+    bool   isNewTrade(int tkParaControlar);
+    void   AgregarTrade(int index, string &data[][]);
+    void   ModificarTrade(int i, string &data[][]);
+    void   ActualizarDatosTrade(int index);
+    void   CerrarTrade(int tkEmisor);
+    void   EjecutarTrades(void);
+    int    EjecutarTrade(int index);
+    void   DetectarCerradas(void);
+    void   PrintTrade(int index);
+    string ParEquivalente(string parAControlar);
+    double LotEquivalente(string parRecibido, double lotEmisor);
+    double DefinirLotaje(int index, int i, double lotEmisor);
+
+    //--- TOMAR PARCIAL
+    int  BuscarIndex(int tk);
+    bool tengoEseTk(int tk);
+    void ModificarTrades(int index, string atributo, int value);
+    void ReemplazarTk(int index);
+    bool CerrarLots(int index, double percent, double price);
+    void CerrarParcial(int tkViejo, double percent, int tkNuevo);
+};
+
+CReceptor::CReceptor()
+{
+    controlarID();
+    GetEquivalenciasyLots();
+}
+CReceptor::~CReceptor() {}
+
+//+------------------------------------------------------------------+
+bool CReceptor::controlarID()
+{
+    idReceptor(NroID);
+    if (NroID == 0) {
+        MessageBox("Cambiar Nro de Receptor", NULL);
+        return false;
+    }
+    return true;
+}
+//+------------------------------------------------------------------+
+void CReceptor::LeerArchivo(void)
+{
+    string nameFile = "Receptor" + (string)id + ".csv";
+    if (!FileIsExist(nameFile, FILE_COMMON)) {
+        return;
+    }
+    int    file = FileOpen(nameFile, FILE_COMMON | FILE_WRITE | FILE_READ | FILE_CSV);
+    string Data[][10];
+    int    row = 0;
+
+    while (!FileIsEnding(file)) {
+        ArrayResize(Data, ArrayRange(Data, 0) + 1);
+        for (int column = 0; column < 10; column++) {
+            string a          = FileReadString(file);
+            Data[row, column] = a;
+            Print("Receptor" + (string)id + Data[row, column]);
+        }
+        row++;
+    }
+    FileClose(file);
+    FileDelete(nameFile, FILE_COMMON);
+    ProcesarInfo(Data);
+}
+
+//+------------------------------------------------------------------+
+void CReceptor::ProcesarInfo(string &data[][])
+{
+    //--- paso toda la info al array de Trades
+    for (int i = 0; i < ArrayRange(data, 0); i++) {
+        if (data[i, 8] == "Abrir")
+            if (isNewTrade((int)data[i, 0])) {
+                AgregarTrade(i, data);
+            } else {
+                ActualizarDatosTrade(i);
+            }
+
+        if (data[i, 8] == "Cambio") {
+            ModificarTrade(i, data);
+        }
+        if (data[i, 8] == "Cerrar") {
+            CerrarTrade((int)data[i, 0]);
+        }
+        if (data[i, 8] == "Parcial") {
+            CerrarParcial((int)data[i, 7], (double)data[i, 9], (int)data[i, 0]);
+        }
+    }
+    EjecutarTrades();
+}
+//+------------------------------------------------------------------+
+bool CReceptor::isNewTrade(int tkParaControlar)
+{
+    for (int i = 0; i < ArraySize(Trades); i++) {
+        if (Trades[i].tkEmisor == tkParaControlar) {
+            return false;
+        }
+    }
+
+    return true;
+}
+//+------------------------------------------------------------------+
+void CReceptor::AgregarTrade(int i, string &data[][])
+{
+    if (data[i, 8] != "Abrir") return;
+
+    int index = ArraySize(Trades);
+    ArrayResize(Trades, ArraySize(Trades) + 1);
+
+    Trades[index].tkEmisor = (int)data[i, 0];
+    Trades[index].par      = ParEquivalente(data[i, 1]);
+    Trades[index].entry    = (double)data[i, 2];
+    Trades[index].sl       = (double)data[i, 3];
+    Trades[index].tp       = (double)data[i, 4];
+    Trades[index].tipo     = (ENUM_ORDER_TYPE)(int)data[i, 5];
+    Trades[index].lots     = LotEquivalente(data[i, 1], (double)data[i, 6]);
+    Trades[index].coment   = data[i, 7];
+    //---
+    Print(__FUNCTION__, " ", "Agregando ", Trades[index].tkEmisor);
+    PrintTrade(i);
+}
+
+//+------------------------------------------------------------------+
+void CReceptor::ModificarTrade(int i, string &data[][])
+{
+    int tk = (int)data[i, 0];
+
+    for (int index = 0; index < ArraySize(Trades); index++) {
+        if (Trades[index].tkEmisor == tk) {
+            Trades[index].entry = (double)data[i, 2];
+            Trades[index].sl    = (double)data[i, 3];
+            Trades[index].tp    = (double)data[i, 4];
+
+            if (OrderModify(Trades[index].tkReceptor, Trades[index].entry, Trades[index].sl, Trades[index].tp, 0, clrNONE)) {
+                Print(__FUNCTION__, " Modificando ", Trades[index].tkReceptor, " ", Trades[index].par);
+                PrintTrade(index);
+            }
+        }
+    }
+}
+//+------------------------------------------------------------------+
+void CReceptor::CerrarTrade(int tkToClose)
+{
+    for (int index = 0; index < ArraySize(Trades); index++) {
+        if (Trades[index].tkEmisor == tkToClose) {
+            double precio = Trades[index].entry;
+            Print(__FUNCTION__, " TRADE TIPO: ", (string)Trades[index].tipo);
+
+            //--- si es un trade abierto:
+            if (Trades[index].tipo == OP_BUY || Trades[index].tipo == OP_SELL) {
+                if (Trades[index].tipo == OP_BUY) {
+                    precio = SymbolInfoDouble(Trades[index].par, SYMBOL_BID);
+                }
+                if (Trades[index].tipo == OP_SELL) {
+                    precio = SymbolInfoDouble(Trades[index].par, SYMBOL_ASK);
+                }
+                Print(__FUNCTION__, " ", "Trades[index].lots", " ", Trades[index].lots);
+                if (OrderClose(Trades[index].tkReceptor, Trades[index].lots, precio, 20, clrNONE)) {
+                    Print(__FUNCTION__, " Cerrando Trade: ", Trades[index].tkReceptor, " ", Trades[index].par);
+                    return;
+                }
+            }
+
+            //--- si es un trade pendiente:
+            if (Trades[index].tipo != OP_BUY || Trades[index].tipo != OP_SELL) {
+                if (OrderDelete(Trades[index].tkReceptor, clrNONE)) {
+                    Print(__FUNCTION__, " Borrando Trade: ", Trades[index].tkReceptor, " ", Trades[index].par);
+                    return;
+                }
+            }
+        }
+    }
+}
+
+//+------------------------------------------------------------------+
+//|      * Funciones de CERRAR PARCIAL *
+//+------------------------------------------------------------------+
+
+void CReceptor::CerrarParcial(int tkViejo, double percent, int tkNuevo)
+{
+    int i = BuscarIndex(tkViejo);
+    if (i == -1) {
+        return;
+    }
+
+    if (Trades[i].tipo == OP_BUY) {
+        double mBid   = SymbolInfoDouble(Trades[i].par, SYMBOL_BID);
+        double mPoint = SymbolInfoDouble(Trades[i].par, SYMBOL_POINT);
+        if (CerrarLots(i, percent, mBid)) {
+            Trades[i].tkEmisor = tkNuevo;
+            ReemplazarTk(i);
+        }
+    }
+    if (Trades[i].tipo == OP_SELL) {
+        double mAsk   = SymbolInfoDouble(Trades[i].par, SYMBOL_ASK);
+        double mPoint = SymbolInfoDouble(Trades[i].par, SYMBOL_POINT);
+        if (CerrarLots(i, percent, mAsk)) {
+            Trades[i].tkEmisor = tkNuevo;
+            ReemplazarTk(i);
+        }
+    }
+}
+
+// cierra el porcentaje de lotes indicado por emisor
+//+------------------------------------------------------------------+
+bool CReceptor::CerrarLots(int index, double percent, double price)
+{
+    if (OrderSelect(Trades[index].tkReceptor, SELECT_BY_TICKET)) {
+        double LotsToClose = NormalizeDouble((OrderLots() * percent), 2);
+        Print(__FUNCTION__, " ", "LotsToClose", " ", LotsToClose);
+
+        if (OrderClose(Trades[index].tkReceptor, LotsToClose, price, 20, clrNONE)) {
+            return true;
+        }
+    }
+    return false;
+}
+//+------------------------------------------------------------------+
+void CReceptor::ReemplazarTk(int index)
+{
+    for (int i = 0; i < OrdersTotal(); i++) {
+        if (OrderSelect(i, SELECT_BY_POS, MODE_TRADES)) {
+            int tk = OrderTicket();
+            // int Magico = OrderMagicNumber();
+            // if(ControlMagico(OrderMagicNumber())){
+            if (!tengoEseTk(tk)) {
+                Trades[index].tkReceptor = tk;
+                ActualizarDatosTrade(index);
+                // Trades[index].tipo = (ENUM_ORDER_TYPE)OrderType();
+                // Trades[index].entry = (double)OrderOpenPrice();
+                // Trades[index].sl = (double)OrderStopLoss();
+                // Trades[index].tp = (double)OrderTakeProfit();
+                // Trades[index].lots = (double)OrderLots();
+                // Trades[index].tkReceptor = tk;
+                // ModificarTrades(index,"tkReceptor",tk);
+                Print(__FUNCTION__, "en Trade: " + (string)index + " nuevo Tk Receptor:" + (string)tk);
+                PrintTrade(index);
+            }
+            // }
+        }
+    }
+}
+//+------------------------------------------------------------------+
+void CReceptor::ActualizarDatosTrade(int index)
+{
+    if (OrderSelect(Trades[index].tkReceptor, SELECT_BY_TICKET)) {
+        Trades[index].tipo   = (ENUM_ORDER_TYPE)OrderType();
+        Trades[index].entry  = (double)OrderOpenPrice();
+        Trades[index].sl     = (double)OrderStopLoss();
+        Trades[index].tp     = (double)OrderTakeProfit();
+        Trades[index].lots   = (double)OrderLots();
+        Trades[index].coment = (string)OrderComment();
+
+    } else {
+        Print(__FUNCTION__, " ", "No se pudo actualizar los datos TK:", Trades[index].tkReceptor, " ", GetLastError());
+    }
+}
+//+------------------------------------------------------------------+
+void CReceptor::ModificarTrades(int index, string atributo, int value)
+{
+    //--- controlar desborde
+    int t = ArraySize(Trades);
+    if (index > t - 1) {
+        index = t - 1;
+    }
+    if (index < 0) {
+        return;
+    }
+    //---
+    if (atributo == "tkReceptor") {
+        Trades[index].tkReceptor = value;
+    }
+    Print("en Trade: " + (string)index + " nuevo " + atributo + ": " + (string)value);
+    PrintTrade(index);
+}
+//+------------------------------------------------------------------+
+bool CReceptor::tengoEseTk(int tk)
+{
+    for (int i = 0; i < ArraySize(Trades); i++) {
+        if (Trades[i].tkReceptor == tk) {
+            return true;
+        }
+    }
+    return false;
+}
+// le pasas el tk y te devuelve el index
+//+------------------------------------------------------------------+
+int CReceptor::BuscarIndex(int tk)
+{
+    for (int i = 0; i < ArraySize(Trades); i++) {
+        if (Trades[i].tkEmisor == tk) {
+            return i;
+        }
+    }
+
+    Print(__FUNCTION__, " ", "tk", tk, "No Encontrado");
+    return -1;
+}
+
+//+------------------------------------------------------------------+
+void CReceptor::EjecutarTrades(void)
+{
+    //--- recorrer los trades
+    for (int i = 0; i < ArraySize(Trades); i++) {
+        if (Trades[i].tkReceptor == 0) {
+            int tk = EjecutarTrade(i);
+            if (tk != -1) {
+                Trades[i].tkReceptor = tk;
+            }
+        }
+    }
+}
+
+// NOTE: agregar al comentario "copia" para que no los tome el emisor
+//+------------------------------------------------------------------+
+int CReceptor::EjecutarTrade(int index)
+{
+    int    i      = index;
+    double precio = Trades[i].entry;
+    if (Trades[i].tipo == OP_BUY) {
+        precio = SymbolInfoDouble(Trades[i].par, SYMBOL_ASK);
+    }
+    if (Trades[i].tipo == OP_SELL) {
+        precio = SymbolInfoDouble(Trades[i].par, SYMBOL_BID);
+    }
+
+    string coment = Trades[i].coment + uComentario;
+
+    int tk = OrderSend(Trades[i].par, Trades[i].tipo, Trades[i].lots, precio, 30, Trades[i].sl, Trades[i].tp, coment, 0, 0, clrNONE);
+    //---
+    return tk;
+}
+//+------------------------------------------------------------------+
+void CReceptor::DetectarCerradas(void) {}
+//+------------------------------------------------------------------+
+void CReceptor::PrintTrade(int index)
+{
+    if (ArraySize(Trades) == 0) {
+        return;
+    }
+    //--- controlar desborde
+    int t = ArraySize(Trades);
+    if (index > t - 1) {
+        index = t - 1;
+    }
+    if (index < 0) {
+        return;
+    }
+    //---
+    Print((string)index + " tk: " + (string)Trades[index].tkEmisor);
+    Print((string)index + " par: " + (string)Trades[index].par);
+    Print((string)index + " entry: " + (string)Trades[index].entry);
+    Print((string)index + " sl: " + (string)Trades[index].sl);
+    Print((string)index + " tp: " + (string)Trades[index].tp);
+    Print((string)index + " lots: " + (string)Trades[index].lots);
+    Print((string)index + " tipo: " + (string)Trades[index].tipo);
+    Print((string)index + " comment: " + (string)Trades[index].coment);
+    Print((string)index + " enviado: " + (string)Trades[index].enviado);
+}
+//+------------------------------------------------------------------+
+// Get Equivalencias
+//+------------------------------------------------------------------+
+void CReceptor::GetEquivalenciasyLots()
+{
+    // hay que hacer 2 divisiones de cadenas
+    // 1. TODAS las separadas por ","
+    ArrayFree(equivalencia);
+    for (int j = 0; j < 3; j++) {
+        string CortePorComa[];
+        string sep = ",";
+        ushort u_sep;
+        u_sep = StringGetCharacter(sep, 0);
+        int k;
+        if (j == 0) {
+            k = StringSplit(UserEqIndices, u_sep, CortePorComa);
+            if (UserEqIndices == "") continue;
+        }
+        if (j == 1) {
+            k = StringSplit(UserEqGold, u_sep, CortePorComa);
+            if (UserEqGold == "") continue;
+        }
+        if (j == 2) {
+            k = StringSplit(UserEqOtras, u_sep, CortePorComa);
+            if (UserEqOtras == "") continue;
+        }
+
+        int t = ArraySize(equivalencia);
+        ArrayResize(equivalencia, t + ArraySize(CortePorComa), 0);
+
+        for (int i = 0; i < ArraySize(CortePorComa); i++) {
+            // 2. dividir la cadena separada por "="
+            string CortePorIgual[];
+            sep   = "=";
+            u_sep = StringGetCharacter(sep, 0);
+            k     = StringSplit(CortePorComa[i], u_sep, CortePorIgual);
+
+            // 3. guardar en el array equivalencias:
+            equivalencia[t + i].enEmisor   = CortePorIgual[0];
+            equivalencia[t + i].enReceptor = CortePorIgual[1];
+            // 4. agrego el lotaje para esa equivalencia
+            if (j == 0) {
+                equivalencia[t + i].lotEq = inpLotIndices;
+            }
+            if (j == 1) {
+                equivalencia[t + i].lotEq = inpLotOro;
+            }
+            if (j == 2) {
+                equivalencia[t + i].lotEq = inpLotOtras;
+            }
+        }
+    }
+    //--- print
+    for (int p = 0; p < ArraySize(equivalencia); p++) {
+        Print(equivalencia[p].enEmisor);
+        Print(equivalencia[p].enReceptor);
+    }
+}
+
+string CReceptor::ParEquivalente(string parRecibido)
+{
+    for (int i = 0; i < ArraySize(equivalencia); i++) {
+        if (equivalencia[i].enEmisor == parRecibido) return equivalencia[i].enReceptor;
+    }
+
+    return parRecibido;
+}
+
+double CReceptor::LotEquivalente(string parRecibido, double lotEmisor)
+{
+    for (int i = 0; i < ArraySize(equivalencia); i++) {
+        if (equivalencia[i].enEmisor == parRecibido) return equivalencia[i].lotEq;
+    }
+
+    if (inpLotbyDefault == 0) {
+        return lotEmisor;
+    }
+
+    return inpLotbyDefault;
+}
+
+#endif
+
+#define _receptorInverso
+#ifdef _receptorInverso
+//+------------------------------------------------------------------+
+//|                                                     Receptor.mqh |
+//|                                  Copyright 2021, Carlos Vallogia |
+//|                                 https://www.thetradingrobots.com |
+//+------------------------------------------------------------------+
+
+// Inputs:
+//+------------------------------------------------------------------+
+// input string Modo_Receptor = "== setup Receptor Inverso ==";  // Para modo Receptor:
+// input int    NroID = 1;                                // Nro de Receptor:
+// input string UserEqIndices;                            // Nombres Equivalentes Indices:
+// input string UserEqGold;                               // Nombres Equivalentes Oro:
+// input string UserEqOtras;                              // Nombres Equivalentes Otras:
+// input double inpLotIndices;                            // Lotaje Equivalencias Indices:
+// input double inpLotOro;                                // Lotaje Equivalencias Oro:
+// input double inpLotOtras;                              // Lotaje Equivalencias Otras:
+// input double inpLotbyDefault;                          // Lotaje por Defecto:
+
+// input string Modo_Receptor = "<< setup Receptor Inverso: >>";  // -----------------
+// input int    NroID = 1;                                // Receiver No.:
+// input string UserEqIndices;                            // Index Equivalent Names:
+// input string UserEqGold;                               // Gold Equivalent Names:
+// input string UserEqOtras;                              // Other Equivalent Names:
+// input double inpLotIndices;                            // Lotage Equivalences Indices:
+// input double inpLotOro;                                // Gold Equivalencies lottery:
+// input double inpLotOtras;                              // Lotage Equivalences Others:
+// input double inpLotbyDefault;                          // Default Lotage:
+
+//--- Clase CReceptorInverso
+//+------------------------------------------------------------------+
+class CReceptorInverso
+{
+  private:
+    struct _TradeInfo {
+        int             tkEmisor;
+        string          par;
+        double          entry;
+        double          sl;
+        double          tp;
+        ENUM_ORDER_TYPE tipo;
+        double          lots;
+        string          coment;
+        bool            enviado;
+        int             tkReceptor;
+    };
+    _TradeInfo Trades[];
+    int        id;
+
+    struct _NombreEquivalencia {
+        string enEmisor;
+        string enReceptor;
+        double lotEq;
+    };
+    _NombreEquivalencia equivalencia[];
+
+  public:
+    CReceptorInverso();
+    ~CReceptorInverso();
+    void Reiniciar(void)
+    {
+        controlarID();
+        GetEquivalenciasyLots();
+    } // para cuando se reinicia el EA
+    void   idReceptor(int Id) { id = Id; }
+    int    idReceptor(void) { return id; }
+    bool   controlarID(void);
+    void   GetEquivalencias(void);
+    void   GetEquivalenciasyLots(void);
+    void   LeerArchivo(void);
+    void   ProcesarInfo(string &array[][]);
+    bool   isNewTrade(int tkParaControlar);
+    void   AgregarTrade(int index, string &data[][]);
+    void   ModificarTrade(int i, string &data[][]);
+    void   ActualizarDatosTrade(int index);
+    void   CerrarTrade(int tkEmisor);
+    void   EjecutarTrades(void);
+    int    EjecutarTrade(int index);
+    void   DetectarCerradas(void);
+    void   PrintTrade(int index);
+    string ParEquivalente(string parAControlar);
+    double LotEquivalente(string parRecibido, double lotEmisor);
+    double DefinirLotaje(int index, int i, double lotEmisor);
+
+    //--- TOMAR PARCIAL
+    int  BuscarIndex(int tk);
+    bool tengoEseTk(int tk);
+    void ModificarTrades(int index, string atributo, int value);
+    void ReemplazarTk(int index);
+    bool CerrarLots(int index, double percent, double price);
+    void CerrarParcial(int tkViejo, double percent, int tkNuevo);
+
+    //--- Revertir
+    ENUM_ORDER_TYPE typeInverso(ENUM_ORDER_TYPE type);
+    double          tpInverso(double openPrice, double tpPrice, double pips, ENUM_ORDER_TYPE type);
+    double          slInverso(double openPrice, double slPrice, double pips, ENUM_ORDER_TYPE type);
+};
+
+CReceptorInverso::CReceptorInverso()
+{
+    controlarID();
+    GetEquivalenciasyLots();
+}
+CReceptorInverso::~CReceptorInverso() {}
+
+//+------------------------------------------------------------------+
+bool CReceptorInverso::controlarID()
+{
+    idReceptor(NroID);
+    if (NroID == 0) {
+        MessageBox("Cambiar Nro de Receptor", NULL);
+        return false;
+    }
+    return true;
+}
+//+------------------------------------------------------------------+
+void CReceptorInverso::LeerArchivo(void)
+{
+    string nameFile = "Receptor" + (string)id + ".csv";
+    if (!FileIsExist(nameFile, FILE_COMMON)) {
+        return;
+    }
+    int    file = FileOpen(nameFile, FILE_COMMON | FILE_WRITE | FILE_READ | FILE_CSV);
+    string Data[][10];
+    int    row = 0;
+
+    while (!FileIsEnding(file)) {
+        ArrayResize(Data, ArrayRange(Data, 0) + 1);
+        for (int column = 0; column < 10; column++) {
+            string a          = FileReadString(file);
+            Data[row, column] = a;
+            Print("Receptor" + (string)id + Data[row, column]);
+        }
+        row++;
+    }
+    FileClose(file);
+    FileDelete(nameFile, FILE_COMMON);
+    ProcesarInfo(Data);
+}
+
+//+------------------------------------------------------------------+
+void CReceptorInverso::ProcesarInfo(string &data[][])
+{
+    //--- paso toda la info al array de Trades
+    for (int i = 0; i < ArrayRange(data, 0); i++) {
+        if (data[i, 8] == "Abrir")
+            if (isNewTrade((int)data[i, 0])) {
+                AgregarTrade(i, data);
+            } else {
+                ActualizarDatosTrade(i);
+            }
+
+        if (data[i, 8] == "Cambio") {
+            ModificarTrade(i, data);
+        }
+        //   if (data[i, 8] == "Cerrar") { CerrarTrade((int)data[i, 0]); }
+        //   if (data[i, 8] == "Parcial") { CerrarParcial((int)data[i, 7], (double)data[i, 9], (int)data[i, 0]); }
+    }
+    EjecutarTrades();
+}
+//+------------------------------------------------------------------+
+bool CReceptorInverso::isNewTrade(int tkParaControlar)
+{
+    for (int i = 0; i < ArraySize(Trades); i++) {
+        if (Trades[i].tkEmisor == tkParaControlar) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+// NOTE: AgregarTrade
+// directamente guardar el trade cambiado y todo va a actuar como si realmente el inverso fuera el original
+// armar funciones que den vuelta tp, sl y cambien el tipo
+//+------------------------------------------------------------------+
+void CReceptorInverso::AgregarTrade(int i, string &data[][])
+{
+    if (data[i, 8] != "Abrir") return;
+
+    int index = ArraySize(Trades);
+    ArrayResize(Trades, ArraySize(Trades) + 1);
+
+    Trades[index].tkEmisor = (int)data[i, 0];
+    Trades[index].par      = ParEquivalente(data[i, 1]);
+    Trades[index].entry    = (double)data[i, 2];
+    Trades[index].tipo     = typeInverso((ENUM_ORDER_TYPE)(int)data[i, 5]);
+
+    //    Trades[index].sl = (double)data[i, 3];
+    double slpips    = uSlPips * 10 * SymbolInfoDouble(Trades[index].par, SYMBOL_POINT);
+    Trades[index].sl = slInverso((double)data[i, 2], (double)data[i, 3], slpips, Trades[index].tipo);
+    //    Trades[index].tp = (double)data[i, 4];
+
+    double tppips    = uTpPips * 10 * SymbolInfoDouble(Trades[index].par, SYMBOL_POINT);
+    Trades[index].tp = tpInverso((double)data[i, 2], (double)data[i, 4], tppips, Trades[index].tipo);
+
+    //    Trades[index].tipo = (ENUM_ORDER_TYPE)(int)data[i, 5];
+
+    Trades[index].lots   = LotEquivalente(data[i, 1], (double)data[i, 6]);
+    Trades[index].coment = data[i, 7];
+    //---
+    Print(__FUNCTION__, " ", "Agregando ", Trades[index].tkEmisor);
+    PrintTrade(i);
+}
+
+//+------------------------------------------------------------------+
+void CReceptorInverso::ModificarTrade(int i, string &data[][])
+{
+    int tk = (int)data[i, 0];
+
+    for (int index = 0; index < ArraySize(Trades); index++) {
+        if (Trades[index].tkEmisor == tk) {
+            Trades[index].entry = (double)data[i, 2];
+
+            double slpips    = uSlPips * 10 * SymbolInfoDouble(Trades[index].par, SYMBOL_POINT);
+            Trades[index].sl = slInverso((double)data[i, 2], (double)data[i, 3], slpips, Trades[index].tipo);
+
+            double tppips    = uTpPips * 10 * SymbolInfoDouble(Trades[index].par, SYMBOL_POINT);
+            Trades[index].tp = tpInverso((double)data[i, 2], (double)data[i, 4], tppips, Trades[index].tipo);
+
+            if (OrderModify(Trades[index].tkReceptor, Trades[index].entry, Trades[index].sl, Trades[index].tp, 0, clrNONE)) {
+                Print(__FUNCTION__, " Modificando ", Trades[index].tkReceptor, " ", Trades[index].par);
+                PrintTrade(index);
+            }
+        }
+    }
+}
+//+------------------------------------------------------------------+
+void CReceptorInverso::CerrarTrade(int tkToClose)
+{
+    for (int index = 0; index < ArraySize(Trades); index++) {
+        if (Trades[index].tkEmisor == tkToClose) {
+            double precio = Trades[index].entry;
+            Print(__FUNCTION__, " TRADE TIPO: ", (string)Trades[index].tipo);
+
+            //--- si es un trade abierto:
+            if (Trades[index].tipo == OP_BUY || Trades[index].tipo == OP_SELL) {
+                if (Trades[index].tipo == OP_BUY) {
+                    precio = SymbolInfoDouble(Trades[index].par, SYMBOL_BID);
+                }
+                if (Trades[index].tipo == OP_SELL) {
+                    precio = SymbolInfoDouble(Trades[index].par, SYMBOL_ASK);
+                }
+                Print(__FUNCTION__, " ", "Trades[index].lots", " ", Trades[index].lots);
+                if (OrderClose(Trades[index].tkReceptor, Trades[index].lots, precio, 20, clrNONE)) {
+                    Print(__FUNCTION__, " Cerrando Trade: ", Trades[index].tkReceptor, " ", Trades[index].par);
+                    return;
+                }
+            }
+
+            //--- si es un trade pendiente:
+            if (Trades[index].tipo != OP_BUY || Trades[index].tipo != OP_SELL) {
+                if (OrderDelete(Trades[index].tkReceptor, clrNONE)) {
+                    Print(__FUNCTION__, " Borrando Trade: ", Trades[index].tkReceptor, " ", Trades[index].par);
+                    return;
+                }
+            }
+        }
+    }
+}
+
+//+------------------------------------------------------------------+
+//|      * Funciones de CERRAR PARCIAL *
+//+------------------------------------------------------------------+
+
+void CReceptorInverso::CerrarParcial(int tkViejo, double percent, int tkNuevo)
+{
+    int i = BuscarIndex(tkViejo);
+    if (i == -1) {
+        return;
+    }
+
+    if (Trades[i].tipo == OP_BUY) {
+        double mBid   = SymbolInfoDouble(Trades[i].par, SYMBOL_BID);
+        double mPoint = SymbolInfoDouble(Trades[i].par, SYMBOL_POINT);
+        if (CerrarLots(i, percent, mBid)) {
+            Trades[i].tkEmisor = tkNuevo;
+            ReemplazarTk(i);
+        }
+    }
+    if (Trades[i].tipo == OP_SELL) {
+        double mAsk   = SymbolInfoDouble(Trades[i].par, SYMBOL_ASK);
+        double mPoint = SymbolInfoDouble(Trades[i].par, SYMBOL_POINT);
+        if (CerrarLots(i, percent, mAsk)) {
+            Trades[i].tkEmisor = tkNuevo;
+            ReemplazarTk(i);
+        }
+    }
+}
+
+// cierra el porcentaje de lotes indicado por emisor
+//+------------------------------------------------------------------+
+bool CReceptorInverso::CerrarLots(int index, double percent, double price)
+{
+    if (OrderSelect(Trades[index].tkReceptor, SELECT_BY_TICKET)) {
+        double LotsToClose = NormalizeDouble((OrderLots() * percent), 2);
+        Print(__FUNCTION__, " ", "LotsToClose", " ", LotsToClose);
+
+        if (OrderClose(Trades[index].tkReceptor, LotsToClose, price, 20, clrNONE)) {
+            return true;
+        }
+    }
+    return false;
+}
+//+------------------------------------------------------------------+
+void CReceptorInverso::ReemplazarTk(int index)
+{
+    for (int i = 0; i < OrdersTotal(); i++) {
+        if (OrderSelect(i, SELECT_BY_POS, MODE_TRADES)) {
+            int tk = OrderTicket();
+            // int Magico = OrderMagicNumber();
+            // if(ControlMagico(OrderMagicNumber())){
+            if (!tengoEseTk(tk)) {
+                Trades[index].tkReceptor = tk;
+                ActualizarDatosTrade(index);
+                Print(__FUNCTION__, "en Trade: " + (string)index + " nuevo Tk Receptor:" + (string)tk);
+                PrintTrade(index);
+            }
+            // }
+        }
+    }
+}
+//+------------------------------------------------------------------+
+void CReceptorInverso::ActualizarDatosTrade(int index)
+{
+    if (OrderSelect(Trades[index].tkReceptor, SELECT_BY_TICKET)) {
+        Trades[index].tipo   = (ENUM_ORDER_TYPE)OrderType();
+        Trades[index].entry  = (double)OrderOpenPrice();
+        Trades[index].sl     = (double)OrderStopLoss();
+        Trades[index].tp     = (double)OrderTakeProfit();
+        Trades[index].lots   = (double)OrderLots();
+        Trades[index].coment = (string)OrderComment();
+
+    } else {
+        Print(__FUNCTION__, " ", "No se pudo actualizar los datos TK:", Trades[index].tkReceptor, " ", GetLastError());
+    }
+}
+//+------------------------------------------------------------------+
+void CReceptorInverso::ModificarTrades(int index, string atributo, int value)
+{
+    //--- controlar desborde
+    int t = ArraySize(Trades);
+    if (index > t - 1) {
+        index = t - 1;
+    }
+    if (index < 0) {
+        return;
+    }
+    //---
+    if (atributo == "tkReceptor") {
+        Trades[index].tkReceptor = value;
+    }
+    Print("en Trade: " + (string)index + " nuevo " + atributo + ": " + (string)value);
+    PrintTrade(index);
+}
+//+------------------------------------------------------------------+
+bool CReceptorInverso::tengoEseTk(int tk)
+{
+    for (int i = 0; i < ArraySize(Trades); i++) {
+        if (Trades[i].tkReceptor == tk) {
+            return true;
+        }
+    }
+    return false;
+}
+// le pasas el tk y te devuelve el index
+//+------------------------------------------------------------------+
+int CReceptorInverso::BuscarIndex(int tk)
+{
+    for (int i = 0; i < ArraySize(Trades); i++) {
+        if (Trades[i].tkEmisor == tk) {
+            return i;
+        }
+    }
+
+    Print(__FUNCTION__, " ", "tk", tk, "No Encontrado");
+    return -1;
+}
+
+//+------------------------------------------------------------------+
+void CReceptorInverso::EjecutarTrades(void)
+{
+    //--- recorrer los trades
+    for (int i = 0; i < ArraySize(Trades); i++) {
+        if (Trades[i].tkReceptor == 0) {
+            int tk = EjecutarTrade(i);
+            if (tk != -1) {
+                Trades[i].tkReceptor = tk;
+            }
+        }
+    }
+}
+
+// NOTE: EjecutarTrade
+//+------------------------------------------------------------------+
+int CReceptorInverso::EjecutarTrade(int index)
+{
+    int    i      = index;
+    double precio = Trades[i].entry;
+    if (Trades[i].tipo == OP_BUY) {
+        precio = SymbolInfoDouble(Trades[i].par, SYMBOL_ASK);
+    }
+    if (Trades[i].tipo == OP_SELL) {
+        precio = SymbolInfoDouble(Trades[i].par, SYMBOL_BID);
+    }
+
+    string coment = Trades[i].coment + uComentario;
+
+    int tk = OrderSend(Trades[i].par, Trades[i].tipo, Trades[i].lots, precio, 30, Trades[i].sl, Trades[i].tp, coment, 0, 0, clrNONE);
+    //---
+    return tk;
+}
+
+//+------------------------------------------------------------------+
+void CReceptorInverso::DetectarCerradas(void) {}
+//+------------------------------------------------------------------+
+void CReceptorInverso::PrintTrade(int index)
+{
+    if (ArraySize(Trades) == 0) {
+        return;
+    }
+    //--- controlar desborde
+    int t = ArraySize(Trades);
+    if (index > t - 1) {
+        index = t - 1;
+    }
+    if (index < 0) {
+        return;
+    }
+    //---
+    Print((string)index + " tk: " + (string)Trades[index].tkEmisor);
+    Print((string)index + " par: " + (string)Trades[index].par);
+    Print((string)index + " entry: " + (string)Trades[index].entry);
+    Print((string)index + " sl: " + (string)Trades[index].sl);
+    Print((string)index + " tp: " + (string)Trades[index].tp);
+    Print((string)index + " lots: " + (string)Trades[index].lots);
+    Print((string)index + " tipo: " + (string)Trades[index].tipo);
+    Print((string)index + " comment: " + (string)Trades[index].coment);
+    Print((string)index + " enviado: " + (string)Trades[index].enviado);
+}
+
+//+------------------------------------------------------------------+
+// Get Equivalencias
+//+------------------------------------------------------------------+
+void CReceptorInverso::GetEquivalenciasyLots()
+{
+    // hay que hacer 2 divisiones de cadenas
+    // 1. TODAS las separadas por ","
+    ArrayFree(equivalencia);
+    for (int j = 0; j < 3; j++) {
+        string CortePorComa[];
+        string sep = ",";
+        ushort u_sep;
+        u_sep = StringGetCharacter(sep, 0);
+        int k;
+        if (j == 0) {
+            k = StringSplit(UserEqIndices, u_sep, CortePorComa);
+            if (UserEqIndices == "") continue;
+        }
+        if (j == 1) {
+            k = StringSplit(UserEqGold, u_sep, CortePorComa);
+            if (UserEqGold == "") continue;
+        }
+        if (j == 2) {
+            k = StringSplit(UserEqOtras, u_sep, CortePorComa);
+            if (UserEqOtras == "") continue;
+        }
+
+        int t = ArraySize(equivalencia);
+        ArrayResize(equivalencia, t + ArraySize(CortePorComa), 0);
+
+        for (int i = 0; i < ArraySize(CortePorComa); i++) {
+            // 2. dividir la cadena separada por "="
+            string CortePorIgual[];
+            sep   = "=";
+            u_sep = StringGetCharacter(sep, 0);
+            k     = StringSplit(CortePorComa[i], u_sep, CortePorIgual);
+
+            // 3. guardar en el array equivalencias:
+            equivalencia[t + i].enEmisor   = CortePorIgual[0];
+            equivalencia[t + i].enReceptor = CortePorIgual[1];
+            // 4. agrego el lotaje para esa equivalencia
+            if (j == 0) {
+                equivalencia[t + i].lotEq = inpLotIndices;
+            }
+            if (j == 1) {
+                equivalencia[t + i].lotEq = inpLotOro;
+            }
+            if (j == 2) {
+                equivalencia[t + i].lotEq = inpLotOtras;
+            }
+        }
+    }
+    //--- print
+    for (int p = 0; p < ArraySize(equivalencia); p++) {
+        Print(equivalencia[p].enEmisor);
+        Print(equivalencia[p].enReceptor);
+    }
+}
+
+// ------------------------------------------------------------------
+string CReceptorInverso::ParEquivalente(string parRecibido)
+{
+    for (int i = 0; i < ArraySize(equivalencia); i++) {
+        if (equivalencia[i].enEmisor == parRecibido) return equivalencia[i].enReceptor;
+    }
+
+    return parRecibido;
+}
+
+// ------------------------------------------------------------------
+double CReceptorInverso::LotEquivalente(string parRecibido, double lotEmisor)
+{
+    for (int i = 0; i < ArraySize(equivalencia); i++) {
+        if (equivalencia[i].enEmisor == parRecibido) return equivalencia[i].lotEq;
+    }
+
+    if (inpLotbyDefault == 0) {
+        return lotEmisor;
+    }
+
+    return inpLotbyDefault;
+}
+
+//+------------------------------------------------------------------+
+// Revertir cosas
+//+------------------------------------------------------------------+
+
+// ------------------------------------------------------------------
+ENUM_ORDER_TYPE CReceptorInverso::typeInverso(ENUM_ORDER_TYPE type)
+{
+    ENUM_ORDER_TYPE typeinverso = type == OP_BUY ? OP_SELL : OP_BUY;
+    return typeinverso;
+}
+
+// ------------------------------------------------------------------
+double CReceptorInverso::tpInverso(double openPrice, double TpPrice, double TpPips, ENUM_ORDER_TYPE type)
+{
+    if (TpPrice == 0 && TpByDefaultOn == false) {
+        return 0;
+    }
+
+    double dist = TpByDefaultOn == false ? fabs(openPrice - TpPrice) : TpPips;
+    // double dist = fabs(openPrice - TpPrice);
+    // double result = openPrice < TpPrice ? openPrice - dist : openPrice + dist;
+
+    double result = 0;
+
+    if (type == OP_BUY) {
+        result = openPrice + dist;
+    } else {
+        result = openPrice - dist;
+    }
+
+    Print(__FUNCTION__, " result: ", result);
+    return result;
+}
+
+// ------------------------------------------------------------------
+double CReceptorInverso::slInverso(double openPrice, double slPrice, double SlPips, ENUM_ORDER_TYPE type)
+{
+    if (slPrice == 0 && SlByDefaultOn == false) {
+        return 0;
+    }
+
+    double dist = SlByDefaultOn == false ? fabs(openPrice - slPrice) : SlPips;
+    // double result = openPrice > slPrice ? openPrice + dist : openPrice - dist;
+    double result = 0;
+
+    if (type == OP_BUY) {
+        result = openPrice - dist;
+    } else {
+        result = openPrice + dist;
+    }
+    Print(__FUNCTION__, " result: ", result);
+    return result;
+}
+
+#endif
+
+#define _emisor
+#ifdef _emisor
+//+------------------------------------------------------------------+
+//|                                                       Emisor.mqh |
+//|                                  Copyright 2021, Carlos Vallogia |
+//|                                 https://www.thetradingrobots.com |
+//+------------------------------------------------------------------+
+//--- Inputs:
+input string Modo_Emisor   = "==== Modo Emisor ===="; // -----------------
+input string inpReceptores = "1,2";                   // Numero Receptores (separado por comas):
+input int    uQntABloquear = 2;                       // Copiar a partir del trade:
+// input string UserOrdersMagicNrs;  // Magic Numbers separados por coma:
+
+datetime horaInicio;
+
+//--- Clase CEmisor
+//+------------------------------------------------------------------+
+class CEmisor
+{
+  private:
+    struct TradeData {
+        int             tk;
+        string          par;
+        double          entry;
+        double          sl;
+        double          tp;
+        ENUM_ORDER_TYPE tipo;
+        double          lots;
+        string          coment;
+        bool            enviado;
+        string          accion;
+        double          percentToClose;
+    };
+    TradeData Trades[];
+    int       Receptores[];
+    int       qntBloquear;
+    int       tksBloqueados[];
+
+  public:
+    CEmisor();
+    ~CEmisor();
+    void SetQntABloquear(int qnt)
+    {
+        if (qnt <= 0) qnt = 1;
+        qntBloquear = qnt - 1;
+        ArrayResize(tksBloqueados, qnt - 1);
+    }
+    void   Reiniciar(void) { GetReceptores(); } // para cuando se reinicia el EA
+    void   ReconocerTrade(void);
+    void   BorrarDatos(void);
+    bool   BuscarTicket(int tk);
+    void   AgregarTrade(int index, bool enviado);
+    void   DeleteTrade(int index);
+    void   PrintTrade(int index);
+    bool   DetectarCambios(void);
+    void   GetReceptores(void);
+    void   EnviarTrades(void);
+    bool   HayCambios(void);
+    bool   HayCierres(void);
+    void   CambiarTrade(int index, string action);
+    double CalcularLote(int i);
+    void   BorrarTradesCerrados(void);
+    void   Emitir(void);
+    bool   ComentarioTieneTo(string coment);
+    bool   vieneDeParcial(string coment);
+    bool   esCopia(string coment);
+    void   ReemplazarTk(int index);
+    bool   tengoEseTk(int tk);
+    void   ModificarTrades(int index, string atributo, int value);
+    int    ticketFrom(string coment, int tk);
+    int    BuscarIndex(int tk);
+    bool   esTradeAMercado(int tk);
+    double PercentToClose(int index, double lotsFinal);
+    void   setIniTime(void) { horaInicio = TimeCurrent(); }
+    bool   EstaBloqueado(int tk);
+    bool   EstaBloqueado(string symbol);
+    void   ReiniciarBloqueador();
+};
+
+CEmisor::CEmisor()
+{
+    GetReceptores();
+    setIniTime();
+}
+CEmisor::~CEmisor() {}
+
+// Flujo de Trabajo del Emisor
+//+------------------------------------------------------------------+
+void CEmisor::Emitir()
+{
+    ReconocerTrade();
+    EnviarTrades();
+    if (HayCambios()) {
+        EnviarTrades();
+    }
+    if (HayCierres()) {
+        ReconocerTrade();
+        EnviarTrades();
+        BorrarTradesCerrados();
+    }
+    ReiniciarBloqueador();
+}
+
+// NOTE: ReconocerTrade
+// Reconoce si hay un trade nuevo en la plataforma
+//+------------------------------------------------------------------+
+void CEmisor::ReconocerTrade()
+{
+
+    for (int i = 0; i <= OrdersTotal() - 1; i++) {
+        if (OrderSelect(i, SELECT_BY_POS, MODE_TRADES)) {
+            int tk     = OrderTicket();
+            int Magico = OrderMagicNumber();
+            // if(EstaBloqueado(tk)){ continue; }
+
+            if (OrderOpenTime() < horaInicio) {
+                continue;
+            }
+            if (esCopia(OrderComment())) {
+                continue;
+            }
+            if (esTradeAMercado(tk))
+                if (!BuscarTicket(tk)) {
+                    if (EstaBloqueado(OrderSymbol())) {
+                        AgregarTrade(i, true);
+                        continue;
+                    }
+                    if (!vieneDeParcial(OrderComment())) {
+                        AgregarTrade(i);
+                        PrintTrade(i);
+                    } else {
+                        int index = BuscarIndex(ticketFrom(OrderComment(), tk));
+                        if (index != -1) {
+                            Trades[index].coment = (string)Trades[index].tk; //*guardo el tk original en el comentario
+                            Trades[index].tk     = tk;
+                            CambiarTrade(index, "Parcial");
+                        }
+                        if (index == -1) {
+                            AgregarTrade(i);
+                            PrintTrade(i);
+                        }
+                    }
+                }
+        }
+    }
+}
+
+//+------------------------------------------------------------------+
+bool CEmisor::esTradeAMercado(int tk)
+{
+    if (OrderSelect(tk, SELECT_BY_TICKET)) {
+        if (OrderType() == OP_BUY || OrderType() == OP_SELL) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// detectar cuando un trade guardado el usuario cambió TP, SL ó type
+//+------------------------------------------------------------------+
+bool CEmisor::DetectarCambios()
+{
+    int t = ArraySize(Trades);
+    for (int i = 0; i < t; i++) {
+        if (OrderSelect(Trades[i].tk, SELECT_BY_TICKET)) {
+            if (OrderCloseTime() != 0) continue;
+
+            ENUM_ORDER_TYPE type = (ENUM_ORDER_TYPE)OrderType();
+
+            if (OrderTakeProfit() != Trades[i].tp) {
+                Trades[i].tp = OrderTakeProfit(); // cambio el tp guardado
+                return true;
+            }
+            if (OrderStopLoss() != Trades[i].sl) {
+                Trades[i].sl = OrderStopLoss(); // cambio el sl guardado
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+// Borra todos los datos del array Trades
+//+------------------------------------------------------------------+
+void CEmisor::BorrarDatos() { ArrayFree(Trades); }
+
+// busca el tk en los trades guardados
+//+------------------------------------------------------------------+
+bool CEmisor::BuscarTicket(int tk)
+{
+    for (int i = 0; i < ArraySize(Trades); i++) {
+        if (Trades[i].tk == tk) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// Agrega un trade que no está en el array
+//+------------------------------------------------------------------+
+void CEmisor::AgregarTrade(int index, bool enviado = false)
+{
+    int j = ArraySize(Trades);
+    ArrayResize(Trades, j + 1);
+
+    if (OrderSelect(index, SELECT_BY_POS)) {
+        Trades[j].tk         = OrderTicket();
+        Trades[j].par        = OrderSymbol();
+        Trades[j].entry      = OrderOpenPrice();
+        Trades[j].sl         = OrderStopLoss();
+        Trades[j].tp         = OrderTakeProfit();
+        ENUM_ORDER_TYPE type = (ENUM_ORDER_TYPE)OrderType();
+        Trades[j].tipo       = type;
+        Trades[j].lots       = OrderLots();
+        Trades[j].coment     = OrderComment();
+        Trades[j].enviado    = enviado;
+        // v1.0
+        Trades[j].accion = "Abrir";
+    }
+}
+//+------------------------------------------------------------------+
+void CEmisor::BorrarTradesCerrados()
+{
+    int qntTrades = ArraySize(Trades);
+    for (int i = 0; i < qntTrades; i++) {
+        if (Trades[i].accion == "Cerrar") {
+            DeleteTrade(i);
+            qntTrades--;
+            i--;
+        }
+    }
+}
+
+// Eliminar un trade en cualquier posición y ordenar el array
+//+------------------------------------------------------------------+
+void CEmisor::DeleteTrade(int index)
+{
+    int t = ArraySize(Trades);
+    if (t == 1) {
+        BorrarDatos();
+        return;
+    }
+    // tiene que pasar una posición abajo todos los trades siguientes al que borraste
+    for (int i = index; i < t; i++) {
+        if (ArraySize(Trades) > i + 1) Trades[i] = Trades[i + 1];
+        PrintTrade(i);
+    }
+    // achicar el array borrando la última posición:
+    ArrayResize(Trades, t - 1);
+}
+
+//+------------------------------------------------------------------+
+void CEmisor::PrintTrade(int index)
+{
+    if (ArraySize(Trades) == 0) {
+        return;
+    }
+    //--- controlar desborde
+    int t = ArraySize(Trades);
+    if (index > t - 1) {
+        index = t - 1;
+    }
+    if (index < 0) {
+        return;
+    }
+    //---
+    Print((string)index + " par: " + (string)Trades[index].par);
+    Print((string)index + " tk: " + (string)Trades[index].tk);
+    Print((string)index + " entry: " + (string)Trades[index].entry);
+    Print((string)index + " sl: " + (string)Trades[index].sl);
+    Print((string)index + " tp: " + (string)Trades[index].tp);
+    Print((string)index + " lots: " + (string)Trades[index].lots);
+    Print((string)index + " tipo: " + (string)Trades[index].tipo);
+    Print((string)index + " comment: " + (string)Trades[index].coment);
+    Print((string)index + " enviado: " + (string)Trades[index].enviado);
+}
+
+// Get Receptores
+//+------------------------------------------------------------------+
+void CEmisor::GetReceptores()
+{
+    string stringReceptores[];
+    string sep = ",";
+    ushort u_sep;
+    u_sep = StringGetCharacter(sep, 0);
+    int k = StringSplit(inpReceptores, u_sep, stringReceptores);
+    ArrayResize(Receptores, ArrayRange(stringReceptores, 0), 0);
+    for (int i = 0; i < ArrayRange(stringReceptores, 0); i++) {
+        Receptores[i] = (int)stringReceptores[i];
+    }
+    if (ArrayRange(Receptores, 0) > 0) {
+        ArraySort(Receptores, WHOLE_ARRAY, 0, MODE_ASCEND);
+    }
+}
+
+// Envia los trades al archivo para que los levanten los receptores
+//+------------------------------------------------------------------+
+void CEmisor::EnviarTrades()
+{
+    int    qntTrades = ArraySize(Trades);
+    string Data[500][10];
+    int    qntReceptores = ArraySize(Receptores);
+    int    file          = 0;
+
+    // paso todos los trades no enviados al array data
+    for (int i = 0; i < qntTrades; i++) {
+        if (Trades[i].enviado == false) {
+            Data[i, 0] = (string)Trades[i].tk;
+            Data[i, 1] = (string)Trades[i].par;
+            Data[i, 2] = (string)Trades[i].entry;
+            Data[i, 3] = (string)Trades[i].sl;
+            Data[i, 4] = (string)Trades[i].tp;
+            Data[i, 5] = (string)Trades[i].tipo;
+            Data[i, 6] = (string)CalcularLote(i);
+            Data[i, 7] = (string)Trades[i].coment;
+            Data[i, 8] = (string)Trades[i].accion;
+            Data[i, 9] = (string)Trades[i].percentToClose;
+        }
+    }
+    // genero un archivo para cada receptor con los datos "Trades\Receptor1.csv"
+    for (int j = 0; j < qntReceptores; j++) {
+        // si alguno de los trades no está enviado, crea el archivo
+        for (int i = 0; i < qntTrades; i++) {
+            if (!Trades[i].enviado) {
+                string nameFile = "Receptor" + (string)Receptores[j] + ".csv";
+                file            = FileOpen(nameFile, FILE_COMMON | FILE_WRITE | FILE_READ | FILE_CSV);
+                break;
+            }
+        }
+
+        // va a escribir en el archivo todos los trades no enviados
+        for (int i = 0; i < qntTrades; i++) {
+            if (!Trades[i].enviado) {
+                FileWrite(file, Data[i, 0], Data[i, 1], Data[i, 2], Data[i, 3], Data[i, 4], Data[i, 5], Data[i, 6], Data[i, 7], Data[i, 8], Data[i, 9]);
+                // swith flag enviado:
+                if (j == qntReceptores - 1) {
+                    Trades[i].enviado = true;
+                }
+            }
+        }
+        FileClose(file);
+    }
+}
+
+//+------------------------------------------------------------------+
+double CEmisor::CalcularLote(int i)
+{
+    //--- Recalcula los lotes de los que tienen comentarios:
+    if (Trades[i].coment != "" && Trades[i].accion != "Parcial") {
+        double LotsToSend = NormalizeDouble(Trades[i].lots * (double)Trades[i].coment, 2);
+        Trades[i].coment  = "";
+        Print("Nuevo lots de trade", i, " es ", Trades[i].lots);
+        return LotsToSend;
+    }
+    return Trades[i].lots;
+}
+
+// Reconocer las modificaciones a las operaciones cargadas
+//+------------------------------------------------------------------+
+bool CEmisor::HayCambios()
+{
+    bool HayCambios = false;
+    for (int i = 0; i < ArraySize(Trades); i++) {
+        if (OrderSelect(Trades[i].tk, SELECT_BY_TICKET)) {
+            if (Trades[i].tp != OrderTakeProfit() || Trades[i].sl != OrderStopLoss() || Trades[i].entry != OrderOpenPrice()) {
+                CambiarTrade(i, "Cambio");
+                HayCambios = true;
+            }
+            if (Trades[i].tipo != OrderType()) {
+                CambiarTrade(i, "Abrir"); // una pendiente que se abre
+                HayCambios = true;
+            }
+        }
+    }
+    if (HayCambios) return true;
+    return false;
+}
+//+------------------------------------------------------------------+
+bool CEmisor::HayCierres()
+{
+    bool HayCierres = false;
+
+    for (int i = 0; i < ArraySize(Trades); i++) {
+        // Print("Buscando Cierre de tk: ", Trades[i].tk);
+        if (OrderSelect(Trades[i].tk, SELECT_BY_TICKET)) {
+            if (OrderCloseTime() != 0) {
+                if (!ComentarioTieneTo(OrderComment())) {
+                    CambiarTrade(i, "Cerrar");
+                    HayCierres = true;
+                }
+            }
+        } else {
+            Print("No pude seleccionar el tk error: ", GetLastError());
+        }
+    }
+
+    if (HayCierres) return true;
+    return false;
+}
+//+------------------------------------------------------------------+
+bool CEmisor::ComentarioTieneTo(string coment)
+{
+    if (StringFind(coment, "to", 0) != -1) return true;
+    return false;
+}
+
+// Actualiza los datos un trade,
+//+------------------------------------------------------------------+
+void CEmisor::CambiarTrade(int index, string action)
+{
+    if (OrderSelect(Trades[index].tk, SELECT_BY_TICKET)) {
+        Trades[index].par            = OrderSymbol();
+        Trades[index].tk             = OrderTicket();
+        Trades[index].entry          = OrderOpenPrice();
+        Trades[index].sl             = OrderStopLoss();
+        Trades[index].tp             = OrderTakeProfit();
+        Trades[index].tipo           = (ENUM_ORDER_TYPE)OrderType();
+        Trades[index].percentToClose = action == "Parcial" ? PercentToClose(index, OrderLots()) : 0;
+        Trades[index].lots           = OrderLots();
+        if (action != "Parcial") {
+            Trades[index].coment = "";
+        }
+        Trades[index].enviado = false;
+        Trades[index].accion  = action;
+        Print("cambio tipo: ", action, " en: ", Trades[index].tk);
+    }
+}
+//+------------------------------------------------------------------+
+double CEmisor::PercentToClose(int index, double lotsFinal)
+{
+    double percent = NormalizeDouble(1 - (lotsFinal / Trades[index].lots), 2);
+    Print(__FUNCTION__, " ", "percent", " ", percent);
+    return percent;
+}
+
+/*
+
+*******************************************************
+TERMINADO (probar)
+*******************************************************
+****** control de los symbolos que no son iguales ******
+1. armar una table para que el usuario ingrese las equivalencias
+2. cada ves que venga info del emisor hay que controlar la equivalencia
+
+*/
+//+------------------------------------------------------------------+
+void CEmisor::ReemplazarTk(int index)
+{
+    for (int i = 0; i < OrdersTotal(); i++) {
+        if (OrderSelect(i, SELECT_BY_POS, MODE_TRADES)) {
+            int tk = OrderTicket();
+            if (!tengoEseTk(tk)) {
+                ModificarTrades(index, "tk", tk);
+                PrintTrade(index);
+            }
+        }
+    }
+}
+//+------------------------------------------------------------------+
+bool CEmisor::tengoEseTk(int tk)
+{
+    for (int i = 0; i < ArraySize(Trades); i++) {
+        if (Trades[i].tk == tk) {
+            return true;
+        }
+    }
+    return false;
+}
+//+------------------------------------------------------------------+
+bool CEmisor::vieneDeParcial(string coment)
+{
+    if (StringFind(coment, "from", 0) != -1) return true;
+    return false;
+}
+//+------------------------------------------------------------------+
+void CEmisor::ModificarTrades(int index, string atributo, int value)
+{
+    //--- controlar desborde
+    int t = ArraySize(Trades);
+    if (index > t - 1) {
+        index = t - 1;
+    }
+    if (index < 0) {
+        return;
+    }
+    //---
+    if (atributo == "tk") {
+        Trades[index].tk = value;
+    }
+    Print("en Trade: " + (string)index + " nuevo " + atributo + ": " + (string)value);
+    PrintTrade(index);
+}
+// le pasas el tk y te devuelve el index o -1
+//+------------------------------------------------------------------+
+int CEmisor::BuscarIndex(int tk)
+{
+    for (int i = 0; i < ArraySize(Trades); i++) {
+        if (Trades[i].tk == tk) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+// te busca en el comentario cual es el tk original (cuando hay cierres parciales)
+//+------------------------------------------------------------------+
+int CEmisor::ticketFrom(string coment, int tk)
+{
+    string partes[];
+    string sep = "#";
+    ushort u_sep;
+    u_sep = StringGetCharacter(sep, 0);
+    int k = StringSplit(coment, u_sep, partes);
+    Print(__FUNCTION__, " ", "El ticket de Origen es", " ", partes[1]);
+
+    //---
+    return (int)partes[1];
+}
+
+// v3.0
+//+------------------------------------------------------------------+
+bool CEmisor::esCopia(string coment)
+{
+    if (StringFind(coment, uComentario, 0) != -1) return true;
+    return false;
+}
+
+// ------------------------------------------------------------------
+bool CEmisor::EstaBloqueado(int tk)
+{
+    for (int i = 0; i < ArraySize(tksBloqueados); i++) {
+        if (tksBloqueados[i] == 0) {
+            tksBloqueados[i] = tk;
+            return true;
+        }
+        if (tksBloqueados[i] == tk) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool CEmisor::EstaBloqueado(string sym)
+{
+    // contar los trades del par y si son menores al la cantidad a bloquear retonrnar true
+    int count = 0;
+    for (int i = OrdersTotal() - 1; i >= 0; i--) {
+        if (OrderSelect(i, SELECT_BY_POS) && OrderSymbol() == sym && OrderComment() != uComentario) {
+            count += 1;
+        }
+    }
+    if (count <= qntBloquear) {
+        return true;
+    }
+    return false;
+}
+
+// void Bloquear(int tk)
+// {
+//     int t = ArraySize(tksBloqueados);
+//     if(ArrayResize(tksBloqueados, t + 1))
+//     {
+//         tksBloqueados[t] = tk;
+//     }
+// }
+
+// ------------------------------------------------------------------
+void CEmisor::ReiniciarBloqueador()
+{
+    if (OrdersTotal() == 0) {
+        ArrayInitialize(tksBloqueados, 0);
+    }
+}
+#endif
+
+#define _program
+#ifdef _program
+
+// Class CProgram
+//+------------------------------------------------------------------+
+class CProgram
+{
+
+  protected:
+    CEmisor          emisor;
+    CReceptor        receptor;
+    CReceptorInverso receptorInverso;
+
+  private:
+  public:
+    CProgram(void);
+    ~CProgram(void);
+    virtual void OnEvent(const int id, const long &lparam, const double &dparam, const string &sparam);
+    int          OnInitEvent(void);
+    void         OnDeinitEvent(const int reason);
+    void         OnTimerEvent(void);
+    bool         BuscarInstancia();
+};
+
+CProgram::CProgram(void) {}
+CProgram::~CProgram(void) {}
+
+// ------------------------------------------------------------------
+int CProgram::OnInitEvent(void)
+{
+    // inicio normal:
+    if (deIniReason != REASON_PARAMETERS) {
+        if (Modo == EMISOR)
+            if (!BuscarInstancia()) {
+                return INIT_FAILED;
+            }
+        if (Modo == EMISOR) Comment("CopyTrade");
+        EventSetMillisecondTimer(200);
+        emisor.setIniTime();
+        emisor.SetQntABloquear(uQntABloquear);
+    }
+
+    // reinicio por parametros
+    if (deIniReason == REASON_PARAMETERS) {
+        if (Modo == EMISOR) {
+            emisor.Reiniciar();
+            emisor.SetQntABloquear(uQntABloquear);
+        }
+        if (Modo == RECEPTOR) {
+            receptor.Reiniciar();
+        }
+        // if (Modo == RECEPTOR_INVERSO) {
+        //     receptorInverso.Reiniciar();
+        // }
+    }
+
+    return INIT_SUCCEEDED;
+}
+
+// ------------------------------------------------------------------
+void CProgram::OnDeinitEvent(const int reason)
+{
+    deIniReason = reason;
+    if (deIniReason != REASON_PARAMETERS) {
+        Comment("");
+    }
+}
+
+// ------------------------------------------------------------------
+void CProgram::OnTimerEvent(void)
+{
+    if (Modo == EMISOR) {
+        emisor.Emitir();
+    }
+    if (Modo == RECEPTOR) {
+        receptor.LeerArchivo();
+    }
+    // if (Modo == RECEPTOR_INVERSO) {
+    //     receptorInverso.LeerArchivo();
+    // }
+}
+
+// ------------------------------------------------------------------
+bool CProgram::BuscarInstancia()
+{
+    long actual = ChartFirst();
+
+    while (actual != -1) {
+        string comentario;
+        if (ChartGetString(actual, CHART_COMMENT, comentario)) {
+            if (comentario == "CopyTrade") {
+                Alert("EL COPIADOR YA ESTÁ INICIADO! CHART: ", ChartSymbol(actual));
+                return false;
+            }
+        }
+        actual = ChartNext(actual);
+    }
+    return true;
+}
+
+#endif
+
+// Includes
+// #include "Program.mqh"
+CProgram program;
+
+// Gobal Variables
+//+------------------------------------------------------------------+
+
+// Expert initialization function
+//+------------------------------------------------------------------+
+int OnInit() { return (program.OnInitEvent()); }
+
+// Expert deinitialization function
+//+------------------------------------------------------------------+
+void OnDeinit(const int reason) { program.OnDeinitEvent(reason); }
+// Expert tick function
+//+------------------------------------------------------------------+
+void OnTick() {}
+//+------------------------------------------------------------------+
+//| Timer function                                                   |
+//+------------------------------------------------------------------+
+void OnTimer(void) { program.OnTimerEvent(); }
+//+------------------------------------------------------------------+
+//| Trade function                                                   |
+//+------------------------------------------------------------------+
+void OnTrade(void) {}
+//+------------------------------------------------------------------+
+//| ChartEvent function                                              |
+//+------------------------------------------------------------------+
+void OnChartEvent(const int id, const long &lparam, const double &dparam, const string &sparam)
+{
+    // program.ChartEvent(id, lparam, dparam, sparam);
+}
+//Available @  https://fxcodebase.com/code/viewtopic.php?f=38&t=76145
+
+// +------------------------------------------------------------------------------------------------+
+// |                                                            Copyright © 2025, Gehtsoft USA LLC   | 
+// |                                                                         http://fxcodebase.com   |
+// |                                                               PayPal: https://goo.gl/9Rj74e     |
+// +------------------------------------------------------------------------------------------------+
+// |                                                                   Developed by: Mario Jemic     |                    
+// |                                                                     mario.jemic@gmail.com       |
+// |                                                                 https://mario-jemic.com/        | 
+// |                                                             Patreon: http://tiny.cc/1ybwxz      |   
+// |                                                      Buy Me a Coffee: http://tiny.cc/bj7vxz     |  
+// +-----------------+----------------------+---------------------------------------------------------+
+// |  Cryptocurrency |  Network             |  Address                                                |
+// +-----------------+----------------------+---------------------------------------------------------+
+// |  BTC            |  BTC                 |  16F5k43RXibTmna4np8bPVgmXM1CzjXFJJ                     | 
+// |  SOL            |  SOL                 |  3nh5rpUKopcYLNU4zGCdUFAkM3iRQq8VVUmuzVG6VDf2           | 
+// |  ETH            |  ERC20               |  0xe53aab6bc468a963a02d1319660ee60cf80fc8e7             |
+// |  BNB            |  BEP20               |  0xe53aab6bc468a963a02d1319660ee60cf80fc8e7             | 
+// |  USDT           |  BEP20               |  0xe53aab6bc468a963a02d1319660ee60cf80fc8e7             | 
+// |  XRP            |  BEP20               |  0xe53aab6bc468a963a02d1319660ee60cf80fc8e7             | 
+// +-----------------+----------------------+---------------------------------------------------------+

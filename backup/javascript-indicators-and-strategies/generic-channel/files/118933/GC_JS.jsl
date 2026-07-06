@@ -1,0 +1,188 @@
+function Init()
+{
+    indicator.name("Generic Channel");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+		
+    indicator.parameters.addGroup("Data Selection");	
+	indicator.parameters.addString("INDICATOR", "Indicator", "", "");
+    indicator.parameters.setFlag("INDICATOR",core.FLAG_INDICATOR);
+	indicator.parameters.addInteger("Number", "Data Stream Number", "", 1, 1 , 100);
+		
+	indicator.parameters.addGroup("Data Smoothing");
+	indicator.parameters.addBoolean("Smoothing", "Use Data Smoothing", "", false);	
+	indicator.parameters.addInteger("Period", "Smoothing Period", "", 20, 1 , 1000);
+	indicator.parameters.addString("Method", "Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "EMA" , "EMA");
+	indicator.parameters.addStringAlternative("Method", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method", "HMA", "HMA" , "HMA");
+    indicator.parameters.addStringAlternative("Method", "WMA", "WMA" , "WMA");
+	indicator.parameters.addStringAlternative("Method", "NONLAGMA", "NONLAGMA", "NONLAGMA"); 
+	indicator.parameters.addStringAlternative("Method", "VIDYA", "VIDYA", "VIDYA"); 	
+	
+	indicator.parameters.addGroup("Channel Calculation");		
+	indicator.parameters.addInteger("SDP", "SD Period", "", 20, 1 , 1000);
+	indicator.parameters.addDouble("Multi", "SD Period", "", 1);	
+
+    indicator.parameters.addGroup("Style");
+	indicator.parameters.addBoolean("Show", "Show Central Line", "", false);
+    indicator.parameters.addColor("Up", "Up Line Color", "", core.rgb(0, 255, 0));
+	indicator.parameters.addColor("Mid", "Central Line Color", "", core.rgb(0, 0,255));
+	indicator.parameters.addColor("Down", "Down Line Color", "", core.rgb(255, 0, 0));
+
+}
+
+var Number;
+var INDICATOR;
+var final={};
+var FIRST=1;
+var source;
+var Indicator= null;
+var Count; 
+var TEMP;  
+var INDEX={};
+var Up,Down,Neutral;
+var SDP;
+var Top, Bottom, Central;
+var Smoothing,Show;
+var Method,Multi;
+var MA;
+var Period;
+function Prepare()
+{
+    Period=instance.parameters.Period;
+    Multi=instance.parameters.Multi;
+     Method=instance.parameters.Method; 
+     Smoothing=instance.parameters.Smoothing;
+    Up=instance.parameters.Up;
+	Down=instance.parameters.Down;
+	Show=instance.parameters.Show;
+	Mid=instance.parameters.Mid;
+
+    INDICATOR=instance.parameters.INDICATOR;
+	SDP=instance.parameters.SDP;
+	
+	
+	source = instance.source;   
+   	Number=instance.parameters.Number;
+	Number=Number-1;
+	
+	Up=instance.parameters.Up;
+	Down=instance.parameters.Down;
+	Neutral=instance.parameters.Neutral;
+	
+	  var name =  profile.id()  ;
+	
+	var i;
+	
+			assert(core.indicators.findIndicator(Method) != null, "Please, {wnload && install " +  Method +".LUA indicator");
+
+	
+  
+     name = name+", ("  +  INDICATOR +", " +SDP +", " + Multi + ", " + Method + ", " +Period + ")";  	
+	instance.name(name);
+	
+		var tmpprofile = core.indicators.findIndicator(instance.parameters.getString("INDICATOR"));
+		var tmpparams = instance.parameters.getCustomParameters("INDICATOR");
+
+		if (tmpprofile.requiredSource() == core.Tick) 
+		{			
+			TEMP = tmpprofile.createInstance( source.close, tmpparams);
+		}
+		else
+		{
+			TEMP = tmpprofile.createInstance(source, tmpparams);
+		}
+		
+	
+	 Count= TEMP.getStreamCount ();
+	 
+	 if (Number >= Count) 
+	 {
+	 Number = Count;
+	  assert( false, "Incorrect index of stream. The indicator has only "+ Count  + " stream(s).");
+	 }			
+			            i=Number;
+						INDEX[i]=  TEMP.getStream (i);	
+
+   
+						
+				
+						FIRST = Math.max(FIRST, INDEX[i].first()) ;		
+
+		
+    if (!(nameOnly)) 
+    {
+	
+	     if (!Smoothing && !Show) 
+	     {
+		  Central = instance.addInternalStream( FIRST , 0);
+		 }
+		 else if (Smoothing &&  Show) 
+		 {		 
+		  Central = instance.addStream("CENTRAL", core.Line, name,  Method +" of " + INDICATOR , Mid, FIRST);
+		 }
+		 else if (Show) 
+		 {		 
+		  Central = instance.addStream("CENTRAL", core.Line, name,  INDICATOR , Mid, FIRST);
+		 }
+		 else
+		 {
+		  Central = instance.addInternalStream( FIRST , 0);
+		 }
+		 
+		   if (Smoothing) 
+		   {
+			MA = core.indicators.create(Method, TEMP.DATA, Period);			
+		   }	
+	
+         Top = instance.addStream("TOP", core.Line, name, "Top", Up, FIRST + SDP);		
+		 Bottom = instance.addStream("BOTTOM", core.Line, name, "Bottom", Down, FIRST + SDP);
+    }				  
+    
+}
+
+function Update(period, mode)
+{
+    TEMP.update(mode);
+	
+	if (period < FIRST) 
+	{
+	 return;
+	}
+	
+	if (Smoothing) 
+	{
+		MA.update(mode);
+		  if (period > MA.DATA.first()) 
+		  {
+		   Central[period] = MA.DATA[period];
+		  }
+	}
+	else
+	{
+	 Central[period] = INDEX[Number][period];
+	}
+    
+	if (period < FIRST + SDP) 
+	{
+	 return;
+	}
+	
+	var STDEV;
+	
+	
+	STDEV= Math.stdev (Central, period-SDP+1, period);
+	
+	
+   Top[period] = Central[period] +  STDEV* Multi ;
+   Bottom[period] = Central[period] - STDEV* Multi;
+	
+}
+	
+

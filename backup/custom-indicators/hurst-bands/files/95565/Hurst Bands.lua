@@ -1,0 +1,240 @@
+-- Id: 12360
+-- More information about this indicator can be found at:
+-- http://fxcodebase.com/code/viewtopic.php?f=17&t=61075
+
+--+------------------------------------------------------------------+
+--|                               Copyright © 2018, Gehtsoft USA LLC |
+--|                                            http://fxcodebase.com |
+--+------------------------------------------------------------------+
+--|                                      Developed by : Mario Jemic  |
+--|                                          mario.jemic@gmail.com   |
+--+------------------------------------------------------------------+
+--|                                 Support our efforts by donating  |
+--|                                 Patreon : https://goo.gl/GdXWeN  |
+--|                                  Paypal : https://goo.gl/9Rj74e  |
+--|                    BitCoin : 15VCJTLaz12Amr7adHSBtL9v8XomURo9RF  |
+--|               BitCoin Cash : 1BEtS465S3Su438Kc58h2sqvVvHK9Mijtg  |
+--|           Ethereum : 0x8C110cD61538fb6d7A2B47858F0c0AaBd663068D  |
+--|                   LiteCoin : LLU8PSY2vsq7B9kRELLZQcKf5nJQrdeqwD  |
+--+------------------------------------------------------------------+
+
+function Init()
+    indicator:name("Hurst Bands");
+    indicator:description("Hurst Bands");
+    indicator:requiredSource(core.Bar);
+    indicator:type(core.Indicator);
+    indicator.parameters:addGroup("Calculation");	
+    indicator.parameters:addInteger("length", "Length", "Length", 10, 1, 2000);
+    indicator.parameters:addInteger("smooth", "MA Length for Close", "MA Length for Close", 1, 1, 2000);
+	indicator.parameters:addDouble("InnerValue", "Inner Value", "Inner Value", 1.6);
+    indicator.parameters:addDouble("OuterValue", "Outer Value", "Outer Value", 2.6);
+    indicator.parameters:addDouble("ExtremeValue", "Extreme Value", "Extreme Value", 4.2);
+	
+	indicator.parameters:addBoolean("showExtremeBands", "Display Extreme Bands", "", true);
+	indicator.parameters:addBoolean("showOuterBand", "Display OuterBand", "", true);
+	indicator.parameters:addBoolean("showInnerBand", "Display InnerBand", "", true);
+	indicator.parameters:addBoolean("showClosingPriceLine", "Plot Close price", "", true);
+	
+	indicator.parameters:addGroup("Style");	
+    indicator.parameters:addColor("CenterLine_color", "Color of CenterLine", "Color of CenterLine", core.rgb(255, 0, 0));
+	indicator.parameters:addInteger("width1", "Line width", "", 1, 1, 5);
+    indicator.parameters:addInteger("style1", "Line style", "", core.LINE_SOLID);
+    indicator.parameters:setFlag("style1", core.FLAG_LINE_STYLE);
+	
+  
+    indicator.parameters:addColor("UpperExtremeBand_color", "Color of UpperExtremeBand", "Color of UpperExtremeBand", core.rgb(0, 255, 255));
+	indicator.parameters:addInteger("width3", "Line width", "", 1, 1, 5);
+    indicator.parameters:addInteger("style3", "Line style", "", core.LINE_SOLID);
+    indicator.parameters:setFlag("style3", core.FLAG_LINE_STYLE);
+	
+	
+    indicator.parameters:addColor("LowerExtremeBand_color", "Color of LowerExtremeBand", "Color of LowerExtremeBand", core.rgb(0, 255, 255));
+	indicator.parameters:addInteger("width4", "Line width", "", 1, 1, 5);
+    indicator.parameters:addInteger("style4", "Line style", "", core.LINE_SOLID);
+    indicator.parameters:setFlag("style4", core.FLAG_LINE_STYLE);
+	
+	
+    indicator.parameters:addColor("UpperOuterBand_color", "Color of UpperOuterBand", "Color of UpperOuterBand", core.rgb(128, 128, 128));
+	indicator.parameters:addInteger("width5", "Line width", "", 1, 1, 5);
+    indicator.parameters:addInteger("style5", "Line style", "", core.LINE_SOLID);
+    indicator.parameters:setFlag("style5", core.FLAG_LINE_STYLE);
+	
+    indicator.parameters:addColor("LowerOuterBand_color", "Color of LowerOuterBand", "Color of LowerOuterBand", core.rgb(128, 128, 128));
+	indicator.parameters:addInteger("width6", "Line width", "", 1, 1, 5);
+    indicator.parameters:addInteger("style6", "Line style", "", core.LINE_SOLID);
+    indicator.parameters:setFlag("style6", core.FLAG_LINE_STYLE);
+	
+	
+    indicator.parameters:addColor("UpperInnerBand_color", "Color of UpperInnerBand", "Color of UpperInnerBand", core.rgb(255, 255, 0));
+	indicator.parameters:addInteger("width7", "Line width", "", 1, 1, 5);
+    indicator.parameters:addInteger("style7", "Line style", "", core.LINE_SOLID);
+    indicator.parameters:setFlag("style7", core.FLAG_LINE_STYLE);
+	
+	
+    indicator.parameters:addColor("LowerInnerBand_color", "Color of LowerInnerBand", "Color of LowerInnerBand", core.rgb(255, 255, 0));
+	indicator.parameters:addInteger("width8", "Line width", "", 1, 1, 5);
+    indicator.parameters:addInteger("style8", "Line style", "", core.LINE_SOLID);
+    indicator.parameters:setFlag("style8", core.FLAG_LINE_STYLE);
+	
+	
+    indicator.parameters:addColor("FlowPrice_color", "Color of FlowPrice", "Color of FlowPrice", core.rgb(0, 0, 255));
+	indicator.parameters:addInteger("width9", "Line width", "", 1, 1, 5);
+    indicator.parameters:addInteger("style9", "Line style", "", core.LINE_SOLID);
+    indicator.parameters:setFlag("style9", core.FLAG_LINE_STYLE);
+	
+end
+
+-- Indicator instance initialization routine
+-- Processes indicator parameters and creates output streams
+-- TODO: Refine the first period calculation for each of the output streams.
+-- TODO: Calculate all constants, create instances all subsequent indicators and load all required libraries
+-- Parameters block
+local length;
+local InnerValue;
+local OuterValue;
+local ExtremeValue;
+local showClosingPriceLine;
+local showExtremeBands;
+local smooth;
+local first;
+local source = nil;
+ local displacement;
+local FlowValue;
+-- Streams block
+local UpperExtremeBand = nil;
+local LowerExtremeBand = nil;
+local UpperOuterBand = nil;
+local LowerOuterBand = nil;
+local UpperInnerBand = nil;
+local LowerInnerBand = nil;
+local FlowPrice = nil;
+local MVA;
+local CMA;
+local showOuterBand;
+local showInnerBand;
+-- Routine
+function Prepare(nameOnly)
+    length = instance.parameters.length;
+	showOuterBand = instance.parameters.showOuterBand;
+	showInnerBand = instance.parameters.showInnerBand;
+	smooth = instance.parameters.smooth;
+    InnerValue = instance.parameters.InnerValue;
+    OuterValue = instance.parameters.OuterValue;
+    ExtremeValue = instance.parameters.ExtremeValue;
+	showExtremeBands = instance.parameters.showExtremeBands;
+	showClosingPriceLine = instance.parameters.showClosingPriceLine;
+	displacement = (length / 2) + 1
+    source = instance.source;
+
+    local name = profile:id() .. "(" .. source:name() .. ", " .. tostring(length).. ", " .. tostring(smooth)  .. ", " .. tostring(InnerValue) .. ", " .. tostring(OuterValue) .. ", " .. tostring(ExtremeValue) .. ")";
+    instance:name(name);
+
+    if (not (nameOnly)) then
+		MVA = core.indicators:create("MVA", source.median,length );
+		first = MVA.DATA:first()+displacement;
+        CMA = instance:addStream("CenterLine", core.Line, name .. ".CenterLine", "CenterLine", instance.parameters.CenterLine_color, first);
+		CMA:setWidth(instance.parameters.width1);
+        CMA:setStyle(instance.parameters.style1);
+		
+       
+		if showExtremeBands then
+        UpperExtremeBand = instance:addStream("UpperExtremeBand", core.Line, name .. ".UpperExtremeBand", "UpperExtremeBand", instance.parameters.UpperExtremeBand_color, first);
+		UpperExtremeBand:setWidth(instance.parameters.width3);
+        UpperExtremeBand:setStyle(instance.parameters.style3);
+        LowerExtremeBand = instance:addStream("LowerExtremeBand", core.Line, name .. ".LowerExtremeBand", "LowerExtremeBand", instance.parameters.LowerExtremeBand_color, first);
+		LowerExtremeBand:setWidth(instance.parameters.width4);
+        LowerExtremeBand:setStyle(instance.parameters.style4);
+		else
+		UpperExtremeBand= instance:addInternalStream(0, 0);
+		LowerExtremeBand= instance:addInternalStream(0, 0);
+		end
+		
+		
+		if showOuterBand then
+        UpperOuterBand = instance:addStream("UpperOuterBand", core.Line, name .. ".UpperOuterBand", "UpperOuterBand", instance.parameters.UpperOuterBand_color, first);
+		UpperOuterBand:setWidth(instance.parameters.width5);
+        UpperOuterBand:setStyle(instance.parameters.style5);
+		
+        LowerOuterBand = instance:addStream("LowerOuterBand", core.Line, name .. ".LowerOuterBand", "LowerOuterBand", instance.parameters.LowerOuterBand_color, first);
+		LowerOuterBand:setWidth(instance.parameters.width6);
+        LowerOuterBand:setStyle(instance.parameters.style6);
+		
+		else
+		UpperOuterBand= instance:addInternalStream(0, 0);
+		LowerOuterBand= instance:addInternalStream(0, 0);
+		end
+		
+		
+		if showInnerBand then
+        UpperInnerBand = instance:addStream("UpperInnerBand", core.Line, name .. ".UpperInnerBand", "UpperInnerBand", instance.parameters.UpperInnerBand_color, first);
+		UpperInnerBand:setWidth(instance.parameters.width7);
+        UpperInnerBand:setStyle(instance.parameters.style7);
+		
+        LowerInnerBand = instance:addStream("LowerInnerBand", core.Line, name .. ".LowerInnerBand", "LowerInnerBand", instance.parameters.LowerInnerBand_color, first);
+		LowerInnerBand:setWidth(instance.parameters.width8);
+        LowerInnerBand:setStyle(instance.parameters.style8);
+		else
+		LowerInnerBand= instance:addInternalStream(0, 0);
+		UpperInnerBand= instance:addInternalStream(0, 0);
+		end
+		
+		FlowValue= instance:addInternalStream(0, 0)
+		SMA= core.indicators:create("MVA", FlowValue,smooth );
+		
+		
+		if showClosingPriceLine then
+        FlowPrice = instance:addStream("FlowPrice", core.Line, name .. ".FlowPrice", "FlowPrice", instance.parameters.FlowPrice_color, SMA.DATA:first());
+		FlowPrice:setWidth(instance.parameters.width9);
+        FlowPrice:setStyle(instance.parameters.style9);
+		else
+		FlowPrice= instance:addInternalStream(0, 0);
+		end
+    end
+end
+
+-- Indicator calculation routine
+-- TODO: Add your code for calculation output values
+function Update(period, mode)
+
+
+    MVA:update(mode);
+    if period  < first or not source:hasData(period) then
+	return;
+	end
+	
+	
+	CMA[period]= MVA.DATA[period-displacement];
+	
+	
+	local ExtremeBand = CMA[period] * ExtremeValue / 100
+    local OuterBand   = CMA[period] * OuterValue / 100
+    local InnerBand   = CMA[period] * InnerValue / 100
+	
+	
+	UpperExtremeBand[period]= CMA[period] +ExtremeBand;
+	LowerExtremeBand[period]= CMA[period] -ExtremeBand;	
+	UpperOuterBand[period]=    CMA[period] + OuterBand;
+	LowerOuterBand[period]=    CMA[period] - OuterBand;
+	UpperInnerBand[period]=   CMA[period] + InnerBand;
+	LowerInnerBand[period]=    CMA[period] - InnerBand;
+
+
+
+	 if source.close[period] > source.close[period-1] then
+	 FlowValue[period]=  source.high[period];
+	 elseif source.close[period] < source.close[period-1] then
+	 FlowValue[period]= source.low [period]
+	 else
+	 FlowValue[period]=source.median[period]
+	 end
+	 
+	 
+     SMA:update(mode); 
+	 if period < SMA.DATA:first() then
+	 return;
+	 end
+
+        FlowPrice[period] = SMA.DATA[period];
+   
+end
+

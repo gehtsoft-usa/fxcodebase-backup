@@ -1,0 +1,31 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - os.time ([table])</title>
+</head>
+<body>
+<h3><a name="pdf-os.time"><code>os.time ([table])</code></a></h3>
+
+
+<p>
+Returns the current time when called without arguments,
+or a time representing the date and time specified by the given table.
+This table must have fields <code>year</code>, <code>month</code>, and <code>day</code>,
+and may have fields <code>hour</code>, <code>min</code>, <code>sec</code>, and <code>isdst</code>
+(for a description of these fields, see the <a href="pdf-os.date.html"><code>os.date</code></a> function).
+
+
+<p>
+The returned value is a number, whose meaning depends on your system.
+In POSIX, Windows, and some other systems, this number counts the number
+of seconds since some given start time (the "epoch").
+In other systems, the meaning is not specified,
+and the number returned by <code>time</code> can be used only as an argument to
+<code>date</code> and <code>difftime</code>.
+
+
+
+
+<p>
+<hr>
+</body>
+</html>

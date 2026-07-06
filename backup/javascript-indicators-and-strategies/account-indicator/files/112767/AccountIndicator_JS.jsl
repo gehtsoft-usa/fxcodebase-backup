@@ -1,0 +1,238 @@
+function Init()
+{
+    indicator.name("Account indicator");
+    indicator.description("Account indicator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addString("ShowMethod", "Accounts show method", "", "Together");
+    indicator.parameters.addStringAlternative("ShowMethod", "Together", "", "Together");
+    indicator.parameters.addStringAlternative("ShowMethod", "Separately", "", "Separately");
+    indicator.parameters.addBoolean("ShowBalance", "Show balance", "", true);
+    indicator.parameters.addBoolean("ShowEquity", "Show equity", "", true);
+    indicator.parameters.addBoolean("ShowDayPL", "Show day profit/loss", "", true);
+    indicator.parameters.addBoolean("ShowNontrdEqty", "Show non-trading equity", "", true);
+    indicator.parameters.addBoolean("ShowM2MEquity", "Show floating balance at the beginning of the trading day", "", true);
+    indicator.parameters.addBoolean("ShowUsedMargin", "Show used margin", "", true);
+    indicator.parameters.addBoolean("ShowUsableMargin", "Show usable margin", "", true);
+    indicator.parameters.addBoolean("ShowGrossPL", "Show profit/loss on all open position", "", true);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("BalanceClr", "Balance Color", "Balance Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("EquityClr", "Equity Color", "Equity Color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("DayPLClr", "DayPL Color", "DayPL Color", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("NontrdEqtyClr", "NontrdEqty Color", "NontrdEqty Color", core.rgb(255, 128, 0));
+    indicator.parameters.addColor("M2MEquityClr", "M2MEquity Color", "M2MEquity Color", core.rgb(255, 0, 128));
+    indicator.parameters.addColor("UsedMarginClr", "UsedMargin Color", "UsedMargin Color", core.rgb(0, 128, 255));
+    indicator.parameters.addColor("UsableMarginClr", "UsableMargin Color", "UsableMargin Color", core.rgb(128, 0, 255));
+    indicator.parameters.addColor("GrossPLClr", "GrossPL Color", "GrossPL Color", core.rgb(128, 0, 128));
+
+}
+
+var first;
+var source = null;
+var ShowMethod;
+var BalanceArray={};
+var EquityArray={};
+var DayPLArray={};
+var NontrdEqtyArray={};
+var M2MEquityArray={};
+var UsedMarginArray={};
+var UsableMarginArray={};
+var GrossPLArray={};
+var AccountsNumber;
+
+function Prepare()
+{
+    source = instance.source;
+    ShowMethod=instance.parameters.ShowMethod;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + ")";
+    instance.name(name);
+    if (ShowMethod=="Together") 
+    {
+     if (instance.parameters.ShowBalance==true) 
+     {
+      BalanceArray[1] = instance.addStream("Balance", core.Line, name + ".Balance", "B", instance.parameters.BalanceClr, first);
+     }
+     if (instance.parameters.ShowEquity==true) 
+     {
+      EquityArray[1] = instance.addStream("Equity", core.Line, name + ".Equity", "Eq", instance.parameters.EquityClr, first);
+     }
+     if (instance.parameters.ShowDayPL==true) 
+     { 
+      DayPLArray[1] = instance.addStream("DayPL", core.Line, name + ".DayPL", "DPL", instance.parameters.DayPLClr, first);
+     }
+     if (instance.parameters.ShowNontrdEqty==true) 
+     { 
+      NontrdEqtyArray[1] = instance.addStream("NontrdEqty", core.Line, name + ".NontrdEqty", "NEq", instance.parameters.NontrdEqtyClr, first);
+     }
+     if (instance.parameters.ShowM2MEquity==true) 
+     { 
+      M2MEquityArray[1] = instance.addStream("M2MEquity", core.Line, name + ".M2MEquity", "M2MEq", instance.parameters.M2MEquityClr, first);
+     }
+     if (instance.parameters.ShowUsedMargin==true) 
+     { 
+      UsedMarginArray[1] = instance.addStream("UsedMargin", core.Line, name + ".UsedMargin", "UsedM", instance.parameters.UsedMarginClr, first);
+     }
+     if (instance.parameters.ShowUsableMargin==true) 
+     { 
+      UsableMarginArray[1] = instance.addStream("UsableMargin", core.Line, name + ".UsableMargin", "UsableM", instance.parameters.UsableMarginClr, first);
+     }
+     if (instance.parameters.ShowGrossPL==true) 
+     { 
+      GrossPLArray[1] = instance.addStream("GrossPL", core.Line, name + ".GrossPL", "GrPL", instance.parameters.GrossPLClr, first);
+     } 
+    }
+    else
+    {
+     var accounts = core.host.findTable("accounts");
+     var enum = accounts.enumerator();
+     AccountsNumber=0;
+     while (true) 
+     {
+      var row = enum.next();
+      if (row == null) { break }
+      AccountsNumber=AccountsNumber+1;
+      if (instance.parameters.ShowBalance==true) 
+      {
+       BalanceArray[AccountsNumber]=instance.addStream("Balance" + AccountsNumber, core.Line, name + ".Balance " + row.AccountID, "B " + row.AccountID, instance.parameters.BalanceClr, first);
+      }
+      if (instance.parameters.ShowEquity==true) 
+      { 
+       EquityArray[AccountsNumber]=instance.addStream("Equity" + AccountsNumber, core.Line, name + ".Equity " + row.AccountID, "Eq " + row.AccountID, instance.parameters.EquityClr, first);
+      }
+      if (instance.parameters.ShowDayPL==true) 
+      { 
+       DayPLArray[AccountsNumber]=instance.addStream("DayPL" + AccountsNumber, core.Line, name + ".DayPL " + row.AccountID, "DPL " + row.AccountID, instance.parameters.DayPLClr, first);
+      }
+      if (instance.parameters.ShowNontrdEqty==true) 
+      { 
+       NontrdEqtyArray[AccountsNumber]=instance.addStream("NontrdEqty" + AccountsNumber, core.Line, name + ".NontrdEqty " + row.AccountID, "NEq " + row.AccountID, instance.parameters.NontrdEqtyClr, first);
+      }
+      if (instance.parameters.ShowM2MEquity==true) 
+      { 
+       M2MEquityArray[AccountsNumber]=instance.addStream("M2MEquity" + AccountsNumber, core.Line, name + ".M2MEquity " + row.AccountID, "M2MEq " + row.AccountID, instance.parameters.M2MEquityClr, first);
+      }
+      if (instance.parameters.ShowUsedMargin==true) 
+      { 
+       UsedMarginArray[AccountsNumber]=instance.addStream("UsedMargin" + AccountsNumber, core.Line, name + ".UsedMargin " + row.AccountID, "UsedM " + row.AccountID, instance.parameters.UsedMarginClr, first);
+      }
+      if (instance.parameters.ShowUsableMargin==true) 
+      {
+       UsableMarginArray[AccountsNumber]=instance.addStream("UsableMargin" + AccountsNumber, core.Line, name + ".UsableMargin " + row.AccountID, "UsableM " + row.AccountID, instance.parameters.UsableMarginClr, first);
+      }
+      if (instance.parameters.ShowGrossPL==true) 
+      { 
+       GrossPLArray[AccountsNumber]=instance.addStream("GrossPL" + AccountsNumber, core.Line, name + ".GrossPL " + row.AccountID, "GrPL " + row.AccountID, instance.parameters.GrossPLClr, first);
+      } 
+     } 
+    
+    } 
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    var accounts = core.host.findTable("accounts");
+    var enum = accounts.enumerator();
+    var SumBalance=0;
+    var SumEquity=0;
+    var SumDayPL=0;
+    var SumNontrdEqty=0;
+    var SumM2MEquity=0;
+    var SumUsedMargin=0;
+    var SumUsableMargin=0;
+    var SumGrossPL=0;
+    var i=0;
+    while (true) 
+    {
+     var row = enum.next();
+     if (row == null) { break }
+     SumBalance=SumBalance+row.Balance;
+     SumEquity=SumEquity+row.Equity;
+     SumDayPL=SumDayPL+row.DayPL;
+     SumNontrdEqty=SumNontrdEqty+row.NontrdEqty;
+     SumM2MEquity=SumM2MEquity+row.M2MEquity;
+     SumUsedMargin=SumUsedMargin+row.UsedMargin;
+     SumUsableMargin=SumUsableMargin+row.UsableMargin;
+     SumGrossPL=SumGrossPL+row.GrossPL;
+     i=i+1;
+     if (ShowMethod=="Separately") 
+     {
+      if (instance.parameters.ShowBalance==true) 
+      {
+       core.drawLine(BalanceArray[i],core.range(first,period),row.Balance,first,row.Balance,period);
+      }
+      if (instance.parameters.ShowEquity==true) 
+      {
+       core.drawLine(EquityArray[i],core.range(first,period),row.Equity,first,row.Equity,period);
+      }
+      if (instance.parameters.ShowDayPL==true) 
+      { 
+       core.drawLine(DayPLArray[i],core.range(first,period),row.DayPL,first,row.DayPL,period);
+      }
+      if (instance.parameters.ShowNontrdEqty==true) 
+      { 
+       core.drawLine(NontrdEqtyArray[i],core.range(first,period),row.NontrdEqty,first,row.NontrdEqty,period);
+      }
+      if (instance.parameters.ShowM2MEquity==true) 
+      { 
+       core.drawLine(M2MEquityArray[i],core.range(first,period),row.M2MEquity,first,row.M2MEquity,period);
+      }
+      if (instance.parameters.ShowUsedMargin==true) 
+      { 
+       core.drawLine(UsedMarginArray[i],core.range(first,period),row.UsedMargin,first,row.UsedMargin,period);
+      }
+      if (instance.parameters.ShowUsableMargin==true) 
+      { 
+       core.drawLine(UsableMarginArray[i],core.range(first,period),row.UsableMargin,first,row.UsableMargin,period);
+      }
+      if (instance.parameters.ShowGrossPL==true) 
+      { 
+       core.drawLine(GrossPLArray[i],core.range(first,period),row.GrossPL,first,row.GrossPL,period);
+      } 
+     }
+    } 
+    
+    if (ShowMethod=="Together") 
+    {
+     if (instance.parameters.ShowBalance==true) 
+     {
+      core.drawLine(BalanceArray[1],core.range(first,period),SumBalance,first,SumBalance,period);
+     }
+     if (instance.parameters.ShowEquity==true) 
+     { 
+      core.drawLine(EquityArray[1],core.range(first,period),SumEquity,first,SumEquity,period);
+     }
+     if (instance.parameters.ShowDayPL==true) 
+     { 
+      core.drawLine(DayPLArray[1],core.range(first,period),SumDayPL,first,SumDayPL,period);
+     }
+     if (instance.parameters.ShowNontrdEqty==true) 
+     { 
+      core.drawLine(NontrdEqtyArray[1],core.range(first,period),SumNontrdEqty,first,SumNontrdEqty,period);
+     }
+     if (instance.parameters.ShowM2MEquity==true) 
+     { 
+      core.drawLine(M2MEquityArray[1],core.range(first,period),SumM2MEquity,first,SumM2MEquity,period);
+     }
+     if (instance.parameters.ShowUsedMargin==true) 
+     { 
+      core.drawLine(UsedMarginArray[1],core.range(first,period),SumUsedMargin,first,SumUsedMargin,period);
+     }
+     if (instance.parameters.ShowUsableMargin==true) 
+     { 
+      core.drawLine(UsableMarginArray[1],core.range(first,period),SumUsableMargin,first,SumUsableMargin,period);
+     }
+     if (instance.parameters.ShowGrossPL==true) 
+     { 
+      core.drawLine(GrossPLArray[1],core.range(first,period),SumGrossPL,first,SumGrossPL,period);
+     } 
+    } 
+   } 
+    
+}
+

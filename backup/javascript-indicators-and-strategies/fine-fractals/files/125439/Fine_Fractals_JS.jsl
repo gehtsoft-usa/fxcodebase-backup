@@ -1,0 +1,85 @@
+function Init()
+{
+    indicator.name("Fine fractals indicator");
+    indicator.description("Fine fractals indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addBoolean("Fine", "Fine", "", true);
+    indicator.parameters.addBoolean("FlatShift", "Flat shift", "", true);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clrUP", "Color UP", "Color UP", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clrDN", "Color DN", "Color DN", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("DotSize", "Dot size", "Dot size", 3, 1, 5);
+}
+
+var first;
+var source = null;
+var Fine;
+var FlatShift;
+var FineFractalsUP=null;
+var FineFractalsDN=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Fine=instance.parameters.Fine;
+    FlatShift=instance.parameters.FlatShift;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ")";
+    instance.name(name);
+    FineFractalsUP = instance.addStream("FineFractalsUP", core.Dot, name + ".UP", "UP", instance.parameters.clrUP, first);
+    FineFractalsUP.setWidth(instance.parameters.DotSize);
+    FineFractalsDN = instance.addStream("FineFractalsDN", core.Dot, name + ".DN", "DN", instance.parameters.clrDN, first);
+    FineFractalsDN.setWidth(instance.parameters.DotSize);
+}
+
+function Update(period, mode)
+{
+   if (period>first+5) 
+   {
+    var FrUP=true;
+    var FrDN=true;
+    if (source.high[period-2]<=source.high[period-1] || source.high[period-2]<=source.high[period] || source.high[period-2]<=source.high[period-3] || source.high[period-2]<=source.high[period-4]) 
+    {
+     FrUP=false;
+    }
+    if (source.low[period-2]>=source.low[period-1] || source.low[period-2]>=source.low[period] || source.low[period-2]>=source.low[period-3] || source.low[period-2]>=source.low[period-4]) 
+    {
+     FrDN=false;
+    }
+    if (Fine && FrUP==false && source.high[period-3]<source.high[period-2] && source.high[period-2]>source.high[period-1] && (source.low[period-2]>=source.low[period-1] || source.high[period-2]>source.high[period-4])) 
+    {
+     FrUP=true;
+    }
+    if (Fine && FrDN==false && source.low[period-3]>source.low[period-2] && source.low[period-2]<source.low[period-1] && (source.high[period-2]<=source.high[period-1] || source.low[period-2]<source.low[period-4])) 
+    {
+     FrDN=true;
+    }
+    if (FlatShift && FrUP) 
+    {
+     while (source.high[period-2]==source.high[period-3] && period>first) 
+     {
+      period=period-1;
+     }
+    }
+    if (FlatShift && FrDN) 
+    {
+     while (source.low[period-2]==source.low[period-3] && period>first) 
+     {
+      period=period-1;
+     }
+    }
+    if (FrUP) 
+    {
+     FineFractalsUP[period-2]=source.high[period-2];
+    }
+    if (FrDN) 
+    {
+     FineFractalsDN[period-2]=source.low[period-2];
+    }
+   } 
+}
+

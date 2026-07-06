@@ -1,0 +1,64 @@
+//initializes the indicator
+function Init()
+{
+    indicator.name("MAE");
+    indicator.description("Moving Average Envelope");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+    indicator.setTag("group", "Channels");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("N", "Number of periods", "Number of periods", 7);
+    indicator.parameters.addDouble("Upper", "Upper percentage value", "Upper percentage value", 0.5);
+    indicator.parameters.addDouble("Lower", "Lower percentage value", "Lower percentage value", 0.5);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Uclr", "Top Line color", "Top Line color", core.rgb(219, 64, 0));
+    indicator.parameters.addInteger("Uwidth", "Top Line width", "Top Line width", 1, 1, 5);
+    indicator.parameters.addInteger("Ustyle", "Top Line style", "Top Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("Ustyle", core.FLAG_LEVEL_STYLE);
+    indicator.parameters.addColor("Lclr", "Bottom Line color", "Bottom Line color", core.rgb(0, 183, 183));
+    indicator.parameters.addInteger("Lwidth", "Bottom Line width", "Bottom Line width", 1, 1, 5);
+    indicator.parameters.addInteger("Lstyle", "Bottom Line style", "Bottom Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("Lstyle", core.FLAG_LEVEL_STYLE);
+}
+
+var first = 0;
+var source = null;
+var ME1 = null;
+var ME2 = null;
+var n, upper, lower;
+
+//initializes the instance of the indicator
+function Prepare(onlyName)
+{
+    source = instance.source;
+    n = instance.parameters.N;
+    upper = instance.parameters.Upper;
+    lower = instance.parameters.Lower;
+    first = instance.source.first()+n-1;
+
+    var name = profile.id() + "(" + instance.source.name() + ")";
+    instance.name(name);
+  
+    if (onlyName == true)
+        return ;
+
+    ME1 = instance.addStream("ME1", core.Line, name, "ME1", instance.parameters.Uclr,  first)
+    ME1.setWidth(instance.parameters.Uwidth);
+    ME1.setStyle(instance.parameters.Ustyle);
+    ME2 = instance.addStream("ME2", core.Line, name, "ME2", instance.parameters.Lclr,  first)
+    ME2.setWidth(instance.parameters.Lwidth);
+    ME2.setStyle(instance.parameters.Lstyle);
+}
+
+// calculate the value
+function Update(period, mode)
+{
+    if (period >= first)
+    {
+        var mvaValue = Math.avg(source, period - n + 1, period);
+        ME1[period] = mvaValue * (1 + upper / 100);
+        ME2[period] = mvaValue * (1 - lower / 100);
+    }
+}

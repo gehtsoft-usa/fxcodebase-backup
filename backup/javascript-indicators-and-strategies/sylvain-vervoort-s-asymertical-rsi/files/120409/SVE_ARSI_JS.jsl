@@ -1,0 +1,141 @@
+function Init()
+{
+    indicator.name("Sylvain Vervoort's Asymmetrical RSI");
+    indicator.description("Sylvain Vervoort's Asymmetrical RSI");
+    indicator.type(core.Oscillator);
+    indicator.requiredSource(core.Tick);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("N", "Number of periods", "", 14, 2, 32);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Indicator Line Color", "", core.rgb(255, 255, 0));
+    indicator.parameters.addInteger("width", "Indicator Line Width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Indicator Line Style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+
+    indicator.parameters.addGroup("Levels");
+    indicator.parameters.addInteger("L1", "Level1", "", 30, 1, 100);
+    indicator.parameters.addInteger("L2", "Level2", "", 70, 1, 100);
+    indicator.parameters.addColor("clrL", "Level Line Color", "", core.rgb(192, 192, 192));
+    indicator.parameters.addInteger("widthL", "Level Line Width", "", 1, 1, 5);
+    indicator.parameters.addInteger("styleL", "Level Line Style", "", core.LINE_DOT);
+    indicator.parameters.setFlag("styleL", core.FLAG_LINE_STYLE);
+}
+
+var n;
+var upbuff;
+var dnbuff;
+var upcnt;
+var upwma = {};
+var dnwma = {};
+var first1;
+var source;
+var pipsize;
+var out;
+
+function Prepare(onlyName)
+{
+    var name;
+
+    name = profile.id() + "(" + instance.source.name() + "," + instance.parameters.N + ")";
+    instance.name(name);
+
+    if (onlyName) 
+    {
+        return ;
+    }
+
+    assert(core.indicators.findIndicator("WMA") != null, "Please {wnload && install WMA.lua (Wilders moving average) indicator");
+
+    n = instance.parameters.N;
+    source = instance.source;
+    pipsize = source.pipSize();
+    first1 = source.first() + 1;
+    upbuff = instance.addInternalStream(first1, 0);
+    dnbuff = instance.addInternalStream(first1, 0);
+    upcnt = instance.addInternalStream(first1, 0);
+
+    var i;
+    for (i = 2; i<=n; i++) 
+    {
+        upwma[i] = core.indicators.create("WMA", upbuff, i);
+        dnwma[i] = core.indicators.create("WMA", dnbuff, i);
+    }
+    first = Math.max(first1 + n, upwma[n].DATA.first());
+
+    out = instance.addStream("SVE_ARSI", core.Line, name, "SVE_ARSI", instance.parameters.clr, first);
+    out.setWidth(instance.parameters.width);
+    out.setStyle(instance.parameters.style);
+
+    out.addLevel(0, core.LINE_NONE, 1, instance.parameters.clrL);
+    out.addLevel(instance.parameters.L1, instance.parameters.styleL, instance.parameters.widthL, instance.parameters.clrL);
+    out.addLevel(instance.parameters.L2, instance.parameters.styleL, instance.parameters.widthL, instance.parameters.clrL);
+    out.addLevel(100, core.LINE_NONE, 1, instance.parameters.clrL);
+
+}
+
+function Update(period, mode)
+{
+    if (period >= first1) 
+    {
+        roc = (source[period] - source[period - 1]) / pipsize;
+        upbuff[period] = Math.max(roc, 0);
+        dnbuff[period] = Math.abs(Math.min(roc, 0));
+        if (roc >= 0) 
+        {
+            upcnt[period] = 1;
+        }    
+        else
+        {
+            upcnt[period] = 0;
+        }
+    }
+
+    if (period >= first) 
+    {
+        var up, dn;
+        var upmove, dnmove;
+        var rs;
+
+        up = Math.sum(upcnt, period-n+1, period);
+        dn = n - up;
+
+        if (up == 0) 
+        {
+            upmove = 0;
+        }    
+        else if (up == 1) 
+        {
+            upmove = upbuff[period];
+        }    
+        else
+        {
+            upwma[up].update(core.UpdateLast);
+            upmove = upwma[up].DATA[period];
+        }
+        if (dn == 0) 
+        {
+            dnmove = 0;
+        }    
+        else if (dn == 1) 
+        {
+            dnmove = dnbuff[period];
+        }    
+        else
+        {
+            dnwma[dn].update(core.UpdateLast);
+            dnmove = dnwma[dn].DATA[period];
+        }
+
+        if (dnmove == 0) 
+        {
+            out[period] = 100;
+        }    
+        else
+        {
+            out[period] = 100 - (100 / (1 + upmove / dnmove));
+        }
+    }
+}
+

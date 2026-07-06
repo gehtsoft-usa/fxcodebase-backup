@@ -1,0 +1,100 @@
+function Init()
+{
+    indicator.name("Adaptive Price Zone");
+    indicator.description("Adaptive Price Zone");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+	
+	
+	indicator.parameters.addGroup("Calculation");  
+    indicator.parameters.addString("Price", "Price Source", "", "close");
+    indicator.parameters.addStringAlternative("Price", "OPEN", "", "open");
+    indicator.parameters.addStringAlternative("Price", "HIGH", "", "high");
+    indicator.parameters.addStringAlternative("Price", "LOW", "", "low");
+    indicator.parameters.addStringAlternative("Price","CLOSE", "", "close");
+    indicator.parameters.addStringAlternative("Price", "MEDIAN", "", "median");
+    indicator.parameters.addStringAlternative("Price", "TYPICAL", "", "typical");
+    indicator.parameters.addStringAlternative("Price", "WEIGHTED", "", "weighted");	
+	
+    indicator.parameters.addInteger("Period", "Period", "Period", 10);
+	indicator.parameters.addString("Method", "MA Method", "Method" , "KAMA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method", "WMA", "WMA" , "WMA");
+    indicator.parameters.addDouble("width", "width [%]", "width [%]", 2);
+	
+	indicator.parameters.addGroup("Style");	
+    indicator.parameters.addColor("Up_color", "Color of Up", "Color of Up", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width1", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style1", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style1", core.FLAG_LINE_STYLE);
+	
+    indicator.parameters.addColor("Dn_color", "Color of Dn", "Color of Dn", core.rgb(255, 0, 0));	
+	indicator.parameters.addInteger("width2", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style2", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style2", core.FLAG_LINE_STYLE);
+}
+
+var Period;
+var width;
+var Method;
+var first;
+var source = null;
+var Price;
+
+var Up = null;
+var Dn = null;
+var MA1, MA2;
+var Buff;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+	Method= instance.parameters.Method;
+	Price= instance.parameters.Price;
+    width = instance.parameters.width;
+    source = instance.source;
+	
+	Buff = instance.addInternalStream(0, 0);
+	 	
+	MA1 = core.indicators.create(Method,source[Price] , Period);
+	MA2 = core.indicators.create(Method,Buff , Period);
+    first = source.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Price) + ", " + tostring(Period) + ", " + tostring(Method)  + ", " + tostring(width)+ ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        Up = instance.addStream("Up", core.Line, name + ".Up", "Up", instance.parameters.Up_color, first);
+		Up.setWidth(instance.parameters.width1);
+        Up.setStyle(instance.parameters.style1);
+        Dn = instance.addStream("Dn", core.Line, name + ".Dn", "Dn", instance.parameters.Dn_color, first);
+		Dn.setWidth(instance.parameters.width2);
+        Dn.setStyle(instance.parameters.style2);
+    }
+}
+
+function Update(period, mode)
+{     
+   Buff[period]= source.high[period]-source.low[period];
+
+    if (period < first) 
+    {
+	 return;
+	}
+	
+	MA1.update(mode);
+    MA2.update(mode);
+    
+	
+        Up[period] = width *MA2.DATA[period] + MA1.DATA[period];
+        Dn[period] = MA1.DATA[period] - width * MA2.DATA[period] ;
+    
+}
+

@@ -1,0 +1,57 @@
+function Init()
+{
+    indicator.name("Dynamic High/Low Band Overlay");
+    indicator.description("Dynamic High/Low Band Overlay");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addInteger("Frame", "Look Back Periods", "No description", 14,2,2000);
+    indicator.parameters.addDouble("Step", "Step", "Step", 0.7071, 0, 1);
+    indicator.parameters.addColor("UP_color", "Color of Up", "Color of UP", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("Down_color", "Color of Down", "Color of Down", core.rgb(255, 0, 0));
+}
+
+var Frame;
+var Step;
+
+var first;
+var source = null;
+
+var UP = null;
+var DOWN = null;
+
+function Prepare()
+{
+    Frame = instance.parameters.Frame;
+    Step = instance.parameters.Step;
+    source = instance.source;
+    first = source.first()+Frame;
+
+    var name = profile.id() + "(" + source.name() + ", " + Frame + ", " + Step + ")";
+    instance.name(name);
+    UP = instance.addStream("UP", core.Line, name + ".Up", "Up", instance.parameters.UP_color, first);
+    DOWN = instance.addStream("DOWN", core.Line, name + ".Down", "Down", instance.parameters.Down_color, first);
+}
+
+function Update(period)
+{
+    if (period >= first && source.hasData(period)) 
+    {
+	
+	    var Top, Bottom;
+		var MAX,MIN;
+		var RANGE;
+
+        var tmp=Math.minmax(source, period-Frame, period);
+        MAX=tmp[1];
+        Top=tmp[3];
+        MIN=tmp[0];
+        Bottom=tmp[2];
+	
+        UP[period]= MAX*Step - (MIN*Step)+MIN;            
+		DOWN[period] =MAX-(MAX*Step-MIN*Step);
+		
+		
+    }
+}
+

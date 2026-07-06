@@ -1,0 +1,68 @@
+function Init()
+{
+    indicator.name("Range ratio oscillator");
+    indicator.description("Range ratio oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 3);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Lclr", "Level color", "Level color", core.rgb(128, 128, 128));
+    indicator.parameters.addInteger("Lwidth", "Level width", "Level width", 1, 1, 5);
+    indicator.parameters.addInteger("Lstyle", "Level style", "Level style", core.LINE_DASH);
+    indicator.parameters.setFlag("Lstyle", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period;
+var Range;
+var RangeRatio=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    first = source.first()+2;
+    Range = instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ")";
+    instance.name(name);
+    RangeRatio = instance.addStream("RangeRatio", core.Line, name + ".RangeRatio", "RangeRatio", instance.parameters.clr, first);
+    RangeRatio.setWidth(instance.parameters.widthLinReg);
+    RangeRatio.setStyle(instance.parameters.styleLinReg);
+    RangeRatio.addLevel(0, instance.parameters.Lstyle, instance.parameters.Lwidth, instance.parameters.Lclr);
+    RangeRatio.addLevel(0.3, instance.parameters.Lstyle, instance.parameters.Lwidth, instance.parameters.Lclr);
+    RangeRatio.addLevel(0.5, instance.parameters.Lstyle, instance.parameters.Lwidth, instance.parameters.Lclr);
+    RangeRatio.addLevel(0.7, instance.parameters.Lstyle, instance.parameters.Lwidth, instance.parameters.Lclr);
+    RangeRatio.addLevel(1, instance.parameters.Lstyle, instance.parameters.Lwidth, instance.parameters.Lclr);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    Range[period]=source.high[period]-source.low[period];
+    if (period>first+Period) 
+    {
+     var tmp=Math.minmax(source, period-Period+1, period);
+     var MinP=tmp[0];
+     var MaxP=tmp[1];
+     var sum = Math.sum(Range, period-Period+1, period);
+     if (sum==0) 
+     {
+      RangeRatio[period]=0;
+     } 
+     else
+     {
+      RangeRatio[period]=(MaxP-MinP)/sum;
+     }
+    }
+   } 
+}
+

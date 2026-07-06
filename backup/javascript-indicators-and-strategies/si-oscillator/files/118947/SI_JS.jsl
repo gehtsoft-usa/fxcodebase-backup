@@ -1,0 +1,102 @@
+function Init()
+{
+    indicator.name("SI oscillator");
+    indicator.description("SI oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 15);
+    indicator.parameters.addString("Method", "Method", "", "EMA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("Method", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Method", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Method", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Method", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Method", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Method", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Method", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Method", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Method", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Method", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Method", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Method", "JSmooth", "", "JSmooth");
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP color", "UP color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DNclr", "DN color", "DN color", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+var Period;
+var Method;
+var D;
+var MA;
+var SI=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    Method=instance.parameters.Method;
+    first = source.first()+2;
+    D = instance.addInternalStream(first, 0);
+    MA = core.indicators.create("AVERAGES", D, Method, Period, false);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.Method + ")";
+    instance.name(name);
+    SI = instance.addStream("SI", core.Bar, name + ".SI", "SI", instance.parameters.UPclr, first);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    var R1=Math.abs(source.high[period]-source.close[period-1]);
+    var R2=Math.abs(source.low[period]-source.close[period-1]);
+    var R3=Math.abs(source.high[period]-source.low[period]);
+    var R4=Math.abs(source.close[period-1]-source.open[period-1]);
+    var K=Math.max(R1, R2);
+    var R=0;
+    if (R1>=Math.max(R2, R3)) 
+    {
+     R=R1-R2/2+R4/4;
+    }
+    else if (R2>=Math.max(R1, R3)) 
+    {
+     R=R2-R1/2+R4/4;
+    } 
+    else
+    {
+     R=R3+R4/4;
+    }
+    if (R==0) 
+    {
+     D[period]=0;
+    } 
+    else
+    {
+     var X=0.25*source.open[period]-1.5*source.close[period-1]+0.75*source.close[period]+0.5*source.open[period-1];
+     D[period]=50*X*K/R;
+    } 
+    MA.update(mode);
+    SI[period]=MA.DATA[period]; 
+    if (SI[period]>=SI[period-1]) 
+    {
+     SI.setColor(period, instance.parameters.UPclr);
+    }
+    else
+    {
+     SI.setColor(period, instance.parameters.DNclr);
+    }
+   } 
+}
+

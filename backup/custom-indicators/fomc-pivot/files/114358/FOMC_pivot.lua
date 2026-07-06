@@ -1,0 +1,214 @@
+
+-- More information about this indicator can be found at:
+-- http://fxcodebase.com/code/viewtopic.php?f=17&t=65014
+
+--+------------------------------------------------------------------+
+--|                               Copyright © 2017, Gehtsoft USA LLC | 
+--|                                            http://fxcodebase.com |
+--+------------------------------------------------------------------+
+--|                                 Support our efforts by donating  | 
+--|                                    Paypal: https://goo.gl/9Rj74e |
+--|                    BitCoin : 15VCJTLaz12Amr7adHSBtL9v8XomURo9RF  |  
+--+------------------------------------------------------------------+
+--|                                      Developed by : Mario Jemic  |                    
+--|                                          mario.jemic@gmail.com   |
+--+------------------------------------------------------------------+
+
+
+function Init()
+    indicator:name("FOMC Pivot");
+    indicator:description("FOMC Pivot");
+    indicator:requiredSource(core.Tick);
+    indicator:type(core.Indicator);
+
+    indicator.parameters:addGroup("Style");
+    indicator.parameters:addColor("color", "Line color", "Line color", core.rgb(0, 255, 0));
+    indicator.parameters:addInteger("width", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters:addInteger("style", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters:setFlag("style", core.FLAG_LINE_STYLE);
+end
+
+local color, width, style;
+local FOMC;
+local req;
+
+local meetings = {};
+
+function GetYears(body)
+    local years_data = {};
+    local meeting_year = string.match(body, "(%d%d%d%d) FOMC Meetings");
+    while (meeting_year ~= nil) do
+        body = string.sub(body, string.find(body, meeting_year .. " FOMC Meetings") + 18);
+        local next_meeting_year = string.match(body, "(%d%d%d%d) FOMC Meetings");
+        if next_meeting_year == nil then
+            years_data[meeting_year] = body;
+        else
+            years_data[meeting_year] = string.sub(body, 0, string.find(body, meeting_year .. " FOMC Meetings"));
+        end
+        meeting_year = next_meeting_year;
+    end
+    return years_data;
+end
+
+function GetMonthIndex(month)
+    if month:find("Jan") == 1 then
+        return 1;
+    elseif month:find("Feb") == 1 then
+        return 2;
+    elseif month:find("Mar") == 1 then
+        return 3;
+    elseif month:find("Apr") == 1 then
+        return 4;
+    elseif month:find("May") == 1 then
+        return 5;
+    elseif month:find("Jun") == 1 then
+        return 6;
+    elseif month:find("Jul") == 1 then
+        return 7;
+    elseif month:find("Aug") == 1 then
+        return 8;
+    elseif month:find("Sep") == 1 then
+        return 9;
+    elseif month:find("Oct") == 1 then
+        return 10;
+    elseif month:find("Nov") == 1 then
+        return 11;
+    elseif month:find("Dec") == 1 then
+        return 12;
+    end
+    return nil;
+end
+
+function AddMeetingDate(year, month, day)
+    local meeting = {};
+    local month_start;
+    local month_end;
+    local separator_index = month:find("/");
+    if separator_index ~= nil then
+        month_start = GetMonthIndex(month:sub(0, separator_index));
+        month_end = GetMonthIndex(month:sub(separator_index + 1));
+    else
+        month_start = GetMonthIndex(month);
+        month_end = month_start;
+    end
+    local day_start, day_end;
+    if day:find("[-]") ~= nil then
+        day_start, day_end = day:match("(%d+)[-](%d+)");
+    else
+        day_start = day:match("(%d+)");
+        day_end = day_start; 
+    end
+    meeting.Start = core.date(year, month_start, day_start);
+    meeting.End = core.date(year, month_end, day_end);
+    meetings[#meetings + 1] = meeting;
+end
+
+function AddMeetingDates(year, year_data)
+    local index = string.find(year_data, "fomc[-]meeting__month");
+    if (index == nil) then
+        return;
+    end
+    year_data = string.sub(year_data, index);
+    local meeting_month = string.match(year_data, "g>([^<]+)<");
+    while (meeting_month ~= nil) do
+        index = string.find(year_data, "fomc[-]meeting__date");
+        year_data = string.sub(year_data, index);
+        local meeting_day = string.match(year_data, ">([^<]+)<");
+        AddMeetingDate(year, meeting_month, meeting_day);
+
+        index = string.find(year_data, "fomc[-]meeting__month");
+        if (index == nil) then
+            return;
+        end
+        year_data = string.sub(year_data, index);
+        meeting_month = string.match(year_data, "g>([^<]+)<");
+    end
+end
+
+function FillMeetingsList()
+    if req:loading() then
+        return false;
+    end
+    
+    if not(req:success()) then
+        core.host:execute("setStatus", "Load failed");
+        return true;
+    end    
+    
+    if req:httpStatus() ~= 200 then
+        core.host:execute("setStatus", "Load failed");
+        return true;
+    end
+
+    core.host:execute("setStatus", "");
+    local body = req:response();
+    local years_data = GetYears(body);
+    for year, data in pairs(years_data) do
+        AddMeetingDates(year, data);
+    end
+    return true;
+end
+
+local timer;
+local H1_data;
+
+function Prepare(onlyName)
+    local name = profile:id();
+    instance:name(name);
+    if onlyName then
+        return;
+    end
+
+    color = instance.parameters.color;
+    width = instance.parameters.width;
+    style = instance.parameters.style;
+
+    H1_data = core.host:execute("getSyncHistory", instance.source:instrument(), "H1", instance.source:isBid(), 300, 100, 101);
+    FOMC = instance:addStream("FOMC", core.Line, name .. ".FOMC", "FOMC", color, 0);
+    FOMC:setWidth(width);
+    FOMC:setStyle(style);
+
+    require("http_lua");
+    req = http_lua.createRequest();
+    req:start("https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm");
+    core.host:execute("setStatus", "Loading FOMC calendar");
+    timer = core.host:execute("setTimer", 1, 1);
+end
+
+function GetNearestDate(date)
+    local max_date = nil;
+    for _, meeting in ipairs(meetings) do
+        local date_start = math.floor(meeting.Start) + 13.0 / 24.0;
+        if date_start <= date then
+            if max_date == nil or max_date < date_start then
+                max_date = date_start;
+            end
+        end
+    end
+    return max_date;
+end
+
+function GetRate(date)
+    local meeting_date = GetNearestDate(date);
+    if meeting_date == nil then
+        return nil;
+    end
+    local index = core.findDate(H1_data, meeting_date, false);
+    if index < 0 then
+        return nil;
+    end
+    return H1_data.open[index];
+end
+
+function Update(period, mode)
+    FOMC[period] = GetRate(FOMC:date(period));
+end
+
+function AsyncOperationFinished(cookie, success, message)
+    if cookie == 1 then
+        if FillMeetingsList() then
+            core.host:execute("killTimer", timer);
+            instance:updateFrom(0);
+        end
+	end
+end

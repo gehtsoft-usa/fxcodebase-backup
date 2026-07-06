@@ -1,0 +1,66 @@
+
+-- More information about this indicator can be found at:
+-- http://fxcodebase.com/code/viewtopic.php?f=17&t=59631
+
+--+------------------------------------------------------------------+
+--|                               Copyright © 2017, Gehtsoft USA LLC | 
+--|                                            http://fxcodebase.com |
+--+------------------------------------------------------------------+
+--|                                 Support our efforts by donating  | 
+--|                                    Paypal: https://goo.gl/9Rj74e |
+--|                    BitCoin : 15VCJTLaz12Amr7adHSBtL9v8XomURo9RF  |  
+--+------------------------------------------------------------------+
+
+
+function Init()
+    indicator:name("Trailing Stop level indicator");
+    indicator:description("Trailing Stop level indicator");
+    indicator:requiredSource(core.Bar);
+    indicator:type(core.Indicator);
+
+    indicator.parameters:addGroup("Calculation");
+    indicator.parameters:addDouble("Percent", "Percent", "", 1);
+
+    indicator.parameters:addGroup("Style");
+    indicator.parameters:addColor("UPclr", "UP color", "UP color", core.rgb(0, 255, 0));
+    indicator.parameters:addColor("DNclr", "DN color", "DN color", core.rgb(255, 0, 0));
+    indicator.parameters:addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters:addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters:setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+end
+
+local first;
+local source = nil;
+local Percent;
+local TSL=nil;
+
+function Prepare()
+    source = instance.source;
+    Percent=instance.parameters.Percent/100;
+    first = source:first()+2;
+    local name = profile:id() .. "(" .. source:name() .. ", " .. instance.parameters.Percent .. ")";
+    instance:name(name);
+    TSL = instance:addStream("TSL", core.Line, name .. ".TSL", "TSL", instance.parameters.UPclr, first);
+    TSL:setWidth(instance.parameters.widthLinReg);
+    TSL:setStyle(instance.parameters.styleLinReg);
+end
+
+function Update(period, mode)
+   if period>first then
+    local loss=source.close[period]*Percent;
+    if source.close[period]>TSL[period-1] and source.close[period-1]>TSL[period-1] then
+     TSL[period]=math.max(TSL[period-1], source.close[period]-loss);
+     TSL:setColor(period, instance.parameters.DNclr);
+    elseif source.close[period]<TSL[period-1] and source.close[period-1]<TSL[period-1] then
+     TSL[period]=math.min(TSL[period-1], source.close[period]+loss);
+     TSL:setColor(period, instance.parameters.UPclr);
+    elseif source.close[period]>TSL[period-1] then
+     TSL[period]=source.close[period]-loss;
+     TSL:setColor(period, instance.parameters.DNclr);
+    else
+     TSL[period]=source.close[period]+loss;
+     TSL:setColor(period, instance.parameters.UPclr);
+    end 
+   end 
+end
+

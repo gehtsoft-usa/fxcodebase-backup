@@ -1,0 +1,146 @@
+function Init()
+{
+    indicator.name("Two Averages Oscillator");
+    indicator.description("");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addString("Method1", "Short MA Method", "", "MVA");
+    indicator.parameters.addStringAlternative("Method1", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method1", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method1", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Method1", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method1", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Method1", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Method1", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Method1", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method1", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Method1", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Method1", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Method1", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Method1", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Method1", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Method1", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Method1", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Method1", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Method1", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Method1", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Method1", "JSmooth", "", "JSmooth");
+
+    indicator.parameters.addInteger("Period1", "Short MA Period", "", 20);
+	
+
+    indicator.parameters.addString("Method2", "Long MA Method", "", "MVA");
+    indicator.parameters.addStringAlternative("Method2", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method2", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method2", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Method2", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method2", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Method2", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Method2", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Method2", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method2", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Method2", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Method2", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Method2", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Method2", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Method2", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Method2", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Method2", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Method2", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Method2", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Method2", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Method2", "JSmooth", "", "JSmooth");
+
+    indicator.parameters.addInteger("Period2", "Long MA Period", "", 50);
+	
+    indicator.parameters.addGroup("Style");
+	 indicator.parameters.addColor("UPUP", "Up in Up Trend ", "", core.rgb(0, 255, 0));
+	 indicator.parameters.addColor("UPDN", "Down in Up Trend ", "", core.rgb(0, 200, 0));
+	 indicator.parameters.addColor("DNUP", "Up in Down Trend ", "", core.rgb(255, 0, 0));
+	 indicator.parameters.addColor("DNDN", "Down in Down Trend ", "", core.rgb(200, 0, 0));
+}
+
+var first;
+var source = null;
+var One
+var Two;
+var Out;
+
+var Method2,Method1;
+var Period1, Period2;
+
+function Prepare(nameOnly)
+{
+    Period1 = instance.parameters.Period1;
+    Period2 = instance.parameters.Period2;
+	Method2 = instance.parameters.Method2;
+	Method1 = instance.parameters.Method1;
+    source = instance.source;
+	
+	assert(core.indicators.findIndicator("AVERAGES") != null, "Please, {wnload && install AVERAGES.LUA indicator");
+	
+	if (Period1 >= Period2) 
+    {
+       error("The short MA period must be smaller than long MA period");
+    }
+	
+	
+	 One = core.indicators.create("AVERAGES", source, Method1, Period1);
+	 Two = core.indicators.create("AVERAGES", source, Method2 , Period2);
+		
+    first = Math.max(One.DATA.first(),  Two.DATA.first());
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period1)+ ", " + tostring(Method1)+ ", " + tostring(Period2)+ ", " + tostring(Method2) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        Out = instance.addStream("TAO", core.Bar, name, "TAO", instance.parameters.UPUP, first);
+    }
+}
+
+function Update(period, mode)
+{
+
+     One.update(mode);
+	 Two.update(mode);
+	
+	  
+	  
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+
+	
+	
+	Out[period] =One.DATA[period] - Two.DATA[period];
+	
+	if (Out[period] > 0) 
+    {
+	    if (Out[period] > Out[period-1]) 
+        {
+		 Out.setColor(period, instance.parameters.UPUP);
+        } 
+		else
+        {    
+		 Out.setColor(period, instance.parameters.UPDN);
+		}
+    }                    	
+	else
+    {
+	    if (Out[period] > Out[period-1]) 
+        {
+		 Out.setColor(period, instance.parameters.DNUP);
+        } 
+		else
+        {
+		 Out.setColor(period, instance.parameters.DNDN);
+		}       
+	}
+	
+    
+}
+

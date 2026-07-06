@@ -1,0 +1,77 @@
+function Init()
+{
+    indicator.name("Grucha Percentage Index");
+    indicator.description("Grucha Percentage Index");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 10);
+    indicator.parameters.addInteger("MA_Period", "MA_Period", "", 10);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("MainClr", "Main Color", "Main Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("MA_Clr", "MA Color", "MA Color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period;
+var MA_Period;
+var MainBuff=null;
+var MABuff=null;
+var MA;
+var PriceDiff;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    MA_Period=instance.parameters.MA_Period;
+    first = source.first()+2;
+    PriceDiff = instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.MA_Period + ")";
+    instance.name(name);
+    MainBuff = instance.addStream("MainBuff", core.Line, name + ".Main", "Main", instance.parameters.MainClr, first);
+    MABuff = instance.addStream("MABuff", core.Line, name + ".MA", "MA", instance.parameters.MA_Clr, first);
+    MA = core.indicators.create("MVA", MainBuff, MA_Period);
+    MainBuff.setWidth(instance.parameters.widthLinReg);
+    MainBuff.setStyle(instance.parameters.styleLinReg);
+    MABuff.setWidth(instance.parameters.widthLinReg);
+    MABuff.setStyle(instance.parameters.styleLinReg);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    PriceDiff[period]=source.open[period]-source.close[period];
+    if (period>first+Period) 
+    {
+     var i;
+     var Pos=0;
+     var Neg=0;
+     for (i=period-Period+1; i<=period; i++) 
+     {
+      if (PriceDiff[i]<0) 
+      {
+       Neg=Neg-PriceDiff[i];
+      }
+      if (PriceDiff[i]>0) 
+      {
+       Pos=Pos+PriceDiff[i];
+      }
+     }
+     if (Neg+Pos>0) 
+     {
+      MainBuff[period]=Neg/(Neg+Pos)*100;
+     } 
+     MA.update(mode);
+     MABuff[period]=MA.DATA[period];
+    } 
+   } 
+}
+

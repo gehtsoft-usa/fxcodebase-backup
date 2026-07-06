@@ -1,0 +1,24 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 2.7 - Error Handling</title>
+</head>
+<body>
+<h2>2.7 - <a name="2.7">Error Handling</a></h2>
+
+<p>
+Because Lua is an embedded extension language,
+all Lua actions start from C&nbsp;code in the host program
+calling a function from the Lua library (see <a href="lua_pcall.html"><code>lua_pcall</code></a>).
+Whenever an error occurs during Lua compilation or execution,
+control returns to C,
+which can take appropriate measures
+(such as printing an error message).
+
+
+<p>
+Lua code can explicitly generate an error by calling the
+<a href="pdf-error.html"><code>error</code></a> function.
+If you need to catch errors in Lua,
+you can use the <a href="pdf-pcall.html"><code>pcall</code></a> function.
+</body>
+</html>

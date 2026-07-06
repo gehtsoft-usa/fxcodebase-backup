@@ -1,0 +1,55 @@
+//initializes the indicator
+function Init()
+{
+    indicator.name("OSC Oscillator");
+    indicator.description("OSC Oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.setTag("group", "Classic Oscillators");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("M", "Slow MA periods", "Slow MA periods.", 7, 1, 10000);
+    indicator.parameters.addInteger("N", "Fast MA periods", "Fast MA periods.", 14, 1, 10000);
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Line color", "The color of line", core.rgb(219, 64, 0));
+    indicator.parameters.addInteger("width", "Line width", "The width of line", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "The style of line", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LEVEL_STYLE);
+}
+
+var first = 0;
+var ppmaFirst;
+var n = 0;
+var m = 0;
+var source = null;
+var OSC;
+
+//initializes the instance of the indicator
+function Prepare(onlyName)
+{
+    source = instance.source;
+    n = instance.parameters.N;
+    m = instance.parameters.M;
+    var name = profile.id() + "(" + instance.source.name() + "," + n + ", " + m + ")";
+    instance.name(name);
+  
+    if (onlyName == true)
+        return ;
+    first = Math.max(m,n) + source.first() - 1;
+
+    OSC = instance.addStream("OSC", core.Line, name, "OSC", instance.parameters.clr,  first);
+    OSC.setWidth(instance.parameters.width);
+    OSC.setStyle(instance.parameters.style);
+}
+
+// calculate the value
+function Update(period, mode)
+{
+    if (period >= first)
+    {
+        var mMvaN = Math.avg(source, period - n + 1, period);
+        var mMvaM = Math.avg(source, period - m + 1, period);
+        OSC[period] = mMvaM - mMvaN;
+    }
+    
+}

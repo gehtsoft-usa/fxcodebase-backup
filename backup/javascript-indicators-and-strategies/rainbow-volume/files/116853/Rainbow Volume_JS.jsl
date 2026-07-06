@@ -1,0 +1,76 @@
+function Init()
+{
+    indicator.name("Rainbow Volume");
+    indicator.description("Rainbow Volume");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addInteger("Period", "Period", "Period", 10);
+	indicator.parameters.addColor("UUC", "Up Price / Up Volume Color", "Up Price / Up Volume Color", core.rgb(0,255,0));
+	indicator.parameters.addColor("UDC", "Up Price / Down Volume Color", "Up Price / Down Volume Color", core.rgb(0,0,255));
+	indicator.parameters.addColor("DDC", "Down Price / Down Volume Color", "Down Price / Down Volume Color", core.rgb(255,0,0));
+	indicator.parameters.addColor("DUC", "Down Price / Up Volume Color", "Down Price / Up Volume Color", core.rgb(255,128,0));
+    indicator.parameters.addColor("NC", "Neutral Color", "Neutral Color", core.rgb(128, 128, 128));
+}
+
+var Period;
+
+var first;
+var source = null;
+
+var Volume = null;
+var NC, UUP,DDC, UDC, DUC ;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+	NC = instance.parameters.NC;
+	UUC = instance.parameters.UUC;
+	DDC = instance.parameters.DDC;
+	UDC = instance.parameters.UDC;
+	DUC = instance.parameters.DUC;
+	
+    source = instance.source;
+    first = source.first()+Period;
+	
+	 assert(source.supportsVolume(), "The source must have volume");
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        Volume = instance.addStream("Volume", core.Bar, name, "Volume", NC, first);
+    }
+}
+
+function Update(period)
+{    
+	Volume.setColor(period, NC);
+		
+	if (period < first || !source.hasData(period)) 
+	{
+	 return;
+	}
+	
+	
+        Volume[period] = source.volume[period];
+		
+		if (source.close[period] > source.close[period-Period] && source.volume[period] > source.volume[period-Period]) 
+		{		
+		 Volume.setColor(period, UUC);
+		} 
+		else if (source.close[period] > source.close[period-Period] && source.volume[period] < source.volume[period-Period]) 
+		{	
+		 Volume.setColor(period, UDC);
+		} 
+		else if (source.close[period] < source.close[period-Period] && source.volume[period] > source.volume[period-Period]) 
+		{	
+		 Volume.setColor(period, DUC);
+		} 
+        else if (source.close[period] < source.close[period-Period] && source.volume[period] < source.volume[period-Period]) 
+        {	
+		 Volume.setColor(period, DDC);
+		}
+}
+

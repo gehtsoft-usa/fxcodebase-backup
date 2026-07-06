@@ -1,0 +1,49 @@
+# TWO MA RSI STOCH STRATEGY
+
+> Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=61827  
+> Forum: 31 · Topic 61827 · 2 post(s)
+
+
+---
+
+## TWO MA RSI STOCH STRATEGY
+
+**Apprentice** · Tue Feb 17, 2015 2:43 pm
+
+![TWO MA RSI STOCH STRATEGY.png](images/98683/TWO%20MA%20RSI%20STOCH%20STRATEGY.png)
+
+
+
+Based on request.
+[viewtopic.php?f=27&t=61825](https://fxcodebase.com/code/viewtopic.php?f=27&t=61825)
+
+BUY:
+1. RSI > BUY LEVEL,
+2. STOCHASTIC K > D AND STOCHATIC K< OVERBOUGHT LEVEL
+3. MOVING AVERAGE1 CROSS OVER MOVING AVERAGE 2
+
+SELL:
+1. RSI< SELL LEVEL
+2. STOCHASTIC K< D AND STOCHASTIC K > OVERSOLD LEVEL
+3. MOVING AVERAGE 1 CROSS UNDER MOVING AVERAGE 2
+
+EXIT BUY:
+1. MOVING AVERAGE1 CROSS UNDER MOVING AVERAGE 2 OR
+2. RSI CROSS UNDER SELL LEVEL
+
+EXIT SELL:
+1. MOVING AVERAGE 1 CROSS OVER MOVING AVERAGE 2 OR
+2. RSI CROSSES OVER BUY LEVEL
+
+ [TWO MA RSI STOCH STRATEGY.lua](files/98683/TWO%20MA%20RSI%20STOCH%20STRATEGY.lua)
+
+The Strategy was revised and updated on January 22, 2019.
+
+
+---
+
+## Re: TWO MA RSI STOCH STRATEGY
+
+**Apprentice** · Sat Jan 06, 2018 8:31 am
+
+The strategy was revised and updated.

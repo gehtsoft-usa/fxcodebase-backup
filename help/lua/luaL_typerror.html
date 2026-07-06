@@ -1,0 +1,25 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - luaL_typerror</title>
+</head>
+<body>
+<h3><a name="luaL_typerror"><code>luaL_typerror</code></a></h3>
+<pre>int luaL_typerror (lua_State *L, int narg, const char *tname);</pre>
+
+<p>
+Generates an error with a message like
+
+<pre>
+     &lt;location&gt;: bad argument &lt;narg&gt; to &lt;function&gt; (&lt;tname&gt; expected, got &lt;realt&gt;)
+</pre><p>
+where <code>&lt;location&gt;</code> is produced by <a href="luaL_where.html"><code>luaL_where</code></a>,
+<code>&lt;function&gt;</code> is the name of the current function,
+and <code>&lt;realt&gt;</code> is the type name of the actual argument.
+
+
+
+
+
+<hr>
+</body>
+</html>

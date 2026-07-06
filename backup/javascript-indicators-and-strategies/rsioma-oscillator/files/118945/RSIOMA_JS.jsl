@@ -1,0 +1,177 @@
+function Init()
+{
+    indicator.name("RSIOMA oscillator");
+    indicator.description("RSIOMA oscillator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+    
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addString("Method", "Method", "", "EMA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("Method", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Method", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Method", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Method", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Method", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Method", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Method", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Method", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Method", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Method", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Method", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Method", "JSmooth", "", "JSmooth");
+    indicator.parameters.addInteger("Period", "Period", "", 14);
+    indicator.parameters.addString("SMethod", "Smooth method", "", "EMA");
+    indicator.parameters.addStringAlternative("SMethod", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("SMethod", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("SMethod", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("SMethod", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("SMethod", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("SMethod", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("SMethod", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("SMethod", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("SMethod", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("SMethod", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("SMethod", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("SMethod", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("SMethod", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("SMethod", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("SMethod", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("SMethod", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("SMethod", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("SMethod", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("SMethod", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("SMethod", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("SMethod", "JSmooth", "", "JSmooth");
+    indicator.parameters.addInteger("SPeriod", "Smooth period", "", 21);
+    indicator.parameters.addInteger("MomPeriod", "Momentum period", "", 1);
+    indicator.parameters.addInteger("HLevel", "High level", "", 20);
+    indicator.parameters.addInteger("MLevel", "Middle level", "", 0);
+    indicator.parameters.addInteger("LLevel", "Low level", "", -20);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr1", "Color 1", "Color 1", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clr2", "Color 2", "Color 2", core.rgb(0, 128, 0));
+    indicator.parameters.addColor("clr3", "Color 3", "Color 3", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("clr4", "Color 4", "Color 4", core.rgb(128, 0, 64));
+    indicator.parameters.addColor("Sclr", "Signal color", "Signal color", core.rgb(0, 0, 255));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Method;
+var Period;
+var SMethod;
+var SPeriod;
+var MomPeriod;
+var HLevel;
+var MLevel;
+var LLevel;
+var MA;
+var SignalMA;
+var Momentum;
+var pos, neg;
+var Positive, Negative;
+var RSIOMA=null;
+var Signal=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Method=instance.parameters.Method;
+    Period=instance.parameters.Period;
+    SMethod=instance.parameters.SMethod;
+    SPeriod=instance.parameters.SPeriod;
+    MomPeriod=instance.parameters.MomPeriod;
+    HLevel=instance.parameters.HLevel;
+    MLevel=instance.parameters.MLevel;
+    LLevel=instance.parameters.LLevel;
+    first = source.first()+2;
+    pos=instance.addInternalStream(first, 0);
+    neg=instance.addInternalStream(first, 0);
+    Positive=instance.addInternalStream(first, 0);
+    Negative=instance.addInternalStream(first, 0);
+    MA = core.indicators.create("AVERAGES", source, Method, Period, false);
+    Momentum = core.indicators.create("MOMENTUM", MA.DATA, MomPeriod);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Method + ", " + instance.parameters.Period + ", " + instance.parameters.SMethod + ", " + instance.parameters.SPeriod + ", " + instance.parameters.MomPeriod + ")";
+    instance.name(name);
+    RSIOMA = instance.addStream("RSIOMA", core.Bar, name + ".RSIOMA", "RSIOMA", instance.parameters.clr1, first);
+    Signal = instance.addStream("Signal", core.Line, name + ".Signal", "Signal", instance.parameters.Sclr, first);
+    Signal.setWidth(instance.parameters.widthLinReg);
+    Signal.setStyle(instance.parameters.styleLinReg);
+    SignalMA = core.indicators.create("AVERAGES", RSIOMA, SMethod, SPeriod, false);
+    Signal.addLevel(HLevel);
+    Signal.addLevel(MLevel);
+    Signal.addLevel(LLevel);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    MA.update(mode);
+    Momentum.update(mode);
+    if (Momentum.DATA[period]>100) 
+    {
+     pos[period]=Momentum.DATA[period]-100;
+     neg[period]=0;
+    }
+    else
+    {
+     pos[period]=0;
+     neg[period]=100-Momentum.DATA[period];
+    }
+    if (period>first+Period) 
+    {
+     Positive[period]=Math.sum(pos, period-Period+1, period);
+     Negative[period]=Math.sum(neg, period-Period+1, period);
+     var p=Math.avg(Positive, period-Period+1, period);
+     var n=Math.avg(Negative, period-Period+1, period);
+     var res;
+     RSIOMA[period]=RSIOMA[period-1];
+     if (n!=0) 
+     {
+      res=1+p/n;
+      if (res!=0) 
+      {
+       RSIOMA[period]=50-100/res;
+      }
+     }
+     if (RSIOMA[period]>0) 
+     {
+      if (RSIOMA[period]>=HLevel) 
+      {
+       RSIOMA.setColor(period, instance.parameters.clr1);
+      }
+      else
+      {
+       RSIOMA.setColor(period, instance.parameters.clr2);
+      }
+     } 
+     else
+     {
+      if (RSIOMA[period]<=LLevel) 
+      {
+       RSIOMA.setColor(period, instance.parameters.clr3);
+      } 
+      else
+      {
+       RSIOMA.setColor(period, instance.parameters.clr4);
+      }
+     }
+     SignalMA.update(mode);
+     Signal[period]=SignalMA.DATA[period];
+    }
+   } 
+}

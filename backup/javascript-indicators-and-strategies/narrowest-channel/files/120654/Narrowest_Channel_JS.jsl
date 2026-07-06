@@ -1,0 +1,74 @@
+function Init()
+{
+    indicator.name("Narrowest channel oscillator");
+    indicator.description("Narrowest channel oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Range", "Range", "", 3);
+    indicator.parameters.addInteger("Period", "Period", "", 10);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Rclr", "Range color", "Range color", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("Rwidth", "Range line width", "Range line width", 1, 1, 5);
+    indicator.parameters.addInteger("Rstyle", "Range line style", "Range line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("Rstyle", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("MRclr", "Min range color", "Min range color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("MRwidth", "Min range line width", "Min range line width", 1, 1, 5);
+    indicator.parameters.addInteger("MRstyle", "Min range line style", "Min range line style", core.LINE_DASH);
+    indicator.parameters.setFlag("MRstyle", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Sclr", "Signal color", "Signal color", core.rgb(0, 0, 255));
+    indicator.parameters.addInteger("Swidth", "Signal {t size", "Signal {t size", 3, 1, 5);
+}
+
+var first;
+var source = null;
+var PRange;
+var Period;
+var Range=null;
+var MinRange=null;
+var Signal=null;
+
+function Prepare()
+{
+    source = instance.source;
+    PRange=instance.parameters.Range;
+    Period=instance.parameters.Period;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Range + ", " + instance.parameters.Period + ")";
+    instance.name(name);
+    Range = instance.addStream("Range", core.Line, name + ".Range", "Range", instance.parameters.Rclr, first);
+    Range.setWidth(instance.parameters.Rwidth);
+    Range.setStyle(instance.parameters.Rstyle);
+    MinRange = instance.addStream("MinRange", core.Line, name + ".MinRange", "MinRange", instance.parameters.MRclr, first);
+    MinRange.setWidth(instance.parameters.MRwidth);
+    MinRange.setStyle(instance.parameters.MRstyle);
+    Signal = instance.addStream("Signal", core.Dot, name + ".Signal", "Signal", instance.parameters.Sclr, first);
+    Signal.setWidth(instance.parameters.Swidth);
+}
+
+function Update(period, mode)
+{
+   if (period>first+PRange) 
+   {
+    var tmp=Math.minmax(source, period-PRange+1, period);
+    var Min=tmp[0];
+    var Max=tmp[1];
+    Range[period]=Max-Min;
+    if (period>first+Period) 
+    {
+     tmp=Math.minmax(Range, period-Period, period-1);
+     MinRange[period]=tmp[0];
+     if (Range[period]<MinRange[period] && Range[period-1]>=MinRange[period-1]) 
+     {
+      Signal[period]=MinRange[period];
+     } 
+     else
+     {
+      Signal[period]=null;
+     }
+    } 
+   } 
+}
+

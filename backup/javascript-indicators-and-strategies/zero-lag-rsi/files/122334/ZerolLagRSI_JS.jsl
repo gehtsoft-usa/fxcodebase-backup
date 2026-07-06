@@ -1,0 +1,142 @@
+function Init()
+{
+    indicator.name("ZerolLagRSI");
+    indicator.description("ZerolLagRSI");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation"); 
+    indicator.parameters.addInteger("smoothing1", "1. Smoothing","", 15);  
+	indicator.parameters.addInteger("smoothing2", "2. Smoothing","", 7);  
+	
+	indicator.parameters.addDouble("Factor1", "1. Factor","", 0.05);
+	indicator.parameters.addInteger("RSI_period1", "1. RSI Period","", 8);	
+	
+	indicator.parameters.addDouble("Factor2", "2. Factor","", 0.1);
+	indicator.parameters.addInteger("RSI_period2", "2. RSI Period","", 21);
+	
+	indicator.parameters.addDouble("Factor3", "3. Factor","", 0.16);
+	indicator.parameters.addInteger("RSI_period3", "3. RSI Period","", 34);
+	
+	indicator.parameters.addDouble("Factor4", "4. Factor","", 0.26);
+	indicator.parameters.addInteger("RSI_period4", "4. RSI Period","", 55);
+	
+	indicator.parameters.addDouble("Factor5", "5. Factor","", 0.43);
+  	indicator.parameters.addInteger("RSI_period5", "5. RSI Period","", 89);
+	
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("ZerolLagRSI_color", "Color of ZerolLagRSI", "Color of ZerolLagRSI", core.rgb(0, 0, 255));
+	
+	indicator.parameters.addColor("UpUp", "Up in Up Trend", "Up in Up Trend", core.rgb(0, 255, 0));
+	indicator.parameters.addColor("UpDown", "Down in Up Trend", "Down in Up Trend", core.rgb(0, 200, 0));
+	indicator.parameters.addColor("DownUp", "Up in Up Trend", "Up in Up Trend", core.rgb(255, 0, 0));
+	indicator.parameters.addColor("DownDown", "Down in Down Trend", "Down in Down Trend", core.rgb(200, 0, 0));
+}
+
+var first;
+var source = null;
+var smoothing1, smoothing2;
+
+var ZerolLagRSI = null;
+var Factor1, Factor2, Factor3,Factor4,Factor5;
+var RSI_period1, RSI_period2, RSI_period3, RSI_period4, RSI_period5;
+var Factor1, Factor2, Factor3, Factor4, Factor5;
+var FastTrend,SlowTrend;
+var RSI={};
+var smoothConst1, smoothConst2;
+
+function Prepare(nameOnly)
+{
+    source = instance.source;
+	
+	smoothing1=instance.parameters.smoothing1;
+	smoothing2=instance.parameters.smoothing2;
+	
+	RSI_period1=instance.parameters.RSI_period1;
+	RSI_period2=instance.parameters.RSI_period2;
+	RSI_period3=instance.parameters.RSI_period3;
+	RSI_period4=instance.parameters.RSI_period4;
+	RSI_period5=instance.parameters.RSI_period5;
+	
+	Factor1=instance.parameters.Factor1;
+	Factor2=instance.parameters.Factor2;
+	Factor3=instance.parameters.Factor3;
+	Factor4=instance.parameters.Factor4;
+	Factor5=instance.parameters.Factor5;
+	
+	smoothConst1=(smoothing1-1.0)/smoothing1;
+    smoothConst2=(smoothing2-1.0)/smoothing2;
+	
+    RSI[1] = core.indicators.create("RSI", source, RSI_period1);
+	RSI[2] = core.indicators.create("RSI", source, RSI_period2);
+	RSI[3] = core.indicators.create("RSI", source, RSI_period3);
+	RSI[4] = core.indicators.create("RSI", source, RSI_period4);
+	RSI[5] = core.indicators.create("RSI", source, RSI_period5);
+	
+	FastTrend= instance.addInternalStream(0, 0);
+	SlowTrend= instance.addInternalStream(0, 0);
+	
+    first = Math.max( RSI[1].DATA.first(),  RSI[2].DATA.first(), RSI[3].DATA.first(), RSI[4].DATA.first(), RSI[5].DATA.first());
+
+    var name = profile.id() + "(" + source.name() + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        ZerolLagRSI = instance.addStream("ZerolLagRSI", core.Bar, name, "ZerolLagRSI", instance.parameters.ZerolLagRSI_color, first);
+    }
+}
+
+function Update(period,mode)
+{
+    ZerolLagRSI.setColor(period, instance.parameters.ZerolLagRSI_color);
+		
+	RSI[1].update(mode);
+    RSI[2].update(mode);
+	RSI[3].update(mode);
+	RSI[4].update(mode);
+	RSI[5].update(mode);
+	
+	if (period < first || !source.hasData(period)) 
+	{
+	 return;
+	}
+	
+	  var Osc1 = Factor1 * RSI[1].DATA[period];
+      var Osc2 = Factor2 * RSI[2].DATA[period];
+      var Osc3 = Factor2 * RSI[3].DATA[period];
+      var Osc4 = Factor4 * RSI[4].DATA[period];
+      var Osc5 = Factor5 * RSI[5].DATA[period];
+      
+      FastTrend[period] = Osc1 + Osc2 + Osc3 + Osc4 + Osc5;
+      SlowTrend[period] = FastTrend[period]/ smoothing1 + SlowTrend[period-1] * smoothConst1;
+      
+      ZerolLagRSI[period]=(FastTrend[period]-SlowTrend[period])/smoothing2+ZerolLagRSI[period-1]*smoothConst2;
+	   
+		
+	var diff=ZerolLagRSI[period]-ZerolLagRSI[period-1];
+	
+	if (ZerolLagRSI[period] > 0) 
+	{
+	    if (diff > 0) 
+	    {
+		 ZerolLagRSI.setColor(period, instance.parameters.UpUp);
+		} 
+		else
+		{
+		 ZerolLagRSI.setColor(period, instance.parameters.UpDown);
+		}
+	}	
+	else	
+	{	
+	    if (diff > 0) 
+	    {
+		 ZerolLagRSI.setColor(period, instance.parameters.DownUp);
+		} 
+		else
+		{	
+		 ZerolLagRSI.setColor(period, instance.parameters.DownDown);
+		}
+	}
+     
+}
+

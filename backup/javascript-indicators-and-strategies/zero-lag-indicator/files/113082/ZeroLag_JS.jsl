@@ -1,0 +1,78 @@
+function Init()
+{
+    indicator.name("Zero Lag");
+    indicator.description("Zero Lag indicator from Futures & Commodities, Oct issue");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addInteger("N", "Lenth", "Inernal EMA length", 20);
+    indicator.parameters.addInteger("GainLimit", "GainLimit", "Limit of gain term", 50);
+	
+	indicator.parameters.addGroup("Style Parameters"); 
+	indicator.parameters.addInteger("width", " Grid Line Width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", " Grid Style", " ", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("ZL_color", "Color of ZeroLag", "Color of ZeroLag", core.rgb(255, 255, 0));
+}
+
+var N;
+var gainLimit;
+
+var first;
+var source = null;
+
+var EMAI = null;
+var ZL = null;
+
+var alpha
+
+function Prepare()
+{
+    N = instance.parameters.N;
+    gainLimit = instance.parameters.GainLimit / 10;
+    source = instance.source;
+    
+    var name = profile.id() + "(" + source.name() + ", " + N + ", " + instance.parameters.GainLimit + ")";
+    instance.name(name);
+    
+    EMAI = core.indicators.create("EMA", source, N  );
+
+    first = EMAI.DATA.first() + 1; 
+
+    alpha =  2.0 / (N + 1.0)
+
+    ZL = instance.addStream("ZL", core.Line, name + ".ZL", "ZL", instance.parameters.ZL_color, first);
+	ZL.setWidth(instance.parameters.width);
+	ZL.setStyle(instance.parameters.style);
+}
+
+function Update(period, mode)
+{
+    EMAI.update(mode);
+    
+    if (period >= first && source.hasData(period)) 
+    {
+        var EMA = EMAI.DATA[period];
+
+		var err = source[period] - ZL[period - 1]
+		var gain = 0
+        if (Math.abs(alpha * err) > 1e-9) 
+        {
+          var diff = ZL[period - 1] - EMA
+          gain = (err + alpha * diff) / (alpha * err)
+        }
+
+        gain = Math.max(Math.min(gain, gainLimit), -gainLimit)
+         
+        if (gain > 0) 
+        {
+        	gain = Math.floor(gain * 10 + 0.5) / 10;
+        }    
+        else
+        {
+        	gain = Math.ceil(gain * 10 - 0.5) / 10;
+        }
+        
+        ZL[period] = alpha * (EMA + gain * err) + (1 - alpha) *  ZL[period - 1];
+    }
+}

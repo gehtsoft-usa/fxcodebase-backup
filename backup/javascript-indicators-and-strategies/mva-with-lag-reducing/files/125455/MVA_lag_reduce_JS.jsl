@@ -1,0 +1,52 @@
+function Init()
+{
+    indicator.name("Simple Moving Average");
+    indicator.description("The average price for the last N periods.");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+    indicator.setTag("group", "Moving Averages");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("N", "Number of periods", "The number of periods", 7, 1, 10000);
+
+    indicator.parameters.addDouble("RLFactor", "Lag reducing parameter", "Lag reducing parameter", 1.5, 0.0001, 10000);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clrDIP", "Line color", "The color of the MVA line.", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("widthDIP", "Line width", "The width of the MVA line.", 1, 1, 5);
+    indicator.parameters.addInteger("styleDIP", "Line style", "The style of the MVA line.", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleDIP", core.FLAG_LEVEL_STYLE);
+}
+
+var first = 0;
+var n = 0;
+var source = null;
+var out = null;
+var outInternal = null;
+var RLFactor;
+
+function Prepare()
+{
+    source = instance.source;
+    n = instance.parameters.N;
+    RLFactor = instance.parameters.RLFactor;
+    first = n + source.first() - 1;
+    var name = profile.id() + "(" + source.name() + "," + n + "," + RLFactor + ")";
+    instance.name(name);
+    out = instance.addStream("MVA", core.Line, name, "MVA", instance.parameters.clrDIP, first)
+
+    outInternal = instance.addInternalStream(first);
+
+    out.setWidth(instance.parameters.widthDIP);
+    out.setStyle(instance.parameters.styleDIP);
+}
+
+function Update(period)
+{
+    if (period >= first) 
+    {
+        outInternal[period] = Math.avg(source, period - n + 1, period);
+        out[period] = Math.pow((outInternal[period]/outInternal[period - 1]), RLFactor) * outInternal[period];
+   }
+    
+}

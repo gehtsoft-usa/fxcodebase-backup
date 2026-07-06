@@ -1,0 +1,61 @@
+function Init()
+{
+    indicator.name("Volume Price Momentum Oscillator");
+    indicator.description("Volume  Price Momentum Oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "Period", 3);
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("VPMO_color", "Color of VPMO", "Color of VPMO", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var Period;
+ 
+var source = null;
+var EMA;
+
+var VPMO = null;
+var vpmo;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+    source = instance.source;
+   
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ")";
+    instance.name(name);
+    vpmo  = instance.addInternalStream(0, 0);
+	
+	assert( source.supportsVolume () , "The source that includes data volume is required.");
+	
+	
+	EMA = core.indicators.create("EMA", vpmo, Period);
+	
+    if (!(nameOnly)) 
+    {
+        VPMO = instance.addStream("VPMO", core.Line, name, "VPMO", instance.parameters.VPMO_color, EMA.DATA.first());
+		VPMO.setWidth(instance.parameters.width);
+        VPMO.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period, mode)
+{ 
+	vpmo[period]=source.volume[period]*(source.close[period]-source.close[period-1]);
+	EMA.update(mode);
+	
+	if (period < EMA.DATA.first() || !source.hasData(period)) 
+	{
+	 return;
+	}
+	
+	VPMO[period] = EMA.DATA[period];
+    
+}
+

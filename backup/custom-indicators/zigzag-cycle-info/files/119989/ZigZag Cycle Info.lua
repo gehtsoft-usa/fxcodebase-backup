@@ -1,0 +1,594 @@
+
+-- More information about this indicator can be found at:
+-- http://fxcodebase.com/code/viewtopic.php?f=17&t=66279
+
+--+------------------------------------------------------------------+
+--|                               Copyright © 2018, Gehtsoft USA LLC | 
+--|                                            http://fxcodebase.com |
+--+------------------------------------------------------------------+
+--|                                      Developed by : Mario Jemic  |                    
+--|                                          mario.jemic@gmail.com   |
+--+------------------------------------------------------------------+
+--|                                 Support our efforts by donating  | 
+--|                                    Paypal: https://goo.gl/9Rj74e |
+--+------------------------------------------------------------------+
+--|                                Patreon :  https://goo.gl/GdXWeN  |  
+--|                    BitCoin : 15VCJTLaz12Amr7adHSBtL9v8XomURo9RF  |  
+--|                BitCoin Cash: 1BEtS465S3Su438Kc58h2sqvVvHK9Mijtg  | 
+--|           Ethereum : 0x8C110cD61538fb6d7A2B47858F0c0AaBd663068D  |  
+--|                   LiteCoin : LLU8PSY2vsq7B9kRELLZQcKf5nJQrdeqwD  |  
+--+------------------------------------------------------------------+
+
+
+-- Indicator profile initialization routine
+function Init()
+    indicator:name("ZigZag Cycle Info");
+    indicator:description("");
+    indicator:requiredSource(core.Bar);
+    indicator:type(core.Indicator);
+    indicator.parameters:addGroup("Calculation");
+    indicator.parameters:addInteger("Depth", "Depth", "the minimal amount of bars where there will not be the second maximum", 12);
+    indicator.parameters:addInteger("Deviation", "Deviation", "Distance in pips to eliminate the second maximum in the last Depth periods", 5);
+    indicator.parameters:addInteger("Backstep", "Backstep", "The minimal amount of bars between maximums/minimums", 3);
+	
+	indicator.parameters:addGroup("Calculation");
+	indicator.parameters:addInteger("Period", "Period in Candles", "0 for All", 0);
+	
+	
+	indicator.parameters:addGroup("Line Style");
+    indicator.parameters:addColor("Zig_color", "Up swing color", "Up swing color", core.rgb(0, 255, 0));
+    indicator.parameters:addColor("Zag_color", "Down swing color", "Down swing color", core.rgb(255, 0, 0));
+    indicator.parameters:addInteger("widthZigZag", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters:addInteger("styleZigZag", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters:setFlag("styleZigZag", core.FLAG_LEVEL_STYLE);
+	
+	indicator.parameters:addGroup("Placement");
+
+	
+	indicator.parameters:addString("X", " X Placement","" , "Right");
+    indicator.parameters:addStringAlternative("X", "Right", "Right" , "Right");
+    indicator.parameters:addStringAlternative("X", "Left", "Left" , "Left"); 
+    indicator.parameters:addInteger("ShiftY", "Vertical Shift","" , 25);
+	
+	
+		indicator.parameters:addGroup("Style");
+   indicator.parameters:addColor("Label", "Label Color", "", core.rgb(0, 0, 0)); 
+   indicator.parameters:addInteger("Size", "Font Size", "", 20);
+    indicator.parameters:addColor("color", "Line Color", "", core.rgb(255, 0, 0));
+ 
+end
+
+-- Indicator instance initialization routine
+-- Processes indicator parameters and creates output streams
+-- Parameters block
+local Depth;
+local Deviation;
+local Backstep;
+
+local first;
+local FIRST;
+local source = nil;
+local Period;
+-- Streams block
+local ZigC;
+local ZagC;
+local out;
+local HighMap = nil;
+local LowMap = nil;
+local pipSize;
+local Flag;
+
+local ZigZag;
+
+
+local X;
+local Label;
+local Size;
+local ShiftY;
+
+
+local NumberOfCycles;
+local MaxSize;
+local MinSize;
+
+local AvgUp;
+local AvgDown;
+local Avg;
+-- Routine
+ function Prepare(nameOnly)
+    Depth = instance.parameters.Depth;
+    Deviation = instance.parameters.Deviation;
+    Backstep = instance.parameters.Backstep;
+	Period = instance.parameters.Period;
+    source = instance.source;
+    first = source:first();
+	
+
+
+    local name = profile:id() .. "(" .. source:name() .. ", " .. Depth .. ", " .. Deviation .. ", " .. Backstep .. ")";
+    instance:name(name);
+	
+	
+	if   (nameOnly) then
+        return;
+    end
+	
+	NumberOfCycles=0;
+	MaxSize=0;
+    MinSize=0;
+	
+	AvgUp=0;
+	AvgDown=0;
+	Avg=0;
+	
+	
+	X=instance.parameters.X;  
+	ShiftY=instance.parameters.ShiftY;
+    Label=instance.parameters.Label;
+	Size=instance.parameters.Size; 
+	
+	
+    out = instance:addStream("out", core.Line, name, "Up", instance.parameters.Zig_color, first);
+    out:setWidth(instance.parameters.widthZigZag);
+    out:setStyle(instance.parameters.styleZigZag);
+	
+	ZigC = instance.parameters.Zig_color;
+	ZagC = instance.parameters.Zag_color;	
+   
+
+    HighMap = instance:addInternalStream(0, 0);
+    LowMap = instance:addInternalStream(0, 0);
+    SearchMode = instance:addInternalStream(0, 0);
+    Peak = instance:addInternalStream(0, 0);
+	Flag=  instance:addInternalStream(0, 0);   
+    pipSize=source:pipSize();
+	
+	
+	ZigZag = instance:addInternalStream(0, 0);
+	
+	instance:ownerDrawn(true);
+	
+	
+	  core.host:execute ("setTimer", 1, 1);
+end
+
+
+local NumberOfCycles=0;
+local NumberOfCyclesUp=0;
+local NumberOfCyclesDown=0;
+function AsyncOperationFinished(cookie)
+
+
+
+
+				if cookie== 1 then
+
+				NumberOfCycles=0;
+				MaxSize=0;
+				MinSize=0;
+				
+				AvgUp=0;
+				AvgDown=0;
+				Avg=0;
+				
+			
+				NumberOfCyclesUp=0;
+				NumberOfCyclesDown=0;
+
+
+				if Period== 0 then
+				FIRST=first;
+				else
+				FIRST=math.max(first,source:size()-1-Period);
+				end
+
+
+								for period =source:size()-1, FIRST, -1 do
+
+
+										if Flag[period]~= 0 then
+										NumberOfCycles=NumberOfCycles+1;
+
+										MaxSize= math.max(math.abs(ZigZag[period]/pipSize),MaxSize);
+
+
+											if MinSize==0 then
+											MinSize=math.abs(ZigZag[period])/pipSize;
+											elseif ZigZag[period]~=0 then
+											MinSize= math.min(math.abs(ZigZag[period]/pipSize),MinSize);
+											end
+											
+											                if Flag[period] == 1 then
+															AvgUp=AvgUp+math.abs(ZigZag[period])/pipSize;
+															NumberOfCyclesUp=NumberOfCyclesUp+1;
+															end
+															if Flag[period] == -1 then
+				                                            AvgDown=AvgDown+math.abs(ZigZag[period])/pipSize;
+															NumberOfCyclesDown=NumberOfCyclesDown+1;
+															end
+				                                            Avg=Avg+math.abs(ZigZag[period])/pipSize;
+											
+										end
+
+
+
+								end
+				if NumberOfCycles ~=0 then				  
+                Avg=Avg/NumberOfCycles;
+				else
+				Avg=0;
+				end
+				
+				if NumberOfCyclesUp~=0 then
+				AvgUp=AvgUp/NumberOfCyclesUp;
+				else
+				AvgUp=0;
+				end
+				
+				if NumberOfCyclesDown ~=0 then
+				AvgDown=AvgDown/NumberOfCyclesDown;
+				else
+				AvgDown=0;
+				end
+				
+				
+		end		
+
+
+end
+
+
+function ReleaseInstance()
+core.host:execute ("killTimer", 1);
+end 
+
+local searchBoth = 0;
+local searchPeak = 1;
+local searchLawn = -1;
+local lastlow = nil;
+local lashhigh = nil;
+
+-- optimization hint
+local peak_count = 0;
+
+function RegisterPeak(period, mode, peak)
+    peak_count = peak_count + 1;
+    out:setBookmark(peak_count, period);
+    SearchMode[period] = mode;
+    Peak[period] = peak;
+end
+
+function ReplaceLastPeak(period, mode, peak)
+    --peak_count = peak_count + 1;
+    out:setBookmark(peak_count, period);
+    SearchMode[period] = mode;
+    Peak[period] = peak;
+end
+
+function GetPeak(offset)
+    local peak;
+    peak = peak_count + offset;
+    if peak < 1 then
+        return -1;
+    end
+    peak = out:getBookmark(peak);
+    if peak < 0 then
+        return -1;
+    end
+    return peak;
+end
+
+local lastperiod = -1;
+
+function DeleteLabels(startBar, endBar)
+ local i;
+ for i=startBar,endBar,1 do
+  Flag[i]=0;
+  ZigZag[i]=0;
+ end
+ return;
+end
+
+
+
+function Update(period, mode)
+    -- calculate zigzag for the completed candle ONLY
+    period = period - 1;
+   Flag[period]=0;
+	
+	
+    if period == lastperiod then
+        return ;
+    end
+
+    if period < lastperiod then
+        lastlow = nil;
+        lasthigh = nil;
+        peak_count = 0;
+    end
+
+    lastperiod = period;
+
+    if period >= Depth then
+        -- fill high/low maps
+        local range = period - Depth + 1;
+        local val;
+        local i;
+        -- get the lowest low for the last depth periods
+        val = mathex.min(source.low, range, period);
+        if val == lastlow then
+            -- if lowest low is not changed - ignore it
+            val = nil;
+        else
+            -- keep it
+            lastlow = val;
+            -- if current low is higher for more than Deviation pips, ignore
+            if (source.low[period] - val) > (source:pipSize() * Deviation) then
+               val = nil;
+            else
+                -- check for the previous backstep lows
+                for i = period - 1, period - Backstep + 1, -1 do
+                    if (LowMap[i] ~= 0) and (LowMap[i] > val) then
+                        LowMap[i] = 0;
+                    end
+                end
+            end
+        end
+        if source.low[period] == val then
+            LowMap[period] = val;
+        else
+            LowMap[period] = 0;
+        end
+        -- get the lowest low for the last depth periods
+        val = mathex.max(source.high, range, period);
+        if val == lasthigh then
+            -- if lowest low is not changed - ignore it
+            val = nil;
+        else
+            -- keep it
+            lasthigh = val;
+            -- if current low is higher for more than Deviation pips, ignore
+            if (val - source.high[period]) > (source:pipSize() * Deviation) then
+               val = nil;
+            else
+                -- check for the previous backstep lows
+                for i = period - 1, period - Backstep + 1, -1 do
+                    if (HighMap[i] ~= 0) and (HighMap[i] < val) then
+                        HighMap[i] = 0;
+                    end
+                end
+            end
+        end
+
+        if source.high[period] == val then
+            HighMap[period] = val;
+        else
+            HighMap[period] = 0
+        end
+
+        local start;
+        local last_peak;
+        local last_peak_i;
+        local prev_peak;
+        local searchMode = searchBoth;
+
+        i = GetPeak(-4);
+        if i == -1 then
+            prev_peak = nil;
+        else
+            prev_peak = i;
+        end
+
+        start = Depth;
+        i = GetPeak(-3);
+        if i == -1 then
+            last_peak_i = nil;
+            last_peak = nil;
+        else
+            last_peak_i = i;
+            last_peak = Peak[i];
+            searchMode = SearchMode[i];
+            start = i;
+        end
+
+        peak_count = peak_count - 3;
+
+        for i = start, period, 1 do
+            if searchMode == searchBoth then
+                if (HighMap[i] ~= 0) then
+                    last_peak_i = i;
+                    last_peak = HighMap[i];
+                    searchMode = searchLawn;
+                    RegisterPeak(i, searchMode, last_peak);
+                elseif (LowMap[i] ~= 0) then
+                    last_peak_i = i;
+                    last_peak = LowMap[i];
+                    searchMode = searchPeak;
+                    RegisterPeak(i, searchMode, last_peak);
+                end
+            elseif searchMode == searchPeak then
+                if (LowMap[i] ~= 0 and LowMap[i] < last_peak) then
+                    last_peak = LowMap[i];
+                    last_peak_i = i;
+                    if prev_peak ~= nil then
+                        if Peak[prev_peak] > LowMap[i] then
+                            core.drawLine(out, core.range(prev_peak, i), Peak[prev_peak], prev_peak, LowMap[i], i, ZagC);
+                            out:setColor(prev_peak, ZigC);
+                            DeleteLabels(prev_peak+1, i);
+                            --TextBuff:set(i, LowMap[i], TextFormat(i-prev_peak, Peak[prev_peak]-LowMap[i]));
+							Flag[i]=-1;
+							
+							ZigZag[i]=Peak[prev_peak]- LowMap[i];
+                        else
+                            core.drawLine(out, core.range(prev_peak, i), Peak[prev_peak], prev_peak, LowMap[i], i, ZigC);
+                            out:setColor(prev_peak, ZagC);
+                            DeleteLabels(prev_peak+1, i);
+                            --TextBuff:set(i, LowMap[i], TextFormat(i-prev_peak, Peak[prev_peak]-LowMap[i]));
+							Flag[i]=-1;
+							ZigZag[i]=Peak[prev_peak]- LowMap[i];
+                        end
+                    end
+                    ReplaceLastPeak(i, searchMode, last_peak);
+                end
+                if HighMap[i] ~= 0 and LowMap[i] == 0 then
+                    core.drawLine(out, core.range(last_peak_i, i), last_peak, last_peak_i, HighMap[i], i, ZigC);
+                    out:setColor(last_peak_i, ZagC);
+                    DeleteLabels(last_peak_i+1, i);
+                    --TextBuff:set(i, HighMap[i], TextFormat(i-last_peak_i, HighMap[i]-last_peak));
+					Flag[i]=1;
+					ZigZag[i]=last_peak-HighMap[i];
+                    prev_peak = last_peak_i;
+                    last_peak = HighMap[i];
+                    last_peak_i = i;
+                    searchMode = searchLawn;
+                    RegisterPeak(i, searchMode, last_peak);
+                end
+            elseif searchMode == searchLawn then
+                if (HighMap[i] ~= 0 and HighMap[i] > last_peak) then
+                    last_peak = HighMap[i];
+                    last_peak_i = i;
+                    if prev_peak ~= nil then
+                        core.drawLine(out, core.range(prev_peak, i), Peak[prev_peak], prev_peak, HighMap[i], i, ZigC);
+                        out:setColor(prev_peak, ZagC);
+                        DeleteLabels(prev_peak+1, i);
+                       -- TextBuff:set(i, HighMap[i], TextFormat(i-prev_peak, HighMap[i]-Peak[prev_peak]));
+						Flag[i]=1;
+						ZigZag[i]=Peak[prev_peak]- HighMap[i];
+                    end
+                    ReplaceLastPeak(i, searchMode, last_peak);
+                end
+                if LowMap[i] ~= 0 and HighMap[i] == 0 then
+                    if  last_peak > LowMap[i] then
+                        core.drawLine(out, core.range(last_peak_i, i), last_peak, last_peak_i, LowMap[i], i, ZagC);
+                        out:setColor(last_peak_i, ZigC);
+                        DeleteLabels(last_peak_i+1, i);
+                       -- TextBuff:set(i, LowMap[i], TextFormat(i-last_peak_i, last_peak-LowMap[i]));
+						Flag[i]=-1;
+						ZigZag[i]=last_peak- LowMap[i];
+                    else
+                        core.drawLine(out, core.range(last_peak_i, i), last_peak, last_peak_i, LowMap[i], i, ZigC);
+                        out:setColor(last_peak_i, ZagC);
+                        DeleteLabels(last_peak_i+1, i);
+                       -- TextBuff:set(i, LowMap[i], TextFormat(i-last_peak_i, last_peak-LowMap[i]));
+						Flag[i]=-1;
+						ZigZag[i]=last_peak- LowMap[i];
+						
+                    end
+                    prev_peak = last_peak_i;
+                    last_peak = LowMap[i];
+                    last_peak_i = i;
+                    searchMode = searchPeak;
+                    RegisterPeak(i, searchMode, last_peak);
+                end
+            end
+        end
+    end
+	
+	   
+end
+
+local Init= true;
+function Draw (stage, context)
+
+    if stage  ~= 2 then
+	return;
+	end
+
+   context:setClipRectangle(context:left(), context:top(), context:right(), context:bottom());    
+   -- context:pixelsToPoints (instance.parameters.TextSize)
+   if Init  then
+   context:createFont (1, "Arial", context:pointsToPixels (Size), context:pointsToPixels (Size), 0);
+   Init=false;
+   end
+   
+      
+  
+  
+   if NumberOfCycles~=0 then
+   Text=  "Number of Cycles : " .. NumberOfCycles;
+	 
+   i=1;	 
+   width, height = context:measureText (1, Text, 0);
+   context:drawText (1,  Text, Label, -1,  iX(context,width,0,1) ,  iY(context,height,i,0) ,iX(context,width,0,2),iY(context,height,i,1), 0 );	
+	
+   end
+   
+   
+    if MaxSize~=0 then
+   Text=  "Max Size : " .. round(MaxSize, 1);
+	 
+   i=5;	 
+   width, height = context:measureText (1, Text, 0);
+   context:drawText (1,  Text, Label, -1,  iX(context,width,0,1) ,  iY(context,height,i,0) ,iX(context,width,0,2),iY(context,height,i,1), 0 );	
+	
+   end
+   
+   
+    if MinSize~=0 then
+   Text=  "Min Size : " .. round(MinSize, 1);
+	 
+   i=6;	 
+   width, height = context:measureText (1, Text, 0);
+   context:drawText (1,  Text, Label, -1,  iX(context,width,0,1) ,  iY(context,height,i,0) ,iX(context,width,0,2),iY(context,height,i,1), 0 );	
+	
+   end
+   
+   
+    if Avg~=0 then
+   Text=  "Average Cycle: " .. round(Avg, 1);
+	 
+   i=2;	 
+   width, height = context:measureText (1, Text, 0);
+   context:drawText (1,  Text, Label, -1,  iX(context,width,0,1) ,  iY(context,height,i,0) ,iX(context,width,0,2),iY(context,height,i,1), 0 );	
+	
+   end
+   
+   
+    if AvgUp~=0 then
+   Text=  "Average Up Cycle: " ..round(AvgUp, 1);
+	 
+   i=3;	 
+   width, height = context:measureText (1, Text, 0);
+   context:drawText (1,  Text, Label, -1,  iX(context,width,0,1) ,  iY(context,height,i,0) ,iX(context,width,0,2),iY(context,height,i,1), 0 );	
+	
+   end
+   
+   
+    if AvgDown~=0 then
+   Text=  "Average Down Cycle: " ..round(AvgDown, 1);
+	 
+   i=4;	 
+   width, height = context:measureText (1, Text, 0);
+   context:drawText (1,  Text, Label, -1,  iX(context,width,0,1) ,  iY(context,height,i,0) ,iX(context,width,0,2),iY(context,height,i,1), 0 );	
+	
+   end
+   
+   
+end	 
+
+function round(num, idp)
+  if idp and idp>0 then
+    local mult = 10^idp
+    return math.floor(num * mult + 0.5) / mult
+  end
+  return math.floor(num + 0.5)
+end
+
+function iX(context, width,Shift,x)
+
+	if X== "Left" then
+	return  context:left()+ Shift*width +  width*(x-1) ;
+	else
+	return context:right() - width*Shift -  width*(1-(x-1));
+	end
+end
+
+
+
+function iY(context, height,Index , Line)
+
+	
+		return context:top()+Index*height +ShiftY + Line *height;
+
+end
+

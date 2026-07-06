@@ -1,0 +1,78 @@
+function Init()
+{
+    indicator.name("CMx oscillator");
+    indicator.description("CMx oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 12);
+    indicator.parameters.addDouble("K", "K", "", 1.682);
+    indicator.parameters.addDouble("L", "L", "", 18);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(255, 255, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Lclr", "Levels color", "Levels color", core.rgb(128, 128, 128));
+    indicator.parameters.addInteger("Lwidth", "Levels width", "Levels width", 1, 1, 5);
+    indicator.parameters.addInteger("Lstyle", "Levels style", "Levels style", core.LINE_DASH);
+    indicator.parameters.setFlag("Lstyle", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period;
+var K_Period;
+var K;
+var L;
+var MA, MA_K;
+var ADX;
+var Diff;
+var D;
+var CMx=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    K=instance.parameters.K;
+    L=instance.parameters.L;
+    K_Period=Math.floor(Period*K+0.5);
+    first = source.first()+2;
+    Diff = instance.addInternalStream(first, 0);
+    D = instance.addInternalStream(first, 0);
+    MA = core.indicators.create("EMA", source.close, Period);
+    MA_K = core.indicators.create("EMA", source.close, K_Period);
+    ADX = core.indicators.create("ADX", source, Period);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.K + ", " + instance.parameters.L + ")";
+    instance.name(name);
+    CMx = instance.addStream("CMx", core.Line, name + ".CMx", "CMx", instance.parameters.clr, first);
+    CMx.setWidth(instance.parameters.widthLinReg);
+    CMx.setStyle(instance.parameters.styleLinReg);
+    CMx.addLevel(61.8, instance.parameters.Lstyle, instance.parameters.Lwidth, instance.parameters.Lclr);
+    CMx.addLevel(-61.8, instance.parameters.Lstyle, instance.parameters.Lwidth, instance.parameters.Lclr);
+    CMx.addLevel(161.8, instance.parameters.Lstyle, instance.parameters.Lwidth, instance.parameters.Lclr);
+    CMx.addLevel(-161.8, instance.parameters.Lstyle, instance.parameters.Lwidth, instance.parameters.Lclr);
+    CMx.addLevel(261.8, instance.parameters.Lstyle, instance.parameters.Lwidth, instance.parameters.Lclr);
+    CMx.addLevel(-261.8, instance.parameters.Lstyle, instance.parameters.Lwidth, instance.parameters.Lclr);
+    CMx.addLevel(423.8, instance.parameters.Lstyle, instance.parameters.Lwidth, instance.parameters.Lclr);
+    CMx.addLevel(-423.8, instance.parameters.Lstyle, instance.parameters.Lwidth, instance.parameters.Lclr);
+}
+
+function Update(period, mode)
+{
+   if (period>first+K_Period) 
+   {
+    MA.update(mode);
+    MA_K.update(mode);
+    ADX.update(mode);
+    Diff[period]=MA.DATA[period]-MA_K.DATA[period];
+    var mean=Math.avg(Diff, period-K_Period+1, period);
+    var meandev=Math.meandev(Diff, period-K_Period+1, period);
+    var CCI=(Diff[period]-mean)/(meandev*0.015);
+    CMx[period]=CCI*ADX.DATA[period]/(L*K);
+   } 
+}
+

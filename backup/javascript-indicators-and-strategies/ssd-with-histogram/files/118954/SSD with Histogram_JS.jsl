@@ -1,0 +1,112 @@
+function Init()
+{
+    indicator.name("Stochastic Slow");
+    indicator.description("Shows the location of the current close relative to the high/low range over a set number of periods.");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.setTag("group", "Classic Oscillators");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("K", "%K periods","", 5, 2, 1000);
+    indicator.parameters.addInteger("SD", "%D slowing periods","", 3, 2, 1000);
+    indicator.parameters.addInteger("D", "%D periods","", 3, 2, 1000);
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clrFirst", "K Line Color","", core.rgb(0, 183, 183));
+    indicator.parameters.addInteger("widthFirst", "K Line Width","", 1, 1, 5);
+    indicator.parameters.addInteger("styleFirst", "K Line Style","", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleFirst", core.FLAG_LEVEL_STYLE);
+
+    indicator.parameters.addColor("clrSecond", "D Line Color","", core.rgb(219, 63, 0));
+    indicator.parameters.addInteger("widthSecond", "D Line Width","", 1, 1, 5);
+    indicator.parameters.addInteger("styleSecond", "D Line Style","", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleSecond", core.FLAG_LEVEL_STYLE);
+	
+	 indicator.parameters.addColor("clrUp", "Histogram Up Color","", core.rgb(0, 255, 0));
+     indicator.parameters.addColor("clrDown", "Histogram Down Color","", core.rgb(255, 0, 0));
+	 
+    indicator.parameters.addGroup("Levels");
+
+    indicator.parameters.addDouble("overbought", "Overbought Level","", 30, 0, 100);
+    indicator.parameters.addDouble("oversold", "Oversold Level","", -30, 0, 100);
+    indicator.parameters.addInteger("level_overboughtsold_width", "Overbought Oversold Line Width","", 1, 1, 5);
+    indicator.parameters.addInteger("level_overboughtsold_style","Overbought Oversold Line Style","", core.LINE_SOLID);
+    indicator.parameters.addColor("level_overboughtsold_color", "Overbought Oversold Line Color","", core.rgb(128, 128, 128));
+    indicator.parameters.setFlag("level_overboughtsold_style", core.FLAG_LEVEL_STYLE);
+}
+
+var k;
+var d;
+var sd;
+
+var source = null;
+var signalLine = null;
+var sfk = null;
+var kFirst = null;
+var dFirst = null;
+var Histogram;
+
+var K = null;
+var D = null;
+
+function Prepare()
+{
+    assert(instance.parameters.oversold < instance.parameters.overbought, "Overbought should be greater than Oversold");
+
+    k = instance.parameters.K;
+    d = instance.parameters.D;
+    sd = instance.parameters.SD;
+    source = instance.source;
+
+    var name = profile.id() + "(" + source.name() + ", " + k + ", " + d + ", " + sd + ")";
+    instance.name(name);
+    sfk = core.indicators.create("SFK", source, k, sd);
+    K = instance.addStream("K", core.Line, name + ".K", "K", instance.parameters.clrFirst, sfk.D.first());
+    K.setWidth(instance.parameters.widthFirst);
+    K.setStyle(instance.parameters.styleFirst);
+    K.setPrecision(2);
+
+    D = instance.addStream("D", core.Line, name + ".D", "D", instance.parameters.clrSecond, K.first() + d - 1);
+    D.setWidth(instance.parameters.widthSecond);
+    D.setStyle(instance.parameters.styleSecond);
+    D.setPrecision(2);
+    kFirst = K.first();
+    dFirst = D.first();
+	
+	Histogram= instance.addStream("Histogram", core.Bar, name + ".Histogram", "Histogram", instance.parameters.clrUp, K.first() + d - 1);
+
+    D.addLevel(-50);
+    D.addLevel(instance.parameters.oversold, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);
+    D.addLevel(instance.parameters.overbought, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);
+    D.addLevel(50);
+}
+
+function Update(period, mode)
+{
+    sfk.update(mode);
+    if (period < kFirst) 
+    {
+	 return;
+	}
+	
+        K[period] = sfk.D[period]-50;
+    
+    if (period < dFirst) 
+    {
+	 return;
+	}
+	
+        D[period] = Math.avg(K, period - d + 1, period);
+        Histogram[period]=K[period]-D[period];
+		
+		if (Histogram[period] >Histogram[period-1]) 
+        {
+		 Color = instance.parameters.clrUp;
+        }
+		else
+        {
+		 Color = instance.parameters.clrDown;
+		}
+		
+		Histogram.setColor(period, Color);
+}
+

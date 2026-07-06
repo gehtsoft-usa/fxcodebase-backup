@@ -1,0 +1,22 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_settop</title>
+</head>
+<body>
+<h3><a name="lua_settop"><code>lua_settop</code></a></h3>
+<pre>void lua_settop (lua_State *L, int index);</pre>
+
+<p>
+Accepts any acceptable index, or&nbsp;0,
+and sets the stack top to this index.
+If the new top is larger than the old one,
+then the new elements are filled with <b>nil</b>.
+If <code>index</code> is&nbsp;0, then all stack elements are removed.
+
+
+
+
+
+<hr>
+</body>
+</html>

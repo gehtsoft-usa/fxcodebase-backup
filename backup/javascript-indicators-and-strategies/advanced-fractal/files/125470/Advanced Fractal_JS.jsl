@@ -1,0 +1,107 @@
+function Init()
+{
+    indicator.name("Advanced fractal");
+    indicator.description("Predicts a reversal in the current trend.");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+  
+
+    indicator.parameters.addColor("UP", "Up fractal color", "Up fractal color", core.rgb(0,255,0));
+    indicator.parameters.addColor("DOWN", "Down fractal color", "Down fractal color", core.rgb(255,0,0));
+	indicator.parameters.addInteger("Frame", "Number of fractals (Odd)", "Number of fractals (Odd)", 5, 3,99);
+}
+
+var source;
+var up, down;
+var frame=0;
+var Rez=0;
+
+function Prepare()
+{
+    source = instance.source;
+    
+    up = instance.createTextOutput ("Up", "Up", "Wingdings", 10, core.H_Center, core.V_Top, instance.parameters.UP, 0);
+    down = instance.createTextOutput ("Dn", "Dn", "Wingdings", 10, core.H_Center, core.V_Bottom, instance.parameters.DOWN, 0);
+	
+	frame=instance.parameters.Frame
+  	
+  		 if (Math.floor(frame/2)*2!=frame) 
+  		 {
+		  frame=frame+1;
+		 }
+ 
+  
+  var name = profile.id() + " ( " + frame-1 + " )";
+    instance.name(name);
+}
+
+function Update(period, mode)
+{
+      var test=0;
+   
+	     var hof=frame;
+	     var i;
+	     var count=0;
+	 
+		 for  (i= 1; i<=frame; i++) 
+		 {
+		 
+			 if (hof >1) 
+			 {
+			  hof= hof-2;
+			  count = count +1;
+			 } 
+			 else
+			 {
+			  count=count-1;
+			  break;
+			 }
+		 
+		 } 
+ 
+    if (period > frame) 
+    {
+	
+	     var x = period - count*2;
+	
+        var curr = source.high[period - count];
+	
+		
+		
+         for (i= x; i<=period; i++) 
+         {
+		
+		     if (curr > source.high[i] && i !=(period - count)) 
+		     {
+			  test=test+1;
+			 }
+			
+		 }	
+		 
+		 if (test == period-x) 
+		 {
+		   up.set(period - count, source.high[period - count], "\226");
+		 }
+
+        test=0;		 
+       
+	     curr = source.low[period - count];
+		
+		  
+          for (i= x; i<=period; i++) 
+          {
+		
+		     if (curr < source.low[i] && i !=(period -count)) 
+		     {
+			  test=test+1;
+			 }
+			
+		 }	
+	   
+	      if (test ==period-x) 
+	      {
+	       down.set(period - count, source.low[period - count], "\225");
+		  }
+        
+    }
+}

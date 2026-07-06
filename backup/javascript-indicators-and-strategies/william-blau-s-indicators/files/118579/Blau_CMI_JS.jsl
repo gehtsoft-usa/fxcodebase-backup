@@ -1,0 +1,99 @@
+function Init()
+{
+    indicator.name("William Blau Candlestick Momentum Index");
+    indicator.description("William Blau Candlestick Momentum Index");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 1);
+    indicator.parameters.addInteger("Smooth_Period1", "Smooth period 1", "", 20);
+    indicator.parameters.addInteger("Smooth_Period2", "Smooth period 2", "", 5);
+    indicator.parameters.addInteger("Smooth_Period3", "Smooth period 3", "", 3);
+    indicator.parameters.addString("Price1", "Price 1", "", "close");
+    indicator.parameters.addStringAlternative("Price1", "close", "", "close");
+    indicator.parameters.addStringAlternative("Price1", "open", "", "open");
+    indicator.parameters.addStringAlternative("Price1", "high", "", "high");
+    indicator.parameters.addStringAlternative("Price1", "low", "", "low");
+    indicator.parameters.addStringAlternative("Price1", "median", "", "median");
+    indicator.parameters.addStringAlternative("Price1", "typical", "", "typical");
+    indicator.parameters.addStringAlternative("Price1", "weighted", "", "weighted");
+    indicator.parameters.addString("Price2", "Price 2", "", "open");
+    indicator.parameters.addStringAlternative("Price2", "close", "", "close");
+    indicator.parameters.addStringAlternative("Price2", "open", "", "open");
+    indicator.parameters.addStringAlternative("Price2", "high", "", "high");
+    indicator.parameters.addStringAlternative("Price2", "low", "", "low");
+    indicator.parameters.addStringAlternative("Price2", "median", "", "median");
+    indicator.parameters.addStringAlternative("Price2", "typical", "", "typical");
+    indicator.parameters.addStringAlternative("Price2", "weighted", "", "weighted");
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(255, 255, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period;
+var Smooth_Period1;
+var Smooth_Period2;
+var Smooth_Period3;
+var Price1;
+var Price2;
+var CM, AbsCM;
+var EMA1, EMA2, EMA3;
+var AnsEMA1, AbsEMA2, AbsEMA3;
+var Blau_CMI=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    Smooth_Period1=instance.parameters.Smooth_Period1;
+    Smooth_Period2=instance.parameters.Smooth_Period2;
+    Smooth_Period3=instance.parameters.Smooth_Period3;
+    Price1=instance.parameters.Price1;
+    Price2=instance.parameters.Price2;
+    first = source.first()+2;
+    CM = instance.addInternalStream(first, 0);
+    AbsCM = instance.addInternalStream(first, 0);
+    EMA1 = core.indicators.create("EMA", CM, Smooth_Period1);
+    EMA2 = core.indicators.create("EMA", EMA1.DATA, Smooth_Period2);
+    EMA3 = core.indicators.create("EMA", EMA2.DATA, Smooth_Period3);
+    AbsEMA1 = core.indicators.create("EMA", AbsCM, Smooth_Period1);
+    AbsEMA2 = core.indicators.create("EMA", AbsEMA1.DATA, Smooth_Period2);
+    AbsEMA3 = core.indicators.create("EMA", AbsEMA2.DATA, Smooth_Period3);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.Smooth_Period1 + ", " + instance.parameters.Smooth_Period2 + ", " + instance.parameters.Smooth_Period3 + ", " + instance.parameters.Price1 + ", " + instance.parameters.Price2 + ")";
+    instance.name(name);
+    Blau_CMI = instance.addStream("Blau_CMI", core.Line, name + ".Blau_CMI", "Blau_CMI", instance.parameters.clr, first);
+    Blau_CMI.setWidth(instance.parameters.widthLinReg);
+    Blau_CMI.setStyle(instance.parameters.styleLinReg);
+    Blau_CMI.addLevel(25);
+    Blau_CMI.addLevel(-25);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    CM[period]=source[Price1][period]-source[Price2][period-Period+1];
+    AbsCM[period]=Math.abs(CM[period]);
+    EMA1.update(mode);
+    EMA2.update(mode);
+    EMA3.update(mode);
+    AbsEMA1.update(mode);
+    AbsEMA2.update(mode);
+    AbsEMA3.update(mode);
+    if (AbsEMA3.DATA[period]>0) 
+    {
+     Blau_CMI[period]=100*EMA3.DATA[period]/AbsEMA3.DATA[period];
+    } 
+    else
+    {
+     Blau_CMI[period]=0;
+    } 
+   } 
+}
+

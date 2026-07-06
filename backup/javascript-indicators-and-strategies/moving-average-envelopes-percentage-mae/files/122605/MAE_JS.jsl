@@ -1,0 +1,81 @@
+function Init()
+{
+    indicator.name("MAE%");
+    indicator.description("MAE%");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+      indicator.parameters.addInteger("N", "Number of periods of Moving Average", "", 10, 2, 300);
+    indicator.parameters.addDouble("W", "Band Offset in percent", "", 5, 0.001, 1000);
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("color", "Line Color", "", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line Width", "", 1, 1, 5);
+     indicator.parameters.addInteger("style", "DEMA Line Style", "", core.LINE_SOLID);
+	indicator.parameters.setFlag("style", core.FLAG_LEVEL_STYLE);	
+	
+	indicator.parameters.addGroup("Overbought / Oversold Levels ");
+	 indicator.parameters.addInteger("overbought","Overbought Level", "", 0, -1000, 1000);
+    indicator.parameters.addInteger("oversold", "Oversold Level", "", 100,-1000, 1000);	
+    indicator.parameters.addInteger("level_overboughtsold_width", "Line Width","", 1, 1, 5);
+    indicator.parameters.addInteger("level_overboughtsold_style", "Line Style", "", core.LINE_SOLID);
+	 indicator.parameters.setFlag("level_overboughtsold_style", core.FLAG_LEVEL_STYLE);
+    indicator.parameters.addColor("level_overboughtsold_color", "Line Color", "", core.rgb(255, 255, 0));
+   
+}
+
+var N,W;
+
+var first;
+var source = null;
+var MVA;
+var up, down;
+
+var MAE = null;
+
+function Prepare()
+{
+    N = instance.parameters.N;
+	W = instance.parameters.W;
+    source = instance.source;
+  
+	
+	MVA= core.indicators.create("MVA", source, N);	
+	
+	  first = MVA.DATA.first();
+	
+	up = instance.addInternalStream(first,0);
+	down = instance.addInternalStream(first,0);
+
+    var name = profile.id() + "(" + source.name() + ", " + N + ", "+ W+")";
+    instance.name(name);
+    MAE = instance.addStream("MAE", core.Line, name, "MAE %", instance.parameters.color, first);
+	MAE.setWidth(instance.parameters.width);
+	MAE.setStyle(instance.parameters.style);
+	MAE.addLevel(instance.parameters.oversold, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);
+    MAE.addLevel(instance.parameters.overbought, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);
+}
+
+function Update(period,mode)
+{
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+		
+	MVA.update(mode);
+	
+	if (!MVA.DATA.hasData(period)) 
+	{
+	 return;
+	}
+	
+	   
+        up[period] = MVA.DATA[period] * (1 + W / 1000);
+        down[period] = MVA.DATA[period] * (1 - W / 1000);
+	
+        MAE[period] =  ((source[period] - down[period]) / (up[period] - down[period])) * 100;
+    
+}
+

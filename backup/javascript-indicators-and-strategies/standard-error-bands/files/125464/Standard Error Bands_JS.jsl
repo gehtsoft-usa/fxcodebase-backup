@@ -1,0 +1,93 @@
+function Init()
+{
+    indicator.name("Standard Error Bands");
+    indicator.description("Standard Error Bands");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+    indicator.parameters.addGroup("Calculation");	
+    indicator.parameters.addInteger("Period", "Period", "Period", 21);
+    indicator.parameters.addInteger("Smoothing", "Smoothing period", "Smoothing period", 3);
+    indicator.parameters.addDouble("Multiplier", "Multiplier", "Multiplier", 2);
+	indicator.parameters.addGroup("Style");	
+    indicator.parameters.addColor("Top_color", "Color of Top", "Color of Top", core.rgb(0, 255, 0));
+	indicator.parameters.addInteger("width1", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style1", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style1", core.FLAG_LINE_STYLE);
+	
+    indicator.parameters.addColor("Central_color", "Color of Central", "Color of Central", core.rgb(0, 0, 255));
+	indicator.parameters.addInteger("width2", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style2", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style2", core.FLAG_LINE_STYLE);
+	
+    indicator.parameters.addColor("Bottom_color", "Color of Bottom", "Color of Bottom", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width3", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style3", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style3", core.FLAG_LINE_STYLE);
+}
+
+var Period;
+var Smoothing;
+var Multiplier;
+
+var first;
+var source = null;
+
+var Top = null;
+var Central = null;
+var Bottom = null;
+var Raw;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+    Smoothing = instance.parameters.Smoothing;
+    Multiplier = instance.parameters.Multiplier;
+    source = instance.source;
+	
+    first = source.first()+Period;
+
+	Raw = instance.addInternalStream(first, 0);
+	
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ", " + tostring(Smoothing) + ", " + tostring(Multiplier) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        Top = instance.addStream("Top", core.Line, name + ".Top", "Top", instance.parameters.Top_color, first+Smoothing);
+		Top.setWidth(instance.parameters.width1);
+        Top.setStyle(instance.parameters.style1);
+		
+        Central = instance.addStream("Central", core.Line, name + ".Central", "Central", instance.parameters.Central_color, first+Smoothing);
+		Central.setWidth(instance.parameters.width2);
+        Central.setStyle(instance.parameters.style2);
+		
+        Bottom = instance.addStream("Bottom", core.Line, name + ".Bottom", "Bottom", instance.parameters.Bottom_color, first+Smoothing);
+		Bottom.setWidth(instance.parameters.width3);
+        Bottom.setStyle(instance.parameters.style3);
+		
+    }
+}
+
+function Update(period)
+{
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+	Raw[period]= Math.lreg (source, period-Period+1, period);
+	
+	 if (period < first + Smoothing) 
+     {
+	  return;
+	 }
+	
+	
+       
+        Central[period] = Math.avg(Raw, period-Smoothing+1,period);
+		var Deviation= Math.stdev (Raw, period-Smoothing+1,period); 
+		Top[period] = Central[period]+ Multiplier* Deviation;
+        Bottom[period] = Central[period]- Multiplier* Deviation;
+    
+}
+

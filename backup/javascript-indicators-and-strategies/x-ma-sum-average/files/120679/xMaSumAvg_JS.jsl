@@ -1,0 +1,87 @@
+function Init()
+{
+    indicator.name("X MA Sum Average");
+    indicator.description("MA Sum Average");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Start", "Start Period Length", "Start Period Length", 20);
+    indicator.parameters.addInteger("End", "End Period Length", "End Period Length", 100);
+	
+	indicator.parameters.addGroup("Style");
+	indicator.parameters.addString("Method", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method", "WMA", "WMA" , "WMA");
+	
+    indicator.parameters.addColor("MSA_color", "Color of MSA", "Color of MSA", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var Start;
+var End;
+var Method;
+var first;
+var source = null;
+
+var MSA = null;
+var MA={};
+
+function Prepare(nameOnly)
+{
+    Start = instance.parameters.Start;
+    End = instance.parameters.End;
+    source = instance.source;
+    first = source.first();
+	Method = instance.parameters.Method;
+	
+	var i;
+	
+	for (i= Start; i<=End; i++) 
+	{
+	 MA[i] = core.indicators.create(Method, source, i);
+	}
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Start) + ", " + tostring(End) + ", " + tostring(Method)+ ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        MSA = instance.addStream("MSA", core.Line, name, "MSA", instance.parameters.MSA_color, MA[End].DATA.first());
+		MSA.setWidth(instance.parameters.width);
+        MSA.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period, mode)
+{   
+	var i;
+	for (i = Start; i<=End; i++) 
+	{
+	 MA[i].update(mode);
+	} 
+	
+	
+	 if (period < first)  
+	 {
+	  return;
+	 }
+	
+	var Sum=0;
+	
+	for (i = Start; i<=End; i++) 
+	{
+	 Sum = Sum + MA[i].DATA[period];
+	} 
+	
+        MSA[period] = Sum / (End-Start+1);
+    
+}
+

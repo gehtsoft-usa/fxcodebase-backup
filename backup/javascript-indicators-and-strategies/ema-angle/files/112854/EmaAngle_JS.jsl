@@ -1,0 +1,112 @@
+function Init()
+{
+    indicator.name("EmaAngle");
+    indicator.description(" Determines the angle between two EMAs");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addInteger("F", "Period", "Period", 50, 2, 2000);
+    indicator.parameters.addInteger("S", "Shift", "Shift", 6, 2, 2000);
+	indicator.parameters.addDouble("T", "Treshold", "Treshold", 0.3 , 0, 100);
+    indicator.parameters.addColor("Top", "Color of Top", "", core.rgb(0, 255, 0));
+	indicator.parameters.addColor("Bottom", "Color of Bottom", "", core.rgb(255, 0, 0));
+	indicator.parameters.addColor("Zero", "Color of Zero", "", core.rgb(255, 215, 0));
+}
+
+var Frame=null;
+var Shift=null;
+var Treshold = null;
+
+var UP=null;
+var DOWN = null;
+var ZERO=null;
+
+var first;
+var source = null;
+
+// Streams block
+var ANGLE = null;
+var Flag = null;
+var mFactor=null;
+var dFactor=null;
+
+var BC=null;
+var ZC=null;
+var TC=null;
+
+var EMA=null;
+  
+// Routine
+function Prepare()
+{
+
+    BC=instance.parameters.Bottom;
+    ZC=instance.parameters.Zero;
+    TC=instance.parameters.Top;
+
+    Frame = instance.parameters.F;
+    Shift = instance.parameters.S;
+	Treshold = instance.parameters.T;
+    source = instance.source;
+   
+	
+		
+	ANGLE = instance.addInternalStream(0, 0);
+	EMA = core.indicators.create("EMA", source.median, Frame);
+	 first = EMA.DATA.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + Frame +  ", " +  Shift + ", " + Treshold + ")";
+    instance.name(name);
+    UP = instance.addStream("UP", core.Bar, name, "UP", TC, first);
+	DOWN = instance.addStream("DOWN", core.Bar, name, "DOWN", BC, first);
+	ZERO = instance.addStream("ZERO", core.Bar, name, "ZERO", ZC, first);
+}
+
+function Update(period,mode)
+{
+
+   EMA.update(mode);
+  
+    if (period >= Frame + Shift  && source.hasData(period)) 
+    {
+        	      
+      ANGLE[period] = ( EMA.DATA[period] - EMA.DATA[period-Shift])/ source.pipSize();
+	  
+	 UP[period] =0;
+     DOWN[period] = 0;
+     ZERO[period] = 0;
+      
+      if (ANGLE[period] >= Treshold) 
+      {
+         UP[period] = ANGLE[period];
+		 DOWN[period] = 0;
+         ZERO[period] = 0;
+      }   
+      else if (ANGLE[period] <=  -Treshold) 
+      {
+         DOWN[period] = ANGLE[period];
+		 UP[period] = 0;
+         ZERO[period] = 0;
+      }   
+      else
+      { 
+	   UP[period] =0;
+     DOWN[period] = 0;
+	  ZERO[period]=ANGLE[period];
+	  }
+
+	  
+	
+    }
+}
+
+function round2(num, idp)
+{
+  if (idp && idp>0) 
+  {
+    var mult = Math.pow(10, idp);
+    return (Math.floor(num * mult + 0.5) / mult);
+  }
+  return (Math.floor(num + 0.5));
+}
+

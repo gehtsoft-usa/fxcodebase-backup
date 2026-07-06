@@ -1,0 +1,84 @@
+function Init()
+{
+    indicator.name("Altr Trend indicator");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addInteger("K", "K", "No description", 30);
+    indicator.parameters.addDouble("KStop", "KStop", "No description", 0.5);
+    indicator.parameters.addInteger("Kperiod", "Kperiod", "No description", 150);
+    indicator.parameters.addInteger("PerADX", "PerADX", "No description", 14);
+
+    indicator.parameters.addColor("UP_color", "Color of UP", "Color of UP", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DN_color", "Color of DN", "Color of DN", core.rgb(255, 0, 0));
+}
+
+var K;
+var KStop;
+var Kperiod;
+var PerADX;
+
+var first;
+var source = null;
+var ADX;
+var buffUp=null;
+var buffDn=null;
+var uptrend=null;
+var old=null;
+
+function Prepare()
+{
+    K = instance.parameters.K;
+    KStop = instance.parameters.KStop;
+    Kperiod = instance.parameters.Kperiod;
+    PerADX = instance.parameters.PerADX;
+    source = instance.source;
+    ADX=core.indicators.create("ADX", source, PerADX);
+    first = ADX.DATA.first();
+    var name = profile.id() + "(" + source.name() + ", " + K + ", " + KStop + ", " + Kperiod + ", " + PerADX + ")";
+    instance.name(name);
+    buffUp = instance.createTextOutput ("Up", "Up", "Wingdings", 10, core.H_Center, core.V_Top, instance.parameters.UP_color, first);
+    buffDn = instance.createTextOutput ("Dn", "Dn", "Wingdings", 10, core.H_Center, core.V_Bottom, instance.parameters.DN_color, first);
+}
+
+function Update(period, mode)
+{
+    if (period>first+Kperiod) 
+    {
+     ADX.update(mode);
+     var SSP=Math.ceil(Kperiod/ADX.DATA[period-1]);
+     var AvgRange=0.;
+     for (i=period-SSP; i<=period; i++) 
+     {
+      AvgRange=AvgRange+Math.abs(source.high[i]-source.low[i]);
+     }
+     var Range=AvgRange/(SSP+1);
+     var tmp=Math.minmax(source, period-SSP+1, period)
+     var SsMax=tmp[1];
+     var SsMin=tmp[0];
+     var smin=SsMin+(SsMax-SsMin)*K/100.;
+     var smax=SsMax-(SsMax-SsMin)*K/100.;
+     
+     if (source.close[period]<smin) 
+     {
+      uptrend=false;
+     }
+     if (source.close[period]>smax) 
+     {
+      uptrend=true;
+     }
+     
+     if (uptrend!=old && uptrend==true) 
+     {
+      buffUp.set(period, source.low[period]-Range*KStop, "\225", "");
+     }
+     if (uptrend!=old && uptrend==false) 
+     {
+      buffDn.set(period, source.high[period]+Range*KStop, "\226", "");
+     }
+     old=uptrend;
+
+    }
+}
+

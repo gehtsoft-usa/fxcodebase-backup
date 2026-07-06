@@ -1,0 +1,28 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_pushlightuserdata</title>
+</head>
+<body>
+<h3><a name="lua_pushlightuserdata"><code>lua_pushlightuserdata</code></a></h3>
+<pre>void lua_pushlightuserdata (lua_State *L, void *p);</pre>
+
+<p>
+Pushes a light userdata onto the stack.
+
+
+<p>
+Userdata represents C&nbsp;values in Lua.
+A <em>light userdata</em> represents a pointer.
+It is a value (like a number):
+you do not create it, it has no individual metatable,
+and it is not collected (as it was never created).
+A light userdata is equal to "any"
+light userdata with the same C&nbsp;address.
+
+
+
+
+
+<hr>
+</body>
+</html>

@@ -1,0 +1,117 @@
+function Init()
+{
+    indicator.name("Zero Point Force");
+    indicator.description("Zero Point Force");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+     indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Short", "Short Period", "Short Period", 12);
+	indicator.parameters.addString("Method1", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method1", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method1", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method1", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method1", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method1", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method1", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method1", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method1", "WMA", "WMA" , "WMA");
+	
+    indicator.parameters.addInteger("Long", "Long Period", "Long Period", 24);
+	
+	indicator.parameters.addString("Method2", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method2", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method2", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method2", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method2", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method2", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method2", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method2", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method2", "WMA", "WMA" , "WMA");
+	
+	   indicator.parameters.addInteger("Volume", "Volume Period", "Volume Period", 12);
+	
+	indicator.parameters.addString("Method3", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method3", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method3", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method3", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method3", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method3", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method3", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method3", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method3", "WMA", "WMA" , "WMA");
+	
+     indicator.parameters.addGroup("Style");
+	 indicator.parameters.addInteger("Transparency", "Channel transparency (%)", "", 70, 0, 100);
+    indicator.parameters.addColor("Up", "Color of Up Trend", "Color of Up Trend", core.rgb(0, 255, 0));
+	indicator.parameters.addColor("Down", "Color of Down Trend", "Color of Down Trend", core.rgb(255, 0, 0));
+}
+
+var Short;
+var Long;
+var Volume;
+var Method1,Method2,Method2;
+var first;
+var source = null;
+
+var hh = null;
+var ll=null;
+var S, L, C;
+var Transparency;
+
+function Prepare(nameOnly)
+{
+    Short = instance.parameters.Short;
+    Long = instance.parameters.Long;
+	Volume = instance.parameters.Volume;
+	Method1 = instance.parameters.Method1;
+	Method2 = instance.parameters.Method2;
+	Method3 = instance.parameters.Method3;
+	Transparency = instance.parameters.Transparency;
+    source = instance.source;
+	 assert(source.supportsVolume(), "The source must have volume");
+	 
+	 S = core.indicators.create(Method1, source.close, Short);
+	 L = core.indicators.create(Method2, source.close, Long);
+	 V = core.indicators.create(Method3, source.volume, Volume );
+	 first = source.first();
+	 
+	var name = profile.id() + "(" + source.name() + ", " + tostring(Short)+ ", " + tostring(Method1) + ", " + tostring(Long)+ ", " + tostring(Method2)+ ", " + tostring(Volume)+ ", " + tostring(Method3) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        hh = instance.addStream("UP", core.Line, name, "UP", core.rgb(0, 0, 0), first);
+		ll = instance.addStream("DOWN", core.Line, name, "DOWN", core.rgb(0, 0, 0), first);
+		instance.createChannelGroup("ZPF", "ZPF", hh, ll, core.rgb(128, 128, 128), 100 - Transparency);
+
+    }
+}
+
+function Update(period, mode)
+{
+    S.update(mode);
+	L.update(mode);
+	V.update(mode);
+
+    if (period < first) 
+    {
+	 return;
+	}
+	
+	   var zpf=V.DATA[period]*(S.DATA[period]-L.DATA[period])/2;
+	   
+      ll[period]=-zpf;
+      hh[period]= zpf;
+	  
+	  if (hh[period] > ll[period]) 
+      {
+	   hh.setColor(period, instance.parameters.Up);	
+	   ll.setColor(period, instance.parameters.Up);
+      } 
+	  else
+      {
+	   hh.setColor(period, instance.parameters.Down);
+	   ll.setColor(period, instance.parameters.Down);
+	  }
+}
+

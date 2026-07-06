@@ -1,0 +1,69 @@
+function Init()
+{
+    indicator.name("Trend Component");
+    indicator.description("Trend Component");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "Period", 11);
+    indicator.parameters.addDouble("Delta", "Delta", "Delta", 0.05);
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Trend_color", "Color of Trend", "Color of Trend", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Width", "Width", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Style", "Style", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var Period;
+var Delta;
+
+var first;
+var source = null;
+
+var Trend = null;
+var beta, gamma, alpha,bp;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+    Delta = instance.parameters.Delta;
+    source = instance.source;
+    first = source.first()+2;
+	
+	beta = Math.cos(Math.rad(360/Period));
+    gamma = (1 / Math.cos(Math.rad(720*Delta)/Period));
+    alpha = gamma * Math.sqrt((gamma*gamma)-1);   
+    bp= instance.addInternalStream(0, 0);	
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ", " + tostring(Delta) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        Trend = instance.addStream("Trend", core.Line, name, "Trend", instance.parameters.Trend_color, first+Period*2);
+		Trend.setWidth(instance.parameters.width);
+        Trend.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period)
+{
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+	       
+		 
+            bp[period] = 0.5*(1-alpha)*(source.median[period]-source.median[period-2]) + 
+            beta*(1+alpha)*bp[period-1]-alpha*bp[period-2];			
+			
+      
+			if (period < first+Period*2) 
+            {
+			 return;
+			}
+
+        Trend[period] = Math.avg(bp, period-Period*2+1, period);
+  
+}
+

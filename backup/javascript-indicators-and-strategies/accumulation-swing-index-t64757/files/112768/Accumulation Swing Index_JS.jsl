@@ -1,0 +1,239 @@
+
+function Init()
+{
+    indicator.name("Accumulation Swing Index");
+    indicator.description("Gets signals from previous maximums && minimums of price.");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    indicator.setTag("group", "Swing");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("T", "T", "Maximum price changing during the trade session.", 300, 2, 1000);
+	
+	indicator.parameters.addString("Position", "Overlay Position", "", "B");
+    indicator.parameters.addStringAlternative("Position", "Bottom", "", "B");
+    indicator.parameters.addStringAlternative("Position", "Top", "", "T");
+	indicator.parameters.addStringAlternative("Position", "Central", "", "C");
+	
+	indicator.parameters.addInteger("ScreenSize", "Overlay Size as  percentage of the screen", "", 25);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clrASI", "Accumulation Swing Index line Color","", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("widthASI","Line Width","", 1, 1, 5);
+    indicator.parameters.addInteger("styleASI", "Line Style","", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleASI", core.FLAG_LEVEL_STYLE);
+	
+	indicator.parameters.addColor("Label", "Label Color","", core.rgb(0, 0, 0));
+}
+
+var ScreenSize;
+var first;
+var source = null;
+
+// Streams block
+var SI = null;
+var ASI=null;
+var T = null;
+var Raw;
+var Position;
+var Label; 
+var Max, Min;
+var max,min;
+// Routine
+function Prepare()
+{
+
+    source = instance.source;
+    first = source.first() + 1;
+ 
+	
+	Position=instance.parameters.Position;
+	ScreenSize=instance.parameters.ScreenSize;
+	Label=instance.parameters.Label;
+
+    var name = profile.id() + "(" + source.name() + ")";
+    instance.name(name);
+	
+	
+	Raw= instance.addInternalStream(first, 0);
+	
+    ASI = instance.addStream("ASI", core.Line, name, "ASI", instance.parameters.clrASI, first);
+    ASI.setWidth(instance.parameters.widthASI);
+    ASI.setStyle(instance.parameters.styleASI);
+    var precision = Math.max(2, source.getPrecision());
+    ASI.setPrecision(precision);
+    T = source.pipSize() * instance.parameters.T;
+	
+	 instance.ownerDrawn(true);
+
+}
+
+
+function Axis (context)
+{
+
+    var Delta =(( context.bottom() -context.top())/100)*ScreenSize;
+    var Start, End;
+	
+	
+ 
+	
+	  if (Position == "T") 
+      {
+	   Start=context.top();	   
+	   End = Start+Delta;
+	   Mid =Start + Delta/2;
+      } 
+	  else if (Position == "C") 
+      {
+	   Start=context.top();
+	   End=context.bottom();	   	  
+	   Mid =Start + ( context.bottom() -context.top())/2;
+      }
+	  else if (Position == "B") 
+      {
+	   Start=context.bottom()-Delta;	  
+	   End=context.bottom();
+	   Mid =Start + Delta/2;
+	  }
+	
+	x, x1, x2 = context.positionOfBar (source.size()-1);
+	context.drawLine (1, x+50, Start, x+50, End, 0);
+	 
+	MAX = Math.max(Math.abs(Min), Math.abs(Max));
+	
+	width, height =  context.measureText (2, "0", context.RIGHT) ; 
+	 
+	AddLabels (context,   x, Start+height, ""+MAX);
+ 	AddLabels (context,   x, Mid, ""+0 );	
+	AddLabels (context,   x, End,  ""+(-MAX));
+	
+	max=Start;
+	min=End;
+	context.drawLine (1,context.left() , Mid, x+50, Mid, 0);
+	
+	 Recalculate (context);
+}
+
+
+function Recalculate (context)
+{
+
+var period;
+
+	for (period = source.first();period<=source.size()-1;period++) 
+    {
+	 ASI[period]= context.priceOfPoint ( (( Raw[period] - Min)/ (Max-Min))*(max-min) +min  );
+	}
+}
+
+function AddLabels ( context,  x,  y, Value)
+{
+
+ var value = Value.format("%." + 0 + "f");
+
+ var tmp =  context.measureText (2, value, context.RIGHT) ; 
+ var width=tmp[0];
+ var height=tmp[1];
+context.drawText (2, value, Label, -1,x+55, y-height, x+55+ width, y, context.RIGHT,0)
+ 
+
+}
+
+var init = false;
+ 
+function Draw(stage, context)
+{
+
+
+if (stage != 2) 
+{
+ return;
+}
+
+var tmp= Math.minmax(Raw,Raw.first(), Raw.size()-1 ); 
+Min=tmp[0];
+Max=tmp[1];
+
+if (!init) 
+{
+ context.createPen (1, context.SOLID, 1, Label)
+ context.createFont (2, "Ariel", 10, 10, 0);
+ init = true;
+}
+
+
+Axis (context)
+
+
+
+}
+
+// Indicator calculation routine
+function Update(period) 
+{
+ 
+ Calculation (period);
+}
+
+function Calculation (period)
+{
+   var open, close, abs;
+
+    if (period >= first) 
+    {
+        open = source.open;
+        close = source.close;
+        abs = Math.abs
+
+        var nom = close[period] - close[period - 1]
+            + (0.5 * (close[period] - open[period]))
+            + (0.25 * (close[period - 1] - open[period - 1]));
+
+
+        var closePrev = close[period - 1];
+        var highCurr = source.high[period];
+        var lowCurr = source.low[period];
+        var hc = abs(highCurr - closePrev);
+        var lc = abs(lowCurr - closePrev);
+        var hl = abs(highCurr - lowCurr);
+        var co = abs(closePrev - open[period - 1]);
+
+        var TR = Math.max(hc, lc, hl);
+
+        var ER = 0;
+
+        if ((closePrev >= lowCurr) && (closePrev <= highCurr)) 
+        {
+            ER = 0;
+         }   
+        else
+        {
+            if (closePrev > highCurr) 
+            {
+                ER = hc;
+            }
+            else if (closePrev < lowCurr) 
+            {
+                ER = lc;
+            }
+        }
+
+        var SH = co;
+        var K = Math.max(hc, lc);
+        var R = TR - 0.5 * ER + 0.25 * SH;
+
+        if (R == 0) 
+        {
+            SI = 0;
+        }
+        else
+        {
+            SI = 50 * nom * (K / T) / R;
+        }
+        Raw[period] = Raw[period - 1] + SI;
+    }
+	
+	
+
+}

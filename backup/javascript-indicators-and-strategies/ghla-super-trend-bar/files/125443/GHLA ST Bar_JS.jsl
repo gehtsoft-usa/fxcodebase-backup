@@ -1,0 +1,77 @@
+function Init()
+{
+    indicator.name("GHLA Super Trend Bar");
+    indicator.description("GHLA Super Trend Bar");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+	indicator.parameters.addGroup("GHLA Calculation");
+	indicator.parameters.addInteger("G", "Number of Periods", "", 10);
+    indicator.parameters.addGroup("Super Trend Calculation");  
+    indicator.parameters.addInteger("S", "Number of periods", "No description", 10);
+    indicator.parameters.addDouble("M", "Multiplier", "No description", 1.5);
+	indicator.parameters.addGroup("Style");
+	 indicator.parameters.addColor("Up", "Color for Up Trend", "", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("Dn", "Color for Down Trend", "", core.rgb(255, 0, 0));
+	 indicator.parameters.addColor("No", "Color for No Trend", "", core.rgb(255, 255, 0));
+}
+
+var M,S,G;
+var first;
+var source = null;
+
+var Indicator={};
+var Out = null;
+
+function Prepare(nameOnly)
+{
+    M = instance.parameters.M;
+    G = instance.parameters.G;
+    S = instance.parameters.S;	
+    source = instance.source;
+    
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(G) + ", " + tostring(S) + ", " + tostring(M) + ")";
+    instance.name(name);
+	
+	assert(core.indicators.findIndicator("GHLA") != null, "Please, {wnload  GHLA.lua Indicator");
+	assert(core.indicators.findIndicator("ST") != null, "Please, {wnload  ST.lua Indicator");
+	
+	 Indicator[1] = core.indicators.create("GHLA", source, G);
+	 Indicator[2] = core.indicators.create("ST", source, S, M);
+
+	 
+	 first = Math.max(Indicator[1].DATA.first(),Indicator[2].DATA.first());
+
+    if (!(nameOnly)) 
+    {
+        Out = instance.addStream("Out", core.Bar, name, "Out", instance.parameters.Up, first);
+    }
+}
+
+function Update(period, mode)
+{
+    if (period < period || !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+	 Indicator[1].update(mode);
+	 Indicator[2].update(mode);
+	
+	 
+	  Out[period] = 1;
+	 
+	 if (source.close[period] > Indicator[1].DATA[period] && source.close[period] > Indicator[2].DATA[period])
+	 {
+	  Out.setColor(period, instance.parameters.Up);  
+	 }
+	 else if (source.close[period] < Indicator[1].DATA[period] && source.close[period] < Indicator[2].DATA[period])
+	 {
+	  Out.setColor(period, instance.parameters.Dn);  
+	 } 
+	 else
+	 {
+	  Out.setColor(period, instance.parameters.No);  
+	 }
+}
+

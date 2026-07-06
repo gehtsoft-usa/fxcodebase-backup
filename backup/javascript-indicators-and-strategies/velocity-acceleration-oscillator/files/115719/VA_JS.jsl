@@ -1,0 +1,124 @@
+function Init()
+{
+    indicator.name("Velocity/Acceleration");
+    indicator.description("Velocity/Acceleration");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("VP", "Velocity Period", "Velocity Period", 14);
+	indicator.parameters.addInteger("VS", "Velocity Shift", "Velocity Shift", 0);
+	 
+    indicator.parameters.addInteger("AP", "Acceleration Period", "Acceleration Period", 10);   
+    indicator.parameters.addInteger("AS", "Acceleration Shift", "Acceleration Shift", 0);
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Velocity_color", "Color of Velocity", "Color of Velocity", core.rgb(0, 255, 0));
+	indicator.parameters.addInteger("width1", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style1", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style1", core.FLAG_LINE_STYLE);
+
+    indicator.parameters.addColor("Acceleration_color", "Color of Acceleration", "Color of Acceleration", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width2", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style2", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style2", core.FLAG_LINE_STYLE);
+}
+
+var VP;
+var AP;
+var VS;
+var AS;
+
+var first;
+var source = null;
+var RV, RA;
+
+var Velocity = null;
+var Acceleration = null;
+var FIRST={};
+
+function Prepare(nameOnly)
+{
+    VP = instance.parameters.VP;
+    AP = instance.parameters.AP;
+    VS = instance.parameters.VS;
+    AS = instance.parameters.AS;
+    source = instance.source;
+    first = source.first()+VP;
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(VP) + ", " + tostring(VS) + ", " + tostring(AP) + ", " + tostring(AS) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+	
+	    RV = instance.addInternalStream(first,0);
+		RA = instance.addInternalStream(first+AP,0);
+		
+		
+			if  (VS > 0) 
+			{
+			 FIRST[1]= first + VS;
+			} 
+			else
+			{	
+			 FIRST[1]= first;
+			}
+			
+			if (AS > 0) 
+			{
+			 FIRST[2]= first+AP + AS;
+			} 
+			else
+			{	
+			 FIRST[2]= first;
+			}
+	  
+        Velocity = instance.addStream("Velocity", core.Line, name + ".Velocity", "Velocity", instance.parameters.Velocity_color, FIRST[1], VS);
+		Velocity.setWidth(instance.parameters.width1);
+        Velocity.setStyle(instance.parameters.style1);
+		
+        Acceleration = instance.addStream("Acceleration", core.Line, name + ".Acceleration", "Acceleration", instance.parameters.Acceleration_color, FIRST[2], AS);
+		Acceleration.setWidth(instance.parameters.width2);
+        Acceleration.setStyle(instance.parameters.style2);
+    }
+}
+
+function Update(period)
+{
+    if (period < first) 
+    {
+	 return;
+	}
+	
+        RV[period] = source[period]*100/source[period-VP];
+		
+	if (period < first+AP) 
+	{
+	 return;
+	}	
+		
+        RA[period] =  RV[period]*100/RV[period-AP];
+		
+		
+	Shift (RV,Velocity,VS,period, FIRST[1]);	
+	Shift (RA, Acceleration, AS, period, FIRST[2]);	
+    
+}
+
+function Shift (from , to, shift, period, X)
+ {
+ 	var p= period+shift;	
+	
+	if (shift < 0) 
+	{	
+	
+	   if (period+shift < X) 
+	   {
+	    return;
+	   }
+	
+	}
+	
+    to[p]= from[period];
+
+}

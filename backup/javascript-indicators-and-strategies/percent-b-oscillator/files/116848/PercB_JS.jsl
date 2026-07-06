@@ -1,0 +1,112 @@
+function Init()
+{
+    indicator.name("Percent B oscillator");
+    indicator.description("Percent B oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("StdDev_Period", "Standard deviation period", "", 18);
+    indicator.parameters.addInteger("Smooth_Period", "Smooth period", "", 3);
+    indicator.parameters.addInteger("PeriodK", "K period for stochastics line", "", 30);
+    indicator.parameters.addInteger("SmoothK", "Slowing K period", "", 3);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("PercBclr", "PercB color", "PercB color", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("PercBwidth", "PercB line width", "PercB line width", 1, 1, 5);
+    indicator.parameters.addInteger("PercBstyle", "PercB line style", "PercB line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("PercBstyle", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Kclr", "K color", "K color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("Kwidth", "K line width", "K line width", 1, 1, 5);
+    indicator.parameters.addInteger("Kstyle", "K line style", "K line style", core.LINE_DASH);
+    indicator.parameters.setFlag("Kstyle", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Lclr", "Levels color", "Levels color", core.rgb(255, 255, 0));
+    indicator.parameters.addInteger("Lwidth", "Levels width", "Levels width", 1, 1, 5);
+    indicator.parameters.addInteger("Lstyle", "Levels style", "Levels style", core.LINE_DASH);
+    indicator.parameters.setFlag("Lstyle", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var StdDev_Period;
+var Smooth_Period;
+var PeriodK;
+var SmoothK;
+var Rainbow;
+var EMA1, EMA2;
+var ZLRB;
+var TEMA;
+var StdDev;
+var WMA;
+var PercB=null;
+var K=null;
+var Close;
+var fastK;
+var SMA;
+
+function Prepare()
+{
+    source = instance.source;
+    Close=source.close;
+    StdDev_Period=instance.parameters.StdDev_Period;
+    Smooth_Period=instance.parameters.Smooth_Period;
+    PeriodK=instance.parameters.PeriodK;
+    SmoothK=instance.parameters.SmoothK;
+    first = source.first()+2;
+    Rainbow = instance.addInternalStream(first, 0);
+    fastK = instance.addInternalStream(first, 0);
+    ZLRB = instance.addInternalStream(first, 0);
+    EMA1 = core.indicators.create("EMA", Rainbow, Smooth_Period);
+    EMA2 = core.indicators.create("EMA", EMA1.DATA, Smooth_Period);
+    TEMA = core.indicators.create("TEMA1", ZLRB, Smooth_Period);
+    SMA = core.indicators.create("MVA", fastK, SmoothK);
+    StdDev = core.indicators.create("STDDEV", TEMA.DATA, StdDev_Period);
+    WMA = core.indicators.create("LWMA", TEMA.DATA, StdDev_Period);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.StdDev_Period + ", " + instance.parameters.Smooth_Period + ")";
+    instance.name(name);
+    PercB = instance.addStream("PercB", core.Line, name + ".PercB", "PercB", instance.parameters.PercBclr, first);
+    PercB.setWidth(instance.parameters.PercBwidth);
+    PercB.setStyle(instance.parameters.PercBstyle);
+    K = instance.addStream("K", core.Line, name + ".K", "K", instance.parameters.Kclr, first);
+    K.setWidth(instance.parameters.Kwidth);
+    K.setStyle(instance.parameters.Kstyle);
+    PercB.addLevel(0, instance.parameters.Lstyle, instance.parameters.Lwidth, instance.parameters.Lclr);
+    PercB.addLevel(50, instance.parameters.Lstyle, instance.parameters.Lwidth, instance.parameters.Lclr);
+    PercB.addLevel(100, instance.parameters.Lstyle, instance.parameters.Lwidth, instance.parameters.Lclr);
+}
+
+function Update(period, mode)
+{
+   if (period>first+10) 
+   {
+    Rainbow[period]=(20*Close[period]+75*Close[period-1]+180*Close[period-2]+336*Close[period-3]+463*Close[period-4]+462*Close[period-5]+330*Close[period-6]+165*Close[period-7]+55*Close[period-8]+11*Close[period-9]+Close[period-10])/2098;
+    EMA1.update(mode);
+    EMA2.update(mode);
+    var diff=EMA1.DATA[period]-EMA2.DATA[period];
+    ZLRB[period]=EMA1.DATA[period]+diff;
+    TEMA.update(mode);
+    StdDev.update(mode);
+    WMA.update(mode);
+    PercB[period]=100*(TEMA.DATA[period]+2*StdDev.DATA[period]-WMA.DATA[period])/(4*StdDev.DATA[period]);
+    if (period>first+PeriodK) 
+    {
+     var RBC=(Rainbow[period]+source.typical[period])/2;
+     var tmp=Math.minmax(source, period-PeriodK+1, period);
+     var Min = tmp[0];
+     var Max=tmp[1];
+     var nom=RBC-Min;
+     var den=Max-Min;
+     if (den==0) 
+     {
+      fastK[period]=fastK[period-1];
+     } 
+     else
+     {
+      fastK[period]=Math.min(100, Math.max(0, 100*nom/den))
+     } 
+    }
+    SMA.update(mode);
+    K[period]=SMA.DATA[period];
+   } 
+}
+

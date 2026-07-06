@@ -1,0 +1,625 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252" /><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><title>Create OCO orders</title><style type="text/css">a, p, h1, h2, h3, h4, h5, h6, table, td, tr, li, ul, ol {
+    font-family: Verdana, Trebuchet MS, Arial;
+}
+
+a, p, td, tr, ul, ol, li {
+    font-size: 12pt;
+}
+
+h3 {
+    font-size: 13pt;
+}
+
+h2 {
+    font-size: 13pt;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+body {
+    color: #444444;
+    background-color: white;
+}
+
+A:link {
+    color: #0065b3;
+    cursor: pointer;
+}
+
+A:visited {
+    color: #0068be;
+    cursor: pointer;
+}
+
+a.action {
+  background-color: #0065b3;
+  color: white;
+  font-size: 10pt;
+  padding: 2px 2px;
+  width: 50pt;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px;
+}
+
+.side-icon {
+    float: left;
+}
+
+a.action [class*="dripicons-"]:before {
+    padding: 0 2px 0 0;
+    font-size: 12pt;
+    vertical-align: text-bottom;
+}
+
+.side-icon:after {
+  content: "";
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  border-left: 1.5px solid white;
+  transform: translate(-50%);
+}
+
+a.actiontab {
+  font-size: 10pt;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px 3px 0 0;
+}
+
+pre, code, code a {
+    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+    font-size: 12pt;
+}
+
+code.ctag {
+    background-color: #f1f1f1;
+    padding: .1em .2em;
+    border-radius: 3px;
+}
+
+pre {
+    background-color: white;
+}
+
+pre.example {
+    background-color: #f1f1f1;
+}
+
+ul {
+    list-style-type: disc;
+    margin-left: 18pt;
+}
+
+ol {
+    list-style-type: decimal;
+    margin-left: 18pt;
+}
+
+ul.hhc {
+    list-style-type: none;
+    margin-left: 1em;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+li.hhc {
+    margin-left: 0;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+table {
+  border-spacing: 0;
+  border-color: #dfe3e7;
+}
+
+tr + tr td {
+   border-top: 0;
+}
+
+tr td + td {
+  border-left: 0;
+}
+
+td {
+  border: 1px solid;
+  border-color: #dfe3e7;
+}
+
+tr:first-child td:first-child {
+   border-radius: 0.2em 0 0 0;
+}
+
+tr:first-child td:last-child {
+  border-radius: 0 0.2em 0 0;
+}
+
+tr:first-child td:only-child {
+  border-radius: 0.2em 0.2em 0 0;
+}
+
+tr:last-child td:first-child {
+    border-radius: 0 0 0 0.2em;
+}
+
+tr:last-child td:last-child {
+    border-radius: 0 0 0.2em 0;
+}
+
+tr:last-child td:only-child {
+    border-radius: 0 0 0.2em 0.2em;
+}
+
+tr:only-child td:only-child {
+    border-radius: 0.2em 0.2em 0.2em 0.2em;
+}
+
+tr:only-child td:first-child {
+   border-radius: 0.2em 0 0 0.2em;
+}
+
+tr:only-child td:last-child {
+  border-radius: 0 0.2em 0.2em 0;
+}
+
+
+td.tmain, td.tmain_nw, td.thdr {
+    background-color: rgb(255, 255, 255);
+    vertical-align: top;
+    padding: 3px;
+}
+
+td.tmain p, td.tmain_nw p, td.thdr p {
+    margin-top: 3pt;
+    margin-bottom: 3pt;
+}
+
+td.tmain_nw {
+    white-space: nowrap;
+}
+
+td.thdr {
+    background-color: #e3e3e3;
+}
+
+table.decl {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+    vertical-align: top;
+    padding: 3px;
+    width: 100%;
+}
+
+table.decl td {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+}
+
+div.note-quote {
+    border-left: 10px solid #ccc;
+    padding: 1em 10px .1em 10px;
+    margin: 1.5em 10px;
+    background-color: rgb(224, 224, 224);
+}
+
+div.note-note {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+div.note-warning {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #fff;
+    background-color: #ff6358;
+}
+div.note-warning code.ctag {
+    color: black;
+}</style>
+<link rel="stylesheet" href="res/dripicons.css"></head><body><script type="text/javascript">
+var highlighterEnabled = false;
+var maintopic = 'index';
+var helptitle = 'Indicore SDK 3';
+    function loadStarted() {
+    window.onload = loadCompleted;
+
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        var head = document.getElementsByTagName('head')[0];
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.min.js';
+        head.appendChild(script4);
+
+
+        var script2 = document.createElement('script');
+        script2.type = 'text/javascript';
+        script2.src = './highlighter/highlight.cshtml.js';
+        head.appendChild(script2);
+
+        var script3 = document.createElement('script');
+        script3.type = 'text/javascript';
+        script3.src = './highlighter/highlight.lua.js';
+        head.appendChild(script3);
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.luax.js';
+        head.appendChild(script4);
+    }
+}
+
+function loadCompleted() {
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        hljs.registerLanguage('cshtml-razor', window.hljsDefineCshtmlRazor);
+        hljs.registerLanguage('lua', window.hljsDefineLua);
+        hljs.registerLanguage('luax', window.hljsDefineLuaX);
+        x = document.querySelectorAll('pre code');
+        for (var i = 0; i < x.length; i++) {
+            if (x[i].hasAttribute('class')) {
+                hljs.highlightBlock(x[i]);
+            }
+        }
+    }
+}
+
+
+function hidediv(divname) {
+    document.getElementById(divname).style.display = 'none';
+}
+
+function showdiv(divname) {
+    document.getElementById(divname).style.display = 'inline';
+}
+
+function syncList() {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, null, document.title);
+    }
+}
+
+function syncList1(key) {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, key + '.html', document.title);
+    }
+}</script><script type="text/javascript">
+    loadStarted();
+</script><h1>Create OCO orders</h1><p>You can create two or more entry orders and then join them into OCO using just one call.</p>
+<p>To create OCO order group:</p>
+<p>1) Create a <a href="valuemap.html"><code>valuemap</code></a> and fill only one field:</p><table class="tmain">
+  <tr>
+    <td class="thdr"><p>Valuemap field</p></td>
+    <td class="thdr"><p>Datatype</p></td>
+    <td class="thdr"><p>Description</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Command</p></td>
+    <td class="tmain"><p>string</p></td>
+    <td class="tmain"><p>The command. Must be <code class="ctag">CreateOCO</code>.</p>
+<p>The field is obligatory.</p></td>
+  </tr>
+</table><p>2) Create a <a href="valuemap.html"><code>valuemap</code></a> for each entry order you want to create and
+fill it as for the regular entry order.</p>
+<p>3) Append each entry order valuemap to the main valuemap using <a href="valuemap.append.html"><code>valuemap.append()</code></a>
+method.</p>
+<p>4) Pass main <code class="ctag">valuemap</code> table to <a href="terminal.execute.html"><code>terminal:execute()</code></a> method.</p>
+<p>Limitations:</p>
+<p>1) Only entry orders can be joined into OCO. However, Entry orders with attached stop limits, either regular or ELS
+can be joined into OCO.</p>
+<p>2) All entry orders must be create for the same account.</p>
+<p>Returns:</p>
+<p>The terminal:execute() method will return the list of request id for each entry order created. So, if 3 entry order
+is created - 3 request id separated by commas (,) will be returned. Moreover, if any of the orders is ELS order,
+3 request id will be returned per each ELS order inside the OCO.</p><div id="open24" style="display:none">
+  <p>Example: Create a pair of entry order on the specified distance from the market and wait for the result&nbsp;<a href="javascript: showdiv('close24'); hidediv('open24');" onclick="javascript: showdiv('close24'); hidediv('open24');" class="action">Show<span class="side-icon dripicons-chevron-right"></span></a></p>
+</div>
+<div id="close24" style="display:inline">
+  <p>Example: Create a pair of entry order on the specified distance from the market and wait for the result&nbsp;<a href="javascript: showdiv('open24'); hidediv('close24');" onclick="javascript: showdiv('open24'); hidediv('close24');" class="action">Hide<span class="side-icon dripicons-chevron-down"></span></a></p>
+  <pre class="example" id="example24"><code>   function Init()
+       strategy:name(&quot;Sample&quot;);
+       strategy:description(&quot;&quot;);
+ 
+       strategy.parameters:addString(&quot;Account&quot;, &quot;Account to trade&quot;, &quot;&quot;, &quot;&quot;);
+       strategy.parameters:setFlag(&quot;Account&quot;, core.FLAG_ACCOUNT);
+       strategy.parameters:addInteger(&quot;Amount&quot;, &quot;Amount in lots to trade&quot;, &quot;&quot;, 1, 1, 100);
+       strategy.parameters:addInteger(&quot;Distance&quot;, &quot;Distance to market&quot;, &quot;&quot;, 100, 1, 1000);
+       strategy.parameters:addString(&quot;BuySell&quot;, &quot;Buy or Sell?&quot;, &quot;&quot;, &quot;B&quot;);
+       strategy.parameters:addStringAlternative(&quot;BuySell&quot;, &quot;Buy&quot;, &quot;&quot;, &quot;B&quot;);
+       strategy.parameters:addStringAlternative(&quot;BuySell&quot;, &quot;Sell&quot;, &quot;&quot;, &quot;S&quot;);
+   end
+ 
+   local offer;
+   local account;
+   local amount;
+   local pipsize;
+   local BuySell;
+   local distance;
+ 
+   function Prepare()
+       instance:name(profile:id() .. &quot;(&quot; .. instance.bid:instrument() .. &quot;)&quot;);
+ 
+       account = instance.parameters.Account;
+       BuySell = instance.parameters.BuySell;
+       distance = instance.parameters.Distance;
+ 
+       local lotSize = core.host:execute(&quot;getTradingProperty&quot;, &quot;baseUnitSize&quot;, instance.bid:instrument(), account);
+       amount = lotSize * instance.parameters.Amount;
+       offer = core.host:findTable(&quot;offers&quot;):find(&quot;Instrument&quot;, instance.bid:instrument()).OfferID;
+       pipsize = instance.bid:pipSize();
+ 
+   end
+ 
+   local create = true;
+   local trade = false;
+   local requestId1;
+   local requestId2;
+ 
+   function Update()
+       if create then
+           create = false;
+ 
+           -- create order
+           local valuemap = core.valuemap();
+           valuemap.Command = &quot;CreateOCO&quot;;
+ 
+           valuemap:append(CreateOrder(BuySell, distance));
+           valuemap:append(CreateOrder(BuySell, -distance));
+ 
+           local success, msg = terminal:execute(100, valuemap);
+ 
+           if not (success) then
+               terminal:alertMessage(instance.bid:instrument(), instance.bid[NOW], &quot;create order failed:&quot; .. msg, instance.bid:date(NOW));
+           else
+               local t = core.parseCsv(msg, &quot;,&quot;);
+               requestId1 = t[0];
+               requestId2 = t[1];
+               terminal:alertMessage(instance.bid:instrument(), instance.bid[NOW], &quot;orders sent:&quot; .. requestId1 .. &quot;,&quot; .. requestId2, instance.bid:date(NOW));
+           end
+       elseif not(trade) then
+           -- check whether trade has been created
+           local row;
+           row = core.host:findTable(&quot;trades&quot;):find(&quot;OpenOrderReqID&quot;, requestId1);
+           if row ~= nil then
+               terminal:alertMessage(instance.bid:instrument(), instance.bid[NOW], &quot;trade created by first order:&quot; .. row.TradeID, instance.bid:date(NOW));
+               trade = true;
+           end
+           row = core.host:findTable(&quot;trades&quot;):find(&quot;OpenOrderReqID&quot;, requestId2);
+           if row ~= nil then
+               terminal:alertMessage(instance.bid:instrument(), instance.bid[NOW], &quot;trade created by second order:&quot; .. row.TradeID, instance.bid:date(NOW));
+               trade = true;
+           end
+       end
+   end
+ 
+   function CreateOrder(aBuySell, adistance)
+       local valuemap = core.valuemap();
+ 
+       --valuemap.Command = &quot;CreateOrder&quot;;
+ 
+       -- get the order type
+       if aBuySell == &quot;B&quot; and adistance &lt; 0 then
+           valuemap.OrderType = &quot;LE&quot;;
+       elseif aBuySell == &quot;B&quot; and adistance &gt; 0 then
+           valuemap.OrderType = &quot;SE&quot;;
+       elseif aBuySell == &quot;S&quot; and adistance &lt; 0 then
+           valuemap.OrderType = &quot;SE&quot;;
+       elseif aBuySell == &quot;S&quot; and adistance &gt; 0 then
+           valuemap.OrderType = &quot;LE&quot;;
+       end
+ 
+       if adistance &gt; 0 then
+           valuemap.Rate = instance.ask[NOW] + adistance * pipsize;
+       else
+           valuemap.Rate = instance.bid[NOW] + adistance * pipsize;
+       end
+ 
+       valuemap.OfferID = offer;
+       valuemap.AcctID = account;
+       valuemap.Quantity = amount;
+       valuemap.BuySell = aBuySell;
+ 
+       return valuemap;
+   end
+ 
+   function AsyncOperationFinished(cookie, success, msg)
+       if cookie == 100 then
+           if not(success) then
+               terminal:alertMessage(instance.bid:instrument(), instance.bid[NOW], &quot;create order failed:&quot; .. msg, instance.bid:date(NOW));
+           else
+               terminal:alertMessage(instance.bid:instrument(), instance.bid[NOW], &quot;order created:&quot; .. msg, instance.bid:date(NOW));
+           end
+       end
+   end</code></pre>
+</div><div id="open25" style="display:none">
+  <p>Example: Create an OCO of Two Entry Orders with Stops and Limits Attached&nbsp;<a href="javascript: showdiv('close25'); hidediv('open25');" onclick="javascript: showdiv('close25'); hidediv('open25');" class="action">Show<span class="side-icon dripicons-chevron-right"></span></a></p>
+</div>
+<div id="close25" style="display:inline">
+  <p>Example: Create an OCO of Two Entry Orders with Stops and Limits Attached&nbsp;<a href="javascript: showdiv('open25'); hidediv('close25');" onclick="javascript: showdiv('open25'); hidediv('close25');" class="action">Hide<span class="side-icon dripicons-chevron-down"></span></a></p>
+  <pre class="example" id="example25"><code>   function Init()
+       strategy:name(&quot;Sample&quot;);
+       strategy:description(&quot;&quot;);
+ 
+       strategy.parameters:addString(&quot;Account&quot;, &quot;Account to trade&quot;, &quot;&quot;, &quot;&quot;);
+       strategy.parameters:setFlag(&quot;Account&quot;, core.FLAG_ACCOUNT);
+       strategy.parameters:addInteger(&quot;Amount&quot;, &quot;Amount in lots to trade&quot;, &quot;&quot;, 1, 1, 100);
+       strategy.parameters:addInteger(&quot;Distance&quot;, &quot;Distance to market&quot;, &quot;&quot;, 20, 20, 1000);
+       strategy.parameters:addString(&quot;BuySell&quot;, &quot;Buy or Sell?&quot;, &quot;&quot;, &quot;B&quot;);
+       strategy.parameters:addStringAlternative(&quot;BuySell&quot;, &quot;Buy&quot;, &quot;&quot;, &quot;B&quot;);
+       strategy.parameters:addStringAlternative(&quot;BuySell&quot;, &quot;Sell&quot;, &quot;&quot;, &quot;S&quot;);
+ 
+       strategy.parameters:addBoolean(&quot;SetLimit&quot;, &quot;Set Limit Order&quot;, &quot;&quot;, true);
+       strategy.parameters:addInteger(&quot;Limit&quot;, &quot;Set Limit Distance in pips&quot;, &quot;&quot;, 30, 1, 10000);
+       strategy.parameters:addBoolean(&quot;SetStop&quot;, &quot;Set Stop Order&quot;, &quot;&quot;, true);
+       strategy.parameters:addInteger(&quot;Stop&quot;, &quot;Set Stop Distance in pips&quot;, &quot;&quot;, 30, 1, 10000);
+       strategy.parameters:addBoolean(&quot;TrailingStop&quot;, &quot;Set Trailing Stop Order&quot;, &quot;&quot;, true);
+ 
+   end
+ 
+   local offer;
+   local account;
+   local amount;
+   local pipsize;
+   local BuySell;
+   local distance;
+   local canClose;
+ 
+   function Prepare()
+       instance:name(profile:id() .. &quot;(&quot; .. instance.bid:instrument() .. &quot;)&quot;);
+ 
+       account = instance.parameters.Account;
+       BuySell = instance.parameters.BuySell;
+       distance = instance.parameters.Distance;
+ 
+       local lotSize = core.host:execute(&quot;getTradingProperty&quot;, &quot;baseUnitSize&quot;, instance.bid:instrument(), account);
+       amount = lotSize * instance.parameters.Amount;
+       offer = core.host:findTable(&quot;offers&quot;):find(&quot;Instrument&quot;, instance.bid:instrument()).OfferID;
+       pipsize = instance.bid:pipSize();
+       canClose = core.host:execute(&quot;getTradingProperty&quot;, &quot;canCreateMarketClose&quot;, instance.bid:instrument(), account);
+ 
+ 
+   end
+ 
+   local create = true;
+   local trade = false;
+   local requestId1;
+   local requestId2;
+ 
+   function Update()
+       if create then
+           create = false;
+ 
+           -- create order
+           local valuemap = core.valuemap();
+           valuemap.Command = &quot;CreateOCO&quot;;
+ 
+           valuemap:append(CreateOrder(BuySell, distance));
+           valuemap:append(CreateOrder(BuySell, -distance));
+ 
+           local success, msg = terminal:execute(100, valuemap);
+ 
+           if not (success) then
+               terminal:alertMessage(instance.bid:instrument(), instance.bid[NOW], &quot;create order failed:&quot; .. msg, instance.bid:date(NOW));
+           else
+               local t = core.parseCsv(msg, &quot;,&quot;);
+               requestId1 = t[0];
+               local second = 1;
+               if instance.parameters.SetStop and not(canClose) then
+                   second = second + 1;
+               end
+               if instance.parameters.SetLimit and not(canClose) then
+                   second = second + 1;
+               end
+               requestId2 = t[second];
+               terminal:alertMessage(instance.bid:instrument(), instance.bid[NOW], &quot;orders sent:&quot; .. requestId1 .. &quot;,&quot; .. requestId2, instance.bid:date(NOW));
+           end
+ 
+       elseif not(trade) then
+           -- check whether trade has been created
+           local row;
+           row = core.host:findTable(&quot;trades&quot;):find(&quot;OpenOrderReqID&quot;, requestId1);
+           if row ~= nil then
+               terminal:alertMessage(instance.bid:instrument(), instance.bid[NOW], &quot;trade created by first order:&quot; .. row.TradeID, instance.bid:date(NOW));
+               trade = true;
+           end
+           local row;
+           row = core.host:findTable(&quot;trades&quot;):find(&quot;OpenOrderReqID&quot;, requestId2);
+           if row ~= nil then
+               terminal:alertMessage(instance.bid:instrument(), instance.bid[NOW], &quot;trade created by second order:&quot; .. row.TradeID, instance.bid:date(NOW));
+               trade = true;
+           end
+       end
+   end
+ 
+   function CreateOrder(aBuySell, adistance)
+       local valuemap = core.valuemap();
+ 
+       -- get the order type
+       if aBuySell == &quot;B&quot; and adistance &lt; 0 then
+           valuemap.OrderType = &quot;LE&quot;;
+       elseif aBuySell == &quot;B&quot; and adistance &gt; 0 then
+           valuemap.OrderType = &quot;SE&quot;;
+       elseif aBuySell == &quot;S&quot; and adistance &lt; 0 then
+           valuemap.OrderType = &quot;SE&quot;;
+       elseif aBuySell == &quot;S&quot; and adistance &gt; 0 then
+           valuemap.OrderType = &quot;LE&quot;;
+       end
+ 
+       if adistance &gt; 0 then
+           valuemap.Rate = instance.ask[NOW] + adistance * pipsize;
+       else
+           valuemap.Rate = instance.bid[NOW] + adistance * pipsize;
+       end
+ 
+       valuemap.OfferID = offer;
+       valuemap.AcctID = account;
+       valuemap.Quantity = amount;
+       valuemap.BuySell = aBuySell;
+ 
+       if instance.parameters.SetLimit then
+           valuemap.PegTypeLimit = &quot;M&quot;;
+           if aBuySell == &quot;B&quot; then
+               valuemap.PegPriceOffsetPipsLimit = instance.parameters.Limit;
+           else
+               valuemap.PegPriceOffsetPipsLimit = -instance.parameters.Limit;
+           end
+       end
+ 
+       if instance.parameters.SetStop then
+           valuemap.PegTypeStop = &quot;M&quot;;
+           if aBuySell == &quot;B&quot; then
+               valuemap.PegPriceOffsetPipsStop = -instance.parameters.Stop;
+           else
+               valuemap.PegPriceOffsetPipsStop = instance.parameters.Stop;
+           end
+ 
+           if instance.parameters.TrailingStop then
+               valuemap.TrailStepStop = 1;
+           end
+       end
+ 
+       if not(canClose) and (instance.parameters.SetStop or instance.parameters.SetLimit) then
+           -- if regular s/l orders aren't allowed - create ELS order
+           valuemap.EntryLimitStop = &quot;Y&quot;;
+       end
+ 
+       return valuemap;
+   end
+ 
+   function AsyncOperationFinished(cookie, success, msg)
+       if cookie == 100 then
+           if not(success) then
+               terminal:alertMessage(instance.bid:instrument(), instance.bid[NOW], &quot;create order failed:&quot; .. msg, instance.bid:date(NOW));
+           else
+               terminal:alertMessage(instance.bid:instrument(), instance.bid[NOW], &quot;order created:&quot; .. msg, instance.bid:date(NOW));
+           end
+       end
+   end</code></pre>
+</div><p>
+  <center><a href="TradingCommands.html">back</a></center>
+</p><script language="javascript" type="text/javascript">if(window.parent.frames[0]) window.parent.frames[0].selectItem(window.location.href);</script></body></html>

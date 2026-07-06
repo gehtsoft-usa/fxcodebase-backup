@@ -1,0 +1,125 @@
+function Init()
+{
+    indicator.name("Market Mode");
+    indicator.description("Market Mode");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addInteger("Period", "Period", "Period", 20);
+    indicator.parameters.addDouble("Delta", "Delta", "Delta", 0.1);
+    indicator.parameters.addDouble("Fract", "Fract", "Fract", 0.25);
+    indicator.parameters.addColor("Mode_color", "Color of Mode", "Color of Mode", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("Peak_color", "Color of Peak", "Color of Peak", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("Valley_color", "Color of Valley", "Color of Valley", core.rgb(0,255, 0));
+}
+
+var Period;
+var Delta;
+var Fract;
+
+var first;
+var source = null;
+
+var Mode = null;
+var Peak = null;
+var Valley = null;
+var Ratio = null;
+var fMean;
+var BP;
+var fPeak,fValley;
+
+var fAvgPeak;
+var fAvgValley;
+
+    var fBeta;
+    var fGamma;
+    var fAlpha;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+    Delta = instance.parameters.Delta;
+    Fract = instance.parameters.Fract;
+    source = instance.source;
+    first = source.first();
+	
+	fBeta = Math.cos(6.28 / Period);
+    fGamma = 1 / Math.cos(2*6.28*Delta / Period);
+    fAlpha = fGamma-Math.sqrt(fGamma*fGamma - 1);
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ", " + tostring(Delta) + ", " + tostring(Fract) + ")";
+    instance.name(name);
+		
+	BP=  instance.addInternalStream(first+2, 0);		
+	fMean=core.indicators.create("MVA",BP , first+5+ 2*Period);
+	
+	fPeak=  instance.addInternalStream(first+2, 0);
+	fValley=  instance.addInternalStream(first+2, 0);
+	
+	
+	fAvgPeak=core.indicators.create("MVA",fPeak , 50);
+    fAvgValley=core.indicators.create("MVA",fValley , 50);
+	
+
+    if (!(nameOnly)) 
+    {
+        Mode = instance.addStream("Mode", core.Line, name + ".Mode", "Mode", instance.parameters.Mode_color, first+ Period*2+50);
+        Peak = instance.addStream("Peak", core.Line, name + ".Peak", "Peak", instance.parameters.Peak_color, first+Period*2+50);
+        Valley = instance.addStream("Valley", core.Line, name + ".Valley", "Valley", instance.parameters.Valley_color, first+50);
+    }
+}
+
+function Update(period, mode)
+{
+   if (period < first+2) 
+   {
+    return;
+   }
+
+    BP[period] = 0.5*(1-fAlpha)*(source.median[period]-source.median[period-2])+fBeta*(1+fAlpha)*BP[period-1]-fAlpha*BP[period-2]
+
+	
+
+	
+	if (BP[period-1] > BP[period] && BP[period-1] > BP[period-2]) 
+    {
+	 fPeak[period] = BP[period-1] 
+    }
+	else
+    {
+	 fPeak[period] = fPeak[period-1]
+	}
+	
+    if (BP[period-1] < BP[period] && BP[period-1] < BP[period-2]) 
+    {
+	 fValley[period] = BP[period-1]
+    }
+	else
+    {
+	 fValley[period] = fValley[period-1]
+	}
+		
+	if (period < fAvgPeak.DATA.first()) 
+    {
+     return;
+    }
+		
+	
+	fAvgPeak.update(mode);	
+	fAvgValley.update(mode);
+	
+	if (period < first+5+ 2*Period) 
+    {
+     return;
+    }
+	
+	
+	fMean.update(mode);		
+
+  
+	
+        Mode[period] = fMean.DATA[period];
+        Peak[period] = Fract*fAvgPeak.DATA[period];
+        Valley[period] = Fract*fAvgValley.DATA[period];
+}
+

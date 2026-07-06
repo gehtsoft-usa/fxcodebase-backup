@@ -1,0 +1,71 @@
+function Init()
+{
+    indicator.name("Bears Bulls Impuls");
+    indicator.description("The oscillators measures the buying && selling pressure in the market");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);	
+     indicator.parameters.addInteger("Frame", "Period", "", 13, 2 , 2000);
+	 indicator.parameters.addString("Type", "Close", "", "close");
+    indicator.parameters.addStringAlternative("Type", "Open", "", "open");
+    indicator.parameters.addStringAlternative("Type", "High", "", "high");
+    indicator.parameters.addStringAlternative("Type", "Low", "", "low");
+    indicator.parameters.addStringAlternative("Type","Close", "", "close");
+    indicator.parameters.addStringAlternative("Type", "Median", "", "median");
+    indicator.parameters.addStringAlternative("Type", "Typical", "", "typical");
+    indicator.parameters.addStringAlternative("Type", "Weighted", "", "weighted");
+     indicator.parameters.addColor("Bulls_color", "Color of Bulls", "Color of Bulls", core.rgb(0, 255, 0));
+	 indicator.parameters.addColor("Bears_color", "Color of Bears", "Color of Bears", core.rgb(255, 0, 0));
+}
+
+var Frame;
+var Type;
+var first;
+var source = null;
+
+var EMA=null;
+var Bull, Bear;
+
+function Prepare()
+{
+    Frame = instance.parameters.Frame;
+    source = instance.source;
+   
+	Type = instance.parameters.Type;
+	
+	EMA=core.indicators.create("EMA", source[Type], Frame);
+	 first = EMA.DATA.first();	
+	
+	var name = profile.id() + "(" + source.name() + ", " + Frame + ")";
+    instance.name(name);
+    Bull = instance.addStream("Bulls", core.Line, name, "Bulls", instance.parameters.Bulls_color, first);
+	Bear = instance.addStream("Bears", core.Line, name, "Bears", instance.parameters.Bears_color, first);
+}
+
+function Update(period,mode)
+{
+    if (period >= first && source.hasData(period)) 
+    {
+	
+	  EMA.update(mode);
+	  
+	  var Bulls = null;
+      var Bears = null;
+	
+        Bulls = source.high[period] - EMA.DATA[period];
+		Bears = source.low[period] - EMA.DATA[period];
+		
+		if (Bulls + Bears > 0) 
+		{
+		 Bull[period]=1;
+		 Bear[period]=-1;
+		} 
+		else
+		{
+		 Bull[period]=-1;
+		 Bear[period]=1;
+		}
+		
+   
+    }
+
+}

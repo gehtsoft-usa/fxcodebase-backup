@@ -1,0 +1,62 @@
+function Init()
+{
+    indicator.name("Pirson oscillator");
+    indicator.description("Pirson oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 20);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(255, 255, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period;
+var MVA;
+var StdDev;
+var Pirson=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    first = source.first()+2;
+    MVA = core.indicators.create("MVA", source.close, Period);
+    StdDev = core.indicators.create("STDDEV", source.close, Period);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ")";
+    instance.name(name);
+    Pirson = instance.addStream("Pirson", core.Line, name + ".Pirson", "Pirson", instance.parameters.clr, first);
+    Pirson.setWidth(instance.parameters.widthLinReg);
+    Pirson.setStyle(instance.parameters.styleLinReg);
+}
+
+function Update(period, mode)
+{
+   if (period>first+Period) 
+   {
+    MVA.update(mode);
+    StdDev.update(mode);
+    var i;
+    var Sum=0;
+    for (i=0; i<=Period-1; i++) 
+    {
+     Sum=Sum+(source.close[period-i]-MVA.DATA[period])*(source.close[period-i-1]-MVA.DATA[period-1]);
+    }
+    var Res=Period*StdDev.DATA[period]*StdDev.DATA[period-1];
+    if (Res==0) 
+    {
+     Pirson[period]=1;
+    } 
+    else
+    {
+     Pirson[period]=Sum/Res;
+    }
+   } 
+}
+

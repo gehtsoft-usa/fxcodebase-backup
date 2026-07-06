@@ -1,0 +1,84 @@
+function Init()
+{
+    indicator.name("VolatilityMA");
+    indicator.description("VolatilityMA");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addInteger("Lookback", "Lookback Period", "Lookback Period", 300);
+    indicator.parameters.addDouble("Barrier", "Barrier", "Barrier", 2);
+    indicator.parameters.addColor("VolatilityMA_color", "Color of VolatilityMA", "Color of VolatilityMA", core.rgb(255, 0, 0));
+}
+
+var Lookback;
+var Barrier;
+
+var first;
+var source = null;
+var Period;
+var VolatilityMA = null;
+var Raw1,Raw2; 
+
+function Prepare(nameOnly)
+{
+    Lookback = instance.parameters.Lookback;
+    Barrier = instance.parameters.Barrier;
+    source = instance.source;
+    first = source.first()+Lookback;
+ 
+	
+	Raw1 = instance.addInternalStream(0, 0);
+    Raw2 = instance.addInternalStream(0, 0);   
+	Period = instance.addInternalStream(0, 0);  
+	
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Lookback) + ", " + tostring(Barrier) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        VolatilityMA = instance.addStream("VolatilityMA", core.Line, name, "VolatilityMA", instance.parameters.VolatilityMA_color, first);
+    }
+}
+
+function Update(period)
+{
+     Raw1[period]   =	(source[period]-source[period-1])/source[period];	
+ 	 Raw2[period]   = (source[period-1]-source[period])/source[period];
+	 
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}	
+	
+		var  Average = Math.avg(Raw1, period-Lookback+1, period);
+       
+	    var j; 
+		var  Variance=0;
+		
+		for (j = 0; j<=Lookback; j++) 
+		{			 
+		 Variance =Variance+ Math.pow( (Raw2[period-j] - Average),2);				
+		}
+					
+		var  sDev = Math.sqrt( Variance/Lookback );
+		var  sDevNow = ((source[period]-source[period-1])/source[period])/ sDev;
+			
+		 
+		if (Math.abs(sDevNow) > Barrier) 
+		{
+		 Period[period]=1;
+		} 
+        else
+        {
+		 Period[period]=Period[period-1]+ 1;
+        }		
+			
+		if (period < Period[period]) 
+		{
+         return;
+        }
+	   
+        VolatilityMA[period] = Math.avg(source, period-Period[period]+1, period);
+   
+}
+

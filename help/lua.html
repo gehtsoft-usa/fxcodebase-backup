@@ -1,0 +1,773 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252" /><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><title>Lua 5.1 documentation</title><style type="text/css">a, p, h1, h2, h3, h4, h5, h6, table, td, tr, li, ul, ol {
+    font-family: Verdana, Trebuchet MS, Arial;
+}
+
+a, p, td, tr, ul, ol, li {
+    font-size: 12pt;
+}
+
+h3 {
+    font-size: 13pt;
+}
+
+h2 {
+    font-size: 13pt;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+body {
+    color: #444444;
+    background-color: white;
+}
+
+A:link {
+    color: #0065b3;
+    cursor: pointer;
+}
+
+A:visited {
+    color: #0068be;
+    cursor: pointer;
+}
+
+a.action {
+  background-color: #0065b3;
+  color: white;
+  font-size: 10pt;
+  padding: 2px 2px;
+  width: 50pt;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px;
+}
+
+.side-icon {
+    float: left;
+}
+
+a.action [class*="dripicons-"]:before {
+    padding: 0 2px 0 0;
+    font-size: 12pt;
+    vertical-align: text-bottom;
+}
+
+.side-icon:after {
+  content: "";
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  border-left: 1.5px solid white;
+  transform: translate(-50%);
+}
+
+a.actiontab {
+  font-size: 10pt;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px 3px 0 0;
+}
+
+pre, code, code a {
+    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+    font-size: 12pt;
+}
+
+code.ctag {
+    background-color: #f1f1f1;
+    padding: .1em .2em;
+    border-radius: 3px;
+}
+
+pre {
+    background-color: white;
+}
+
+pre.example {
+    background-color: #f1f1f1;
+}
+
+ul {
+    list-style-type: disc;
+    margin-left: 18pt;
+}
+
+ol {
+    list-style-type: decimal;
+    margin-left: 18pt;
+}
+
+ul.hhc {
+    list-style-type: none;
+    margin-left: 1em;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+li.hhc {
+    margin-left: 0;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+table {
+  border-spacing: 0;
+  border-color: #dfe3e7;
+}
+
+tr + tr td {
+   border-top: 0;
+}
+
+tr td + td {
+  border-left: 0;
+}
+
+td {
+  border: 1px solid;
+  border-color: #dfe3e7;
+}
+
+tr:first-child td:first-child {
+   border-radius: 0.2em 0 0 0;
+}
+
+tr:first-child td:last-child {
+  border-radius: 0 0.2em 0 0;
+}
+
+tr:first-child td:only-child {
+  border-radius: 0.2em 0.2em 0 0;
+}
+
+tr:last-child td:first-child {
+    border-radius: 0 0 0 0.2em;
+}
+
+tr:last-child td:last-child {
+    border-radius: 0 0 0.2em 0;
+}
+
+tr:last-child td:only-child {
+    border-radius: 0 0 0.2em 0.2em;
+}
+
+tr:only-child td:only-child {
+    border-radius: 0.2em 0.2em 0.2em 0.2em;
+}
+
+tr:only-child td:first-child {
+   border-radius: 0.2em 0 0 0.2em;
+}
+
+tr:only-child td:last-child {
+  border-radius: 0 0.2em 0.2em 0;
+}
+
+
+td.tmain, td.tmain_nw, td.thdr {
+    background-color: rgb(255, 255, 255);
+    vertical-align: top;
+    padding: 3px;
+}
+
+td.tmain p, td.tmain_nw p, td.thdr p {
+    margin-top: 3pt;
+    margin-bottom: 3pt;
+}
+
+td.tmain_nw {
+    white-space: nowrap;
+}
+
+td.thdr {
+    background-color: #e3e3e3;
+}
+
+table.decl {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+    vertical-align: top;
+    padding: 3px;
+    width: 100%;
+}
+
+table.decl td {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+}
+
+div.note-quote {
+    border-left: 10px solid #ccc;
+    padding: 1em 10px .1em 10px;
+    margin: 1.5em 10px;
+    background-color: rgb(224, 224, 224);
+}
+
+div.note-note {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+div.note-warning {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #fff;
+    background-color: #ff6358;
+}
+div.note-warning code.ctag {
+    color: black;
+}</style>
+<link rel="stylesheet" href="res/dripicons.css"></head><body><script type="text/javascript">
+var highlighterEnabled = false;
+var maintopic = 'index';
+var helptitle = 'Indicore SDK 3';
+    function loadStarted() {
+    window.onload = loadCompleted;
+
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        var head = document.getElementsByTagName('head')[0];
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.min.js';
+        head.appendChild(script4);
+
+
+        var script2 = document.createElement('script');
+        script2.type = 'text/javascript';
+        script2.src = './highlighter/highlight.cshtml.js';
+        head.appendChild(script2);
+
+        var script3 = document.createElement('script');
+        script3.type = 'text/javascript';
+        script3.src = './highlighter/highlight.lua.js';
+        head.appendChild(script3);
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.luax.js';
+        head.appendChild(script4);
+    }
+}
+
+function loadCompleted() {
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        hljs.registerLanguage('cshtml-razor', window.hljsDefineCshtmlRazor);
+        hljs.registerLanguage('lua', window.hljsDefineLua);
+        hljs.registerLanguage('luax', window.hljsDefineLuaX);
+        x = document.querySelectorAll('pre code');
+        for (var i = 0; i < x.length; i++) {
+            if (x[i].hasAttribute('class')) {
+                hljs.highlightBlock(x[i]);
+            }
+        }
+    }
+}
+
+
+function hidediv(divname) {
+    document.getElementById(divname).style.display = 'none';
+}
+
+function showdiv(divname) {
+    document.getElementById(divname).style.display = 'inline';
+}
+
+function syncList() {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, null, document.title);
+    }
+}
+
+function syncList1(key) {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, key + '.html', document.title);
+    }
+}</script><script type="text/javascript">
+    loadStarted();
+</script><h1>Lua 5.1 documentation</h1><p><b>What is Lua?</b></p>
+<p>Lua is a powerful, fast, lightweight, embeddable scripting
+language.</p>
+<p>Lua combines simple procedural syntax with powerful data
+description constructs based on associative arrays and extensible
+semantics. Lua is dynamically typed, runs by interpreting bytecode for
+a register-based virtual machine, and has automatic memory management
+with incremental garbage collection, making it ideal for
+configuration, scripting, and rapid prototyping.</p>
+<p>Lua Copyright © 1994–2008 Lua.org, PUC-Rio.</p>
+<p><b>Why choose Lua?</b></p>
+<p><i>Lua is a proven, robust language</i></p>
+<p>Lua has been used in many industrial applications (e.g., Adobe's
+Photoshop Lightroom), with an emphasis on embedded systems (e.g., the
+Ginga middleware for digital TV in Brazil) and games (e.g., World of
+Warcraft). Lua is currently the leading scripting language in games.
+Lua has a solid reference manual and there are several books about it.
+Several versions of Lua have been released and used in real
+applications since its creation in 1993. Lua featured in HOPL III, the
+Third ACM SIGPLAN History of Programming Languages Conference, in June
+2007.</p>
+<p><i>Lua is fast</i></p>
+<p>Lua has a deserved reputation for performance. To claim to be &quot;as fast
+as Lua&quot; is an aspiration of other scripting languages. Several
+benchmarks show Lua as the fastest language in the realm of
+interpreted scripting languages. Lua is fast not only in fine-tuned
+benchmark programs, but in real life too. A substantial fraction of
+large applications have been written in Lua.</p>
+<p><i>Lua is simple, yet powerful</i></p>
+<p>A fundamental concept in the design of Lua is to provide
+meta-mechanisms for implementing features, instead of providing a host
+of features directly in the language. For example, although Lua is not
+a pure object-oriented language, it does provide meta-mechanisms for
+implementing classes and inheritance. Lua's meta-mechanisms bring an
+economy of concepts and keep the language small, while allowing the
+semantics to be extended in unconventional ways.</p>
+<p><i>Lua is small</i></p>
+<p>Adding Lua to an application does not bloat it. The tarball file for
+Lua 5.1.4, which contains source code, documentation, and examples,
+takes 212K compressed and 860K uncompressed. The source contains
+around 17000 lines of code. Under Linux, the Lua interpreter built with
+all standard Lua libraries takes 153K and the Lua library takes 203K.</p>
+<p><i>Lua is free</i></p>
+<p>Lua is free software, distributed under a <a href="http://www.lua.org/license.html" target="_blank">very
+liberal license</a> (the well-known MIT license). It can be used for any purpose,
+including commercial purposes, at absolutely no cost. Just download it
+and use it. Lua is not an open-source project, with code contributed
+by several people: all code is written by us.</p>
+<p><b>Where does Lua come from?</b></p>
+<p>Lua is designed, implemented, and maintained by <a href="http://www.lua.org/authors.html" target="_blank">a team</a>
+at <a href="http://www.puc-rio.br/" target="_blank">PUC-Rio</a>, the Pontifical Catholic University of Rio de Janeiro in Brazil.
+Lua was born and raised in Tecgraf, the Computer Graphics
+Technology Group of PUC-Rio, and is now housed at Lablua. Both Tecgraf and Lablua are
+laboratories of the Department of Computer Science of PUC-Rio.</p>
+<p>Please, visit <a href="http://www.lua.org" target="_blank">the Lua's home site</a>.</p>
+<p><b>What's in a name?</b></p>
+<p>&quot;Lua&quot; (pronounced LOO-ah) means &quot;Moon&quot; in Portuguese. As such, it
+is neither an acronym nor an abbreviation, but a noun. More
+specifically, &quot;Lua&quot; is a name, the name of the Earth's moon and the
+name of the language. Like most names, it should be written in lower
+case with an initial capital, that is, &quot;Lua&quot;. Please do not write it
+as &quot;LUA&quot;, which is both ugly and confusing, because then it becomes an
+acronym with different meanings for different people. So, please,
+write &quot;Lua&quot; right!</p>
+<p><b>Document Content</b></p><ul class="main">
+  <li><p><a href="lua/lua_51_reference_manual.html">Lua 5.1 Reference Manual</a></p></li>
+  <ul class="main">
+    <li><p><a href="lua/1.html">1 - Introduction</a></p></li>
+    <li><p><a href="lua/2.html">2 - The Language</a></p></li>
+    <ul class="main">
+      <li><p><a href="lua/2.1.html">2.1 - Lexical Conventions</a></p></li>
+      <li><p><a href="lua/2.2.html">2.2 - Values and Types</a></p></li>
+      <ul class="main">
+        <li><p><a href="lua/2.2.1.html">2.2.1 - Coercion</a></p></li>
+      </ul>
+      <li><p><a href="lua/2.3.html">2.3 - Variables</a></p></li>
+      <li><p><a href="lua/2.4.html">2.4 - Statements</a></p></li>
+      <ul class="main">
+        <li><p><a href="lua/2.4.1.html">2.4.1 - Chunks</a></p></li>
+        <li><p><a href="lua/2.4.2.html">2.4.2 - Blocks</a></p></li>
+        <li><p><a href="lua/2.4.3.html">2.4.3 - Assignment</a></p></li>
+        <li><p><a href="lua/2.4.4.html">2.4.4 - Control Structures</a></p></li>
+        <li><p><a href="lua/2.4.5.html">2.4.5 - For Statement</a></p></li>
+        <li><p><a href="lua/2.4.6.html">2.4.6 - Function Calls as Statements</a></p></li>
+        <li><p><a href="lua/2.4.7.html">2.4.7 - Local Declarations</a></p></li>
+      </ul>
+      <li><p><a href="lua/2.5.html">2.5 - Expressions</a></p></li>
+      <ul class="main">
+        <li><p><a href="lua/2.5.1.html">2.5.1 - Arithmetic Operators</a></p></li>
+        <li><p><a href="lua/2.5.2.html">2.5.2 - Relational Operators</a></p></li>
+        <li><p><a href="lua/2.5.3.html">2.5.3 - Logical Operators</a></p></li>
+        <li><p><a href="lua/2.5.4.html">2.5.4 - Concatenation</a></p></li>
+        <li><p><a href="lua/2.5.5.html">2.5.5 - The Length Operator</a></p></li>
+        <li><p><a href="lua/2.5.6.html">2.5.6 - Precedence</a></p></li>
+        <li><p><a href="lua/2.5.7.html">2.5.7 - Table Constructors</a></p></li>
+        <li><p><a href="lua/2.5.8.html">2.5.8 - Function Calls</a></p></li>
+        <li><p><a href="lua/2.5.9.html">2.5.9 - Function Definitions</a></p></li>
+      </ul>
+      <li><p><a href="lua/2.6.html">2.6 - Visibility Rules</a></p></li>
+      <li><p><a href="lua/2.7.html">2.7 - Error Handling</a></p></li>
+      <li><p><a href="lua/2.8.html">2.8 - Metatables</a></p></li>
+      <li><p><a href="lua/2.9.html">2.9 - Environments</a></p></li>
+      <li><p><a href="lua/2.10.html">2.10 - Garbage Collection</a></p></li>
+      <ul class="main">
+        <li><p><a href="lua/2.10.1.html">2.10.1 - Garbage-Collection Metamethods</a></p></li>
+        <li><p><a href="lua/2.10.2.html">2.10.2 - Weak Tables</a></p></li>
+      </ul>
+      <li><p><a href="lua/2.11.html">2.11 - Coroutines</a></p></li>
+    </ul>
+    <li><p><a href="lua/3.html">3 - The Application Program Interface</a></p></li>
+    <ul class="main">
+      <li><p><a href="lua/3.1.html">3.1 - The Stack</a></p></li>
+      <li><p><a href="lua/3.2.html">3.2 - Stack Size</a></p></li>
+      <li><p><a href="lua/3.3.html">3.3 - Pseudo-Indices</a></p></li>
+      <li><p><a href="lua/3.4.html">3.4 - C Closures</a></p></li>
+      <li><p><a href="lua/3.5.html">3.5 - Registry</a></p></li>
+      <li><p><a href="lua/3.6.html">3.6 - Error Handling in C</a></p></li>
+      <li><p><a href="lua/3.7.html">3.7 - Functions and Types</a></p></li>
+      <ul class="main">
+        <li><p><a href="lua/lua_Alloc.html">lua_Alloc</a></p></li>
+        <li><p><a href="lua/lua_atpanic.html">lua_atpanic</a></p></li>
+        <li><p><a href="lua/lua_call.html">lua_call</a></p></li>
+        <li><p><a href="lua/lua_CFunction.html">lua_CFunction</a></p></li>
+        <li><p><a href="lua/lua_checkstack.html">lua_checkstack</a></p></li>
+        <li><p><a href="lua/lua_close.html">lua_close</a></p></li>
+        <li><p><a href="lua/lua_concat.html">lua_concat</a></p></li>
+        <li><p><a href="lua/lua_cpcall.html">lua_cpcall</a></p></li>
+        <li><p><a href="lua/lua_createtable.html">lua_createtable</a></p></li>
+        <li><p><a href="lua/lua_dump.html">lua_dump</a></p></li>
+        <li><p><a href="lua/lua_equal.html">lua_equal</a></p></li>
+        <li><p><a href="lua/lua_error.html">lua_error</a></p></li>
+        <li><p><a href="lua/lua_gc.html">lua_gc</a></p></li>
+        <li><p><a href="lua/lua_getallocf.html">lua_getallocf</a></p></li>
+        <li><p><a href="lua/lua_getfenv.html">lua_getfenv</a></p></li>
+        <li><p><a href="lua/lua_getfield.html">lua_getfield</a></p></li>
+        <li><p><a href="lua/lua_getglobal.html">lua_getglobal</a></p></li>
+        <li><p><a href="lua/lua_getmetatable.html">lua_getmetatable</a></p></li>
+        <li><p><a href="lua/lua_gettable.html">lua_gettable</a></p></li>
+        <li><p><a href="lua/lua_gettop.html">lua_gettop</a></p></li>
+        <li><p><a href="lua/lua_insert.html">lua_insert</a></p></li>
+        <li><p><a href="lua/lua_Integer.html">lua_Integer</a></p></li>
+        <li><p><a href="lua/lua_isboolean.html">lua_isboolean</a></p></li>
+        <li><p><a href="lua/lua_iscfunction.html">lua_iscfunction</a></p></li>
+        <li><p><a href="lua/lua_isfunction.html">lua_isfunction</a></p></li>
+        <li><p><a href="lua/lua_islightuserdata.html">lua_islightuserdata</a></p></li>
+        <li><p><a href="lua/lua_isnil.html">lua_isnil</a></p></li>
+        <li><p><a href="lua/lua_isnumber.html">lua_isnumber</a></p></li>
+        <li><p><a href="lua/lua_isstring.html">lua_isstring</a></p></li>
+        <li><p><a href="lua/lua_istable.html">lua_istable</a></p></li>
+        <li><p><a href="lua/lua_isthread.html">lua_isthread</a></p></li>
+        <li><p><a href="lua/lua_isuserdata.html">lua_isuserdata</a></p></li>
+        <li><p><a href="lua/lua_lessthan.html">lua_lessthan</a></p></li>
+        <li><p><a href="lua/lua_load.html">lua_load</a></p></li>
+        <li><p><a href="lua/lua_newstate.html">lua_newstate</a></p></li>
+        <li><p><a href="lua/lua_newtable.html">lua_newtable</a></p></li>
+        <li><p><a href="lua/lua_newthread.html">lua_newthread</a></p></li>
+        <li><p><a href="lua/lua_newuserdata.html">lua_newuserdata</a></p></li>
+        <li><p><a href="lua/lua_next.html">lua_next</a></p></li>
+        <li><p><a href="lua/lua_Number.html">lua_Number</a></p></li>
+        <li><p><a href="lua/lua_objlen.html">lua_objlen</a></p></li>
+        <li><p><a href="lua/lua_pcall.html">lua_pcall</a></p></li>
+        <li><p><a href="lua/lua_pop.html">lua_pop</a></p></li>
+        <li><p><a href="lua/lua_pushboolean.html">lua_pushboolean</a></p></li>
+        <li><p><a href="lua/lua_pushcclosure.html">lua_pushcclosure</a></p></li>
+        <li><p><a href="lua/lua_pushcfunction.html">lua_pushcfunction</a></p></li>
+        <li><p><a href="lua/lua_pushfstring.html">lua_pushfstring</a></p></li>
+        <li><p><a href="lua/lua_pushinteger.html">lua_pushinteger</a></p></li>
+        <li><p><a href="lua/lua_pushlightuserdata.html">lua_pushlightuserdata</a></p></li>
+        <li><p><a href="lua/lua_pushlstring.html">lua_pushlstring</a></p></li>
+        <li><p><a href="lua/lua_pushnil.html">lua_pushnil</a></p></li>
+        <li><p><a href="lua/lua_pushnumber.html">lua_pushnumber</a></p></li>
+        <li><p><a href="lua/lua_pushstring.html">lua_pushstring</a></p></li>
+        <li><p><a href="lua/lua_pushthread.html">lua_pushthread</a></p></li>
+        <li><p><a href="lua/lua_pushvalue.html">lua_pushvalue</a></p></li>
+        <li><p><a href="lua/lua_pushvfstring.html">lua_pushvfstring</a></p></li>
+        <li><p><a href="lua/lua_rawequal.html">lua_rawequal</a></p></li>
+        <li><p><a href="lua/lua_rawget.html">lua_rawget</a></p></li>
+        <li><p><a href="lua/lua_rawgeti.html">lua_rawgeti</a></p></li>
+        <li><p><a href="lua/lua_rawset.html">lua_rawset</a></p></li>
+        <li><p><a href="lua/lua_rawseti.html">lua_rawseti</a></p></li>
+        <li><p><a href="lua/lua_Reader.html">lua_Reader</a></p></li>
+        <li><p><a href="lua/lua_register.html">lua_register</a></p></li>
+        <li><p><a href="lua/lua_remove.html">lua_remove</a></p></li>
+        <li><p><a href="lua/lua_replace.html">lua_replace</a></p></li>
+        <li><p><a href="lua/lua_resume.html">lua_resume</a></p></li>
+        <li><p><a href="lua/lua_setallocf.html">lua_setallocf</a></p></li>
+        <li><p><a href="lua/lua_setfenv.html">lua_setfenv</a></p></li>
+        <li><p><a href="lua/lua_setfield.html">lua_setfield</a></p></li>
+        <li><p><a href="lua/lua_setglobal.html">lua_setglobal</a></p></li>
+        <li><p><a href="lua/lua_setmetatable.html">lua_setmetatable</a></p></li>
+        <li><p><a href="lua/lua_settable.html">lua_settable</a></p></li>
+        <li><p><a href="lua/lua_settop.html">lua_settop</a></p></li>
+        <li><p><a href="lua/lua_State.html">lua_State</a></p></li>
+        <li><p><a href="lua/lua_status.html">lua_status</a></p></li>
+        <li><p><a href="lua/lua_toboolean.html">lua_toboolean</a></p></li>
+        <li><p><a href="lua/lua_tocfunction.html">lua_tocfunction</a></p></li>
+        <li><p><a href="lua/lua_tointeger.html">lua_tointeger</a></p></li>
+        <li><p><a href="lua/lua_tolstring.html">lua_tolstring</a></p></li>
+        <li><p><a href="lua/lua_tonumber.html">lua_tonumber</a></p></li>
+        <li><p><a href="lua/lua_topointer.html">lua_topointer</a></p></li>
+        <li><p><a href="lua/lua_tostring.html">lua_tostring</a></p></li>
+        <li><p><a href="lua/lua_tothread.html">lua_tothread</a></p></li>
+        <li><p><a href="lua/lua_touserdata.html">lua_touserdata</a></p></li>
+        <li><p><a href="lua/lua_type.html">lua_type</a></p></li>
+        <li><p><a href="lua/lua_typename.html">lua_typename</a></p></li>
+        <li><p><a href="lua/lua_Writer.html">lua_Writer</a></p></li>
+        <li><p><a href="lua/lua_xmove.html">lua_xmove</a></p></li>
+        <li><p><a href="lua/lua_yield.html">lua_yield</a></p></li>
+      </ul>
+      <li><p><a href="lua/3.8.html">3.8 - The Debug Interface</a></p></li>
+      <ul class="main">
+        <li><p><a href="lua/lua_Debug.html">lua_Debug</a></p></li>
+        <li><p><a href="lua/lua_gethook.html">lua_gethook</a></p></li>
+        <li><p><a href="lua/lua_gethookcount.html">lua_gethookcount</a></p></li>
+        <li><p><a href="lua/lua_gethookmask.html">lua_gethookmask</a></p></li>
+        <li><p><a href="lua/lua_getinfo.html">lua_getinfo</a></p></li>
+        <li><p><a href="lua/lua_getlocal.html">lua_getlocal</a></p></li>
+        <li><p><a href="lua/lua_getstack.html">lua_getstack</a></p></li>
+        <li><p><a href="lua/lua_getupvalue.html">lua_getupvalue</a></p></li>
+        <li><p><a href="lua/lua_Hook.html">lua_Hook</a></p></li>
+        <li><p><a href="lua/lua_sethook.html">lua_sethook</a></p></li>
+        <li><p><a href="lua/lua_setlocal.html">lua_setlocal</a></p></li>
+        <li><p><a href="lua/lua_setupvalue.html">lua_setupvalue</a></p></li>
+      </ul>
+    </ul>
+    <li><p><a href="lua/4.html">4 - The Auxiliary Library</a></p></li>
+    <ul class="main">
+      <li><p><a href="lua/4.1.html">4.1 - Functions and Types</a></p></li>
+      <ul class="main">
+        <li><p><a href="lua/luaL_addchar.html">luaL_addchar</a></p></li>
+        <li><p><a href="lua/luaL_addlstring.html">luaL_addlstring</a></p></li>
+        <li><p><a href="lua/luaL_addsize.html">luaL_addsize</a></p></li>
+        <li><p><a href="lua/luaL_addstring.html">luaL_addstring</a></p></li>
+        <li><p><a href="lua/luaL_addvalue.html">luaL_addvalue</a></p></li>
+        <li><p><a href="lua/luaL_argcheck.html">luaL_argcheck</a></p></li>
+        <li><p><a href="lua/luaL_argerror.html">luaL_argerror</a></p></li>
+        <li><p><a href="lua/luaL_Buffer.html">luaL_Buffer</a></p></li>
+        <li><p><a href="lua/luaL_buffinit.html">luaL_buffinit</a></p></li>
+        <li><p><a href="lua/luaL_callmeta.html">luaL_callmeta</a></p></li>
+        <li><p><a href="lua/luaL_checkany.html">luaL_checkany</a></p></li>
+        <li><p><a href="lua/luaL_checkint.html">luaL_checkint</a></p></li>
+        <li><p><a href="lua/luaL_checkinteger.html">luaL_checkinteger</a></p></li>
+        <li><p><a href="lua/luaL_checklong.html">luaL_checklong</a></p></li>
+        <li><p><a href="lua/luaL_checklstring.html">luaL_checklstring</a></p></li>
+        <li><p><a href="lua/luaL_checknumber.html">luaL_checknumber</a></p></li>
+        <li><p><a href="lua/luaL_checkoption.html">luaL_checkoption</a></p></li>
+        <li><p><a href="lua/luaL_checkstack.html">luaL_checkstack</a></p></li>
+        <li><p><a href="lua/luaL_checkstring.html">luaL_checkstring</a></p></li>
+        <li><p><a href="lua/luaL_checktype.html">luaL_checktype</a></p></li>
+        <li><p><a href="lua/luaL_checkudata.html">luaL_checkudata</a></p></li>
+        <li><p><a href="lua/luaL_dofile.html">luaL_dofile</a></p></li>
+        <li><p><a href="lua/luaL_dostring.html">luaL_dostring</a></p></li>
+        <li><p><a href="lua/luaL_error.html">luaL_error</a></p></li>
+        <li><p><a href="lua/luaL_getmetafield.html">luaL_getmetafield</a></p></li>
+        <li><p><a href="lua/luaL_getmetatable.html">luaL_getmetatable</a></p></li>
+        <li><p><a href="lua/luaL_gsub.html">luaL_gsub</a></p></li>
+        <li><p><a href="lua/luaL_loadbuffer.html">luaL_loadbuffer</a></p></li>
+        <li><p><a href="lua/luaL_loadfile.html">luaL_loadfile</a></p></li>
+        <li><p><a href="lua/luaL_loadstring.html">luaL_loadstring</a></p></li>
+        <li><p><a href="lua/luaL_newmetatable.html">luaL_newmetatable</a></p></li>
+        <li><p><a href="lua/luaL_newstate.html">luaL_newstate</a></p></li>
+        <li><p><a href="lua/luaL_openlibs.html">luaL_openlibs</a></p></li>
+        <li><p><a href="lua/luaL_optint.html">luaL_optint</a></p></li>
+        <li><p><a href="lua/luaL_optinteger.html">luaL_optinteger</a></p></li>
+        <li><p><a href="lua/luaL_optlong.html">luaL_optlong</a></p></li>
+        <li><p><a href="lua/luaL_optlstring.html">luaL_optlstring</a></p></li>
+        <li><p><a href="lua/luaL_optnumber.html">luaL_optnumber</a></p></li>
+        <li><p><a href="lua/luaL_optstring.html">luaL_optstring</a></p></li>
+        <li><p><a href="lua/luaL_prepbuffer.html">luaL_prepbuffer</a></p></li>
+        <li><p><a href="lua/luaL_pushresult.html">luaL_pushresult</a></p></li>
+        <li><p><a href="lua/luaL_ref.html">luaL_ref</a></p></li>
+        <li><p><a href="lua/luaL_Reg.html">luaL_Reg</a></p></li>
+        <li><p><a href="lua/luaL_register.html">luaL_register</a></p></li>
+        <li><p><a href="lua/luaL_typename.html">luaL_typename</a></p></li>
+        <li><p><a href="lua/luaL_typerror.html">luaL_typerror</a></p></li>
+        <li><p><a href="lua/luaL_unref.html">luaL_unref</a></p></li>
+        <li><p><a href="lua/luaL_where.html">luaL_where</a></p></li>
+      </ul>
+    </ul>
+    <li><p><a href="lua/5.html">5 - Standard Libraries</a></p></li>
+    <ul class="main">
+      <li><p><a href="lua/5.1.html">5.1 - Basic Functions</a></p></li>
+      <ul class="main">
+        <li><p><a href="lua/pdf-assert.html">assert (v [, message])</a></p></li>
+        <li><p><a href="lua/pdf-collectgarbage.html">collectgarbage (opt [, arg])</a></p></li>
+        <li><p><a href="lua/pdf-dofile.html">dofile (filename)</a></p></li>
+        <li><p><a href="lua/pdf-error.html">error (message [, level])</a></p></li>
+        <li><p><a href="lua/pdf-_G.html">_G</a></p></li>
+        <li><p><a href="lua/pdf-getfenv.html">getfenv (f)</a></p></li>
+        <li><p><a href="lua/pdf-getmetatable.html">getmetatable (object)</a></p></li>
+        <li><p><a href="lua/pdf-ipairs.html">ipairs (t)</a></p></li>
+        <li><p><a href="lua/pdf-load.html">load (func [, chunkname])</a></p></li>
+        <li><p><a href="lua/pdf-loadfile.html">loadfile ([filename])</a></p></li>
+        <li><p><a href="lua/pdf-loadstring.html">loadstring (string [, chunkname])</a></p></li>
+        <li><p><a href="lua/pdf-next.html">next (table [, index])</a></p></li>
+        <li><p><a href="lua/pdf-pairs.html">pairs (t)</a></p></li>
+        <li><p><a href="lua/pdf-pcall.html">pcall (f, arg1, ...)</a></p></li>
+        <li><p><a href="lua/pdf-print.html">print (...)</a></p></li>
+        <li><p><a href="lua/pdf-rawequal.html">rawequal (v1, v2)</a></p></li>
+        <li><p><a href="lua/pdf-rawget.html">rawget (table, index)</a></p></li>
+        <li><p><a href="lua/pdf-rawset.html">rawset (table, index, value)</a></p></li>
+        <li><p><a href="lua/pdf-select.html">select (index, ...)</a></p></li>
+        <li><p><a href="lua/pdf-setfenv.html">setfenv (f, table)</a></p></li>
+        <li><p><a href="lua/pdf-setmetatable.html">setmetatable (table, metatable)</a></p></li>
+        <li><p><a href="lua/pdf-tonumber.html">tonumber (e [, base])</a></p></li>
+        <li><p><a href="lua/pdf-tostring.html">tostring (e)</a></p></li>
+        <li><p><a href="lua/pdf-type.html">type (v)</a></p></li>
+        <li><p><a href="lua/pdf-unpack.html">unpack (list [, i [, j]])</a></p></li>
+        <li><p><a href="lua/pdf-_VERSION.html">_VERSION</a></p></li>
+        <li><p><a href="lua/pdf-xpcall.html">xpcall (f, err)</a></p></li>
+      </ul>
+      <li><p><a href="lua/5.2.html">5.2 - Coroutine Manipulation</a></p></li>
+      <ul class="main">
+        <li><p><a href="lua/pdf-coroutine.create.html">coroutine.create (f)</a></p></li>
+        <li><p><a href="lua/pdf-coroutine.resume.html">coroutine.resume (co [, val1, ...])</a></p></li>
+        <li><p><a href="lua/pdf-coroutine.running.html">coroutine.running ()</a></p></li>
+        <li><p><a href="lua/pdf-coroutine.status.html">coroutine.status (co)</a></p></li>
+        <li><p><a href="lua/pdf-coroutine.wrap.html">coroutine.wrap (f)</a></p></li>
+        <li><p><a href="lua/pdf-coroutine.yield.html">coroutine.yield (...)</a></p></li>
+      </ul>
+      <li><p><a href="lua/5.3.html">5.3 - Modules</a></p></li>
+      <ul class="main">
+        <li><p><a href="lua/pdf-module.html">module (name [, ...])</a></p></li>
+        <li><p><a href="lua/pdf-require.html">require (modname)</a></p></li>
+        <li><p><a href="lua/pdf-package.cpath.html">package.cpath</a></p></li>
+        <li><p><a href="lua/pdf-package.loaded.html">package.loaded</a></p></li>
+        <li><p><a href="lua/pdf-package.loadlib.html">package.loadlib (libname, funcname)</a></p></li>
+        <li><p><a href="lua/pdf-package.path.html">package.path</a></p></li>
+        <li><p><a href="lua/pdf-package.preload.html">package.preload</a></p></li>
+        <li><p><a href="lua/pdf-package.seeall.html">package.seeall (module)</a></p></li>
+      </ul>
+      <li><p><a href="lua/5.4.html">5.4 - String Manipulation</a></p></li>
+      <ul class="main">
+        <li><p><a href="lua/pdf-string.byte.html">string.byte (s [, i [, j]])</a></p></li>
+        <li><p><a href="lua/pdf-string.char.html">string.char (...)</a></p></li>
+        <li><p><a href="lua/pdf-string.dump.html">string.dump (function)</a></p></li>
+        <li><p><a href="lua/pdf-string.find.html">string.find (s, pattern [, init [, plain]])</a></p></li>
+        <li><p><a href="lua/pdf-string.format.html">string.format (formatstring, ...)</a></p></li>
+        <li><p><a href="lua/pdf-string.gmatch.html">string.gmatch (s, pattern)</a></p></li>
+        <li><p><a href="lua/pdf-string.gsub.html">string.gsub (s, pattern, repl [, n])</a></p></li>
+        <li><p><a href="lua/pdf-string.len.html">string.len (s)</a></p></li>
+        <li><p><a href="lua/pdf-string.lower.html">string.lower (s)</a></p></li>
+        <li><p><a href="lua/pdf-string.match.html">string.match (s, pattern [, init])</a></p></li>
+        <li><p><a href="lua/pdf-string.rep.html">string.rep (s, n)</a></p></li>
+        <li><p><a href="lua/pdf-string.reverse.html">string.reverse (s)</a></p></li>
+        <li><p><a href="lua/pdf-string.sub.html">string.sub (s, i [, j])</a></p></li>
+        <li><p><a href="lua/pdf-string.upper.html">string.upper (s)</a></p></li>
+        <li><p><a href="lua/5.4.1.html">5.4.1 - Patterns</a></p></li>
+        <ul class="main">
+          <li><p><a href="lua/character_class.html">Character Class:</a></p></li>
+          <li><p><a href="lua/pattern_item.html">Pattern Item:</a></p></li>
+          <li><p><a href="lua/pattern.html">Pattern:</a></p></li>
+          <li><p><a href="lua/captures.html">Captures:</a></p></li>
+        </ul>
+      </ul>
+      <li><p><a href="lua/5.5.html">5.5 - Table Manipulation</a></p></li>
+      <ul class="main">
+        <li><p><a href="lua/pdf-table.concat.html">table.concat (table [, sep [, i [, j]]])</a></p></li>
+        <li><p><a href="lua/pdf-table.insert.html">table.insert (table, [pos,] value)</a></p></li>
+        <li><p><a href="lua/pdf-table.maxn.html">table.maxn (table)</a></p></li>
+        <li><p><a href="lua/pdf-table.remove.html">table.remove (table [, pos])</a></p></li>
+        <li><p><a href="lua/pdf-table.sort.html">table.sort (table [, comp])</a></p></li>
+      </ul>
+      <li><p><a href="lua/5.6.html">5.6 - Mathematical Functions</a></p></li>
+      <ul class="main">
+        <li><p><a href="lua/pdf-math.abs.html">math.abs (x)</a></p></li>
+        <li><p><a href="lua/pdf-math.acos.html">math.acos (x)</a></p></li>
+        <li><p><a href="lua/pdf-math.asin.html">math.asin (x)</a></p></li>
+        <li><p><a href="lua/pdf-math.atan.html">math.atan (x)</a></p></li>
+        <li><p><a href="lua/pdf-math.atan2.html">math.atan2 (x, y)</a></p></li>
+        <li><p><a href="lua/pdf-math.ceil.html">math.ceil (x)</a></p></li>
+        <li><p><a href="lua/pdf-math.cos.html">math.cos (x)</a></p></li>
+        <li><p><a href="lua/pdf-math.cosh.html">math.cosh (x)</a></p></li>
+        <li><p><a href="lua/pdf-math.deg.html">math.deg (x)</a></p></li>
+        <li><p><a href="lua/pdf-math.exp.html">math.exp (x)</a></p></li>
+        <li><p><a href="lua/pdf-math.floor.html">math.floor (x)</a></p></li>
+        <li><p><a href="lua/pdf-math.fmod.html">math.fmod (x, y)</a></p></li>
+        <li><p><a href="lua/pdf-math.frexp.html">math.frexp (x)</a></p></li>
+        <li><p><a href="lua/pdf-math.huge.html">math.huge</a></p></li>
+        <li><p><a href="lua/pdf-math.ldexp.html">math.ldexp (m, e)</a></p></li>
+        <li><p><a href="lua/pdf-math.log.html">math.log (x)</a></p></li>
+        <li><p><a href="lua/pdf-math.log10.html">math.log10 (x)</a></p></li>
+        <li><p><a href="lua/pdf-math.max.html">math.max (x, ...)</a></p></li>
+        <li><p><a href="lua/pdf-math.min.html">math.min (x, ...)</a></p></li>
+        <li><p><a href="lua/pdf-math.modf.html">math.modf (x)</a></p></li>
+        <li><p><a href="lua/pdf-math.pi.html">math.pi</a></p></li>
+        <li><p><a href="lua/pdf-math.pow.html">math.pow (x, y)</a></p></li>
+        <li><p><a href="lua/pdf-math.rad.html">math.rad (x)</a></p></li>
+        <li><p><a href="lua/pdf-math.random.html">math.random ([m [, n]])</a></p></li>
+        <li><p><a href="lua/pdf-math.randomseed.html">math.randomseed (x)</a></p></li>
+        <li><p><a href="lua/pdf-math.sin.html">math.sin (x)</a></p></li>
+        <li><p><a href="lua/pdf-math.sinh.html">math.sinh (x)</a></p></li>
+        <li><p><a href="lua/pdf-math.sqrt.html">math.sqrt (x)</a></p></li>
+        <li><p><a href="lua/pdf-math.tan.html">math.tan (x)</a></p></li>
+        <li><p><a href="lua/pdf-math.tanh.html">math.tanh (x)</a></p></li>
+      </ul>
+      <li><p><a href="lua/5.7.html">5.7 - Input and Output Facilities</a></p></li>
+      <ul class="main">
+        <li><p><a href="lua/pdf-io.close.html">io.close ([file])</a></p></li>
+        <li><p><a href="lua/pdf-io.flush.html">io.flush ()</a></p></li>
+        <li><p><a href="lua/pdf-io.input.html">io.input ([file])</a></p></li>
+        <li><p><a href="lua/pdf-io.lines.html">io.lines ([filename])</a></p></li>
+        <li><p><a href="lua/pdf-io.open.html">io.open (filename [, mode])</a></p></li>
+        <li><p><a href="lua/pdf-io.output.html">io.output ([file])</a></p></li>
+        <li><p><a href="lua/pdf-io.popen.html">io.popen ([prog [, mode]])</a></p></li>
+        <li><p><a href="lua/pdf-io.read.html">io.read (...)</a></p></li>
+        <li><p><a href="lua/pdf-io.tmpfile.html">io.tmpfile ()</a></p></li>
+        <li><p><a href="lua/pdf-io.type.html">io.type (obj)</a></p></li>
+        <li><p><a href="lua/pdf-io.write.html">io.write (...)</a></p></li>
+        <li><p><a href="lua/pdf-file:close.html">file:close ()</a></p></li>
+        <li><p><a href="lua/pdf-file:flush.html">file:flush ()</a></p></li>
+        <li><p><a href="lua/pdf-file:lines.html">file:lines ()</a></p></li>
+        <li><p><a href="lua/pdf-file:read.html">file:read (...)</a></p></li>
+        <li><p><a href="lua/pdf-file:seek.html">file:seek ([whence] [, offset])</a></p></li>
+        <li><p><a href="lua/pdf-file:setvbuf.html">file:setvbuf (mode [, size])</a></p></li>
+        <li><p><a href="lua/pdf-file:write.html">file:write (...)</a></p></li>
+      </ul>
+      <li><p><a href="lua/5.8.html">5.8 - Operating System Facilities</a></p></li>
+      <ul class="main">
+        <li><p><a href="lua/pdf-os.clock.html">os.clock ()</a></p></li>
+        <li><p><a href="lua/pdf-os.date.html">os.date ([format [, time]])</a></p></li>
+        <li><p><a href="lua/pdf-os.difftime.html">os.difftime (t2, t1)</a></p></li>
+        <li><p><a href="lua/pdf-os.execute.html">os.execute ([command])</a></p></li>
+        <li><p><a href="lua/pdf-os.exit.html">os.exit ([code])</a></p></li>
+        <li><p><a href="lua/pdf-os.getenv.html">os.getenv (varname)</a></p></li>
+        <li><p><a href="lua/pdf-os.remove.html">os.remove (filename)</a></p></li>
+        <li><p><a href="lua/pdf-os.rename.html">os.rename (oldname, newname)</a></p></li>
+        <li><p><a href="lua/pdf-os.setlocale.html">os.setlocale (locale [, category])</a></p></li>
+        <li><p><a href="lua/pdf-os.time.html">os.time ([table])</a></p></li>
+        <li><p><a href="lua/pdf-os.tmpname.html">os.tmpname ()</a></p></li>
+      </ul>
+      <li><p><a href="lua/5.9.html">5.9 - The Debug Library</a></p></li>
+      <ul class="main">
+        <li><p><a href="lua/pdf-debug.debug.html">debug.debug ()</a></p></li>
+        <li><p><a href="lua/pdf-debug.getfenv.html">debug.getfenv (o)</a></p></li>
+        <li><p><a href="lua/pdf-debug.gethook.html">debug.gethook ([thread])</a></p></li>
+        <li><p><a href="lua/pdf-debug.getinfo.html">debug.getinfo ([thread,] function [, what])</a></p></li>
+        <li><p><a href="lua/pdf-debug.getlocal.html">debug.getlocal ([thread,] level, local)</a></p></li>
+        <li><p><a href="lua/pdf-debug.getmetatable.html">debug.getmetatable (object)</a></p></li>
+        <li><p><a href="lua/pdf-debug.getregistry.html">debug.getregistry ()</a></p></li>
+        <li><p><a href="lua/pdf-debug.getupvalue.html">debug.getupvalue (func, up)</a></p></li>
+        <li><p><a href="lua/pdf-debug.setfenv.html">debug.setfenv (object, table)</a></p></li>
+        <li><p><a href="lua/pdf-debug.sethook.html">debug.sethook ([thread,] hook, mask [, count])</a></p></li>
+        <li><p><a href="lua/pdf-debug.setlocal.html">debug.setlocal ([thread,] level, local, value)</a></p></li>
+        <li><p><a href="lua/pdf-debug.setmetatable.html">debug.setmetatable (object, table)</a></p></li>
+        <li><p><a href="lua/pdf-debug.setupvalue.html">debug.setupvalue (func, up, value)</a></p></li>
+        <li><p><a href="lua/pdf-debug.traceback.html">debug.traceback ([thread,] [message])</a></p></li>
+      </ul>
+    </ul>
+    <li><p><a href="lua/6.html">6 - Lua Stand-alone</a></p></li>
+    <li><p><a href="lua/7.html">7 - Incompatibilities with the Previous Version</a></p></li>
+    <ul class="main">
+      <li><p><a href="lua/7.1.html">7.1 - Changes in the Language</a></p></li>
+      <li><p><a href="lua/7.2.html">7.2 - Changes in the Libraries</a></p></li>
+      <li><p><a href="lua/7.3.html">7.3 - Changes in the API</a></p></li>
+    </ul>
+    <li><p><a href="lua/8.html">8 - The Complete Syntax of Lua</a></p></li>
+  </ul>
+</ul><p>
+  <center><a href="index.html">back</a></center>
+</p><script language="javascript" type="text/javascript">if(window.parent.frames[0]) window.parent.frames[0].selectItem(window.location.href);</script></body></html>

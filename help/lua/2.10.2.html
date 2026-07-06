@@ -1,0 +1,39 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 2.10.2 - Weak Tables</title>
+</head>
+<body>
+<h3>2.10.2 - <a name="2.10.2">Weak Tables</a></h3>
+
+<p>
+A <em>weak table</em> is a table whose elements are
+<em>weak references</em>.
+A weak reference is ignored by the garbage collector.
+In other words,
+if the only references to an object are weak references,
+then the garbage collector will collect this object.
+
+
+<p>
+A weak table can have weak keys, weak values, or both.
+A table with weak keys allows the collection of its keys,
+but prevents the collection of its values.
+A table with both weak keys and weak values allows the collection of
+both keys and values.
+In any case, if either the key or the value is collected,
+the whole pair is removed from the table.
+The weakness of a table is controlled by the value of the
+<code>__mode</code> field of its metatable.
+If the <code>__mode</code> field is a string containing the character&nbsp;'<code>k</code>',
+the keys in the table are weak.
+If <code>__mode</code> contains '<code>v</code>',
+the values in the table are weak.
+
+
+<p>
+After you use a table as a metatable,
+you should not change the value of its field <code>__mode</code>.
+Otherwise, the weak behavior of the tables controlled by this
+metatable is undefined.
+</body>
+</html>

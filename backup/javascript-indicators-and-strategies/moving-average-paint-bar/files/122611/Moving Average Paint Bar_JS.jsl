@@ -1,0 +1,148 @@
+function Init()
+{
+    indicator.name("Moving Average Paint Bar");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+	
+	indicator.parameters.addGroup("Calculation");
+	indicator.parameters.addString("Price1", "Fast MA Price Source", "", "close");
+    indicator.parameters.addStringAlternative("Price1", "OPEN", "", "open");
+    indicator.parameters.addStringAlternative("Price1", "HIGH", "", "high");
+    indicator.parameters.addStringAlternative("Price1", "LOW", "", "low");
+    indicator.parameters.addStringAlternative("Price1","CLOSE", "", "close");
+    indicator.parameters.addStringAlternative("Price1", "MEDIAN", "", "median");
+    indicator.parameters.addStringAlternative("Price1", "TYPICAL", "", "typical");
+    indicator.parameters.addStringAlternative("Price1", "WEIGHTED", "", "weighted");	
+    indicator.parameters.addInteger("Fast", "Fast Average Period", "", 34);
+	indicator.parameters.addString("Method1", "Fast MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method1", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method1", "EMA", "EMA" , "EMA");
+   indicator.parameters.addStringAlternative("Method1", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method1", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method1", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method1", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method1", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method1", "WMA", "WMA" , "WMA");
+	
+	
+	indicator.parameters.addString("Price2", "Slow MA Price Source", "", "close");
+    indicator.parameters.addStringAlternative("Price2", "OPEN", "", "open");
+    indicator.parameters.addStringAlternative("Price2", "HIGH", "", "high");
+    indicator.parameters.addStringAlternative("Price2", "LOW", "", "low");
+    indicator.parameters.addStringAlternative("Price2","CLOSE", "", "close");
+    indicator.parameters.addStringAlternative("Price2", "MEDIAN", "", "median");
+    indicator.parameters.addStringAlternative("Price2", "TYPICAL", "", "typical");
+    indicator.parameters.addStringAlternative("Price2", "WEIGHTED", "", "weighted");	
+	
+    indicator.parameters.addInteger("Slow", "Slow Average Period", "", 200);
+	indicator.parameters.addString("Method2", "Slow MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method2", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method2", "EMA", "EMA" , "EMA");
+ indicator.parameters.addStringAlternative("Method2", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method2", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method2", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method2", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method2", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method2", "WMA", "WMA" , "WMA");
+	
+	indicator.parameters.addGroup("Style");
+	indicator.parameters.addColor("Up", "Up Trend Color","Up Trend Color", core.rgb(0,255,0));
+	indicator.parameters.addColor("Down", "Down Trend Color","Down Trend Color", core.rgb(255,0,0));
+	indicator.parameters.addColor("Neutral", "Neutral Trend Color","Neutral Trend Color", core.rgb(0,0,0));
+	
+}
+
+var Fast,Slow, fast,slow, Method1,Method2,Price1,Price2;
+var first;
+var source = null;
+
+var open=null;
+var close=null;
+var high=null;
+var low=null;
+var Up, Down, Neutral;
+
+function Prepare()
+{
+    Fast = instance.parameters.Fast;
+    Slow= instance.parameters.Slow;
+	Method1= instance.parameters.Method1;
+	Method2= instance.parameters.Method2;
+	Price1= instance.parameters.Price1;
+	Price2= instance.parameters.Price2;
+	
+	Up = instance.parameters.Up;
+	Down = instance.parameters.Down;
+	Neutral = instance.parameters.Neutral; 
+	
+    source = instance.source;
+   
+	
+    fast = core.indicators.create(Method1, source[Price1], Fast);
+    slow = core.indicators.create(Method2, source[Price2], Slow);
+    first = Math.max( fast.DATA.first(), slow.DATA.first());	
+
+    var name = profile.id() + "(" + source.name() + ", "  + Fast + ", " + Slow + ")";
+    instance.name(name);
+    
+	
+	open = instance.addStream("open", core.Line, name, "open", core.rgb(0, 0, 0), first)
+    high = instance.addStream("high", core.Line, name, "high", core.rgb(0, 0, 0), first)
+    low = instance.addStream("low", core.Line, name, "low", core.rgb(0, 0, 0), first)
+    close = instance.addStream("close", core.Line, name, "close", core.rgb(0, 0, 0), first)
+    instance.createCandleGroup("ZONE", "", open, high, low, close);
+	
+	
+}
+
+function Update(period, mode)
+{
+
+    fast.update(mode);
+	slow.update(mode);
+
+	
+	high[period]= source.high[period];
+	low[period]= source.low[period];		   
+	close[period] = source.close[period];
+	open[period]  = source.open[period];	
+     
+	if (period < first  || !source.hasData(period)) 
+    {
+	 open.setColor(period, Neutral);		
+     return;
+    } 
+  
+	
+var Price=source.close[period];
+var FastAvg=fast.DATA[period];
+var SlowAvg=slow.DATA[period];
+		    
+if (Price > FastAvg && Price < SlowAvg) 
+{
+ open.setColor(period, Neutral); 
+} 
+else if (Price < FastAvg && Price > SlowAvg) 
+{
+ open.setColor(period, Neutral); 
+} 
+else if (FastAvg > SlowAvg && Price > FastAvg) 
+{ 
+ open.setColor(period, Up); 
+} 
+else if (FastAvg > SlowAvg && Price < SlowAvg) 
+{ 
+ open.setColor(period, Down); 
+} 
+else if (FastAvg < SlowAvg && Price < FastAvg) 
+{
+ open.setColor(period, Down); 
+} 
+else if (FastAvg < SlowAvg && Price > FastAvg) 
+{
+ open.setColor(period, Up); 
+}	
+ 		  
+}
+

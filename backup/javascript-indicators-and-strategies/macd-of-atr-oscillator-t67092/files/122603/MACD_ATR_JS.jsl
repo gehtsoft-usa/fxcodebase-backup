@@ -1,0 +1,114 @@
+function Init()
+{
+    indicator.name("MACD_ATR indicator");
+    indicator.description("MACD_ATR indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("MACD_Fast_Period", "Fast Period for MACD", "", 12);
+    indicator.parameters.addInteger("MACD_Slow_Period", "Slow Period for MACD", "", 26);
+    indicator.parameters.addString("MACD_Price", "Price for MACD", "", "close");
+    indicator.parameters.addStringAlternative("MACD_Price", "close", "", "close");
+    indicator.parameters.addStringAlternative("MACD_Price", "open", "", "open");
+    indicator.parameters.addStringAlternative("MACD_Price", "high", "", "high");
+    indicator.parameters.addStringAlternative("MACD_Price", "low", "", "low");
+    indicator.parameters.addStringAlternative("MACD_Price", "median", "", "median");
+    indicator.parameters.addStringAlternative("MACD_Price", "typical", "", "typical");
+    indicator.parameters.addStringAlternative("MACD_Price", "weighted", "", "weighted");
+    indicator.parameters.addInteger("ATR_Period", "Period for ATR", "", 14);
+    indicator.parameters.addDouble("ATR_Coeff", "Coeff of ATR", "", 1);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("MACD_clr", "MACD Color", "MACD Color", core.rgb(255, 128, 255));
+    indicator.parameters.addColor("MACD_ATR_clr", "MACD_ATR Color", "MACD_ATR Color", core.rgb(255, 255, 0));
+    indicator.parameters.addColor("UP_clr", "UP Color", "UP Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DN_clr", "DN Color", "DN Color", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+var MACD_Fast_Period;
+var MACD_Slow_Period;
+var ATR_Period;
+var MACD_Price;
+var ATR_Coeff;
+var MACD;
+var ATR;
+var MACD_Buff=null;
+var MACD_ATR_Buff=null;
+
+function Prepare()
+{
+    source = instance.source;
+    MACD_Fast_Period=instance.parameters.MACD_Fast_Period;
+    RepulsePeriod2=instance.parameters.MACD_Slow_Period;
+    RepulsePeriod3=instance.parameters.ATR_Period;
+    MACD_Price=instance.parameters.MACD_Price;
+    ATR_Coeff=instance.parameters.ATR_Coeff;
+    first = source.first()+2;
+    if (MACD_Price=="close") 
+    {
+     MACD = core.indicators.create("MACD", source.close, MACD_Fast_Period, MACD_Slow_Period, 2);
+    } 
+    else if (MACD_Price=="open") 
+    {
+     MACD = core.indicators.create("MACD", source.open, MACD_Fast_Period, MACD_Slow_Period, 2);
+    } 
+    else if (MACD_Price=="high") 
+    {
+     MACD = core.indicators.create("MACD", source.high, MACD_Fast_Period, MACD_Slow_Period, 2);
+    } 
+    else if (MACD_Price=="low") 
+    {
+     MACD = core.indicators.create("MACD", source.low, MACD_Fast_Period, MACD_Slow_Period, 2);
+    } 
+    else if (MACD_Price=="median") 
+    {
+     MACD = core.indicators.create("MACD", source.median, MACD_Fast_Period, MACD_Slow_Period, 2);
+    } 
+    else if (MACD_Price=="typical") 
+    {
+     MACD = core.indicators.create("MACD", source.typical, MACD_Fast_Period, MACD_Slow_Period, 2);
+    } 
+    else
+    {
+     MACD = core.indicators.create("MACD", source.weighted, MACD_Fast_Period, MACD_Slow_Period, 2);
+    } 
+    ATR = core.indicators.create("ATR", source, ATR_Period);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.MACD_Fast_Period + ", " + instance.parameters.MACD_Slow_Period + ", " + instance.parameters.ATR_Period + ", " + instance.parameters.MACD_Price + ", " + instance.parameters.ATR_Coeff + ")";
+    instance.name(name);
+    MACD_Buff = instance.addStream("MACD_Buff", core.Bar, name + ".MACD", "MACD", instance.parameters.MACD_clr, first);
+    MACD_ATR_Buff = instance.addStream("MACD_ATR_Buff", core.Line, name + ".MACD_ATR", "MACD_ATR", instance.parameters.MACD_ATR_clr, first);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    MACD.update(mode);
+    ATR.update(mode);
+    MACD_Buff[period]=MACD.MACD[period];
+    if (MACD_Buff[period]>0) 
+    {
+     MACD_ATR_Buff[period]=MACD_Buff[period]-ATR_Coeff*ATR.DATA[period];
+     if (MACD_ATR_Buff[period]>0) 
+     {
+      MACD_Buff.setColor(period,instance.parameters.UP_clr);
+     }
+    } 
+    else if (MACD.MACD[period]<0) 
+    {
+     MACD_ATR_Buff[period]=MACD_Buff[period]+ATR_Coeff*ATR.DATA[period];
+     if (MACD_ATR_Buff[period]<0) 
+     {
+      MACD_Buff.setColor(period,instance.parameters.DN_clr);
+     }
+    } 
+    else
+    {
+     MACD_ATR_Buff[period]=MACD_Buff[period];
+    }
+   } 
+}
+

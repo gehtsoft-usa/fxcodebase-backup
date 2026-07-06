@@ -1,0 +1,50 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - string.format (formatstring, &middot;&middot;&middot;)</title>
+</head>
+<body>
+<h3><a name="pdf-string.format"><code>string.format (formatstring, &middot;&middot;&middot;)</code></a></h3>
+Returns a formatted version of its variable number of arguments
+following the description given in its first argument (which must be a string).
+The format string follows the same rules as the <code>printf</code> family of
+standard C&nbsp;functions.
+The only differences are that the options/modifiers
+<code>*</code>, <code>l</code>, <code>L</code>, <code>n</code>, <code>p</code>,
+and <code>h</code> are not supported
+and that there is an extra option, <code>q</code>.
+The <code>q</code> option formats a string in a form suitable to be safely read
+back by the Lua interpreter:
+the string is written between double quotes,
+and all double quotes, newlines, embedded zeros,
+and backslashes in the string
+are correctly escaped when written.
+For instance, the call
+
+<pre>
+     string.format('%q', 'a string with "quotes" and \n new line')
+</pre><p>
+will produce the string:
+
+<pre>
+     "a string with \"quotes\" and \
+      new line"
+</pre>
+
+<p>
+The options <code>c</code>, <code>d</code>, <code>E</code>, <code>e</code>, <code>f</code>,
+<code>g</code>, <code>G</code>, <code>i</code>, <code>o</code>, <code>u</code>, <code>X</code>, and <code>x</code> all
+expect a number as argument,
+whereas <code>q</code> and <code>s</code> expect a string.
+
+
+<p>
+This function does not accept string values
+containing embedded zeros.
+
+
+
+
+<p>
+<hr>
+</body>
+</html>

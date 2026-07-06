@@ -1,0 +1,61 @@
+function Init()
+{
+    indicator.name("Candle Range");
+    indicator.description("Candle Range");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    indicator.parameters.addGroup("Calculation");	
+    indicator.parameters.addDouble("Level", "Minimum body range", "Minimum body range", 50);
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Color", "Color of S1", "Color of S1", core.rgb(0, 255, 0));
+	indicator.parameters.addInteger("Size", "Label Size", "Label Size", 10);
+}
+
+var Level;
+var font;
+var first;
+var source = null;
+var Color;
+var Size = null;
+
+function Prepare(nameOnly)
+{
+    Level = instance.parameters.Level;
+	Size= instance.parameters.Size;
+	Color= instance.parameters.Color;
+    source = instance.source;
+    first = source.first();
+	
+	font = core.host.execute("createFont", "Wingdings", Size, false, false);
+
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Level) + ")";
+    instance.name(name);
+ 
+}
+
+function Update(period)
+{
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+	var Range= Math.abs(source.open[period]-source.close[period]) /( (source.high[period]-source.low[period])/100);
+	if (Range< Level) 
+    {
+     core.host.execute("drawLabel1", source.serial(period), source.date(period), core.CR_CHART, source.median[period], core.CR_CHART, core.H_Center, core.V_Top,font, Color, "\108");
+    }
+    else
+    {
+	 core.host.execute ("removeLabel", source.serial(period))
+	}
+    
+}
+
+function ReleaseInstance()
+{
+       core.host.execute("deleteFont", font);
+   }
+

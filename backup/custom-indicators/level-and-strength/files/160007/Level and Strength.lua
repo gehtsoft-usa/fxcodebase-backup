@@ -1,0 +1,336 @@
+-- Available @  https://fxcodebase.com/code/viewtopic.php?f=17&t=76179
+
+-- +------------------------------------------------------------------------------------------------+
+-- |                                                              Copyright 2025, Gehtsoft USA LLC  | 
+-- |                                                                         http://fxcodebase.com  |
+-- |                                                               Paypal:  https://goo.gl/9Rj74e   |
+-- +------------------------------------------------------------------------------------------------+
+-- |                                                                   Developed by : Mario Jemic   |                    
+-- |                                                                       mario.jemic@gmail.com    |
+-- |                                                                       https://mario-jemic.com/ | 
+-- |                                                             Patreon :  http://tiny.cc/1ybwxz   |   
+-- |                                                      Buy Me a Coffee:  http://tiny.cc/bj7vxz   |  
+-- +-----------------+----------------------+-------------------------------------------------------+
+-- |  Cryptocurrency |  Network             |  Address                                              |
+-- +-----------------+----------------------+-------------------------------------------------------+
+-- |  BTC            |  BTC                 |  16F5k43RXibTmna4np8bPVgmXM1CzjXFJJ                   | 
+-- |  SOL            |  SOL                 |  3nh5rpUKopcYLNU4zGCdUFAkM3iRQq8VVUmuzVG6VDf2         | 
+-- |  ETH            |  ERC20               |  0xe53aab6bc468a963a02d1319660ee60cf80fc8e7           |
+-- |  BNB            |  BEP20               |  0xe53aab6bc468a963a02d1319660ee60cf80fc8e7           | 
+-- |  USDT           |  BEP20               |  0xe53aab6bc468a963a02d1319660ee60cf80fc8e7           | 
+-- |  XRP            |  BEP20               |  0xe53aab6bc468a963a02d1319660ee60cf80fc8e7           | 
+-- +-----------------+----------------------+-------------------------------------------------------+ 
+function Init()
+    indicator:name("Level and Strength");
+    indicator:description("Level and Strength");
+    indicator:requiredSource(core.Bar);
+    indicator:type(core.Oscillator);
+	
+    local Instruments = {"USD", "EUR", "GBP", "AUD", "NZD", "JPY"};
+
+    indicator.parameters:addGroup("Calculation");
+	indicator.parameters:addInteger("Period", "Period", "Period", 20);		
+	indicator.parameters:addDouble("Deviations", "Deviations", "Deviations", 2);			
+	indicator.parameters:addString("Instrument", "Instrument", "Instrument", Instruments[1]);	
+	for i= 1, 6, 1 do
+    indicator.parameters:addStringAlternative("Instrument",Instruments[i],"", Instruments[i])
+	end
+	
+	indicator.parameters:addBoolean("Average", "Strength Average", "Average", false);
+	indicator.parameters:addBoolean("Revers", "Revers", "Revers", false);	
+	
+	
+     indicator.parameters:addGroup("Style");
+    indicator.parameters:addColor("Up", "Up Color", "", core.rgb(0, 255, 0));
+    indicator.parameters:addColor("Down", "Down Color", "", core.rgb(255, 0, 0));
+    indicator.parameters:addColor("Neutral", "Neutral Color", "", core.rgb(0, 0, 255));	
+	
+    indicator.parameters:addInteger("width", "Line Width", "Width of the line", 2, 1, 5)
+    indicator.parameters:addInteger("style", "Style", "Style of the oscillator line", core.LINE_SOLID)
+    indicator.parameters:setFlag("style", core.FLAG_LINE_STYLE);
+    indicator.parameters:addGroup("Levels");	
+    indicator.parameters:addDouble("Level1", "1. Level","", 100);
+	indicator.parameters:addDouble("Level2", "2. Level","", 0);
+	indicator.parameters:addDouble("Level3", "3. Level","", -100); 
+	indicator.parameters:addColor("level_overboughtsold_color", "1. Line Color","", core.rgb(128, 128, 128));
+    indicator.parameters:addInteger("level_overboughtsold_width","Line width","", 1, 1, 5);
+    indicator.parameters:addInteger("level_overboughtsold_style", "Line Style","", core.LINE_SOLID);
+    indicator.parameters:setFlag("level_overboughtsold_style", core.FLAG_LEVEL_STYLE);		
+	
+	
+end
+local pauto =  "(%a%a%a)/(%a%a%a)";
+local Instrument;
+local Count;
+local SourceData={};
+local List={}; 
+local Point={};  
+local Index={}; 
+local loading={};
+local Indicator={};
+-- Routine
+function Prepare(nameOnly)
+    source = instance.source;
+    first = source:first();
+    host = core.host;
+    dayoffset = host:execute("getTradingDayOffset");
+    weekoffset = host:execute("getTradingWeekOffset");
+    Instrument=instance.parameters.Instrument;
+	Period=instance.parameters.Period;
+	Deviations=instance.parameters.Deviations;
+	Average=instance.parameters.Average;
+	Revers=instance.parameters.Revers;
+
+    local name = profile:id() .. "(".. Instrument .. ")";
+    instance:name(name);
+	if nameOnly then
+		return;
+	end
+	
+	
+	local list, count,point= getInstrumentList()
+	
+	
+	Count=0;
+	for i= 1, count, 1 do	
+		crncy1, crncy2 = string.match(list[i], pauto);
+		
+		if crncy1== Instrument or  crncy2==Instrument then
+		    Count=Count+1;
+		
+			if crncy1== Instrument then
+			Index[Count]= 1;
+			else
+			Index[Count]= -1;
+			end
+			Point[Count]=point[i];  
+			List[Count]=list[i];   
+		end
+   end
+   
+   for i= 1, Count , 1 do  
+   
+   SourceData[i] = core.host:execute("getSyncHistory",List[i], source:barSize(), source:isBid(), Period, 2000 +i, 1000+i);
+   loading[i]=true;
+
+	Indicator[i] = core.indicators:create("BB", SourceData[i].close, Period,Deviations);	 
+   end
+   
+   
+    Price = instance:addStream("Price", core.Line, name, "Price", instance.parameters.Neutral, 0)
+    Price:setWidth(instance.parameters.width)
+    Price:setStyle(instance.parameters.style)
+    Price:setPrecision(math.max(2, instance.source:getPrecision()));	
+
+    strength = instance:addInternalStream(0, 0);
+	Strength= instance:addStream("Strength", core.Bar, name, "Strength", instance.parameters.Neutral, 0) 
+    Strength:setPrecision(math.max(2, instance.source:getPrecision()));	
+   
+ 
+end
+
+
+function getInstrumentList()
+    local list={};
+	local point={};
+	
+    local count = 0;	
+    local row, enum;	
+	
+    enum = core.host:findTable("offers"):enumerator();
+    row = enum:next();
+    while row ~= nil do
+	    
+        count = count + 1;
+        list[count] = row.Instrument;
+		point[count] = row.PointSize;
+		 
+        row = enum:next();
+    end
+	
+	 
+    return list, count,point;
+end
+
+-- Indicator calculation routine
+ 
+function Update(period )
+
+ 
+   
+	
+    if period  < source:first()	
+	or Count==0 	
+	then
+    return;		
+    end	
+	p={};
+     
+	local Flag=false;
+    for i= 1, Count , 1 do 
+	    p[i]= Initialization(period,i)		
+	
+		if loading[i] or p[i]==false  then		
+		Flag=true;
+		end
+	end
+		
+	
+	if Flag then
+	return;
+	end	
+	
+	
+    Price[period]=0;
+	strength[period]=0;
+	
+    for i= 1, Count , 1 do 			
+    Indicator[i]:update(mode); 
+	end
+
+	
+    for i= 1, Count , 1 do 		
+
+	        if p[i]> 0 and p[i] ~= false and  Indicator[i].BL:hasData(p[i]) then
+				if Index[i]==1 then
+				Price[period]= Price[period]+ (SourceData[i].close[p[i]]-Indicator[i].BL[p[i]]) / ((Indicator[i].TL[p[i]]- Indicator[i].BL[p[i]])/100)	
+					if SourceData[i].close[p[i]] > SourceData[i].open[p[i]] then
+					strength[period]=strength[period]+1;	
+					else
+					strength[period]=strength[period]-1;
+					end				
+				else
+				Price[period]= Price[period]+ (Indicator[i].TL[p[i]]-SourceData[i].close[p[i]]) / ((Indicator[i].TL[p[i]]- Indicator[i].BL[p[i]])/100)	
+					if SourceData[i].close[p[i]] > SourceData[i].open[p[i]] then
+					strength[period]=strength[period]-1;	
+					else
+					strength[period]=strength[period]+1;		
+					end		
+				
+				end
+				
+				
+				
+			end
+    end
+      
+    Price[period]=Price[period]/Count;			
+
+   
+	
+	if Revers then
+	Price[period] = -((Price[period] / 50 - 1) * 100);
+	else
+    Price[period]=    (Price[period] / 50 - 1) * 100		
+	end
+ 
+	
+	if Average then
+	strength[period]=(strength[period] /Count)  * 100
+			if period > Period then
+			Strength[period]= mathex.avg(strength, period-Period+1, period)
+			end
+    else
+	
+		if Revers then
+	    Strength[period]=-(strength[period] /Count)  * 100		
+		else
+	    Strength[period]=(strength[period] /Count)  * 100
+		end
+	end   
+	
+	if Strength[period]> 0 then
+	Strength:setColor(period, instance.parameters.Up);
+	else
+	Strength:setColor(period, instance.parameters.Down)	
+	end
+end
+
+
+
+
+
+function   Initialization(period,id)
+
+    local Candle;
+    Candle = core.getcandle(source:barSize(), source:date(period), dayoffset, weekoffset);
+  
+    if loading[id] or SourceData[id]:size() == 0  then
+        return false;
+    end
+
+    
+    if period < source:first() then
+        return false;
+    end
+
+    local P = core.findDate(SourceData[id], Candle, false);
+	 
+
+    -- candle is not found
+    if P < 0    then
+        return false;
+	else return P;	
+    end
+			
+end	
+
+
+
+
+-- the function is called when the async operation is finished
+function AsyncOperationFinished(cookie)
+     local j;	 
+	local Flag = false;	
+	local Number=0;	
+	
+	
+	
+    for j = 1, Count, 1 do
+		
+			  if cookie == (1000+j) then
+			  loading[j] = true;
+		      elseif  cookie == (2000+j) then
+			  loading[j] = false;  
+			  instance:updateFrom(0);		 
+              end
+			  
+		if loading[j] then
+		Number=Number+1;
+		Flag=true;
+		end	 
+
+		  
+		if Flag then
+		core.host:execute ("setStatus", " Loading ".. (Count-Number) .."/" .. Count);
+		else
+		core.host:execute ("setStatus", " Loaded ".. (Count-Number) .."/" .. Count);
+		end
+			  
+	end    
+   
+        
+		return core.ASYNC_REDRAW ;
+end
+-- Available @  https://fxcodebase.com/code/viewtopic.php?f=17&t=76179
+
+-- +------------------------------------------------------------------------------------------------+
+-- |                                                              Copyright 2025, Gehtsoft USA LLC  | 
+-- |                                                                         http://fxcodebase.com  |
+-- |                                                               Paypal:  https://goo.gl/9Rj74e   |
+-- +------------------------------------------------------------------------------------------------+
+-- |                                                                   Developed by : Mario Jemic   |                    
+-- |                                                                       mario.jemic@gmail.com    |
+-- |                                                                       https://mario-jemic.com/ | 
+-- |                                                             Patreon :  http://tiny.cc/1ybwxz   |   
+-- |                                                      Buy Me a Coffee:  http://tiny.cc/bj7vxz   |  
+-- +-----------------+----------------------+-------------------------------------------------------+
+-- |  Cryptocurrency |  Network             |  Address                                              |
+-- +-----------------+----------------------+-------------------------------------------------------+
+-- |  BTC            |  BTC                 |  16F5k43RXibTmna4np8bPVgmXM1CzjXFJJ                   | 
+-- |  SOL            |  SOL                 |  3nh5rpUKopcYLNU4zGCdUFAkM3iRQq8VVUmuzVG6VDf2         | 
+-- |  ETH            |  ERC20               |  0xe53aab6bc468a963a02d1319660ee60cf80fc8e7           |
+-- |  BNB            |  BEP20               |  0xe53aab6bc468a963a02d1319660ee60cf80fc8e7           | 
+-- |  USDT           |  BEP20               |  0xe53aab6bc468a963a02d1319660ee60cf80fc8e7           | 
+-- |  XRP            |  BEP20               |  0xe53aab6bc468a963a02d1319660ee60cf80fc8e7           | 
+-- +-----------------+----------------------+-------------------------------------------------------+ 

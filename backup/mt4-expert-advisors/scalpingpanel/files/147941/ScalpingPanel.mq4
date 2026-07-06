@@ -1,0 +1,4767 @@
+// More information about this indicator can be found at:
+// https://fxcodebase.com/code/viewtopic.php?f=38&p=147962
+
+//+------------------------------------------------------------------------------------------------+
+//|                                                            Copyright © 2022, Gehtsoft USA LLC  | 
+//|                                                                         http://fxcodebase.com  |
+//+------------------------------------------------------------------------------------------------+
+//|                                                                   Developed by : Mario Jemic   |                    
+//|                                                                       mario.jemic@gmail.com    |
+//|                                                        https://AppliedMachineLearning.systems  |
+//|                                                                       https://mario-jemic.com/ |
+//+------------------------------------------------------------------------------------------------+
+
+//+------------------------------------------------------------------------------------------------+
+//|                                           Our work would not be possible without your support. |
+//+------------------------------------------------------------------------------------------------+
+//|                                                               Paypal: https://goo.gl/9Rj74e    |
+//|                                                             Patreon :  https://goo.gl/GdXWeN   |  
+//+------------------------------------------------------------------------------------------------+
+
+//+------------------------------------------------------------------------------------------------+
+//|BitCoin                    : 15VCJTLaz12Amr7adHSBtL9v8XomURo9RF                                 |  
+//|Ethereum                   : 0x8C110cD61538fb6d7A2B47858F0c0AaBd663068D                         |  
+//|SOL Address                : 4tJXw7JfwF3KUPSzrTm1CoVq6Xu4hYd1vLk3VF2mjMYh                       |
+//|Cardano/ADA                : addr1v868jza77crzdc87khzpppecmhmrg224qyumud6utqf6f4s99fvqv         |  
+//|Dogecoin Address           : DBGXP1Nc18ZusSRNsj49oMEYFQgAvgBVA8                                 |
+//|SHIB Address               : 0x1817D9ebb000025609Bf5D61E269C64DC84DA735                         |              
+//|Binance(ERC20 & BSC only)  : 0xe84751063de8ade7c5fbff5e73f6502f02af4e2c                         | 
+//|BitCoin Cash               : 1BEtS465S3Su438Kc58h2sqvVvHK9Mijtg                                 | 
+//|LiteCoin                   : LLU8PSY2vsq7B9kRELLZQcKf5nJQrdeqwD                                 |  
+//+------------------------------------------------------------------------------------------------+
+
+
+
+
+#property copyright "Copyright © 2022, Gehtsoft USA LLC"
+#property link      "http://fxcodebase.com"
+#property version "1.0"
+ 
+#property strict
+// Includes
+#include <Controls\Button.mqh>
+#include <Controls\Dialog.mqh>
+#include <Controls\Edit.mqh>
+#include <Controls\Label.mqh>
+// #include "Program.mqh"
+int i_reason;
+
+interface iActions
+{
+  bool doAction();
+};
+
+#define GUI_ON
+
+
+#ifdef GUI_ON
+
+// clang-format off
+class GUI : public CAppDialog
+{
+ int _magic;
+ int _high, _width;
+ int _x, _y;
+ int _gapV, _gapH;
+ 
+ iActions* button1Action;
+ iActions* button2Action; 
+ iActions* button3Action; 
+ iActions* button4Action; 
+ iActions* button5Action; 
+ iActions* button6Action; 
+ iActions* button7Action; 
+ iActions* button8Action; 
+ iActions* button9Action; 
+ iActions* button10Action; 
+ iActions* button11Action; 
+ iActions* button12Action; 
+ iActions* button13Action; 
+ iActions* button14Action; 
+ iActions* button15Action; 
+ iActions* button16Action; 
+ iActions* button17Action; 
+ 
+ // CEdit   edit1;
+
+ public: 
+  GUI(int magic=0)
+	{
+    _high  = 40;
+    _width = 100;
+    _x     = 10;
+    _y     = 10;
+    _gapV  = 2;
+    _gapH  = 2;
+		_magic = magic;		
+  }
+  ~GUI() 
+	{ 
+		delete button1Action;
+		delete button2Action;
+		delete button3Action;
+		delete button4Action;
+		delete button5Action;
+		delete button6Action;
+		delete button7Action;
+		delete button8Action;
+		delete button9Action;
+		delete button10Action;
+		delete button11Action;
+		delete button12Action;
+		delete button13Action;
+		delete button14Action;
+		delete button15Action;
+		delete button16Action;
+		delete button17Action;
+	}
+
+	// CLabel  lb1, lb2, lb3, lb4, lb5, lb6, lb7, lb8, lb9;
+	CButton bt1, bt2, bt3, bt4, bt5, bt6, bt7, bt8, bt9, bt10, bt11, bt12, bt13, bt14, bt15,bt16, bt17;
+
+	void setButton1Action(iActions *action)  { button1Action  = action; }
+	void setButton2Action(iActions *action)  { button2Action  = action; }
+	void setButton3Action(iActions *action)  { button3Action  = action; }
+	void setButton4Action(iActions *action)  { button4Action  = action; }
+	void setButton5Action(iActions *action)  { button5Action  = action; }
+	void setButton6Action(iActions *action)  { button6Action  = action; }
+	void setButton7Action(iActions *action)  { button7Action  = action; }
+	void setButton8Action(iActions *action)  { button8Action  = action; }
+	void setButton9Action(iActions *action)  { button9Action  = action; }
+	void setButton10Action(iActions *action) { button10Action = action; }
+	void setButton11Action(iActions *action) { button11Action = action; }
+	void setButton12Action(iActions *action) { button12Action = action; }
+	void setButton13Action(iActions *action) { button13Action = action; }
+	void setButton14Action(iActions *action) { button14Action = action; }
+	void setButton15Action(iActions *action) { button15Action = action; }
+	void setButton16Action(iActions *action) { button16Action = action; }
+	void setButton17Action(iActions *action) { button17Action = action; }
+	
+	// Create Pannel:
+	// ------------------------------------------------------------------
+	int Row(int r) { return _x + (r * _high)+ r * _gapV; }  
+	int Col(int c) { return _y + (c * _width)+ c * _gapH; }
+
+	bool Create(const long chart, const string name, const int subwin, const int x1, const int y1, const int x2, const int y2)
+  {
+    if (!CAppDialog::Create(chart, name, subwin, x1, y1, x2, y2)) return false;
+    if (!Create_button("SELL Stop Prev",            Col(0), Row(0), _high, _width, bt1)) return false; 
+    if (!Create_button("Cancel SELL Prev",          Col(0), Row(1), _high, _width, bt2)) return false; 
+    if (!Create_button("SELL Stop Current",         Col(0), Row(2), _high, _width, bt3)) return false; 
+    if (!Create_button("Cancel SELL Current",       Col(0), Row(3), _high, _width, bt4)) return false; 
+    if (!Create_button("SELL Stop",                 Col(0), Row(4), _high, _width, bt5)) return false; 
+    if (!Create_button("Cancel SELL",               Col(0), Row(5), _high, _width, bt6)) return false; 
+    if (!Create_button("Sell Market",               Col(0), Row(6), _high, _width, bt16)) return false; 
+    if (!Create_button("Close losers",              Col(0), Row(7), _high, _width, bt7)) return false; 
+    if (!Create_button("BUY Stop Prev",             Col(1), Row(0), _high, _width, bt8)) return false; 
+    if (!Create_button("Cancel BUY Prev",           Col(1), Row(1), _high, _width, bt9)) return false; 
+    if (!Create_button("BUY Stop Current",          Col(1), Row(2), _high, _width, bt10)) return false; 
+    if (!Create_button("Cancel BUY Current",        Col(1), Row(3), _high, _width, bt11)) return false; 
+    if (!Create_button("BUY Stop",                  Col(1), Row(4), _high, _width, bt12)) return false; 
+    if (!Create_button("Cancel BUY",                Col(1), Row(5), _high, _width, bt13)) return false; 
+    if (!Create_button("Buy Market",                Col(1), Row(6), _high, _width, bt17)) return false; 
+    if (!Create_button("Close Winners",             Col(1), Row(7), _high, _width, bt14)) return false; 
+    if (!Create_button("Close All Orders",          Col(0), Row(8), _high, _width*2+_gapH, bt15)) return false; 
+
+    return true;
+  }
+
+	virtual bool OnEvent(const int id, const long& lparam, const double& dparam, const string& sparam);
+
+	void HoverEvents(const int id, const long& lparam, const double& dparam, const string& sparam)
+	{
+		if(bt1.IsActive()) bt1.ColorBackground(RoyalBlue); else bt1.ColorBackground(CONTROLS_BUTTON_COLOR_BG);
+		if(bt2.IsActive()) bt2.ColorBackground(RoyalBlue); else bt2.ColorBackground(CONTROLS_BUTTON_COLOR_BG);
+		if(bt3.IsActive()) bt3.ColorBackground(RoyalBlue); else bt3.ColorBackground(CONTROLS_BUTTON_COLOR_BG);
+		if(bt4.IsActive()) bt4.ColorBackground(RoyalBlue); else bt4.ColorBackground(CONTROLS_BUTTON_COLOR_BG);
+		if(bt5.IsActive()) bt5.ColorBackground(RoyalBlue); else bt5.ColorBackground(CONTROLS_BUTTON_COLOR_BG);
+		if(bt6.IsActive()) bt6.ColorBackground(RoyalBlue); else bt6.ColorBackground(CONTROLS_BUTTON_COLOR_BG);
+		if(bt7.IsActive()) bt7.ColorBackground(RoyalBlue); else bt7.ColorBackground(CONTROLS_BUTTON_COLOR_BG);
+		if(bt8.IsActive()) bt8.ColorBackground(RoyalBlue); else bt8.ColorBackground(CONTROLS_BUTTON_COLOR_BG);
+		if(bt9.IsActive()) bt9.ColorBackground(RoyalBlue); else bt9.ColorBackground(CONTROLS_BUTTON_COLOR_BG);
+		if(bt10.IsActive()) bt10.ColorBackground(RoyalBlue); else bt10.ColorBackground(CONTROLS_BUTTON_COLOR_BG);
+		if(bt11.IsActive()) bt11.ColorBackground(RoyalBlue); else bt11.ColorBackground(CONTROLS_BUTTON_COLOR_BG);
+		if(bt12.IsActive()) bt12.ColorBackground(RoyalBlue); else bt12.ColorBackground(CONTROLS_BUTTON_COLOR_BG);
+		if(bt13.IsActive()) bt13.ColorBackground(RoyalBlue); else bt13.ColorBackground(CONTROLS_BUTTON_COLOR_BG);
+		if(bt14.IsActive()) bt14.ColorBackground(RoyalBlue); else bt14.ColorBackground(CONTROLS_BUTTON_COLOR_BG);
+		if(bt15.IsActive()) bt15.ColorBackground(RoyalBlue); else bt15.ColorBackground(CONTROLS_BUTTON_COLOR_BG);
+		if(bt16.IsActive()) bt16.ColorBackground(RoyalBlue); else bt16.ColorBackground(CONTROLS_BUTTON_COLOR_BG);
+		if(bt17.IsActive()) bt17.ColorBackground(RoyalBlue); else bt17.ColorBackground(CONTROLS_BUTTON_COLOR_BG);
+	}
+	
+ protected:
+  // void OnEndEdit_edit1(){;}
+  void OnClick_button1(){ button1Action.doAction();}
+  void OnClick_button2(){ button2Action.doAction();}
+  void OnClick_button3(){ button3Action.doAction();}
+  void OnClick_button4(){ button4Action.doAction();}
+  void OnClick_button5(){ button5Action.doAction();}
+  void OnClick_button6(){ button6Action.doAction();}
+  void OnClick_button7(){ button7Action.doAction();}
+  void OnClick_button8(){ button8Action.doAction();}
+  void OnClick_button9(){ button9Action.doAction();}
+  void OnClick_button10(){ button10Action.doAction();}
+  void OnClick_button11(){ button11Action.doAction();}
+  void OnClick_button12(){ button12Action.doAction();}
+  void OnClick_button13(){ button13Action.doAction();}
+  void OnClick_button14(){ button14Action.doAction();}
+  void OnClick_button15(){ button15Action.doAction();}
+  void OnClick_button16(){ button16Action.doAction();}
+  void OnClick_button17(){ button17Action.doAction();}
+
+	bool Create_label(string name, int x1, int y1, int high, int width, CLabel &label)
+	{
+   int x2 = x1+width;
+   int y2 = y1+high;
+
+   label.Create(m_chart_id, name, 0, x1, y1, x2, y2);
+   label.Text(name);
+   label.Font("Calibri");
+   label.Color(C'121, 125, 127');
+   label.FontSize(9);
+   Add(label);
+   return true;
+	}
+	bool Create_button(string name, const int x1, const int y1, const int high, const int width, CButton &bt)
+	{
+	 int x2 = x1+width;
+   int y2 = y1+high;
+
+	 bt.Create(m_chart_id, name, m_subwin, x1, y1, x2, y2);
+   bt.Text(name);
+   bt.Font("Calibri");
+   bt.FontSize(8);
+
+   Add(bt);
+   return true;
+	}
+
+  //  bool Create_edit1();
+
+};
+
+//Mapa de eventos (MACRO substituciones)
+EVENT_MAP_BEGIN(GUI)
+// ON_EVENT(ON_END_EDIT, edit1, OnEndEdit_edit1)
+ON_EVENT(ON_CLICK, bt1, OnClick_button1)
+ON_EVENT(ON_CLICK, bt2, OnClick_button2)
+ON_EVENT(ON_CLICK, bt3, OnClick_button3)
+ON_EVENT(ON_CLICK, bt4, OnClick_button4)
+ON_EVENT(ON_CLICK, bt5, OnClick_button5)
+ON_EVENT(ON_CLICK, bt6, OnClick_button6)
+ON_EVENT(ON_CLICK, bt7, OnClick_button7)
+ON_EVENT(ON_CLICK, bt8, OnClick_button8)
+ON_EVENT(ON_CLICK, bt9, OnClick_button9)
+ON_EVENT(ON_CLICK, bt10, OnClick_button10)
+ON_EVENT(ON_CLICK, bt11, OnClick_button11)
+ON_EVENT(ON_CLICK, bt12, OnClick_button12)
+ON_EVENT(ON_CLICK, bt13, OnClick_button13)
+ON_EVENT(ON_CLICK, bt14, OnClick_button14)
+ON_EVENT(ON_CLICK, bt15, OnClick_button15)
+ON_EVENT(ON_CLICK, bt16, OnClick_button16)
+ON_EVENT(ON_CLICK, bt17, OnClick_button17)
+EVENT_MAP_END(CAppDialog)
+
+GUI gui;
+
+#endif 
+
+//+------------------------------------------------------------------+
+string file_custom_indicator = "";
+
+
+// NOTE: defines
+// ------------------------------------------------------------------
+// #define NEWS_FILTER
+// #define DAILY_LIMITS
+#define PENDING_ENTRYS
+#define SPREAD_FILTER
+// #define CONTROL_CUSTOM_INDICATOR_FILE
+// #define LICENSE_CONTROL_ON
+// #define TIMER_FULL  // full setup sessions
+// #define TIMER_MINI  // one session at day
+#define TIMER_OFF   // don't show timer
+// #define GRID_ON
+// #define NOTIFICATIONS_ON
+// #define CLOSE_ALL_ON
+// #define PARTIAL_CLOSE_ON
+#define BREAKEVEN_ON
+#define TRAILING_STOP_ON
+// #define MAX_TRADES_AT_SAME_TIME
+
+// ------------------------------------------------------------------
+enum ModeLevels {
+  FixPips,            // Fix Pips
+  byMoney,            // Money
+  PipsFromOpenCandle  // Pips from Candle
+};
+enum TSLMode {
+  byPips,  // By Pips
+  byMA     // By Moving Average
+};
+enum ModeCalcLots {
+  FixLots,         // Fix Lots
+  Money,           // by Money
+  AccountPercent,  // by Account Percent
+};
+enum CloseAllMode {
+  CloseByMoney,           // by Money
+  CloseByAccountPercent,  // by Account Percent
+  CloseByPips             // By Pips
+};
+enum enumDays { sunday,
+                monday,
+                tuesday,
+                wednesday,
+                thursday,
+                friday,
+                saturday,
+                EA_OFF };
+enum ModeEntry { Market,
+                 PendingStop,
+                 PendingLimit };
+// ------------------------------------------------------------------
+#ifdef PENDING_ENTRYS
+input string    Tpom              = "== Pending or Market Setup ==";  // == Pending or Market Setup ==
+ModeEntry modeEntry         = Market;                           // Mode Entry:
+input double    uEntryDistance    = 100;                               // Points distance for pending orders:
+input double uDistance = 150; // Points for Sell Stop / Buy Stop:
+bool      uDeletePendingsOn = true;                             // Delete pendings when close all:
+#else
+ModeEntry    modeEntry               = Market;                     // Mode Entry:
+double       uEntryDistance          = 0;                          // Pips distance for pending orders:
+#endif
+
+input string T0 = "== Trade Setup ==";  // == Trade Setup ==
+int uMinSize = 20;  // Minimum Size Candle Pattern (points):
+#ifdef MAX_TRADES_AT_SAME_TIME
+input int uMaxTrades = 1;  // Max Trades At Same Time:
+#endif
+bool         uTradeReverse  = false;              // Trade Reverse Signal:
+input int          magico         = 22648;              // Magic Number:
+input ModeCalcLots modeCalcLots   = FixLots;            // Mode to Calc Lots:
+input double       userLots       = 0.01;               // Setup Lots by "Fix Lots":
+input double       userMoney      = 10;                 // Setup Lots by "Money":
+input double       userBalancePer = 0.1;                // Setup Lots by "Account Percent":
+input string       T01            = "- Take Profit -";  // Setup Hard Take Profit
+input bool         takeProfitOn   = true;               // Take Profit On:
+input ModeLevels   modeTP         = FixPips;            // Mode Take Profit:
+input int          userTPpips     = 20;                 // Pips TP
+input double       userTPmoney    = 15;                 // Money TP
+input string       T02            = "- Stop Loss -";    // Setup hard Stop Loss
+input bool         stopLossOn     = true;               // Stop Loss On:
+input ModeLevels   modeSL         = FixPips;            // Mode Stop Loss:
+input int          userSLpips     = 20;                 // Pips SL
+input double       userSLmoney    = 15;                 // Money SL
+#ifdef SPREAD_FILTER
+input bool   SpreadFilterOn = true;  // Spread Filter On:
+input double uSpreadMax     = 100;   // Max Spread points:
+#endif
+
+#ifdef DAILY_LIMITS
+enum DayLimitsMode {
+  LimitsByAmount,         // by Amount
+  LimitsByAccountPercent  // by Account %
+};
+input string        Tlimits            = "== Daily Limits Setup ==";  // == Daily Limits Setup ==
+input bool          uDailyProfitOn     = false;                       // Control Daily Profit On:
+input DayLimitsMode limitProfitMode    = LimitsByAmount;              // Mode to control daily profit:
+input double        uDayLimitProfit    = 2000;                        // Max Daily Profit ($ or %):
+input bool          uDailyLossOn       = false;                       // Control Daily Loss On:
+input DayLimitsMode limitLossMode      = LimitsByAmount;              // Mode to control daily loss:
+input double        uDayLimitLoss      = -1000;                       // Max Daily Loss ($ or %):
+input bool          uConsiderFloatting = false;                       // Consider Floating:
+#else
+enum DayLimitsMode {
+  LimitsByAmount,         // by Amount
+  LimitsByAccountPercent  // by Account %
+};
+string        Tlimits            = "== Daily Limits Setup ==";  // == Daily Limits Setup ==
+bool          uDailyProfitOn     = false;                       // Control Daily Profit On:
+DayLimitsMode limitProfitMode    = LimitsByAmount;              // Mode to control daily profit:
+double        uDayLimitProfit    = 2000;                        // Max Daily Profit ($ or %):
+bool          uDailyLossOn       = false;                       // Control Daily Loss On:
+DayLimitsMode limitLossMode      = LimitsByAmount;              // Mode to control daily loss:
+double        uDayLimitLoss      = -1000;                       // Max Daily Loss ($ or %):
+bool          uConsiderFloatting = false;                       // Consider Floating:
+#endif
+
+
+
+#ifdef CLOSE_ALL_ON
+input string       TtpOptions              = "== Close All Options ==";  // == Close All Options ==
+input bool         closeAllControlON       = false;                      // Close All Control ON:
+input CloseAllMode closeBy                 = CloseByMoney;               // Close All Mode:
+input double       closeAllMoney           = 100;                        // Close by Money $:
+input double       closeAllMoneyLoss       = -100;                       // Close by Money Lossing $:
+input double       accountPerWin           = 1;                          // Account Percent Win:
+input double       accountPerLos           = -1;                         // Account Percent Loss:
+input double       closeByPipsWin          = 10;                         // Close Pips Win:
+input double       closeByPipsLoss         = 10;                         // Close Pips Loss:
+input bool         closeAllInOpositeSignal = false;                      // CLose All In Oposite Signal
+#else
+string       TtpOptions              = "== Close All Options ==";  // == Close All Options ==
+bool         closeAllControlON       = false;                      // Close All Control ON:
+CloseAllMode closeBy                 = CloseByMoney;               // Close All Mode:
+double       closeAllMoney           = 100;                        // Close by Money $:
+double       closeAllMoneyLoss       = -100;                       // Close by Money Lossing $:
+double       accountPerWin           = 1;                          // Account Percent Win:
+double       accountPerLos           = -1;                         // Account Percent Loss:
+double       closeByPipsWin          = 10;                         // Close Pips Win:
+double       closeByPipsLoss         = 10;                         // Close Pips Loss:
+bool         closeAllInOpositeSignal = false;                      // CLose All In Oposite Signal
+#endif
+
+#ifdef PARTIAL_CLOSE_ON
+input string Tpc                     = "== Partial Close ==";  // == Partial Close ==
+input bool   partialCloseOn          = false;                  // Use Partial Close ?
+input double userPartialClosePercent = 50;                     // Partial Close Percent:
+input double userPartialClosePips    = 20;                     // Partial Close Pips:
+input int    uQntPartials            = 1;                      // Partials to take:
+#else
+string       Tpc                     = "== Partial Close ==";      // == Partial Close ==
+bool         partialCloseOn          = false;                      // Use Partial Close ?
+double       userPartialClosePercent = 50;                         // Partial Close Percent:
+double       userPartialClosePips    = 20;                         // Partial Close Pips:
+int          uQntPartials            = 1;                          // Partials to take:
+#endif
+#ifdef BREAKEVEN_ON
+input string Tbk         = "== Breakeven Setup ==";  // == Breakeven Setup ==
+input bool   breakevenOn = false;                    // Use Breakeven?
+input double userBkvPips = 3;                        // Breakeven Pips
+#else
+string       Tbk                     = "== Breakeven Setup ==";    // == Breakeven Setup ==
+bool         breakevenOn             = false;                      // Use Breakeven?
+double       userBkvPips             = 3;                          // Breakeven Pips
+#endif
+#ifdef TRAILING_STOP_ON
+input string tTailingStop       = "== TailingStop Setup ==";  // == TailingStop Setup ==
+input bool   TslON              = false;                      // TSL ON:
+TSLMode      userTslMode        = byPips;                     // TSL Mode:
+input int    userTslInitialStep = 1;                          // TSL Initial Step:
+input int    userTslStep        = 1;                          // TSL Step:
+input int    userTslDistance    = 20;                         // TSL Distance:
+#else
+string       tTailingStop            = "== TailingStop Setup ==";  // == TailingStop Setup ==
+bool         TslON                   = false;                      // TSL ON:
+TSLMode      userTslMode             = byPips;                     // TSL Mode:
+int          userTslInitialStep      = 1;                          // TSL Initial Step:
+int          userTslStep             = 1;                          // TSL Step:
+int          userTslDistance         = 20;                         // TSL Distance:
+#endif
+#ifdef GRID_ON
+input string tGrid               = "== Grid Setup ==";  // == Grid Setup ==
+input bool   GridON              = false;               // Use Grid:
+input int    GridUser_maxCount   = 5;                   // Max attempts:
+input double GridUser_maxLot     = 10;                  // Max lot value:
+input double GridUser_multiplier = 1.5;                 // Multiplier:
+input int    GridUser_gap        = 30;                  // Gap betwen orders (pips):
+input bool   closeGridOn         = true;                // Use Close Grid?
+input double closeGridTP         = 100;                 // Take Profit Grid $
+input double closeGridSL         = -100;                // Stop Loss Grid -$
+#else
+string       tGrid                   = "== Grid Setup ==";         // == Grid Setup ==
+bool         GridON                  = false;                      // Use Grid:
+int          GridUser_maxCount       = 5;                          // Max attempts:
+double       GridUser_maxLot         = 10;                         // Max lot value:
+double       GridUser_multiplier     = 1.5;                        // Multiplier:
+int          GridUser_gap            = 30;                         // Gap betwen orders (pips):
+bool         closeGridOn             = true;                       // Use Close Grid?
+double       closeGridTP             = 100;                        // Take Profit Grid $
+double       closeGridSL             = -100;                       // Stop Loss Grid -$
+#endif
+#ifdef TIMER_FULL
+input string   T1         = "== Trading Sessions  ==";  // Trading Sessions
+input double   uTimeZone  = -6;                         // Set your GMT zone:
+input bool     day1_On    = true;                       // Session On:
+input enumDays day1       = monday;                     // Day
+input string   day1_Start = "00:00:00";                 // Time Start GMT
+input string   day1_End   = "23:59:59";                 // Time End GMT
+input bool     day2_On    = true;                       // Session On:
+input enumDays day2       = tuesday;                    // Day
+input string   day2_Start = "00:00:00";                 // Time Start GMT
+input string   day2_End   = "23:59:59";                 // Time End GMT
+input bool     day3_On    = true;                       // Session On:
+input enumDays day3       = wednesday;                  // Day
+input string   day3_Start = "00:00:00";                 // Time Start GMT
+input string   day3_End   = "23:59:59";                 // Time End GMT
+input bool     day4_On    = true;                       // Session On:
+input enumDays day4       = thursday;                   // Day
+input string   day4_Start = "00:00:00";                 // Time Start GMT
+input string   day4_End   = "23:59:59";                 // Time End GMT
+input bool     day5_On    = true;                       // Session On:
+input enumDays day5       = friday;                     // Day
+input string   day5_Start = "00:00:00";                 // Time Start GMT
+input string   day5_End   = "23:59:59";                 // Time End GMT
+#endif
+#ifdef TIMER_MINI
+input string T1        = "== Trading Sessions  ==";  // Trading Sessions
+input string timeStart = "00:00:00";                 // Time Start GMT
+input string timeEnd   = "23:59:59";                 // Time End GMT
+#endif
+#ifdef TIMER_OFF
+string T1        = "== Trading Sessions  ==";  // Trading Sessions
+string timeStart = "00:00:00";                 // Time Start GMT
+string timeEnd   = "23:59:59";                 // Time End GMT
+#endif
+#ifdef NOTIFICATIONS_ON
+input string TZ                    = "== Notifications ==";  // Notifications
+input bool   notifications         = false;                  // Notifications On
+input bool   desktop_notifications = false;                  // Desktop MT4 Notifications
+input bool   email_notifications   = false;                  // Email Notifications
+input bool   push_notifications    = false;                  // Push Mobile Notifications
+#else
+string       TZ                      = "== Notifications ==";      // Notifications
+bool         notifications           = false;                      // Notifications On
+bool         desktop_notifications   = false;                      // Desktop MT4 Notifications
+bool         email_notifications     = false;                      // Email Notifications
+bool         push_notifications      = false;                      // Push Mobile Notifications
+#endif
+
+string             Iema           = "== Moving Average Setup ==";  // == Moving Average Setup ==
+int                maPeriod       = 50;                            // Period
+int                      maShift        = 0;                             // Ma Shift
+ENUM_MA_METHOD     maMethod       = MODE_EMA;                      // Method
+ENUM_APPLIED_PRICE maAppliedPrice = PRICE_CLOSE;                   // Applied Price
+
+string TFilters        = "== Filters Orders ==";  // == Filters Orders ==
+bool   filterSymbolsOn = true;                    // Use symbols filter?
+string SymbolsList     = "GBPUSD,EURUSD";         // Symbols (separate by comma ","):
+bool   filterMagicsOn  = true;                    // Use magic number filter?
+string MagicsList      = "2022";                  // Magics numbers (separate by comma ","):
+
+#ifdef NEWS_FILTER
+input string TNewsFilter     = "== News ==";  // == News ==
+input bool   newsOn          = false; // News Filter On:
+int input    Turn_OFF_Before = 30;            // Turn OFF before (min.)
+int input    Turn_ON_After   = 30;            // Turn ON after (min.)
+
+enum SourceNews { Manual,
+                  Auto,
+                  None };
+
+SourceNews News_Fuente = Auto;  // News Source:
+
+int          AfterNewsStop  = 5;                                  // Indent after News, minuts
+int          BeforeNewsStop = 5;                                  // Indent before News, minut
+input bool   NewsLight      = false;                              // Enable light news
+input bool   NewsMedium     = false;                              // Enable medium news
+input bool   NewsHard       = true;                               // Enable hard news
+input int    offset         = 0;                                  // Your Time Zone, GMT (for news)
+input string NewsSymb       = "USD,EUR,GBP,CHF,CAD,AUD,NZD,JPY";  // Currency to display the news (empty - only the current currencies)
+input bool   DrawLines      = true;                               // Draw lines on the chart
+input bool   Next           = false;                              // Draw only the future of news line
+bool         Signal         = true;                               // Signals on the upcoming news
+
+color highc   = clrRed;      // Colour important news
+color mediumc = clrOrange;   // Colour medium news
+color lowc    = clrSkyBlue;  // The color of weak news
+int   Style   = 2;           // Line style
+int   Upd     = 86400;       // Period news updates in seconds
+
+bool Vhigh     = false;
+bool Vmedium   = false;
+bool Vlow      = false;
+int  MinBefore = 10;  // MINUTOS DE AVISO ANTES DE UNA NOTICIA
+int  MinAfter  = 10;  // MINUTOS DE AVISO DESPUES DE UNA NOTICIA
+
+int      NomNews = 0;
+string   NewsArr[4][1000];
+int      Now = 0;
+datetime LastUpd;
+string   str1;
+
+#endif
+
+// Gobal Variables
+// ------------------------------------------------------------------
+
+// NOTE: License
+#ifdef LICENSE_CONTROL_ON
+class ConditionLicense
+{
+ private:
+  string   _names[];
+  datetime _date;
+  // long   _acounts[];
+
+ public:
+  ConditionLicense(const string name) { addName(name); }
+  ConditionLicense(datetime date) { _date = date; }
+  ~ConditionLicense() {}
+
+  bool addName(string name)
+  {
+    int t = ArraySize(_names);
+    if (ArrayResize(_names, t + 1))
+    {
+      _names[t] = name;
+      return true;
+    }
+    return false;
+  }
+
+  bool controlByName()
+  {
+    for (int i = 0; i < ArraySize(_names); i++)
+    {
+      string name        = _names[i];
+      string accountName = AccountInfoString(ACCOUNT_NAME);
+
+      if (StringToUpper(name) && StringToUpper(accountName))
+      {
+        if (name == accountName)
+        {
+          return true;
+        }
+      }
+
+      // busca si coincide una parte de name dentro de accountName:
+      if (StringFind(accountName, name, 0) != -1)
+      {
+        return true;
+      }
+    }
+
+    Alert("Account Without Licences. Info: tradingxbots@gmail.com");
+    return false;
+  }
+
+  bool controlByDate()
+  {
+    datetime today = TimeCurrent();
+    if (today >= _date)
+    {
+      Alert("Licences Expire. Info: tradingxbots@gmail.com");
+      return false;
+    }
+    return true;
+  }
+};
+ConditionLicense license(D '2022.03.30');
+#endif
+
+class Engoulfing
+{
+  string          _symbol;  // symbol
+  // ENUM_TIMEFRAMES _tf;      // timeframe
+  double        _minSize;// tamaño minimo
+
+ public:
+  Engoulfing(string Symbol, int minSize=0)
+  {
+    _symbol = Symbol;
+    // _tf     = TF;
+    double mPoints = MarketInfo(_symbol,MODE_POINT);
+		_minSize = minSize * mPoints;
+		
+  }
+  ~Engoulfing() { ; }
+
+double AverageSizeCandles(int _tf = 0)
+{
+  double SumSize = 0;
+  for (int i = 1; i < 50; i++)
+  {
+    double hi, lo, cl, op;
+    hi = iHigh(_symbol, _tf, i);
+    lo = iLow(_symbol, _tf, i);
+
+    SumSize += fabs(hi - lo);
+	}
+  return SumSize / 50;
+}
+
+
+  string FindPattern(int _tf = 0)
+  {
+		Print(__FUNCTION__," _tf: ",_tf);
+    string direction;
+    string candle;
+    
+		for (int i = 1; i < 4; i++)
+    {
+      bool   havePatern = false;
+      double hi1 = iHigh(_symbol, _tf, i);
+      double lo1 = iLow(_symbol, _tf, i);
+      double op1 = iOpen(_symbol, _tf, i);
+      double cl1 = iClose(_symbol, _tf, i);
+      double hi2 = iHigh(_symbol, _tf, i+1);
+      double lo2 = iLow(_symbol, _tf, i+1);
+      double op2 = iOpen(_symbol, _tf, i+1);
+      double cl2 = iClose(_symbol, _tf, i+1);
+
+      // check patrón alcista:
+      double body1 = fabs(op1 - cl1);
+      double body2 = fabs(op2 - cl2);			
+      double size1 = fabs(hi1 - lo1);
+      double size2 = fabs(hi2 - lo2);
+      double ratio1 = 0;
+      double ratio2 = 0;
+
+      if(size1 > 0) ratio1 = body1 / size1;
+      if(size2 > 0) ratio2 = body2 / size2;
+
+      // Tengo ratio
+      // if (ratio1 > 0.80 && ratio2 > 0.80)
+      // if (ratio1 > 0.60 && ratio2 > 0.20)
+      // {
+			// 	// clang-format off
+			
+				bool haveSize=false;
+				// if(_minSize == 0 && body1 > AverageSizeCandles() && body2 > AverageSizeCandles()) { haveSize = true; }
+				// if(_minSize != 0 && body1 > _minSize && body2 > _minSize ) { haveSize = true; }
+				if(_minSize != 0 && body1 > _minSize ) { haveSize = true; }
+
+				if(haveSize)
+				{
+	      	if (op2 > cl2 && cl1 > op1 && cl1 >= (cl2+body2*0.70)) { 
+						direction = "p";havePatern = true;
+						} // alcista
+					if (op2 < cl2 && cl1 < op1 && cl1 <= (op2+body2*0.30)) { direction = "q";havePatern = true;} // bajista
+				}
+      // }
+			
+			if(havePatern)
+			{
+				candle = i<10? "0"+(string)i : (string)i; 
+				return candle+direction;
+			}			
+    }
+
+		return "000";
+	}
+};
+Engoulfing engoulfing(_Symbol, uMinSize);
+
+class MovingAverage
+{
+  string _symbol;
+  int    _tf;
+
+  struct MovingAverageParameters
+  {
+    int setup0;  //  Period
+    int setup1;  //  Ma Shift
+    int setup2;  //  Method
+    int setup3;  //  Applied Price
+  };
+  MovingAverageParameters _setup;
+
+ public:
+  MovingAverage()
+  {
+    _symbol = _Symbol;
+    _tf     = Period();
+  }
+  MovingAverage(string Symbol, int TimeFrame)
+  {
+    _symbol = Symbol;
+    _tf     = TimeFrame;
+  }
+  MovingAverage(string Symbol, int TimeFrame, int period, int shift, ENUM_MA_METHOD method, ENUM_APPLIED_PRICE appliedPrice)
+  {
+    _symbol = Symbol;
+    _tf     = TimeFrame;
+    setSetup(period, shift, method, appliedPrice);
+  }
+  ~MovingAverage() { ; }
+
+  void setSetup(
+      int set0,
+      int set1,
+      int set2,
+      int set3)
+  {
+    _setup.setup0 = set0;
+    _setup.setup1 = set1;
+    _setup.setup2 = set2;
+    _setup.setup3 = set3;
+  }
+
+  double calculate(int buffer, int shift)
+  {
+    return iMA(_symbol, _tf,
+               _setup.setup0,
+               _setup.setup1,
+               _setup.setup2,
+               _setup.setup3,
+               shift);
+  }
+
+  double index(int shift)
+  {
+    return calculate(0, shift);
+  }
+};
+MovingAverage* ma;
+
+interface iIndicators
+{
+  double calculate(int bufferNumber, int shift);
+};
+interface IOrders
+{
+ public:
+  virtual void Add()     = 0;
+  virtual void Release() = 0;
+
+  virtual bool AddOrder()    = 0;
+  virtual bool DeleteOrder() = 0;
+  virtual bool Select()      = 0;
+};
+class Order
+{
+  int      _id;
+  string   _symbol;
+  double   _price;
+  double   _sl;
+  double   _tp;
+  double   _lot;
+  int      _type;
+  int      _magic;
+  string   _comment;
+  string   _strategy;
+  datetime _expireTime;
+  datetime _signalTime;
+  double   _profit;
+  double   _tslNext;
+  bool     _bkvWasDoIt;
+  int      _countPartials;
+
+ public:
+  Order(
+      int      id,
+      string   symbol,
+      double   price,
+      double   sl,
+      double   tp,
+      double   lot,
+      int      type,
+      int      magic,
+      string   comment,
+      string   strategy,
+      datetime expireTime,
+      datetime signalTime,
+      double   profit,
+      double   bkvWasDoIt,
+      int      countPartials) : _id(id),
+                           _symbol(symbol),
+                           _price(price),
+                           _sl(sl),
+                           _tp(tp),
+                           _lot(lot),
+                           _type(type),
+                           _magic(magic),
+                           _comment(comment),
+                           _strategy(strategy),
+                           _expireTime(expireTime),
+                           _signalTime(signalTime),
+                           _profit(profit),
+                           _bkvWasDoIt(bkvWasDoIt),
+                           _countPartials(countPartials) {}
+
+  Order() {}
+  ~Order() {}
+
+  // clang-format off
+	Order* id(int id){_id=id; return &this;}
+	Order* symbol(string symbol){_symbol=symbol; return &this;}
+	Order* price(double price){_price=price; return &this;}
+	Order* sl(double sl){_sl=sl; return &this;}
+	Order* tp(double tp){_tp=tp; return &this;}
+	Order* lot(double lot){_lot=lot; return &this;}
+	Order* type(int type){_type=type; return &this;}
+	Order* magic(int magic){_magic=magic; return &this;}
+	Order* comment(string comment){_comment=comment; return &this;}
+	Order* expireTime(datetime expireTm){_expireTime=expireTm; return &this;}
+	Order* signalTime(datetime signalTm){_signalTime=signalTm; return &this;}
+	Order* profit(double profit){_profit=profit; return &this;}
+	Order* strategy(string strategy){_strategy=strategy; return &this;}
+	Order* tslNext(double tslNext){_tslNext=tslNext; return &this;}
+	Order* breakevenWasDoIt(bool bkvWasDoIt){_bkvWasDoIt=bkvWasDoIt; return &this;}
+	Order* countPartials(int count){_countPartials=_countPartials + count; return &this;}
+
+   int            id()               { return _id; }
+   string         symbol()           { return _symbol; }
+   double         price()            { return _price; }
+   double         sl()               { return _sl; }
+   double         tp()               { return _tp; }
+   double         lot()              { return _lot; }
+   int            type()             { return _type; }
+   int            magic()            { return _magic; }
+   string         comment()          { return _comment; }
+   string         strategy()         { return _strategy; }
+   datetime       expireTime()       { return _expireTime; }
+   datetime       signalTime()       { return _signalTime; }
+   double         profit()           { if (OrderSelect(_id, SELECT_BY_TICKET)) return OrderProfit(); return -1; }
+   double         tslNext()          { return _tslNext; }
+   double         breakevenWasDoIt() { return _bkvWasDoIt; }
+   int            countPartials()    { return _countPartials; }
+};
+class FilterBySymbols
+{
+   string _symbols[];
+
+  public:
+   FilterBySymbols(string userSymbols) { getSymbols(userSymbols); }
+   ~FilterBySymbols() { ; }
+
+   void getSymbols(string userSymbols)
+   {
+      string Simbolos[];
+      string sep = ",";
+      ushort u_sep;
+      u_sep = StringGetCharacter(sep, 0);
+      int k = StringSplit(userSymbols, u_sep, Simbolos);
+      ArrayResize(_symbols, ArrayRange(Simbolos, 0), 0);
+      for (int i = 0; i < ArrayRange(Simbolos, 0); i++)
+      {
+         _symbols[i] = Simbolos[i];
+      }
+      printSymbols();
+   }
+
+   bool control(const string symbolToControl)
+   {
+      if (ArraySize(_symbols) > 0)
+      {
+         for (int i = 0; i < ArraySize(_symbols); i++)
+         {
+            if (_symbols[i] == symbolToControl)
+            {
+               return true;
+            }
+         }
+      }
+
+      return false;
+   }
+
+   void printSymbols()
+   {
+      for (int i = 0; i < ArraySize(_symbols); i++)
+      {
+         Print(_symbols[i]);
+      }
+   }
+
+   //---
+};
+class FilterByMagics
+{
+   int _magics[];
+
+  public:
+   FilterByMagics(string userMagics) { getMagics(userMagics); }
+   ~FilterByMagics() { ; }
+
+   void getMagics(string userMagics)
+   {
+      string Magicos[];
+      string sep = ",";
+      ushort u_sep;
+      u_sep = StringGetCharacter(sep, 0);
+      int k = StringSplit(userMagics, u_sep, Magicos);
+      ArrayResize(_magics, ArrayRange(Magicos, 0), 0);
+      for (int i = 0; i < ArrayRange(Magicos, 0); i++)
+      {
+         _magics[i] = (int)Magicos[i];
+      }
+      if (ArrayRange(_magics, 0) > 0)
+      {
+         ArraySort(_magics, WHOLE_ARRAY, 0, MODE_ASCEND);
+      }
+      printMagics();
+   }
+
+   bool control(const int magicToControl)
+   {
+      if (ArraySize(_magics) > 0)
+      {			
+         int p = ArrayBsearch(_magics, magicToControl, WHOLE_ARRAY, 0, MODE_ASCEND);
+			if (_magics[p] == magicToControl)
+         {
+            return true;
+         }
+      }
+
+      return false;
+   }
+
+   void printMagics()
+   {
+      for (int i = 0; i < ArraySize(_magics); i++)
+      {
+         Print(_magics[i]);
+      }
+   }
+  
+  
+   //---
+};
+class OrdersList
+{
+   Order*          orders[];
+   bool            _filterByMagicOn;
+   bool            _filterBySymbolsOn;
+   FilterByMagics* _magics;
+   FilterBySymbols* _symbols;
+
+  public:
+  OrdersList(){;}
+   OrdersList(bool uFilterByMagicOn, string uMagics, bool uFilterBySymbolsOn, string uSymbols)
+   {
+		_filterByMagicOn = uFilterByMagicOn;
+		_filterBySymbolsOn = uFilterBySymbolsOn;
+      _magics = new FilterByMagics(uMagics);
+      _symbols = new FilterBySymbols(uSymbols);
+
+      Print("New OrderList Created");
+   }
+   ~OrdersList() 
+	{ 
+		delete _magics;
+		delete _symbols;
+		clearList(); 
+	}
+
+   //+------------------------------------------------------------------+
+
+void setOrdersList(bool magicOn, string magics, bool symbolsOn, string symbols)
+{
+		_filterByMagicOn = magicOn;
+		_filterBySymbolsOn = symbolsOn;
+      _magics = new FilterByMagics(magics);
+      _symbols = new FilterBySymbols(symbols);
+
+}
+
+   bool AddOrder(Order* order)
+   {
+      int t = ArraySize(orders);
+      if (ArrayResize(orders, t + 1))
+      {
+         orders[t] = order;
+         return true;
+      }
+
+      return false;
+   }
+
+   // recorrer las ordenes de mercado y agregar las que no estén en el array
+   //+------------------------------------------------------------------+
+   void GetMarketOrders()
+   {
+      for (int i = OrdersTotal() - 1; i >= 0; i--)
+      {
+         if (OrderSelect(i, SELECT_BY_POS, MODE_TRADES))
+         {
+            if (_filterByMagicOn) if (!_magics.control(OrderMagicNumber())) { continue; }
+            if (_filterBySymbolsOn) if (!_symbols.control(OrderSymbol())) { continue; }
+
+            if (exist(OrderTicket()) == true) { continue; }
+
+            Order* newOrder = new Order();
+            newOrder
+                .id(OrderTicket())
+                .symbol(OrderSymbol())
+                .price(OrderOpenPrice())
+                .sl(OrderStopLoss())
+                .tp(OrderTakeProfit())
+                .lot(OrderLots())
+                .type(OrderType())
+                .magic(OrderMagicNumber())
+                .comment(OrderComment())
+                .expireTime(OrderExpiration())
+                .profit(OrderProfit())
+                .breakevenWasDoIt(false)
+                .countPartials(0);
+
+            if (AddOrder(newOrder))
+            {
+               PrintOrder(i);
+            }
+         }
+      }
+   }
+
+   // agrega la última orden si no está en el array
+   //+------------------------------------------------------------------+
+   bool GetLastMarketOrder()
+   {
+      for (int i = OrdersTotal() - 1; i >= 0; i--)
+      {
+         if (OrderSelect(i, SELECT_BY_POS, MODE_TRADES))
+         {
+            if (_filterByMagicOn) if(!_magics.control(OrderMagicNumber())) { continue; }
+            if (_filterBySymbolsOn) if (!_symbols.control(OrderSymbol())) { continue; }
+            if (exist(OrderTicket()) == true) { continue; }
+
+            Order* newOrder = new Order();
+            newOrder
+                .id(OrderTicket())
+                .symbol(OrderSymbol())
+                .price(OrderOpenPrice())
+                .sl(OrderStopLoss())
+                .tp(OrderTakeProfit())
+                .lot(OrderLots())
+                .type(OrderType())
+                .magic(OrderMagicNumber())
+                .comment(OrderComment())
+                .expireTime(OrderExpiration())
+                .profit(OrderProfit())
+                .breakevenWasDoIt(false)
+                .countPartials(0);
+
+            if (AddOrder(newOrder))
+            {
+                  Print(__FUNCTION__," ","* Nueva Orden De Mercado * ",id(i), "magic: ",magic(i));
+                  // PrintOrder(i);
+                  return true;
+            }
+         }
+         return false;
+      }
+      return false;
+   }
+
+   // controlar si el id ya está adentro del array
+   //+------------------------------------------------------------------+
+   bool exist(int id)
+   {
+      for (int i = qnt() - 1; i >= 0; i--)
+      {
+         if (id(i) == id)
+         {
+            return true;
+         }
+      }
+      return false;
+   }
+
+   // borra una orden en la posición indicada y acomoda el array
+   //+------------------------------------------------------------------+
+   bool deleteOrder(int index)
+   {
+      if (notOverFlow(index))
+      {
+         delete orders[index];
+      }
+
+      if (qnt() > index)
+      {
+         for (int i = index; i < qnt() - 1; i++)
+         {
+            orders[i] = orders[i + 1];
+         }
+         ArrayResize(orders, qnt() - 1);
+         return true;
+      }
+
+      return false;
+   }
+
+   // borra todos los elementos de la lista
+   //+------------------------------------------------------------------+
+   void clearList()
+   {
+      for (int i = 0; i < qnt(); i++)
+      {
+         if (CheckPointer(orders[i]) != POINTER_INVALID)
+         {
+            deleteOrder(i);
+         }
+      }
+   }
+
+   // devuelve el puntero a la última orden
+   Order* last()
+   {
+      int lastIndex = ArraySize(orders) - 1;
+      if (lastIndex == -1)
+      {
+         return NULL;
+      }
+      return GetPointer(orders[lastIndex]);
+   }
+
+   Order* index(int in)
+   {
+      return GetPointer(orders[in]);
+   }
+
+   int lastId()
+   {
+      int lastIndex = ArraySize(orders) - 1;
+      return orders[lastIndex].id();
+   }
+
+   //+------------------------------------------------------------------+
+   bool notOverFlow(int index)
+   {
+      if (index > ArraySize(orders) - 1) return false;
+      if (index < 0) return false;
+      if (CheckPointer(orders[index]) == POINTER_INVALID) return false;
+
+      return true;
+   }
+
+   // cantidad de ordenes guardadas
+   //+------------------------------------------------------------------+
+   int qnt()
+   {
+      return ArraySize(orders);
+   }
+
+   // clang-format off
+   // Metodos para acceder a información de cada trade mediante su index:
+   //+------------------------------------------------------------------+
+   int id(int index)
+   {
+      if (notOverFlow(index))
+      {
+         return orders[index].id();
+      }
+      return -1;
+   }
+   string symbol(int index)
+   {
+      if (notOverFlow(index))
+      {
+         return orders[index].symbol();
+      }
+      return "";
+   }
+   double price(int index)
+   {
+      if (notOverFlow(index))
+      {
+         return orders[index].price();
+      }
+      return -1;
+   }
+   double sl(int index)
+   {
+      if (notOverFlow(index))
+      {
+         return orders[index].sl();
+      }
+      return -1;
+   }
+   double tp(int index)
+   {
+      if (notOverFlow(index))
+      {
+         return orders[index].tp();
+      }
+      return -1;
+   }
+   double lot(int index)
+   {
+      if (notOverFlow(index))
+      {
+         return orders[index].lot();
+      }
+      return -1;
+   }
+   int magic(int index)
+   {
+      if (notOverFlow(index))
+      {
+         return orders[index].magic();
+      }
+      return -1;
+   }
+   datetime expire(int index)
+   {
+      if (notOverFlow(index))
+      {
+         return orders[index].expireTime();
+      }
+      return -1;
+   }
+   datetime signalTime(int index)
+   {
+      if (notOverFlow(index))
+      {
+         return orders[index].signalTime();
+      }
+      return -1;
+   }
+   string comment(int index)
+   {
+      if (notOverFlow(index))
+      {
+         return orders[index].comment();
+      }
+      return "";
+   }
+   ENUM_ORDER_TYPE type(int index)
+   {
+      if (notOverFlow(index))
+      {
+         return orders[index].type();
+      }
+      return -1;
+   }
+   double profit(int index)
+   {
+      if (notOverFlow(index))
+      {
+         return orders[index].profit();
+      }
+      return -1;
+   }
+
+  // clang-format on
+
+  // comprueba si la orden está cerrada
+  //+------------------------------------------------------------------+
+  bool isClose(int index)
+  {
+    if (notOverFlow(index))
+    {
+      if (OrderSelect(id(index), SELECT_BY_TICKET))
+      {
+        if (OrderCloseTime() != 0) return true;
+      }
+    }
+    return false;
+  }
+
+  // borra de la lista los trades cerrados
+  //+------------------------------------------------------------------+
+  void cleanCloseOrders()
+  {
+    if (qnt() == 0)
+    {
+      return;
+    }
+
+    for (int i = 0; i < qnt(); i++)
+    {
+      if (isClose(i))
+      {
+        deleteOrder(i);
+      }
+    }
+  }
+
+  // cierra todas las ordenes en la lista y la limpia, te retorna la cantidad de errores
+  int closeAllInList()
+  {
+    cleanCloseOrders();
+    int errors = 0;
+
+    for (int i = 0; i < ArraySize(orders); i++)
+    {
+      int tk;
+      if (isClose(i))
+      {
+        continue;
+      }
+      if (CheckPointer(orders[i]) != POINTER_INVALID)
+      {
+        tk = orders[i].id();
+      } else
+      {
+        continue;
+      }
+      if (OrderSelect(tk, SELECT_BY_TICKET))
+      {
+        double ask        = SymbolInfoDouble(OrderSymbol(), SYMBOL_ASK);
+        double bid        = SymbolInfoDouble(OrderSymbol(), SYMBOL_BID);
+        double closePrice = OrderType() == OP_BUY ? bid : ask;
+        if (!OrderClose(OrderTicket(), OrderLots(), closePrice, 1000, clrNONE))
+        {
+          Print(__FUNCTION__, " ", "Error in close order ", orders[i].id(), ": ", GetLastError());
+          errors++;
+        }
+      }
+    }
+
+    cleanCloseOrders();
+
+    return errors;
+  }
+
+  //+------------------------------------------------------------------+
+  void PrintOrder(const int index)
+  {
+    if (!notOverFlow(index))
+    {
+      return;
+    }
+    if (CheckPointer(orders[index]) == POINTER_INVALID)
+    {
+      return;
+    }
+    // clang-format off
+      Print("Order ", index, " id: ",          orders[index].id());
+      Print("Order ", index, " symbol: ",      orders[index].symbol());
+      Print("Order ", index, " type: ",        orders[index].type());
+      Print("Order ", index, " lot: ",         orders[index].lot());
+      Print("Order ", index, " price: ",       orders[index].price());
+      Print("Order ", index, " sl: ",          orders[index].sl());
+      Print("Order ", index, " tp: ",          orders[index].tp());
+      Print("Order ", index, " magic: ",       orders[index].magic());
+      Print("Order ", index, " comment: ",     orders[index].comment());
+      Print("Order ", index, " strategy: ",    orders[index].strategy());
+      Print("Order ", index, " expire time: ", orders[index].expireTime());
+      Print("Order ", index, " signal time: ", orders[index].signalTime());
+      Print("Order ", index, " profit: ",      orders[index].profit());
+      Print("Order ", index, " countPartials: ", orders[index].countPartials());
+    // clang-format on
+  }
+  //+------------------------------------------------------------------+
+  void PrintList()
+  {
+    for (int i = 0; i < qnt(); i++)
+    {
+      PrintOrder(i);
+    }
+  }
+};
+OrdersList mainOrders(filterMagicsOn, (string)magico, filterSymbolsOn, _Symbol);
+
+interface iConditions
+{
+  bool evaluate();
+};
+class ConcurrentConditions
+{
+ protected:
+  iConditions* _conditions[];
+
+ public:
+  ConcurrentConditions(void) {}
+  ~ConcurrentConditions(void) { releaseConditions(); }
+
+  //+------------------------------------------------------------------+
+  void releaseConditions()
+  {
+    for (int i = 0; i < ArraySize(_conditions); i++)
+    {
+      delete _conditions[i];
+    }
+    ArrayFree(_conditions);
+  }
+  //+------------------------------------------------------------------+
+  void AddCondition(iConditions* condition)
+  {
+    int t = ArraySize(_conditions);
+    ArrayResize(_conditions, t + 1);
+    _conditions[t] = condition;
+  }
+
+  //+------------------------------------------------------------------+
+  bool EvaluateConditions(void)
+  {
+    for (int i = 0; i < ArraySize(_conditions); i++)
+    {
+      if (!_conditions[i].evaluate())
+      {
+        return false;
+      }
+    }
+    return true;
+  }
+};
+class ConditionMatchPrice : public iConditions
+{
+  string _symbol;
+  string _side;
+  double _price;
+  int    _mode;  // 0: Ask>=Price & Bid <=Price , 1: Ask <= Price && Bid >= Price
+
+ public:
+  ConditionMatchPrice(string Symbol, string Side, double Price, int Mode)
+  {
+    _symbol = Symbol;
+    _side   = Side;
+    _price  = Price;
+    _mode   = Mode;
+  }
+  ~ConditionMatchPrice() { ; }
+
+  void   side(string inpside) { _side = inpside; }
+  string side(void) { return _side; }
+  void   symbol(string inpsymbol) { _symbol = inpsymbol; }
+  string symbol(void) { return _symbol; }
+  void   price(double inpprice) { _price = inpprice; }
+  double price(void) { return _price; }
+  void   mode(int inpmode) { _mode = inpmode; }
+  int    mode(void) { return _mode; }
+
+  bool evaluate()
+  {
+    double ask = SymbolInfoDouble(_symbol, SYMBOL_ASK);
+    double bid = SymbolInfoDouble(_symbol, SYMBOL_BID);
+
+    if (_mode == 0)
+    {
+      if (_side == "buy")
+      {
+        if (ask >= _price)
+        {
+          return true;
+        }
+        return false;
+      }
+      if (_side == "sell")
+      {
+        if (bid <= _price)
+        {
+          return true;
+        }
+        return false;
+      }
+    }
+
+    if (_mode == 1)
+    {
+      if (_side == "buy")
+      {
+        if (ask <= _price)
+        {
+          return true;
+        }
+        return false;
+      }
+      if (_side == "sell")
+      {
+        if (bid >= _price)
+        {
+          return true;
+        }
+        return false;
+      }
+    }
+    return false;
+  }
+};
+class ConditionMaxLot : public iConditions
+{
+  double _maxLot;
+  double _lot;
+
+ public:
+  ConditionMaxLot(double MaxLot, double Lot)
+  {
+    _maxLot = MaxLot;
+    _lot    = Lot;
+  }
+  ~ConditionMaxLot() { ; }
+  void lot(double inplot) { _lot = inplot; }
+
+  bool evaluate()
+  {
+    if (_maxLot >= _lot)
+    {
+      return true;
+    }
+    return false;
+  }
+};
+class ConditionOrderCount : public iConditions
+{
+  OrdersList* _orders;
+  int         _maxQnt;
+
+ public:
+  ConditionOrderCount(OrdersList* Orders, int MaxQnt)
+  {
+    _orders = Orders;
+    _maxQnt = MaxQnt;
+  }
+  ~ConditionOrderCount() { ; }
+
+  bool evaluate()
+  {
+    if (_orders.qnt() < _maxQnt)
+    {
+      return true;
+    }
+    return false;
+  }
+};
+
+class DailyProfitCondition : public iConditions
+{
+  int           _magic;
+  double        _limit;
+  bool          _considerOpen;  // Considera el flotante profit flotante
+  string        _mode;          // loss or profit
+  DayLimitsMode _limitMode;     // Amount or AccountPer
+ public:
+  DailyProfitCondition(double limit, int mag, bool considerOpen, string mode, DayLimitsMode limitMode) : _limit(limit), _magic(mag), _considerOpen(considerOpen), _mode(mode), _limitMode(limitMode) { ; }
+  ~DailyProfitCondition() { ; }
+
+  bool evaluate()
+  {
+    if (_mode == "profit")
+    {
+      if (TodayProfit() >= Limit())
+      {
+        Print("DAILY PROFIT REACHED: ", TodayProfit());
+        return true;
+      }
+    }
+    if (_mode == "loss")
+    {
+      if (TodayProfit() <= Limit())
+      {
+        Print("DAILY LOSS REACHED: ", TodayProfit());
+        return true;
+      }
+    }
+    return false;
+  }
+
+  double Limit()
+  {
+    if (_limitMode == LimitsByAmount)
+    {
+      return _limit;
+    }
+    if (_limitMode == LimitsByAccountPercent)
+    {
+      return _limit / 100 * AccountInfoDouble(ACCOUNT_BALANCE);
+    }
+    return 0;
+  }
+
+  double TodayProfit()
+  {
+    datetime iniDay = iTime(NULL, PERIOD_D1, 0);
+
+    double profit = 0;
+    for (int i = OrdersHistoryTotal() - 1; i >= 0; i--)
+    {
+      if (OrderSelect(i, SELECT_BY_POS, MODE_HISTORY) && OrderSymbol() == _Symbol && OrderMagicNumber() == _magic)
+      {
+        if (OrderCloseTime() >= iniDay)
+        {
+          profit += OrderProfit() + OrderSwap() + OrderCommission();
+        }
+      }
+    }
+
+    if (_considerOpen)
+    {
+      for (int i = OrdersTotal() - 1; i >= 0; i--)
+      {
+        if (OrderSelect(i, SELECT_BY_POS) && OrderSymbol() == _Symbol && OrderMagicNumber() == _magic)
+        {
+          profit += OrderProfit() + OrderSwap() + OrderCommission();
+        }
+      }
+    }
+
+    return profit;
+  }
+};
+#ifdef DAILY_LIMITS
+DailyProfitCondition dailyProfitCondition(uDayLimitProfit, magico, uConsiderFloatting, "profit", limitProfitMode);
+DailyProfitCondition dailyLossCondition(uDayLimitLoss, magico, uConsiderFloatting, "loss", limitLossMode);
+#endif
+
+
+class MoveSL : public iActions
+{
+  Order* _order;
+  double _newSL;
+
+ public:
+  MoveSL() { ; }
+  ~MoveSL() { ; }
+
+  MoveSL* order(Order* or)
+  {
+    _order = or ;
+    return &this;
+  }
+  MoveSL* newSL(double newSL)
+  {
+    _newSL = newSL;
+    return &this;
+  }
+
+  bool controlPointer(Order* or)
+  {
+    if (CheckPointer(or))
+    {
+      return true;
+    } else
+    {
+      Print("Order Pointer Invalid");
+      return false;
+    }
+  }
+
+  bool doAction()
+  {
+    if (!controlPointer(_order))
+    {
+      Print(__FUNCTION__, " ", "Can't Move Stop Loss");
+      return false;
+    }
+    if (OrderSelect(_order.id(), SELECT_BY_TICKET))
+    {
+      if (OrderCloseTime() > 0)
+      {
+        Print(__FUNCTION__, " ", "Order are closed ", _order.id());
+        return false;
+      }
+
+      if (OrderModify(_order.id(), OrderOpenPrice(), _newSL, OrderTakeProfit(), OrderExpiration(), clrNONE))
+      {
+        _order.sl(_newSL);
+        _order.breakevenWasDoIt(true);
+        Print(__FUNCTION__, " ", _order.id(), " Modify: new SL: ", _newSL);
+        return true;
+      }
+
+    } else
+    {
+      Print(__FUNCTION__, " ", "Can't Select the order ", _order.id());
+    }
+
+    return false;
+  }
+};
+MoveSL* breackevenAction;
+
+class PartialClose : public iActions
+{
+  Order* _order;
+  double _percentToClose;
+
+ public:
+  PartialClose() { ; }
+  ~PartialClose() { ; }
+
+  PartialClose* order(Order* or)
+  {
+    _order = or ;
+    return &this;
+  }
+  PartialClose* percent(double percentToClose)
+  {
+    _percentToClose = percentToClose;
+    return &this;
+  }
+
+  bool controlPointer(Order* or)
+  {
+    if (CheckPointer(or))
+    {
+      return true;
+    } else
+    {
+      Print("Order Pointer Invalid");
+      return false;
+    }
+  }
+
+  double lots()
+  {
+    // hay que ajustar el lotaje para volverlo al original
+    int n = _order.countPartials();
+    if (n > 0)
+    {
+      double originalLots = _order.lot() / (1 - (NormalizeDouble(_percentToClose / 100, 2) * n));
+      return NormalizeDouble((originalLots * _percentToClose / 100), 2);
+    }
+
+    return NormalizeDouble((_order.lot() * _percentToClose / 100), 2);
+  }
+
+  double price()
+  {
+    double ask = SymbolInfoDouble(_order.symbol(), SYMBOL_ASK);
+    double bid = SymbolInfoDouble(_order.symbol(), SYMBOL_BID);
+
+    if (_order.type() == OP_BUY)
+    {
+      return bid;
+    }
+    if (_order.type() == OP_SELL)
+    {
+      return ask;
+    }
+    return 0;
+  }
+
+  bool doAction()
+  {
+    if (!controlPointer(_order))
+    {
+      Print(__FUNCTION__, " ", "Can't Take Partial");
+      return false;
+    }
+    if (OrderSelect(_order.id(), SELECT_BY_TICKET))
+    {
+      if (OrderCloseTime() > 0)
+      {
+        Print(__FUNCTION__, " ", "Order are closed ", _order.id());
+        return false;
+      }
+
+      if (OrderClose(_order.id(), lots(), price(), 10000, clrNONE))
+      {
+        // aumenta el contador de parciales
+        _order.countPartials(1);
+
+        // remplazar el tk por el nuevo tk
+        changeTk(_order.id());
+
+        Print(__FUNCTION__, " ", _order.id(), " Partial TP taked ");
+        return true;
+      }
+
+    } else
+    {
+      Print(__FUNCTION__, " ", "Can't Select the order ", _order.id());
+    }
+
+    return false;
+  }
+
+  void changeTk(int tk)
+  {
+    if (OrderSelect(tk, SELECT_BY_TICKET))
+    {
+      datetime dt     = OrderCloseTime();
+      string   coment = OrderComment();
+      int      pos    = StringFind(coment, "#") + 1;
+      string   newId  = StringSubstr(coment, pos, StringLen(coment));
+      _order.id((int)newId);
+    }
+  }
+};
+PartialClose* partialCloseAction;
+
+class SendNewOrder : public iActions
+{
+ private:
+  Order* newOrder;
+
+ public:
+  SendNewOrder(string side, double lots, string symbol = "", double price = 0, double sl = 0, double tp = 0, int magic = 0, string coment = "", datetime expire = 0)
+  {
+    string _symbol = setSymbol(symbol);
+    double _price  = setPrice(side, price, _symbol);
+    int    _type   = SetType(side, price, _symbol);
+    if (_type == -1)
+    {
+      Print(__FUNCTION__, " ", "Imposible to set OrderType");
+      return;
+    }
+
+    newOrder = new Order();
+
+    newOrder
+        .id(OrderTicket())
+        .symbol(_symbol)
+        .type(_type)
+        .price(_price)
+        .sl(sl)
+        .tp(tp)
+        .lot(lots)
+        .magic(magic)
+        .comment(coment)
+        .expireTime(expire)
+        .profit(0);
+  }
+
+  ~SendNewOrder()
+  {
+    delete newOrder;
+  }
+
+  string setSymbol(string sim)
+  {
+    if (sim == "")
+    {
+      return Symbol();
+    }
+    return sim;
+  }
+
+  double setPrice(string side, double pr, string sym)
+  {
+    if (pr == 0)
+    {
+      if (side == "buy")
+      {
+        return SymbolInfoDouble(sym, SYMBOL_ASK);
+      }
+      if (side == "sell")
+      {
+        return SymbolInfoDouble(sym, SYMBOL_BID);
+      }
+    }
+
+    return pr;
+  }
+
+  int SetType(string side, double priceClient, string sym)
+  {
+    double ask = SymbolInfoDouble(sym, SYMBOL_ASK);
+    double bid = SymbolInfoDouble(sym, SYMBOL_BID);
+
+    if (priceClient == 0)
+    {
+      if (side == "buy")
+      {
+        return (int)OP_BUY;
+      }
+      if (side == "sell")
+      {
+        return (int)OP_SELL;
+      }
+    } else
+    {
+      if (side == "buy")
+      {
+        if (priceClient > ask)
+        {
+          return (int)OP_BUYSTOP;
+        }
+        if (priceClient < ask)
+        {
+          return (int)OP_BUYLIMIT;
+        }
+      }
+      if (side == "sell")
+      {
+        if (priceClient > bid)
+        {
+          return (int)OP_SELLLIMIT;
+        }
+        if (priceClient < bid)
+        {
+          return (int)OP_SELLSTOP;
+        }
+      }
+    }
+
+    return -1;
+  }
+
+  bool doAction()
+  {
+    int tk = OrderSend(newOrder.symbol(), newOrder.type(), newOrder.lot(), newOrder.price(), 1000, newOrder.sl(), newOrder.tp(), newOrder.comment(), newOrder.magic(), newOrder.expireTime(), clrNONE);
+
+    if (tk < 0)
+    {
+      Print(__FUNCTION__, " ", "Connot Send Order, error: ", GetLastError());
+      return false;
+    }
+
+    return true;
+  }
+
+  Order* lastOrder()
+  {
+    return GetPointer(newOrder);
+  }
+};
+SendNewOrder* actionSendOrder;
+
+// GRID
+// ------------------------------------------------------------------
+class Grid
+{
+  ConcurrentConditions conditionsToOpenNewTrade;
+  ConcurrentConditions conditionsToCloseGrid;
+  ConditionMatchPrice* cdMatchPrice;
+  ConditionOrderCount* cdMaxOrders;
+  ConditionMaxLot*     cdMaxLot;
+  SendNewOrder*        openTrade;
+  // ActionCloseOrdersByType* actionCloseGrid;
+  string     _symbol;
+  string     _side;
+  double     _nextPrice;
+  double     _lastPrice;
+  double     _gap;
+  double     _multiplier;
+  int        _maxQnt;
+  double     _maxLot;
+  double     _initialLot;
+  double     _nextLot;
+  int        _qnt;
+  bool       _active;
+  int        _magico;
+  OrdersList gridOrders;
+
+ public:
+  Grid(string Symbol, string Side, double LastPrice, double Gap, double Multiplier, int MaxQnt, double MaxLot, double InitialLot, int magic, bool simbolFilterOn = true, bool magicFilterOn = true)
+  {
+    _symbol     = Symbol;
+    _side       = Side;
+    _lastPrice  = LastPrice;
+    _gap        = Gap;
+    _nextPrice  = nextPrice(LastPrice);
+    _multiplier = Multiplier;
+    _maxQnt     = MaxQnt + 1;
+    _maxLot     = MaxLot;
+    _initialLot = InitialLot;
+    _nextLot    = nextLot();
+    _magico     = magic;
+
+    Print(_symbol);
+    Print(_side);
+    Print(_lastPrice);
+    Print(_nextPrice);
+    Print(_gap);
+    Print(_multiplier);
+    Print(_maxQnt);
+    Print(_maxLot);
+    Print(_initialLot);
+    Print(_nextLot);
+
+    gridOrders.setOrdersList(magicFilterOn, IntegerToString(_magico), simbolFilterOn, _symbol);
+    gridOrders.GetLastMarketOrder();
+
+    // Set Conditions:
+    cdMatchPrice = new ConditionMatchPrice(_symbol, _side, _nextPrice, 1);
+    cdMaxOrders  = new ConditionOrderCount(GetPointer(gridOrders), _maxQnt);
+    cdMaxLot     = new ConditionMaxLot(_maxLot, _nextLot);
+
+    cdMaxLot.lot(_nextLot);
+    cdMatchPrice.price(_nextPrice);
+
+    conditionsToOpenNewTrade.AddCondition(cdMatchPrice);
+    conditionsToOpenNewTrade.AddCondition(cdMaxOrders);
+    conditionsToOpenNewTrade.AddCondition(cdMaxLot);
+  }
+  ~Grid()
+  {
+    delete cdMatchPrice;
+    delete cdMaxOrders;
+    delete cdMaxLot;
+    delete openTrade;
+  }
+
+  void lastPrice(int inplastPrice) { _lastPrice = inplastPrice; }
+  bool active(void)
+  {
+    // si la primer orden está en perdidas:
+    if (gridOrders.profit(0) < 0)
+    {
+      _active = true;
+    } else
+    {
+      _active = false;
+    }
+    return _active;
+  }
+  double nextPrice(double inpLastPrice)
+  {
+    double mPoint = MarketInfo(_symbol, MODE_POINT);
+
+    if (_side == "buy") _nextPrice = inpLastPrice - (_gap * mPoint * 10);
+    if (_side == "sell") _nextPrice = inpLastPrice + (_gap * mPoint * 10);
+
+    return _nextPrice;
+  }
+  void   gap(double inpGap) { _gap = inpGap; }
+  void   multiplier(double inpmultiplier) { _multiplier = inpmultiplier; }
+  void   maxQnt(int inpmaxQnt) { _maxQnt = inpmaxQnt; }
+  void   maxLot(double inpmaxLot) { _maxLot = inpmaxLot; }
+  double maxLot() { return _maxLot; }
+  void   side(string inpside) { _side = inpside; }
+  void   symbol(string inpsymbol) { _symbol = inpsymbol; }
+  int    qnt()
+  {
+    return gridOrders.qnt();
+  }
+  double nextLot(void)
+  {
+    return NormalizeDouble(_initialLot * pow(_multiplier, qnt()), 2);
+  };
+
+  double profit()
+  {
+    double gridResult = 0;
+    Print(__FUNCTION__, " ", "qnt()", " ", qnt());
+
+    for (int i = 0; i < qnt(); i++)
+    {
+      if (CheckPointer(gridOrders.index(i)) != POINTER_INVALID)
+        gridResult += gridOrders.profit(i);
+
+      Print(__FUNCTION__, " ", "gridResult", " ", gridResult);
+    }
+    return gridResult;
+  }
+
+  void doGrid()
+  {
+    if (conditionsToOpenNewTrade.EvaluateConditions())
+    {
+      if (_side == "buy")
+      {
+        openTrade = new SendNewOrder("buy", Lots(), "", 0, SL("buy"), TP("buy"), _magico);
+        if (openTrade.doAction())
+        {
+          Print("pointer de la ultima orden: ", openTrade.lastOrder());
+          // if (gridOrders.AddOrder(openTrade.lastOrder()))
+          if (gridOrders.GetLastMarketOrder())
+            setNextTrade();
+        }
+        delete openTrade;
+      }
+
+      if (_side == "sell")
+      {
+        openTrade = new SendNewOrder("sell", Lots(), "", 0, SL("sell"), TP("sell"), _magico);
+        if (openTrade.doAction())
+        {
+          // Print("pointer de la ultima orden: ", openTrade.lastOrder());
+          // if (gridOrders.AddOrder(openTrade.lastOrder()))
+          if (gridOrders.GetLastMarketOrder())
+            setNextTrade();
+        }
+        delete openTrade;
+      }
+    }
+  }
+
+  void setNextTrade()
+  {
+    nextPrice(gridOrders.last().price());
+    // Print(__FUNCTION__, " ", "nextPrice: ", " ", _nextPrice);
+    cdMaxLot.lot(nextLot());
+    // Print(__FUNCTION__, " ", "nextLot()", " ", nextLot());
+    cdMatchPrice.price(_nextPrice);
+  }
+
+  double Lots()
+  {
+    return nextLot();
+  }
+
+  double SL(string side)
+  {
+    return 0;
+  }
+  double TP(string side)
+  {
+    return 0;
+  }
+
+  void closeGrid()
+  {
+    gridOrders.cleanCloseOrders();
+    if (qnt() == 0)
+    {
+      return;
+    }
+
+    int attempts = 0;
+    while (gridOrders.closeAllInList() != 0 || attempts < 10)
+    {
+      attempts++;
+    }
+  }
+};
+Grid* gridBuy;
+Grid* gridSell;
+
+class ConditionSignalLimiter : public iConditions
+{
+  string _side;
+  string _lastSide;
+
+ public:
+  ConditionSignalLimiter(string Side)
+  {
+    _side = Side;
+  }
+  ~ConditionSignalLimiter() { ; }
+
+  void lastSide(string lastSignal)
+  {
+    _lastSide = lastSignal;
+  }
+
+  bool evaluate()
+  {
+    if (_side != _lastSide)
+    {
+      return true;
+    }
+
+    return false;
+  }
+};
+ConditionSignalLimiter* availableToTakeSignalBuy;
+ConditionSignalLimiter* availableToTakeSignalSell;
+
+class ConditionGridActive : public iConditions
+{
+  Grid* _grid;
+
+ public:
+  ConditionGridActive(Grid* grid)
+  {
+    _grid = grid;
+  }
+  ~ConditionGridActive() { delete _grid; }
+
+  bool evaluate()
+  {
+    if (CheckPointer(_grid) != POINTER_INVALID)
+    {
+      if (_grid.active())
+      {
+        return false;
+      }
+    }
+    return true;
+  }
+};
+ConditionGridActive* gridActiveCondition;
+
+class ConditionsModeOneTrue
+{
+ protected:
+  iConditions* _conditions[];
+
+ public:
+  ConditionsModeOneTrue(void) {}
+  ~ConditionsModeOneTrue(void) { releaseConditions(); }
+
+  //+------------------------------------------------------------------+
+  void releaseConditions()
+  {
+    for (int i = 0; i < ArraySize(_conditions); i++)
+    {
+      delete _conditions[i];
+    }
+    ArrayFree(_conditions);
+  }
+  //+------------------------------------------------------------------+
+  void AddCondition(iConditions* condition)
+  {
+    int t = ArraySize(_conditions);
+    ArrayResize(_conditions, t + 1);
+    _conditions[t] = condition;
+  }
+
+  //+------------------------------------------------------------------+
+  bool EvaluateConditions(void)
+  {
+    for (int i = 0; i < ArraySize(_conditions); i++)
+    {
+      if (_conditions[i].evaluate())
+      {
+        return true;
+      }
+    }
+    return false;
+  }
+};
+
+interface iLevels
+{
+  double calculateLevel();
+  double pips();
+};
+class ByFixPips : public iLevels
+{
+  string _symbol;
+  string _side;
+  int    _pips;
+  string _mode;  // TP SL
+  double _price;
+
+ public:
+  ByFixPips(string inpSymbol, string inpSide, int inpPips, string inpMode, double Price = 0)
+  {
+    _pips   = inpPips;
+    _symbol = inpSymbol;
+    _side   = inpSide;
+    _mode   = inpMode;
+    _price  = Price;
+  }
+  ~ByFixPips() { ; }
+
+  double pips() { return _pips; }
+
+  double calculateLevel()
+  {
+    double mPoint   = MarketInfo(_symbol, MODE_POINT);
+    double distance = _pips * 10 * mPoint;
+
+    if (_pips == 0)
+    {
+      return 0;
+    }
+
+    if (_mode == "SL")
+    {
+      distance *= -1;
+    }
+
+    if (_side == "buy")
+    {
+      double ask        = SymbolInfoDouble(_symbol, SYMBOL_ASK);
+      double entryPrice = _price == 0 ? ask : _price;
+      return entryPrice + distance;
+    }
+
+    if (_side == "sell")
+    {
+      double bid        = SymbolInfoDouble(_symbol, SYMBOL_BID);
+      double entryPrice = _price == 0 ? bid : _price;
+      return entryPrice - distance;
+    }
+
+    return -1;
+  }
+};
+class ByMoney : public iLevels
+{
+  string _symbol;
+  string _side;
+  int    _pips;
+  double _money;
+  string _mode;  // TP SL
+  double _lot;
+
+ public:
+  ByMoney(string Symbol, string Side, double Lot, double Money, string Mode)
+  {
+    _lot    = Lot;
+    _symbol = Symbol;
+    _side   = Side;
+    _mode   = Mode;
+    _money  = Money;
+  }
+  ~ByMoney() { ; }
+
+  double pips()
+  {
+    double _tickValue    = MarketInfo(_symbol, MODE_TICKVALUE);
+    double _modeCalc     = MarketInfo(_symbol, MODE_PROFITCALCMODE);
+    double _contractSize = SymbolInfoDouble(_symbol, SYMBOL_TRADE_CONTRACT_SIZE);
+    double _step         = MarketInfo(_symbol, MODE_LOTSTEP);
+    double _points       = MarketInfo(_symbol, MODE_POINT);
+    double _digits       = MarketInfo(_symbol, MODE_DIGITS);
+
+    // FOREX
+    if (_modeCalc == 0)
+    {
+      // lot = return NormalizeDouble(_money / distance / _tickValue, 2);
+      return NormalizeDouble(_money / (_lot * _tickValue), 2);
+    }
+
+    // FUTUROS
+    if (_modeCalc == 1 && _step != 1.0)
+    {
+      double c = _contractSize * _step;
+      // return NormalizeDouble(_money / (distance * c), 2);
+      // lot = _money / (distance * c)
+      return NormalizeDouble((_money / c / _lot), 2);
+    }
+
+    // FUTUROS SIN DECIMALES
+    if (_modeCalc == 1 && _step == 1.0)
+    {
+      double c = _contractSize * _step;
+      // return MathFloor(_money / (distance * c) * 100);
+      return MathFloor((_money / c / _lot) / 100);
+    }
+
+    return 0;
+  }
+
+  double calculateLevel()
+  {
+    _pips         = (int)pips();
+    double mPoint = MarketInfo(_symbol, MODE_POINT);
+    // double distance = _pips * 10 * mPoint;
+    double distance = _pips * mPoint;
+    double result   = 0;
+    double ask      = SymbolInfoDouble(_symbol, SYMBOL_ASK);
+    double bid      = SymbolInfoDouble(_symbol, SYMBOL_BID);
+
+    if (_pips == 0)
+    {
+      return 0;
+    }
+    if (_mode == "SL")
+    {
+      distance *= -1;
+    }
+    if (_side == "buy")
+    {
+      return ask + distance;
+    }
+    if (_side == "sell")
+    {
+      return bid - distance;
+    }
+    return -1;
+  }
+};
+class ByPipsFromCandle : public iLevels
+{
+  string _symbol;
+  string _side;
+  int    _pips;
+  string _mode;  // TP SL
+  int    _tfCandle;
+  int    _shiftCandle;
+
+ public:
+  ByPipsFromCandle(string inpSymbol, string inpSide, int inpPips, string inpMode, int timeFrameCandle, int shiftCandle)
+  {
+    _pips        = inpPips;
+    _symbol      = inpSymbol;
+    _side        = inpSide;
+    _mode        = inpMode;
+    _tfCandle    = timeFrameCandle;
+    _shiftCandle = shiftCandle;
+  }
+  ~ByPipsFromCandle() { ; }
+  double pips()
+  {
+    return _pips;
+  }
+
+  double calculateLevel()
+  {
+    double mPoint   = MarketInfo(_symbol, MODE_POINT);
+    double distance = _pips * 10 * mPoint;
+    double result   = 0;
+    double high     = iHigh(_symbol, _tfCandle, _shiftCandle);
+    double low      = iLow(_symbol, _tfCandle, _shiftCandle);
+
+    if (_pips == 0)
+    {
+      return 0;
+    }
+
+    if (_side == "buy")
+    {
+      if (_mode == "TP") return high + distance;
+      if (_mode == "SL") return low - distance;
+    }
+    if (_side == "sell")
+    {
+      if (_mode == "TP") return low - distance;
+      if (_mode == "SL") return high + distance;
+    }
+    return -1;
+  }
+};
+class Levels
+{
+  iLevels* _level;
+
+ public:
+  Levels(iLevels* inpLevel)
+  {
+    _level = inpLevel;
+  }
+  ~Levels()
+  {
+    if (CheckPointer(_level) == 1)
+      delete _level;
+  }
+
+  double calculateLevel()
+  {
+    return _level.calculateLevel();
+  }
+  double pips()
+  {
+    return _level.pips();
+  }
+};
+Levels* levelTP;
+Levels* levelSL;
+
+class ActionCloseOrdersByType : public iActions
+{
+  ENUM_ORDER_TYPE _type;
+  string          _symbol;
+  int             _magic;
+  int             _slippage;
+  double          _price;
+
+ public:
+  ActionCloseOrdersByType(string side, int magic = 0, string symbol = "", int slippage = 10000)
+  {
+    if (side == "buy") _type = OP_BUY;
+    if (side == "sell") _type = OP_SELL;
+    if (symbol == "")
+    {
+      _symbol = Symbol();
+    } else
+    {
+      _symbol = symbol;
+    }
+    if (magic != 0)
+    {
+      _magic = magic;
+    }
+    if (slippage != 10000)
+    {
+      _slippage = slippage;
+    }
+  }
+  ~ActionCloseOrdersByType() {}
+
+  void setPrice()
+  {
+    if (_type == OP_BUY)
+    {
+      _price = SymbolInfoDouble(_symbol, SYMBOL_BID);
+    }
+    if (_type == OP_SELL)
+    {
+      _price = SymbolInfoDouble(_symbol, SYMBOL_ASK);
+    }
+  }
+
+  bool doAction()
+  {
+    setPrice();
+    for (int i = OrdersTotal() - 1; i >= 0; i--)
+    {
+      if (OrderSelect(i, SELECT_BY_POS) && OrderSymbol() == _symbol && OrderMagicNumber() == _magic && OrderType() == _type)
+      {
+        if (!OrderClose(OrderTicket(), OrderLots(), _price, _slippage, clrNONE))
+        {
+          Print(__FUNCTION__, " ", "can't close Order: ", OrderTicket(), " error: ", GetLastError());
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+};
+ActionCloseOrdersByType* actionCloseSells;
+ActionCloseOrdersByType* actionCloseBuys;
+
+class ActionDeletePendings : public iActions
+{
+  string _symbol;
+  int    _magic;
+  string _side;
+
+ public:
+  ActionDeletePendings(string side, int magic = 0, string symbol = "")
+  {
+    _side   = side;
+    _symbol = symbol == "" ? Symbol() : symbol;
+    _magic  = magic != 0 ? magic : 0;
+  }
+  ~ActionDeletePendings() {}
+
+  bool doAction()
+  {
+    for (int i = OrdersTotal() - 1; i >= 0; i--)
+    {
+      if (OrderSelect(i, SELECT_BY_POS) && OrderSymbol() == _symbol && OrderMagicNumber() == _magic)
+      {
+        if (_side == "buy" && (OrderType() == OP_BUYSTOP || OrderType() == OP_BUYLIMIT))
+        {
+          OrderDelete(OrderTicket());
+        }
+        if (_side == "sell" && (OrderType() == OP_SELLSTOP || OrderType() == OP_SELLLIMIT))
+        {
+          OrderDelete(OrderTicket());
+        }
+      }
+    }
+    return true;
+  }
+};
+ActionDeletePendings* actionDeletePendingsBuys;
+ActionDeletePendings* actionDeletePendingsSells;
+
+interface iTSL
+{
+  void   setInitialStep(Order* order);
+  void   setNextStep(Order* order);
+  double newSL(Order* order);
+};
+class TslByPips : public iTSL
+{
+  int    _InitialStep;
+  int    _TslStep;
+  double _Distance;
+
+ public:
+  TslByPips(int InitialStep, int TslStep, double Distance)
+  {
+    _InitialStep = InitialStep * 10;
+    _TslStep     = TslStep * 10;
+    _Distance    = Distance * 10;
+  }
+  ~TslByPips() { ; }
+
+  void setInitialStep(Order* order)
+  {
+    double mPoint       = MarketInfo(order.symbol(), MODE_POINT);
+    double pointsToMove = _InitialStep * mPoint;
+    if (order.type() == OP_SELL)
+    {
+      pointsToMove *= -1;
+    }
+    order.tslNext(order.price() + pointsToMove);
+
+    Print(__FUNCTION__, " ", "TSL Order: ", " ", order.id());
+    Print(__FUNCTION__, " ", "TSL Order Price: ", " ", order.price());
+    Print(__FUNCTION__, " ", "TSL tslNext: ", " ", order.tslNext());
+  }
+
+  void setNextStep(Order* order)
+  {
+    double mPoint       = MarketInfo(order.symbol(), MODE_POINT);
+    double pointsToMove = _TslStep * mPoint;
+    if (order.type() == OP_SELL)
+    {
+      pointsToMove *= -1;
+    }
+    order.tslNext(order.tslNext() + pointsToMove);
+
+    Print(__FUNCTION__, " ", "TSL Order: ", " ", order.id());
+    Print(__FUNCTION__, " ", "TSL Order Price: ", " ", order.price());
+    Print(__FUNCTION__, " ", "TSL tslNext: ", " ", order.tslNext());
+  }
+
+  double newSL(Order* order)
+  {
+    double mPoint       = MarketInfo(order.symbol(), MODE_POINT);
+    double pointsToMove = _Distance * mPoint;
+    if (order.type() == OP_SELL)
+    {
+      pointsToMove *= -1;
+    }
+
+    double newSl = order.tslNext() - pointsToMove;
+    Print(__FUNCTION__, " ", "TSL Order: ", " ", order.id());
+    Print(__FUNCTION__, " ", "TSL New SL: ", " ", newSl);
+
+    return newSl;
+  }
+};
+
+class TrailingStop
+{
+  OrdersList* _orders;
+  iTSL*       _TslMode;
+
+ public:
+  TrailingStop(OrdersList* uOrders, TSLMode mode)
+  {
+    _orders = uOrders;
+
+    switch (mode)
+    {
+      case byPips:
+        _TslMode = new TslByPips(userTslInitialStep, userTslStep, userTslDistance);
+        break;
+        // case byMA:
+        // _TslMode = new TslByMA(userTslMaTf, tslMaPeriod, tslMaShift, tslMaMethod, tslMaAppliedPrice);
+        // break;
+    }
+  }
+  ~TrailingStop()
+  {
+    // delete _orders;
+    delete _TslMode;
+  }
+
+  void doTSL()
+  {
+    for (int i = 0; i < _orders.qnt(); i++)
+    {
+      if (CheckPointer(_orders.index(i)) == POINTER_INVALID)
+      {
+        Print(__FUNCTION__, " ", "Pointer invalid i= ", i);
+        continue;
+      }
+
+      // seteo Initial:
+      if (_orders.index(i).tslNext() == 0)
+      {
+        _TslMode.setInitialStep(_orders.index(i));
+      }
+
+      if (MatchNextTsl(_orders.index(i)))
+      {
+        double newSl = _TslMode.newSL(_orders.index(i));
+        moveSL(_orders.index(i).id(), newSl);
+        _TslMode.setNextStep(_orders.index(i));
+      }
+    }
+  }
+
+  bool MatchNextTsl(Order* order)
+  {
+    double ask = SymbolInfoDouble(order.symbol(), SYMBOL_ASK);
+    double bid = SymbolInfoDouble(order.symbol(), SYMBOL_BID);
+    if (order.type() == OP_BUY)
+    {
+      if (bid >= order.tslNext())
+      {
+        return true;
+      }
+    }
+    if (order.type() == OP_SELL)
+    {
+      if (ask <= order.tslNext())
+      {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  void moveSL(int tk, double newSl)
+  {
+    if (OrderSelect(tk, SELECT_BY_TICKET))
+    {
+      if (!OrderModify(tk, OrderOpenPrice(), newSl, OrderTakeProfit(), 0))
+      {
+        Print(__FUNCTION__, " ", "error when make TSL in TK: ", tk, " ", GetLastError());
+      } else
+      {
+        Print(__FUNCTION__, " trailing stop in tk: ", tk);
+      }
+    }
+  }
+};
+TrailingStop* tsl;
+
+bool CloseCandleMode = true;  // meter en la clase CloseCandle
+class LotCalculator
+{
+  double _tickValue;
+  double _modeCalc;
+  double _contractSize;
+  double _step;
+  string _symbol;
+  double _points;
+  double _digits;
+
+ public:
+  LotCalculator(string inpSymbol = "") { setSymbol(inpSymbol); };
+  ~LotCalculator() { ; }
+
+  void setSymbol(string sym)
+  {
+    if (sym == "")
+    {
+      _symbol = Symbol();
+    } else
+    {
+      _symbol = sym;
+    }
+    _tickValue    = MarketInfo(_symbol, MODE_TICKVALUE);
+    _modeCalc     = MarketInfo(_symbol, MODE_PROFITCALCMODE);
+    _contractSize = SymbolInfoDouble(_symbol, SYMBOL_TRADE_CONTRACT_SIZE);
+    _step         = MarketInfo(_symbol, MODE_LOTSTEP);
+    _points       = MarketInfo(_symbol, MODE_POINT);
+    _digits       = MarketInfo(_symbol, MODE_DIGITS);
+  }
+
+  double LotsByBalancePercent(double BalancePercent, double Distance)
+  {
+    double risk = AccountBalance() * BalancePercent / 100;
+    return CalculateLots(risk, Distance);
+  }
+
+  double LotsByMoney(double Money, double Distance)
+  {
+    double risk = fabs(Money);
+    return CalculateLots(risk, Distance);
+  }
+
+  double CalculateLots(double risk, double distance)
+  {
+    distance *= 10;
+    if (distance == 0)
+    {
+      Print(__FUNCTION__, " ", "Set Distance");
+      return 0;
+    }
+
+    // FOREX
+    if (_modeCalc == 0)
+    {
+      return NormalizeDouble(risk / distance / _tickValue, 2);
+    }
+
+    // FUTUROS
+    if (_modeCalc == 1 && _step != 1.0)
+    {
+      double c = _contractSize * _step;
+      return NormalizeDouble(risk / (distance * c), 2);
+    }
+
+    // FUTUROS SIN DECIMALES
+    if (_modeCalc == 1 && _step == 1.0)
+    {
+      double c = _contractSize * _step;
+      return MathFloor(risk / (distance * c) * 100);
+    }
+
+    return 0;
+  }
+};
+LotCalculator* lotProvider;
+
+class Session
+{
+  int _iniTime;  // second from 00:00 hr of the day
+  int _endTime;
+  int _dayNumber;
+
+ public:
+  // receive time in format 00:00
+  Session(string iniTime, string endTime, int dayNumber = 0)
+  {
+    _iniTime   = secondsFromZeroHour(iniTime);
+    _endTime   = secondsFromZeroHour(endTime);
+    _dayNumber = dayNumber;
+  };
+
+  ~Session() {}
+
+  int iniTime() { return _iniTime; }
+  int endTime() { return _endTime; }
+  int dayNumber() { return _dayNumber; }
+
+  int secondsFromZeroHour(string time)
+  {
+    int hh = (int)StringSubstr(time, 0, 2);
+    int mm = (int)StringSubstr(time, 3, 2);
+
+    return (hh * 3600) + (mm * 60);
+  }
+};
+class ScheduleController
+{
+  Session* schedules[];
+  int      _actualIndex;
+  Session* _actualSession;
+  int      _currentDay;
+  double   _timeZone;  // modificador para ajustar GMT
+
+ public:
+  ScheduleController()
+  {
+    setCurrentDay();
+  };
+  ~ScheduleController()
+  {
+    ClearShchedules();
+  }
+
+  Session* at() { return _actualSession; }
+
+  void setTimeZone(double hs)
+  {
+    _timeZone = hs * 60 * 60;
+  }
+
+  void setCurrentDay()
+  {
+    _currentDay = TimeDay(TimeGMT() + _timeZone);  // return the day of the month 1-31
+  }
+
+  bool isNewDay()
+  {
+    if (TimeDay(TimeGMT() + _timeZone) != _currentDay)
+    {
+      setCurrentDay();
+      return true;
+    }
+
+    return false;
+  }
+
+  void setActualSession(int index)
+  {
+    _actualIndex = index;
+
+    if (index > -1)
+    {
+      _actualSession = schedules[index];
+    }
+  }
+
+  int qnt()
+  {
+    return ArraySize(schedules);
+  }
+
+  bool AddSession(string ini, string end, int day = 0)
+  {
+    Session* sc = new Session(ini, end, day);
+    int      t  = qnt();
+    if (ArrayResize(schedules, t + 1))
+    {
+      schedules[t] = sc;
+      return true;
+    }
+
+    return false;
+  }
+
+  bool ClearShchedules()
+  {
+    for (int i = 0; i < qnt(); i++)
+    {
+      delete schedules[i];
+    }
+    ArrayFree(schedules);
+
+    return true;
+  }
+
+  bool doSessionControl()  // control day and hours for every session
+  {
+    Comment("Daily Control - EA OFF");
+
+    int actual = (TimeHour(TimeGMT() + _timeZone) * 3600) + (TimeMinute(TimeGMT() + _timeZone) * 60);
+
+    for (int i = 0; i < qnt(); i++)
+    {
+      if (schedules[i].dayNumber() == EA_OFF)
+      {
+        continue;
+      }
+
+      if (schedules[i].dayNumber() != 0)
+      {
+        if (schedules[i].dayNumber() == TimeDayOfWeek(TimeGMT() + _timeZone))
+        {
+          if ((actual >= schedules[i].iniTime()) && actual <= schedules[i].endTime())
+          {
+            setActualSession(i);
+            Comment("Daily Control - EA ON");
+            return true;
+          }
+        }
+      }
+
+      if (schedules[i].dayNumber() == 0)
+      {
+        if ((actual >= schedules[i].iniTime()) && actual <= schedules[i].endTime())
+        {
+          setActualSession(i);
+          Comment("Daily Control - EA ON");
+          return true;
+        }
+      }
+    }
+
+    //---
+    setActualSession(-1);
+    return false;
+  }
+
+  void PrintDays()
+  {
+    for (int i = 0; i < qnt(); i++)
+    {
+      PrintDay(i);
+    }
+  }
+
+  void PrintDay(int i)
+  {
+    Print("Day Nr: ", schedules[i].dayNumber());
+    Print("Day Ini Time: ", schedules[i].iniTime());
+    Print("Day End Time: ", schedules[i].endTime());
+  }
+};
+ScheduleController sesionControl;
+
+class CNewCandle
+{
+ private:
+  int    velasInicio;
+  string m_symbol;
+  int    m_tf;
+
+ public:
+  CNewCandle();
+  CNewCandle(string symbol, int tf) : m_symbol(symbol), m_tf(tf), velasInicio(iBars(symbol, tf)) {}
+  ~CNewCandle();
+
+  bool IsNewCandle();
+};
+CNewCandle::CNewCandle()
+{
+  // toma los valores del chart actual
+  velasInicio = iBars(Symbol(), Period());
+  m_symbol    = Symbol();
+  m_tf        = Period();
+}
+CNewCandle::~CNewCandle() {}
+bool CNewCandle::IsNewCandle()
+{
+  int velasActuales = iBars(m_symbol, m_tf);
+  if (velasActuales > velasInicio)
+  {
+    velasInicio = velasActuales;
+    return true;
+  }
+
+  //---
+  return false;
+}
+CNewCandle* newCandle;
+
+ConcurrentConditions conditionsToBuy;
+ConcurrentConditions conditionsToSell;
+// ConditionsModeOneTrue    conditionsToCloseBuy;
+ConcurrentConditions conditionsToCloseBuy;
+// ConditionsModeOneTrue    conditionsToCloseSell;
+ConcurrentConditions conditionsToCloseSell;
+ConcurrentConditions conditionsToBreackeven;
+ConcurrentConditions conditionsToPartialClose;
+
+class BUYcondition1 : public iConditions
+{
+ public:
+  bool evaluate()
+  {
+    // TODO: condition Buy 1
+
+    string patCode = engoulfing.FindPattern(Period());
+    Print(__FUNCTION__, " patCode: ", patCode);
+    int    candleNumber     = StringSubstr(patCode, 0, 2);
+    string patternDirection = StringSubstr(patCode, 2, 1);
+
+    return (patternDirection == "p" && candleNumber == 1);
+
+    // return iClose(NULL, 0, 1) > iOpen(NULL, 0, 1);
+    // return false;
+  }
+};
+BUYcondition1* buyCondition1;
+class BUYcondition2 : public iConditions
+{
+ public:
+  bool evaluate()
+  {
+    // TODO: condition Buy 2
+    return iClose(NULL, 0, 1) > ma.index(1);
+    // return false;
+  }
+};
+BUYcondition2* buyCondition2;
+class BUYcondition3 : public iConditions
+{
+ public:
+  bool evaluate()
+  {
+    // TODO: condition Buy 3
+    return false;
+  }
+};
+BUYcondition3* buyCondition3;
+class ConditionCountBuys : public iConditions
+{
+  int _maxBuys;
+
+ public:
+  ConditionCountBuys(int maxBuys)
+  {
+    _maxBuys = maxBuys;
+  }
+  ~ConditionCountBuys() { ; }
+
+  bool evaluate()
+  {
+    int count = 0;
+    for (int i = OrdersTotal() - 1; i >= 0; i--)
+    {
+      if (OrderSelect(i, SELECT_BY_POS) && OrderSymbol() == _Symbol && OrderMagicNumber() == magico)
+      {
+        if (OrderType() == OP_BUY)
+        {
+          count += 1;
+        }
+
+        if (count == _maxBuys)
+        {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+};
+ConditionCountBuys* countBuys;
+class ConditionCountTrades : public iConditions
+{
+  int _max;
+
+ public:
+  ConditionCountTrades(int maxTrades)
+  {
+    _max = maxTrades;
+  }
+  ~ConditionCountTrades() { ; }
+
+  bool evaluate()
+  {
+    int count = 0;
+    for (int i = OrdersTotal() - 1; i >= 0; i--)
+    {
+      if (OrderSelect(i, SELECT_BY_POS) && OrderSymbol() == _Symbol && OrderMagicNumber() == magico)
+      {
+        count += 1;
+
+        if (count == _max)
+        {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+};
+ConditionCountTrades* countTrades;
+
+class SELLcondition1 : public iConditions
+{
+ public:
+  bool evaluate()
+  {
+    // TODO: condition sell 1
+    string patCode = engoulfing.FindPattern(Period());
+    Print(__FUNCTION__, " patCode: ", patCode);
+    int    candleNumber     = StringSubstr(patCode, 0, 2);
+    string patternDirection = StringSubstr(patCode, 2, 1);
+
+    return (patternDirection == "q" && candleNumber == 1);
+    // return iClose(NULL, 0, 1) < iOpen(NULL, 0, 1);
+  }
+};
+SELLcondition1* sellCondition1;
+class SELLcondition2 : public iConditions
+{
+ public:
+  bool evaluate()
+  {
+    // TODO: condition sell 2
+    return iClose(NULL, 0, 1) < ma.index(1);
+    // return false;
+  }
+};
+SELLcondition2* sellCondition2;
+class SELLcondition3 : public iConditions
+{
+ public:
+  bool evaluate()
+  {
+    // TODO: condition sell 3
+
+    return false;
+  }
+};
+SELLcondition3* sellCondition3;
+class ConditionCountSells : public iConditions
+{
+  int _maxSells;
+
+ public:
+  ConditionCountSells(int maxSells)
+  {
+    _maxSells = maxSells;
+  }
+  ~ConditionCountSells() { ; }
+
+  bool evaluate()
+  {
+    int count = 0;
+    for (int i = OrdersTotal() - 1; i >= 0; i--)
+    {
+      if (OrderSelect(i, SELECT_BY_POS) && OrderSymbol() == _Symbol && OrderMagicNumber() == magico)
+      {
+        if (OrderType() == OP_SELL)
+        {
+          count += 1;
+        }
+
+        if (count == _maxSells)
+        {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+};
+ConditionCountSells* countSells;
+
+// TODO: close Conditions
+class ConditionToCloseBuy : public iConditions
+{
+ public:
+  bool evaluate()
+  {
+    if (closeAllInOpositeSignal)
+    {
+      return sellCondition1.evaluate() && sellCondition2.evaluate();
+    }
+    if (closeAllControlON)
+    {
+      return CloseAllControl();
+    }
+
+#ifdef DAILY_LIMITS
+    if (uDailyProfitOn)
+    {
+      if (dailyProfitCondition.evaluate()) return true;
+    }
+    if (uDailyLossOn)
+    {
+      if (dailyLossCondition.evaluate()) return true;
+    }
+#endif
+
+    return false;
+  }
+};
+ConditionToCloseBuy* conditionCloseBuy;
+
+class ConditionToCloseSell : public iConditions
+{
+ public:
+  bool evaluate()
+  {
+    if (closeAllInOpositeSignal)
+    {
+      return buyCondition1.evaluate() && buyCondition2.evaluate();
+    }
+    if (closeAllControlON)
+    {
+      return CloseAllControl();
+    }
+
+#ifdef DAILY_LIMITS
+    if (uDailyProfitOn)
+    {
+      if (dailyProfitCondition.evaluate()) return true;
+    }
+    if (uDailyLossOn)
+    {
+      if (dailyLossCondition.evaluate()) return true;
+    }
+#endif
+
+    return false;
+  }
+};
+ConditionToCloseSell* conditionCloseSell;
+
+class BreackevenCondition : public iConditions
+{
+  // TODO: bk condition
+  Order* _order;
+
+ public:
+  void setOrder(Order* or)
+  {
+    _order = or ;
+  }
+
+  bool evaluate()
+  {
+    // si el precio actual coindide con el momento de hacer bk ret true
+    double mPoints = MarketInfo(_order.symbol(), MODE_POINT);
+    double ask     = SymbolInfoDouble(_order.symbol(), SYMBOL_ASK);
+    double bid     = SymbolInfoDouble(_order.symbol(), SYMBOL_BID);
+    double dist    = userBkvPips * mPoints * 10;
+
+    if (_order.type() == OP_BUY)
+    {
+      if (bid >= _order.price() + dist)
+      {
+        return true;
+      }
+    }
+    if (_order.type() == OP_SELL)
+    {
+      if (ask <= _order.price() - dist)
+      {
+        return true;
+      }
+    }
+
+    return false;
+  }
+};
+BreackevenCondition* breackevenCondition;
+
+class PartialCloseCondition : public iConditions
+{
+  // TODO: PC condition
+  Order* _order;
+
+ public:
+  void setOrder(Order* or)
+  {
+    _order = or ;
+  }
+
+  bool evaluate()
+  {
+    double mPoints = MarketInfo(_order.symbol(), MODE_POINT);
+    double ask     = SymbolInfoDouble(_order.symbol(), SYMBOL_ASK);
+    double bid     = SymbolInfoDouble(_order.symbol(), SYMBOL_BID);
+
+    int    n = _order.countPartials();
+    double dist;
+    if (n == 0) dist = userPartialClosePips * mPoints * 10;
+    if (n > 0) dist = userPartialClosePips * mPoints * 10 * (n + 1);
+
+    if (_order.type() == OP_BUY)
+    {
+      if (bid >= _order.price() + dist)
+      {
+        Print(__FUNCTION__, " ", "_order.price()", " ", _order.price());
+        Print(__FUNCTION__, " ", "bid", " ", bid);
+        return true;
+      }
+    }
+    if (_order.type() == OP_SELL)
+    {
+      if (ask <= _order.price() - dist)
+      {
+        return true;
+      }
+    }
+
+    return false;
+  }
+};
+PartialCloseCondition* partialCloseCondition;
+
+//////////////////////////////////////////////////////////////////////
+// NOTE: OnInit
+int OnInit()
+{
+	 // gui.OnInitEvent();
+  
+	if (i_reason != REASON_CHARTCHANGE && i_reason != REASON_TEMPLATE && i_reason != REASON_PARAMETERS)
+	{
+		if (!gui.Create(0, "Scalping Panel",0, 10,10,240,430))
+	  {
+    	::Print(__FUNCTION__, "Failed to create graphical interface!");
+    	return (INIT_FAILED);
+	  }
+	}
+	gui.Run();
+	
+	// NOTE: BUTTONS Actions	
+	gui.setButton1Action(sellStopPrevious = new SellStopPrevious());
+	gui.setButton2Action(cancelSellStopPrevious = new CancelSellStopPrevious());
+	gui.setButton3Action(sellStopCurrent = new SellStopCurrent());
+	gui.setButton4Action(cancelSellStopCurrent = new CancelSellStopCurrent());
+	gui.setButton5Action(sellStop = new SellStop());
+	gui.setButton6Action(cancelSellStop = new CancelSellStop());
+	gui.setButton7Action(closeLossers = new ActionCloseByProfit("loss",magico,_Symbol));
+	
+	gui.setButton8Action(buyStopPrevious = new BuyStopPrevious());
+	gui.setButton9Action(cancelBuyStopPrevious = new CancelBuyStopPrevious());
+	gui.setButton10Action(buyStopCurrent = new BuyStopCurrent());
+	gui.setButton11Action(cancelBuyStopCurrent = new CancelBuyStopCurrent());
+	gui.setButton12Action(buyStop = new BuyStop());
+	gui.setButton13Action(cancelBuyStop = new CancelBuyStop());
+	gui.setButton14Action(closeWinners = new ActionCloseByProfit("win",magico,_Symbol));
+	gui.setButton15Action(closeAll = new ActionCloseByProfit("all",magico,_Symbol));
+	
+	gui.setButton16Action(sellMarket = new SellMarket());
+	gui.setButton17Action(buyMarket = new BuyMarket());
+
+
+
+
+#ifdef LICENSE_CONTROL_ON
+  if (!license.controlByDate())
+  {
+    return INIT_FAILED;
+  }
+#endif
+
+#ifdef CONTROL_CUSTOM_INDICATOR_FILE
+  double temp = iCustom(NULL, 0, file_custom_indicator, 0, 0);
+  if (GetLastError() == ERR_INDICATOR_CANNOT_LOAD)
+  {
+    Alert("Please, install the: " + file_custom_indicator + " indicator");
+    return INIT_FAILED;
+  }
+#endif
+
+  newCandle = new CNewCandle();
+  tsl       = new TrailingStop(GetPointer(mainOrders), byPips);
+
+  //--- CONDITIONS TO OPEN TRADES:
+  //--- buys:
+  // conditionsToBuy.AddCondition(buyCondition1 = new BUYcondition1());
+  // conditionsToBuy.AddCondition(buyCondition2 = new BUYcondition2());
+  // conditionsToBuy.AddCondition(buyCondition3 = new BUYcondition3());
+  // conditionsToBuy.AddCondition(countBuys = new ConditionCountBuys(1));
+  // availableToTakeSignalBuy = new ConditionSignalLimiter("buy");
+  // conditionsToBuy.AddCondition(availableToTakeSignalBuy);
+
+  //--- sell:
+  // conditionsToSell.AddCondition(sellCondition1 = new SELLcondition1());
+  // conditionsToSell.AddCondition(sellCondition2 = new SELLcondition2());
+  // conditionsToSell.AddCondition(sellCondition3 = new SELLcondition3());
+  // conditionsToSell.AddCondition(countSells = new ConditionCountSells(1));
+  // availableToTakeSignalSell = new ConditionSignalLimiter("sell");
+  // conditionsToSell.AddCondition(availableToTakeSignalSell);
+
+#ifdef MAX_TRADES_AT_SAME_TIME
+  conditionsToBuy.AddCondition(countTrades = new ConditionCountTrades(uMaxTrades));
+  conditionsToSell.AddCondition(countTrades = new ConditionCountTrades(uMaxTrades));
+#endif
+
+  //--- CONDITIONS TO CLOSE TRADES:
+  // conditionsToCloseSell.AddCondition(conditionCloseSell = new ConditionToCloseSell());
+  // conditionsToCloseBuy.AddCondition(conditionCloseBuy = new ConditionToCloseBuy());
+
+  //--- CONDITIONS TO BREAKEVEN:
+  conditionsToBreackeven.AddCondition(breackevenCondition = new BreackevenCondition());
+
+  //--- CONDITIONS TO PARTIAL CLOSE:
+  conditionsToPartialClose.AddCondition(partialCloseCondition = new PartialCloseCondition());
+
+//--- SESSIONS CONTROL:
+#ifdef TIMER_FULL
+  sesionControl.setTimeZone(uTimeZone);
+  if (day1_On) sesionControl.AddSession(day1_Start, day1_End, day1);
+  if (day2_On) sesionControl.AddSession(day2_Start, day2_End, day2);
+  if (day3_On) sesionControl.AddSession(day3_Start, day3_End, day3);
+  if (day4_On) sesionControl.AddSession(day4_Start, day4_End, day4);
+  if (day5_On) sesionControl.AddSession(day5_Start, day5_End, day5);
+#endif
+#ifdef TIMER_MINI
+  sesionControl.AddSession(timeStart, timeEnd);
+#endif
+
+  // EventSetTimer(1);
+
+  // Note: Indicators
+  // Example: indicator.setSetup(set0, set1... setn);
+  //--- INDICATORS SETUPS:
+  // pfe = new PFE(_Symbol, Period());
+  ma = new MovingAverage();
+  ma.setSetup(maPeriod, maShift, maMethod, maAppliedPrice);
+
+#ifdef NEWS_FILTER
+  if (StringLen(NewsSymb) > 1)
+    str1 = NewsSymb;
+  else
+    str1 = Symbol();
+
+  Vhigh   = NewsHard;
+  Vmedium = NewsMedium;
+  Vlow    = NewsLight;
+
+  MinBefore = BeforeNewsStop;
+  MinAfter  = AfterNewsStop;
+  
+	LastUpd   = 0;
+#endif
+
+  return (INIT_SUCCEEDED);
+}
+
+void OnDeinit(const int reason)
+{
+	i_reason = reason;
+  if (i_reason != REASON_CHARTCHANGE && i_reason != REASON_PARAMETERS)
+  {
+    gui.Destroy(reason);
+  }
+
+  delete newCandle;
+  delete tsl;
+}
+
+// NOTE: OnTick
+void OnTick()
+{
+#ifdef NEWS_FILTER
+  if(newsOn)
+	{
+		News_Automatic();
+		if (ControlNewsTime()) { return; }
+	}
+#endif 
+  
+  mainOrders.cleanCloseOrders();
+  mainOrders.GetMarketOrders();
+
+  CheckearOrdernesyGenerarGrids();
+  // Breackeven Conditions & action
+  // ------------------------------------------------------------------
+  if (breakevenOn) doBreackevenAction();
+  if (TslON) tsl.doTSL();
+
+  // Partial Close:
+  // ------------------------------------------------------------------
+  if (partialCloseOn) doPartialCloseAction();
+
+  if (GridON == true && CheckPointer(gridSell) != POINTER_INVALID)
+  {
+    gridSell.doGrid();
+    mainOrders.GetMarketOrders();
+  }
+  if (GridON == true && CheckPointer(gridBuy) != POINTER_INVALID)
+  {
+    gridBuy.doGrid();
+    mainOrders.GetMarketOrders();
+  }
+  if (GridON == true && closeGridOn == true)
+  {
+    doCloseGridControl();
+  }
+
+  if (!sesionControl.doSessionControl())
+  {
+    return;
+  }
+
+  // ------------------------------------------------------------------
+  if (!uTradeReverse)
+  {
+    if (conditionsToCloseBuy.EvaluateConditions())
+    {
+      closeAll("buy");
+    }
+    if (conditionsToCloseSell.EvaluateConditions())
+    {
+      closeAll("sell");
+    }
+  }
+  if (uTradeReverse)
+  {
+    if (conditionsToCloseSell.EvaluateConditions())
+    {
+      closeAll("buy");
+    }
+    if (conditionsToCloseBuy.EvaluateConditions())
+    {
+      closeAll("sell");
+    }
+  }
+  // ------------------------------------------------------------------
+
+  //--- CANDLE CLOSE:
+  if (CloseCandleMode)
+    if (!newCandle.IsNewCandle())
+    {
+      return;
+    }
+
+    // ------------------------------------------------------------------
+#ifdef SPREAD_FILTER
+  if (SpreadFilterOn)
+    if (!spreadFilter()) return;
+#endif
+
+#ifdef DAILY_LIMITS
+  if (uDailyProfitOn)
+  {
+    if (dailyProfitCondition.evaluate()) return;
+  }
+  if (uDailyLossOn)
+  {
+    if (dailyLossCondition.evaluate()) return;
+  }
+#endif
+
+
+  // ------------------------------------------------------------------
+
+  // NOTE: BUY normal
+  if (!uTradeReverse)
+  {
+    if (conditionsToBuy.EvaluateConditions())
+    {
+      if (modeEntry == Market)
+      {
+        actionSendOrder = new SendNewOrder("buy", Lots(), "", 0, SL("buy"), TP("buy"), magico);
+      } else
+      {
+        double pr       = Price("buy", uEntryDistance, _Symbol);
+        actionSendOrder = new SendNewOrder("buy", Lots(), "", pr, SL("buy", pr), TP("buy", pr), magico);
+      }
+
+      if (actionSendOrder.doAction())
+      {
+        mainOrders.GetMarketOrders();
+
+        if (GridON == true && CheckPointer(gridBuy) == POINTER_INVALID)
+        {
+          gridBuy = new Grid(_Symbol, "buy", mainOrders.last().price(), GridUser_gap, GridUser_multiplier, GridUser_maxCount, GridUser_maxLot, mainOrders.last().lot(), magico);
+          conditionsToBuy.AddCondition(gridActiveCondition = new ConditionGridActive(gridBuy));
+        }
+
+        // availableToTakeSignalBuy.lastSide("buy");
+        // availableToTakeSignalSell.lastSide("buy");
+        Notifications(0);
+      }
+
+      delete actionSendOrder;
+      delete levelTP;
+      delete levelSL;
+    }
+    // NOTE: SELL normal
+    if (conditionsToSell.EvaluateConditions())
+    {
+      if (modeEntry == Market)
+      {
+        actionSendOrder = new SendNewOrder("sell", Lots(), "", 0, SL("sell"), TP("sell"), magico);
+      } else
+      {
+        double pr       = Price("sell", uEntryDistance, _Symbol);
+        actionSendOrder = new SendNewOrder("sell", Lots(), "", pr, SL("sell", pr), TP("sell", pr), magico);
+      }
+      if (actionSendOrder.doAction())
+      {
+        mainOrders.GetMarketOrders();
+
+        if (GridON == true && CheckPointer(gridSell) == POINTER_INVALID)
+        {
+          Print(__FUNCTION__, " ", "Voy a setear la gridSell");
+          gridSell = new Grid(_Symbol, "sell", mainOrders.last().price(), GridUser_gap, GridUser_multiplier, GridUser_maxCount, GridUser_maxLot, mainOrders.last().lot(), magico);
+          Print(__FUNCTION__, " ", "pointer de la grid", GetPointer(gridSell));
+          conditionsToSell.AddCondition(gridActiveCondition = new ConditionGridActive(gridSell));
+        }
+
+        // availableToTakeSignalBuy.lastSide("sell");
+        // availableToTakeSignalSell.lastSide("sell");
+        Notifications(1);
+      }
+      delete actionSendOrder;
+      delete levelTP;
+      delete levelSL;
+    }
+  }
+
+  if (uTradeReverse)
+  {
+    // NOTE: BUY reverse
+    if (conditionsToSell.EvaluateConditions())
+    {
+      if (modeEntry == Market)
+      {
+        actionSendOrder = new SendNewOrder("buy", Lots(), "", 0, SL("buy"), TP("buy"), magico);
+      } else
+      {
+        double pr       = Price("buy", uEntryDistance, _Symbol);
+        actionSendOrder = new SendNewOrder("buy", Lots(), "", pr, SL("buy", pr), TP("buy", pr), magico);
+      }
+
+      if (actionSendOrder.doAction())
+      {
+        mainOrders.GetMarketOrders();
+
+        if (GridON == true && CheckPointer(gridBuy) == POINTER_INVALID)
+        {
+          gridBuy = new Grid(_Symbol, "buy", mainOrders.last().price(), GridUser_gap, GridUser_multiplier, GridUser_maxCount, GridUser_maxLot, mainOrders.last().lot(), magico);
+          conditionsToBuy.AddCondition(gridActiveCondition = new ConditionGridActive(gridBuy));
+        }
+
+        // availableToTakeSignalBuy.lastSide("buy");
+        // availableToTakeSignalSell.lastSide("buy");
+        Notifications(0);
+      }
+
+      delete actionSendOrder;
+      delete levelTP;
+      delete levelSL;
+    }
+    // NOTE: SELL reverse
+    if (conditionsToBuy.EvaluateConditions())
+    {
+      if (modeEntry == Market)
+      {
+        actionSendOrder = new SendNewOrder("sell", Lots(), "", 0, SL("sell"), TP("sell"), magico);
+      } else
+      {
+        double pr       = Price("sell", uEntryDistance, _Symbol);
+        actionSendOrder = new SendNewOrder("sell", Lots(), "", pr, SL("sell", pr), TP("sell", pr), magico);
+      }
+      if (actionSendOrder.doAction())
+      {
+        mainOrders.GetMarketOrders();
+
+        if (GridON == true && CheckPointer(gridSell) == POINTER_INVALID)
+        {
+          Print(__FUNCTION__, " ", "Voy a setear la gridSell");
+          gridSell = new Grid(_Symbol, "sell", mainOrders.last().price(), GridUser_gap, GridUser_multiplier, GridUser_maxCount, GridUser_maxLot, mainOrders.last().lot(), magico);
+          Print(__FUNCTION__, " ", "pointer de la grid", GetPointer(gridSell));
+          conditionsToSell.AddCondition(gridActiveCondition = new ConditionGridActive(gridSell));
+        }
+
+        // availableToTakeSignalBuy.lastSide("sell");
+        // availableToTakeSignalSell.lastSide("sell");
+        Notifications(1);
+      }
+      delete actionSendOrder;
+      delete levelTP;
+      delete levelSL;
+    }
+  }
+}
+
+
+//////////////////////////////////////////////////////////////////////
+
+// NOTE: PRICE
+double Price(string direction, int pips = 0, string _symbol = "")
+{
+  string symbol   = _symbol == "" ? Symbol() : _symbol;
+  double points   = MarketInfo(symbol, MODE_POINT);
+  double distance = pips * points;
+  int    digits   = MarketInfo(symbol, MODE_DIGITS);
+
+  if (direction == "buy")
+  {
+    double ask   = SymbolInfoDouble(_symbol, SYMBOL_ASK);
+    double price = distance == 0 ? ask : ask + distance;
+
+    if (modeEntry == PendingStop)
+    {
+      double cl = iClose(symbol, 0, 1);
+      double op = iOpen(symbol, 0, 1);
+
+      if (cl > op)
+      {
+        	price = cl + distance;
+      } else
+      {
+        price = op + distance;
+      }
+    }
+    if (modeEntry == PendingLimit)
+    {
+      double cl = iClose(symbol, 0, 1);
+      double op = iOpen(symbol, 0, 1);
+
+      if (cl > op)
+      {
+        price = op - distance;
+      } else
+      {
+        price = cl - distance;
+      }
+    }
+
+    return NormalizeDouble(price, digits);
+  }
+
+  if (direction == "sell")
+  {
+    double bid   = SymbolInfoDouble(_symbol, SYMBOL_BID);
+    double price = distance == 0 ? bid : bid - distance;
+
+    if (modeEntry == PendingStop)
+    {
+      double cl = iClose(symbol, 0, 1);
+      double op = iOpen(symbol, 0, 1);
+      if (cl > op)
+      {
+        price = op - distance;
+      } else
+      {
+        price = cl - distance;
+      }
+    }
+    if (modeEntry == PendingLimit)
+    {
+      double cl = iClose(symbol, 0, 1);
+      double op = iOpen(symbol, 0, 1);
+      if (cl > op)
+      {
+        price = cl + distance;
+      } else
+      {
+        price = op + distance;
+      }
+    }
+
+    return NormalizeDouble(price, digits);
+  }
+
+  return -1;
+}
+double SL(string side, double price = 0)
+{
+  double result = 0;
+  if (stopLossOn)
+    switch (modeSL)
+    {
+      case FixPips:
+        levelSL = new Levels(new ByFixPips(_Symbol, side, userSLpips, "SL", price));
+        result  = levelSL.calculateLevel();
+        break;
+
+      case byMoney:
+        levelSL = new Levels(new ByMoney(_Symbol, side, userLots, userSLmoney, "SL"));
+        result  = levelSL.calculateLevel();
+        break;
+      case PipsFromOpenCandle:
+        levelSL = new Levels(new ByPipsFromCandle(_Symbol, side, userSLpips, "SL", 0, 1));
+        result  = levelSL.calculateLevel();
+    }
+  return result;
+}
+double TP(string side, double price = 0)
+{
+  double result = 0;
+  if (takeProfitOn)
+    switch (modeTP)
+    {
+      case FixPips:
+        levelTP = new Levels(new ByFixPips(_Symbol, side, userTPpips, "TP", price));
+        result  = levelTP.calculateLevel();
+        break;
+
+      case byMoney:
+        levelTP = new Levels(new ByMoney(_Symbol, side, userLots, userTPmoney, "TP"));
+        result  = levelTP.calculateLevel();
+        break;
+      case PipsFromOpenCandle:
+        levelSL = new Levels(new ByPipsFromCandle(_Symbol, side, userSLpips, "TP", 0, 1));
+        result  = levelSL.calculateLevel();
+    }
+  return result;
+}
+double Lots()
+{
+  lotProvider = new LotCalculator();
+  double lots = -1;
+  switch (modeCalcLots)
+  {
+    case Money:
+      lots = lotProvider.LotsByMoney(userMoney, levelSL.pips());
+      break;
+
+    case AccountPercent:
+      lots = lotProvider.LotsByBalancePercent(userBalancePer, levelSL.pips());
+      break;
+
+    case FixLots:
+      lots = userLots;
+      break;
+  }
+  delete lotProvider;
+  return lots;
+}
+void Notifications(int type)
+{
+  string text = "";
+  if (type == 0)
+    text += _Symbol + " " + GetTimeFrame(_Period) + " BUY ";
+  else
+    text += _Symbol + " " + GetTimeFrame(_Period) + " SELL ";
+
+  text += " ";
+
+  if (!notifications)
+    return;
+  if (desktop_notifications)
+    Alert(text);
+  if (push_notifications)
+    SendNotification(text);
+  if (email_notifications)
+    SendMail("MetaTrader Notification", text);
+}
+
+string GetTimeFrame(int lPeriod)
+{
+  switch (lPeriod)
+  {
+    case PERIOD_M1:
+      return ("M1");
+    case PERIOD_M5:
+      return ("M5");
+    case PERIOD_M15:
+      return ("M15");
+    case PERIOD_M30:
+      return ("M30");
+    case PERIOD_H1:
+      return ("H1");
+    case PERIOD_H4:
+      return ("H4");
+    case PERIOD_D1:
+      return ("D1");
+    case PERIOD_W1:
+      return ("W1");
+    case PERIOD_MN1:
+      return ("MN1");
+  }
+  return IntegerToString(lPeriod);
+}
+
+int Distancia(double precioA, double precioB, string par, string mode = "pips")
+{
+  double mPoint = MarketInfo(par, MODE_POINT);
+  double dist   = fabs(precioA - precioB);
+  if (mode == "points") return (int)(dist / mPoint);
+  if (mode == "pips") return (int)((dist / mPoint) / 10);
+  return 0;
+}
+
+double floatingEA()
+{
+  double profit = 0;
+  for (int i = OrdersTotal() - 1; i >= 0; i--)
+  {
+    if (OrderSelect(i, SELECT_BY_POS) && OrderSymbol() == _Symbol && OrderMagicNumber() == magico)
+    {
+      profit += OrderProfit();
+    }
+  }
+
+  return profit;
+}
+
+double openVolume()
+{
+  double volume = 0;
+  for (int i = OrdersTotal() - 1; i >= 0; i--)
+  {
+    if (OrderSelect(i, SELECT_BY_POS) && OrderSymbol() == _Symbol && OrderMagicNumber() == magico)
+    {
+      volume += OrderLots();
+    }
+  }
+
+  return volume;
+}
+
+void CheckearOrdernesyGenerarGrids()
+{
+  if (mainOrders.qnt() == 1)
+  {
+    if (mainOrders.last().type() == OP_BUY && CheckPointer(gridBuy) == POINTER_INVALID)
+    {
+      gridBuy = new Grid(_Symbol, "buy", mainOrders.last().price(), GridUser_gap, GridUser_multiplier, GridUser_maxCount, GridUser_maxLot, mainOrders.last().lot(), magico);
+    }
+    if (mainOrders.last().type() == OP_SELL && CheckPointer(gridSell) == POINTER_INVALID)
+    {
+      gridSell = new Grid(_Symbol, "sell", mainOrders.last().price(), GridUser_gap, GridUser_multiplier, GridUser_maxCount, GridUser_maxLot, mainOrders.last().lot(), magico);
+    }
+  }
+  if (mainOrders.qnt() == 0)
+  {
+    deleteGrid();
+  }
+}
+
+void deleteGrid()
+{
+  if (CheckPointer(gridSell) != POINTER_INVALID)
+  {
+    delete gridSell;
+  }
+  if (CheckPointer(gridBuy) != POINTER_INVALID)
+  {
+    delete gridBuy;
+  }
+}
+
+// clang-format off
+bool CloseAllControl()
+{
+   switch (closeBy)
+   {
+      case CloseByMoney:
+         if (floatingEA() >= closeAllMoney && closeAllMoney>0) { return true; }
+         if (floatingEA() < closeAllMoneyLoss && closeAllMoneyLoss<0) { return true; }
+         break;
+
+      case CloseByAccountPercent: 
+		{
+         double moneyByAccountPerWin = AccountInfoDouble(ACCOUNT_BALANCE) * accountPerWin / 100;
+         double moneyByAccountPerLos = AccountInfoDouble(ACCOUNT_BALANCE) * accountPerLos / 100;
+
+         if (floatingEA() >= moneyByAccountPerWin && moneyByAccountPerWin>0) { return true; }
+         if (floatingEA() < moneyByAccountPerLos && moneyByAccountPerLos<0) { return true; }
+         break;
+      }
+      case CloseByPips: 
+      {
+         double moneyLimitWin = openVolume()*closeByPipsWin*10;
+         double moneyLimitLoss = -openVolume()*closeByPipsLoss*10;
+         if (floatingEA() >=moneyLimitWin) {return true; }
+         if (floatingEA() < moneyLimitLoss) { return true; }
+         break;
+      }
+   }
+	return false;
+}
+// clang-format on
+
+void closeAll(string side)
+{
+  if (side == "buy")
+  {
+    actionCloseBuys = new ActionCloseOrdersByType("buy", magico);
+    actionCloseBuys.doAction();
+    if (GridON && CheckPointer(gridBuy) != POINTER_INVALID)
+    {
+      gridBuy.closeGrid();
+      delete gridBuy;
+    }
+    delete actionCloseBuys;
+
+    if (uDeletePendingsOn)
+    {
+      actionDeletePendingsBuys = new ActionDeletePendings("buy", magico);
+      actionDeletePendingsBuys.doAction();
+      delete actionDeletePendingsBuys;
+    }
+  }
+  if (side == "sell")
+  {
+    actionCloseSells = new ActionCloseOrdersByType("sell", magico);
+    actionCloseSells.doAction();
+    if (GridON && CheckPointer(gridSell) != POINTER_INVALID)
+    {
+      gridSell.closeGrid();
+      delete gridSell;
+    }
+
+    if (uDeletePendingsOn)
+    {
+      actionDeletePendingsSells = new ActionDeletePendings("sell", magico);
+      actionDeletePendingsSells.doAction();
+      delete actionDeletePendingsSells;
+    }
+
+    delete actionCloseSells;
+  }
+}
+
+void doBreackevenAction()
+{
+  for (int i = mainOrders.qnt() - 1; i >= 0; i--)
+  {
+    if (!mainOrders.index(i).breakevenWasDoIt())
+    {
+      breackevenCondition.setOrder(mainOrders.index(i));
+      if (conditionsToBreackeven.EvaluateConditions())
+      {
+        breackevenAction = new MoveSL();
+        breackevenAction.order(mainOrders.index(i)).newSL(mainOrders.index(i).price());
+        breackevenAction.doAction();
+        delete breackevenAction;
+      }
+    }
+  }
+}
+
+void doPartialCloseAction()
+{
+  for (int i = mainOrders.qnt() - 1; i >= 0; i--)
+  {
+    if (mainOrders.index(i).countPartials() < uQntPartials)
+    {
+      partialCloseCondition.setOrder(mainOrders.index(i));
+      if (conditionsToPartialClose.EvaluateConditions())
+      {
+        partialCloseAction = new PartialClose();
+        partialCloseAction.order(mainOrders.index(i)).percent(userPartialClosePercent);
+        partialCloseAction.doAction();
+        delete partialCloseAction;
+      }
+    }
+  }
+}
+
+// clang-format off
+void doCloseGridControl()
+{   
+   if(closeGridTP>0)
+   {
+      if(CheckPointer(gridBuy) != POINTER_INVALID)
+      if(gridBuy.profit() >= closeGridTP) {gridBuy.closeGrid(); delete gridBuy; }
+      if(CheckPointer(gridSell) != POINTER_INVALID)
+      if(gridSell.profit() >= closeGridTP) {gridSell.closeGrid(); delete gridSell; }
+   }
+
+   if(closeGridSL<0)
+   {
+      if(CheckPointer(gridBuy) != POINTER_INVALID)
+      if(gridBuy.profit() <= closeGridSL) {gridBuy.closeGrid(); delete gridBuy; }
+      if(CheckPointer(gridSell) != POINTER_INVALID)
+      if(gridSell.profit() <= closeGridSL) {gridSell.closeGrid(); delete gridSell; }
+   }
+}
+// clang-format on
+
+#ifdef SPREAD_FILTER
+bool spreadFilter()
+{
+  // tomar el spread actual
+  int spread = SymbolInfoInteger(_Symbol, SYMBOL_SPREAD);
+
+  // comparar ocn max
+  return spread < uSpreadMax;
+}
+#endif
+
+#ifdef NEWS_FILTER
+void News_Automatic()
+{
+  if (News_Fuente == Auto)
+  {
+    double CheckNews = 0;
+    if (AfterNewsStop > 0)
+    {
+      if (TimeCurrent() - LastUpd >= Upd)
+      {
+        Comment("News Loading...");
+        Print("News Loading...");
+        UpdateNews();
+        LastUpd = TimeCurrent();
+        Comment("");
+      }
+      WindowRedraw();
+      //---Draw a line on the chart news--------------------------------------------
+      if (DrawLines)
+      {
+        for (int i = 0; i < NomNews; i++)
+        {
+          string Name = StringSubstr(TimeToStr(TimeNewsFunck(i), TIME_MINUTES) + "_" + NewsArr[1][i] + "_" + NewsArr[3][i], 0, 63);
+          if (NewsArr[3][i] != "")
+            if (ObjectFind(Name) == 0) continue;
+          if (StringFind(str1, NewsArr[1][i]) < 0) continue;
+          if (TimeNewsFunck(i) < TimeCurrent() && Next) continue;
+
+          color clrf = clrNONE;
+          if (Vhigh && StringFind(NewsArr[2][i], "High") >= 0) clrf = highc;
+          if (Vmedium && StringFind(NewsArr[2][i], "Moderate") >= 0) clrf = mediumc;
+          if (Vlow && StringFind(NewsArr[2][i], "Low") >= 0) clrf = lowc;
+
+          if (clrf == clrNONE) continue;
+
+          if (NewsArr[3][i] != "")
+          {
+            ObjectCreate(Name, 0, OBJ_VLINE, TimeNewsFunck(i), 0);
+            ObjectSet(Name, OBJPROP_COLOR, clrf);
+            ObjectSet(Name, OBJPROP_STYLE, Style);
+            ObjectSetInteger(0, Name, OBJPROP_BACK, true);
+          }
+
+          Print(NewsArr[0, i]);  // tiene la fecha y hora
+          Print(NewsArr[1, i]);  // tiene el Par
+          Print(NewsArr[2, i]);  // tiene el Impacto (low med hi)
+          Print(NewsArr[3, i]);  // tiene el texto de la noticia
+        }
+      }
+      //---------------event Processing------------------------------------
+      int i;
+      CheckNews = 0;
+      for (i = 0; i < NomNews; i++)
+      {
+        int power = 0;
+        if (Vhigh && StringFind(NewsArr[2][i], "High") >= 0) power = 1;
+        if (Vmedium && StringFind(NewsArr[2][i], "Moderate") >= 0) power = 2;
+        if (Vlow && StringFind(NewsArr[2][i], "Low") >= 0) power = 3;
+        if (power == 0) continue;
+        if (TimeCurrent() + MinBefore * 60 > TimeNewsFunck(i) && TimeCurrent() - MinAfter * 60 < TimeNewsFunck(i) && StringFind(str1, NewsArr[1][i]) >= 0)
+        {
+          CheckNews = 1;
+          break;
+        } else
+          CheckNews = 0;
+      }
+      if (CheckNews == 1 && i != Now && Signal)
+      {
+        Alert("In ", (int)(TimeNewsFunck(i) - TimeCurrent()) / 60, " minutes released news ", NewsArr[1][i], "_", NewsArr[3][i]);
+        Now = i;
+      }
+      /***  ***/
+    }
+
+    if (CheckNews > 0)
+    {
+      /////  We are doing here if we are in the framework of the news
+      Comment("News time");
+
+    } else
+    {
+      // We are out of scope of the news release (No News)
+      // Comment("No news");
+    }
+  }
+}
+//+------------------------------------------------------------------+
+
+//////////////////////////////////////////////////////////////////////////////////
+// Download CBOE page source code in a text variable
+// And returns the result
+//////////////////////////////////////////////////////////////////////////////////
+
+string ReadCBOE()
+{
+  string cookie = NULL, headers;
+  char   post[], result[];
+  string TXT = "";
+  int    res;
+  //--- to work with the server, you must add the URL "https://www.google.com/finance"
+  //--- the list of allowed URL (Main menu-> Tools-> Settings tab "Advisors"):
+  string google_url = "http://ec.forexprostools.com/?columns=exc_currency,exc_importance&importance=1,2,3&calType=week&timeZone=15&lang=1";
+  //---
+  ResetLastError();
+  //--- download html-pages
+  int timeout = 5000;  //--- timeout less than 1,000 (1 sec.) is insufficient at a low speed of the Internet
+  res         = WebRequest("GET", google_url, cookie, NULL, timeout, post, 0, result, headers);
+  //--- error checking
+  if (res == -1)
+  {
+    Print("WebRequest error, err.code  =", GetLastError());
+    MessageBox("You must add the address ' " + google_url + "' in the list of allowed URL tab 'Advisors' ", " Error ", MB_ICONINFORMATION);
+    //--- You must add the address ' "+ google url"' in the list of allowed URL tab 'Advisors' "," Error "
+  } else
+  {
+    //--- successful download
+    PrintFormat("File successfully downloaded, the file size in bytes  =%d.", ArraySize(result));
+    //--- save the data in the file
+    int filehandle = FileOpen("news-log.html", FILE_WRITE | FILE_BIN);
+    //--- проверка ошибки
+    if (filehandle != INVALID_HANDLE)
+    {
+      //---save the contents of the array result [] in file
+      FileWriteArray(filehandle, result, 0, ArraySize(result));
+      //--- close file
+      FileClose(filehandle);
+
+      int filehandle2 = FileOpen("news-log.html", FILE_READ | FILE_BIN);
+      TXT             = FileReadString(filehandle2, ArraySize(result));
+      FileClose(filehandle2);
+    } else
+    {
+      Print("Error in FileOpen. Error code =", GetLastError());
+    }
+  }
+
+  return (TXT);
+}
+//+------------------------------------------------------------------+
+datetime TimeNewsFunck(int nomf)
+{
+  string s    = NewsArr[0][nomf];
+  string time = StringConcatenate(StringSubstr(s, 0, 4), ".", StringSubstr(s, 5, 2), ".", StringSubstr(s, 8, 2), " ", StringSubstr(s, 11, 2), ":", StringSubstr(s, 14, 4));
+  return ((datetime)(StringToTime(time) + offset * 3600));
+}
+//+------------------------------------------------------------------+
+void UpdateNews()
+{
+  string TEXT = ReadCBOE();
+  int    sh   = StringFind(TEXT, "pageStartAt>") + 12;
+  int    sh2  = StringFind(TEXT, "</tbody>");
+  TEXT        = StringSubstr(TEXT, sh, sh2 - sh);
+
+  sh = 0;
+  while (!IsStopped())
+  {
+    sh  = StringFind(TEXT, "event_timestamp", sh) + 17;
+    sh2 = StringFind(TEXT, "onclick", sh) - 2;
+    if (sh < 17 || sh2 < 0) break;
+    NewsArr[0][NomNews] = StringSubstr(TEXT, sh, sh2 - sh);
+
+    sh  = StringFind(TEXT, "flagCur", sh) + 10;
+    sh2 = sh + 3;
+    if (sh < 10 || sh2 < 3) break;
+    NewsArr[1][NomNews] = StringSubstr(TEXT, sh, sh2 - sh);
+    if (StringFind(str1, NewsArr[1][NomNews]) < 0) continue;
+
+    sh  = StringFind(TEXT, "title", sh) + 7;
+    sh2 = StringFind(TEXT, "Volatility", sh) - 1;
+    if (sh < 7 || sh2 < 0) break;
+    NewsArr[2][NomNews] = StringSubstr(TEXT, sh, sh2 - sh);
+    if (StringFind(NewsArr[2][NomNews], "High") >= 0 && !Vhigh) continue;
+    if (StringFind(NewsArr[2][NomNews], "Moderate") >= 0 && !Vmedium) continue;
+    if (StringFind(NewsArr[2][NomNews], "Low") >= 0 && !Vlow) continue;
+
+    sh      = StringFind(TEXT, "left event", sh) + 12;
+    int sh1 = StringFind(TEXT, "Speaks", sh);
+    sh2     = StringFind(TEXT, "<", sh);
+    if (sh < 12 || sh2 < 0) break;
+    if (sh1 < 0 || sh1 > sh2)
+      NewsArr[3][NomNews] = StringSubstr(TEXT, sh, sh2 - sh);
+    else
+      NewsArr[3][NomNews] = StringSubstr(TEXT, sh, sh1 - sh);
+
+    NomNews++;
+    if (NomNews == 300) break;
+  }
+}
+
+bool ControlNewsTime()
+{
+  if (News_Fuente != Auto)
+  {
+    return false;
+  }
+  bool   TieneNewsProxHora = false;
+  string symNews;
+  string SymPanel = Symbol();
+  int ahora = TimeGMT();  // hora actual
+
+  int t = ArrayRange(NewsArr, 1);
+  // parte1 = StringSubstr(SymPanel, 0, 3);  // saca la primera parte del simbolo (EUR por ej para EURUSD)
+  // parte2 = StringSubstr(SymPanel, 3, 6);  // saca la segunda (USD por ej para EURUSD)
+
+  for (int j = 0; j < t; j++)
+  {
+    symNews         = NewsArr[1, j];  // tiene el Par / tomas el par j del array de news
+    string s        = NewsArr[0][j];
+    string time     = StringConcatenate(StringSubstr(s, 0, 4), ".", StringSubstr(s, 5, 2), ".", StringSubstr(s, 8, 2), " ", StringSubstr(s, 11, 2), ":", StringSubstr(s, 14, 4));
+    int    NewsHora = ((datetime)(StringToTime(time)));  // hora de la noticia guardada en el array de news
+
+      // Si la noticia está dentro del rango de minutos en adelante "Turn_Off_Before"
+      if (ahora + Turn_OFF_Before * 60 >= NewsHora && NewsHora > ahora)
+      {
+        Comment("||------ EA OFF for futures News ------||");
+        return true;
+      } else
+      {
+        int UltimaNewsPasada = 0;
+
+        // recorre todas las noticias buscando la mayor hora del pasado
+        for (int j = 0; j < t; j++)
+        {
+          string s        = NewsArr[0][j];
+          string time     = StringConcatenate(StringSubstr(s, 0, 4), ".", StringSubstr(s, 5, 2), ".", StringSubstr(s, 8, 2), " ", StringSubstr(s, 11, 2), ":", StringSubstr(s, 14, 4));
+          int    NewsHora = ((datetime)(StringToTime(time)));  // hora de la noticia guardada en el array de news
+
+          if (NewsHora < ahora && NewsHora > UltimaNewsPasada)
+          {
+            UltimaNewsPasada = NewsHora;
+          }
+        }
+
+        if (UltimaNewsPasada >= ahora - Turn_ON_After * 60)
+        {
+					Comment("||------ EA OFF for pass News ------||");
+          return true;
+        }
+    }
+  }
+
+	return false;
+
+}
+
+#endif
+
+//+------------------------------------------------------------------+
+
+
+void OnTimer(void)
+{
+  // gui.OnTimerEvent();
+}
+
+void OnChartEvent(const int     id,
+                  const long&   lparam,
+                  const double& dparam,
+                  const string& sparam)
+{
+  gui.ChartEvent(id, lparam, dparam, sparam);
+  gui.HoverEvents(id, lparam, dparam, sparam);
+}
+
+class SellStopPrevious : public iActions
+{
+	bool doAction()
+	{
+			double pr       = PricePrevious("sell", uEntryDistance, _Symbol);
+      actionSendOrder = new SendNewOrder("sell", Lots(), "", pr, SL("sell", pr), TP("sell", pr), magico,"previous");
+      if(!actionSendOrder.doAction())
+			{
+        Print("Can't Send order");
+				return false;
+      }
+			delete actionSendOrder;
+			return true;
+	}
+};
+SellStopPrevious* sellStopPrevious;
+
+class BuyStopPrevious : public iActions
+{
+	bool doAction()
+	{
+			double pr       = PricePrevious("buy", uEntryDistance, _Symbol);
+      actionSendOrder = new SendNewOrder("buy", Lots(), "", pr, SL("buy", pr), TP("buy", pr), magico, "previous");
+      if(!actionSendOrder.doAction())
+			{
+        Print("Can't Send order");
+				return false;
+      }
+      delete actionSendOrder;
+      return true;
+	}
+};
+BuyStopPrevious* buyStopPrevious;
+
+double PricePrevious(string direction, int pips = 0, string _symbol = "")
+{
+  string symbol   = _symbol == "" ? Symbol() : _symbol;
+  double points   = MarketInfo(symbol, MODE_POINT);
+  double distance = pips * points;
+  int    digits   = MarketInfo(symbol, MODE_DIGITS);
+
+  if (direction == "buy")
+  {
+    double ask   = SymbolInfoDouble(_symbol, SYMBOL_ASK);
+    double price = distance == 0 ? ask : ask + distance;
+
+    double cl = iClose(symbol, 0, 1);
+    double op = iOpen(symbol, 0, 1);
+    double hi = iHigh(symbol, 0, 1);
+    double lo = iLow(symbol, 0, 1);
+  
+	 	price = hi + distance;
+
+    return NormalizeDouble(price, digits);
+  }
+
+  if (direction == "sell")
+  {
+    double bid   = SymbolInfoDouble(_symbol, SYMBOL_BID);
+    double price = distance == 0 ? bid : bid + distance;
+
+    double cl = iClose(symbol, 0, 1);
+    double op = iOpen(symbol, 0, 1);
+  	double hi = iHigh(symbol, 0, 1);
+    double lo = iLow(symbol, 0, 1);
+
+    price = lo - distance;
+
+    return NormalizeDouble(price, digits);
+  }
+
+  return -1;
+}
+double PriceCurrent(string direction, int pips = 0, string _symbol = "")
+{
+  string symbol   = _symbol == "" ? Symbol() : _symbol;
+  double points   = MarketInfo(symbol, MODE_POINT);
+  double distance = pips * points;
+  int    digits   = MarketInfo(symbol, MODE_DIGITS);
+
+  if (direction == "buy")
+  {
+    double ask   = SymbolInfoDouble(_symbol, SYMBOL_ASK);
+    double price = distance == 0 ? ask : ask + distance;
+
+    double cl = iClose(symbol, 0, 0);
+    double op = iOpen(symbol, 0, 0);
+    double hi = iHigh(symbol, 0, 0);
+    double lo = iLow(symbol, 0, 0);
+  
+	 	price = hi + distance;
+
+    return NormalizeDouble(price, digits);
+  }
+
+  if (direction == "sell")
+  {
+    double bid   = SymbolInfoDouble(_symbol, SYMBOL_BID);
+    double price = distance == 0 ? bid : bid + distance;
+
+    double cl = iClose(symbol, 0, 0);
+    double op = iOpen(symbol, 0, 0);
+  	double hi = iHigh(symbol, 0, 0);
+    double lo = iLow(symbol, 0, 0);
+
+    price = lo - distance;
+
+    return NormalizeDouble(price, digits);
+  }
+
+  return -1;
+}
+
+class CancelSellStopPrevious : public iActions
+{
+	bool doAction()
+	{
+		for(int i=OrdersTotal()-1;i>=0;i--)
+		{
+			 if(OrderSelect(i,SELECT_BY_POS) && OrderSymbol() == _Symbol && (OrderType()==OP_SELLSTOP || OrderType()==OP_SELLLIMIT) && OrderComment()=="previous")
+			 {
+          OrderDelete(OrderTicket());
+			 }
+    }
+		return true;
+	}
+};
+CancelSellStopPrevious* cancelSellStopPrevious;
+
+class CancelBuyStopPrevious : public iActions
+{
+	bool doAction()
+	{
+		for(int i=OrdersTotal()-1;i>=0;i--)
+		{
+			 if(OrderSelect(i,SELECT_BY_POS) && OrderSymbol() == _Symbol && (OrderType()==OP_BUYSTOP || OrderType()==OP_BUYLIMIT) && OrderComment()=="previous")
+			 {
+          OrderDelete(OrderTicket());
+			 }
+    }
+		return true;
+	}
+};
+CancelBuyStopPrevious* cancelBuyStopPrevious;
+
+class SellStopCurrent : public iActions
+{
+	bool doAction()
+	{
+			double pr       = PriceCurrent("sell", uEntryDistance, _Symbol);
+      actionSendOrder = new SendNewOrder("sell", Lots(), "", pr, SL("sell", pr), TP("sell", pr), magico,"Current");
+      if(!actionSendOrder.doAction())
+			{
+        Print("Can't Send order");
+				return false;
+      }
+			delete actionSendOrder;
+			return true;
+	}
+};
+SellStopCurrent* sellStopCurrent;
+
+class BuyStopCurrent : public iActions
+{
+	bool doAction()
+	{
+			double pr       = PriceCurrent("buy", uEntryDistance, _Symbol);
+      actionSendOrder = new SendNewOrder("buy", Lots(), "", pr, SL("buy", pr), TP("buy", pr), magico,"Current");
+      if(!actionSendOrder.doAction())
+			{
+        Print("Can't Send order");
+				return false;
+      }
+			delete actionSendOrder;
+			return true;
+	}
+};
+BuyStopCurrent* buyStopCurrent;
+
+class CancelSellStopCurrent : public iActions
+{
+	bool doAction()
+	{
+		for(int i=OrdersTotal()-1;i>=0;i--)
+		{
+			 if(OrderSelect(i,SELECT_BY_POS) && OrderSymbol() == _Symbol && (OrderType()==OP_SELLSTOP || OrderType()==OP_SELLLIMIT) && OrderComment()=="Current")
+			 {
+          OrderDelete(OrderTicket());
+			 }
+    }
+		return true;
+	}
+};
+CancelSellStopCurrent* cancelSellStopCurrent;
+
+class CancelBuyStopCurrent : public iActions
+{
+	bool doAction()
+	{
+		for(int i=OrdersTotal()-1;i>=0;i--)
+		{
+			 if(OrderSelect(i,SELECT_BY_POS) && OrderSymbol() == _Symbol && (OrderType()==OP_BUYSTOP || OrderType()==OP_BUYLIMIT) && OrderComment()=="Current")
+			 {
+          OrderDelete(OrderTicket());
+			 }
+    }
+		return true;
+	}
+};
+CancelBuyStopCurrent* cancelBuyStopCurrent;
+
+class SellStop : public iActions
+{
+	bool doAction()
+	{
+			double pr       = Price("sell", uDistance, _Symbol);
+      actionSendOrder = new SendNewOrder("sell", Lots(), "", pr, SL("sell", pr), TP("sell", pr), magico,"SellStop");
+      if(!actionSendOrder.doAction())
+			{
+        Print("Can't Send order");
+				return false;
+      }
+			delete actionSendOrder;
+			return true;
+	}
+};
+SellStop* sellStop;
+
+class BuyStop : public iActions
+{
+	bool doAction()
+	{
+			double pr       = Price("buy", uDistance, _Symbol);
+      actionSendOrder = new SendNewOrder("buy", Lots(), "", pr, SL("buy", pr), TP("buy", pr), magico,"BuyStop");
+      if(!actionSendOrder.doAction())
+			{
+        Print("Can't Send order");
+				return false;
+      }
+			delete actionSendOrder;
+			return true;
+	}
+};
+BuyStop* buyStop;
+
+class SellMarket : public iActions
+{
+	bool doAction()
+	{
+			// double pr       = Bid;
+      actionSendOrder = new SendNewOrder("sell", Lots(), "", 0, SL("sell"), TP("sell"), magico,"SellMarket");
+      if(!actionSendOrder.doAction())
+			{
+        Print("Can't Send order");
+				return false;
+      }
+			delete actionSendOrder;
+			return true;
+	}
+};
+SellMarket* sellMarket;
+
+class BuyMarket : public iActions
+{
+	bool doAction()
+	{
+			// double pr       = Ask;
+      actionSendOrder = new SendNewOrder("buy", Lots(), "", 0, SL("buy"), TP("buy"), magico,"BuyMarket");
+      if(!actionSendOrder.doAction())
+			{
+        Print("Can't Send order");
+				return false;
+      }
+			delete actionSendOrder;
+			return true;
+	}
+};
+BuyMarket* buyMarket;
+
+class CancelSellStop : public iActions
+{
+	bool doAction()
+	{
+		for(int i=OrdersTotal()-1;i>=0;i--)
+		{
+			 if(OrderSelect(i,SELECT_BY_POS) && OrderSymbol() == _Symbol && OrderType()==OP_SELLSTOP && OrderComment()=="SellStop")
+			 {
+          OrderDelete(OrderTicket());
+			 }
+    }
+		return true;
+	}
+};
+CancelSellStop* cancelSellStop;
+
+class CancelBuyStop : public iActions
+{
+	bool doAction()
+	{
+		for(int i=OrdersTotal()-1;i>=0;i--)
+		{
+			 if(OrderSelect(i,SELECT_BY_POS) && OrderSymbol() == _Symbol && OrderType()==OP_BUYSTOP && OrderComment()=="BuyStop")
+			 {
+          OrderDelete(OrderTicket());
+			 }
+    }
+		return true;
+	}
+};
+CancelBuyStop* cancelBuyStop;
+
+class ActionCloseByProfit : public iActions
+{
+   ENUM_ORDER_TYPE _type;
+   string          _symbol;
+   int             _magic;
+   double          _price;
+	 string          _profitState; // win, loss, or all 
+
+  public:
+   ActionCloseByProfit(string profitState="all", int magic = 0, string symbol = "")
+   {
+      _profitState = profitState;
+      if (symbol == "") { _symbol = Symbol(); } else { _symbol = symbol; }
+      if (magic != 0)   { _magic  = magic; }
+   }
+   ~ActionCloseByProfit() {}
+
+  double ClosePrice()
+	{
+		if (_type == OP_BUY)  { _price = SymbolInfoDouble(_symbol, SYMBOL_BID); }
+		if (_type == OP_SELL) { _price = SymbolInfoDouble(_symbol, SYMBOL_ASK); }	
+		return _price;
+	}
+	
+	bool doAction()
+   {
+      for (int i = OrdersTotal() - 1; i >= 0; i--)
+      {
+         if (OrderSelect(i, SELECT_BY_POS) && OrderSymbol() == _symbol && OrderMagicNumber() == _magic)
+         {
+						_type = OrderType();
+						double profit = OrderProfit() - OrderSwap() - OrderCommission();						
+						
+						if((_profitState == "win" && profit > 0) || (_profitState == "loss" && profit < 0) || (_profitState == "all"))
+						 if (!OrderClose(OrderTicket(), OrderLots(), ClosePrice(), 10000, clrNONE))
+             {
+                Print(__FUNCTION__, " ", "can't close Order: ", OrderTicket(), " error: ", GetLastError());
+             }	
+
+						 if(_profitState == "all" && (_type!= OP_BUY && _type!=OP_SELL))
+						 {
+								OrderDelete(OrderTicket());
+						 }
+         }
+      }
+      return true;
+   }
+};
+ActionCloseByProfit* closeLossers;
+ActionCloseByProfit* closeWinners;
+ActionCloseByProfit* closeAll;
+
+//+------------------------------------------------------------------------------------------------+
+//|                                                                    We appreciate your support. | 
+//+------------------------------------------------------------------------------------------------+
+//|                                                               Paypal: https://goo.gl/9Rj74e    |
+//|                                                             Patreon :  https://goo.gl/GdXWeN   |  
+//+------------------------------------------------------------------------------------------------+
+//|                                                                   Developed by : Mario Jemic   |                    
+//|                                                                       mario.jemic@gmail.com    |
+//|                                                        https://AppliedMachineLearning.systems  |
+//|                                                                       https://mario-jemic.com/ |
+//+------------------------------------------------------------------------------------------------+

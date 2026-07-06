@@ -1,0 +1,27 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_topointer</title>
+</head>
+<body>
+<h3><a name="lua_topointer"><code>lua_topointer</code></a></h3>
+<pre>const void *lua_topointer (lua_State *L, int index);</pre>
+
+<p>
+Converts the value at the given acceptable index to a generic
+C&nbsp;pointer (<code>void*</code>).
+The value may be a userdata, a table, a thread, or a function;
+otherwise, <a href="lua_topointer.html"><code>lua_topointer</code></a> returns <code>NULL</code>.
+Different objects will give different pointers.
+There is no way to convert the pointer back to its original value.
+
+
+<p>
+Typically this function is used only for debug information.
+
+
+
+
+
+<hr>
+</body>
+</html>

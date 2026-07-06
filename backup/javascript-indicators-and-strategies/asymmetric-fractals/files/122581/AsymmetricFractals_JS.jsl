@@ -1,0 +1,84 @@
+function Init()
+{
+    indicator.name("Asymmetric fractals");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+  
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("FrameBefore", "Number of bars before fractal", "Number of bars before fractal", 5);
+    indicator.parameters.addInteger("FrameAfter", "Number of bars after fractal", "Number of bars after fractal", 2);
+    
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UpClr", "Up fractal color", "Up fractal color", core.rgb(0,255,0));
+    indicator.parameters.addColor("DnClr", "Down fractal color", "Down fractal color", core.rgb(255,0,0));
+}
+
+var source;
+var first;
+var up, down;
+var FrameBefore, FrameAfter;
+
+
+function Prepare()
+{
+    source = instance.source;
+    first = source.first();
+    
+    up = instance.createTextOutput("Up", "Up", "Wingdings", 10, core.H_Center, core.V_Top, instance.parameters.UpClr, 0);
+    down = instance.createTextOutput("Dn", "Dn", "Wingdings", 10, core.H_Center, core.V_Bottom, instance.parameters.DnClr, 0);
+	
+    FrameBefore=instance.parameters.FrameBefore;
+    FrameAfter=instance.parameters.FrameAfter;
+  
+    var name = profile.id() + " ( " + FrameBefore + ", " + FrameAfter + " )";
+    instance.name(name);
+}
+
+function Update(period, mode)
+{
+ if (period>first+FrameBefore) 
+ {
+  var i;
+  var UpFr = true;
+  var DnFr = true;
+  for (i=1; i<=FrameBefore; i++) 
+  {
+   if (source.high[period-FrameAfter]<=source.high[period-i-FrameAfter]) 
+   {
+    UpFr=false;
+   }
+   if (source.low[period-FrameAfter]>=source.low[period-i-FrameAfter]) 
+   {
+    DnFr=false;
+   }
+  }
+  for (i=1; i<=FrameAfter; i++) 
+  {
+   if (source.high[period-FrameAfter]<=source.high[period-FrameAfter+i]) 
+   {
+    UpFr=false;
+   }
+   if (source.low[period-FrameAfter]>=source.low[period-FrameAfter+i]) 
+   {
+    DnFr=false;
+   }
+  }
+  if (UpFr) 
+  {
+   up.set(period-FrameAfter, source.high[period-FrameAfter], "\226");
+  } 
+  else
+  {
+   up.setNoData(period-FrameAfter);
+  }
+  if (DnFr) 
+  {
+   down.set(period-FrameAfter, source.low[period-FrameAfter], "\225");
+  } 
+  else
+  {
+   down.setNoData(period-FrameAfter);
+  }
+ }
+}

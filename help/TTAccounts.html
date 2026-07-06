@@ -1,0 +1,473 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252" /><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><title>Accounts(table)</title><style type="text/css">a, p, h1, h2, h3, h4, h5, h6, table, td, tr, li, ul, ol {
+    font-family: Verdana, Trebuchet MS, Arial;
+}
+
+a, p, td, tr, ul, ol, li {
+    font-size: 12pt;
+}
+
+h3 {
+    font-size: 13pt;
+}
+
+h2 {
+    font-size: 13pt;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+body {
+    color: #444444;
+    background-color: white;
+}
+
+A:link {
+    color: #0065b3;
+    cursor: pointer;
+}
+
+A:visited {
+    color: #0068be;
+    cursor: pointer;
+}
+
+a.action {
+  background-color: #0065b3;
+  color: white;
+  font-size: 10pt;
+  padding: 2px 2px;
+  width: 50pt;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px;
+}
+
+.side-icon {
+    float: left;
+}
+
+a.action [class*="dripicons-"]:before {
+    padding: 0 2px 0 0;
+    font-size: 12pt;
+    vertical-align: text-bottom;
+}
+
+.side-icon:after {
+  content: "";
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  border-left: 1.5px solid white;
+  transform: translate(-50%);
+}
+
+a.actiontab {
+  font-size: 10pt;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px 3px 0 0;
+}
+
+pre, code, code a {
+    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+    font-size: 12pt;
+}
+
+code.ctag {
+    background-color: #f1f1f1;
+    padding: .1em .2em;
+    border-radius: 3px;
+}
+
+pre {
+    background-color: white;
+}
+
+pre.example {
+    background-color: #f1f1f1;
+}
+
+ul {
+    list-style-type: disc;
+    margin-left: 18pt;
+}
+
+ol {
+    list-style-type: decimal;
+    margin-left: 18pt;
+}
+
+ul.hhc {
+    list-style-type: none;
+    margin-left: 1em;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+li.hhc {
+    margin-left: 0;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+table {
+  border-spacing: 0;
+  border-color: #dfe3e7;
+}
+
+tr + tr td {
+   border-top: 0;
+}
+
+tr td + td {
+  border-left: 0;
+}
+
+td {
+  border: 1px solid;
+  border-color: #dfe3e7;
+}
+
+tr:first-child td:first-child {
+   border-radius: 0.2em 0 0 0;
+}
+
+tr:first-child td:last-child {
+  border-radius: 0 0.2em 0 0;
+}
+
+tr:first-child td:only-child {
+  border-radius: 0.2em 0.2em 0 0;
+}
+
+tr:last-child td:first-child {
+    border-radius: 0 0 0 0.2em;
+}
+
+tr:last-child td:last-child {
+    border-radius: 0 0 0.2em 0;
+}
+
+tr:last-child td:only-child {
+    border-radius: 0 0 0.2em 0.2em;
+}
+
+tr:only-child td:only-child {
+    border-radius: 0.2em 0.2em 0.2em 0.2em;
+}
+
+tr:only-child td:first-child {
+   border-radius: 0.2em 0 0 0.2em;
+}
+
+tr:only-child td:last-child {
+  border-radius: 0 0.2em 0.2em 0;
+}
+
+
+td.tmain, td.tmain_nw, td.thdr {
+    background-color: rgb(255, 255, 255);
+    vertical-align: top;
+    padding: 3px;
+}
+
+td.tmain p, td.tmain_nw p, td.thdr p {
+    margin-top: 3pt;
+    margin-bottom: 3pt;
+}
+
+td.tmain_nw {
+    white-space: nowrap;
+}
+
+td.thdr {
+    background-color: #e3e3e3;
+}
+
+table.decl {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+    vertical-align: top;
+    padding: 3px;
+    width: 100%;
+}
+
+table.decl td {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+}
+
+div.note-quote {
+    border-left: 10px solid #ccc;
+    padding: 1em 10px .1em 10px;
+    margin: 1.5em 10px;
+    background-color: rgb(224, 224, 224);
+}
+
+div.note-note {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+div.note-warning {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #fff;
+    background-color: #ff6358;
+}
+div.note-warning code.ctag {
+    color: black;
+}</style>
+<link rel="stylesheet" href="res/dripicons.css"></head><body><script type="text/javascript">
+var highlighterEnabled = false;
+var maintopic = 'index';
+var helptitle = 'Indicore SDK 3';
+    function loadStarted() {
+    window.onload = loadCompleted;
+
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        var head = document.getElementsByTagName('head')[0];
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.min.js';
+        head.appendChild(script4);
+
+
+        var script2 = document.createElement('script');
+        script2.type = 'text/javascript';
+        script2.src = './highlighter/highlight.cshtml.js';
+        head.appendChild(script2);
+
+        var script3 = document.createElement('script');
+        script3.type = 'text/javascript';
+        script3.src = './highlighter/highlight.lua.js';
+        head.appendChild(script3);
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.luax.js';
+        head.appendChild(script4);
+    }
+}
+
+function loadCompleted() {
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        hljs.registerLanguage('cshtml-razor', window.hljsDefineCshtmlRazor);
+        hljs.registerLanguage('lua', window.hljsDefineLua);
+        hljs.registerLanguage('luax', window.hljsDefineLuaX);
+        x = document.querySelectorAll('pre code');
+        for (var i = 0; i < x.length; i++) {
+            if (x[i].hasAttribute('class')) {
+                hljs.highlightBlock(x[i]);
+            }
+        }
+    }
+}
+
+
+function hidediv(divname) {
+    document.getElementById(divname).style.display = 'none';
+}
+
+function showdiv(divname) {
+    document.getElementById(divname).style.display = 'inline';
+}
+
+function syncList() {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, null, document.title);
+    }
+}
+
+function syncList1(key) {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, key + '.html', document.title);
+    }
+}</script><script type="text/javascript">
+    loadStarted();
+</script><h1>Accounts(table)</h1>
+<h2>Brief</h2>
+<p>The section describes the &quot;Accounts&quot; table.</p>
+<h2>Details</h2><p>The table contains information pertinent to the trading account (funds
+used in trading as well as idle funds, the summary of profits/losses,
+certain account limitations, and so on).</p><table class="tmain">
+  <tr>
+    <td class="thdr"><p>Name</p></td>
+    <td class="thdr"><p>Type</p></td>
+    <td class="thdr"><p>Description</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>AccountID</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The unique number of the account. The number is unique within the
+connection (Real or Demo). Please note that by &quot;connection&quot; we mean
+that your Demo <code class="ctag">AccountID</code> will be unique to all Demo accounts, and Real
+<code class="ctag">AccountID</code> will unique to all Real accounts WITHIN the same URL.
+&quot;Connection&quot; here does not mean Session between Login and Logout.</p>
+<p>You can search by this column.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>AccountName</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The unique name of the account as it is displayed to the FX Trading Station user.
+The name is unique within the connection (Real or Demo).</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Balance</p></td>
+    <td class="tmain"><p>Double</p></td>
+    <td class="tmain"><p>The amount of funds in the account without taking into consideration profits and losses
+on all open positions.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Equity</p></td>
+    <td class="tmain"><p>Double</p></td>
+    <td class="tmain"><p>The amount of funds in the account, including profits and losses on all open positions
+(the &quot;floating&quot; balance of the account).</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>DayPL</p></td>
+    <td class="tmain"><p>Double</p></td>
+    <td class="tmain"><p>The profit and loss (both &quot;floating&quot; and realized) during the current trading day.
+The trading days are from 17:00 to 17:00 EST.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>UsedMargin</p></td>
+    <td class="tmain"><p>Double</p></td>
+    <td class="tmain"><p>The amount of funds currently committed to maintain all open positions in the account.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>UsableMargin</p></td>
+    <td class="tmain"><p>Double</p></td>
+    <td class="tmain"><p>The amount of funds available to open new positions or to absorb any losses on the existing positions.
+Once the <code class="ctag">UsableMargin</code> reaches zero, the margin call order is triggered on the account and positions are
+automatically liquidated at the best available price. Together, <code class="ctag">UsableMargin</code> and <code class="ctag">UsedMargin</code> make up
+the <code class="ctag">Equity</code> of the account.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>GrossPL</p></td>
+    <td class="tmain"><p>Double</p></td>
+    <td class="tmain"><p>The profit and loss on all open positions in the account. The <code class="ctag">GrossPL</code> is the difference between the
+<code class="ctag">Equity</code> and the <code class="ctag">Balance</code> of the account.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Kind</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The type of the account. Possible values:</p><table class="tmain">
+  <tr>
+    <td class="tmain"><p><code class="ctag">32</code></p></td>
+    <td class="tmain"><p>Trading account.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">36</code></p></td>
+    <td class="tmain"><p>Managed account.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">38</code></p></td>
+    <td class="tmain"><p>Controlled account.</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>MarginCall</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The limitation state of the account, each state determines the operations that can be performed on the account. Possible values:</p><table class="tmain">
+  <tr>
+    <td class="tmain"><p><code class="ctag">Y</code></p></td>
+    <td class="tmain"><p>Margin call (all positions are liquidated, new positions cannot be opened).</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">W</code></p></td>
+    <td class="tmain"><p>Warning about possible margin call (positions can be closed, new positions cannot be opened).</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">Q</code></p></td>
+    <td class="tmain"><p>Equity stop (all positions are liquidated, new positions cannot be opened up to the end of the trading day).</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">A</code></p></td>
+    <td class="tmain"><p>Equity alert (positions can be closed, new positions cannot be opened up to the end of the trading day).</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">N</code></p></td>
+    <td class="tmain"><p>No limitations (no limitations are imposed on the account operations).</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>IsUnderMarginCall</p></td>
+    <td class="tmain"><p>Boolean</p></td>
+    <td class="tmain"><p>Defines whether the account is under the margin call. Possible values:</p><table class="tmain">
+  <tr>
+    <td class="tmain"><p><code class="ctag">True</code></p></td>
+    <td class="tmain"><p>The account is under the margin call (the <code class="ctag">UsableMargin</code> has reached &quot;0&quot; and open positions were closed because
+of the insufficient funds in the account).</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">False</code></p></td>
+    <td class="tmain"><p>The account is not under the margin call (there are funds available to open new positions and cover losses on the existing positions).</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Hedging</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The type of the position maintenance. It defines how trade operations can be performed on the
+account. The possible values are:</p><table class="tmain">
+  <tr>
+    <td class="tmain"><p><code class="ctag">Y</code></p></td>
+    <td class="tmain"><p>Hedging is allowed. In other words, both buy and sell positions can be opened for
+the same instrument at the same time. To close each buy or sell position, an individual
+order is required.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">N</code></p></td>
+    <td class="tmain"><p>Hedging is not allowed. In other words, either a buy or a sell position can be opened for
+the same instrument at a time. Opening a position for the instrument that already has
+open position(s) of the opposite trade operation always causes closing or partial closing of the open position(s).</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">0</code></p></td>
+    <td class="tmain"><p>Netting only. In other words, for each instrument there exists only one open position.
+The amount of the position is the total amount of the instrument, either bought or sold,
+that has not yet been offset by opposite trade operations.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">D</code></p></td>
+    <td class="tmain"><p>Day netting. In other words, for each instrument there exists only one open position.
+Same as Netting only, but within a trading day. If the position is not offset during the same trading day it is opened,
+it is closed automatically on simulated delivery date.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">F</code></p></td>
+    <td class="tmain"><p>FIFO. Positions open and close in accordance with the FIFO (First-in, First-out) rule. Hedging is not allowed.</p></td>
+  </tr>
+</table></td>
+  </tr>
+</table><p>
+  <center><a href="TradingTables.html">back</a></center>
+</p><script language="javascript" type="text/javascript">if(window.parent.frames[0]) window.parent.frames[0].selectItem(window.location.href);</script></body></html>

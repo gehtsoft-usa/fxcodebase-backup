@@ -1,0 +1,73 @@
+function Init()
+{
+    indicator.name("Linear Regression Slope");
+    indicator.description("Linear Regression Slope");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addInteger("period", "Period", "Period", 14);
+    indicator.parameters.addColor("slope_color", "Color of slope", "Color of slope", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+
+var slope = null;
+var b =0;
+var c =0;
+var oldx=0
+var oldy=0
+var frame=0;
+var testreset=0;
+var petlja =0;
+var test=0;
+var y=0;
+var xy=0;
+var x=0;
+var x2=0;
+
+function Prepare()
+{
+    frame = instance.parameters.period;
+    source = instance.source;
+    first = source.first();
+	
+    var name = profile.id() + "(" + source.name() + ", " + frame + ")";
+    instance.name(name);
+    slope = instance.addStream("slope", core.Line, name, "Slope", instance.parameters.slope_color, first);
+}
+
+function Update(period)
+{ 	   
+ if (period >= frame && source.hasData(period)) 
+ {
+		
+			        
+										
+								for (petlja = (period-frame); petlja<=period; petlja++) 
+								{
+								
+									if (petlja == (period-frame)) 
+									{
+									 test=1;
+									 y = source.close[petlja];
+									 xy=source.close[petlja]*test;
+									 x=test;
+									 x2=test*test;
+									} 
+									else
+									{
+									 test=test+1;													
+								     y = y + source.close[petlja];
+								     xy=xy+(source.close[petlja]*test);
+								     x=x+test;
+								     x2=x2+(test*test);
+									}
+							
+					   }
+    		                  
+            c=x2*(test)-x*x;
+		    b=(xy*(test)-x*y)/c;			
+	        slope[period]=b;
+	    }
+ }

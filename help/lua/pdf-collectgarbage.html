@@ -1,0 +1,57 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - collectgarbage (opt [, arg])</title>
+</head>
+<body>
+<h3><a name="pdf-collectgarbage"><code>collectgarbage (opt [, arg])</code></a></h3>
+
+
+<p>
+This function is a generic interface to the garbage collector.
+It performs different functions according to its first argument, <code>opt</code>:
+
+<ul>
+
+<li><b>"stop":</b>
+stops the garbage collector.
+</li>
+
+<li><b>"restart":</b>
+restarts the garbage collector.
+</li>
+
+<li><b>"collect":</b>
+performs a full garbage-collection cycle.
+</li>
+
+<li><b>"count":</b>
+returns the total memory in use by Lua (in Kbytes).
+</li>
+
+<li><b>"step":</b>
+performs a garbage-collection step.
+The step "size" is controlled by <code>arg</code>
+(larger values mean more steps) in a non-specified way.
+If you want to control the step size
+you must experimentally tune the value of <code>arg</code>.
+Returns <b>true</b> if the step finished a collection cycle.
+</li>
+
+<li><b>"setpause":</b>
+sets <code>arg</code>/100 as the new value for the <em>pause</em> of
+the collector (see <a href="2.10.html">&sect;2.10</a>).
+</li>
+
+<li><b>"setstepmul":</b>
+sets <code>arg</code>/100 as the new value for the <em>step multiplier</em> of
+the collector (see <a href="2.10.html">&sect;2.10</a>).
+</li>
+
+</ul>
+
+
+
+<p>
+<hr>
+</body>
+</html>

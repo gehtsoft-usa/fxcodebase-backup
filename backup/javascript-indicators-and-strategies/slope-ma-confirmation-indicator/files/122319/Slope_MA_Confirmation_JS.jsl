@@ -1,0 +1,185 @@
+function Init()
+{
+    indicator.name("Slope/MA Confirmation");
+    indicator.description("Slope/MA Confirmation");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+	
+	
+	indicator.parameters.addGroup("Slope Direction Line Parameters");
+	indicator.parameters.addInteger("Frame1", "Slope direction line", " Short Period", 50);
+	
+    indicator.parameters.addString("Method1", "SDL Method", "", "MVA");
+    indicator.parameters.addStringAlternative("Method1", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method1", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method1", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("Method1", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method1", "TMA", "", "TMA"); 
+	
+    indicator.parameters.addString("Price1", "Price", "", "close");
+    indicator.parameters.addStringAlternative("Price1", "open", "", "open");
+    indicator.parameters.addStringAlternative("Price1", "close", "", "close");
+    indicator.parameters.addStringAlternative("Price1", "high", "", "high");
+    indicator.parameters.addStringAlternative("Price1", "low", "", "low");
+	indicator.parameters.addStringAlternative("Price1", "median", "", "median");
+    indicator.parameters.addStringAlternative("Price1", "typical", "", "typical");
+    indicator.parameters.addStringAlternative("Price1", "weighted", "", "weighted");
+	
+	indicator.parameters.addGroup("Moving Average Parameters");
+	indicator.parameters.addInteger("Frame2", "MA Period", "", 50);
+	indicator.parameters.addString("Method2", "MA Method", "", "MVA");
+    indicator.parameters.addStringAlternative("Method2", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method2", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method2", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("Method2", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method2", "TMA", "", "TMA");
+	indicator.parameters.addString("Price2", "Price", "", "close");
+    indicator.parameters.addStringAlternative("Price2", "open", "", "open");
+    indicator.parameters.addStringAlternative("Price2", "close", "", "close");
+    indicator.parameters.addStringAlternative("Price2", "high", "", "high");
+    indicator.parameters.addStringAlternative("Price2", "low", "", "low");
+	indicator.parameters.addStringAlternative("Price2", "median", "", "median");
+    indicator.parameters.addStringAlternative("Price2", "typical", "", "typical");
+    indicator.parameters.addStringAlternative("Price2", "weighted", "", "weighted");
+}
+
+var Price1, Price2,Method1, Method2, Frame1, Frame2 ;
+
+var first;
+var source = null;
+
+var HZU = null;
+var HZL = null;
+
+var open=null;
+var close=null;
+var high=null;
+var low=null;
+
+var SDL=null;
+var MA = null;
+
+var Price1, Price2, MAInput, SDLInput;
+
+function Prepare()
+{     
+	Price1=instance.parameters.Price1; 
+	Price2=instance.parameters.Price2; 
+	Method1=instance.parameters.Method1;
+	Method2=instance.parameters.Method2; 
+	Frame1=instance.parameters.Frame1;
+	Frame2=instance.parameters.Frame2;
+    
+    source = instance.source;
+    first = source.first();
+	
+	if (Price2=="close") 
+    {
+     MAInput = source.close;
+    }
+    else if (Price2=="open") 
+    {
+     MAInput = source.open;
+    }
+    else if (Price2=="high") 
+    {
+     MAInput = source.high;
+    } 
+    else if (Price2=="low") 
+    {
+      MAInput = source.low;
+    }  
+	else if (Price2=="weighted") 
+    {
+     MAInput = source.weighted;
+    } 
+    else if (Price2=="typical") 
+    {
+     MAInput = source.typical;
+    } 
+    else if (Price2=="median") 
+    {
+     MAInput = source.median;  
+    }
+	
+	if (Price1=="close") 
+    {
+     SDLInput = source.close;
+    } 
+    else if (Price1=="open") 
+    {
+     SDLInput = source.open;
+    } 
+    else if (Price1=="high") 
+    {
+     SDLInput = source.high;
+    } 
+    else if (Price1=="low") 
+    {
+     SDLInput = source.low;
+    } 
+	else if (Price1=="weighted") 
+    {
+     SDLInput = source.weighted;
+    } 
+    else if (Price1=="typical") 
+    {
+     SDLInput = source.typical;
+    } 
+    else if (Price1=="median") 
+    {
+      SDLInput = source.median; 
+    }
+		
+	MA= core.indicators.create( Method2 , MAInput, Frame2 );
+	SDL= core.indicators.create("SLOPE_DIRECTION_LINE", SDLInput, Frame1 , Method1, Price1, true);
+
+    var name = profile.id() + "(" + source.name() + ", " + Frame1 + "," + Price1 +"," + Method1  + ", " + Frame2 + "," + Price2 +"," + Method2 + ")";
+    instance.name(name);
+   
+   
+    HZU = instance.addStream("HZU", core.Line, name + "HZU", "", core.rgb(127, 127, 127), first);
+    HZL = instance.addStream("HZL", core.Line, name + "HZL", "", core.rgb(127, 127, 127), first);
+    instance.createFromToBarGroup("NEUTRAL", "", HZU, HZL, core.rgb(127, 127, 127));
+	
+	open = instance.addStream("open", core.Line, name, "open", core.rgb(127, 127, 127), first)
+    high = instance.addStream("high", core.Line, name, "high", core.rgb(127, 127, 127), first)
+    low = instance.addStream("low", core.Line, name, "low", core.rgb(127, 127, 127), first)
+    close = instance.addStream("close", core.Line, name, "close", core.rgb(127, 127, 127), first)
+    instance.createCandleGroup("ZONE", "", open, high, low, close);
+}
+
+function Update(period,mode)   
+{	
+	MA.update(mode);
+	SDL.update(mode);
+	
+	if (MA.DATA.hasData(period) && MA.DATA.hasData(period-1) && SDL.DATA.hasData(period) && SDL.DATA.hasData(period-1)) 
+    {
+				if (SDL.DATA[period-1] < SDL.DATA[period] && MA.DATA[period-1] < MA.DATA[period]) 
+                { 
+				   high[period]= source.high[period];
+				   low[period]= source.low[period];		   
+				   close[period] = Math.max(source.open[period], source.close[period]);
+				   open[period]  = Math.min(source.open[period], source.close[period]);   
+                }   
+				else if (SDL.DATA[period-1] > SDL.DATA[period] && MA.DATA[period-1] > MA.DATA[period])   
+                { 
+			       high[period]= source.high[period];
+				   low[period]= source.low[period];		   
+				   close[period] = Math.min(source.open[period], source.close[period]);
+				   open[period]  = Math.max(source.open[period], source.close[period]);   
+                }   
+				else
+                {    
+				   HZU[period] = Math.max(source.open[period], source.close[period]);
+				   HZL[period] = Math.min(source.open[period], source.close[period]);
+				}
+    }            
+	else
+    {    
+     HZU[period] = Math.max(source.open[period], source.close[period]);
+	 HZL[period] = Math.min(source.open[period], source.close[period]);	
+    }
+}
+

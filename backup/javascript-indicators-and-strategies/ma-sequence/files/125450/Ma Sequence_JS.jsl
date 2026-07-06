@@ -1,0 +1,130 @@
+function Init()
+{
+    indicator.name("MA Sequence");
+    indicator.description("");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+	
+	indicator.parameters.addGroup("Selector"); 
+	indicator.parameters.addBoolean("Use1" , "Use 1. Filter"  , "", true); 
+	indicator.parameters.addBoolean("Use2" , "Use 2. Filter"  , "", true); 
+	indicator.parameters.addBoolean("Use3" , "Use 3. Filter"  , "", true); 
+	
+	
+    Add(1, "EMA", 10);
+	Add(2,"EMA", 20);
+	Add(3,"EMA", 50);
+	Add(4,"EMA", 200);
+	
+	indicator.parameters.addGroup("Style");	
+	indicator.parameters.addColor("Up", "Up Color", "", core.rgb(0, 255, 0));
+	indicator.parameters.addColor("Down", "Down Color", "", core.rgb(255, 0, 0));
+	indicator.parameters.addColor("No", "Neutral Color", "", core.rgb(255, 128, 0));
+}
+
+function Add(id, M, P)
+{
+    indicator.parameters.addGroup(id+ ". MA Calculation"); 
+	
+    indicator.parameters.addInteger("Period"+id , "Period", "", P);
+	
+	indicator.parameters.addString("Method"+id, "MA Method", "Method" , M);
+    indicator.parameters.addStringAlternative("Method"+id, "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method"+id, "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method"+id, "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method"+id, "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method"+id, "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method"+id, "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method"+id, "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method"+id, "WMA", "WMA" , "WMA");
+
+}
+
+var Up, Down, No;
+var Period={};
+var Method={};
+var Use={};
+var first;
+var source = null;
+
+var Top = null;
+var Bottom = null;
+
+var indicator={};
+
+function Prepare()
+{ 
+    source = instance.source;
+   Up=instance.parameters.Up;
+   Down=instance.parameters.Down;
+   No=instance.parameters.No;
+   
+    var name = profile.id() + "," + source.name() ;
+	
+	Use[3]=instance.parameters.Use3;
+	Use[2]=instance.parameters.Use2;
+	Use[1]=instance.parameters.Use1;
+   
+   var i;
+   
+   for (i= 1; i<=4; i++) 
+   {
+    Method[i]=instance.parameters.getString("Method" + i);
+	Period[i]=instance.parameters.getInteger("Period" + i);
+    indicator[i] = core.indicators.create(Method[i], source, Period[i]);
+      
+   name= name+ "(" + i+ ". MA - " + Method[i] + "," + Period[i] +")" ;
+   
+   }
+   
+     instance.name(name);
+   
+   first = Math.max(  indicator[1].DATA.first(), indicator[2].DATA.first(), indicator[3].DATA.first(),indicator[4].DATA.first()  );	
+  
+   Top = instance.addStream("Top", core.Line, name, "", No, first); 
+   Bottom= instance.addStream("Bottom", core.Line, name, "", No, first); 
+   instance.createChannelGroup ("ZONE", "ZONE", Top, Bottom,  No, 100)
+	
+	 if (onlyName) 
+	 {
+        return ;
+    }
+	
+}
+
+function Update(period, mode)
+{
+   Top[period]=1;
+   Bottom[period]=0;
+
+
+
+    indicator[1].update(mode);
+    indicator[2].update(mode);
+	indicator[3].update(mode);
+    indicator[4].update(mode);
+    
+	Top.setColor(period, No);
+ 
+	if (period < first  || !source.hasData(period)) 
+	{	
+     return;
+    } 
+
+			
+      
+				if ((indicator[1].DATA[period]	> indicator[2].DATA[period]	 || !Use[1]	) && ( indicator[2].DATA[period]> indicator[3].DATA[period]	 || !Use[2]	) && ( indicator[3].DATA[period]> indicator[4].DATA[period]	 || !Use[3] ) && ( Use[1] || Use[2] || Use[3]))
+				{
+				 Top.setColor(period, Up);
+				}
+				else if (( indicator[1].DATA[period]	< indicator[2].DATA[period]  || !Use[1]) && ( indicator[2].DATA[period]	< indicator[3].DATA[period]	  || !Use[2] )	&& ( indicator[3].DATA[period]	< indicator[4].DATA[period]  || !Use[3]	) && ( Use[1] || Use[2] || Use[3]))			
+				{
+				 Top.setColor(period, Down);	
+				} 
+				else
+				{
+				 Top.setColor(period, No);
+				}
+		
+}
+

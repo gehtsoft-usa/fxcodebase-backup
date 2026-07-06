@@ -1,0 +1,97 @@
+function Init()
+{
+    indicator.name("Gann Hi-lo Activator SSL");
+    indicator.description("When red line is above the candle, sell.When red line is below the canle, buy.");    
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+   
+    indicator.parameters.addInteger("N", "Number of periods", "The number of periods.", 10, 2, 1000);
+	
+	
+	indicator.parameters.addGroup("Style");    
+	indicator.parameters.addInteger("width", " Grid Line Width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", " Grid Style", " ", core.LINE_SOLID);
+	 indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Up", "Up Line Color", "Color of the Up line.", core.rgb(0, 255, 0));    
+	indicator.parameters.addColor("Dn", "Up Line Color", "Color of the Up line.", core.rgb(255, 0, 0)); 
+    
+}
+
+var first;
+var source = null;
+var pips;
+
+var SSL = null;
+
+var maHigh = null;
+var maLow = null;
+var hlvStream = null;
+
+function Prepare()
+{
+    source = instance.source;    
+    var n = instance.parameters.N;                  
+    first = n + source.first();
+    
+    var name = profile.id() + "(" + source.name() + "," + n + ")";
+    instance.name(name);
+    
+    maHigh = core.indicators.create("MVA", source.high, n);
+    maLow = core.indicators.create("MVA", source.low, n);        
+    
+    SSL = instance.addStream("SSL", core.Line, name, "SSL", instance.parameters.Up, first);   
+    SSL.setWidth(instance.parameters.width);
+	SSL.setStyle(instance.parameters.style);	
+    hlvStream = instance.addInternalStream(first - 1);    
+}
+
+function Update(period, mode)    
+{
+    maHigh.update(mode);
+    maLow.update(mode);
+    
+    if (period >= first) 
+    {         
+        var close = source.close[period];
+        var maHighVal = maHigh.DATA[period - 1];
+        var maLowVal = maLow.DATA[period - 1];
+        var hld = 0;
+        var hlv;
+        
+        if (close > maHighVal) 
+        {
+            hld = 1;
+        }
+        else if (close < maLowVal) 
+        {
+            hld = -1;        
+        }
+		
+		 SSL.setColor(period, SSL.colorI(period-1));
+
+
+        
+        hlv = hlvStream[period - 1];
+        if (hld != 0) 
+        {
+           hlv = hld;           
+        }
+        
+        hlvStream[period] = hlv; 
+        
+        if (hlv == -1) 
+        {
+            SSL[period] = maHighVal; 
+			 SSL.setColor(period, instance.parameters.Dn);
+        }
+        else if (hlv == 1) 
+        {         
+            SSL[period] = maLowVal;  
+            SSL.setColor(period, instance.parameters.Up);  			
+        }                    
+    }
+    else
+    {
+        hlvStream[period] = 0;          
+    }
+}

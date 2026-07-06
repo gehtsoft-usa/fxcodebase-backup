@@ -1,0 +1,98 @@
+function Init()
+{
+    indicator.name("Fast Candle");
+    indicator.description("Fast Candle");
+    indicator.requiredSource(core.Bar);
+	indicator.setTag("replaceSource", "t");
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addDouble("Volume_Factor", "Volume Factor", "Volume Factor", 0.2);
+    indicator.parameters.addInteger("Period", "Period", "Period", 3);
+ 
+}
+
+var Volume_Factor;
+var Period;
+
+var first;
+var source = null;
+
+var open, close, high, low = null;
+var cdFast, cdSlow;
+var T3_Fast, T3_Slow; 
+
+function Prepare(nameOnly)
+{
+    Volume_Factor = instance.parameters.Volume_Factor;
+    Period = instance.parameters.Period;
+    source = instance.source;
+    first = source.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Volume_Factor) + ", " + tostring(Period) + ")";
+    instance.name(name);
+	
+	assert(core.indicators.findIndicator("T3") != null, "Please, download && install T3.LUA indicator");
+	assert(core.indicators.findIndicator("GD") != null, "Please, download && install GD.LUA indicator");
+
+    if (!(nameOnly)) 
+    {
+	cdFast= instance.addInternalStream(first, 0);
+	cdSlow= instance.addInternalStream(first, 0); 
+	
+	T3_Fast = core.indicators.create("T3", cdFast, Volume_Factor, Period);
+	T3_Slow = core.indicators.create("T3", cdSlow, Volume_Factor, Period);
+	T3_High = core.indicators.create("T3", source.high, Volume_Factor, Period);
+	T3_Low = core.indicators.create("T3", source.low, Volume_Factor, Period);
+	
+    open = instance.addInternalStream(T3_Fast.DATA.first()+1, 0);
+    high =instance.addInternalStream(T3_Fast.DATA.first()+1, 0);
+    low = instance.addInternalStream(T3_Fast.DATA.first()+1, 0);
+    close = instance.addInternalStream(T3_Fast.DATA.first()+1, 0);
+    instance.createCandleGroup("ZONE", "", open, high, low, close);
+    }
+}
+
+function Update(period,mode)
+{
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+    if (source.close[period] >source.open[period])   
+    {
+	 cdFast[period]=(source.close[period]+source.high[period])/2
+	} 
+    else
+    {
+	 cdFast[period]=(source.close[period]+source.open[period])/2
+	}
+	
+	if (source.close[period] >source.open[period])   
+	{
+	 cdSlow[period]=(source.open[period]+source.low[period])/2
+	} 
+    else
+    {
+	 cdSlow[period]=(source.open[period]+source.high[period])/2
+	}
+	
+	T3_Fast.update(mode);
+	T3_Slow.update(mode);
+	T3_High.update(mode);
+	T3_Low.update(mode);
+	
+	if (period < T3_Fast.DATA.first()+1) 
+	{
+	 return;
+	}
+	
+	period= period-1;
+	
+	close[period+1]= T3_Fast.DATA[period];
+	open[period+1]= T3_Slow.DATA[period-1];
+	high[period+1]= T3_High.DATA[period+1];
+	low[period+1]= T3_Low.DATA[period+1];
+}
+ 
+

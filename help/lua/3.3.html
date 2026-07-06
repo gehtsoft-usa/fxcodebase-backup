@@ -1,0 +1,36 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 3.3 - Pseudo-Indices</title>
+</head>
+<body>
+<h2>3.3 - <a name="3.3">Pseudo-Indices</a></h2>
+
+<p>
+Unless otherwise noted,
+any function that accepts valid indices can also be called with
+<em>pseudo-indices</em>,
+which represent some Lua values that are accessible to C&nbsp;code
+but which are not in the stack.
+Pseudo-indices are used to access the thread environment,
+the function environment,
+the registry,
+and the upvalues of a C&nbsp;function (see <a href="3.4.html">&sect;3.4</a>).
+
+
+<p>
+The thread environment (where global variables live) is
+always at pseudo-index <a name="pdf-LUA_GLOBALSINDEX"><code>LUA_GLOBALSINDEX</code></a>.
+The environment of the running C&nbsp;function is always
+at pseudo-index <a name="pdf-LUA_ENVIRONINDEX"><code>LUA_ENVIRONINDEX</code></a>.
+
+
+<p>
+To access and change the value of global variables,
+you can use regular table operations over an environment table.
+For instance, to access the value of a global variable, do
+
+<pre>
+     lua_getfield(L, LUA_GLOBALSINDEX, varname);
+</pre>
+</body>
+</html>

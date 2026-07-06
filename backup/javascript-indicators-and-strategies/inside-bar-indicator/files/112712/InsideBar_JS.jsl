@@ -1,0 +1,37 @@
+function Init()
+{
+    indicator.name("Inside bar Indicator");
+    indicator.description("Inside bar Indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    
+    indicator.parameters.addColor("clrIn", "Inside bar color", "Inside bar color", core.rgb(255, 255, 0));
+}
+
+var first;
+var source = null;
+var buffIn;
+var buffOut;
+
+function Prepare()
+{
+    source = instance.source;
+    Percent=instance.parameters.Percent;
+    MaxPeriod=instance.parameters.MaxPeriod;
+    first = source.first()+2;
+    var name = profile.id()+"("+source.name()+")";
+    instance.name(name);
+    buffIn = instance.createTextOutput ("Inside", "Inside", "Wingdings", 10, core.H_Center, core.V_Center, instance.parameters.clrIn, first);
+}
+
+function Update(period, mode)
+{
+    if (period>first)
+    {
+     if (source.high[period]<source.high[period-1] && source.low[period]>source.low[period-1])
+     {
+      buffIn.set(period, source.low[period], "\159", "");
+     }
+    } 
+}
+

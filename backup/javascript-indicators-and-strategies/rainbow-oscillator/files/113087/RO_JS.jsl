@@ -1,0 +1,78 @@
+function Init()
+{
+    indicator.name("Rainbow Oscillator");
+    indicator.description("Rainbow Oscillator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "Period", 10);
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("RO_color", "Color of RO", "Color of RO", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var Period;
+
+var first;
+var source = null;
+
+// Streams block
+var RO = null;
+var Avg={};
+// Routine
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+    source = instance.source;
+    first = source.first()+Period;
+	
+	var i;
+	for (i = 1; i<=Period; i++) 
+	{
+	 Avg[i] = instance.addInternalStream(0, 0);
+	}
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        RO = instance.addStream("RO", core.Line, name, "RO", instance.parameters.RO_color, first);
+		RO.setWidth(instance.parameters.width);
+        RO.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period)
+{
+    if (period < first) 
+    {
+	 return;
+	}
+	var i;
+	var Sum=0;
+	var min, max;
+	var tmp=Math.minmax(source, period-Period+1, period);
+	min=tmp[0];
+	max=tmp[1];
+
+	for (i = 1; i<=Period; i++) 
+	{
+		if (i == 1) 
+		{
+		 Avg[i][period]=Math.avg(source, period-2+1, period);
+		} 
+		else
+		{
+		 Avg[i][period]=Math.avg(Avg[i-1], period-2+1, period);
+		}	
+	    Sum= Sum+Avg[i][period];
+	}
+	
+	
+        RO[period] = 100 * (source[period] - ( Sum/ Period)) / ( max -min );		
+    
+}
+

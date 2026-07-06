@@ -1,0 +1,114 @@
+function Init()
+{
+    indicator.name("Multiple CCI");
+    indicator.description("Multiple CCI");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+   
+   Add(1, 5 ); 
+   Add(2, 10  ); 
+   Add(3, 15 ); 
+   Add(4, 20  ); 
+   Add(5, 25 ); 
+
+   
+   
+    indicator.parameters.addGroup("OB/OS Levels");	
+    indicator.parameters.addDouble("overbought", "Overbought Level","", 100);
+    indicator.parameters.addDouble("oversold","Oversold Level","", -100);
+	    indicator.parameters.addColor("level_overboughtsold_color", "Line Color","", core.rgb(128, 128, 128));
+    indicator.parameters.addInteger("level_overboughtsold_width","Line width","", 1, 1, 5);
+    indicator.parameters.addInteger("level_overboughtsold_style", "Line Style","", core.LINE_SOLID);
+    indicator.parameters.setFlag("level_overboughtsold_style", core.FLAG_LEVEL_STYLE);
+}
+
+function Coloring (value, mid)
+{
+ var color;
+
+ if (value <= mid) 
+ {
+  color = core.rgb(255 * (value / mid), 255, 0) 
+ } 
+ else 
+ {
+  color = core.rgb(255, 255 - 255 * ((value - mid) / mid), 0)
+ }
+
+
+ return (color);
+
+}
+
+function Add(id, Period  ) 
+{
+  indicator.parameters.addGroup(id + ". Line");
+
+  indicator.parameters.addBoolean("On"+id , "Show this line", "", true);	
+  indicator.parameters.addInteger("Period"+ id, "Period", "Period", Period);
+  indicator.parameters.addColor("Color"+ id, "Line Color", "Line Color", Coloring (id, 5/2));
+
+}
+
+var Number= 5;
+var first={};
+var source = null;
+var Color={};
+var Period={};
+var On={};
+
+var CCI = {};
+var cci={};
+
+function Prepare(nameOnly)
+{    
+    source = instance.source;
+   
+	
+	var i;
+	for (i= 1; i<=Number; i++) 
+  {
+    On[i] = instance.parameters.getBoolean("On" + i);
+	Color[i] = instance.parameters.getDouble("Color" + i);
+	Period[i] = instance.parameters.getInteger("Period" + i);
+	}	
+
+    var name = profile.id() + ", " + source.name()  
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+	    for (i= 1; i<=Number; i++) 
+      {
+		    cci[i] = core.indicators.create("CCI", source, Period[i]);
+			  first[i]=cci[i].DATA.first();
+			  if (On[i]) 
+        {
+			   CCI[i] = instance.addStream("CCI" + i   , core.Line, name, i+ ". CCI", Color[i], first[i]);
+			   CCI[i].addLevel(instance.parameters.oversold, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);
+		     CCI[i].addLevel(instance.parameters.overbought, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);   
+        }
+  			else
+        {
+			   CCI[i] = instance.addInternalStream(0, 0);
+        } 
+		  }
+       
+    }
+}
+
+function Update(period, mode)
+{
+    var i;
+	for (i= 1; i<=Number; i++) 
+  {	   
+	    cci[i].update(mode);
+		if (period > first[i]) 
+    {
+		 CCI[i][period] = cci[i].DATA[period];
+		}
+ 
+	}
+	    
+}
+

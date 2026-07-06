@@ -1,0 +1,129 @@
+function Init()
+{
+    indicator.name("Step RSI oscillator");
+    indicator.description("Step RSI oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 14);
+    indicator.parameters.addInteger("StepFast", "Step size fast", "", 5);
+    indicator.parameters.addInteger("StepSlow", "Step size slow", "", 15);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("RSIclr", "RSI color", "RSI color", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("RSIwidth", "RSI width", "RSI width", 1, 1, 5);
+    indicator.parameters.addInteger("RSIstyle", "RSI style", "RSI style", core.LINE_SOLID);
+    indicator.parameters.setFlag("RSIstyle", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("StepFclr", "Step RSI fast color", "Step RSI fast color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("StepFwidth", "Step RSI fast width", "Step RSI fast width", 1, 1, 5);
+    indicator.parameters.addInteger("StepFstyle", "Step RSI fast style", "Step RSI fast style", core.LINE_SOLID);
+    indicator.parameters.setFlag("StepFstyle", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("StepSclr", "Step RSI slow color", "Step RSI slow color", core.rgb(255, 222, 0));
+    indicator.parameters.addInteger("StepSwidth", "Step RSI slow width", "Step RSI slow width", 1, 1, 5);
+    indicator.parameters.addInteger("StepSstyle", "Step RSI slow style", "Step RSI slow style", core.LINE_SOLID);
+    indicator.parameters.setFlag("StepSstyle", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period;
+var StepFast;
+var StepSlow;
+var fmin, fmax, smin, smax;
+var ftrend, strend;
+var RSI_Ind;
+var RSI=null;
+var StepRSIFast=null;
+var StepRSISlow=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    StepFast=instance.parameters.StepFast;
+    StepSlow=instance.parameters.StepSlow;
+    first = source.first()+2;
+    fmin = instance.addInternalStream(first, 0);
+    fmax = instance.addInternalStream(first, 0);
+    ftrend = instance.addInternalStream(first, 0);
+    smin = instance.addInternalStream(first, 0);
+    smax = instance.addInternalStream(first, 0);
+    strend = instance.addInternalStream(first, 0);
+    RSI_Ind = core.indicators.create("RSI", source.close, Period);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.StepFast + ", " + instance.parameters.StepSlow + ")";
+    instance.name(name);
+    RSI = instance.addStream("RSI", core.Line, name + ".RSI", "RSI", instance.parameters.RSIclr, first);
+    RSI.setWidth(instance.parameters.RSIwidth);
+    RSI.setStyle(instance.parameters.RSIstyle);
+    StepRSIFast = instance.addStream("StepRSIFast", core.Line, name + ".StepRSIFast", "StepRSIFast", instance.parameters.StepFclr, first);
+    StepRSIFast.setWidth(instance.parameters.StepFwidth);
+    StepRSIFast.setStyle(instance.parameters.StepFstyle);
+    StepRSISlow = instance.addStream("StepRSISlow", core.Line, name + ".StepRSISlow", "StepRSISlow", instance.parameters.StepSclr, first);
+    StepRSISlow.setWidth(instance.parameters.StepSwidth);
+    StepRSISlow.setStyle(instance.parameters.StepSstyle);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    RSI_Ind.update(mode);
+    ftrend[period]=ftrend[period-1];
+    strend[period]=strend[period-1];
+    fmax[period]=RSI_Ind.DATA[period]+2*StepFast;
+    fmin[period]=RSI_Ind.DATA[period]-2*StepFast;
+    if (RSI_Ind.DATA[period]>fmax[period-1]) 
+    {
+     ftrend[period]=1;
+    } 
+    else if (RSI_Ind.DATA[period]<fmin[period-1]) 
+    {
+     ftrend[period]=-1; 
+    }
+    if (ftrend[period]==1 && fmin[period]<fmin[period-1]) 
+    {
+     fmin[period]=fmin[period-1];
+    } 
+    else if (ftrend[period]==-1 && fmax[period]>fmax[period-1]) 
+    {
+     fmax[period]=fmax[period-1];
+    }
+    smax[period]=RSI_Ind.DATA[period]+2*StepSlow;
+    smin[period]=RSI_Ind.DATA[period]-2*StepSlow;
+    if (RSI_Ind.DATA[period]>smax[period-1]) 
+    {
+     strend[period]=1;
+    } 
+    else if (RSI_Ind.DATA[period]<smin[period-1]) 
+    {
+     strend[period]=-1;
+    }
+    if (strend[period]==1 && smin[period]<smin[period-1]) 
+    {
+     smin[period]=smin[period-1];
+    } 
+    else if (strend[period]==-1 && smax[period]>smax[period-1]) 
+    {
+     smax[period]=smax[period-1];
+    }
+    RSI[period]=RSI_Ind.DATA[period];
+    if (ftrend[period]>=0) 
+    {
+     StepRSIFast[period]=fmin[period]+StepFast;
+    } 
+    else
+    {
+     StepRSIFast[period]=fmax[period]-StepFast;
+    }
+    if (strend[period]>=0) 
+    {
+     StepRSISlow[period]=smin[period]+StepSlow;
+    } 
+    else
+    {
+     StepRSISlow[period]=smax[period]-StepSlow;
+    }
+   } 
+}
+

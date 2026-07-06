@@ -1,0 +1,130 @@
+function Init()
+{
+    indicator.name("Proportional Direction");
+    indicator.description("Proportional Direction");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+	
+	indicator.parameters.addGroup("Indicator Selection");	
+	indicator.parameters.addString("INDICATOR", "Indicator", "", "");
+    indicator.parameters.setFlag("INDICATOR",core.FLAG_INDICATOR);
+	indicator.parameters.addInteger("Number", "Data Stream Number", "", 1, 1 , 100);
+    indicator.parameters.addGroup("Calculation");		
+    indicator.parameters.addString("Direction", "Direction", "Direction", "Direct");
+	indicator.parameters.addStringAlternative("Direction", "Direct", "Direct" , "Direct");
+	indicator.parameters.addStringAlternative("Direction", "Reverse Indicator", "ReverseIndicator" , "ReverseIndicator");
+	indicator.parameters.addStringAlternative("Direction", "Reverse Price", "ReversePrice" , "ReversePrice");
+	
+	indicator.parameters.addGroup("Style");	
+	indicator.parameters.addInteger("Size", "Arrow Size", "Arrow Size", 15);
+    indicator.parameters.addColor("Up", "Color of Up", "Color of Up", core.rgb(0, 255, 0));
+	indicator.parameters.addColor("Down", "Color of Down", "Color of Down", core.rgb(255, 0, 0));
+}
+
+var Direction;
+
+var first;
+var source = null;
+var Number;
+
+var Up,Down;
+var up, down;
+var Indicator;
+var INDEX;
+var Size;
+
+function Prepare(nameOnly)
+{
+    Direction = instance.parameters.Direction; 
+	Number = instance.parameters.Number-1;
+	Size = instance.parameters.Size;
+	Up=instance.parameters.Up;
+	Down=instance.parameters.Down;
+    source = instance.source;
+	
+		var iprofile = core.indicators.findIndicator(instance.parameters.getString("INDICATOR"));
+		var iparams = instance.parameters.getCustomParameters("INDICATOR");
+
+		if (iprofile.requiredSource() == core.Tick) 
+		{			
+			Indicator = iprofile.createInstance( source.close, iparams);
+		}
+		else
+		{
+			Indicator = iprofile.createInstance(source, iparams);
+		}
+	
+	 Count= Indicator.getStreamCount ();
+	 
+	 if (Number >= Count) 
+	 {
+	  Number = Count;
+	  assert( false, "Incorrect index of stream. The indicator has only "+ Count  + " stream(s).");
+	 }	 
+	 
+	INDEX=  Indicator.getStream (Number);	
+	 
+    first = Math.max(source.first(), INDEX.first()) ;	
+	 			
+ 
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Direction) + ")";
+    instance.name(name);
+	
+	up = instance.createTextOutput ("Up", "Up", "Wingdings", Size, core.H_Center, core.V_Bottom, Up, 0);
+    down = instance.createTextOutput ("Dn", "Dn", "Wingdings", Size, core.H_Center, core.V_Top, Down, 0);
+ 
+}
+
+function Update(period,mode)
+{
+    Indicator.update(mode);
+	
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+	up.setNoData(period);
+	down.setNoData(period);
+	
+	if (Direction == "Direct") 
+	{
+		if (source.close[period]>source.open[period] && INDEX[period]> INDEX[period-1])
+		{
+ 		 up.set(period , source.low[period], "\217");	 
+ 		}
+		else if (source.close[period]<source.open[period] && INDEX[period]< INDEX[period-1])
+		{
+ 		 down.set(period , source.high[period], "\218");
+		}
+	}
+	else if (Direction == "ReverseIndicator") 
+	{
+	 
+	    if (source.close[period]<source.open[period] && INDEX[period]> INDEX[period-1])
+	    {
+		 up.set(period , source.low[period], "\217");			
+		}
+		else if (source.close[period]>source.open[period] && INDEX[period]<INDEX[period-1])
+		{
+		 down.set(period , source.high[period], "\218");
+		}
+	}
+	
+	else if (Direction == "ReversePrice") 
+	{
+	 
+	     if (source.close[period]>source.open[period] && INDEX[period]< INDEX[period-1])
+	     {
+		  up.set(period , source.low[period], "\217");			
+		}
+		else if (source.close[period]<source.open[period] && INDEX[period]>INDEX[period-1])
+		{
+		down.set(period , source.high[period], "\218");
+		}
+		
+	}
+     
+}
+

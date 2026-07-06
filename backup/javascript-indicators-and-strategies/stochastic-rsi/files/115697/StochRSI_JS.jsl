@@ -1,0 +1,94 @@
+function Init()
+{
+    indicator.name("Stochastic RSI");
+    indicator.description("");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addInteger("N", "Number of periods for RSI", "", 14, 1, 200);
+    indicator.parameters.addInteger("K", "%K Stochastic Periods", "", 14, 1, 200);
+    indicator.parameters.addInteger("KS", "%K Slowing Periods", "", 5, 1, 200);
+    indicator.parameters.addInteger("D", "%D Slowing Stochastic Periods", "", 3, 1, 200);
+    indicator.parameters.addColor("K_color", "Color of K", "Color of K", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("D_color", "Color of D", "Color of D", core.rgb(255, 0, 0));
+}
+
+var N;
+var K;
+var KS;
+var D;
+
+var firstSKI;
+var firstK;
+var firstD;
+var source = null;
+
+var SKI = null;
+var SK = null;
+var SD = null;
+var RSI = null;
+var MVA1 = null;
+var MVA2 = null;
+
+function Prepare()
+{
+    N = instance.parameters.N;
+    K = instance.parameters.K;
+    KS = instance.parameters.KS;
+    D = instance.parameters.D;
+    source = instance.source;
+    first = source.first();
+
+    RSI = core.indicators.create("RSI", source, N);
+    var name = profile.id() + "(" + source.name() + ", " + N + ", " + K + ", " + KS +", " + D + ")";
+    instance.name(name);
+    firstSKI = RSI.DATA.first() + K;
+    SKI = instance.addInternalStream(firstSKI, 0);
+    MVA1 = core.indicators.create("MVA", SKI, KS);
+    firstK = MVA1.DATA.first();
+    SK = instance.addStream("K", core.Line, name + ".K", "K", instance.parameters.K_color, firstK);
+    SK.addLevel(20);
+    SK.addLevel(50);
+    SK.addLevel(80);
+    MVA2 = core.indicators.create("MVA", SK, D);
+    firstD = MVA2.DATA.first();
+    SD = instance.addStream("D", core.Dot, name + ".D", "D", instance.parameters.D_color, firstD);
+}
+
+function Update(period, mode)
+{
+    RSI.update(mode);
+
+    if (period >= firstSKI) 
+    {
+        var min, max;
+        var range;
+        range = core.rangeTo(period, K);
+        var tmp=Math.minmax(RSI.DATA, period-K+1, period);
+        min = tmp[0];
+        max = tmp[1];
+        if (min == max) 
+        {
+            SKI[period] = 100;
+        }    
+        else
+        {
+            SKI[period] = (RSI.DATA[period] - min) / (max - min) * 100;
+        }
+    }
+
+    MVA1.update(mode);
+
+    if (period >= firstK) 
+    {
+        SK[period] = MVA1.DATA[period];
+    }
+
+    MVA2.update(mode);
+
+    if (period >= firstD) 
+    {
+        SD[period] = MVA2.DATA[period];
+    }
+}
+

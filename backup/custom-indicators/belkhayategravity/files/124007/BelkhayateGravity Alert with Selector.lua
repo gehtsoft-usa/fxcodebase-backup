@@ -1,0 +1,300 @@
+-- Id: 23986
+
+-- More information about this indicator can be found at:
+-- http://fxcodebase.com/code/viewtopic.php?f=17&t=67311
+
+--+------------------------------------------------------------------+
+--|                               Copyright © 2019, Gehtsoft USA LLC |
+--|                                            http://fxcodebase.com |
+--+------------------------------------------------------------------+
+--|                                      Developed by : Mario Jemic  |
+--|                                          mario.jemic@gmail.com   |
+--+------------------------------------------------------------------+
+--|                                 Support our efforts by donating  |
+--|                                   Paypal: https://goo.gl/9Rj74e  |
+--|                    Patreon : https://www.patreon.com/mariojemic  |
+--|                    BitCoin : 15VCJTLaz12Amr7adHSBtL9v8XomURo9RF  |
+--|               BitCoin Cash : 1BEtS465S3Su438Kc58h2sqvVvHK9Mijtg  |
+--|           Ethereum : 0x8C110cD61538fb6d7A2B47858F0c0AaBd663068D  |
+--|                   LiteCoin : LLU8PSY2vsq7B9kRELLZQcKf5nJQrdeqwD  |
+--+------------------------------------------------------------------+
+
+-- Indicator profile initialization routine
+
+function Init()
+	indicator:name("Belkhayate Gravity")
+	indicator:description("")
+	indicator:requiredSource(core.Tick)
+	indicator:type(core.Indicator)
+
+	indicator.parameters:addString("tf1", "Custom Timeframe #1", "", "m5")
+	indicator.parameters:addString("tf2", "Custom Timeframe #2", "", "m15")
+	indicator.parameters:addString("tf3", "Custom Timeframe #3", "", "m30")
+	indicator.parameters:addString("tf4", "Custom Timeframe #4", "", "H1")
+	indicator.parameters:addString("tf5", "Custom Timeframe #5", "", "H4")
+	indicator.parameters:addString("tf6", "Custom Timeframe #6", "", "D1")
+
+	indicator.parameters:addGroup("Calculation")
+	indicator.parameters:addInteger("Period", "Period", "", 100)
+	indicator.parameters:addInteger("Order", "Order", "Order", 3)
+	indicator.parameters:addColor("color", "Line Color", "", core.colors().Lime)
+	indicator.parameters:addColor("UpColor", "Up Color", "", core.colors().Lime)
+	indicator.parameters:addColor("DownColor", "Down Color", "", core.colors().Red)
+
+	indicator.parameters:addGroup("Alerts")
+	indicator.parameters:addString("Side", "Type of side", "", "green")
+	indicator.parameters:addStringAlternative("Side", "Green", "", "green")
+	indicator.parameters:addStringAlternative("Side", "Red", "", "red")
+	indicator.parameters:addStringAlternative("Side", "OnChange", "", "both")
+
+	indicator.parameters:addBoolean("ShowAlert", "ShowAlert", "", true)
+	indicator.parameters:addBoolean("PlaySound", "Play Sound", "", false)
+	indicator.parameters:addFile("SoundFile", "Sound File", "", "")
+	indicator.parameters:setFlag("SoundFile", core.FLAG_SOUND)
+	indicator.parameters:addBoolean("RecurrentSound", "Recurrent Sound", "", true)
+	indicator.parameters:addBoolean("SendEmail", "Send Email", "", false)
+	indicator.parameters:addString("Email", "Email", "", "")
+	indicator.parameters:setFlag("Email", core.FLAG_EMAIL)
+end
+
+local GC1
+local Thick1
+local Thick2
+local Thick3
+local BiasStrength
+local UpColor
+local DownColor
+local Period
+local Order
+
+local first
+local source = nil
+local BCG
+local indicators = {}
+
+local SoundFile = nil
+local RecurrentSound = false
+local ShowAlert
+local Email
+local SendEmail
+local AlertSide
+
+function Add(tf)
+	local data = {}
+	data.loadedId = (#indicators * 2) + 1
+	data.loadingId = (#indicators * 2) + 2
+	data.source =
+		core.host:execute("getSyncHistory", source:instrument(), tf, source:isBid(), 0, data.loadedId, data.loadingId)
+	data.indi = core.indicators:create("BCG", data.source, Period, Order, 0.618)
+	data.loading = true
+	indicators[#indicators + 1] = data
+end
+
+function Prepare(nameOnly)
+	local name = profile:id() .. "(" .. instance.source:name() .. ")"
+	instance:name(name)
+	if (nameOnly) then
+		return
+	end
+
+	local PlaySound = instance.parameters.PlaySound
+	if PlaySound then
+		SoundFile = instance.parameters.SoundFile
+	else
+		SoundFile = nil
+	end
+	assert(not (PlaySound) or (PlaySound and SoundFile ~= ""), "Sound file must be chosen")
+
+	ShowAlert = instance.parameters.ShowAlert
+	RecurrentSound = instance.parameters.RecurrentSound
+
+	SendEmail = instance.parameters.SendEmail
+
+	if SendEmail then
+		Email = instance.parameters.Email
+	else
+		Email = nil
+	end
+	assert(not (SendEmail) or (SendEmail and Email ~= ""), "E-mail address must be specified")
+
+	AlertSide = instance.parameters.Side
+
+	UpColor = instance.parameters.UpColor
+	DownColor = instance.parameters.DownColor
+	Period = instance.parameters.Period
+	Order = instance.parameters.Order
+	source = instance.source
+	BiasStrength = instance:addInternalStream(0, 0)
+	GC1 = instance:addStream("GC1", core.Line, "GC1", "GC1", instance.parameters.color, 0)
+	Thick1 = instance:addStream("Thick1", core.Dot, "Thick1", "Thick1", instance.parameters.color, 0)
+	Thick1:setWidth(2)
+	Thick2 = instance:addStream("Thick2", core.Dot, "Thick2", "Thick2", instance.parameters.color, 0)
+	Thick2:setWidth(3)
+	Thick3 = instance:addStream("Thick3", core.Dot, "Thick3", "Thick3", instance.parameters.color, 0)
+	Thick3:setWidth(4)
+
+	assert(
+		core.indicators:findIndicator("BCG") ~= nil,
+		"Please, download and install BCG.LUA indicator from http://fxcodebase.com/code/viewtopic.php?f=17&p=123721"
+	)
+
+	BCG = core.indicators:create("BCG", source, Period, Order, 0.618)
+	Add(instance.parameters.tf1)
+	Add(instance.parameters.tf2)
+	Add(instance.parameters.tf3)
+	Add(instance.parameters.tf4)
+	Add(instance.parameters.tf5)
+	Add(instance.parameters.tf6)
+end
+
+function AsyncOperationFinished(cookie, successful, message, message1, message2)
+	local allLoaded = true
+	for _, data in ipairs(indicators) do
+		if data.loadingId == cookie then
+			data.loading = true
+		elseif data.loadedId == cookie then
+			data.loading = false
+		end
+		if data.loading then
+			allLoaded = false
+		end
+	end
+	if allLoaded then
+		instance:updateFrom(0)
+	end
+end
+
+local lastSide = 0
+function Update(period, mode)
+	if (period < 10 + Period) then
+		return
+	end
+	BCG:update(core.UpdateLast)
+	for _, data in ipairs(indicators) do
+		if data.loading then
+			return
+		end
+		data.indi:update(core.UpdateLast)
+	end
+	local p1 = BCG.GravityLine[period]
+	if not BCG.GravityLine:hasData(period - 1) then
+		return
+	end
+	local p2 = BCG.GravityLine[period - 1]
+
+	BiasStrength[period] = 0
+	GC1[period] = p1
+	if p1 > p2 then
+		BiasStrength[period] = 1
+		BiasStrength:setColor(period, UpColor)
+	elseif p1 < p2 then
+		BiasStrength[period] = -1
+		BiasStrength:setColor(period, DownColor)
+	end
+
+	local above = 0
+	local below = 0
+	for _, data in ipairs(indicators) do
+		if p1 > data.indi.DATA[NOW] then
+			above = above + 1
+		elseif p1 < data.indi.DATA[NOW] then
+			below = below + 1
+		end
+	end
+	if p1 > p2 and above > 0 then
+		if below == 0 then
+			Thick3[period] = p1
+			Thick3:setColor(period, UpColor)
+			BiasStrength[period] = 4
+		end
+		if above > below then
+			Thick2[period] = p1
+			Thick2:setColor(period, UpColor)
+			BiasStrength[period] = 3
+		else
+			Thick1[period] = p1
+			Thick1:setColor(period, UpColor)
+			BiasStrength[period] = 2
+		end
+	elseif p1 < p2 and below > 0 then
+		if above == 0 then
+			Thick3[period] = p1
+			Thick3:setColor(period, DownColor)
+			BiasStrength[period] = -4
+		end
+		if below > above then
+			Thick2[period] = p1
+			Thick2:setColor(period, DownColor)
+			BiasStrength[period] = -3
+		else
+			Thick1[period] = p1
+			Thick1:setColor(period, DownColor)
+			BiasStrength[period] = -2
+		end
+	end
+
+	if (BiasStrength[period] < 0 and lastSide > 0) then
+		if (AlertSide == "red" or AlertSide == "both") then
+			SoundAlert(SoundFile)
+			EmailAlert("Red", "Red", period)
+			SendAlert("Red", "Red", period)
+		end
+	elseif (BiasStrength[period] > 0 and lastSide < 0) then
+		if (AlertSide == "green" or AlertSide == "both") then
+			SoundAlert(SoundFile)
+			EmailAlert("Green", "Green", period)
+			SendAlert("Green", "Green", period)
+		end
+	end
+	lastSide = BiasStrength[period]
+end
+
+function SoundAlert(Sound)
+	if not PlaySound then
+		return
+	end
+
+	terminal:alertSound(Sound, RecurrentSound)
+end
+
+function EmailAlert(AlertLabel, AlertText, period)
+	if not SendEmail then
+		return
+	end
+
+	local delim = "\013\010"
+
+	local date = source:date(period)
+	local DATA = core.dateToTable(date)
+
+	local Symbol = "Instrument : " .. source:instrument()
+	local TF = "Time Frame : " .. source:barSize()
+	local Time =
+		" Date : " ..
+		DATA.month .. " / " .. DATA.day .. delim .. " Time:  " .. DATA.hour .. " / " .. DATA.min .. " / " .. DATA.sec
+
+	local Text = Symbol .. delim .. TF .. delim .. Time .. delim .. AlertLabel .. ":" .. AlertText
+
+	terminal:alertEmail(Email, profile:id(), Text)
+end
+
+function SendAlert(AlertLabel, AlertText, period)
+	if not ShowAlert then
+		return
+	end
+
+	local delim = "\013\010"
+
+	local date = source:date(period)
+	local DATA = core.dateToTable(date)
+
+	local Symbol = "Instrument : " .. source:instrument()
+	local TF = "Time Frame : " .. source:barSize()
+	local Time =
+		" Date : " ..
+		DATA.month .. " / " .. DATA.day .. delim .. "Time :" .. DATA.hour .. " / " .. DATA.min .. " / " .. DATA.sec
+
+	local Text = Symbol .. delim .. TF .. delim .. Time .. delim .. AlertLabel .. ":" .. AlertText
+
+	terminal:alertMessage(source:instrument(), source[NOW], Text, source:date(NOW))
+end

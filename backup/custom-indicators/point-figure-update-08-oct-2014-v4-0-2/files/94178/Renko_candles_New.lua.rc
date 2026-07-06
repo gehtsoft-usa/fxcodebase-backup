@@ -1,0 +1,114 @@
+﻿include=common.lua.rc
+default=enu
+[enu]
+codepage=1252
+name=Renko Chart New
+description=A chart where a new brick is added only when the price moves up or down by more than a predefined amount.
+step_name=Brick size
+step_desc=The brick size in pips.
+
+[ara]
+codepage=1256
+name=مخطط رينكو
+description=مخطط يتم فيه إضافة قرميدة جديدة فقط عندما يتحرك السعر صعودًا أو نزولاً بأكثر من المقدار المحدد مسبقًا.
+step_name=حجم القرميدة
+step_desc=حجم القرميدة بالنقاط.
+
+[chs]
+codepage=936
+name=砖形图
+description=图表的一种，仅当价格上行或下行超过预定量时才新增一块砖。
+step_name=砖块大小
+step_desc=以点数表示的砖块大小。
+
+[cht]
+codepage=950
+name=磚形圖
+description=圖表的一種，僅當價格上行或下行超過預定量時才新增一個磚塊。
+step_name=磚塊大小
+step_desc=以點數表示的磚塊大小。
+
+[cze]
+codepage=1250
+name=Renko graf
+description=Graf, do něhož se přidá nová cihla pouze v případě, kdy se cena pohne směrem nahoru nebo dolů o předem stanovenou výši
+step_name=Velikost cihly
+step_desc=Velikost cihly v pipech
+
+[deu]
+codepage=1252
+name=Renko-Chart
+description=Ein Chart, in dem nur dann ein neuer Ziegel hinzugefügt wird, wenn sich der Kurs um mehr als den vordefinierten Wert nach oben oder unten bewegt.
+step_name=Ziegelgröße
+step_desc=Ziegelgröße in Pips.
+
+[esp]
+codepage=1252
+name=Gráfico Renko
+description=Gráfico en el que se añade un nuevo bloque únicamente cuando el precio sube o baja en una cantidad superior a la predefinida.
+step_name=Tamaño del bloque
+step_desc=Tamaño del bloque en pips.
+
+[fra]
+codepage=1252
+name=Graphique Renko
+description=Un graphique dans lequel une nouvelle brique est ajoutée uniquement quand le prix monte ou descend plus qu'un montant prédéfini.
+step_name=Taille de la brique
+step_desc=La taille de la brique en pips.
+
+[gre]
+codepage=1253
+name=Διάγραμμα Renko
+description=Διάγραμμα στο οποίο προστίθεται νέο τούβλο μόνο αφού η τιμή αυξηθεί η μειωθεί κατά ένα ποσό άνω του καθορισμένου.
+step_name=Μέγεθος τούβλου
+step_desc=Το μέγεθος τούβλου σε pip.
+
+[heb]
+codepage=1255
+name=גרף Renko
+description=גרף שבו נוספת "לבנה" (Brick) חדשה רק כאשר המחיר עולה או יורד ביותר ממידה מוגדרת מראש.
+step_name=גודל לבנה
+step_desc=גודל לבנה בפיפסים.
+
+[hun]
+codepage=0
+name=Renko grafikon
+description=Olyan grafikon, amelyhez csak akkor adódik új blokk, ha az ár  az előre meghatározott értéknél nagyobb mértékben változik.
+step_name=Blokk mérete
+step_desc=A blokk mérete pip-ben.
+
+[ita]
+codepage=1252
+name=Grafico Renko
+description=Un grafico in cui un nuovo mattone viene aggiunto solo quando il prezzo sale o scende più di un importo predefinito.
+step_name=Dimensioni mattone
+step_desc=Le dimensioni del mattone in pip.
+
+[jpn]
+codepage=932
+name=連行足チャート
+description=価格が所定の額を超えて上下した場合にのみ、新しい足が追加されるチャート
+step_name=足のサイズ
+step_desc=足のサイズ（ピップ数）
+
+[pol]
+codepage=1250
+name=Wykres Renko
+description=Wykres, w przypadku którego nową cegiełkę dodaje się tylko wtedy, gdy cena wzrośnie lub zmaleje o kwotę przekraczającą kwotę, która została wcześniej ustalona.
+step_name=Rozmiar cegiełki
+step_desc=Rozmiar cegiełki w pipsach.
+
+[por]
+codepage=1252
+name=Gráfico Renko
+description=Um gráfico em que um novo tijolo é acrescentado apenas quando o preço se move para cima ou para baixo mais do que um valor predefinido.
+step_name=Tamanho de tijolo
+step_desc=O tamanho do tijolo em pips
+
+[rus]
+codepage=1251
+name=График Ренко
+description=График, в котором новый "кирпичик" добавляется только тогда, когда движение цены вверх или вниз превышает заданный пороговый уровень.
+step_name=Размер "кирпичика"
+step_desc=Размер "кирпичика" в пунктах.
+

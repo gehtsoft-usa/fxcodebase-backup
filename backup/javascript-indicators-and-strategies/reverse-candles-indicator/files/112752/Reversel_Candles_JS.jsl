@@ -1,0 +1,61 @@
+function Init()
+{
+    indicator.name("Reverse candles indicator");
+    indicator.description("Reverse candles indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    indicator.setTag("replaceSource", "t");
+
+}
+
+var first;
+var source = null;
+
+function ReverseSymbol(Name)
+{
+ var Pos=String.find(Name,"/");
+ if (Pos!=null) 
+ {
+  return (String.sub(Name,Pos+1) + "/" + String.sub(Name,1,Pos-1));
+ } 
+ else
+ {
+  return (null);
+ }
+}
+
+function Prepare()
+{
+    source = instance.source;
+    first = source.first()+2;
+    trend = instance.addInternalStream(first, 0);
+    var ReverseName=ReverseSymbol(source.name());
+    var name;
+    if (ReverseName==null) 
+    {
+     ReverseName="1/" + source.name();
+     name = profile.id() + "(1/" + source.name() + ")";
+    } 
+    else
+    {
+     name = profile.id() + "(" + ReverseName + ")";
+    } 
+    instance.name(name);
+    open = instance.addStream("open", core.Line, ReverseName, "open", core.rgb(0, 0, 0), first)
+    high = instance.addStream("high", core.Line, ReverseName, "high", core.rgb(0, 0, 0), first)
+    low = instance.addStream("low", core.Line, ReverseName, "low", core.rgb(0, 0, 0), first)
+    close = instance.addStream("close", core.Line, ReverseName, "close", core.rgb(0, 0, 0), first)
+    instance.createCandleGroup(ReverseName, "", open, high, low, close);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    open[period]=1/source.open[period];
+    close[period]=1/source.close[period];
+    high[period]=1/source.low[period];
+    low[period]=1/source.high[period];
+   } 
+}
+

@@ -1,0 +1,140 @@
+function Init()
+{
+    indicator.name("VLM");
+    indicator.description("VLM");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+  
+	  
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("m1", "m1 Period", "", 300);
+	indicator.parameters.addInteger("m5", "m5 Period", "", 120);
+	indicator.parameters.addInteger("m15", "m15 Period", "", 120);
+	indicator.parameters.addInteger("m30", "m30 Period", "", 60);
+	indicator.parameters.addInteger("H1", "H1 Period", "", 30);
+	indicator.parameters.addInteger("H2", "H2 Period", "", 30);
+	indicator.parameters.addInteger("H3", "H6 Period", "", 30);
+	indicator.parameters.addInteger("H4", "H4 Period", "", 30);
+	indicator.parameters.addInteger("H6", "H6 Period", "", 30);
+	indicator.parameters.addInteger("H8", "H8 Period", "", 30);
+	indicator.parameters.addInteger("D1", "D1 Period", "", 30);
+	indicator.parameters.addInteger("W1", "W1 Period", "", 25);
+	indicator.parameters.addInteger("M1", "M1 Period", "", 12);
+	
+	   indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Color1", "Color of Hours between 8-14 & 18-21", "", core.rgb(255, 0, 0));
+	 indicator.parameters.addColor("Color2", "Color of Hours between 14-18", "", core.rgb(0, 255, 0));
+	  indicator.parameters.addColor("Color3", "Color of Hours after 22", "", core.rgb( 0, 128, 128));
+	   indicator.parameters.addColor("Color4", "Color of Hours prior to 8", "", core.rgb(0, 0, 255));
+}
+
+var Period;
+
+var first;
+var source = null;
+
+var Volume = null;
+
+function Prepare(nameOnly)
+{
+    source = instance.source;
+    first = source.first();
+	
+	
+		 if  (source.barSize () == "m1") 
+		 {
+		         Period = instance.parameters.m1;
+		 }        
+		 else if (source.barSize () == "m5") 
+		 {
+		 		 Period = instance.parameters.m5;
+		 }		 
+		 else if (source.barSize () == "m15") 
+		 {
+		      	 Period = instance.parameters.m15;
+		 }     	 
+		 else if (source.barSize () == "m30") 
+		 {
+		          Period = instance.parameters.m30;
+		 }         
+		 else if (source.barSize () == "H1") 
+		 {
+		 		 Period = instance.parameters.H1;		         
+		 }		 
+		 else if (source.barSize () == "H2") 
+		 { 
+		 		 Period = instance.parameters.H2;
+		 }		 
+		 else if (source.barSize () == "H3") 
+		 {
+		 		 Period = instance.parameters.H3;
+		 }		 
+		 else if (source.barSize () == "H4") 
+		 {
+		 		 Period = instance.parameters.H4;		         
+		 }		 
+		 else if (source.barSize () == "H6") 
+		 {
+		 		 Period = instance.parameters.H6;
+		 }		 
+		 else if (source.barSize () == "H8") 
+		 {
+		 		 Period = instance.parameters.H8;
+		 }		 
+		 else if (source.barSize () == "D1") 
+		 { 
+		 		 Period = instance.parameters.D1;		        
+		 }		 
+		 else if (source.barSize () == "W1") 
+		 {
+		 		 Period = instance.parameters.W1;		   
+		 }		 
+		 else if (source.barSize () == "M1") 
+		 { 
+		 		 Period = instance.parameters.M1;
+		 }
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        Volume = instance.addStream("Volume", core.Bar, name, "Volume", instance.parameters.Color1, first);
+    }
+}
+
+function Update(period)
+{
+    if (period <first +Period || !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+     Volume[period]  =source.volume[period] /  Math.avg (source.volume, period- Period+1, period);
+
+	 
+	 var date = core.dateToTable(source.date(period));
+     if (date.hour >= 8 &&  date.hour < 14) 
+     {
+	  Volume.setColor(period, instance.parameters.Color1);
+	 } 
+	 else if (date.hour >= 18 &&  date.hour <= 21) 
+	 {
+	  Volume.setColor(period, instance.parameters.Color1);
+	 } 
+	 else if (date.hour >= 14 &&  date.hour < 18) 
+	 {
+	  Volume.setColor(period, instance.parameters.Color2);
+	 } 
+	 else if (date.hour >=  22) 
+	 {
+	  Volume.setColor(period, instance.parameters.Color3);
+	 } 
+	 else if (date.hour <  8) 
+	 {
+	  Volume.setColor(period, instance.parameters.Color4);
+	 }
+
+    
+}
+

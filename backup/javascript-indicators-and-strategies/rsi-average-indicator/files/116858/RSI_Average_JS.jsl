@@ -1,0 +1,95 @@
+function Init()
+{
+    indicator.name("RSI-Average indicator");
+    indicator.description("RSI-Average indicator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("RSI_Period", "RSI period", "", 5);
+    indicator.parameters.addInteger("MA_Period", "MA period", "", 3);
+    indicator.parameters.addString("MA_Method", "MA method", "", "EMA");
+    indicator.parameters.addStringAlternative("MA_Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("MA_Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("MA_Method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("MA_Method", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("MA_Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("MA_Method", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("MA_Method", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("MA_Method", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("MA_Method", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("MA_Method", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("MA_Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("MA_Method", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("MA_Method", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("MA_Method", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("MA_Method", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("MA_Method", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("MA_Method", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("MA_Method", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("MA_Method", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("MA_Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("MA_Method", "JSmooth", "", "JSmooth");
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("RSIclr", "RSI Color", "RSI Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("MAclr", "MA Color", "MA Color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("UP_Arrow_clr", "UP arrow color", "UP arrow color", core.rgb(255, 255, 0));
+    indicator.parameters.addColor("DN_Arrow_clr", "DN arrow color", "DN arrow color", core.rgb(0, 255, 255));
+}
+
+var first;
+var source = null;
+var RSI_Period;
+var MA_Period;
+var MA_Method;
+var RSI_Buff = null;
+var MA_Buff = null;
+var RSI;
+var MA;
+var UP_Arrow = null;
+var DN_Arrow = null;
+
+function Prepare()
+{
+    source = instance.source;
+    RSI_Period=instance.parameters.RSI_Period;
+    MA_Period=instance.parameters.MA_Period;
+    MA_Method=instance.parameters.MA_Method;
+    first = source.first()+2;
+    RSI = core.indicators.create("RSI", source, RSI_Period);
+    MA = core.indicators.create("AVERAGES", RSI.DATA, MA_Method, MA_Period, false);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.RSI_Period + ", " + instance.parameters.MA_Period + ", " + instance.parameters.MA_Method + ")";
+    instance.name(name);
+    RSI_Buff = instance.addStream("RSI", core.Line, name + ".RSI", "RSI", instance.parameters.RSIclr, first);
+    MA_Buff = instance.addStream("MA", core.Line, name + ".MA", "MA", instance.parameters.MAclr, first);
+    RSI_Buff.setWidth(instance.parameters.widthLinReg);
+    RSI_Buff.setStyle(instance.parameters.styleLinReg);
+    MA_Buff.setWidth(instance.parameters.widthLinReg);
+    MA_Buff.setStyle(instance.parameters.styleLinReg);
+    UP_Arrow = instance.createTextOutput ("Up", "Up", "Wingdings", 10, core.H_Center, core.V_Bottom, instance.parameters.UP_Arrow_clr);
+    DN_Arrow = instance.createTextOutput ("Dn", "Dn", "Wingdings", 10, core.H_Center, core.V_Top, instance.parameters.DN_Arrow_clr);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    RSI.update(mode);
+    MA.update(mode);
+    RSI_Buff[period] = RSI.DATA[period];
+    MA_Buff[period] = MA.DATA[period];
+    if (RSI_Buff[period]>MA_Buff[period] && RSI_Buff[period-1]<MA_Buff[period-1]) 
+    {
+     UP_Arrow.set(period, MA_Buff[period], "\225", "Up");
+    } 
+    else if (RSI_Buff[period]<MA_Buff[period] && RSI_Buff[period-1]>MA_Buff[period-1]) 
+    {
+     DN_Arrow.set(period, MA_Buff[period], "\226", "Dn");
+    }
+   } 
+}
+

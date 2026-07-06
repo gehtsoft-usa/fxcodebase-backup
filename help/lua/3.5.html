@@ -1,0 +1,26 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 3.5 - Registry</title>
+</head>
+<body>
+<h2>3.5 - <a name="3.5">Registry</a></h2>
+
+<p>
+Lua provides a <em>registry</em>,
+a pre-defined table that can be used by any C&nbsp;code to
+store whatever Lua value it needs to store.
+This table is always located at pseudo-index
+<a name="pdf-LUA_REGISTRYINDEX"><code>LUA_REGISTRYINDEX</code></a>.
+Any C&nbsp;library can store data into this table,
+but it should take care to choose keys different from those used
+by other libraries, to avoid collisions.
+Typically, you should use as key a string containing your library name
+or a light userdata with the address of a C&nbsp;object in your code.
+
+
+<p>
+The integer keys in the registry are used by the reference mechanism,
+implemented by the auxiliary library,
+and therefore should not be used for other purposes.
+</body>
+</html>

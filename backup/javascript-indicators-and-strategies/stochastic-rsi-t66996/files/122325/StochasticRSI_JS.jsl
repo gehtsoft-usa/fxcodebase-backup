@@ -1,0 +1,90 @@
+function Init()
+{
+    indicator.name("RSI oscillator");
+    indicator.description("RSI oscillator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("RSIPeriod", "RSI Period", "", 8);
+    indicator.parameters.addInteger("PeriodK", "Period K", "", 8);
+    indicator.parameters.addInteger("SlowPeriod", "Slow Period", "", 3);
+    indicator.parameters.addString("MethodMA", "MethodMA", "", "MVA");
+    indicator.parameters.addStringAlternative("MethodMA", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("MethodMA", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("MethodMA", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("MethodMA", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("MethodMA", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("MethodMA", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("MethodMA", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("MethodMA", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("MethodMA", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("MethodMA", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("MethodMA", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("MethodMA", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("MethodMA", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("MethodMA", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("MethodMA", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("MethodMA", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("MethodMA", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("MethodMA", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("MethodMA", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("MethodMA", "JSmooth", "", "JSmooth");
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(0, 255, 0));
+}
+
+var first;
+var source = null;
+var RSIPeriod;
+var PeriodK;
+var SlowPeriod;
+var MethodMA;
+var RSIBuffer;
+var TempBuffer;
+var RSI_O=null;
+var RSI;
+var MA;
+
+function Prepare()
+{
+    source = instance.source;
+    RSIPeriod=instance.parameters.RSIPeriod;
+    PeriodK=instance.parameters.PeriodK;
+    SlowPeriod=instance.parameters.SlowPeriod;
+    MethodMA=instance.parameters.MethodMA;
+    first = source.first()+2;
+    RSIBuffer = instance.addInternalStream(first, 0);
+    TempBuffer = instance.addInternalStream(first, 0);
+    RSI=core.indicators.create("RSI", source, RSIPeriod);
+    MA=core.indicators.create("AVERAGES", TempBuffer, MethodMA, SlowPeriod, false);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.RSIPeriod + ", " + instance.parameters.PeriodK + ", " + instance.parameters.SlowPeriod + ")";
+    instance.name(name);
+    RSI_O = instance.addStream("RSI_O", core.Line, name + ".RSI_O", "RSI_O", instance.parameters.clr, first);
+    RSI_O.addLevel(20);
+    RSI_O.addLevel(80);
+}
+
+function Update(period, mode)
+{
+   if (period>first+Math.max(RSIPeriod,PeriodK)) 
+   {
+    RSI.update(mode);
+    RSIBuffer[period]=RSI.DATA[period];
+    var tmp=Math.minmax(RSIBuffer, period-PeriodK+1, period);
+    var LLV=tmp[0];
+    var HHV=tmp[1];
+    if (HHV-LLV>0) 
+    {
+     TempBuffer[period]=(RSIBuffer[period]-LLV)/(HHV-LLV)*100;
+    } 
+    else
+    {
+     TempBuffer[period]=0;
+    }
+    MA.update(mode);
+    RSI_O[period]=MA.DATA[period];
+   } 
+}
+

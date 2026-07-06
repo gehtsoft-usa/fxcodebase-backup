@@ -1,0 +1,123 @@
+function Init()
+{
+    indicator.name("MBMCD oscillator");
+    indicator.description("MBMCD oscillator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period1", "Period 1", "", 1);
+    indicator.parameters.addInteger("Period2", "Period 2", "", 13);
+    indicator.parameters.addInteger("Filter", "Filter", "", 0);
+    indicator.parameters.addInteger("LineCount", "LineCount", "", 1);
+    indicator.parameters.addString("Method", "Method", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("Method", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Method", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Method", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Method", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Method", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Method", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Method", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Method", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Method", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Method", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Method", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Method", "JSmooth", "", "JSmooth");
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Uclr", "Upper histogram color", "Upper histogram color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("Lclr", "Lower histogram color", "Lower histogram color", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+var Period1;
+var Period2;
+var Filter;
+var LineCount;
+var Method;
+var MA;
+var MAs={};
+var Sts={};
+var MA_F;
+var Ubuff=null;
+var Lbuff=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period1=instance.parameters.Period1;
+    Period2=instance.parameters.Period2;
+    Filter=instance.parameters.Filter;
+    LineCount=instance.parameters.LineCount;
+    Method=instance.parameters.Method;
+    first = source.first()+2;
+    MA = core.indicators.create("AVERAGES", source, Method, Period1, false);
+    var i;
+    Sts[0]=instance.addInternalStream(first, 0);
+    for (i=1; i<=LineCount; i++) 
+    {
+     MAs[i]=core.indicators.create("MVA", Sts[i-1], Period2);
+     Sts[i]=instance.addInternalStream(first, 0);
+    }
+    if (Filter>0) 
+    {
+     MA_F = core.indicators.create("AVERAGES", Sts[LineCount], Method, Filter, false);
+    } 
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period1 + ", " + instance.parameters.Period2 + ", " + instance.parameters.Filter + ", " + instance.parameters.LineCount + ", " + instance.parameters.Method + ")";
+    instance.name(name);
+    Ubuff = instance.addStream("Ubuff", core.Bar, name + ".Ubuff", "Ubuff", instance.parameters.Uclr, first);
+    Lbuff = instance.addStream("Lbuff", core.Bar, name + ".Lbuff", "Lbuff", instance.parameters.Lclr, first);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    MA.update(mode);
+    Sts[0][period]=MA.DATA[period];
+    var i;
+    for (i=1; i<=LineCount; i++) 
+    {
+     MAs[i].update(mode);
+     Sts[i][period]=Sts[i-1][period]-MAs[i].DATA[period];
+    }
+    if (Filter>0) 
+    {
+     MA_F.update(mode);
+     if (Sts[LineCount][period]>MA_F.DATA[period]) 
+     {
+      Ubuff[period]=Sts[LineCount][period];
+      Lbuff[period]=null;
+     } 
+     else
+     {
+      Ubuff[period]=null;
+      Lbuff[period]=Sts[LineCount][period];
+     }
+    } 
+    else
+    {
+     if (Sts[LineCount][period]>0) 
+     {
+      Ubuff[period]=Sts[LineCount][period];
+      Lbuff[period]=null;
+     } 
+     else
+     {
+      Ubuff[period]=null;
+      Lbuff[period]=Sts[LineCount][period];
+     }
+    }
+   } 
+}
+

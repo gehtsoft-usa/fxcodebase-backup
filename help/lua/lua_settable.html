@@ -1,0 +1,27 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_settable</title>
+</head>
+<body>
+<h3><a name="lua_settable"><code>lua_settable</code></a></h3>
+<pre>void lua_settable (lua_State *L, int index);</pre>
+
+<p>
+Does the equivalent to <code>t[k] = v</code>,
+where <code>t</code> is the value at the given valid index <code>index</code>,
+<code>v</code> is the value at the top of the stack,
+and <code>k</code> is the value just below the top.
+
+
+<p>
+This function pops both the key and the value from the stack.
+As in Lua, this function may trigger a metamethod
+for the "newindex" event (see <a href="2.8.html">&sect;2.8</a>).
+
+
+
+
+
+<hr>
+</body>
+</html>

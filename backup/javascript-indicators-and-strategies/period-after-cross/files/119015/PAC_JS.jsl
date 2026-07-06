@@ -1,0 +1,91 @@
+function Init()
+{
+    indicator.name("Period After Cross");
+    indicator.description("Period After Cross");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+    
+	indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "Period", 14);
+	indicator.parameters.addString("Method", "Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "EMA" , "EMA");
+	indicator.parameters.addStringAlternative("Method", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method", "HMA", "HMA" , "HMA");
+    indicator.parameters.addStringAlternative("Method", "WMA", "WMA" , "WMA");
+    indicator.parameters.addStringAlternative("Method", "VIDYA", "VIDYA" , "VIDYA");
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Up_PAC", "Color of Pozitiv PAC", "Color of PAC", core.rgb(0, 255, 0));
+	indicator.parameters.addColor("Dn_PAC", "Color of Negativ PAC", "Color of PAC", core.rgb(255, 0, 0));
+}
+
+var Period;
+var Method;
+var first;
+var source = null;
+var MA;
+
+var PAC = null;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+	Method = instance.parameters.Method;
+    source = instance.source;
+	
+	MA= core.indicators.create(Method, source, Period);
+    first = MA.DATA.first();
+	
+	
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period)+ ", " + tostring(Method) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        PAC = instance.addStream("PAC", core.Bar, name, "PAC", core.rgb(128, 128, 128), first);
+    }
+}
+
+function Update(period, mode)
+{
+    MA.update(mode);
+	
+	PAC[period]=0;
+	
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+	
+	if (source[period] >  MA.DATA[period] &&  source[period-1] >  MA.DATA[period-1]) 
+	{
+	 PAC[period]=PAC[period-1]+1;
+	} 
+    else if (source[period] <  MA.DATA[period] &&  source[period-1] <  MA.DATA[period-1]) 
+    {
+	 PAC[period]=PAC[period-1]-1;
+	} 
+    else if (source[period] >  MA.DATA[period]) 
+    {
+   	 PAC[period]=1;
+   	} 
+	else if (source[period] <  MA.DATA[period]) 
+	{
+	 PAC[period]=-1;
+	}
+	
+	if (PAC[period]> 0) 
+	{
+	 PAC.setColor(period, instance.parameters.Up_PAC);
+	} 
+	else
+	{	
+	 PAC.setColor(period, instance.parameters.Dn_PAC);
+	}    
+    
+}
+

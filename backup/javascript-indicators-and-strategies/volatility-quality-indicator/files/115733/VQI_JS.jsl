@@ -1,0 +1,116 @@
+function Init()
+{
+    indicator.name("Volatility Quality Index ");
+    indicator.description("Volatility Quality Index ");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+	
+	   indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("P1", "Short Smoothing Period", "", 9);
+	indicator.parameters.addInteger("P2", "Long Smoothing Period", "", 200);
+ 
+
+   indicator.parameters.addString("Type", "Algorithm Selection", "", "One");
+    indicator.parameters.addStringAlternative("Type", "One", "", "One");
+    indicator.parameters.addStringAlternative("Type", "Two", "", "Two"); 
+
+
+	
+	  indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("S1_color", "VQI Line Color", "", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("S2_color", "First Smoothing Line Color", "", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("S3_color", "Second Smoothing Line Color", "", core.rgb(0, 0, 255));
+}
+
+var P1;
+var P2;
+var Type;
+
+var first;
+var source = null;
+
+var S1 = null;
+var S2 = null;
+var S3 = null;
+var VQI;
+var One, Two;
+
+function Prepare(nameOnly)
+{
+    P1 = instance.parameters.P1;
+	P2 = instance.parameters.P2;
+	Type = instance.parameters.Type;
+	
+    source = instance.source;
+    first = source.first();
+	
+	VQI=instance.addInternalStream (0,0);
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(P1) + ", " + tostring(P2)+ ")";
+    instance.name(name);	
+
+    if (!(nameOnly)) 
+    {
+        S1 = instance.addStream("S1", core.Line, name + ".S1", "S1", instance.parameters.S1_color, first);
+		One = core.indicators.create("MVA",  S1, P1);
+		Two = core.indicators.create("MVA", S1, P2);
+        S2 = instance.addStream("S2", core.Line, name + ".S2", "S2", instance.parameters.S2_color, One.DATA.first());
+        S3 = instance.addStream("S3", core.Line, name + ".S3", "S3", instance.parameters.S3_color,  Two.DATA.first());
+    }
+}
+
+function Update(period, mode)
+{
+    if (period < first || !source.hasData(period)) 
+    {
+	   return;
+	  }
+	
+	if (period == first) 
+  {
+	  S1[period] =0;
+	}
+
+var  TR = Math.max((source.high[period] - source.low[period]), ( source.close[period-1] - source.high[period]) ,  ( source.close[period-1] - source.low[period]));
+
+
+if (Type == "One") 
+{
+		if (TR != 0 && (source.high[period] -source.low[period]) !=  0) 
+    {
+		 VQI[period] =  ((source.close[period] - source.close[period-1]) / TR + (source.close[period] - source.open[period]) / (source.high[period] - source.low[period])) * 0.5;
+    } 
+		else
+    {
+		 VQI[period]=VQI[period-1];
+		 VQI[period] = Math.abs(VQI[period]) * ((source.close[period] - source.close[period-1] + (source.close[period] - source.open[period])) * 0.5);
+		}
+}    
+else
+{
+   if (TR != 0 && (source.high[period] -source.low[period]) !=  0) 
+   {
+    VQI[period]= ((source.close[period] - source.close[period-1]) / TR + (source.close[period] - source.open[period]) / (source.high[period] - source.low[period])) * 0.5;
+   } 
+   else
+   {
+    VQI[period]= VQI[period-1];  
+   }
+   
+   VQI[period] = Math.abs(VQI[period]) * ((source.close[period] - source.close[period-1] + (source.close[period] - source.open[period])) * 0.5);   
+   
+}
+		
+		
+S1[period] = S1[period-1] +VQI[period];
+
+       One.update(mode);
+	   Two.update(mode);
+
+
+        S2[period] = One.DATA[period];
+        S3[period] = Two.DATA[period];
+    
+}
+

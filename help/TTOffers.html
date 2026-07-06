@@ -1,0 +1,597 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252" /><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><title>Offers(table)</title><style type="text/css">a, p, h1, h2, h3, h4, h5, h6, table, td, tr, li, ul, ol {
+    font-family: Verdana, Trebuchet MS, Arial;
+}
+
+a, p, td, tr, ul, ol, li {
+    font-size: 12pt;
+}
+
+h3 {
+    font-size: 13pt;
+}
+
+h2 {
+    font-size: 13pt;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+body {
+    color: #444444;
+    background-color: white;
+}
+
+A:link {
+    color: #0065b3;
+    cursor: pointer;
+}
+
+A:visited {
+    color: #0068be;
+    cursor: pointer;
+}
+
+a.action {
+  background-color: #0065b3;
+  color: white;
+  font-size: 10pt;
+  padding: 2px 2px;
+  width: 50pt;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px;
+}
+
+.side-icon {
+    float: left;
+}
+
+a.action [class*="dripicons-"]:before {
+    padding: 0 2px 0 0;
+    font-size: 12pt;
+    vertical-align: text-bottom;
+}
+
+.side-icon:after {
+  content: "";
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  border-left: 1.5px solid white;
+  transform: translate(-50%);
+}
+
+a.actiontab {
+  font-size: 10pt;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px 3px 0 0;
+}
+
+pre, code, code a {
+    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+    font-size: 12pt;
+}
+
+code.ctag {
+    background-color: #f1f1f1;
+    padding: .1em .2em;
+    border-radius: 3px;
+}
+
+pre {
+    background-color: white;
+}
+
+pre.example {
+    background-color: #f1f1f1;
+}
+
+ul {
+    list-style-type: disc;
+    margin-left: 18pt;
+}
+
+ol {
+    list-style-type: decimal;
+    margin-left: 18pt;
+}
+
+ul.hhc {
+    list-style-type: none;
+    margin-left: 1em;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+li.hhc {
+    margin-left: 0;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+table {
+  border-spacing: 0;
+  border-color: #dfe3e7;
+}
+
+tr + tr td {
+   border-top: 0;
+}
+
+tr td + td {
+  border-left: 0;
+}
+
+td {
+  border: 1px solid;
+  border-color: #dfe3e7;
+}
+
+tr:first-child td:first-child {
+   border-radius: 0.2em 0 0 0;
+}
+
+tr:first-child td:last-child {
+  border-radius: 0 0.2em 0 0;
+}
+
+tr:first-child td:only-child {
+  border-radius: 0.2em 0.2em 0 0;
+}
+
+tr:last-child td:first-child {
+    border-radius: 0 0 0 0.2em;
+}
+
+tr:last-child td:last-child {
+    border-radius: 0 0 0.2em 0;
+}
+
+tr:last-child td:only-child {
+    border-radius: 0 0 0.2em 0.2em;
+}
+
+tr:only-child td:only-child {
+    border-radius: 0.2em 0.2em 0.2em 0.2em;
+}
+
+tr:only-child td:first-child {
+   border-radius: 0.2em 0 0 0.2em;
+}
+
+tr:only-child td:last-child {
+  border-radius: 0 0.2em 0.2em 0;
+}
+
+
+td.tmain, td.tmain_nw, td.thdr {
+    background-color: rgb(255, 255, 255);
+    vertical-align: top;
+    padding: 3px;
+}
+
+td.tmain p, td.tmain_nw p, td.thdr p {
+    margin-top: 3pt;
+    margin-bottom: 3pt;
+}
+
+td.tmain_nw {
+    white-space: nowrap;
+}
+
+td.thdr {
+    background-color: #e3e3e3;
+}
+
+table.decl {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+    vertical-align: top;
+    padding: 3px;
+    width: 100%;
+}
+
+table.decl td {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+}
+
+div.note-quote {
+    border-left: 10px solid #ccc;
+    padding: 1em 10px .1em 10px;
+    margin: 1.5em 10px;
+    background-color: rgb(224, 224, 224);
+}
+
+div.note-note {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+div.note-warning {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #fff;
+    background-color: #ff6358;
+}
+div.note-warning code.ctag {
+    color: black;
+}</style>
+<link rel="stylesheet" href="res/dripicons.css"></head><body><script type="text/javascript">
+var highlighterEnabled = false;
+var maintopic = 'index';
+var helptitle = 'Indicore SDK 3';
+    function loadStarted() {
+    window.onload = loadCompleted;
+
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        var head = document.getElementsByTagName('head')[0];
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.min.js';
+        head.appendChild(script4);
+
+
+        var script2 = document.createElement('script');
+        script2.type = 'text/javascript';
+        script2.src = './highlighter/highlight.cshtml.js';
+        head.appendChild(script2);
+
+        var script3 = document.createElement('script');
+        script3.type = 'text/javascript';
+        script3.src = './highlighter/highlight.lua.js';
+        head.appendChild(script3);
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.luax.js';
+        head.appendChild(script4);
+    }
+}
+
+function loadCompleted() {
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        hljs.registerLanguage('cshtml-razor', window.hljsDefineCshtmlRazor);
+        hljs.registerLanguage('lua', window.hljsDefineLua);
+        hljs.registerLanguage('luax', window.hljsDefineLuaX);
+        x = document.querySelectorAll('pre code');
+        for (var i = 0; i < x.length; i++) {
+            if (x[i].hasAttribute('class')) {
+                hljs.highlightBlock(x[i]);
+            }
+        }
+    }
+}
+
+
+function hidediv(divname) {
+    document.getElementById(divname).style.display = 'none';
+}
+
+function showdiv(divname) {
+    document.getElementById(divname).style.display = 'inline';
+}
+
+function syncList() {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, null, document.title);
+    }
+}
+
+function syncList1(key) {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, key + '.html', document.title);
+    }
+}</script><script type="text/javascript">
+    loadStarted();
+</script><h1>Offers(table)</h1>
+<h2>Brief</h2>
+<p>The section describes the &quot;Offers&quot; table.</p>
+<h2>Details</h2><p>The table contains information about trading instruments, current prices as well as high/low trading day prices.</p><table class="tmain">
+  <tr>
+    <td class="thdr"><p>Name</p></td>
+    <td class="thdr"><p>Type</p></td>
+    <td class="thdr"><p>Description</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>OfferID</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The unique number of the instrument.</p>
+<p>You can search by this column.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Instrument</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The symbol indicating the instrument. For example, EUR/USD, USD/JPY, GBP/USD.</p>
+<p>You can search by this column.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>InstrumentType</p></td>
+    <td class="tmain"><p>Integer</p></td>
+    <td class="tmain"><p>The type of the instrument. Possible values:</p><table class="tmain">
+  <tr>
+    <td class="tmain"><p><code class="ctag">1</code></p></td>
+    <td class="tmain"><p>Forex.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">2</code></p></td>
+    <td class="tmain"><p>Indices.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">3</code></p></td>
+    <td class="tmain"><p>Commodity.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">4</code></p></td>
+    <td class="tmain"><p>Treasury.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">5</code></p></td>
+    <td class="tmain"><p>Bullion.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">6</code></p></td>
+    <td class="tmain"><p>Shares.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">7</code></p></td>
+    <td class="tmain"><p>FXIndex.</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Bid</p></td>
+    <td class="tmain"><p>Double</p></td>
+    <td class="tmain"><p>The current market price the instrument can be sold at.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Ask</p></td>
+    <td class="tmain"><p>Double</p></td>
+    <td class="tmain"><p>The current market price the instrument can be bought at.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Hi</p></td>
+    <td class="tmain"><p>Double</p></td>
+    <td class="tmain"><p>The highest Ask price (buy price) of the instrument for the current trading day. The trading days are from 17:00 to 17:00 EST.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Low</p></td>
+    <td class="tmain"><p>Double</p></td>
+    <td class="tmain"><p>The lowest Bid price (sell price) of the instrument for the current trading day. The trading days are from 17:00 to 17:00 EST.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>IntrS</p></td>
+    <td class="tmain"><p>Double</p></td>
+    <td class="tmain"><p>The interest that is added to/subtracted from the account for holding overnight
+a 1 lot sell position opened in this instrument. The interest is expressed in the account currency.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>IntrB</p></td>
+    <td class="tmain"><p>Double</p></td>
+    <td class="tmain"><p>The interest that is added to/subtracted from the account for holding overnight
+a 1 lot buy position opened in this instrument. The interest is expressed in the account currency.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>ContractCurrency</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The base currency of the instrument (EUR - in EUR/USD, USD - in USD/JPY, GBP - in GBP/USD, etc).</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>ContractSize</p></td>
+    <td class="tmain"><p>Integer</p></td>
+    <td class="tmain"><p>The legacy lot size in the base currency of the instrument which is supported for the backward compatibility. Always equals 1.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Digits</p></td>
+    <td class="tmain"><p>Integer</p></td>
+    <td class="tmain"><p>The number of digits after the decimal point
+to which the price of the instrument is rounded in calculations.
+For example, it is 5 for EUR/USD and GBP/USD, and 3 for USD/JPY.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>DefaultSortOrder</p></td>
+    <td class="tmain"><p>Integer</p></td>
+    <td class="tmain"><p>The sequence number of the instrument in the list of instruments displayed to the FX Trading Station user.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>PipCost</p></td>
+    <td class="tmain"><p>Double</p></td>
+    <td class="tmain"><p>The cost of one pip per lot.
+The cost is expressed in the account currency.
+<code class="ctag">PipCost</code> is used for calculation of the P/L value in account currency.</p>
+<p>See also <a href="account_math.html">Account Mathematics</a> article for details.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>MMR</p></td>
+    <td class="tmain"><p>Double</p></td>
+    <td class="tmain"><p>Minimum Margin Requirement.</p>
+<p>The amount of funds which must be allocated for trading 1 lot in this instrument; depends on leverage.
+The lot size is defined by <code class="ctag">BaseUnitSize</code> (use <code class="ctag">getTradingProperties</code> to get the base unit size for
+the specified account/instrument).</p>
+<p>The minimum margin requirement is expressed in the account currency.</p>
+<p>For example, for $100,000 lot size and 1:100 leverage the minimum margin requirement is $1,000.</p>
+<p>This is the minimal margin (of Entry, Maintenance and Liquidation margin requirements) for the instrument
+among all the user's accounts.  To get certain margin requirement for certain account, please use
+<a href="host.execute_getTradingProperty.html"><code>host:execute(&quot;getTradingProperty&quot;, ...)</code></a> method.</p>
+<p>See also <a href="account_math.html">Account Mathematics</a> article for details.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Time</p></td>
+    <td class="tmain"><p>DateTime</p></td>
+    <td class="tmain"><p>The date and time of the last update of the instrument. The date and time are in the EST/EDT time.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>BidChangeDirection</p></td>
+    <td class="tmain"><p>Integer</p></td>
+    <td class="tmain"><p>The direction the Bid price (sell price) of the instrument is changing in. Possible values:</p><table class="tmain">
+  <tr>
+    <td class="tmain"><p><code class="ctag">0</code></p></td>
+    <td class="tmain"><p>Not changing.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">1</code></p></td>
+    <td class="tmain"><p>Going up.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">-1</code></p></td>
+    <td class="tmain"><p>Going down.</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>AskChangeDirection</p></td>
+    <td class="tmain"><p>Integer</p></td>
+    <td class="tmain"><p>The direction the Ask price (buy price) of the instrument is changing in. Possible values:</p><table class="tmain">
+  <tr>
+    <td class="tmain"><p><code class="ctag">0</code></p></td>
+    <td class="tmain"><p>Not changing.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">1</code></p></td>
+    <td class="tmain"><p>Going up.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">-1</code></p></td>
+    <td class="tmain"><p>Going down.</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>HiChangeDirection</p></td>
+    <td class="tmain"><p>Integer</p></td>
+    <td class="tmain"><p>The direction the highest Ask price (buy price) of the instrument is changing in. Possible values:</p><table class="tmain">
+  <tr>
+    <td class="tmain"><p><code class="ctag">0</code></p></td>
+    <td class="tmain"><p>Not changing.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">1</code></p></td>
+    <td class="tmain"><p>Going up.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">-1</code></p></td>
+    <td class="tmain"><p>Going down.</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>LowChangeDirection</p></td>
+    <td class="tmain"><p>Integer</p></td>
+    <td class="tmain"><p>The direction the lowest Bid price (sell price) of the instrument is changing in. Possible values:</p><table class="tmain">
+  <tr>
+    <td class="tmain"><p><code class="ctag">0</code></p></td>
+    <td class="tmain"><p>Not changing.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">1</code></p></td>
+    <td class="tmain"><p>Going up.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">-1</code></p></td>
+    <td class="tmain"><p>Going down.</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>QuoteID</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The unique number of the pair of prices (Bid and Ask) the instrument can be traded at.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>BidID</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The unique number of the Bid price.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>AskID</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The unique number of the Ask price.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>BidExpireDate</p></td>
+    <td class="tmain"><p>DateTime</p></td>
+    <td class="tmain"><p>The date and time up to which the Bid price is available for trading. The date and time are in the EST/EDT time.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>AskExpireDate</p></td>
+    <td class="tmain"><p>DateTime</p></td>
+    <td class="tmain"><p>The date and time up to which the Ask price is available for trading. The date and time are in the EST/EDT time.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>BidTradable</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>Defines whether the Bid price of the instrument is available for trading.
+Possible values:</p><table class="tmain">
+  <tr>
+    <td class="tmain"><p><code class="ctag">T</code></p></td>
+    <td class="tmain"><p>The Bid price is available for trading.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">I</code></p></td>
+    <td class="tmain"><p>The Bid price is view only.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">N</code></p></td>
+    <td class="tmain"><p>the Bid price is not available for trading.</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>AskTradable</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>Defines whether the Ask price of the instrument is available for trading.
+Possible values:</p><table class="tmain">
+  <tr>
+    <td class="tmain"><p><code class="ctag">T</code></p></td>
+    <td class="tmain"><p>The Ask price is available for trading.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">I</code></p></td>
+    <td class="tmain"><p>The Ask price is view only.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">N</code></p></td>
+    <td class="tmain"><p>the Ask price is not available for trading.</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>PointSize</p></td>
+    <td class="tmain"><p>Double</p></td>
+    <td class="tmain"><p>The size of a pip. <code class="ctag">PointSize</code> is a decimal number. For example, it is 0.0001 for EUR/USD, GBP/USD, and USD/CHF, and 0.01 for USD/JPY.
+Please note that in order to define the minimum possible change of the price, it is necessary to use the <code class="ctag">Digits</code> column of the &quot;Offers&quot; table.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>ExpireDate</p></td>
+    <td class="tmain"><p>DateTime</p></td>
+    <td class="tmain"><p>The date and time until which the order is valid. Used for GTD orders only. For other orders this column will contain 0. The date and time are in the EST/EDT time.</p></td>
+  </tr>
+</table><p>
+  <center><a href="TradingTables.html">back</a></center>
+</p><script language="javascript" type="text/javascript">if(window.parent.frames[0]) window.parent.frames[0].selectItem(window.location.href);</script></body></html>

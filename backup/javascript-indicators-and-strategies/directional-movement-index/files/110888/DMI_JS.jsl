@@ -1,0 +1,125 @@
+//initializes the indicator
+function Init()
+{
+    indicator.name("DMI");
+    indicator.description("Directional Movement Index");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.setTag("group", "Trend Strength");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("N", "Number of periods", "The number of periods.", 10, 1, 10000);
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Pclr", "DI+ color", "DI+ color", core.rgb(0, 183, 183));
+    indicator.parameters.addInteger("Pwidth", "DI+ width", "DI+ width", 1, 1, 5);
+    indicator.parameters.addInteger("Pstyle", "DI+ style", "DI+ style", core.LINE_SOLID);
+    indicator.parameters.setFlag("Pstyle", core.FLAG_LEVEL_STYLE);
+    indicator.parameters.addColor("Mclr", "DI- color", "DI- color", core.rgb(219, 64, 0));
+    indicator.parameters.addInteger("Mwidth", "DI- width", "DI- width", 1, 1, 5);
+    indicator.parameters.addInteger("Mstyle", "DI- style", "DI- style", core.LINE_SOLID);
+    indicator.parameters.setFlag("Mstyle", core.FLAG_LEVEL_STYLE);
+}
+
+var first = 0;
+var sfirst = 0;
+var n = 0;
+var source = null;
+var DIP = null;
+var DIM = null;
+var DMI, EMA;
+var avgPlusDM, avgMinusDM;
+var emaDIP, emaDIM;
+
+//initializes the instance of the indicator
+function Prepare(onlyName)
+{
+    source = instance.source;
+    n = instance.parameters.N;
+    var name = profile.id() + "(" + instance.source.name() + "," + n + ")";
+    instance.name(name);
+  
+    if (onlyName == true)
+        return ;
+    sfirst = source.first() + 1;
+
+    avgPlusDM = instance.addInternalStream(sfirst, 0);
+    avgMinusDM = instance.addInternalStream(sfirst, 0);
+
+    emaDIP = core.indicators.create("EMA", avgPlusDM, n);
+    emaDIM = core.indicators.create("EMA", avgMinusDM, n);
+    first = Math.max(emaDIP.DATA.first(), emaDIM.DATA.first());
+
+    DIP = instance.addStream("DIP", core.Line, name, "DIP", instance.parameters.Pclr,  first)
+    DIP.setWidth(instance.parameters.Pwidth);
+    DIP.setStyle(instance.parameters.Pstyle);
+    DIM = instance.addStream("DIM", core.Line, name, "DIM", instance.parameters.Mclr,  first)
+    DIM.setWidth(instance.parameters.Mwidth);
+    DIM.setStyle(instance.parameters.Mstyle);
+}
+
+function TrueRangeCustom(period)
+{
+    var num1 = Math.abs(source.high[period] - source.low[period]);
+    var num2 = Math.abs(source.high[period] - source.close[period - 1]);
+    var num3 = Math.abs(source.close[period - 1] - source.low[period]);
+    return (Math.max(num1, num2, num3));
+}
+
+// calculate the value
+function Update(period, mode)
+{
+    avgPlusDM[period] = 0;
+    avgMinusDM[period] = 0;
+
+    if (period >= sfirst)
+    {
+        var upperMove = 0;
+        var lowerMove = 0;
+        var TR = 0;
+
+        upperMove = source.high[period] - source.high[period - 1];
+        lowerMove = source.low[period - 1] - source.low[period];
+        if (upperMove < 0) upperMove = 0;
+        if (lowerMove < 0) lowerMove = 0;
+        if (upperMove == lowerMove)
+        {
+            upperMove = 0;
+            lowerMove = 0;
+        }
+        else
+        {
+            if (upperMove < lowerMove)
+            {
+                upperMove = 0;
+            }
+            else
+            {
+                if (lowerMove < upperMove)
+                {
+                    lowerMove = 0;
+                }
+            }
+        }
+
+        TR = TrueRangeCustom(period);
+        if (TR == 0)
+        {
+            avgPlusDM[period] = 0;
+            avgMinusDM[period] = 0;
+        }
+        else
+        {
+            avgPlusDM[period] = 100 * upperMove / TR;
+            avgMinusDM[period] = 100 * lowerMove / TR;
+        }
+    }
+
+    if (period >= first)
+    {
+        emaDIP.update(mode);
+        emaDIM.update(mode);
+
+        DIP[period] = emaDIP.DATA[period];
+        DIM[period] = emaDIM.DATA[period];
+    }
+}

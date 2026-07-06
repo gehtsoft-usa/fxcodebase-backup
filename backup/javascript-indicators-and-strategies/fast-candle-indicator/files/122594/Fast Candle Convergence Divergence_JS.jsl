@@ -1,0 +1,118 @@
+function Init()
+{
+    indicator.name("Fast Candle");
+    indicator.description("Fast Candle");
+    indicator.requiredSource(core.Bar); 
+    indicator.type(core.Oscillator);
+
+	
+	indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addDouble("Volume_Factor", "Volume Factor", "Volume Factor", 0.2);
+    indicator.parameters.addInteger("Period", "Period", "Period", 3);
+ 
+   indicator.parameters.addGroup("Style");
+   indicator.parameters.addColor("Fast_color", "Color of Fast", "Color of Fast", core.rgb(0, 255, 0));   
+   indicator.parameters.addColor("Slow_color", "Color of Slow", "Color of Slow", core.rgb(255, 0, 0));
+   indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var Volume_Factor;
+var Period;
+
+var first;
+var source = null;
+
+var fast,slow,delta;
+var cdFast, cdSlow;
+var T3_Fast, T3_Slow; 
+
+function Prepare(nameOnly)
+{
+    Volume_Factor = instance.parameters.Volume_Factor;
+    Period = instance.parameters.Period;
+    source = instance.source;
+    first = source.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Volume_Factor) + ", " + tostring(Period) + ")";
+    instance.name(name);
+	
+	assert(core.indicators.findIndicator("T3") != null, "Please, {wnload && install T3.LUA indicator");
+	assert(core.indicators.findIndicator("GD") != null, "Please, {wnload && install GD.LUA indicator");
+
+    if (!(nameOnly)) 
+    {
+	cdFast= instance.addInternalStream(first, 0);
+	cdSlow= instance.addInternalStream(first, 0); 
+	
+	T3_Fast = core.indicators.create("T3", cdFast, Volume_Factor, Period);
+	T3_Slow = core.indicators.create("T3", cdSlow, Volume_Factor, Period);
+	
+    fast =   instance.addStream("Fast", core.Line, name, "Fast", instance.parameters.Fast_color, T3_Fast.DATA.first()+1) ; 
+    slow =    instance.addStream("Slow", core.Line, name, "Slow", instance.parameters.Slow_color, T3_Slow.DATA.first()+1); 
+	fast.setWidth(instance.parameters.width);
+    fast.setStyle(instance.parameters.style);
+	slow.setWidth(instance.parameters.width);
+    slow.setStyle(instance.parameters.style);
+	
+	core.host.execute ("attachOuputToChart", "Fast");
+	core.host.execute ("attachOuputToChart", "Slow");
+	
+	delta =    instance.addStream("Delta", core.Bar, name, "Delta", instance.parameters.Fast_color, Math.max( (T3_Fast.DATA.first()+1),(T3_Slow.DATA.first()+1) )); 
+ 
+    }
+}
+
+function Update(period,mode)
+{
+    
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+    if (source.close[period] >source.open[period])   
+    {
+	 cdFast[period]=(source.close[period]+source.high[period])/2
+	} 
+    else
+    {
+	 cdFast[period]=(source.close[period]+source.open[period])/2
+	}
+	
+	if (source.close[period] >source.open[period])   
+	{
+	 cdSlow[period]=(source.open[period]+source.low[period])/2
+	} 
+    else
+    {
+	 cdSlow[period]=(source.open[period]+source.high[period])/2
+	}
+	
+	T3_Fast.update(mode);
+	T3_Slow.update(mode);
+	
+	if (period < T3_Fast.DATA.first()+1) 
+	{
+	 return;
+	}
+	
+	period= period-1;
+	
+	fast[period+1]= T3_Fast.DATA[period];
+	slow[period+1]= T3_Slow.DATA[period-1]; 
+	
+	delta[period+1]= fast[period+1]-slow[period+1];
+	
+	if (delta[period+1] > 0) 
+	{
+	 delta.setColor(period+1, instance.parameters.Fast_color);
+	} 
+	else
+	{	
+	 delta.setColor(period+1, instance.parameters.Slow_color);
+	}
+}
+ 
+

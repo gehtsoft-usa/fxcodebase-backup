@@ -1,0 +1,24 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - debug.setlocal ([thread,] level, local, value)</title>
+</head>
+<body>
+<h3><a name="pdf-debug.setlocal"><code>debug.setlocal ([thread,] level, local, value)</code></a></h3>
+
+
+<p>
+This function assigns the value <code>value</code> to the local variable
+with index <code>local</code> of the function at level <code>level</code> of the stack.
+The function returns <b>nil</b> if there is no local
+variable with the given index,
+and raises an error when called with a <code>level</code> out of range.
+(You can call <code>getinfo</code> to check whether the level is valid.)
+Otherwise, it returns the name of the local variable.
+
+
+
+
+<p>
+<hr>
+</body>
+</html>

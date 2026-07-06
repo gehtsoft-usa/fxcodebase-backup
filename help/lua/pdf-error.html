@@ -1,0 +1,29 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - error (message [, level])</title>
+</head>
+<body>
+<h3><a name="pdf-error"><code>error (message [, level])</code></a></h3>
+Terminates the last protected function called
+and returns <code>message</code> as the error message.
+Function <code>error</code> never returns.
+
+
+<p>
+Usually, <code>error</code> adds some information about the error position
+at the beginning of the message.
+The <code>level</code> argument specifies how to get the error position.
+With level&nbsp;1 (the default), the error position is where the
+<code>error</code> function was called.
+Level&nbsp;2 points the error to where the function
+that called <code>error</code> was called; and so on.
+Passing a level&nbsp;0 avoids the addition of error position information
+to the message.
+
+
+
+
+<p>
+<hr>
+</body>
+</html>

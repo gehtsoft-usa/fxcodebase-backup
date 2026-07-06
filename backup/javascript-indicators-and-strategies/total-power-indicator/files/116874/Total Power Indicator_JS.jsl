@@ -1,0 +1,106 @@
+function Init()
+{
+    indicator.name("Total Power Indicator");
+    indicator.description("Total Power Indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+	  indicator.parameters.addGroup("Calculation"); 
+    indicator.parameters.addInteger("LB", "Lookback Period", "Lookback Period", 40);
+    indicator.parameters.addInteger("PP", "Power Period", "Power Period", 10);
+	
+	  indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Power_color", "Color of Power", "Color of Power", core.rgb(0, 0, 255));
+	indicator.parameters.addInteger("widthPower", "Power Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("stylePower", "Power Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("stylePower", core.FLAG_LINE_STYLE);
+	
+	
+    indicator.parameters.addColor("BearPower_color", "Color of BearPower", "Color of BearPower", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("widthBear", "Bear Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("styleBear", "Bear Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleBear", core.FLAG_LINE_STYLE);
+	
+	
+    indicator.parameters.addColor("BullPower_color", "Color of BullPower", "Color of BullPower", core.rgb(0, 255, 0));
+	indicator.parameters.addInteger("widthBull", "Bear Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("styleBull", "Bear Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleBull", core.FLAG_LINE_STYLE);
+}
+
+var LB;
+var PP;
+
+var first;
+var source = null;
+
+var Power = null;
+var BearPower = null;
+var BullPower = null;
+
+var  Bulls,Bears;
+var EMA;
+
+function Prepare()
+{
+    LB = instance.parameters.LB;
+    PP = instance.parameters.PP;
+    source = instance.source;
+   
+	
+	Bulls = instance.addInternalStream(0, 0);
+	Bears = instance.addInternalStream(0, 0);
+	
+	EMA=core.indicators.create("EMA", source.close, PP);
+	first = EMA.DATA.first();
+	
+    var name = profile.id() + "(" + source.name() + ", " + LB + ", " + PP + ")";
+    instance.name(name);
+    Power = instance.addStream("Power", core.Line, name + ".Power", "Power", instance.parameters.Power_color, first);
+	Power.setWidth(instance.parameters.widthPower);
+    Power.setStyle(instance.parameters.stylePower);
+	
+    BearPower = instance.addStream("BearPower", core.Line, name + ".BearPower", "BearPower", instance.parameters.BearPower_color, first);
+	BearPower.setWidth(instance.parameters.widthBear);
+    BearPower.setStyle(instance.parameters.styleBear);
+	
+    BullPower = instance.addStream("BullPower", core.Line, name + ".BullPower", "BullPower", instance.parameters.BullPower_color, first);
+	BullPower.setWidth(instance.parameters.widthBull);
+    BullPower.setStyle(instance.parameters.styleBull);
+}
+
+function Update(period, mode)
+{
+	 EMA.update(mode);
+        Bulls[period] = source.high[period] - EMA.DATA[period];
+		Bears[period] = source.low[period] - EMA.DATA[period];
+		
+		var BearCount=0;
+		var BullCount=0;
+		
+       if (period < first + LB) 
+       {
+	    return;
+	   }
+	   
+	   var i;
+	   
+	   for (i=period -LB; i<=period; i++) 
+	   {
+			   if (Bulls[i] > 0) 
+			   {
+			    BullCount=BullCount+1;
+			   }
+			   
+			   if (Bears[i] < 0) 
+			   {
+			    BearCount=BearCount+1;
+			   }
+	   }
+	
+        Power[period] = Math.abs(BearCount - BullCount)*100 / LB;
+        BearPower[period] = BearCount*100/LB;
+        BullPower[period] = BullCount*100/LB;
+   
+}
+

@@ -1,0 +1,527 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252" /><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><title>Create a Limit Order</title><style type="text/css">a, p, h1, h2, h3, h4, h5, h6, table, td, tr, li, ul, ol {
+    font-family: Verdana, Trebuchet MS, Arial;
+}
+
+a, p, td, tr, ul, ol, li {
+    font-size: 12pt;
+}
+
+h3 {
+    font-size: 13pt;
+}
+
+h2 {
+    font-size: 13pt;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+body {
+    color: #444444;
+    background-color: white;
+}
+
+A:link {
+    color: #0065b3;
+    cursor: pointer;
+}
+
+A:visited {
+    color: #0068be;
+    cursor: pointer;
+}
+
+a.action {
+  background-color: #0065b3;
+  color: white;
+  font-size: 10pt;
+  padding: 2px 2px;
+  width: 50pt;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px;
+}
+
+.side-icon {
+    float: left;
+}
+
+a.action [class*="dripicons-"]:before {
+    padding: 0 2px 0 0;
+    font-size: 12pt;
+    vertical-align: text-bottom;
+}
+
+.side-icon:after {
+  content: "";
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  border-left: 1.5px solid white;
+  transform: translate(-50%);
+}
+
+a.actiontab {
+  font-size: 10pt;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px 3px 0 0;
+}
+
+pre, code, code a {
+    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+    font-size: 12pt;
+}
+
+code.ctag {
+    background-color: #f1f1f1;
+    padding: .1em .2em;
+    border-radius: 3px;
+}
+
+pre {
+    background-color: white;
+}
+
+pre.example {
+    background-color: #f1f1f1;
+}
+
+ul {
+    list-style-type: disc;
+    margin-left: 18pt;
+}
+
+ol {
+    list-style-type: decimal;
+    margin-left: 18pt;
+}
+
+ul.hhc {
+    list-style-type: none;
+    margin-left: 1em;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+li.hhc {
+    margin-left: 0;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+table {
+  border-spacing: 0;
+  border-color: #dfe3e7;
+}
+
+tr + tr td {
+   border-top: 0;
+}
+
+tr td + td {
+  border-left: 0;
+}
+
+td {
+  border: 1px solid;
+  border-color: #dfe3e7;
+}
+
+tr:first-child td:first-child {
+   border-radius: 0.2em 0 0 0;
+}
+
+tr:first-child td:last-child {
+  border-radius: 0 0.2em 0 0;
+}
+
+tr:first-child td:only-child {
+  border-radius: 0.2em 0.2em 0 0;
+}
+
+tr:last-child td:first-child {
+    border-radius: 0 0 0 0.2em;
+}
+
+tr:last-child td:last-child {
+    border-radius: 0 0 0.2em 0;
+}
+
+tr:last-child td:only-child {
+    border-radius: 0 0 0.2em 0.2em;
+}
+
+tr:only-child td:only-child {
+    border-radius: 0.2em 0.2em 0.2em 0.2em;
+}
+
+tr:only-child td:first-child {
+   border-radius: 0.2em 0 0 0.2em;
+}
+
+tr:only-child td:last-child {
+  border-radius: 0 0.2em 0.2em 0;
+}
+
+
+td.tmain, td.tmain_nw, td.thdr {
+    background-color: rgb(255, 255, 255);
+    vertical-align: top;
+    padding: 3px;
+}
+
+td.tmain p, td.tmain_nw p, td.thdr p {
+    margin-top: 3pt;
+    margin-bottom: 3pt;
+}
+
+td.tmain_nw {
+    white-space: nowrap;
+}
+
+td.thdr {
+    background-color: #e3e3e3;
+}
+
+table.decl {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+    vertical-align: top;
+    padding: 3px;
+    width: 100%;
+}
+
+table.decl td {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+}
+
+div.note-quote {
+    border-left: 10px solid #ccc;
+    padding: 1em 10px .1em 10px;
+    margin: 1.5em 10px;
+    background-color: rgb(224, 224, 224);
+}
+
+div.note-note {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+div.note-warning {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #fff;
+    background-color: #ff6358;
+}
+div.note-warning code.ctag {
+    color: black;
+}</style>
+<link rel="stylesheet" href="res/dripicons.css"></head><body><script type="text/javascript">
+var highlighterEnabled = false;
+var maintopic = 'index';
+var helptitle = 'Indicore SDK 3';
+    function loadStarted() {
+    window.onload = loadCompleted;
+
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        var head = document.getElementsByTagName('head')[0];
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.min.js';
+        head.appendChild(script4);
+
+
+        var script2 = document.createElement('script');
+        script2.type = 'text/javascript';
+        script2.src = './highlighter/highlight.cshtml.js';
+        head.appendChild(script2);
+
+        var script3 = document.createElement('script');
+        script3.type = 'text/javascript';
+        script3.src = './highlighter/highlight.lua.js';
+        head.appendChild(script3);
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.luax.js';
+        head.appendChild(script4);
+    }
+}
+
+function loadCompleted() {
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        hljs.registerLanguage('cshtml-razor', window.hljsDefineCshtmlRazor);
+        hljs.registerLanguage('lua', window.hljsDefineLua);
+        hljs.registerLanguage('luax', window.hljsDefineLuaX);
+        x = document.querySelectorAll('pre code');
+        for (var i = 0; i < x.length; i++) {
+            if (x[i].hasAttribute('class')) {
+                hljs.highlightBlock(x[i]);
+            }
+        }
+    }
+}
+
+
+function hidediv(divname) {
+    document.getElementById(divname).style.display = 'none';
+}
+
+function showdiv(divname) {
+    document.getElementById(divname).style.display = 'inline';
+}
+
+function syncList() {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, null, document.title);
+    }
+}
+
+function syncList1(key) {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, key + '.html', document.title);
+    }
+}</script><script type="text/javascript">
+    loadStarted();
+</script><h1>Create a Limit Order</h1><p>A limit order is used for locking in profit of the existing position when the market condition is met.</p>
+<p>Limit orders can be created for existing trades as well as for existing entry orders. Limit
+orders created for entry orders remain inactive until the trade is created by the entry order.</p>
+<p>Only one limit order can be attached to a position or an entry order.</p>
+<p>Please note that close, stop and limit orders must be permitted for the account in order to be
+used (see also <a href="host.execute_getTradingProperty.html"><code>core.host:execute(&quot;getTradingProperty&quot;, ...)</code></a> for details
+about permissions).</p>
+<p>Please note that stop and limit orders cannot be attached to the netting entry orders.</p><table class="tmain">
+  <tr>
+    <td class="thdr"><p>Valuemap field</p></td>
+    <td class="thdr"><p>Datatype</p></td>
+    <td class="thdr"><p>Description</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Command</p></td>
+    <td class="tmain"><p>string</p></td>
+    <td class="tmain"><p>The command. Must be <code class="ctag">CreateOrder</code>.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>OrderType</p></td>
+    <td class="tmain"><p>string</p></td>
+    <td class="tmain"><p>The type of the order. Must be <code class="ctag">L</code>.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>OfferID</p></td>
+    <td class="tmain"><p>string</p></td>
+    <td class="tmain"><p>The identifier of the instrument the order should be placed for.
+The value must be obtained from the &quot;Offers&quot; table, the <code class="ctag">OfferID</code> column.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>AcctID</p></td>
+    <td class="tmain"><p>string</p></td>
+    <td class="tmain"><p>The identifier of the account the order should be placed for.
+The value must be obtained from the &quot;Accounts&quot; table, the <code class="ctag">AccountID</code> column.</p>
+<p>Please note that the account identifier may not necessarily be equal to the account name
+which is shown in the Trading Station application.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>TradeID</p></td>
+    <td class="tmain"><p>string</p></td>
+    <td class="tmain"><p>The identifier of the trade to be closed.
+The value must be obtained from the &quot;Trades&quot; table, the <code class="ctag">TradeID</code> column.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>BuySell</p></td>
+    <td class="tmain"><p>string</p></td>
+    <td class="tmain"><p>The order direction.</p>
+<p>The value must be <code class="ctag">B</code> - for buy orders and <code class="ctag">S</code> - for sell orders. The order direction must be
+opposite to the direction of the order which was used to create the position (see the <code class="ctag">BS</code> column
+of the trade).</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Quantity</p></td>
+    <td class="tmain"><p>number</p></td>
+    <td class="tmain"><p>The quantity of the instrument to be bought or sold. The quantity is expressed in contracts and must
+be divisible by the value of the lot size (see <code class="ctag">baseUnitSize</code> trading option in the following call:
+<a href="host.execute_getTradingProperty.html"><code>core.host:execute(&quot;getTradingProperty&quot;, ...)</code></a>).</p>
+<p>The quantity must be equal to the size of the position (see the <code class="ctag">Lot</code> column of the trade).</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Rate</p></td>
+    <td class="tmain"><p>number</p></td>
+    <td class="tmain"><p>The rate at which the order must be filled.</p>
+<p>The rate must be above the market for sell orders and below the market for buy orders.</p>
+<p>To specify the limit order price, use:</p><ul class="main">
+  <li><p><code class="ctag">Rate</code> - if the limit order is created for the existing position.</p></li>
+  <li><p>Either <code class="ctag">Rate</code> or a pair of <code class="ctag">PegType</code> and <code class="ctag">PegPriceOffsetPips</code> fields - if the limit order is created for an entry order.</p></li>
+</ul></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>PegType</p></td>
+    <td class="tmain"><p>string</p></td>
+    <td class="tmain"><p>&quot;Pegged&quot; means that the price is specified as an offset (in pips) against the market price.</p>
+<p>The field specifies which price should be used to calculate the order price:</p><table class="tmain">
+  <tr>
+    <td class="tmain"><p><code class="ctag">O</code></p></td>
+    <td class="tmain"><p>The open price of the related trade.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">M</code></p></td>
+    <td class="tmain"><p>The close price (the current market price) of the related trade.</p></td>
+  </tr>
+</table><p>Please note that &quot;pegged&quot; orders are stored as &quot;pegged&quot; only while the order is attached to an entry
+order. Once the entry order gets filled and a position is opened, the peg price is automatically converted
+to a regular market price.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>PegPriceOffsetPips</p></td>
+    <td class="tmain"><p>number</p></td>
+    <td class="tmain"><p>Offset to the price specified in the <code class="ctag">PegType</code> field. The offset must be expressed in pips.</p>
+<p>The offset must be negative for buy orders and positive for sell orders.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>CustomID</p></td>
+    <td class="tmain"><p>string</p></td>
+    <td class="tmain"><p>The custom identifier of the order. This value will be populated into all
+order-related QTXT columns of the following tables: &quot;Orders&quot;, &quot;Trades&quot;, and &quot;Closed Trades&quot;.</p></td>
+  </tr>
+</table><div id="open21" style="display:none">
+  <p>Example: Create or Change the Limit Order of Chosen Trade&nbsp;<a href="javascript: showdiv('close21'); hidediv('open21');" onclick="javascript: showdiv('close21'); hidediv('open21');" class="action">Show<span class="side-icon dripicons-chevron-right"></span></a></p>
+</div>
+<div id="close21" style="display:inline">
+  <p>Example: Create or Change the Limit Order of Chosen Trade&nbsp;<a href="javascript: showdiv('open21'); hidediv('close21');" onclick="javascript: showdiv('open21'); hidediv('close21');" class="action">Hide<span class="side-icon dripicons-chevron-down"></span></a></p>
+  <pre class="example" id="example21"><code>   function Init()
+       strategy:name(&quot;Sample&quot;);
+       strategy:description(&quot;&quot;);
+ 
+       strategy.parameters:addGroup(&quot;Trade&quot;);
+       strategy.parameters:addString(&quot;Trade&quot;, &quot;Choose Trade&quot;, &quot;&quot;, &quot;&quot;);
+       strategy.parameters:setFlag(&quot;Trade&quot;, core.FLAG_TRADE);
+       strategy.parameters:addInteger(&quot;Distance&quot;, &quot;Distance in pips to set a limit against market&quot;, &quot;&quot;, 50, 1, 1000);
+   end
+ 
+ 
+   function Prepare(onlyName)
+       local name;
+       name = profile:id();
+       instance:name(name);
+ 
+       if onlyName then
+           return ;
+       end
+   end
+ 
+   local executing = false;
+   local done = false;
+ 
+   function Update()
+       if not(core.host:execute(&quot;isTableFilled&quot;, &quot;trades&quot;)) then
+           return ;
+       end
+ 
+       if not(core.host:execute(&quot;isTableFilled&quot;, &quot;offers&quot;)) then
+           return ;
+       end
+ 
+       if executing then
+           return ;
+       end
+ 
+       if done then
+           core.host:execute(&quot;stop&quot;);
+           return ;
+       end
+ 
+       local trade, offer;
+ 
+       trade = core.host:findTable(&quot;trades&quot;):find(&quot;TradeID&quot;, instance.parameters.Trade);
+ 
+       if trade == nil then
+           terminal:alertMessage(instance.bid:instrument(), instance.bid[NOW], &quot;Trade &quot; .. instance.parameters.Trade .. &quot; disappear&quot;, instance.bid:date(NOW));
+           core.host:execute(&quot;stop&quot;);
+           return ;
+       end
+ 
+       offer = core.host:findTable(&quot;offers&quot;):find(&quot;OfferID&quot;, trade.OfferID);
+ 
+       local limitValue;
+       local limitSide;
+ 
+       if trade.BS == &quot;B&quot; then
+           limitSide = &quot;S&quot;;
+           limitValue = offer.Bid + instance.parameters.Distance * offer.PointSize;
+       else
+           limitSide = &quot;B&quot;;
+           limitValue = offer.Ask - instance.parameters.Distance * offer.PointSize;
+       end
+ 
+       if trade.LimitOrderID == &quot;&quot; or trade.LimitOrderID == nil then
+           valuemap = core.valuemap();
+           valuemap.Command = &quot;CreateOrder&quot;;
+           valuemap.OrderType = &quot;L&quot;;
+           valuemap.OfferID = trade.OfferID;
+           valuemap.AcctID = trade.AccountID;
+           valuemap.TradeID = trade.TradeID;
+           valuemap.Quantity = trade.Lot;
+           valuemap.Rate = limitValue;
+           valuemap.BuySell = limitSide;
+           executing = true;
+           success, msg = terminal:execute(200, valuemap);
+           if not(success) then
+               executing = false;
+               done = true;
+               terminal:alertMessage(instance.bid:instrument(), instance.bid[NOW], &quot;Failed create limit &quot; .. msg, instance.bid:date(NOW));
+           end
+       elseif math.abs(limitValue - trade.Limit) &gt;= offer.PointSize then
+           valuemap = core.valuemap();
+           valuemap.Command = &quot;EditOrder&quot;;
+           valuemap.AcctID = trade.AccountID;
+           valuemap.OrderID = trade.LimitOrderID;
+           valuemap.Rate = limitValue;
+           executing = true;
+           success, msg = terminal:execute(200, valuemap);
+           if not(success) then
+               executing = false;
+               done = true;
+               terminal:alertMessage(instance.bid:instrument(), instance.bid[NOW], &quot;Failed change limit &quot; .. msg, instance.bid:date(NOW));
+           end
+       end
+   end
+ 
+   function AsyncOperationFinished(id, success, message)
+       if id == 200 then
+           executing = false;
+           done = true;
+           if not(success) then
+               terminal:alertMessage(instance.bid:instrument(), instance.bid[NOW], &quot;Failed create/change limit &quot; .. msg, instance.bid:date(NOW));
+           else
+               terminal:alertMessage(instance.bid:instrument(), instance.bid[NOW], &quot;Create/change limit order&quot; .. msg, instance.bid:date(NOW));
+           end
+       end
+   end</code></pre>
+</div><p>
+  <center><a href="TradingCommandsCreateOrder.html">back</a></center>
+</p><script language="javascript" type="text/javascript">if(window.parent.frames[0]) window.parent.frames[0].selectItem(window.location.href);</script></body></html>

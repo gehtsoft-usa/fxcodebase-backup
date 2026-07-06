@@ -1,0 +1,74 @@
+function Init()
+{
+    indicator.name("Slingshot indicator");
+    indicator.description("Slingshot indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+	
+	
+    indicator.parameters.addGroup("1. Line Calculation");	
+    indicator.parameters.addInteger("N1", "Period", "Period", 14);
+	
+	indicator.parameters.addString("Price1", "Price Source", "", "close");
+    indicator.parameters.addStringAlternative("Price1", "OPEN", "", "open");
+    indicator.parameters.addStringAlternative("Price1", "HIGH", "", "high");
+    indicator.parameters.addStringAlternative("Price1", "LOW", "", "low");
+    indicator.parameters.addStringAlternative("Price1","CLOSE", "", "close");
+    indicator.parameters.addStringAlternative("Price1", "MEDIAN", "", "median");
+    indicator.parameters.addStringAlternative("Price1", "TYPICAL", "", "typical");
+    indicator.parameters.addStringAlternative("Price1", "WEIGHTED", "", "weighted");
+
+    indicator.parameters.addGroup("2. Line Calculation");	
+     indicator.parameters.addInteger("N2", "Period", "Period", 14);
+     indicator.parameters.addString("Price2", "Price Source", "", "low");
+    indicator.parameters.addStringAlternative("Price2", "OPEN", "", "open");
+    indicator.parameters.addStringAlternative("Price2", "HIGH", "", "high");
+    indicator.parameters.addStringAlternative("Price2", "LOW", "", "low");
+    indicator.parameters.addStringAlternative("Price2","CLOSE", "", "close");
+    indicator.parameters.addStringAlternative("Price2", "MEDIAN", "", "median");
+    indicator.parameters.addStringAlternative("Price2", "TYPICAL", "", "typical");
+    indicator.parameters.addStringAlternative("Price2", "WEIGHTED", "", "weighted");
+	
+
+    indicator.parameters.addGroup("Style");	
+    indicator.parameters.addColor("Color1", "Line Color", "Line Color", core.rgb(0, 255, 0));
+	indicator.parameters.addColor("Color2", "Line Color", "Line Color", core.rgb( 255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var ONE, TWO;
+var first;
+var source = null;
+var N1, N2;
+var Price1, Price2;
+
+function Prepare()
+{
+    Price1=instance.parameters.Price1;
+	Price2=instance.parameters.Price2;
+    source = instance.source;
+    N1=instance.parameters.N1;
+	N2=instance.parameters.N2;
+    first = Math.max(N1, N2);
+    var name = profile.id() + "(" + source.name()  + ", " + source.barSize() + ", " + N1 + ", " + Price1 + ", " + N2 + ", " + Price2 + ")";
+    instance.name(name);
+    ONE = instance.addStream("One", core.Bar, name + "." + Price1,  Price1, instance.parameters.Color1, first);
+	TWO = instance.addStream("Two", core.Line, name + "." + Price2,  Price2, instance.parameters.Color2, first);
+	
+	TWO.setWidth(instance.parameters.width);
+    TWO.setStyle(instance.parameters.style);
+}
+
+function Update(period, mode)
+{
+    if (period<first ) 
+    {
+	 return;
+	}
+	
+     ONE[period]=source[Price1][period]-source[Price1][period-N1];
+     TWO[period]=source[Price2][period]-source[Price2][period-N2]; 
+}
+

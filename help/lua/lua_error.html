@@ -1,0 +1,23 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_error</title>
+</head>
+<body>
+<h3><a name="lua_error"><code>lua_error</code></a></h3>
+<pre>int lua_error (lua_State *L);</pre>
+
+<p>
+Generates a Lua error.
+The error message (which can actually be a Lua value of any type)
+must be on the stack top.
+This function does a long jump,
+and therefore never returns.
+(see <a href="luaL_error.html"><code>luaL_error</code></a>).
+
+
+
+
+
+<hr>
+</body>
+</html>

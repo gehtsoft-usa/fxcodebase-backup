@@ -1,0 +1,82 @@
+function Init()
+{
+    indicator.name("False Breakouts Counter");
+    indicator.description("False Breakouts Counter");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 5);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP counter color", "UP counter color", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("UPwidth", "UP counter line width", "UP counter line width", 1, 1, 5);
+    indicator.parameters.addInteger("UPstyle", "UP counter line style", "UP counter line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("UPstyle", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("DNclr", "DN counter color", "DN counter color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("DNwidth", "DN counter line width", "DN counter line width", 1, 1, 5);
+    indicator.parameters.addInteger("DNstyle", "DN counter line style", "DN counter line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("DNstyle", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Sclr", "Sum counter color", "Sum counter color", core.rgb(0, 0, 255));
+    indicator.parameters.addInteger("Swidth", "Sum counter line width", "Sum counter line width", 1, 1, 5);
+    indicator.parameters.addInteger("Sstyle", "Sum counter line style", "Sum counter line style", core.LINE_DASH);
+    indicator.parameters.setFlag("Sstyle", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period;
+var UpStream, DnStream;
+var UpCounter=null;
+var DnCounter=null;
+var SumCounter=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    first = source.first()+2;
+    UpStream=instance.addInternalStream(first, 0);
+    DnStream=instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ")";
+    instance.name(name);
+    UpCounter = instance.addStream("UpCounter", core.Line, name + ".UpCounter", "UpCounter", instance.parameters.UPclr, first);
+    UpCounter.setWidth(instance.parameters.UPwidth);
+    UpCounter.setStyle(instance.parameters.UPstyle);
+    DnCounter = instance.addStream("DnCounter", core.Line, name + ".DnCounter", "DnCounter", instance.parameters.DNclr, first);
+    DnCounter.setWidth(instance.parameters.DNwidth);
+    DnCounter.setStyle(instance.parameters.DNstyle);
+    SumCounter = instance.addStream("SumCounter", core.Line, name + ".SumCounter", "SumCounter", instance.parameters.Sclr, first);
+    SumCounter.setWidth(instance.parameters.Swidth);
+    SumCounter.setStyle(instance.parameters.Sstyle);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    if (source.high[period]>source.high[period-1] && source.close[period]<=source.high[period-1]) 
+    {
+     UpStream[period]=1;
+    } 
+    else
+    {
+     UpStream[period]=0; 
+    }
+    if (source.low[period]<source.low[period-1] && source.close[period]>=source.low[period-1]) 
+    {
+     DnStream[period]=1;
+    } 
+    else
+    {
+     DnStream[period]=0;
+    }
+    if (period>first+Period) 
+    {
+     UpCounter[period]=Math.sum(UpStream, period-Period+1, period);
+     DnCounter[period]=Math.sum(DnStream, period-Period+1, period);
+     SumCounter[period]=UpCounter[period]+DnCounter[period];
+    }
+   } 
+}
+

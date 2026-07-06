@@ -1,0 +1,102 @@
+function Init()
+{
+    indicator.name("Asymmetric Trend Pressure");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addInteger("UP", "Trend Period", "", 14);
+	indicator.parameters.addInteger("DOWN", "Reversal Period", "", 10);
+	 indicator.parameters.addInteger("Cut", "Cutoff Period", "", 24);
+	
+  	indicator.parameters.addColor("Out_color", "Color of Sum", "Color of Sum", core.rgb(0, 0, 255));
+}
+
+	var UP;
+	var DOWN;
+
+var first;
+var source = null;
+
+var Up = null;
+var Down = null;
+var Out;
+
+var Cut;
+
+function Prepare()
+{
+    Cut = instance.parameters.Cut;
+    UP = instance.parameters.UP;
+	DOWN = instance.parameters.DOWN;
+
+    source = instance.source;
+    first = source.first() + Cut;
+
+    var name = profile.id() + "(" + source.name() + ", " + UP+ ", " + DOWN  + ", " + Cut + ")";
+    instance.name(name);
+
+	Out= instance.addStream("Out", core.Line, name + ".Out", "Out", instance.parameters.Out_color, first);
+}
+
+function Update(period)
+{
+    if (period >= first && source.hasData(period)) 
+    {
+	
+	var iup= 0;
+	var idown=0;
+	var SumUp=0;
+	var SumDown=0;
+	var i=-1;
+
+	
+	if (Out[period] > 0) 
+	{
+	 Up = UP;
+	} 
+	else
+	{
+	 Up = DOWN;
+	}
+	
+	if (Out[period] < 0) 
+	{
+	 Down = UP;
+	} 
+	else
+	{
+	 Down =  DOWN;
+	}
+	
+			while (true) 
+			{
+			   i = i+1;	
+						if (iup < Up && i < Cut) 
+						{
+								if (source.close[period-i] >   source.open[period-i]) 
+								{
+								 SumUp= SumUp + (source.close[period-i] - source.open[period-i]);
+								 iup = iup+1;				
+								}
+						}
+						if (idown < Down  && i < Cut) 
+						{
+								if (source.close[period-i] <   source.open[period-i]) 
+								{ 
+								 SumDown= SumDown + ( source.open[period-i] - source.close[period-i] );
+								 idown = idown+1;
+								}
+						}
+						
+					
+				if (iup >= Up && idown >= Down || i >= Cut) 
+				{
+				 break;
+				}		
+			}
+       
+		Out[period]=   SumUp/ Up  -  SumDown/Down;
+    }
+}
+

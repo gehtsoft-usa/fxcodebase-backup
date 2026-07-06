@@ -1,0 +1,74 @@
+function Init()
+{
+    indicator.name("Silver trend indicator");
+    indicator.description("Silver trend indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Border", "Border", "", 30);
+    indicator.parameters.addInteger("Period", "Period", "", 9);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clrUP", "Color UP", "Color UP", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clrDN", "Color DN", "Color DN", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("widthLinReg", "Dot size", "Dot size", 3, 1, 5);
+}
+
+var first;
+var source = null;
+var Border;
+var Period;
+var BuffUP=null;
+var BiffDN=null;
+var Trigger;
+var HL;
+
+function Prepare()
+{
+    source = instance.source;
+    Border=instance.parameters.Border;
+    Period=instance.parameters.Period;
+    first = source.first()+2;
+    Trigger=instance.addInternalStream(first, 0);
+    HL=instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Border + ", " + instance.parameters.Period + ")";
+    instance.name(name);
+    BuffUP = instance.addStream("BuffUP", core.Dot, name + ".UP", "UP", instance.parameters.clrUP, first);
+    BuffDN = instance.addStream("BuffDN", core.Dot, name + ".DN", "DN", instance.parameters.clrDN, first);
+    BuffUP.setWidth(instance.parameters.widthLinReg);
+    BuffDN.setWidth(instance.parameters.widthLinReg);
+}
+
+function Update(period, mode)
+{
+   if (period>first+Period && period<source.size()-1) 
+   {
+    HL[period]=source.high[period]-source.low[period];
+    var tmp=Math.minmax(source, period-Period+1, period);
+    var Max=tmp[1];
+    var Min=tmp[0];
+    var Range=(Max-Min)*Border/100;
+    var R=Math.lwma(HL,period-Period+1, period)*0.5;
+    if (source.close[period]<Min+Range && Trigger[period-1]!=-1) 
+    {
+     Trigger[period]=-1;
+     BuffDN[period]=source.low[period]-R;
+    }
+    else if (source.close[period]>Max-Range && Trigger[period-1]!=1) 
+    {
+     Trigger[period]=1;
+     BuffUP[period]=source.high[period]+R;
+    } 
+    else
+    {
+     Trigger[period]=Trigger[period-1]; 
+    }
+   } 
+   else if (period>=first) 
+   {
+    Trigger[period]=0; 
+    HL[period]=source.high[period]-source.low[period];
+   } 
+}
+

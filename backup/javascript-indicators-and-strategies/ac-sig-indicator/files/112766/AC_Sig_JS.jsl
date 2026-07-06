@@ -1,0 +1,68 @@
+function Init()
+{
+    indicator.name("AC_Sig indicator");
+    indicator.description("AC_Sig indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("FastPeriod", "Fast period for AC", "", 5);
+    indicator.parameters.addInteger("SlowPeriod", "Slow period for AC", "", 34);
+    indicator.parameters.addInteger("MAPeriod", "MA period for AC", "", 5);
+    indicator.parameters.addInteger("ATRPeriod", "ATR period", "", 15);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP Color", "UP Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DNclr", "DN Color", "DN Color", core.rgb(255, 255, 0));
+    indicator.parameters.addInteger("DotSize", "Dot size", "Dot size", 4, 1, 5);
+}
+
+var first;
+var source = null;
+var FastPeriod;
+var SlowPeriod;
+var MAPeriod;
+var ATRPeriod;
+var AC;
+var ATR;
+var AC_Sig=null;
+
+function Prepare()
+{
+    source = instance.source;
+    FastPeriod=instance.parameters.FastPeriod;
+    SlowPeriod=instance.parameters.SlowPeriod;
+    MAPeriod=instance.parameters.MAPeriod;
+    ATRPeriod=instance.parameters.ATRPeriod;
+    first = source.first()+2;
+    AC = core.indicators.create("AC", source, FastPeriod, SlowPeriod, MAPeriod);
+    ATR = core.indicators.create("ATR", source, ATRPeriod);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.FastPeriod + ", " + instance.parameters.SlowPeriod + ", " + instance.parameters.MAPeriod + ", " + instance.parameters.ATRPeriod + ")";
+    instance.name(name);
+    AC_Sig = instance.addStream("AC_Sig", core.Dot, name + ".AC_Sig", "AC_Sig", instance.parameters.UPclr, first);
+    AC_Sig.setWidth(instance.parameters.DotSize);
+}
+
+function Update(period, mode)
+{
+   if (period>first+5) 
+   {
+    AC.update(mode);
+    ATR.update(mode);
+    var ac=AC.DATA;
+    var atr=ATR.DATA;
+    if (((ac[period-3]>0 && ac[period-2]>0 && ac[period-1]>0 && ac[period]>0) && (ac[period-3]>ac[period-2] && ac[period-1]>ac[period-2] && ac[period]>ac[period-1])) || ((ac[period-3]<0 && ac[period-2]<0 && ac[period-1]<0 && ac[period]>0) && (ac[period-3]>ac[period-2] && ac[period-1]>ac[period-2] && ac[period]>ac[period-1])) || ((ac[period-4]<0 && ac[period-3]<0 && ac[period-2]<0 && ac[period-1]<0 && ac[period]<0) && (ac[period-4]>ac[period-3] && ac[period-3]<ac[period-2] && ac[period-2]<ac[period-1] && ac[period-1]<ac[period]))) 
+       {
+        AC_Sig[period]=source.high[period]+atr[period]*3/8;  
+        AC_Sig.setColor(period,instance.parameters.DNclr);
+       }
+    if (((ac[period-3]<0 && ac[period-2]<0 && ac[period-1]<0 && ac[period]<0) && (ac[period-3]<ac[period-2] && ac[period-1]<ac[period-2] && ac[period]<ac[period-1])) ||
+       ((ac[period-3]>0 && ac[period-2]>0 && ac[period-1]>0 && ac[period]<0) && (ac[period-3]<ac[period-2] && ac[period-1]<ac[period-2] && ac[period]<ac[period-1])) ||
+       ((ac[period-4]>0 && ac[period-3]>0 && ac[period-2]>0 && ac[period-1]>0 && ac[period]>0) && (ac[period-4]<ac[period-3] && ac[period-3]>ac[period-2] && ac[period-2]>ac[period-1] && ac[period-1]>ac[period]))) 
+       {
+        AC_Sig[period]=source.low[period]-atr[period]*3/8;  
+        AC_Sig.setColor(period,instance.parameters.UPclr);
+       }
+   } 
+}
+

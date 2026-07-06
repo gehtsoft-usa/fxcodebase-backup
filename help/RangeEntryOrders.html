@@ -1,0 +1,530 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252" /><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><title>Range Entry Orders</title><style type="text/css">a, p, h1, h2, h3, h4, h5, h6, table, td, tr, li, ul, ol {
+    font-family: Verdana, Trebuchet MS, Arial;
+}
+
+a, p, td, tr, ul, ol, li {
+    font-size: 12pt;
+}
+
+h3 {
+    font-size: 13pt;
+}
+
+h2 {
+    font-size: 13pt;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+body {
+    color: #444444;
+    background-color: white;
+}
+
+A:link {
+    color: #0065b3;
+    cursor: pointer;
+}
+
+A:visited {
+    color: #0068be;
+    cursor: pointer;
+}
+
+a.action {
+  background-color: #0065b3;
+  color: white;
+  font-size: 10pt;
+  padding: 2px 2px;
+  width: 50pt;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px;
+}
+
+.side-icon {
+    float: left;
+}
+
+a.action [class*="dripicons-"]:before {
+    padding: 0 2px 0 0;
+    font-size: 12pt;
+    vertical-align: text-bottom;
+}
+
+.side-icon:after {
+  content: "";
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  border-left: 1.5px solid white;
+  transform: translate(-50%);
+}
+
+a.actiontab {
+  font-size: 10pt;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px 3px 0 0;
+}
+
+pre, code, code a {
+    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+    font-size: 12pt;
+}
+
+code.ctag {
+    background-color: #f1f1f1;
+    padding: .1em .2em;
+    border-radius: 3px;
+}
+
+pre {
+    background-color: white;
+}
+
+pre.example {
+    background-color: #f1f1f1;
+}
+
+ul {
+    list-style-type: disc;
+    margin-left: 18pt;
+}
+
+ol {
+    list-style-type: decimal;
+    margin-left: 18pt;
+}
+
+ul.hhc {
+    list-style-type: none;
+    margin-left: 1em;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+li.hhc {
+    margin-left: 0;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+table {
+  border-spacing: 0;
+  border-color: #dfe3e7;
+}
+
+tr + tr td {
+   border-top: 0;
+}
+
+tr td + td {
+  border-left: 0;
+}
+
+td {
+  border: 1px solid;
+  border-color: #dfe3e7;
+}
+
+tr:first-child td:first-child {
+   border-radius: 0.2em 0 0 0;
+}
+
+tr:first-child td:last-child {
+  border-radius: 0 0.2em 0 0;
+}
+
+tr:first-child td:only-child {
+  border-radius: 0.2em 0.2em 0 0;
+}
+
+tr:last-child td:first-child {
+    border-radius: 0 0 0 0.2em;
+}
+
+tr:last-child td:last-child {
+    border-radius: 0 0 0.2em 0;
+}
+
+tr:last-child td:only-child {
+    border-radius: 0 0 0.2em 0.2em;
+}
+
+tr:only-child td:only-child {
+    border-radius: 0.2em 0.2em 0.2em 0.2em;
+}
+
+tr:only-child td:first-child {
+   border-radius: 0.2em 0 0 0.2em;
+}
+
+tr:only-child td:last-child {
+  border-radius: 0 0.2em 0.2em 0;
+}
+
+
+td.tmain, td.tmain_nw, td.thdr {
+    background-color: rgb(255, 255, 255);
+    vertical-align: top;
+    padding: 3px;
+}
+
+td.tmain p, td.tmain_nw p, td.thdr p {
+    margin-top: 3pt;
+    margin-bottom: 3pt;
+}
+
+td.tmain_nw {
+    white-space: nowrap;
+}
+
+td.thdr {
+    background-color: #e3e3e3;
+}
+
+table.decl {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+    vertical-align: top;
+    padding: 3px;
+    width: 100%;
+}
+
+table.decl td {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+}
+
+div.note-quote {
+    border-left: 10px solid #ccc;
+    padding: 1em 10px .1em 10px;
+    margin: 1.5em 10px;
+    background-color: rgb(224, 224, 224);
+}
+
+div.note-note {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+div.note-warning {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #fff;
+    background-color: #ff6358;
+}
+div.note-warning code.ctag {
+    color: black;
+}</style>
+<link rel="stylesheet" href="res/dripicons.css"></head><body><script type="text/javascript">
+var highlighterEnabled = false;
+var maintopic = 'index';
+var helptitle = 'Indicore SDK 3';
+    function loadStarted() {
+    window.onload = loadCompleted;
+
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        var head = document.getElementsByTagName('head')[0];
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.min.js';
+        head.appendChild(script4);
+
+
+        var script2 = document.createElement('script');
+        script2.type = 'text/javascript';
+        script2.src = './highlighter/highlight.cshtml.js';
+        head.appendChild(script2);
+
+        var script3 = document.createElement('script');
+        script3.type = 'text/javascript';
+        script3.src = './highlighter/highlight.lua.js';
+        head.appendChild(script3);
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.luax.js';
+        head.appendChild(script4);
+    }
+}
+
+function loadCompleted() {
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        hljs.registerLanguage('cshtml-razor', window.hljsDefineCshtmlRazor);
+        hljs.registerLanguage('lua', window.hljsDefineLua);
+        hljs.registerLanguage('luax', window.hljsDefineLuaX);
+        x = document.querySelectorAll('pre code');
+        for (var i = 0; i < x.length; i++) {
+            if (x[i].hasAttribute('class')) {
+                hljs.highlightBlock(x[i]);
+            }
+        }
+    }
+}
+
+
+function hidediv(divname) {
+    document.getElementById(divname).style.display = 'none';
+}
+
+function showdiv(divname) {
+    document.getElementById(divname).style.display = 'inline';
+}
+
+function syncList() {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, null, document.title);
+    }
+}
+
+function syncList1(key) {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, key + '.html', document.title);
+    }
+}</script><script type="text/javascript">
+    loadStarted();
+</script><h1>Range Entry Orders</h1>
+<h2>Brief</h2>
+<p>The article describes Range Entry orders.</p>
+<h2>Details</h2><p></p>
+<h3>Definition and Use</h3>
+<p><b>Range Order</b> is an order to buy or sell an instrument once the market is within the specified price range.
+When the specified price range is reached, the range order is executed at the specified price range. The range
+order can be used to enter or exit the market.</p>
+<p></p>
+<h4>Range Order</h4>
+<p>The order is used for entering the market in case the trader believes that the market price will continue to move
+in the same direction after hitting the stop price of the order. This is usually done if the stop price represents
+a level of support or resistance. If prices rally through resistance and hit the stop price, the trader will
+buy the instrument expecting that prices will continue to rally. Similarly, if prices fall through support and hit
+the stop price, the trader will sell the instrument expecting that prices will continue to decline.
+See execution <a href="RangeEntryExecScenario1.html">Scenario 1</a>.</p>
+<p>As was mentioned above, the order is used for entering the market. However, if hedging on an account is disabled,
+placing an entry stop order in the direction opposite to an existing position will result in closing such position.
+So the entry range order is used as closing stop order on FIFO accounts and it is a secondary order
+of the <a href="ELSContingentOrder.html">ELS (Entry-with-Limit-and-Stop) Contingent Order</a>.</p>
+<p></p>
+<h3>Time-in-Force Option</h3>
+<p>The trader has the following time-in-force options that provide additional instructions on how long an order should remain active:</p><table class="tmain" width="100%">
+  <tr>
+    <td class="thdr" width="12%"><p>Time-in-Force Option</p></td>
+    <td class="thdr"><p>Description</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Good Till Cancelled (GTC)</p></td>
+    <td class="tmain"><p>An order that remains active until the trader decides to cancel it or until the order is executed.
+In the event of limited liquidity, a GTC order may be executed in portions.
+Such execution results in a number of positions opened/closed at different prices.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Day (DAY)</p></td>
+    <td class="tmain"><p>An order that automatically expires if not executed on the day the order is placed.
+During the trading day the order behaves exactly like a GTC order.</p></td>
+  </tr>
+</table><p></p>
+<h3>Execution Price</h3>
+<p>A range order guarantees execution at the specified price range. To fill a range order, the system searches
+for the best price at the specified price range. If the best price is included in the specified order range,
+the order will be executed at the best price.</p>
+<p></p>
+<h3>Partial Fill</h3>
+<p>A range order can be executed partially. It means that one order may result in a number of positions
+opened/closed at different prices. When the market satisfies the order criteria, it is filled in portions to the
+maximum extent possible (until the liquidity pool is dried up). The remainder of the order is set to wait until the
+market once again hits the price specified in the order.
+In case of partial closing, the system closes a position in the filled amount and opens a new position in the
+remaining amount.
+See <a href="RangeEntryOrderExecScenarios.html">Execution Scenarios</a>.</p>
+<p></p>
+<h3>Range Orders State Machine</h3>
+<p>The range orders state machine is based on the FXCM order statuses.
+The state machine, description of order statuses and their transitions are provided below.
+Please note that the order is created by the system only after successful order validation. If the order does not pass
+validation, the system creates a rejection message and does not store the order in the database. However,
+the information about the order (such as, for example, the order ID and the reason for its rejection) is stored
+in the database. So, the initial transition on the diagram indicates that the order is successfully validated.</p>
+<p><b>Range Orders: State Machine</b><br></p>
+<p><img src="img/StopEntryStopStateMachine.gif"></p>
+<p><b>Range Orders: FXCM Order Statuses Description</b><br></p><table class="tmain" width="100%">
+  <tr>
+    <td class="thdr" width="12%"><p>Order Status</p></td>
+    <td class="thdr" width="38%"><p>Order Status Description</p></td>
+    <td class="thdr" width="50%"><p>Transition</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><b>Waiting (W)</b></p></td>
+    <td class="tmain"><p>The status has one of the following meanings:</p><ul class="main">
+  <li><p>Initial Transition:<br>
+The order was successfully validated and is waiting until the market price satisfies the order criteria.</p></li>
+  <li><p>Transition from &quot;Waiting (W)&quot;:<br>
+<i>All Orders:</i><br>
+The order was modified by the trader.<br>
+<i>Only Trailing Range Orders:</i><br>
+The trailing range entry order was automatically adjusted by the minimum rate move.</p></li>
+  <li><p>Transition from &quot;Pending Calculated (U)&quot;:<br>
+The order was filled partially or was not filled at all because of limited liquidity or lack of same, and is
+waiting until the market price satisfies the order criteria.</p></li>
+</ul></td>
+    <td class="tmain"><table class="tmain" width="100%">
+  <tr>
+    <td class="tmain" width="13%"><p>Waiting (W)</p></td>
+    <td class="tmain"><p>All Orders:<br>
+The trader modifies the order.<br></p>
+<p>Only Trailing Range Entry Orders:</p><ul class="main">
+  <li><p>Fixed trailing stop: The order is automatically adjusted by the minimum rate move set by the trader.</p></li>
+  <li><p>Dynamic trailing stop: The order is automatically adjusted by the minimum rate move defined in the system.<br>
+<b>Note:</b> This transition <b>is not</b> made each time the dynamic trailing stop is adjusted (that is, each time the market
+moves 1/10th of a pip in trader’s favor). The transition is made only when the market price changes by the minimum
+rate move defined in the system.</p></li>
+</ul></td>
+  </tr>
+  <tr>
+    <td class="tmain" width="13%"><p>In Process (P)</p></td>
+    <td class="tmain"><p>The market price satisfies the order criteria.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain" width="13%"><p>Pending Cancelled (S)</p></td>
+    <td class="tmain"><p>The trader removes the order.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain" width="13%"><p>Cancelled (C)</p></td>
+    <td class="tmain"><p>All Orders:<br>
+The position the order is placed on is already closed by another order.<br></p>
+<p>Only Entry Range, Trailing Entry Range Orders:<br>
+The market price satisfies the order criteria, but there is insufficient margin in the account under the margin call.<br></p>
+<p>Only Net Amount Orders:<br>
+The positions the order is placed on are already closed by another order.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain" width="13%"><p>Expired (T)</p></td>
+    <td class="tmain"><p>The transition is applicable only to DAY orders:<br>
+The order expires because it cannot be executed on the day it was placed.</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><b>In Process (P)</b></p></td>
+    <td class="tmain"><p>The status has one of the following meanings:</p><ul class="main">
+  <li><p>Initial Transition:<br>
+<i>Only Entry Range:</i><br>
+The order was successfully validated. Right after the validation, the market price satisfied the order
+criteria and the order is ready for further execution.</p></li>
+  <li><p>Transition from &quot;Waiting (W)&quot;:<br>
+The market price satisfied the order criteria and the order is ready for further execution.</p></li>
+</ul></td>
+    <td class="tmain"><table class="tmain" width="100%">
+  <tr>
+    <td class="tmain" width="13%"><p>Pending Calculated (U)</p></td>
+    <td class="tmain"><p>The order is sent to external execution.</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><b>Pending Calculated (U)</b></p></td>
+    <td class="tmain"><p>The status has one of the following meanings:</p><ul class="main">
+  <li><p>Transition from &quot;In Process (P)&quot;:<br>
+The market price satisfied the order criteria and the order was sent to external execution.</p></li>
+  <li><p>Transition from &quot;Pending Calculated (U)&quot;:<br>
+The order was filled partially.</p></li>
+</ul></td>
+    <td class="tmain"><table class="tmain" width="100%">
+  <tr>
+    <td class="tmain" width="13%"><p>Executing (E)</p></td>
+    <td class="tmain"><p>The order is completely filled.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain" width="13%"><p>Pending Calculated (U)</p></td>
+    <td class="tmain"><p>The order is filled partially. The position is opened/closed in the filled amount. Note that the filled portion may result in
+a number of open/closed positions.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain" width="13%"><p>Waiting (W)</p></td>
+    <td class="tmain"><p>The order cannot be filled because there is no liquidity to fill the order.</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><b>Executing (E)</b></p></td>
+    <td class="tmain"><p>The order was completely filled.</p></td>
+    <td class="tmain"><table class="tmain" width="100%">
+  <tr>
+    <td class="tmain" width="13%"><p>Executed (F)</p></td>
+    <td class="tmain"><p>A position is either opened or closed. Note that the order may result in a number of open/closed positions.</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><b>Executed (F)</b></p></td>
+    <td class="tmain"><p>A position was opened/closed. Note that the order may result in a number of open/closed positions.</p></td>
+    <td class="tmain">
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><b>Pending Cancelled (S)</b></p></td>
+    <td class="tmain"><p>The status is applicable only to GTC orders:<br>
+The order was removed by the trader.</p></td>
+    <td class="tmain"><table class="tmain" width="100%">
+  <tr>
+    <td class="tmain" width="13%"><p>Cancelled (C)</p></td>
+    <td class="tmain"><p>The trader removes the order and the system deletes the same order.</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><b>Cancelled (C)</b></p></td>
+    <td class="tmain"><p>The status has one of the following meanings:</p><ul class="main">
+  <li><p>Transition from &quot;Waiting (W)&quot;:<br>
+<i>All Orders:</i><br>
+The position the order was placed on was already closed by another order.<br>
+<i>Only Entry Stop, Trailing Entry Stop Orders:</i><br>
+The account is under the margin call/there is insufficient margin in the account.<br>
+<i>Only Net Amount Orders:</i><br>
+The positions the order was placed on were already closed by another order.</p></li>
+  <li><p>Transition from &quot;Pending Cancelled (S)&quot;:<br>
+The order was removed by the trader and deleted by the system.</p></li>
+</ul></td>
+    <td class="tmain">
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><b>Expired (T)</b></p></td>
+    <td class="tmain"><p>The status is applicable to Day orders only:<br>
+The order expired because it was not executed on the day it was placed.</p></td>
+    <td class="tmain"><table class="tmain" width="100%">
+  <tr>
+    <td class="tmain" width="13%"><p>Expired (T)</p></td>
+    <td class="tmain"><p>The transition is applicable only to Day orders:<br>
+The system deletes the order after it expires.</p></td>
+  </tr>
+</table></td>
+  </tr>
+</table><p>
+  <center><a href="FXCMRangeEntryOrders.html">back</a></center>
+</p><script language="javascript" type="text/javascript">if(window.parent.frames[0]) window.parent.frames[0].selectItem(window.location.href);</script></body></html>

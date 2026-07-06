@@ -1,0 +1,79 @@
+function Init()
+{
+    indicator.name("ColorStdDev indicator");
+    indicator.description("ColorStdDev indicator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 12);
+    indicator.parameters.addString("Method", "Method", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method", "TMA", "", "TMA");
+    indicator.parameters.addInteger("MaxTrendLevel", "Max trend level", "", 100);
+    indicator.parameters.addInteger("MiddleTrendLevel", "Middle trend level", "", 40);
+    indicator.parameters.addInteger("FlatLevel", "Flat level", "", 10);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("MaxTrendClr", "Max trend Color", "Max trend Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("MiddleTrendClr", "Middle trend Color", "Middle trend Color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("FlatClr", "Flat Color", "Flat Color", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("NeutralClr", "Neutral Color", "Neutral Color", core.rgb(192, 192, 192));
+}
+
+var first;
+var source = null;
+var Period;
+var Method;
+var MaxTrendLevel;
+var MiddleTrendLevel;
+var FlatLevel;
+var StdDev;
+var ColorStdDev=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    Method=instance.parameters.Method;
+    MaxTrendLevel=instance.parameters.MaxTrendLevel;
+    MiddleTrendLevel=instance.parameters.MiddleTrendLevel;
+    FlatLevel=instance.parameters.FlatLevel;
+    first = source.first()+2;
+    StdDev = core.indicators.create("STDDEV2", source, Period, Method);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.Method + ")";
+    instance.name(name);
+    ColorStdDev = instance.addStream("ColorStdDev", core.Bar, name + ".ColorStdDev", "ColorStdDev", instance.parameters.MaxTrendClr, first);
+    ColorStdDev.addLevel(MaxTrendLevel);
+    ColorStdDev.addLevel(MiddleTrendLevel);
+    ColorStdDev.addLevel(FlatLevel);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    StdDev.update(mode);
+    ColorStdDev[period]=StdDev.DATA[period]/source.pipSize();
+    if (ColorStdDev[period]>MaxTrendLevel) 
+    {
+     ColorStdDev.setColor(period,instance.parameters.MaxTrendClr);
+    } 
+    else if (ColorStdDev[period]>MiddleTrendLevel) 
+    {
+     ColorStdDev.setColor(period,instance.parameters.MiddleTrendClr);
+    } 
+    else if (ColorStdDev[period]>FlatLevel) 
+    {
+     ColorStdDev.setColor(period,instance.parameters.FlatClr);
+    } 
+    else
+    {
+     ColorStdDev.setColor(period,instance.parameters.NeutralClr);
+    }
+   } 
+}
+

@@ -1,0 +1,85 @@
+function Init()
+{
+    indicator.name("MA SAR indicator");
+    indicator.description("MA SAR indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("MA_Period", "Period of MA", "", 20);
+    indicator.parameters.addString("Method", "Method of MA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("Method", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Method", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Method", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Method", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Method", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Method", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Method", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Method", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Method", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Method", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Method", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Method", "JSmooth", "", "JSmooth");
+    indicator.parameters.addInteger("MA_Shift", "Shift of MA", "", 5);
+    indicator.parameters.addInteger("ATR_Period", "Period of ATR", "", 15);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP Color", "UP Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DNclr", "DN Color", "DN Color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("DotSize", "Dot size", "Line width", 2, 1, 5);
+}
+
+var first;
+var source = null;
+var MA_Period;
+var Method;
+var MA_Shift;
+var ATR_Period;
+var MA;
+var ATR;
+var MA_SAR=null;
+
+function Prepare()
+{
+    source = instance.source;
+    MA_Period=instance.parameters.MA_Period;
+    Method=instance.parameters.Method;
+    MA_Shift=instance.parameters.MA_Shift;
+    ATR_Period=instance.parameters.ATR_Period;
+    first = source.first()+2;
+    MA = core.indicators.create("AVERAGES", source.median, Method, MA_Period, false);
+    ATR = core.indicators.create("ATR", source, ATR_Period);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.MA_Period + ", " + instance.parameters.Method + ", " + instance.parameters.MA_Shift + ", " + instance.parameters.ATR_Period + ")";
+    instance.name(name);
+    MA_SAR = instance.addStream("MA_SAR", core.Dot, name + ".MA_SAR", "MA_SAR", instance.parameters.UPclr, first);
+    MA_SAR.setWidth(instance.parameters.DotSize);
+}
+
+function Update(period, mode)
+{
+   if (period>first+MA_Shift) 
+   {
+    MA.update(mode);
+    ATR.update(mode);
+    if (MA.DATA[period]>MA.DATA[period-MA_Shift]) 
+    {
+     MA_SAR[period]=MA.DATA[period]-ATR.DATA[period];
+     MA_SAR.setColor(period,instance.parameters.UPclr);
+    } 
+    else
+    {
+     MA_SAR[period]=MA.DATA[period]+ATR.DATA[period];
+     MA_SAR.setColor(period,instance.parameters.DNclr);
+    }
+   } 
+}
+

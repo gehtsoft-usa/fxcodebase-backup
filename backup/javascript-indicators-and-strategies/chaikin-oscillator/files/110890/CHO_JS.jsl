@@ -1,0 +1,107 @@
+//initializes the indicator
+function Init()
+{
+    indicator.name("CHO");
+    indicator.description("Chaikin Oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.setTag("group", "Volume Indicators");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("FastN", "Fast MA periods", "Fast MA periods", 3);
+    indicator.parameters.addInteger("SlowN", "Slow MA periods", "Slow MA periods", 10);
+    indicator.parameters.addString("Method", "Smoothing method", "Smoothing method", "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "MVA", "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMQ", "EMA", "EMA");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "LWMA", "LWMA");
+    indicator.parameters.addStringAlternative("Method", "LSMA", "LSMA", "REGRESSION");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "SMMA", "SMMA");
+    indicator.parameters.addStringAlternative("Method", "VIDYA (1995)", "VIDYA (1995)", "VIDYA");
+    indicator.parameters.addStringAlternative("Method", "VIDYA (1992)*", "VIDYA (1992)*", "VIDYA92");
+    indicator.parameters.addStringAlternative("Method", "Wilders", "Wilders", "WMA");
+    indicator.parameters.addString("ADMethod", "A/D calculation mode", "A/D calculation mode", "CI");
+    indicator.parameters.addStringAlternative("ADMethod", "Classic", "Classic", "CS");
+    indicator.parameters.addStringAlternative("ADMethod", "Classic incremental", "Classic incremental", "CI");
+    indicator.parameters.addStringAlternative("ADMethod", "Trade Station", "Trade Station", "TS");
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addString("Display", "Display mode", "Display mode", "L");
+    indicator.parameters.addStringAlternative("Display", "Line", "", "L");
+    indicator.parameters.addStringAlternative("Display", "Histogram", "", "H");
+    indicator.parameters.addColor("clr", "Line color", "Line color", core.rgb(128, 128, 128));
+    indicator.parameters.addInteger("width", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LEVEL_STYLE);
+    indicator.parameters.addColor("Uclr", "Upper bar color", "Upper bar color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("Lclr", "Lower bar color", "Lower bar color", core.rgb(255, 0, 0));
+}
+
+var first = 0;
+var source = null;
+var CHO = null;
+var AD, FMA, SMA;
+
+//initializes the instance of the indicator
+function Prepare(onlyName)
+{
+    source = instance.source;
+    first = source.first()+1;
+
+    var name = profile.id() + "(" + instance.source.name() + ")";
+    instance.name(name);
+  
+    if (onlyName == true)
+        return ;
+    AD = core.indicators.create("AD", source, instance.parameters.ADMethod);
+    FMA = core.indicators.create(instance.parameters.Method, AD.DATA, instance.parameters.FastN);
+    SMA = core.indicators.create(instance.parameters.Method, AD.DATA, instance.parameters.SlowN);
+
+    first = Math.max(FMA.DATA.first(), SMA.DATA.first());
+    var mode;
+    if (instance.parameters.Display == "L")
+    {
+        mode = core.Line;
+        line = true;
+    }
+    else
+    {
+        mode = core.Bar;
+        line = false;
+    }
+
+    U = instance.parameters.Uclr;
+    D = instance.parameters.Lclr;
+
+    CHO = instance.addStream("CHO", mode, name, "CHO", instance.parameters.clr,  first)
+    if (instance.parameters.Display == "L")
+    {
+        CHO.setWidth(instance.parameters.width);
+    }
+    
+    CHO.setStyle(instance.parameters.style);
+    CHO.addLevel(0);
+}
+
+// calculate the value
+function Update(period, mode)
+{
+    AD.update(mode);
+    FMA.update(mode);
+    SMA.update(mode);
+
+    if (period >= first)
+    {
+        CHO[period] = FMA.DATA[period] - SMA.DATA[period];
+        if (!line)
+        {
+            if (CHO[period] > 0)
+            {
+                CHO.setColor(period, U);
+            }
+            else
+            {
+                CHO.setColor(period, D);
+            }
+        }
+    }
+}

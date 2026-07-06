@@ -1,0 +1,151 @@
+function Init()
+{
+    indicator.name("VOLUME FLOW INDICATOR");
+    indicator.description("VOLUME FLOW INDICATOR");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");	
+    indicator.parameters.addInteger("Period", "Period", "Period", 130);
+    indicator.parameters.addDouble("Coef", "Coef", "Coef", 0.2);
+    indicator.parameters.addDouble("VCoef", "VCoef", "VCoef", 2.5);
+    indicator.parameters.addInteger("SmoothingPeriods", "SmoothingPeriods", "SmoothingPeriods", 3);
+	indicator.parameters.addGroup("Style");	
+    indicator.parameters.addColor("VFI_color", "Color of VFI", "Color of VFI", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var Period;
+var Coef;
+var VCoef;
+var SmoothingPeriods;
+var myVFI;
+var first;
+var source = null;
+
+var VFI = null;
+var INTER;
+var MA;
+var DirectionalVolume;
+var EMA;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+    Coef = instance.parameters.Coef;
+    VCoef = instance.parameters.VCoef;
+    SmoothingPeriods = instance.parameters.SmoothingPeriods;
+    source = instance.source;
+    first = source.first();
+	
+	INTER = instance.addInternalStream(0, 0);
+	
+	MA = core.indicators.create("MVA", source.volume, Period);
+	DirectionalVolume = instance.addInternalStream(0, 0);
+    myVFI = instance.addInternalStream(0, 0);
+	if (SmoothingPeriods  > 0) 
+	{
+	 EMA = core.indicators.create("EMA", myVFI, SmoothingPeriods);
+	}
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ", " + tostring(Coef) + ", " + tostring(VCoef) + ", " + tostring(SmoothingPeriods) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+	    if (SmoothingPeriods  > 0) 
+	    {
+         VFI = instance.addStream("VFI", core.Line, name, "VFI", instance.parameters.VFI_color, EMA.DATA.first());
+        } 
+		else
+		{	
+		 VFI = instance.addStream("VFI", core.Line, name, "VFI", instance.parameters.VFI_color, MA.DATA.first()+Period);
+		}
+		
+		VFI.setWidth(instance.parameters.width);
+        VFI.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period, mode)
+{
+	 if (period < first +1) 
+	 {
+	  return;
+	  }
+	
+	  INTER[period] = Math.log(source.typical[period])-Math.log(source.typical[period-1]);
+	  
+	 if (period < first+1 +30) 
+	 {
+	  return;
+	  }
+      
+    var VINTER=Math.stdev (INTER, period-30+1, period);
+    var CutOff=Coef*VINTER*source.close[period];
+	
+	MA.update(mode);
+	if (period <  MA.DATA.first()+1) 
+	{
+	 return;
+	}
+	
+	var VAve=MA.DATA[period-1];
+    var VMax=VAve*VCoef;
+	
+	var VC;
+	
+	if (source.volume[period] < VMax) 
+	{
+	 VC = source.volume[period];
+	} 
+	else
+	{	
+     VC =  VMax;
+    }	 
+	
+    var MF =  source.typical[period] -  source.typical[period-1];
+	if (MF > CutOff) 
+	{
+	 DirectionalVolume[period]=VC;
+	} 
+	else if (MF < -CutOff) 
+	{
+	 DirectionalVolume[period]=-VC;
+	} 
+	else
+	{	
+	 DirectionalVolume[period]=0;
+	}
+	
+	if (period <  MA.DATA.first()+Period) 
+	{
+	 return;
+	}
+	
+    if (VAve != 0) 
+    { 
+     myVFI[period]=  Math.sum (DirectionalVolume, period-Period+1, period)/ VAve ;  
+    } 
+    else
+    {
+	 myVFI[period] = 0;
+	}	
+	
+	if (SmoothingPeriods > 0) 
+	{
+	
+	    EMA.update(mode);
+		
+	    if (period <  EMA.DATA.first()) 
+	    {
+		 return;
+		}
+	    VFI[period] = EMA.DATA[period]
+	}    
+	else
+	{	
+     VFI[period] = myVFI[period];
+	}   
+    
+}

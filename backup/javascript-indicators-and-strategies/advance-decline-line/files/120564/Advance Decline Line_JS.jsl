@@ -1,0 +1,93 @@
+function Init()
+{
+    indicator.name("Advance Decline Line");
+    indicator.description("Advance Decline Line");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+	
+	indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "Period", 10);
+    indicator.parameters.addBoolean("Cumulative", "Cumulative", "Cumulative", true);
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("ADL_color", "Color of ADL", "Color of ADL", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Width", "Width", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Style", "Style", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+	
+	indicator.parameters.addGroup("OB/OS Levels");	
+	 indicator.parameters.addBoolean("Show", "Show OverBought/OverSold", "", false);
+    indicator.parameters.addDouble("overbought", "Overbought Level","", 0);
+    indicator.parameters.addDouble("oversold","Oversold Level","", 0);
+	indicator.parameters.addColor("level_overboughtsold_color", "Line Color","", core.rgb(128, 128, 128));
+    indicator.parameters.addInteger("level_overboughtsold_width","Line width","", 1, 1, 5);
+    indicator.parameters.addInteger("level_overboughtsold_style", "Line Style","", core.LINE_SOLID);
+    indicator.parameters.setFlag("level_overboughtsold_style", core.FLAG_LEVEL_STYLE);
+}
+
+var Period;
+var Cumulative;
+
+var first;
+var source = null;
+
+var ADL = null;
+var Show;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+    Cumulative = instance.parameters.Cumulative;
+	Show = instance.parameters.Show;
+    source = instance.source;
+    first = source.first()+Period;
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ", " + tostring(Cumulative) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        ADL = instance.addStream("ADL", core.Line, name, "ADL", instance.parameters.ADL_color, first);
+		ADL.setWidth(instance.parameters.width);
+        ADL.setStyle(instance.parameters.style);
+		if (Show) 
+		{
+		 ADL.addLevel(instance.parameters.oversold, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);
+		 ADL.addLevel(instance.parameters.overbought, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);    
+		}
+    }
+}
+
+function Update(period)
+{
+    if (period <first || !source.hasData(period)) 
+    {
+	 return;
+	}	
+	
+	var rs=0;
+    var fs=0;
+	var i;
+	 for (i=0; i<=Period-1; i++) 
+	 {
+		 if (source.close[period-i]> source.open[period-i]) 
+		 {
+		  rs=rs+1;
+		 }
+		 if (source.close[period-i]< source.open[period-i]) 
+		 {
+		  fs=fs+1;
+		 }
+	 }
+ 
+        if (Cumulative) 
+        {
+         ADL[period] =  rs - fs + ADL[period-1];
+        } 
+        else
+        {
+		 ADL[period] =  rs - fs ;
+		}
+}
+

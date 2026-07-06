@@ -1,0 +1,46 @@
+function Init()
+{
+    indicator.name("Price Volume Trend");
+    indicator.description("Price Volume Trend");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("PVT_color", "Color of PVT", "Color of PVT", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+
+var PVT = null;
+
+function Prepare(nameOnly)
+{    
+    source = instance.source;
+    first = source.first();
+
+    var name = profile.id() + "(" + source.name()  + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        PVT = instance.addStream("PVT", core.Line, name, "PVT", instance.parameters.PVT_color, first);
+		PVT.setWidth(instance.parameters.width);
+        PVT.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period)
+{
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+	 PVT[period] = ((source.close [period] - source.close [period-1] ) / source.close[period-1]) * source.volume[period] + PVT [period - 1];        
+    
+}
+

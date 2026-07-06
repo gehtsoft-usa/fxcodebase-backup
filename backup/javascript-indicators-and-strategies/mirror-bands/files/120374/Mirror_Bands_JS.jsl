@@ -1,0 +1,110 @@
+function Init()
+{
+    indicator.name("Mirror Bands");
+    indicator.description("Mirror Bands");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addInteger("Period", "Period", "Period", 9);
+	 indicator.parameters.addInteger("MA_Period", "MA Period", "Period", 2);
+    indicator.parameters.addDouble("Deviations", "Deviations", "Deviations", 2);
+    indicator.parameters.addColor("Top_color", "Color of Top", "Color of Top", core.rgb(0, 0, 255));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+	
+    indicator.parameters.addColor("Bottom_color", "Color of Bottom", "Color of Bottom", core.rgb(0, 0, 255));
+	indicator.parameters.addInteger("width1", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style1", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style1", core.FLAG_LINE_STYLE);
+	
+    indicator.parameters.addColor("MA_color", "Color of MA", "Color of MA", core.rgb(0, 255, 0));
+	indicator.parameters.addInteger("width2", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style2", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style2", core.FLAG_LINE_STYLE);
+	
+    indicator.parameters.addColor("Mirror_color", "Color of Mirror", "Color of Mirror", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width3", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style3", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style3", core.FLAG_LINE_STYLE);
+}
+
+var Period;
+var Deviations;
+var MA_Period;
+var first;
+var source = null;
+
+var Top = null;
+var Bottom = null;
+var MA = null;
+var Mirror = null;
+var ma, ma2;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+	MA_Period = instance.parameters.MA_Period;
+    Deviations = instance.parameters.Deviations;
+    source = instance.source;
+	
+	ma = core.indicators.create("MVA", source, Period);
+	
+	ma2 = core.indicators.create("MVA", source, MA_Period);
+    first = Math.max(ma.DATA.first(),ma2.DATA.first())
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ", " + tostring(Deviations) + ", " + tostring(MA_Period) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        Top = instance.addStream("Top", core.Line, name + ".Top", "Top", instance.parameters.Top_color, ma.DATA.first());
+		Top.setWidth(instance.parameters.width);
+        Top.setStyle(instance.parameters.style);
+        Bottom = instance.addStream("Bottom", core.Line, name + ".Bottom", "Bottom", instance.parameters.Bottom_color,ma.DATA.first());
+		Bottom.setWidth(instance.parameters.width1);
+        Bottom.setStyle(instance.parameters.style1);
+        MA = instance.addStream("MA", core.Line, name + ".MA", "MA", instance.parameters.MA_color, ma2.DATA.first());
+		MA.setWidth(instance.parameters.width2);
+        MA.setStyle(instance.parameters.style2);
+        Mirror = instance.addStream("Mirror", core.Line, name + ".Mirror", "Mirror", instance.parameters.Mirror_color, ma2.DATA.first());
+		Mirror.setWidth(instance.parameters.width3);
+        Mirror.setStyle(instance.parameters.style3);
+    }
+}
+
+function Update(period, mode)
+{
+    ma.update(mode);
+	
+	if (period < ma.DATA.first()) 
+    {
+	 return;
+	}
+	
+	var sum=0;
+	var new2;
+	
+	for (j = period -Period+1; j<=period; j++) 
+    {
+	 new2=source[j]-ma.DATA[period];
+     sum=sum + new2*new2;
+	}
+	
+	var deviation=Deviations*Math.sqrt(sum/Period);
+		
+        Top[period] = ma.DATA[period]+deviation;
+        Bottom[period] = ma.DATA[period]-deviation;
+		
+		ma2.update(mode);
+		
+	if (period < first) 
+    {
+	 return;
+	}	
+	
+        MA[period] = ma2.DATA[period];
+        Mirror[period] = ma.DATA[period]*2 - ma2.DATA[period]
+    
+}
+

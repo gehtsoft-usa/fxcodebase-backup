@@ -1,0 +1,88 @@
+function Init()
+{
+    indicator.name("AwesomeMod oscillator");
+    indicator.description("AwesomeMod oscillator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Short_Period", "Short period", "", 18);
+    indicator.parameters.addInteger("Medium_Period", "Medium period", "", 40);
+    indicator.parameters.addInteger("Long_Period", "Long period", "", 200);
+    indicator.parameters.addInteger("AO_Fast_Period", "AO fast period", "", 12);
+    indicator.parameters.addInteger("AO_Slow_Period", "AO slow period", "", 18);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("SlowUPclr", "Slow AO UP color", "Slow AO color", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("SlowDNclr", "Slow AO DN color", "Slow DN color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("FastUPclr", "Fast AO UP color", "Fast AO color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("FastDNclr", "Fast AO DN color", "Fast DN color", core.rgb(255, 128, 0));
+}
+
+var first;
+var source = null;
+var Short_Period;
+var Medium_Period;
+var Long_Period;
+var AO_Fast_Period;
+var AO_Slow_Period;
+var Short_EMA, Medium_EMA, Long_EMA;
+var AO_Slow_Tmp, AO_Fast_Tmp;
+var Slow_MA, Fast_MA;
+var AO_Slow=null;
+var AO_Fast=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Short_Period=instance.parameters.Short_Period;
+    Medium_Period=instance.parameters.Medium_Period;
+    Long_Period=instance.parameters.Long_Period;
+    AO_Fast_Period=instance.parameters.AO_Fast_Period;
+    AO_Slow_Period=instance.parameters.AO_Slow_Period;
+    first = source.first()+2;
+    AO_Slow_Tmp=instance.addInternalStream(first, 0);
+    AO_Fast_Tmp=instance.addInternalStream(first, 0);
+    Short_EMA = core.indicators.create("EMA", source, Short_Period);
+    Medium_EMA = core.indicators.create("EMA", source, Medium_Period);
+    Long_EMA = core.indicators.create("EMA", source, Long_Period);
+    Slow_MA = core.indicators.create("MVA", AO_Slow_Tmp, AO_Slow_Period);
+    Fast_MA = core.indicators.create("MVA", AO_Fast_Tmp, AO_Fast_Period);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Short_Period + ", " + instance.parameters.Medium_Period + ", " + instance.parameters.Long_Period + ", " + instance.parameters.AO_Fast_Period + ", " + instance.parameters.AO_Slow_Period + ")";
+    instance.name(name);
+    AO_Slow = instance.addStream("AO_Slow", core.Bar, name + ".AO_Slow", "AO_Slow", instance.parameters.SlowUPclr, first);
+    AO_Fast = instance.addStream("AO_Fast", core.Bar, name + ".AO_Fast", "AO_Fast", instance.parameters.FastUPclr, first);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    Short_EMA.update(mode);
+    Medium_EMA.update(mode);
+    Long_EMA.update(mode);
+    AO_Fast_Tmp[period]=100*(Short_EMA.DATA[period]/Medium_EMA.DATA[period]-1);
+    AO_Slow_Tmp[period]=100*(Medium_EMA.DATA[period]/Long_EMA.DATA[period]-1);
+    Slow_MA.update(mode);
+    Fast_MA.update(mode);
+    AO_Slow[period]=Slow_MA.DATA[period];
+    AO_Fast[period]=Fast_MA.DATA[period];
+    if (AO_Slow[period]>=AO_Slow[period-1]) 
+    {
+     AO_Slow.setColor(period, instance.parameters.SlowUPclr);
+    } 
+    else
+    {
+     AO_Slow.setColor(period, instance.parameters.SlowDNclr);
+    }
+    if (AO_Fast[period]>=AO_Fast[period-1]) 
+    {
+     AO_Fast.setColor(period, instance.parameters.FastUPclr);
+    } 
+    else
+    {
+     AO_Fast.setColor(period, instance.parameters.FastDNclr);
+    }
+   } 
+}
+

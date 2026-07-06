@@ -1,0 +1,145 @@
+function Init()
+{
+    indicator.name("Blau_DTI");
+    indicator.description("Blau_DTI");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+
+    indicator.parameters.addInteger("Period", "Period", "", 10);
+    indicator.parameters.addInteger("Smooth_Period1", "Smooth Period 1", "", 10);
+    indicator.parameters.addInteger("Smooth_Period2", "Smooth Period 2", "", 10);
+    indicator.parameters.addInteger("Smooth_Period3", "Smooth Period 3", "", 10);
+    indicator.parameters.addInteger("Signal_Period", "Signal Period", "", 10);
+
+
+   
+    indicator.parameters.addGroup("Style");
+
+    indicator.parameters.addColor("clr", "Blau_DTI Line Color", "", core.rgb(188, 1, 209));
+    indicator.parameters.addColor("clr1", "Signal Line Color", "", core.rgb(188, 1, 0));
+    indicator.parameters.addInteger("line_width", "Line width", "", 3);
+    indicator.parameters.addString("line_style" , "Blau_DTI Line Style", "", "Solid");
+    indicator.parameters.addStringAlternative("line_style" , "Solid line", "", "Solid");
+    indicator.parameters.addStringAlternative("line_style" , "Dot line", "", "Dot");
+    indicator.parameters.addStringAlternative("line_style", "Dash line", "", "Dash");
+    indicator.parameters.addStringAlternative("line_style" , "Dash-dot line", "", "Dash-dot");
+    indicator.parameters.addString("line_style1" , "Signal Line Style", "", "Solid");
+    indicator.parameters.addStringAlternative("line_style1" , "Solid line", "", "Solid");
+    indicator.parameters.addStringAlternative("line_style1" , "Dot line", "", "Dot");
+    indicator.parameters.addStringAlternative("line_style1", "Dash line", "", "Dash");
+    indicator.parameters.addStringAlternative("line_style1" , "Dash-dot line", "", "Dash-dot");
+
+
+}
+
+var first;
+var source = null;
+var Period, Smooth_Period1, Smooth_Period2, Smooth_Period3, Signal_Period;
+var  clr, clr1, line_style, line_style1, line_width;
+var  Blau_DTI, Signal;
+var LM, HM, HLM, AbsHLM;
+var Ind, Ind1, Ind2, Ind3, EMA3, AbsEMA3, Signal1;
+
+function Prepare()
+{
+    source = instance.source;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name()+ ")";
+    instance.name(name);
+    
+    clr=instance.parameters.clr;
+    clr1=instance.parameters.clr1;
+    line_width=instance.parameters.line_width;
+    line_style=instance.parameters.line_style; 
+    line_style1=instance.parameters.line_style1; 
+    Period=instance.parameters.Period;
+    Smooth_Period1=instance.parameters.Smooth_Period1;
+    Smooth_Period2=instance.parameters.Smooth_Period2;
+    Smooth_Period3=instance.parameters.Smooth_Period3;
+    Signal_Period=instance.parameters.Signal_Period;
+
+    Blau_DTI = instance.addStream("Blau_DTI", core.Line, name + ".Blau_DTI", "Blau_DTI", instance.parameters.clr, first);
+
+    if (line_style =="Solid") 
+    {
+        Blau_DTI.setStyle (core.LINE_SOLID);
+    }
+    else if (line_style=="Dot") 
+    {
+        Blau_DTI.setStyle (core.LINE_DOT);
+    }
+    else if (line_style=="Dash") 
+    {
+        Blau_DTI.setStyle (core.LINE_DASH);
+    }
+    else if (line_style=="Dash-dot") 
+    {
+        Blau_DTI.setStyle (core.LINE_DASHDOT);
+    }  
+
+    Blau_DTI.setWidth (line_width);
+
+    Signal = instance.addStream("Signal", core.Line, name + ".Signal", "Signal", instance.parameters.clr1, first);
+
+    if (line_style1 =="Solid") 
+    {
+        Signal.setStyle (core.LINE_SOLID);
+    }
+    else if (line_style1=="Dot") 
+    {
+        Signal.setStyle (core.LINE_DOT);
+    }
+    else if (line_style1=="Dash") 
+    {
+        Signal.setStyle (core.LINE_DASH);
+    }
+    else if (line_style1=="Dash-dot") 
+    {
+        Signal.setStyle (core.LINE_DASHDOT);
+    }  
+
+    Signal.setWidth (line_width);
+
+    HLM = instance.addInternalStream(first);
+    AbsHLM = instance.addInternalStream(first);
+
+    Ind=core.indicators.create("EMA", HLM, Smooth_Period1);
+    Ind1=core.indicators.create("EMA", Ind.DATA, Smooth_Period2);
+    EMA3=core.indicators.create("EMA", Ind1.DATA, Smooth_Period3);
+
+    Ind2=core.indicators.create("EMA", AbsHLM, Smooth_Period1);
+    Ind3=core.indicators.create("EMA", Ind2.DATA, Smooth_Period2);
+    AbsEMA3=core.indicators.create("EMA", Ind3.DATA, Smooth_Period3);
+
+    Signal1=core.indicators.create("EMA", Blau_DTI, Signal_Period);
+
+}
+
+function Update(period, mode)
+{    
+
+    if (period>first+Period+Signal_Period+Smooth_Period1+Smooth_Period2+Smooth_Period3) 
+    {
+        LM=source.low[period-Period+1]-source.low[period];
+        HM=source.high[period]-source.high[period-Period+1];
+        HLM[period]=HM-LM;
+        AbsHLM[period]=Math.abs(HLM[period]);
+        Ind.update(mode);
+        Ind1.update(mode);
+        EMA3.update(mode);
+        Ind2.update(mode);
+        Ind3.update(mode);
+        AbsEMA3.update(mode);
+        if (AbsEMA3.DATA[period]!=0) 
+        {
+            Blau_DTI[period] = 100*EMA3.DATA[period]/AbsEMA3.DATA[period];
+        }
+        Signal1.update(mode);
+        
+        
+        Signal[period]=Signal1.DATA[period];
+    }
+}
+

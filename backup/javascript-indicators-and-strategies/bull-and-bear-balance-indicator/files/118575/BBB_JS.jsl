@@ -1,0 +1,257 @@
+function Init()
+{
+    indicator.name("Bull And Bear Balance Indicator");
+    indicator.description("Bull And Bear Balance Indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+	indicator.parameters.addGroup("Calculation");
+	indicator.parameters.addInteger("Raw", "Raw Data Smooth Period", "Raw Data Smooth Period", 20);
+	indicator.parameters.addString("Method1", "Raw MA Method", "Method" , "EMA");
+    indicator.parameters.addStringAlternative("Method1", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method1", "EMA", "EMA" , "EMA");
+  indicator.parameters.addStringAlternative("Method1", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method1", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method1", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method1", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method1", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method1", "WMA", "WMA" , "WMA");
+    indicator.parameters.addInteger("Smooth", "Smooth Period", "Smooth Period", 30);
+	
+	indicator.parameters.addString("Method2", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method2", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method2", "EMA", "EMA" , "EMA");
+ indicator.parameters.addStringAlternative("Method2", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method2", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method2", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method2", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method2", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method2", "WMA", "WMA" , "WMA");
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("BBB_color", "Color of BBB", "Color of BBB", core.rgb(255, 0, 0));
+}
+
+var Raw;
+var Smooth;
+var Method2, Method1;
+var first;
+var source = null;
+var Bull, Bear;
+
+var BBB = null;
+
+function Prepare(nameOnly)
+{
+    Raw = instance.parameters.Raw;
+	Method2 = instance.parameters.Method2;
+	Method1 = instance.parameters.Method1;
+    Smooth = instance.parameters.Smooth;
+    source = instance.source;
+	
+	Bull = instance.addInternalStream(0, 0);
+	Bear = instance.addInternalStream(0, 0);
+		
+	bull = core.indicators.create(Method1, Bull, Raw);
+	bear = core.indicators.create(Method1, Bear, Raw);
+	
+	smooth= instance.addInternalStream(0, 0);
+	smoothed = core.indicators.create(Method2, smooth, Smooth);
+	
+    first = bull.DATA.first();
+	
+	
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Raw) + ", " + tostring(Method1)+ ", " + tostring(Smooth)+ ", " + tostring(Method2) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        BBB = instance.addStream("BBB", core.Bar, name, "BBB", instance.parameters.BBB_color, first);
+    }
+}
+
+function Update(period, mode)
+{
+Bull[period]=BullPower(period) ;
+Bear[period]=BearPower(period) ;
+
+bull.update(mode);
+bear.update(mode);
+   
+     if (period < bull.DATA.first()) 
+     {
+	  return;
+	  }
+   
+   smooth[period]=bull.DATA[period]-bear.DATA[period];
+   
+   smoothed.update(mode);
+   
+   if (period < first) 
+   {
+	return;
+}
+	
+        BBB[period] = smoothed.DATA[period];
+   
+}
+
+function BearPower(period) 
+{
+var  value = 0;
+if (close(period) < open(period)) 
+{
+		if (close(period-1) > open(period)) 
+		{
+		 value = Math.max(close(period-1) - open(period), high(period) - low(period));
+		}
+		else
+		{
+		 value = high(period) - low(period);
+		}
+		
+		}
+else if (close(period) > open(period)) 
+{
+						if (close(period-1) > open(period)) 
+						{
+							value = Math.max(close(period-1) - low(period), high(period) - close(period));
+						}
+						else
+						{
+							value = Math.max(open(period) - low(period),high(period) - close(period));
+						}
+}
+						 
+else if (high(period) - close(period) > close(period) - low(period)) 
+{
+								if (close(period-1) > open(period)) 
+								{
+								 value = Math.max(close(period-1) - open(period),high(period) - low(period));
+								}
+								else
+								{
+								 value = high(period) - low(period);
+								}
+}
+								
+else if (high(period) - close(period) < close(period) - low(period)) 
+{
+								if (close(period-1) > open(period)) 
+								{
+								 value = Math.max(close(period-1) - low(period),high(period) - close(period));
+								}
+								else
+								{
+								 value = open(period) - low(period);
+								}
+}
+else if (close(period-1) > open(period)) 
+{
+ value = Math.max(close(period-1) - open(period),high(period) - low(period));
+}
+else if (close(period-1) < open(period)) 
+{
+ value = Math.max(open(period) - low(period),high(period) - close(period));
+}
+else
+{
+ value = high(period) - low(period);
+}
+								
+		
+	 
+
+return (value);
+
+}
+
+
+function BullPower (period)
+{
+var  value = 0;
+
+
+if (close(period) < open(period)) 
+{
+	if (close(period-1) < open(period))  
+	{
+	 value = Math.max(high(period) - close(period-1), close(period) - low(period));
+	}
+	else
+	{
+	 value = Math.max(high(period) - open(period), close(period) - low(period));
+	}
+}
+else if (close(period) > open(period))  
+{
+	if (close(period-1) > open(period))  
+	{
+	 value = high(period) - low(period);
+	}
+	else
+	{
+	 value = Math.max(open(period) - close(period-1),high(period) - low(period));
+	}
+}	
+else if (high(period) - close(period) > close(period) - low(period))  
+{
+	if (close(period-1) < open(period))  
+	{
+	 value = Math.max(high(period) - close(period-1),close(period) - low(period));
+	}
+	else
+	{
+	 value = high(period) - open(period);
+	}
+}
+else if (high(period) - close(period) < close(period) - low(period))  
+{
+	if (close(period-1) > open(period))  
+	{
+	 value = high(period) - low(period);
+	}
+	else
+	{
+	 value = Math.max(open(period) - close(period-1),high(period) - low(period));
+	}
+}
+else if (close(period-1) > open(period))  
+{
+ value = Math.max(high(period) - open(period),close(period) - low(period));
+}
+else if (close(period-1) < open(period))  
+{
+ value = Math.max(open(period) - close(period-1),high(period) - low(period));
+}
+else
+{
+ value = high(period) - low(period);
+}
+
+return (value);
+
+}
+
+function open(Shift)
+{
+return (source.open[Shift]);
+}
+
+function close(Shift)
+{
+return (source.close[Shift]);
+}
+
+function high(Shift)
+{
+return (source.high[Shift]);
+}
+
+function low(Shift)
+{
+return (source.low[Shift]);
+}
+
+
+

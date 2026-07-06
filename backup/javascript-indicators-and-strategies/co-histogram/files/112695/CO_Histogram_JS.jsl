@@ -1,0 +1,51 @@
+function Init()
+{
+    indicator.name("CO Histogram");
+    indicator.description("CO Histogram");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Sum_Period", "Number of values", "", 30);
+    indicator.parameters.addInteger("MA_Period", "Number of periods", "", 7);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(255, 255, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 100, 1, 100);
+}
+
+var first;
+var source = null;
+var Sum_Period;
+var MA_Period;
+var Temp;
+var MA;
+var CO_Hist;
+
+function Prepare()
+{
+    source = instance.source;
+    Sum_Period=instance.parameters.Sum_Period;
+    MA_Period=instance.parameters.MA_Period;
+    first = source.first()+2;
+    Temp = instance.addInternalStream(first, 0);
+    MA = core.indicators.create("MVA", Temp, MA_Period);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Sum_Period + ", " + instance.parameters.MA_Period + ")";
+    instance.name(name);
+    CO_Hist = instance.addStream("CO_Hist", core.Bar, name + ".CO_Hist", "CO_Hist", instance.parameters.clr, first);
+    CO_Hist.setWidth(instance.parameters.widthLinReg);
+}
+
+function Update(period, mode)
+{
+   if (period>first+Sum_Period) 
+   {
+    var Sum_Close=Math.sum(source.close, core.rangeTo(period, Sum_Period));
+    var Sum_Open=Math.sum(source.open, core.rangeTo(period, Sum_Period));
+    Temp[period]=Sum_Close-Sum_Open;
+    
+    MA.update(mode);
+    CO_Hist[period]=MA.DATA[period];
+   } 
+}
+

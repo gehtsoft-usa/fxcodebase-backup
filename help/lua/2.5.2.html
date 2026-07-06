@@ -1,0 +1,53 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 2.5.2 - Relational Operators</title>
+</head>
+<body>
+<h3>2.5.2 - <a name="2.5.2">Relational Operators</a></h3><p>
+The relational operators in Lua are
+
+<pre>
+     ==    ~=    &lt;     &gt;     &lt;=    &gt;=
+</pre><p>
+These operators always result in <b>false</b> or <b>true</b>.
+
+
+<p>
+Equality (<code>==</code>) first compares the type of its operands.
+If the types are different, then the result is <b>false</b>.
+Otherwise, the values of the operands are compared.
+Numbers and strings are compared in the usual way.
+Objects (tables, userdata, threads, and functions)
+are compared by <em>reference</em>:
+two objects are considered equal only if they are the <em>same</em> object.
+Every time you create a new object
+(a table, userdata, thread, or function),
+this new object is different from any previously existing object.
+
+
+<p>
+You can change the way that Lua compares tables and userdata 
+by using the "eq" metamethod (see <a href="2.8.html">&sect;2.8</a>).
+
+
+<p>
+The conversion rules of <a href="2.2.1.html">&sect;2.2.1</a>
+<em>do not</em> apply to equality comparisons.
+Thus, <code>"0"==0</code> evaluates to <b>false</b>,
+and <code>t[0]</code> and <code>t["0"]</code> denote different
+entries in a table.
+
+
+<p>
+The operator <code>~=</code> is exactly the negation of equality (<code>==</code>).
+
+
+<p>
+The order operators work as follows.
+If both arguments are numbers, then they are compared as such.
+Otherwise, if both arguments are strings,
+then their values are compared according to the current locale.
+Otherwise, Lua tries to call the "lt" or the "le"
+metamethod (see <a href="2.8.html">&sect;2.8</a>).
+</body>
+</html>

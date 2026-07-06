@@ -1,0 +1,160 @@
+function Init()
+{
+    indicator.name("BBands_Stop Indicator");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    
+    indicator.parameters.addInteger("Length", "Length", "Bollinger Bands Period", 20);
+    indicator.parameters.addDouble("Deviation", "Deviation", "Deviation", 2);
+    indicator.parameters.addDouble("MoneyRisk", "MoneyRisk", "Offset Factor", 1);
+    indicator.parameters.addInteger("Signal", "Signal", "Display signals mode. 1-Signals & Stops; 0-only Stops; 2-only Signals;", 1);
+    indicator.parameters.addInteger("Line", "Line", "Display line mode. 0-no,1-yes", 1);
+
+    indicator.parameters.addColor("UP_color", "Color of UP", "Color of UP", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DN_color", "Color of DN", "Color of DN", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+var Signal;
+var Line;
+
+var Bands=null;
+
+var UpTrendBuffer=0;
+var DownTrendBuffer=0;
+var UpTrendSignal=0;
+var DownTrendSignal=0;
+var UpTrendLine=null;
+var DownTrendLine=null;
+var smin=0;
+var smax=0;
+var bsmin=0;
+var bsmax=0;
+
+function Prepare()
+{
+    source = instance.source;
+    MoneyRisk=instance.parameters.MoneyRisk;
+    Signal=instance.parameters.Signal;
+    Line=instance.parameters.Line;
+    Bands = core.indicators.create("BB", source.close, instance.parameters.Length,instance.parameters.Deviation);
+    first = Bands.DATA.first()+1;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Length + ", " + instance.parameters.Deviation + ", " + instance.parameters.MoneyRisk + ", " + instance.parameters.Signal + ", " + instance.parameters.Line + ")";
+    instance.name(name);
+    UpTrendBuffer = instance.addStream("UP_B", core.Dot, name + ".UP_B", "UP_B", instance.parameters.UP_color, first);
+    DownTrendBuffer = instance.addStream("DN_B", core.Dot, name + ".DN_B", "DN_B", instance.parameters.DN_color, first);
+    UpTrendSignal = instance.addStream("UP_S", core.Dot, name + ".UP_S", "UP_S", instance.parameters.UP_color, first);
+    DownTrendSignal = instance.addStream("DN_S", core.Dot, name + ".DN_S", "DN_S", instance.parameters.DN_color, first);
+    UpTrendLine = instance.addStream("UP_L", core.Line, name + ".UP_L", "UP_L", instance.parameters.UP_color, first);
+    DownTrendLine = instance.addStream("DN_L", core.Line, name + ".DN_L", "DN_L", instance.parameters.DN_color, first);
+    smax=instance.addInternalStream(0, 0);
+    smin=instance.addInternalStream(0, 0);
+    bsmax=instance.addInternalStream(0, 0);
+    bsmin=instance.addInternalStream(0, 0);
+}
+
+function Update(period, mode)
+{
+    Bands.update(mode);
+    if (period>first) 
+    {
+     smax[period]=Bands.TL[period];
+     smin[period]=Bands.BL[period];
+     
+     if (source.close[period]>smax[period-1]) 
+     {
+      trend=1;
+     }
+     if (source.close[period]<smin[period-1]) 
+     {
+      trend=-1;
+     }
+     
+     if (trend>0 && smin[period]<smin[period-1]) 
+     {
+      smin[period]=smin[period-1];
+     }
+     if (trend<0 && smax[period]>smax[period-1]) 
+     {
+      smax[period]=smax[period-1];
+     }
+     
+     bsmax[period]=smax[period]+0.5*(MoneyRisk-1)*(smax[period]-smin[period]);
+     bsmin[period]=smin[period]-0.5*(MoneyRisk-1)*(smax[period]-smin[period]);
+     
+     if (trend>0 && bsmin[period]<bsmin[period-1]) 
+     {
+      bsmin[period]=bsmin[period-1];
+     }
+     if (trend<0 && bsmax[period]>bsmax[period-1]) 
+     {
+      bsmax[period]=bsmax[period-1];
+     }
+     
+     if (trend>0) 
+     {
+      if (Signal>0 && UpTrendBuffer[period-1]==-1.) 
+      {
+       UpTrendSignal[period]=bsmin[period];
+       UpTrendBuffer[period]=bsmin[period];
+       if (Line>0) 
+       {
+        UpTrendLine[period]=bsmin[period];
+       }
+      } 
+      else
+      {
+       UpTrendBuffer[period]=bsmin[period];
+       if (Line>0) 
+       {
+        UpTrendLine[period]=bsmin[period];
+       }
+       UpTrendSignal[period]=-1;
+      }
+      if (Signal==2) 
+      {
+       UpTrendBuffer[period]=0;
+      }
+      DownTrendSignal[period]=-1;
+      DownTrendBuffer[period]=-1;
+      DownTrendLine[period]=null;
+     }
+     
+     if (trend<0) 
+     {
+      if (Signal>0 && DownTrendBuffer[period-1]==-1.) 
+      {
+       DownTrendSignal[period]=bsmax[period];
+       DownTrendBuffer[period]=bsmax[period];
+       if (Line>0) 
+       {
+        DownTrendLine[period]=bsmax[period];
+       }
+      } 
+      else
+      {
+       DownTrendBuffer[period]=bsmax[period]; 
+       if (Line>0) 
+       {
+        DownTrendLine[period]=bsmax[period];
+       }
+       DownTrendSignal[period]=-1;
+      }
+      UpTrendSignal[period]=-1;
+      UpTrendBuffer[period]=-1;
+      UpTrendLine[period]=null;
+     }
+    } 
+    else if (first==period) 
+    {
+     UpTrendSignal[period]=0;
+     UpTrendBuffer[period]=0;
+     UpTrendLine[period]=null;
+     DownTrendSignal[period]=0;
+     DownTrendBuffer[period]=0;
+     DownTrendLine[period]=null;
+ }    
+}
+

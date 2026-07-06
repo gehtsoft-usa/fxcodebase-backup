@@ -1,0 +1,130 @@
+function Init()
+{
+    indicator.name("Bull Bear Ratio");
+    indicator.description("Bull Bear Ratio");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "Period", 14);
+	indicator.parameters.addBoolean("Composite", "Composite", "Composite", true);
+
+	
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Bull_color", "Color of Bull", "Color of Bull", core.rgb(0, 255, 0));
+	indicator.parameters.addInteger("width1", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style1", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style1", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Bear_color", "Color of Bear", "Color of Bear", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width2", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style2", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style2", core.FLAG_LINE_STYLE);
+
+	
+}
+
+var Period;
+
+var first;
+var source = null;
+
+var Bull;
+var Bear;
+var BullUp, BullDown;
+var BearUp, BearDown;
+var Ratio;
+var Composite;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+	Composite = instance.parameters.Composite;
+    source = instance.source;
+    first = source.first()+Period;
+	BullUp= instance.addInternalStream(0, 0);
+    BullDown= instance.addInternalStream(0, 0); 	 
+	BearUp= instance.addInternalStream(0, 0);
+    BearDown= instance.addInternalStream(0, 0);
+	
+
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+	
+	
+	   if (Composite) 
+	   {
+	   
+	
+	    Ratio = instance.addStream("Ratio", core.Line, name + ".Ratio", "Ratio", instance.parameters.Bull_color, first);
+		Ratio.setWidth(instance.parameters.width1);
+        Ratio.setStyle(instance.parameters.style1);
+		
+			Bull= instance.addInternalStream(0, 0);
+            Bear= instance.addInternalStream(0, 0);
+		}
+		else
+	{
+        Bull = instance.addStream("Bull", core.Line, name + ".Bull", "Bull", instance.parameters.Bull_color, first);
+		Bull.setWidth(instance.parameters.width1);
+        Bull.setStyle(instance.parameters.style1);
+		
+        Bear = instance.addStream("Bear", core.Line, name + ".Bear", "Bear", instance.parameters.Bear_color, first);
+		Bear.setWidth(instance.parameters.width2);
+        Bear.setStyle(instance.parameters.style2);
+		}
+    }
+}
+
+function Update(period)
+{
+
+    BullUp[period]=0;	
+    BullDown[period]=0;
+	BearUp[period]=0;
+    BearDown[period]=0;
+    
+	if (source.close[period] -source.open[period] > 0) 
+	{
+     BullUp[period]=  source.close[period] -source.open[period];
+	}
+	
+    BullDown[period]=  source.high[period] -Math.max(source.open[period],source.close[period] );
+	
+	
+	
+	if (source.open[period] - source.close[period]  > 0) 
+	{
+     BearDown[period]= source.open[period] - source.close[period]
+	}
+	
+	BearUp[period]=   Math.min(source.open[period],source.close[period] ) - source.low[period];
+
+    if (period < first) 
+    {
+	 return;
+	}
+		    
+	
+        Bull[period] =  Math.sum(BullUp , period-Period+1, period)/Math.sum(BullDown , period-Period+1, period);
+		Bear[period] = Math.sum(BearDown , period-Period+1, period) /Math.sum(BearUp , period-Period+1, period);
+	
+     if (Composite) 
+     {	
+		Ratio[period]=  Bull[period]-  Bear[period];
+		
+		
+		if (Ratio[period]> Ratio[period-1]) 
+		{
+		 Ratio.setColor(period, instance.parameters.Bull_color);
+		}
+		else
+		{
+		 Ratio.setColor(period, instance.parameters.Bear_color);
+		}
+	 }	
+ }
+

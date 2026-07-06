@@ -1,0 +1,98 @@
+function Init()
+{
+    indicator.name("Smart money pressure");
+    indicator.description("Smart money pressure");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "Period", 14);
+    indicator.parameters.addInteger("LookBack", "Look Back", "Look Back", 300);
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("SMP_color", "Color of SMP", "Color of SMP", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var Period;
+var LookBack;
+
+var first;
+var source = null;
+
+var SMP = null;
+ 
+var MA,SM;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+    LookBack = instance.parameters.LookBack;
+    source = instance.source;
+    
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ", " + tostring(LookBack) + ")";
+    instance.name(name);
+	MA= core.indicators.create("MVA", source.volume, Period);
+	first = MA.DATA.first()+LookBack;
+	
+	 
+	SM  = instance.addInternalStream(0, 0);
+
+    if (!(nameOnly)) 
+    {
+        SMP = instance.addStream("SMP", core.Line, name, "SMP", instance.parameters.SMP_color, first);
+		SMP.setWidth(instance.parameters.width);
+        SMP.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period,mode)
+{    
+    MA.update(mode); 
+	
+    if (period < source.size()-1) 
+    {
+     return;
+    }
+  	
+	SM[period]=null
+	SMP[period]=null
+	
+	var Start;
+	if (LookBack== 0) 
+	{
+	 Start=first;
+	} 
+	else
+	{
+	 Start=Math.max(source.size()-1-LookBack, first)
+	}
+	
+	for (period=Start; period<=source.size()-1; period++) 
+	{
+		    Change=source.close[period]-source.close[period-1]; 
+		 
+			 if (source.volume[period]> MA.DATA[period]) 
+			 {
+			  SM[period]= SM[period-1] + Change;
+			 }
+			 else    
+			 {
+			  SM[period]= SM[period-1];
+			 }		 
+		 
+		
+	
+ 
+		 if (LookBack== 0) 
+		 {
+		  SMP[period] = source.close[first]+SM[period];
+		 } 
+		 else
+		 {	
+		  SMP[period] = source.close[Math.max(source.size()-1-LookBack, first)]+SM[period];
+		 }
+	}
+    
+}
+

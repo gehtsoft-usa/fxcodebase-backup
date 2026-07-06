@@ -1,0 +1,26 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_setfield</title>
+</head>
+<body>
+<h3><a name="lua_setfield"><code>lua_setfield</code></a></h3>
+<pre>void lua_setfield (lua_State *L, int index, const char *k);</pre>
+
+<p>
+Does the equivalent to <code>t[k] = v</code>,
+where <code>t</code> is the value at the given valid index <code>index</code>
+and <code>v</code> is the value at the top of the stack,
+
+
+<p>
+This function pops the value from the stack.
+As in Lua, this function may trigger a metamethod
+for the "newindex" event (see <a href="2.8.html">&sect;2.8</a>).
+
+
+
+
+
+<hr>
+</body>
+</html>

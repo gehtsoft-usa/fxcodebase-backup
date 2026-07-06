@@ -1,0 +1,22 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_getmetatable</title>
+</head>
+<body>
+<h3><a name="lua_getmetatable"><code>lua_getmetatable</code></a></h3>
+<pre>int lua_getmetatable (lua_State *L, int index);</pre>
+
+<p>
+Pushes onto the stack the metatable of the value at the given
+acceptable index.
+If the index is not valid,
+or if the value does not have a metatable,
+the function returns&nbsp;0 and pushes nothing on the stack.
+
+
+
+
+
+<hr>
+</body>
+</html>

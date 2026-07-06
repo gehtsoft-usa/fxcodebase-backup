@@ -1,0 +1,26 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - luaL_Reg</title>
+</head>
+<body>
+<h3><a name="luaL_Reg"><code>luaL_Reg</code></a></h3>
+<pre>typedef struct luaL_Reg {
+  const char *name;
+  lua_CFunction func;
+} luaL_Reg;</pre>
+
+<p>
+Type for arrays of functions to be registered by
+<a href="luaL_register.html"><code>luaL_register</code></a>.
+<code>name</code> is the function name and <code>func</code> is a pointer to
+the function.
+Any array of <a href="luaL_Reg.html"><code>luaL_Reg</code></a> must end with an sentinel entry
+in which both <code>name</code> and <code>func</code> are <code>NULL</code>.
+
+
+
+
+
+<hr>
+</body>
+</html>

@@ -1,0 +1,150 @@
+function Init()
+{
+    indicator.name("Toby Crabel NR Pattern");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+   
+    indicator.parameters.addGroup("Parameters");
+	
+	
+	indicator.parameters.addString("Method", "Method", "Method" , "2NR");
+    indicator.parameters.addStringAlternative("Method", "2NR", "2NR" , "2NR");
+    indicator.parameters.addStringAlternative("Method", "3NR", "3NR" , "3NR");
+    indicator.parameters.addStringAlternative("Method", "4NR", "4NR" , "4NR");
+	indicator.parameters.addStringAlternative("Method", "8NR", "8NR" , "8NR");
+	indicator.parameters.addStringAlternative("Method", "Customizable", "Customizable" , "Customizable");
+	indicator.parameters.addBoolean("Previous", "Exclude the current period", "", true);
+	
+	indicator.parameters.addInteger("Sample", "Sample Period", "", 2, 0, 1000);
+	indicator.parameters.addInteger("Period", "Range Period", "", 20, 0, 1000);
+	
+	indicator.parameters.addGroup("Show Patern");
+	indicator.parameters.addBoolean("On1", "Show Wide Range Bar", "", false);
+	indicator.parameters.addBoolean("On2", "Show Narrow Range Bar", "", true);
+
+   
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addInteger("FontSize", "Font Size", "", 12, 4, 20);
+    indicator.parameters.addColor("WColor", "Color for pattern labels", "", core.rgb(0,255,0));
+	indicator.parameters.addColor("NColor", "Color for pattern labels", "", core.rgb(255,0,0));
+}
+
+var source;
+
+
+var Period,Sample ;
+var ON={};
+var Raw;
+var Wide,Narrow;
+var first;
+var Method;
+var Previous;
+function Prepare()
+{
+	Previous  = instance.parameters.Previous;
+  	Period  = instance.parameters.Period;
+	Sample  = instance.parameters.Sample;
+	Method  = instance.parameters.Method;
+	
+	source = instance.source; 
+	first=source.first();
+	
+	ON[1]  = instance.parameters.On1;
+	ON[2]  = instance.parameters.On2;
+      
+	
+	if (Method == "2NR") 
+	{
+	 Sample  = 2;
+	 Period  = 20;
+	} 
+	else if (Method == "3NR") 
+	{
+	 Sample  = 3;
+	 Period  = 20;
+	} 
+	else if (Method == "4NR") 
+	{
+	 Sample  = 4;
+	 Period  = 40;
+	} 
+	else if (Method == "8NR") 
+	{
+	 Sample  = 8;
+	 Period  = 40;
+	}
+
+	
+    var name;
+    name = profile.id()+ ", " + Method + ", " + Sample+ ", " + Period;
+    instance.name(name);
+	
+	 Raw = instance.addInternalStream(0, 0);
+
+   if (ON[1]) 
+   { 
+    Wide = instance.createTextOutput("WideRange", "WideRange", "Wingdings", instance.parameters.FontSize, core.H_Center, core.V_Top, instance.parameters.WColor, 0);
+   }
+   if (ON[2]) 
+   { 
+    Narrow = instance.createTextOutput("NarrowRange", "NarrowRange", "Wingdings", instance.parameters.FontSize, core.H_Center, core.V_Top, instance.parameters.NColor, 0);
+   } 
+}
+
+
+function Update(period)
+{
+	if (Previous) 
+	{
+	 period=period-1;
+	}
+	
+		
+    if (period<first+Sample) 
+    {
+	 return;
+	}
+	
+
+	var tmp = Math.minmax(source, period-Sample , period );		
+	min=tmp[0];
+	max=tmp[1];
+	 
+	 Raw[period]= max-min;
+	 
+	
+		
+			if (period <  first +Period) 
+			{	
+             return;
+            }			
+			   
+						 
+				if (ON[1]) 
+				{  
+						var tmp=Math.minmax(Raw, period-Period+1, period);
+						 if (tmp[1] == Raw[period]) 
+						 {
+						  Wide.set(period, source.high[period],  "\108","Wide");
+						}
+						 else
+						 {
+						  Wide.setNoData (period);
+						 }
+				}
+				if (ON[2]) 
+				{
+				  		 var tmp=Math.minmax(Raw, period-Period+1, period);
+						 if (tmp[0] == Raw[period]) 
+						 {
+						  Narrow.set(period, source.high[period],  "\108","Narrow");
+						}
+						 else
+						 { 
+						  Narrow.setNoData (period);
+						 }
+				 }
+		   
+  
+}

@@ -1,0 +1,76 @@
+function Init()
+{
+    indicator.name("HL_LR_Band indicator");
+    indicator.description("HL_LR_Band indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 20);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP color", "UP color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DNclr", "DN color", "DN color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("Cclr", "Constriction color", "Constriction color", core.rgb(0, 255, 255));
+    indicator.parameters.addColor("Eclr", "Expansion color", "Expansion color", core.rgb(255, 255, 128));
+    indicator.parameters.addInteger("Transparency", "Transparency", "", 50,0,100);
+}
+
+var first;
+var source = null;
+var Period;
+var LR_H, LR_L;
+var Hbuff=null;
+var Lbuff=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    first = source.first()+2;
+    LR_H = core.indicators.create("LINEAR REGRESSION LINE", source.high, Period);
+    LR_L = core.indicators.create("LINEAR REGRESSION LINE", source.low, Period);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ")";
+    instance.name(name);
+    Hbuff = instance.addStream("Hbuff", core.Line, name + ".Hbuff", "Hbuff", instance.parameters.UPclr, first);
+    Lbuff = instance.addStream("Lbuff", core.Line, name + ".Lbuff", "Lbuff", instance.parameters.UPclr, first);
+    instance.createChannelGroup("TC","TC" , Hbuff, Lbuff, instance.parameters.UPclr, 100-instance.parameters.Transparency);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    LR_H.update(mode);
+    LR_L.update(mode);
+    Hbuff[period]=LR_H.DATA[period];
+    Lbuff[period]=LR_L.DATA[period];
+    if (Hbuff[period]>Hbuff[period-1]) 
+    {
+     if (Lbuff[period]>Lbuff[period-1]) 
+     {
+      Hbuff.setColor(period, instance.parameters.UPclr);
+      Lbuff.setColor(period, instance.parameters.UPclr);
+     } 
+     else
+     {
+      Hbuff.setColor(period, instance.parameters.Eclr);
+      Lbuff.setColor(period, instance.parameters.Eclr);
+     }
+    } 
+    else
+    {
+     if (Lbuff[period]>Lbuff[period-1]) 
+     {
+      Hbuff.setColor(period, instance.parameters.Cclr);
+      Lbuff.setColor(period, instance.parameters.Cclr);
+     } 
+     else
+     {
+      Hbuff.setColor(period, instance.parameters.DNclr);
+      Lbuff.setColor(period, instance.parameters.DNclr);
+     }
+    }
+   } 
+}
+

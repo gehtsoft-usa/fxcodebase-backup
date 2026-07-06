@@ -1,0 +1,182 @@
+function Init()
+{
+    indicator.name("Alpha");
+    indicator.description(" ");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Prices");
+    indicator.parameters.addString("Src", "The source stream", "", "close");
+    indicator.parameters.addStringAlternative("Src", "open", "", "open");
+    indicator.parameters.addStringAlternative("Src", "high", "", "high");
+    indicator.parameters.addStringAlternative("Src", "low", "", "low");
+    indicator.parameters.addStringAlternative("Src", "close", "", "close");
+    indicator.parameters.addStringAlternative("Src", "median", "", "median");
+    indicator.parameters.addStringAlternative("Src", "typical", "", "typical");
+    indicator.parameters.addStringAlternative("Src", "weighted", "", "weighted");
+	
+    indicator.parameters.addString("INST", "The instrument to compare with", "", "");
+    indicator.parameters.setFlag("INST", core.FLAG_INSTRUMENTS);
+	
+	indicator.parameters.addString("Dst", "The  stream to compare width", "", "close");
+    indicator.parameters.addStringAlternative("Dst", "open", "", "open");
+    indicator.parameters.addStringAlternative("Dst", "high", "", "high");
+    indicator.parameters.addStringAlternative("Dst", "low", "", "low");
+    indicator.parameters.addStringAlternative("Dst", "close", "", "close");
+    indicator.parameters.addStringAlternative("Dst", "median", "", "median");
+    indicator.parameters.addStringAlternative("Dst", "typical", "", "typical");
+    indicator.parameters.addStringAlternative("Dst", "weighted", "", "weighted");
+	
+	
+	indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("PERIOD", "Period", "", 14, 2, 1000);
+    
+	indicator.parameters.addGroup("Style");
+	indicator.parameters.addColor("clr", "Line Color", "", core.rgb(0, 255, 255));
+    indicator.parameters.addInteger("width", "Line Width (in pixels)", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line Style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LEVEL_STYLE);
+   
+
+}
+
+var source;                             // the indicator source
+var other;                              // the additional data stream
+var other_stream;
+var loading;                            // flag indicating the other data stream is being loaded
+var instrument;                         // the instrument to be loaded
+var PERIOD;
+var price_src, price_dst, price_first;  // prices
+var output, output_first;               // output stream
+var FLAG=true;
+var Indicator={};
+var beta;
+
+function Prepare(onlyName)
+{
+    source = instance.source;   
+    price_first = source.first();
+    PERIOD=instance.parameters.PERIOD;
+    instrument = instance.parameters.INST;
+
+    var name;
+    name = profile.id() + "(" + source.name() + "." + instance.parameters.Src + "," + instrument + "." + instance.parameters.Dst + "." + PERIOD + ")";
+    instance.name(name);
+    if (onlyName) 
+    {
+        return ;
+    }
+
+    price_src = source[instance.parameters.Src];
+    price_dst = instance.addInternalStream(price_first, 0);   
+
+    output_first =source.first();
+	
+	beta = instance.addInternalStream(price_first, 0); 
+
+    output = instance.addStream("C", core.Line, name, "C", instance.parameters.clr, output_first);
+    output.setWidth(instance.parameters.width);
+    output.setStyle(instance.parameters.style);
+    output.setPrecision(2);
+   FLAG = true;
+}
+
+function Update(period, mode)
+{
+    var from, to;
+
+    if (period < price_first) 
+    {
+        return ;
+    }
+
+    if (other == null) 
+    {
+        from = source.date(source.first());   // oldest data to load
+        if (source.isAlive()) 
+        {              // newest data to load || 0 if the source is "alive"
+            to = 0;
+        }
+        else
+        {
+            to = source.date(source.size() - 1);
+        }
+        load_from = from;
+        loading = true;
+        other = core.host.execute("getHistory", 1, instrument, source.barSize(), from, to, source.isBid());
+        other_stream = other[instance.parameters.Dst];
+        return ;
+    }
+
+    if (loading) 
+    {
+        return ;
+    }
+
+    var curr_date = source.date(period);
+    if (curr_date < load_from) 
+    {
+        from = source.date(source.first());     // load from the oldest data we have in source
+        if (other.size() > other.first()) 
+        {
+            to = other.date(other.first());     // to the oldest data we have in other instrument
+        }
+        else
+        {
+            to = load_from;
+        }
+        load_from = from;
+        loading = true;
+        core.host.execute("extendHistory", 1, other, from, to);
+        return ;
+    }
+
+    var other_period = core.findDate(other, curr_date, true);
+
+    if (other_period != -1) 
+    {
+        price_dst[period] = other_stream[other_period];
+    }
+    else
+    {
+        if (price_dst.hasData(period - 1)) 
+        {
+            price_dst[period] = price_dst[period - 1]
+        }
+    }
+	
+	    if (FLAG) 
+        {
+		 FLAG= false;
+		 Indicator["SRC"] =   core.indicators.create("ROC", price_src,2);
+		 Indicator["DST"] =   core.indicators.create("ROC", price_dst,2);
+		}
+
+		 Indicator["SRC"].update(mode);
+		 Indicator["DST"].update(mode);
+	
+	if (period >= output_first  +PERIOD*2) 
+    { 
+		
+		if (other_period!= -1  &&  Indicator["DST"].DATA.hasData(other_period)) 
+        {
+		var Covar = Math.covar (Indicator["SRC"].DATA, Indicator["DST"].DATA, period-PERIOD, period, other_period-PERIOD, other_period);
+		var StDev = Math.stdev (Indicator["DST"].DATA, other_period-PERIOD, other_period)
+        
+		 beta[period] = (Covar/StDev)*(Covar/StDev);   
+        output[period] = Math.avg( Indicator["SRC"].DATA, period-PERIOD , period )-   beta[period]* Math.avg( Indicator["DST"].DATA, period-PERIOD , period ) ;      
+		}
+      
+    }
+}
+
+function AsyncOperationFinished(cookie, success, message)
+{
+    if (cookie == 1) 
+    {
+        loading = false;
+        instance.updateFrom(price_first);
+        return ;
+    }
+}
+

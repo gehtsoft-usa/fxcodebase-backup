@@ -1,0 +1,54 @@
+function Init()
+{
+    indicator.name("TD_I indicator");
+    indicator.description("TD_I indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Shift", "Shift", "", 1);
+    indicator.parameters.addInteger("Period", "Period", "", 8);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(0, 255, 0));
+}
+
+var first;
+var source = null;
+var Period;
+var Shift;
+var High_Diff;
+var Low_Diff;
+var Buff=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    Shift=instance.parameters.Shift;
+    first = source.first()+2;
+    High_Diff = instance.addInternalStream(first+Shift, 0);
+    Low_Diff = instance.addInternalStream(first+Shift, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Shift + ", " + instance.parameters.Period + ")";
+    instance.name(name);
+    Buff = instance.addStream("Buff", core.Line, name + ".Buff", "Buff", instance.parameters.clr, first);
+}
+
+function Update(period, mode)
+{
+   if (period>first+Shift) 
+   {
+    High_Diff[period]=Math.max(0.,source.high[period]-source.high[period-Shift]);
+    Low_Diff[period]=Math.max(0.,source.low[period-Shift]-source.low[period]);
+    if (period>first+Shift+Period) 
+    {
+     var High_Avg=Math.avg(High_Diff,core.rangeTo(period,Period));
+     var Low_Avg=Math.avg(Low_Diff,core.rangeTo(period,Period));
+     if (High_Avg!=0 || Low_Avg!=0) 
+     {
+      Buff[period]=High_Avg*100./(High_Avg+Low_Avg);
+     }
+    } 
+   } 
+}
+

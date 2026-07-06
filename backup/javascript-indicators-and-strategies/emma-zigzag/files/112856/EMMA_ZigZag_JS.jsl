@@ -1,0 +1,220 @@
+function Init()
+{
+    indicator.name("EMMA ZigZag");
+    indicator.description("EMMA ZigZag");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    
+    indicator.parameters.addDouble("Deviation", "Deviation in percent", "Deviation in percent", 0.1);
+    indicator.parameters.addString("MA_Mode", "Mode of MA", "", "CLOSE");
+    indicator.parameters.addStringAlternative("MA_Mode", "CLOSE", "", "CLOSE");
+    indicator.parameters.addStringAlternative("MA_Mode", "HIGH/LOW", "", "HIGH/LOW");
+    indicator.parameters.addString("MA_Method", "Method of MA", "", "MVA");
+    indicator.parameters.addStringAlternative("MA_Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("MA_Method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("MA_Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("MA_Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("MA_Method", "TMA", "", "TMA");
+    indicator.parameters.addInteger("MA_Period", "Period of MA", "Period of MA", 18);
+    indicator.parameters.addString("app_price", "Price for MA", "", "close");
+    indicator.parameters.addStringAlternative("app_price", "close", "", "close");
+    indicator.parameters.addStringAlternative("app_price", "open", "", "open");
+    indicator.parameters.addStringAlternative("app_price", "high", "", "high");
+    indicator.parameters.addStringAlternative("app_price", "low", "", "low");
+    indicator.parameters.addStringAlternative("app_price", "median", "", "median");
+    indicator.parameters.addStringAlternative("app_price", "typical", "", "typical");
+    indicator.parameters.addStringAlternative("app_price", "weighted", "", "weighted");
+
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(0, 255, 0));
+}
+
+var first;
+var source = null;
+var MA;
+var Deviation;
+var MA_Mode;
+var MA_Method;
+var MA_Period;
+var buff=null;
+var home_Time;
+var PrevValue=null;
+var app_price;
+
+function Prepare()
+{
+    source = instance.source;
+    Deviation=instance.parameters.Deviation;
+    MA_Mode=instance.parameters.MA_Mode;
+    MA_Method=instance.parameters.MA_Method;
+    MA_Period=instance.parameters.MA_Period;
+    app_price=instance.parameters.app_price;
+    if (app_price=="close") 
+    {
+     MA = core.indicators.create(MA_Method, source.close, MA_Period);
+    } 
+    else if (app_price=="open") 
+    {
+     MA = core.indicators.create(MA_Method, source.open, MA_Period);
+    } 
+    else if (app_price=="high") 
+    {
+     MA = core.indicators.create(MA_Method, source.high, MA_Period);
+    } 
+    else if (app_price=="low") 
+    {
+     MA = core.indicators.create(MA_Method, source.low, MA_Period);
+    } 
+    else if (app_price=="median") 
+    {
+     MA = core.indicators.create(MA_Method, source.median, MA_Period);
+    } 
+    else if (app_price=="typical") 
+    {
+     MA = core.indicators.create(MA_Method, source.typical, MA_Period);
+    } 
+    else if (app_price=="weighted") 
+    {
+     MA = core.indicators.create(MA_Method, source.weighted, MA_Period);
+    }
+    first = MA.DATA.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Deviation + ", " + instance.parameters.MA_Mode + ", " + instance.parameters.MA_Method + ", " + instance.parameters.MA_Period + ", " + instance.parameters.app_price + ")";
+    instance.name(name);
+    buff = instance.addStream("EMMA", core.Line, name + ".EMMA", "EMMA", instance.parameters.clr, first);
+}
+
+function Update(period, mode)
+{
+    MA.update(mode);
+    if (period>first+MA_Period) 
+    {
+     var ctrl=-1;
+     var SavePrice;
+     var flag=false;
+     home_Time=first+MA_Period;
+     for (shift=first+MA_Period;shift<=period;shift++) 
+     {
+      if (ctrl!=0 && flag==false && MA.DATA[shift]<MA.DATA[shift-1]) 
+      {
+       SavePrice=MA.DATA[shift-1];
+       flag=true;
+       ctrl=0;
+      }
+      if (ctrl!=1 && flag==false && MA.DATA[shift]>MA.DATA[shift-1]) 
+      {
+       SavePrice=MA.DATA[shift-1];
+       flag=true;
+       ctrl=1;
+      }
+      if (ctrl==0 && flag==true && MA.DATA[shift]<=SavePrice-SavePrice*Deviation/100.) 
+      {
+       search(0,shift);
+       flag=false;       
+      }
+      if (ctrl==0 && flag==true && MA.DATA[shift]>=SavePrice) 
+      {
+       flag=false;
+       ctrl=1;
+      }
+      if (ctrl==1 && flag==true && MA.DATA[shift]>=SavePrice+SavePrice*Deviation/100.) 
+      {
+       search(1,shift);
+       flag=false;       
+      }
+      if (ctrl==1 && flag==true && MA.DATA[shift]<=SavePrice) 
+      {
+       flag=false;
+       ctrl=0;
+      }
+     }
+    } 
+}
+
+function search(type,endTime)
+{
+ var ExTime;
+ var ExPrice;
+ if (type==0) 
+ {
+  if (MA_Mode=="CLOSE") 
+  {
+   ExPrice=source.close[home_Time];
+   ExTime=home_Time+1;
+   for (i=home_Time+1;i<=endTime;i++) 
+   {
+    if (source.close[i]>ExPrice) 
+    {
+     ExPrice=source.close[i];
+     ExTime=i;
+    }
+   }
+   buff[ExTime]=ExPrice;
+   if (PrevValue!=null && ExTime!=PrevValue) 
+   {
+    core.drawLine(buff,core.range(PrevValue,ExTime),buff[PrevValue],PrevValue,buff[ExTime],ExTime);
+   }
+   PrevValue=ExTime;
+  } 
+  else
+  {
+   ExPrice=source.high[home_Time];
+   ExTime=home_Time+1;
+   for (i=home_Time+1;i<=endTime;i++) 
+   {
+    if (source.high[i]>ExPrice) 
+    {
+     ExPrice=source.high[i];
+     ExTime=i;
+    }
+   }
+   buff[ExTime]=ExPrice;
+   if (PrevValue!=null && ExTime!=PrevValue) 
+   {
+    core.drawLine(buff,core.range(PrevValue,ExTime),buff[PrevValue],PrevValue,buff[ExTime],ExTime);
+   }
+   PrevValue=ExTime;
+  }
+ } 
+ else
+ {
+  if (MA_Mode=="CLOSE") 
+  {
+   ExPrice=source.close[home_Time];
+   ExTime=home_Time+1;
+   for (i=home_Time+1;i<=endTime;i++) 
+   {
+    if (source.close[i]<ExPrice) 
+    {
+     ExPrice=source.close[i];
+     ExTime=i;
+    }
+   }
+   buff[ExTime]=ExPrice;
+   if (PrevValue!=null && ExTime!=PrevValue) 
+   {
+    core.drawLine(buff,core.range(PrevValue,ExTime),buff[PrevValue],PrevValue,buff[ExTime],ExTime);
+   }
+   PrevValue=ExTime;
+  } 
+  else
+  {
+   ExPrice=source.low[home_Time];
+   ExTime=home_Time+1;
+   for (i=home_Time+1;i<=endTime;i++) 
+   {
+    if (source.low[i]<ExPrice) 
+    {
+     ExPrice=source.low[i];
+     ExTime=i;
+    }
+   }
+   buff[ExTime]=ExPrice;
+   if (PrevValue!=null && ExTime!=PrevValue) 
+   {
+    core.drawLine(buff,core.range(PrevValue,ExTime),buff[PrevValue],PrevValue,buff[ExTime],ExTime);
+   }
+   PrevValue=ExTime;
+  }
+ }
+ home_Time=ExTime;
+}
+

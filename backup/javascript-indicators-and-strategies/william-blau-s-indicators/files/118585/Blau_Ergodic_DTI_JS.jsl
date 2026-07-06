@@ -1,0 +1,99 @@
+function Init()
+{
+    indicator.name("William Blau Ergodic DTI-Oscillator");
+    indicator.description("William Blau Ergodic DTI-Oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 2);
+    indicator.parameters.addInteger("Smooth_Period1", "Smooth period 1", "", 20);
+    indicator.parameters.addInteger("Smooth_Period2", "Smooth period 2", "", 5);
+    indicator.parameters.addInteger("Smooth_Period3", "Smooth period 3", "", 3);
+    indicator.parameters.addInteger("Signal_Period", "Signal period", "", 3);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(128, 128, 128));
+    indicator.parameters.addColor("Sclr", "Signal color", "Color", core.rgb(255, 255, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period;
+var Smooth_Period1;
+var Smooth_Period2;
+var Smooth_Period3;
+var Signal_Period;
+var HLM;
+var AbsHLM;
+var EMA1, EMA2, EMA3;
+var AbsEMA1, AbsEMA2, AbsEMA3;
+var Signal_EMA;
+var Blau_DTI=null;
+var Signal=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    Smooth_Period1=instance.parameters.Smooth_Period1;
+    Smooth_Period2=instance.parameters.Smooth_Period2;
+    Smooth_Period3=instance.parameters.Smooth_Period3;
+    Signal_Period=instance.parameters.Signal_Period;
+    first = source.first()+2;
+    HLM = instance.addInternalStream(first, 0);
+    AbsHLM = instance.addInternalStream(first, 0);
+    EMA1 = core.indicators.create("EMA", HLM, Smooth_Period1);
+    EMA2 = core.indicators.create("EMA", EMA1.DATA, Smooth_Period2);
+    EMA3 = core.indicators.create("EMA", EMA2.DATA, Smooth_Period3);
+    AbsEMA1 = core.indicators.create("EMA", AbsHLM, Smooth_Period1);
+    AbsEMA2 = core.indicators.create("EMA", AbsEMA1.DATA, Smooth_Period2);
+    AbsEMA3 = core.indicators.create("EMA", AbsEMA2.DATA, Smooth_Period3);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.Smooth_Period1 + ", " + instance.parameters.Smooth_Period2 + ", " + instance.parameters.Smooth_Period3 + ", " + instance.parameters.Signal_Period + ")";
+    instance.name(name);
+    Blau_DTI = instance.addStream("Blau_DTI", core.Bar, name + ".Blau_DTI", "Blau_DTI", instance.parameters.clr, first);
+    Signal_EMA = core.indicators.create("EMA", Blau_DTI, Signal_Period);
+    Signal = instance.addStream("Signal", core.Line, name + ".Signal", "Signal", instance.parameters.Sclr, first);
+    Signal.setWidth(instance.parameters.widthLinReg);
+    Signal.setStyle(instance.parameters.styleLinReg);
+}
+
+function Update(period, mode)
+{
+   if (period>first+Period) 
+   {
+    var HM, LM;
+    HM=source.high[period]-source.high[period-Period+1];
+    LM=source.low[period-Period+1]-source.low[period];
+    if (HM<0) 
+    {
+     HM=0;
+    }
+    if (LM<0) 
+    {
+     LM=0;
+    }
+    HLM[period]=HM-LM;
+    AbsHLM[period]=Math.abs(HLM[period]);
+    EMA1.update(mode);
+    EMA2.update(mode);
+    EMA3.update(mode);
+    AbsEMA1.update(mode);
+    AbsEMA2.update(mode);
+    AbsEMA3.update(mode);
+    if (AbsEMA3.DATA[period]>0) 
+    {
+     Blau_DTI[period]=100*EMA3.DATA[period]/AbsEMA3.DATA[period];
+    } 
+    else
+    {
+     Blau_DTI[period]=0;
+    }
+    Signal_EMA.update(mode);
+    Signal[period]=Signal_EMA.DATA[period];
+   } 
+}
+

@@ -1,0 +1,28 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - luaL_newmetatable</title>
+</head>
+<body>
+<h3><a name="luaL_newmetatable"><code>luaL_newmetatable</code></a></h3>
+<pre>int luaL_newmetatable (lua_State *L, const char *tname);</pre>
+
+<p>
+If the registry already has the key <code>tname</code>,
+returns 0.
+Otherwise,
+creates a new table to be used as a metatable for userdata,
+adds it to the registry with key <code>tname</code>,
+and returns 1.
+
+
+<p>
+In both cases pushes onto the stack the final value associated
+with <code>tname</code> in the registry.
+
+
+
+
+
+<hr>
+</body>
+</html>

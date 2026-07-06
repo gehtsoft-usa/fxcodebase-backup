@@ -1,0 +1,809 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252" /><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><title>Orders(table)</title><style type="text/css">a, p, h1, h2, h3, h4, h5, h6, table, td, tr, li, ul, ol {
+    font-family: Verdana, Trebuchet MS, Arial;
+}
+
+a, p, td, tr, ul, ol, li {
+    font-size: 12pt;
+}
+
+h3 {
+    font-size: 13pt;
+}
+
+h2 {
+    font-size: 13pt;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+body {
+    color: #444444;
+    background-color: white;
+}
+
+A:link {
+    color: #0065b3;
+    cursor: pointer;
+}
+
+A:visited {
+    color: #0068be;
+    cursor: pointer;
+}
+
+a.action {
+  background-color: #0065b3;
+  color: white;
+  font-size: 10pt;
+  padding: 2px 2px;
+  width: 50pt;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px;
+}
+
+.side-icon {
+    float: left;
+}
+
+a.action [class*="dripicons-"]:before {
+    padding: 0 2px 0 0;
+    font-size: 12pt;
+    vertical-align: text-bottom;
+}
+
+.side-icon:after {
+  content: "";
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  border-left: 1.5px solid white;
+  transform: translate(-50%);
+}
+
+a.actiontab {
+  font-size: 10pt;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px 3px 0 0;
+}
+
+pre, code, code a {
+    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+    font-size: 12pt;
+}
+
+code.ctag {
+    background-color: #f1f1f1;
+    padding: .1em .2em;
+    border-radius: 3px;
+}
+
+pre {
+    background-color: white;
+}
+
+pre.example {
+    background-color: #f1f1f1;
+}
+
+ul {
+    list-style-type: disc;
+    margin-left: 18pt;
+}
+
+ol {
+    list-style-type: decimal;
+    margin-left: 18pt;
+}
+
+ul.hhc {
+    list-style-type: none;
+    margin-left: 1em;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+li.hhc {
+    margin-left: 0;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+table {
+  border-spacing: 0;
+  border-color: #dfe3e7;
+}
+
+tr + tr td {
+   border-top: 0;
+}
+
+tr td + td {
+  border-left: 0;
+}
+
+td {
+  border: 1px solid;
+  border-color: #dfe3e7;
+}
+
+tr:first-child td:first-child {
+   border-radius: 0.2em 0 0 0;
+}
+
+tr:first-child td:last-child {
+  border-radius: 0 0.2em 0 0;
+}
+
+tr:first-child td:only-child {
+  border-radius: 0.2em 0.2em 0 0;
+}
+
+tr:last-child td:first-child {
+    border-radius: 0 0 0 0.2em;
+}
+
+tr:last-child td:last-child {
+    border-radius: 0 0 0.2em 0;
+}
+
+tr:last-child td:only-child {
+    border-radius: 0 0 0.2em 0.2em;
+}
+
+tr:only-child td:only-child {
+    border-radius: 0.2em 0.2em 0.2em 0.2em;
+}
+
+tr:only-child td:first-child {
+   border-radius: 0.2em 0 0 0.2em;
+}
+
+tr:only-child td:last-child {
+  border-radius: 0 0.2em 0.2em 0;
+}
+
+
+td.tmain, td.tmain_nw, td.thdr {
+    background-color: rgb(255, 255, 255);
+    vertical-align: top;
+    padding: 3px;
+}
+
+td.tmain p, td.tmain_nw p, td.thdr p {
+    margin-top: 3pt;
+    margin-bottom: 3pt;
+}
+
+td.tmain_nw {
+    white-space: nowrap;
+}
+
+td.thdr {
+    background-color: #e3e3e3;
+}
+
+table.decl {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+    vertical-align: top;
+    padding: 3px;
+    width: 100%;
+}
+
+table.decl td {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+}
+
+div.note-quote {
+    border-left: 10px solid #ccc;
+    padding: 1em 10px .1em 10px;
+    margin: 1.5em 10px;
+    background-color: rgb(224, 224, 224);
+}
+
+div.note-note {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+div.note-warning {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #fff;
+    background-color: #ff6358;
+}
+div.note-warning code.ctag {
+    color: black;
+}</style>
+<link rel="stylesheet" href="res/dripicons.css"></head><body><script type="text/javascript">
+var highlighterEnabled = false;
+var maintopic = 'index';
+var helptitle = 'Indicore SDK 3';
+    function loadStarted() {
+    window.onload = loadCompleted;
+
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        var head = document.getElementsByTagName('head')[0];
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.min.js';
+        head.appendChild(script4);
+
+
+        var script2 = document.createElement('script');
+        script2.type = 'text/javascript';
+        script2.src = './highlighter/highlight.cshtml.js';
+        head.appendChild(script2);
+
+        var script3 = document.createElement('script');
+        script3.type = 'text/javascript';
+        script3.src = './highlighter/highlight.lua.js';
+        head.appendChild(script3);
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.luax.js';
+        head.appendChild(script4);
+    }
+}
+
+function loadCompleted() {
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        hljs.registerLanguage('cshtml-razor', window.hljsDefineCshtmlRazor);
+        hljs.registerLanguage('lua', window.hljsDefineLua);
+        hljs.registerLanguage('luax', window.hljsDefineLuaX);
+        x = document.querySelectorAll('pre code');
+        for (var i = 0; i < x.length; i++) {
+            if (x[i].hasAttribute('class')) {
+                hljs.highlightBlock(x[i]);
+            }
+        }
+    }
+}
+
+
+function hidediv(divname) {
+    document.getElementById(divname).style.display = 'none';
+}
+
+function showdiv(divname) {
+    document.getElementById(divname).style.display = 'inline';
+}
+
+function syncList() {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, null, document.title);
+    }
+}
+
+function syncList1(key) {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, key + '.html', document.title);
+    }
+}</script><script type="text/javascript">
+    loadStarted();
+</script><h1>Orders(table)</h1>
+<h2>Brief</h2>
+<p>The section describes the &quot;Orders&quot; table.</p>
+<h2>Details</h2><p>The table contains information related with order placement and order statuses.</p><table class="tmain">
+  <tr>
+    <td class="thdr"><p>Name</p></td>
+    <td class="thdr"><p>Type</p></td>
+    <td class="thdr"><p>Description</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>OrderID</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The unique number of the order. The number is unique within the connection (Real or Demo).</p>
+<p>You can search by this column.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>RequestID</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The unique identifier of the request to create an
+order or the last change of the order request. The identifier is
+unique within the connection (Real or Demo).</p>
+<p>Please note that <code class="ctag">RequestID</code> in unique for a <b>request</b>, not for an order. One request
+can create multiple orders. For example, if an entry order is created with
+stops and limit orders attached, the table will contain a number of orders with the
+same <code class="ctag">RequestID</code>.</p>
+<p>You can search by this column.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>AccountID</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The unique number of the account the order is placed from.
+The number is unique within the connection (Real or Demo).
+In Order2Go, an account is always referred to by its <code class="ctag">AccountID</code>.</p>
+<p>You can search by this column.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>AccountName</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The unique name of the account the order is placed from.
+This is the name that is displayed to the FX Trading Station user.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>OfferID</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The unique number of the instrument the order is placed for.</p>
+<p>You can search by this column.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Instrument</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The symbol indicating the instrument the order is placed for. For example, EUR/USD, USD/JPY, GBP/USD.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>TradeID</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The unique number of the position to be opened or closed by the order.
+The number is unique within the connection (Real or Demo).</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>NetQuantity</p></td>
+    <td class="tmain"><p>Boolean</p></td>
+    <td class="tmain"><p>For SE/LE  orders (see Orders.Type column), defines whether the order is Net stop/limit or regular stop/limit. For open market orders,
+defines whether the order is &quot;Close All by Instrument&quot; or a regular open market order.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>BS</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The trade operation. Possible values:</p><table class="tmain">
+  <tr>
+    <td class="tmain"><p><code class="ctag">B</code></p></td>
+    <td class="tmain"><p>The order is placed to buy the instrument.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">S</code></p></td>
+    <td class="tmain"><p>The order is placed to sell the instrument.</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Stage</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>Defines whether the order is placed to open or to close the position. Possible values:</p><table class="tmain">
+  <tr>
+    <td class="tmain"><p><code class="ctag">O</code></p></td>
+    <td class="tmain"><p>The order is placed to open the position.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">C</code></p></td>
+    <td class="tmain"><p>The order is placed to close the position.</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Side</p></td>
+    <td class="tmain"><p>Integer</p></td>
+    <td class="tmain"><p>Defines whether the order is immediate (i.e. executed immediately upon trader's request) or conditional
+(i.e. executed only when the market reaches the price specified by the trader). If the order is conditional,
+this parameter also indicates the position of the order price relative to the current market price. Possible values:</p><table class="tmain">
+  <tr>
+    <td class="tmain"><p><code class="ctag">0</code></p></td>
+    <td class="tmain"><p>The order is immediate.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">-1</code></p></td>
+    <td class="tmain"><p>The order is conditional, the price of the order is below the current market price.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">1</code></p></td>
+    <td class="tmain"><p>The order is conditional, the price of the order is above the current market price.</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Type</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The type of the order. Possible values:</p><table class="tmain">
+  <tr>
+    <td class="tmain"><p><code class="ctag">S</code></p></td>
+    <td class="tmain"><p>Stop.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">L</code></p></td>
+    <td class="tmain"><p>Limit.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">SE</code></p></td>
+    <td class="tmain"><p>Entry Stop.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">LE</code></p></td>
+    <td class="tmain"><p>Entry Limit.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">C</code></p></td>
+    <td class="tmain"><p>Close.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">O</code></p></td>
+    <td class="tmain"><p>Open.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">M</code></p></td>
+    <td class="tmain"><p>Margin Call.</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>FixStatus</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The state of the order, based on the FIX protocol. Possible values:</p><table class="tmain">
+  <tr>
+    <td class="tmain"><p><code class="ctag">W</code></p></td>
+    <td class="tmain"><p>Waiting.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">P</code></p></td>
+    <td class="tmain"><p>In process.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">I</code></p></td>
+    <td class="tmain"><p>Dealer intervention.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">Q</code></p></td>
+    <td class="tmain"><p>Requoted.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">U</code></p></td>
+    <td class="tmain"><p>Pending calculated.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">E</code></p></td>
+    <td class="tmain"><p>Executing.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">C</code></p></td>
+    <td class="tmain"><p>Cancelled.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">R</code></p></td>
+    <td class="tmain"><p>Rejected.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">T</code></p></td>
+    <td class="tmain"><p>Expired.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">F</code></p></td>
+    <td class="tmain"><p>Executed.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">G</code></p></td>
+    <td class="tmain"><p>Not Available.</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Lot</p></td>
+    <td class="tmain"><p>Integer</p></td>
+    <td class="tmain"><p><b>Forex:</b> The amount of the order expressed in the base currency of the instrument.
+For example, 20,000 for EUR/USD means that the amount of the order
+is 20,000 Euros, for USD/JPY - 20,000 US dollars, etc.</p>
+<p><b>CFD:</b> With CFD, the amount of the order is expressed in the number of contracts.
+For example, 5000 for SILVER means that this order/position is for 5000 contracts of SILVER.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>AmountK</p></td>
+    <td class="tmain"><p>Double</p></td>
+    <td class="tmain"><p><b>Forex:</b> The amount of the order (in thousands) as specified by the FX Trading Station user.
+For example, 20 for EUR/USD means that the amount of the order is 20,000 Euros, for USD/JPY - 20,000 US dollars, etc.</p>
+<p><b>CFD:</b> The number of contracts (in thousands). For example, the order/position for 5000 contracts
+will display 5 in this field.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Rate</p></td>
+    <td class="tmain"><p>Double</p></td>
+    <td class="tmain"><p>The price the order is placed at.</p>
+<p>The parameter can have a zero value in case of open/close market order (i.e. when the order must be executed at any available price).</p>
+<p>The value can be a distance (in pips) to the open or close price in case of pegged stop/limit orders
+(use the <code class="ctag">TypeSL</code> column to define whether the stop/limit order is set as a distance).</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Stop</p></td>
+    <td class="tmain"><p>Double</p></td>
+    <td class="tmain"><p>The price of the associated stop order (the loss-limit level). Makes sense for opening orders (Entry or Market).
+If there is no associated stop order or there is an associated pegged stop order, the value of the parameter is &quot;0&quot;.</p>
+<p>The value can be a distance (in pips) to the open or close price in case of pegged stop orders
+(use the <code class="ctag">TypeStop</code> column to define whether the associated stop order is set as a distance).</p>
+<p><b>Does not function for United States based accounts.</b> The value of this field is always &quot;0&quot; for FIFO accounts.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Limit</p></td>
+    <td class="tmain"><p>Double</p></td>
+    <td class="tmain"><p>The price of the associated limit order (the profit-limit level). Makes sense for opening orders (Entry or Market).
+If there is no associated limit order or there is an associated pegged limit order, the value of the parameter is &quot;0&quot;.</p>
+<p>The value can be a distance (in pips) to the open or close price in case of pegged limit orders
+(use the <code class="ctag">TypeLimit</code> column to define whether the associated limit order is set as a distance).</p>
+<p><b>Does not function for United States based accounts.</b> The value of this field is always &quot;0&quot; for FIFO accounts.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Time</p></td>
+    <td class="tmain"><p>DateTime</p></td>
+    <td class="tmain"><p>The date and time of the last update of the order. The date and time are in the EST/EDT time.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>IsBuy</p></td>
+    <td class="tmain"><p>Boolean</p></td>
+    <td class="tmain"><p>Defines whether the order is placed to buy or to sell the instrument. Possible values:</p><table class="tmain">
+  <tr>
+    <td class="tmain"><p><code class="ctag">True</code></p></td>
+    <td class="tmain"><p>Buy.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">False</code></p></td>
+    <td class="tmain"><p>Sell.</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>IsConditionalOrder</p></td>
+    <td class="tmain"><p>Boolean</p></td>
+    <td class="tmain"><p>Defines whether the order is a conditional order.
+Possible values:</p><table class="tmain">
+  <tr>
+    <td class="tmain"><p><code class="ctag">True</code></p></td>
+    <td class="tmain"><p>The order is conditional.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">False</code></p></td>
+    <td class="tmain"><p>The order is not conditional.</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>IsEntryOrder</p></td>
+    <td class="tmain"><p>Boolean</p></td>
+    <td class="tmain"><table class="tmain">
+  <tr>
+    <td class="tmain"><p><code class="ctag">True</code></p></td>
+    <td class="tmain"><p>The order is an entry order.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">False</code></p></td>
+    <td class="tmain"><p>The order is not an entry order.</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Lifetime</p></td>
+    <td class="tmain"><p>Integer</p></td>
+    <td class="tmain"><p>The time (in seconds) during which the trader must accept or reject the order requoted by the dealer.
+This is applicable only to immediate orders in the &quot;requoted&quot; state. For all other orders, the value is &quot;0&quot;.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>AtMarket</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The distance (in pips) from the order <code class="ctag">Rate</code> within which the trader allows the order to be executed.
+If the market price moves beyond the allowed distance, the order must not be executed.
+The parameter is applicable only to open/close range orders (i.e. when the order must be executed at any
+price within the price range specified by the trader, or not executed at all).</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>TrlMinMove</p></td>
+    <td class="tmain"><p>Integer</p></td>
+    <td class="tmain"><p>The size of the market movement, expressed pips, after which the trailing stop must be moved to follow the market.
+The column is applicable only to stop orders with the trailing stop mode.</p>
+<p>1 is for dynamic trailing stop. The trailing stop mode can be detected using the following condition: <code class="ctag">TrlRate ~= 0</code>.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Distance</p></td>
+    <td class="tmain"><p>Integer</p></td>
+    <td class="tmain"><p>The distance (in pips) from the market price to the price specified in the stop order when the stop order is set.
+This is the distance that must be kept the same when the stop order automatically adjusts itself as the market price
+changes in the trader's favor (i.e. when the trailing stop feature is activated).</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>GTC</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The time-in-force option of the order. The possible values are:</p><table class="tmain">
+  <tr>
+    <td class="tmain"><p><code class="ctag">GTC</code></p></td>
+    <td class="tmain"><p>Good Till Cancelled (Open/Close Market, Entry, Stop, and Limit orders).</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">IOC</code></p></td>
+    <td class="tmain"><p>Immediate Or Cancel (Open/Close Market, Open/Close, and Open/Close Range orders).</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">FOK</code></p></td>
+    <td class="tmain"><p>Fill Or Kill (Open/Close Market, Open/Close, and Open/Close Range orders).</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">DAY</code></p></td>
+    <td class="tmain"><p>Day Order (Open/Close Market, Entry, Stop, and Limit orders).</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">GTD</code></p></td>
+    <td class="tmain"><p>Good Till Date (Open/Close Market, Entry, Stop, and Limit orders).</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Kind</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The type of the account the order is placed from. Possible values:</p><table class="tmain">
+  <tr>
+    <td class="tmain"><p><code class="ctag">32</code></p></td>
+    <td class="tmain"><p>Trading account.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">36</code></p></td>
+    <td class="tmain"><p>Managed account.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">38</code></p></td>
+    <td class="tmain"><p>Controlled account.</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>QTXT</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The text comment that can be added to the order.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>StopOrderID</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The unique number of the associated stop order. The number is unique within the connection (Real or Demo). Makes sense for opening
+orders (Entry or Market). If there is no associated stop order, the parameter has an empty value.</p>
+<p><b>Does not function for United States based accounts.</b> The value of this parameter is always empty for FIFO accounts.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>LimitOrderID</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The unique number of the associated limit order. The number is unique within the connection (Real or Demo).
+Makes sense for opening orders (Entry or Market). If there is no associated limit order, the parameter has the
+empty value.</p>
+<p><b>Does not function for United States based accounts.</b> The value of this parameter is always empty for FIFO accounts.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>TypeSL</p></td>
+    <td class="tmain"><p>Integer</p></td>
+    <td class="tmain"><p>Defines the way the stop or limit order is set.
+Makes sense for stop and limit orders. Possible values:</p><table class="tmain">
+  <tr>
+    <td class="tmain"><p><code class="ctag">1</code></p></td>
+    <td class="tmain"><p>The stop/limit order is set as an absolute rate (a regular stop/limit order).</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">2</code></p></td>
+    <td class="tmain"><p>The stop/limit order is set as a distance (in pips) to the open price (the pegged stop/limit order).</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">3</code></p></td>
+    <td class="tmain"><p>The stop/limit order is set as a distance (in pips) to the close price (the pegged stop/limit order).</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>TypeStop</p></td>
+    <td class="tmain"><p>Integer</p></td>
+    <td class="tmain"><p>Defines the way the associated stop order is set.
+Makes sense for opening orders (entry and market).
+Possible values:</p><table class="tmain">
+  <tr>
+    <td class="tmain"><p><code class="ctag">0</code></p></td>
+    <td class="tmain"><p>The associated stop order is not specified.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">1</code></p></td>
+    <td class="tmain"><p>The associated stop order is set as an absolute rate (a regular stop order).</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">2</code></p></td>
+    <td class="tmain"><p>The associated stop order is set as a distance (in pips) to the open price (the pegged stop order).</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">3</code></p></td>
+    <td class="tmain"><p>The associated stop order is set as a distance (in pips) to the close price (the pegged stop order).</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>TypeLimit</p></td>
+    <td class="tmain"><p>Integer</p></td>
+    <td class="tmain"><p>Defines the way the associated limit order is set.
+Makes sense for opening orders (entry and market).
+Possible values:</p><table class="tmain">
+  <tr>
+    <td class="tmain"><p><code class="ctag">0</code></p></td>
+    <td class="tmain"><p>The associated limit order is not specified.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">1</code></p></td>
+    <td class="tmain"><p>The associated limit order is set as an absolute rate (a regular limit order).</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">2</code></p></td>
+    <td class="tmain"><p>The associated limit order is set as a distance (in pips) to the open price (the pegged limit order).</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">3</code></p></td>
+    <td class="tmain"><p>The associated limit order is set as a distance (in pips) to the close price (the pegged limit order).</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>ContingencyID</p></td>
+    <td class="tmain"><p>Integer</p></td>
+    <td class="tmain"><p>The unique identifier of the contingency group. All the orders included into the contingency group will
+have the same contingency identifier. The contingency group can be: OCO (one-cancel-others), OTO (one-triggers-others) or
+ELS (entry-stop-limit). Please note that for OTO and ELS contingency groups the root order is <b>not</b> included into
+the group, only dependent orders are.</p>
+<p>The order can be included into one contingency group at the time.</p>
+<p>The type of the contingency group is specified in ContingencyType column of the table.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>ContingencyType</p></td>
+    <td class="tmain"><p>Integer</p></td>
+    <td class="tmain"><p>The type of the contingency group:</p><table class="tmain">
+  <tr>
+    <td class="tmain"><p>0</p></td>
+    <td class="tmain"><p>The order is not included into any contingency group.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>1</p></td>
+    <td class="tmain"><p>The order is a part of OCO (one-cancel-others) contingency group.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>2</p></td>
+    <td class="tmain"><p>The order is a dependent order of OTO (one-triggers-others) contingency group. To find
+the root order of the group please use PrimaryOrderId column of the table.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>3</p></td>
+    <td class="tmain"><p>The order is a stop or limit order inside ELS (entry-stop-limit) contingency group. To find
+the root entry or market order (it is it not executed yet) please use PrimaryOrderId column of the table.</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>PrimaryOrderId</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The reference to the root order of the OTO or ELS contingency group.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>WorkingIndicator</p></td>
+    <td class="tmain"><p>Boolean</p></td>
+    <td class="tmain"><p>The boolean flag indicating whether the order is currently active and can be executed when the
+market condition is met.</p>
+<p>This flag can be false in the following cases:
+stop or limit orders attached to an entry order, a dependent order of OTO or ELS group when the root order of the
+contingency group is not executed yet.</p></td>
+  </tr>
+</table><p>
+  <center><a href="TradingTables.html">back</a></center>
+</p><script language="javascript" type="text/javascript">if(window.parent.frames[0]) window.parent.frames[0].selectItem(window.location.href);</script></body></html>

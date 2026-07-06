@@ -1,0 +1,137 @@
+function Init()
+{
+    indicator.name("Repulse indicator");
+    indicator.description("Repulse indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("FastPeriod", "Fast period", "", 6);
+    indicator.parameters.addInteger("SlowPeriod", "Slow period", "", 14);
+    indicator.parameters.addBoolean("EnableZLR", "Enable Zero-line Reject", "", true);
+    indicator.parameters.addBoolean("EnableST", "Enable Shamu Trade", "", true);
+    indicator.parameters.addBoolean("EnableTLB", "Enable Trend Line Break", "", true);
+    indicator.parameters.addBoolean("EnableVT", "Enable Vegas Trade", "", true);
+    indicator.parameters.addBoolean("EnableGT", "Enable Ghost Trade", "", true);
+    indicator.parameters.addBoolean("EnableRD", "Enable Reverse Divergence", "", true);
+    indicator.parameters.addBoolean("EnableHFE", "Enable Hook from Extremes", "", true);
+    indicator.parameters.addBoolean("EnableExit", "Enable Exit signals", "", true);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clrZLR", "Color Zero-line Reject", "Color Zero-line Reject", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clrST", "Color Shamu Trade", "Color Shamu Trade", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("clrTLB", "Color Trend Line Break", "Color Trend Line Break", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("clrVT", "Color Vegas Trade", "Color Vegas Trade", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("clrGT", "Color Ghost Trade", "Color Ghost Trade", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("clrRD", "Color Reverse Divergence", "Color Reverse Divergence", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("clrHFE", "Color Hook from Extremes", "Color Hook from Extremes", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("clrExit", "Color Exit signals", "Color Exit signals", core.rgb(0, 0, 255));
+    indicator.parameters.addInteger("DotSize", "Dot size", "Dot size", 3, 1, 5);
+}
+
+var first;
+var source = null;
+var FastPeriod;
+var SlowPeriod;
+var EnableZLR;
+var EnableST;
+var EnableTLB;
+var EnableVT;
+var EnableGT;
+var EnableRD;
+var EnableHFE;
+var EnableExit;
+var FastCCI;
+var SlowCCI;
+var ZLR=null;
+var ST=null;
+var TLB=null;
+var VT=null;
+var GT=null;
+var RD=null;
+var HFE=null;
+var Exit=null;
+
+function Prepare()
+{
+    source = instance.source;
+    FastPeriod=instance.parameters.FastPeriod;
+    SlowPeriod=instance.parameters.SlowPeriod;
+    EnableZLR=instance.parameters.EnableZLR;
+    EnableST=instance.parameters.EnableST;
+    EnableTLB=instance.parameters.EnableTLB;
+    EnableVT=instance.parameters.EnableVT;
+    EnableGT=instance.parameters.EnableGT;
+    EnableRD=instance.parameters.EnableRD;
+    EnableHFE=instance.parameters.EnableHFE;
+    EnableExit=instance.parameters.EnableExit;
+    first = source.first()+2;
+    FastCCI = core.indicators.create("CCI", source, FastPeriod);
+    SlowCCI = core.indicators.create("CCI", source, SlowPeriod);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.FastPeriod + ", " + instance.parameters.SlowPeriod + ")";
+    instance.name(name);
+    ZLR = instance.addStream("ZLR", core.Dot, name + ".ZLR", "ZLR", instance.parameters.clrZLR, first);
+    ST = instance.addStream("ST", core.Dot, name + ".ST", "ST", instance.parameters.clrST, first);
+    TLB = instance.addStream("TLB", core.Dot, name + ".TLB", "TLB", instance.parameters.clrTLB, first);
+    VT = instance.addStream("VT", core.Dot, name + ".VT", "VT", instance.parameters.clrVT, first);
+    GT = instance.addStream("GT", core.Dot, name + ".GT", "GT", instance.parameters.clrGT, first);
+    RD = instance.addStream("RD", core.Dot, name + ".RD", "RD", instance.parameters.clrRD, first);
+    HFE = instance.addStream("HFE", core.Dot, name + ".HFE", "HFE", instance.parameters.clrHFE, first);
+    Exit = instance.addStream("Exit", core.Dot, name + ".Exit", "Exit", instance.parameters.clrExit, first);
+    ZLR.setWidth(instance.parameters.DotSize);
+    ST.setWidth(instance.parameters.DotSize);
+    TLB.setWidth(instance.parameters.DotSize);
+    VT.setWidth(instance.parameters.DotSize);
+    GT.setWidth(instance.parameters.DotSize);
+    RD.setWidth(instance.parameters.DotSize);
+    HFE.setWidth(instance.parameters.DotSize);
+    Exit.setWidth(instance.parameters.DotSize);
+}
+
+function Update(period, mode)
+{
+   if (period>first+20) 
+   {
+    FastCCI.update(mode);
+    SlowCCI.update(mode);
+    var up=0;
+    var dn=0;
+    var i;
+    for (i=0; i<=7; i++) 
+    {
+     if (SlowCCI.DATA[period-i]>0) 
+     {
+      up=up+1;
+     } 
+     else
+     {
+      dn=dn+1;
+     }
+    }
+    
+    if (EnableZLR) 
+    {
+     if (dn>=6 && SlowCCI.DATA[period]<SlowCCI.DATA[period-1] && SlowCCI.DATA[period-2]<SlowCCI.DATA[period-1] && Math.abs(SlowCCI.DATA[period])<80 && Math.abs(SlowCCI.DATA[period-1])<80 && Math.abs(SlowCCI.DATA[period-1]-SlowCCI.DATA[period-2])>20) 
+     {
+      ZLR[period]=source.high[period];
+     }
+     if (p>=6 && SlowCCI.DATA[period]>SlowCCI.DATA[period-1] && SlowCCI.DATA[period-2]>SlowCCI.DATA[period-1] && Math.abs(SlowCCI.DATA[period])<80 && Math.abs(SlowCCI.DATA[period-1])<80 && Math.abs(SlowCCI.DATA[period-1]-SlowCCI.DATA[period-2])>20) 
+     {
+      ZLR[period]=source.low[period];
+     }
+    }
+    
+    if (ST) 
+    {
+     if (dn>=6 && SlowCCI.DATA[period]>SlowCCI.DATA[period-1]+15 && SlowCCI.DATA[period-1]<SlowCCI.DATA[period-2] && SlowCCI.DATA[period-2]>SlowCCI.DATA[period-3] && SlowCCI.DATA[period-1]<=50 && SlowCCI.DATA[period-1]>=-50 && SlowCCI.DATA[period-2]<=50 && SlowCCI.DATA[period-2]>=-50) 
+     {
+      ST[period]=source.low[period];
+     }
+     if (up>=6 && SlowCCI.DATA[period]<SlowCCI.DATA[period-1]-15 && SlowCCI.DATA[period-1]>SlowCCI.DATA[period-2] && SlowCCI.DATA[period-2]<SlowCCI.DATA[period-3] && SlowCCI.DATA[period-1]<=50 && SlowCCI.DATA[period-1]>=-50 && SlowCCI.DATA[period-2]<=50 && SlowCCI.DATA[period-2]>=-50) 
+     {
+      ST[period]=source.high[period];
+     }
+    }
+   } 
+}
+

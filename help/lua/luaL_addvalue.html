@@ -1,0 +1,27 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - luaL_addvalue</title>
+</head>
+<body>
+<h3><a name="luaL_addvalue"><code>luaL_addvalue</code></a></h3>
+<pre>void luaL_addvalue (luaL_Buffer *B);</pre>
+
+<p>
+Adds the value at the top of the stack
+to the buffer <code>B</code>
+(see <a href="luaL_Buffer.html"><code>luaL_Buffer</code></a>).
+Pops the value.
+
+
+<p>
+This is the only function on string buffers that can (and must)
+be called with an extra element on the stack,
+which is the value to be added to the buffer.
+
+
+
+
+
+<hr>
+</body>
+</html>

@@ -1,0 +1,90 @@
+function Init()
+{
+    indicator.name("CCI Squeeze Indicator");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    
+    indicator.parameters.addInteger("MA_Period", "Period of MA", "Period of MA", 200);
+    indicator.parameters.addString("MA_Method", "Method of MA", "", "MVA");
+    indicator.parameters.addStringAlternative("MA_Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("MA_Method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("MA_Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("MA_Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("MA_Method", "TMA", "", "TMA");
+    indicator.parameters.addInteger("CCI_Period", "Period of CCI", "Period of CCI", 50);
+
+    indicator.parameters.addColor("upB_color", "Color of upB", "Color of upB", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("loB_color", "Color of loB", "Color of loB", core.rgb(255, 128, 64));
+    indicator.parameters.addColor("upB2_color", "Color of upB2", "Color of upB2", core.rgb(0, 64, 0));
+    indicator.parameters.addColor("loB2_color", "Color of loB2", "Color of loB2", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("line_color", "Color of line", "Color of line", core.rgb(128, 128, 128));
+}
+
+var first;
+var source = null;
+var MA;
+var CCI;
+
+function Prepare()
+{
+    source = instance.source;
+    MA_Period=instance.parameters.MA_Period;
+    MA_Method=instance.parameters.MA_Method;
+    CCI_Period=instance.parameters.CCI_Period;
+    MA = core.indicators.create(MA_Method, source.close, MA_Period);
+    CCI = core.indicators.create("CCI", source, CCI_Period);
+    first = Math.max(MA.DATA.first(),CCI.DATA.first())+2;
+    var name = profile.id() + "(" + source.name() + ", " + MA_Period + ", " + MA_Method + ", " + CCI_Period + ")";
+    instance.name(name);
+    upB = instance.addStream("upB", core.Bar, name + ".upB", "upB", instance.parameters.upB_color, first);
+    loB = instance.addStream("loB", core.Bar, name + ".loB", "loB", instance.parameters.loB_color, first);
+    upB2 = instance.addStream("upB2", core.Bar, name + ".upB2", "upB2", instance.parameters.upB2_color, first);
+    loB2 = instance.addStream("loB2", core.Bar, name + ".loB2", "loB2", instance.parameters.loB2_color, first);
+    cciline = instance.addStream("cciline", core.Line, name + ".cciline", "cciline", instance.parameters.line_color, first);
+}
+
+function Update(period, mode)
+{
+    MA.update(mode);
+    CCI.update(mode);
+    if (period>first) 
+    {
+     cciline[period]=CCI.DATA[period];
+     if (source.close[period]<MA.DATA[period]) 
+     {
+      if (CCI.DATA[period]>0.) 
+      {
+       upB[period]=CCI.DATA[period];
+       loB[period]=null;
+       upB2[period]=null;
+       loB2[period]=null;
+      } 
+      else
+      {
+       upB[period]=null;
+       loB[period]=CCI.DATA[period];
+       upB2[period]=null;
+       loB2[period]=null;
+      }
+     } 
+     else
+     {
+      if (CCI.DATA[period]>0.) 
+      {
+       upB[period]=null;
+       loB[period]=null;
+       upB2[period]=CCI.DATA[period];
+       loB2[period]=null;
+      } 
+      else
+      {
+       upB[period]=null;
+       loB[period]=null;
+       upB2[period]=null;
+       loB2[period]=CCI.DATA[period];
+      }
+     }
+    }
+}
+

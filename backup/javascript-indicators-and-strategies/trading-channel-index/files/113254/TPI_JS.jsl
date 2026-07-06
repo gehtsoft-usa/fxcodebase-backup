@@ -1,0 +1,80 @@
+function Init()
+{
+    indicator.name("Trading Channel Index");
+    indicator.description("Trading Channel Index");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+	
+	indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("CP", "Channel Period", "Channel Period", 10);
+    indicator.parameters.addInteger("AP", "Average Period", "Average Period", 21);
+	indicator.parameters.addDouble("Coefficient", "Coefficient", "Coefficient", 0.015);
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("TPI_color", "Color of TPI", "Color of TPI", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var CP;
+var AP;
+var source = null;
+var MA1, MA2, M3;
+var Buff1,Buff2;
+var Coefficient;
+// Streams block
+var TPI = null;
+
+function Prepare(nameOnly)
+{
+    CP = instance.parameters.CP;
+    AP = instance.parameters.AP;
+	Coefficient = instance.parameters.Coefficient;
+    source = instance.source;
+	MA1 = core.indicators.create("EMA", source, CP);
+	Buff1 = instance.addInternalStream(0, 0);
+	MA2 = core.indicators.create("EMA", Buff1, CP);
+	Buff2 = instance.addInternalStream(0, 0);
+	MA3 = core.indicators.create("EMA", Buff2, AP);
+   
+    var name = profile.id() + "(" + source.name() + ", " + tostring(CP) + ", " + tostring(AP) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        TPI = instance.addStream("TPI", core.Line, name, "TPI", instance.parameters.TPI_color, MA3.DATA.first());
+		TPI.setWidth(instance.parameters.width);
+        TPI.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period, mode)
+{
+
+MA1.update(mode);
+if (period < MA1.DATA.first()) 
+{
+ return;
+}
+
+Buff1[period]= Math.abs( source[period] -  MA1.DATA[period]);
+
+MA2.update(mode);
+if (period < MA2.DATA.first()) 
+{
+ return;
+}
+
+Buff2[period] = (source[period] -  MA1.DATA[period]) / (Coefficient * MA2.DATA[period]);
+
+MA3.update(mode);
+if (period < MA3.DATA.first()) 
+{
+ return;
+}
+ 	
+        TPI[period] = MA3.DATA[period];
+   
+}
+

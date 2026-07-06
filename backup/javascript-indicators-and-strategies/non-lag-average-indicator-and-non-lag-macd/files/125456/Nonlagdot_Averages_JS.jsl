@@ -1,0 +1,149 @@
+function Init()
+{
+    indicator.name("NonLagDot with averages indicator");
+    indicator.description("NonLagDot with averages indicator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+    
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addString("Method", "Method", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("Method", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Method", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Method", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Method", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Method", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Method", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Method", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Method", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Method", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Method", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Method", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Method", "JSmooth", "", "JSmooth");
+    indicator.parameters.addInteger("Length", "Length", "Length", 10);
+    indicator.parameters.addInteger("Filter", "Filter", "Filter", 0);
+    indicator.parameters.addDouble("Deviation", "Deviation", "Deviation", 0);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addString("Type", "Type", "", "Dots");
+    indicator.parameters.addStringAlternative("Type", "Dots", "", "Dots");
+    indicator.parameters.addStringAlternative("Type", "Line", "", "Line");
+    indicator.parameters.addColor("clrUP", "UP color", "UP color", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("clrDN", "DN color", "DN color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width (dot size)", "Line width (dot size)", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Length;
+var Filter;
+var Method;
+var Deviation;
+var NonLagDot=null;
+var MA;
+var trend;
+var Coeff;
+var Phase;
+var Len;
+var dT1, dT2, Kd, Fi;
+
+function Prepare()
+{
+    source = instance.source;
+    Length=instance.parameters.Length;
+    Filter=instance.parameters.Filter;
+    Method=instance.parameters.Method;
+    Deviation=instance.parameters.Deviation;
+    trend = instance.addInternalStream(0, 0);
+    first = source.first()+2;
+    MA=core.indicators.create("AVERAGES", source, Method, Length, false);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Length + ", " + instance.parameters.Filter + ", " + instance.parameters.Method + ", " + instance.parameters.Deviation + ")";
+    instance.name(name);
+    if (instance.parameters.Type=="Dots") 
+    {
+     NonLagDot = instance.addStream("NonLagDot", core.Dot, name + ".NonLagDot", "NonLagDot", instance.parameters.clrUP, first);
+    } 
+    else
+    {
+     NonLagDot = instance.addStream("NonLagDot", core.Line, name + ".NonLagDot", "NonLagDot", instance.parameters.clrUP, first);
+    } 
+    NonLagDot.setWidth(instance.parameters.widthLinReg);
+    NonLagDot.setStyle(instance.parameters.styleLinReg);
+    Coeff=3*3.1415926;
+    Phase=Length-1;
+    Len=Length*4+Phase;
+    dT1=7/(4*Length-1);
+    dT2=1/(Phase-1);
+    Kd=1+Deviation/100;
+    Fi=Filter*source.pipSize();
+}
+
+function Update(period, mode)
+{
+    if (period>first+Len+2) 
+    {
+     MA.update(mode);
+     var Weight=0;
+     var Sum=0;
+     var t=0;
+     for (i=0; i<=Len-1; i++) 
+     {
+      var g=1/(Coeff*t+1);
+      if (t<=0.5) 
+      {
+       g=1;
+      }
+      var beta=Math.cos(3.1415926*t);
+      var alpha=g*beta;
+      Sum=Sum+alpha*MA.DATA[period-i];
+      Weight=Weight+alpha;
+      if (t<1) 
+      {
+       t=t+dT2;
+      } 
+      else if (t<Len-1) 
+      {
+       t=t+dT1;
+      }
+     }
+     if (Weight>0) 
+     {
+      NonLagDot[period]=Kd*Sum/Weight;
+     }
+     if (Filter>0) 
+     {
+      if (Math.abs(NonLagDot[period]-NonLagDot[period-1])<Fi) 
+      {
+       NonLagDot[period]=NonLagDot[period-1];
+      }
+     }
+     trend[period]=trend[period-1];
+     if (NonLagDot[period]-NonLagDot[period-1]>Fi) 
+     {
+      trend[period]=1;
+     }
+     if (NonLagDot[period-1]-NonLagDot[period]>Fi) 
+     {
+      trend[period]=-1;
+     }
+     if (trend[period]>0) 
+     {
+      NonLagDot.setColor(period, instance.parameters.clrUP);
+     } 
+     else
+     {
+      NonLagDot.setColor(period, instance.parameters.clrDN);
+     }
+
+    } 
+}

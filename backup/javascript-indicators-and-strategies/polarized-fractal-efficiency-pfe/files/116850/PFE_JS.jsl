@@ -1,0 +1,87 @@
+function Init()
+{
+    indicator.name("Polarized Fractal Efficiency Indicator");
+    indicator.description("Polarized Fractal Efficiency Indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+	
+	
+	indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("ROCLong", "ROC Long Period", "", 9);
+    indicator.parameters.addInteger("ROCShort", "ROC Short Period", "", 1);
+	indicator.parameters.addInteger("AVERAGEPeriod", "Average Period", "", 5);
+	indicator.parameters.addInteger("PDS", "PDS", "", 10);
+	
+    indicator.parameters.addGroup("Style");	
+    indicator.parameters.addColor("PFE_color", "Color of S1", "Color of S1", core.rgb(255, 0, 0));
+}
+
+var ROCLongPeriod;
+var ROCLongPeriod;
+var AVERAGEPeriod;
+var PDS;
+
+var first;
+var source = null;
+
+var ROCShort = null;
+var ROCLong = null;
+var PFE;
+var Buffer;
+var AVERAGE;
+
+function Prepare()
+{
+    PDS= instance.parameters.PDS;
+    AVERAGEPeriod = instance.parameters.AVERAGEPeriod;
+    ROCLongPeriod = instance.parameters.ROCLong;
+	 ROCShortPeriod = instance.parameters.ROCShort;
+    source = instance.source;
+    first = source.first();
+	
+	
+	Buffer= instance.addInternalStream (first, extent)
+	
+	 ROCShort= core.indicators.create("ROC", source.close,  ROCShortPeriod);
+	 ROCLong= core.indicators.create("ROC", source.close, ROCLongPeriod);
+	 AVERAGE= core.indicators.create("EMA", Buffer, AVERAGEPeriod);
+
+    var name = profile.id() + "(" + source.name() + ", " + ROCShortPeriod+ ", "+  ROCLongPeriod +", "+ AVERAGEPeriod + ", "+  PDS +  ")";
+    instance.name(name);
+    PFE = instance.addStream("PFE", core.Line, name, "PFE", instance.parameters.PFE_color, first);
+}
+
+function Update(period, mode)
+{
+ if (period >= first && source.hasData(period)) 
+ {
+  ROCShort.update(mode);	
+  ROCLong.update(mode);
+  if (!ROCShort.DATA.hasData(period) ||  !ROCLong.DATA.hasData(period)) 
+  {
+   return;
+  }			
+  var x=Math.sqrt((ROCLong.DATA[period]*ROCLong.DATA[period])+100);
+  var y = Math.sqrt((ROCShort.DATA[period]* ROCShort.DATA[period])+1)+PDS;
+  var z=(x/y);
+  if (source.close[period] >  source.close[period-ROCLongPeriod]) 
+  {
+   Buffer[period]= z*100;
+  } 
+  else
+  {
+   Buffer[period]= -z*100;
+  }
+		
+  AVERAGE.update(mode);	
+		
+  if (!AVERAGE.DATA.hasData(period)) 
+  {
+   return;
+  }
+		 
+  PFE[period]= AVERAGE.DATA[period]; 
+		
+ }
+}
+

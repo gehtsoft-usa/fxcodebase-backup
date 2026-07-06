@@ -1,0 +1,144 @@
+function Init()
+{
+    indicator.name("Tymen STARCBands indicator");
+    indicator.description("Tymen STARCBands indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("MA_Period", "MA_Period", "", 6);
+    indicator.parameters.addString("MA_Method", "MA_Method", "", "EMA");
+    indicator.parameters.addStringAlternative("MA_Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("MA_Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("MA_Method", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("MA_Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("MA_Method", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("MA_Method", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("MA_Method", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("MA_Method", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("MA_Method", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("MA_Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("MA_Method", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("MA_Method", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("MA_Method", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("MA_Method", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("MA_Method", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("MA_Method", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("MA_Method", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("MA_Method", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("MA_Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("MA_Method", "JSmooth", "", "JSmooth");
+    indicator.parameters.addString("MA_Price", "MA_Price", "", "close");
+    indicator.parameters.addStringAlternative("MA_Price", "close", "", "close");
+    indicator.parameters.addStringAlternative("MA_Price", "open", "", "open");
+    indicator.parameters.addStringAlternative("MA_Price", "high", "", "high");
+    indicator.parameters.addStringAlternative("MA_Price", "low", "", "low");
+    indicator.parameters.addStringAlternative("MA_Price", "median", "", "median");
+    indicator.parameters.addStringAlternative("MA_Price", "typical", "", "typical");
+    indicator.parameters.addStringAlternative("MA_Price", "weighted", "", "weighted");
+    indicator.parameters.addInteger("ATR_Period", "ATR_Period", "", 15);
+    indicator.parameters.addDouble("KATR", "KATR", "", 1.);
+    indicator.parameters.addDouble("MKATR", "MKATR", "", 0.7);
+    indicator.parameters.addInteger("Shift", "Shift", "", 0);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UpperClr", "Upper Color", "Upper Color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("MUpperClr", "MUpper Color", "MUpper Color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("MiddleClr", "Middle Color", "Middle Color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("MLowerClr", "MLower Color", "MLower Color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("LowerClr", "Lower Color", "Lower Color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var MA_Period;
+var MA_Method;
+var MA_Price;
+var ATR_Period;
+var KATR;
+var MKATR;
+var Shift;
+var MA;
+var ATR;
+var UpperBuff=null;
+var MUpperBuff=null;
+var MiddleBuff=null;
+var MLowerBuff=null;
+var LowerBuff=null;
+
+function Prepare()
+{
+    source = instance.source;
+    MA_Period=instance.parameters.MA_Period;
+    MA_Method=instance.parameters.MA_Method;
+    MA_Price=instance.parameters.MA_Price;
+    ATR_Period=instance.parameters.ATR_Period;
+    KATR=instance.parameters.KATR;
+    MKATR=instance.parameters.MKATR;
+    Shift=instance.parameters.Shift;
+    if (MA_Price=="close") 
+    {
+     MA = core.indicators.create("AVERAGES", source.close, MA_Method, MA_Period, false);
+    } 
+    else if (MA_Price=="open") 
+    {
+     MA = core.indicators.create("AVERAGES", source.open, MA_Method, MA_Period, false);
+    } 
+    else if (MA_Price=="high") 
+    {
+     MA = core.indicators.create("AVERAGES", source.high, MA_Method, MA_Period, false);
+    } 
+    else if (MA_Price=="low") 
+    {
+     MA = core.indicators.create("AVERAGES", source.low, MA_Method, MA_Period, false);
+    } 
+    else if (MA_Price=="median") 
+    {
+     MA = core.indicators.create("AVERAGES", source.median, MA_Method, MA_Period, false);
+    } 
+    else if (MA_Price=="typical") 
+    {
+     MA = core.indicators.create("AVERAGES", source.typical, MA_Method, MA_Period, false);
+    } 
+    else
+    {
+     MA = core.indicators.create("AVERAGES", source.weighted, MA_Method, MA_Period, false);
+    } 
+    ATR = core.indicators.create("ATR", source, ATR_Period);
+    first = Math.max(MA.DATA.first(),ATR.DATA.first())+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.MA_Period + ", " + instance.parameters.MA_Method + ", " + instance.parameters.MA_Price + ", " + instance.parameters.ATR_Period + ", " + instance.parameters.KATR + ", " + instance.parameters.MKATR + ", " + instance.parameters.Shift + ")";
+    instance.name(name);
+    UpperBuff = instance.addStream("UpperBuff", core.Line, name + ".Upper", "Upper", instance.parameters.UpperClr, first, Shift);
+    MUpperBuff = instance.addStream("MUpperBuff", core.Line, name + ".MUpper", "MUpper", instance.parameters.MUpperClr, first, Shift);
+    MiddleBuff = instance.addStream("MiddleBuff", core.Line, name + ".Middle", "Middle", instance.parameters.MiddleClr, first, Shift);
+    MLowerBuff = instance.addStream("MLowerBuff", core.Line, name + ".MLower", "MLower", instance.parameters.MLowerClr, first, Shift);
+    LowerBuff = instance.addStream("LowerBuff", core.Line, name + ".Lower", "Lower", instance.parameters.LowerClr, first, Shift);
+    UpperBuff.setWidth(instance.parameters.widthLinReg);
+    UpperBuff.setStyle(instance.parameters.styleLinReg);
+    MUpperBuff.setWidth(instance.parameters.widthLinReg);
+    MUpperBuff.setStyle(instance.parameters.styleLinReg);
+    MiddleBuff.setWidth(instance.parameters.widthLinReg);
+    MiddleBuff.setStyle(instance.parameters.styleLinReg);
+    MLowerBuff.setWidth(instance.parameters.widthLinReg);
+    MLowerBuff.setStyle(instance.parameters.styleLinReg);
+    LowerBuff.setWidth(instance.parameters.widthLinReg);
+    LowerBuff.setStyle(instance.parameters.styleLinReg);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    MA.update(mode);
+    ATR.update(mode);
+    MiddleBuff[period+Shift]=MA.DATA[period];
+    UpperBuff[period+Shift]=MiddleBuff[period+Shift]+KATR*ATR.DATA[period];
+    LowerBuff[period+Shift]=MiddleBuff[period+Shift]-KATR*ATR.DATA[period];
+    MUpperBuff[period+Shift]=MiddleBuff[period+Shift]+MKATR*ATR.DATA[period];
+    MLowerBuff[period+Shift]=MiddleBuff[period+Shift]-MKATR*ATR.DATA[period];
+   } 
+}
+

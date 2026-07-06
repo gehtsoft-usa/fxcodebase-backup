@@ -1,0 +1,90 @@
+function Init()
+{
+    indicator.name("Candles by size indicator");
+    indicator.description("Paint the candles by size.");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    
+    indicator.parameters.addInteger("HL_Level", "High-Low level (in pips)", "", 20);
+    indicator.parameters.addString("HL_Method", "High-Low method", "", "0");
+    indicator.parameters.addStringAlternative("HL_Method", "H-L<Level", "", "0");
+    indicator.parameters.addStringAlternative("HL_Method", "H-L>Level", "", "1");
+    indicator.parameters.addInteger("OC_Level", "Open-Close level (in pips)", "", 10);
+    indicator.parameters.addString("OC_Method", "Open-Close method", "", "0");
+    indicator.parameters.addStringAlternative("OC_Method", "O-C<Level", "", "0");
+    indicator.parameters.addStringAlternative("OC_Method", "C-C>Level", "", "1");
+    indicator.parameters.addBoolean("OC_Abs", "Use absolute value for Open-Close", "", true);
+    
+    indicator.parameters.addColor("clrDefaultUp", "Default UP bar color", "Default UP bar color", core.COLOR_UPCANDLE);
+    indicator.parameters.addColor("clrDefaultDn", "Default DN bar color", "Default DN bar color", core.COLOR_DOWNCANDLE);
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(255, 255, 0));    
+}
+
+var first;
+var source = null;
+var HL_Level;
+var HL_Method;
+var OC_Level;
+var OC_Method;
+var OC_Abs;
+var open=null;
+var close=null;
+var high=null;
+var low=null;
+
+function Prepare()
+{
+    source = instance.source;
+    HL_Level=instance.parameters.HL_Level*source.pipSize();
+    HL_Method=tonumber(instance.parameters.HL_Method);
+    OC_Level=instance.parameters.OC_Level*source.pipSize();
+    OC_Method=tonumber(instance.parameters.OC_Method);
+    OC_Abs=instance.parameters.OC_Abs;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ")";
+    instance.name(name);
+    open = instance.addStream("open", core.Line, name, "open", core.rgb(0, 0, 0), first)
+    high = instance.addStream("high", core.Line, name, "high", core.rgb(0, 0, 0), first)
+    low = instance.addStream("low", core.Line, name, "low", core.rgb(0, 0, 0), first)
+    close = instance.addStream("close", core.Line, name, "close", core.rgb(0, 0, 0), first)
+    instance.createCandleGroup("ColorCandle", "", open, high, low, close);
+}
+
+function Update(period, mode)
+{
+    if (period>first) 
+    {
+     open[period]=source.open[period];
+     close[period]=source.close[period];
+     high[period]=source.high[period];
+     low[period]=source.low[period];
+     
+     var HL=source.high[period]-source.low[period];
+     var OC;
+     if (OC_Abs) 
+     {
+      OC=Math.abs(source.open[period]-source.close[period]);
+     }
+     else
+     {
+      OC=source.open[period]-source.close[period];
+     }
+     
+     if (((HL_Method==0 && HL<HL_Level) || (HL_Method==1 && HL>HL_Level)) && ((OC_Method==0 && OC<OC_Level) || (OC_Method==1 && OC>OC_Level)))
+     {
+      open.setColor(period, instance.parameters.clr);
+     }
+     else
+     {
+      if (source.close[period]>source.open[period]) 
+      {
+       open.setColor(period, instance.parameters.clrDefaultUp);
+      }
+      else
+      {
+       open.setColor(period, instance.parameters.clrDefaultDn);
+      }
+     }
+    } 
+}
+

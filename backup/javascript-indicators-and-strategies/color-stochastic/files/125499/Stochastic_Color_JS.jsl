@@ -1,0 +1,84 @@
+function Init()
+{
+    indicator.name("Color stochastic");
+    indicator.description("Color stochastic");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("K", "Number of periods for %K", "Number of periods for %K", 5, 2, 1000);
+    indicator.parameters.addInteger("SD", "%D slowing periods", "%D slowing periods", 3, 2, 1000);
+    indicator.parameters.addInteger("D", "Number of periods for %D", "Number of periods for %D", 3, 2, 1000);
+
+    indicator.parameters.addString("MVAT_K", "Smoothing type for %K", "Smoothing type for %K", "MVA");
+    indicator.parameters.addStringAlternative("MVAT_K", "MVA", "MVA", "MVA");
+    indicator.parameters.addStringAlternative("MVAT_K", "EMA", "EMA", "EMA");
+    indicator.parameters.addStringAlternative("MVAT_K", "FS", "Fast Smoothed", "FS");
+
+    indicator.parameters.addString("MVAT_D", "Smoothing type for %D", "Smoothing type for %D", "MVA");
+    indicator.parameters.addStringAlternative("MVAT_D", "MVA", "MVA", "MVA");
+    indicator.parameters.addStringAlternative("MVAT_D", "EMA", "EMA", "EMA");
+    
+    indicator.parameters.addDouble("OverboughtLevel", "Overbought level", "Overbought level", 80, 0, 100);
+    indicator.parameters.addDouble("OversoldLevel", "Oversold level", "Oversold level", 20, 0, 100);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Kclr", "K line Color", "K line Color", core.rgb(128, 128, 128));
+    indicator.parameters.addInteger("Kwidth", "K line width", "K line width", 1, 1, 5);
+    indicator.parameters.addInteger("Kstyle", "K line style", "K line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("Kstyle", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Dclr", "D line Color", "D line Color", core.rgb(128, 128, 128));
+    indicator.parameters.addInteger("Dwidth", "D line width", "D line width", 1, 1, 5);
+    indicator.parameters.addInteger("Dstyle", "D line style", "D line style", core.LINE_DASH);
+    indicator.parameters.setFlag("Dstyle", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("OBclr", "Overbought Color", "Overbought Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("OSclr", "Oversold Color", "Oversold Color", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+var OverboughtLevel;
+var OversoldLevel;
+var Stochastic;
+var BuffK=null;
+var BuffD=null;
+
+function Prepare()
+{
+    source = instance.source;
+    OverboughtLevel=instance.parameters.OverboughtLevel;
+    OversoldLevel=instance.parameters.OversoldLevel;
+    first = source.first()+2;
+    Stochastic = core.indicators.create("STOCHASTIC", source, instance.parameters.K, instance.parameters.SD, instance.parameters.D, instance.parameters.MVAT_K, instance.parameters.MVAT_D);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.K + ", " + instance.parameters.SD + ", " + instance.parameters.D + ", " + instance.parameters.MVAT_K + ", " + instance.parameters.MVAT_D + ")";
+    instance.name(name);
+    BuffK = instance.addStream("BuffK", core.Line, name + ".K", "K", instance.parameters.Kclr, first);
+    BuffD = instance.addStream("BuffD", core.Line, name + ".D", "D", instance.parameters.Dclr, first);
+    BuffK.setWidth(instance.parameters.Kwidth);
+    BuffK.setStyle(instance.parameters.Kstyle);
+    BuffD.setWidth(instance.parameters.Dwidth);
+    BuffD.setStyle(instance.parameters.Dstyle);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    Stochastic.update(mode);
+    BuffK[period]=Stochastic.K[period];
+    BuffD[period]=Stochastic.D[period];
+    if (BuffK[period]>=OverboughtLevel) 
+    {
+     BuffK.setColor(period,instance.parameters.OBclr);
+    }
+    else if (BuffK[period]<=OversoldLevel) 
+    {
+     BuffK.setColor(period,instance.parameters.OSclr);
+    }
+    else
+    {
+     BuffK.setColor(period,instance.parameters.Kclr);
+    }
+   } 
+}
+

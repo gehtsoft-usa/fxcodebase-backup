@@ -1,0 +1,78 @@
+function Init()
+{
+    indicator.name("Glitch Index");
+    indicator.description("Glitch Index");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");	
+    indicator.parameters.addInteger("MaPeriod", "MA Period", "MA Period", 30);
+	indicator.parameters.addString("Method", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method", "WMA", "WMA" , "WMA");
+	
+    indicator.parameters.addInteger("ROCPeriod", "ROC Period", "ROC Period", 1);
+	
+	indicator.parameters.addGroup("Style");	
+    indicator.parameters.addColor("Up", "Color of Positiv GlitchIndex", "Color of GlitchIndex", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("Down", "Color of Negativ GlitchIndex", "Color of GlitchIndex", core.rgb(255, 0, 0)); 
+}
+
+var MaPeriod;
+var ROCPeriod;
+var Method;
+var first;
+var source = null;
+var MA;
+
+var GlitchIndex = null;
+
+function Prepare(nameOnly)
+{
+    MaPeriod = instance.parameters.MaPeriod;
+    ROCPeriod = instance.parameters.ROCPeriod;
+	Method = instance.parameters.Method;
+    source = instance.source;
+	MA = core.indicators.create(Method, source, MaPeriod);
+    first = MA.DATA.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(MaPeriod)  + ", " + tostring(Method)+ ", " + tostring(ROCPeriod) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        GlitchIndex = instance.addStream("GlitchIndex", core.Bar, name, "GlitchIndex", instance.parameters.Up, first+ROCPeriod);
+	 
+    }
+}
+
+function Update(period, mode)
+{
+       MA.update(mode);  
+    if (period < first + ROCPeriod) 
+    {
+	 return;
+	}
+	
+	var rocsma=((MA.DATA[period]-MA.DATA[period-ROCPeriod])*0.1)+1;
+	var smamult=MA.DATA[period]*rocsma;
+    var diff=source[period]-smamult;
+    GlitchIndex[period] = (diff/source[period])*100;
+	
+	if  (GlitchIndex[period] > 0) 
+    {
+	 GlitchIndex.setColor(period,  instance.parameters.Up);
+    }
+	else
+    {
+	 GlitchIndex.setColor(period,  instance.parameters.Down);
+	}
+ 
+}
+
+

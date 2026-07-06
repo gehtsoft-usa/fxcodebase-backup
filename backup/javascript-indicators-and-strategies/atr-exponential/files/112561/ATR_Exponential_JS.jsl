@@ -1,0 +1,54 @@
+function Init()
+{
+    indicator.name("ATR exponential indicator");
+    indicator.description("ATR exponential indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 14);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period;
+var Temp;
+var ATRex=null;
+var pr;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ")";
+    instance.name(name);
+    ATRex = instance.addStream("ATRex", core.Line, name + ".ATRex", "ATRex", instance.parameters.clr, first);
+    ATRex.setWidth(instance.parameters.widthLinReg);
+    ATRex.setStyle(instance.parameters.styleLinReg);
+    pr=2/(Period+1);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    Temp=Math.max(source.high[period],source.close[period-1])-Math.min(source.low[period],source.close[period-1]);
+    ATRex[period]=Temp*pr+ATRex[period-1]*(1-pr);
+   } 
+   else
+   {
+    if (period==first) 
+    {
+    ATRex[period]=0;
+    } 
+   } 
+
+}
+

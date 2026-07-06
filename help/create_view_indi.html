@@ -1,0 +1,525 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252" /><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><title>How to Create View Indicator?</title><style type="text/css">a, p, h1, h2, h3, h4, h5, h6, table, td, tr, li, ul, ol {
+    font-family: Verdana, Trebuchet MS, Arial;
+}
+
+a, p, td, tr, ul, ol, li {
+    font-size: 12pt;
+}
+
+h3 {
+    font-size: 13pt;
+}
+
+h2 {
+    font-size: 13pt;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+body {
+    color: #444444;
+    background-color: white;
+}
+
+A:link {
+    color: #0065b3;
+    cursor: pointer;
+}
+
+A:visited {
+    color: #0068be;
+    cursor: pointer;
+}
+
+a.action {
+  background-color: #0065b3;
+  color: white;
+  font-size: 10pt;
+  padding: 2px 2px;
+  width: 50pt;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px;
+}
+
+.side-icon {
+    float: left;
+}
+
+a.action [class*="dripicons-"]:before {
+    padding: 0 2px 0 0;
+    font-size: 12pt;
+    vertical-align: text-bottom;
+}
+
+.side-icon:after {
+  content: "";
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  border-left: 1.5px solid white;
+  transform: translate(-50%);
+}
+
+a.actiontab {
+  font-size: 10pt;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px 3px 0 0;
+}
+
+pre, code, code a {
+    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+    font-size: 12pt;
+}
+
+code.ctag {
+    background-color: #f1f1f1;
+    padding: .1em .2em;
+    border-radius: 3px;
+}
+
+pre {
+    background-color: white;
+}
+
+pre.example {
+    background-color: #f1f1f1;
+}
+
+ul {
+    list-style-type: disc;
+    margin-left: 18pt;
+}
+
+ol {
+    list-style-type: decimal;
+    margin-left: 18pt;
+}
+
+ul.hhc {
+    list-style-type: none;
+    margin-left: 1em;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+li.hhc {
+    margin-left: 0;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+table {
+  border-spacing: 0;
+  border-color: #dfe3e7;
+}
+
+tr + tr td {
+   border-top: 0;
+}
+
+tr td + td {
+  border-left: 0;
+}
+
+td {
+  border: 1px solid;
+  border-color: #dfe3e7;
+}
+
+tr:first-child td:first-child {
+   border-radius: 0.2em 0 0 0;
+}
+
+tr:first-child td:last-child {
+  border-radius: 0 0.2em 0 0;
+}
+
+tr:first-child td:only-child {
+  border-radius: 0.2em 0.2em 0 0;
+}
+
+tr:last-child td:first-child {
+    border-radius: 0 0 0 0.2em;
+}
+
+tr:last-child td:last-child {
+    border-radius: 0 0 0.2em 0;
+}
+
+tr:last-child td:only-child {
+    border-radius: 0 0 0.2em 0.2em;
+}
+
+tr:only-child td:only-child {
+    border-radius: 0.2em 0.2em 0.2em 0.2em;
+}
+
+tr:only-child td:first-child {
+   border-radius: 0.2em 0 0 0.2em;
+}
+
+tr:only-child td:last-child {
+  border-radius: 0 0.2em 0.2em 0;
+}
+
+
+td.tmain, td.tmain_nw, td.thdr {
+    background-color: rgb(255, 255, 255);
+    vertical-align: top;
+    padding: 3px;
+}
+
+td.tmain p, td.tmain_nw p, td.thdr p {
+    margin-top: 3pt;
+    margin-bottom: 3pt;
+}
+
+td.tmain_nw {
+    white-space: nowrap;
+}
+
+td.thdr {
+    background-color: #e3e3e3;
+}
+
+table.decl {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+    vertical-align: top;
+    padding: 3px;
+    width: 100%;
+}
+
+table.decl td {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+}
+
+div.note-quote {
+    border-left: 10px solid #ccc;
+    padding: 1em 10px .1em 10px;
+    margin: 1.5em 10px;
+    background-color: rgb(224, 224, 224);
+}
+
+div.note-note {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+div.note-warning {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #fff;
+    background-color: #ff6358;
+}
+div.note-warning code.ctag {
+    color: black;
+}</style>
+<link rel="stylesheet" href="res/dripicons.css"></head><body><script type="text/javascript">
+var highlighterEnabled = false;
+var maintopic = 'index';
+var helptitle = 'Indicore SDK 3';
+    function loadStarted() {
+    window.onload = loadCompleted;
+
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        var head = document.getElementsByTagName('head')[0];
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.min.js';
+        head.appendChild(script4);
+
+
+        var script2 = document.createElement('script');
+        script2.type = 'text/javascript';
+        script2.src = './highlighter/highlight.cshtml.js';
+        head.appendChild(script2);
+
+        var script3 = document.createElement('script');
+        script3.type = 'text/javascript';
+        script3.src = './highlighter/highlight.lua.js';
+        head.appendChild(script3);
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.luax.js';
+        head.appendChild(script4);
+    }
+}
+
+function loadCompleted() {
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        hljs.registerLanguage('cshtml-razor', window.hljsDefineCshtmlRazor);
+        hljs.registerLanguage('lua', window.hljsDefineLua);
+        hljs.registerLanguage('luax', window.hljsDefineLuaX);
+        x = document.querySelectorAll('pre code');
+        for (var i = 0; i < x.length; i++) {
+            if (x[i].hasAttribute('class')) {
+                hljs.highlightBlock(x[i]);
+            }
+        }
+    }
+}
+
+
+function hidediv(divname) {
+    document.getElementById(divname).style.display = 'none';
+}
+
+function showdiv(divname) {
+    document.getElementById(divname).style.display = 'inline';
+}
+
+function syncList() {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, null, document.title);
+    }
+}
+
+function syncList1(key) {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, key + '.html', document.title);
+    }
+}</script><script type="text/javascript">
+    loadStarted();
+</script><h1>How to Create View Indicator?</h1><p>To create a view indicator:</p>
+<p>1) In <a href="Init.html"><code>Init()</code></a> function of the indicator, set the type of the indicator to <code class="ctag">core.View</code>.</p>
+<p>Then create the set of indicator parameters as you usually do it.</p>
+<p>If you want the user to specify a data range for the data created by your view indicator - use new type of the
+parameter <a href="parameters.addDate.html"><code>addDate()</code></a>. If you want the behavior similar to &quot;until now&quot;, use NULL flags for
+this parameters. In this case, if the user doesn't &quot;check&quot; the parameter and enter the value, the parameter will return <code class="ctag">0</code>, which can be
+directly used as a &quot;now&quot; value in the <a href="host.execute_getHistory.html"><code>host:execute(&quot;getHistory&quot;)</code></a>, <a href="host.execute_getHistory1.html"><code>host:execute(&quot;getHistory1&quot;)</code></a>
+functions.</p>
+<p>If you want the user to choose an instrument from the list of the instruments available, use <code class="ctag">FLAG_INSTRUMENTS</code> applied on a string parameter.</p>
+<p>2) In <a href="Prepare.html"><code>Prepare()</code></a> function:</p>
+<p>2.1) if you need access to the price data via Marketscope, use <a href="host.execute_getHistory.html"><code>host:execute(&quot;getHistory&quot;)</code></a> to
+get the historical data.</p>
+<p>2.2) if you need notifications when new prices arrived, use <a href="host.execute_subscribeTradeEvents.html"><code>host:execute(&quot;subscribeTradeEvents&quot;)</code></a>
+to subscribe to new prices. Please note that you don't need to update or manage updates of the historical prices obtained via
+<a href="host.execute_getHistory.html"><code>host:execute(&quot;getHistory&quot;)</code></a> method. The notification about new prices is always sent <b>after</b> all
+historical subscriptions of the indicator is updated.</p>
+<p>2.3) initialize a view using <a href="instance_impl.initView.html"><code>initView()</code></a> method before any of outputs are created.</p>
+<p>This step is important because all outputs of the indicator shall provide the information about their source, such as the name of the instrument,
+the base time frame, precision and so on. The regular indicators take this data from the indicator source. Because view does not have a source,
+it must specify these parameters.</p>
+<p>Please avoid using the standard timeframe names (such as &quot;m1&quot; or &quot;H1&quot;) for if your indicator will produce completely custom time axis. Using
+a custom value here would help other indicators to recognize that the timeframe is custom.</p>
+<p>2.4) now you can create all outputs of your indicator.</p>
+<p>The indicator SDK itself does not specify any rules of the indicator outputs, but the most host applications do.</p>
+<p>It is common recommendation for a view indicator to:</p>
+<p>a) Try to create a <a href="instance_impl.createCandleGroup.html"><code>candle output group</code></a> if it is possible. In this case almost any indicator and all
+chart instruments can be used on the chart created for this view.</p>
+<p>b) If a candle output is not applicable to the view, at least one output stream must be created. In this case the chart will be recognized as
+a tick chart, and only those tools and indicators which can be used on a tick chart will be available in the host application.</p>
+<p>3) In <a href="AsyncOperationFinished.html"><code>AsyncOperationFinished()</code></a> handle all the data as required. In order to create a new bar use
+<a href="instance_impl.addViewBar.html"><code>instance_impl.addViewBar()</code></a> function. This function adds a new bar to the end of all output streams. You must fill the
+values before the <code class="ctag">AsyncOperationFinished()</code> is finished.</p>
+<p>Please note that the view functionality can be mixed with <a href="od_indicators.html">owner-drawn indicator</a> functionality in order to create completely custom views.</p>
+<p>Please find an example of a view indicator below.</p>
+<p>This view indicator creates a N-hour chart with a custom trading day start hour. It is impossible to create such chart without view, because,
+depending on the trading day start hour the date/time of individual bars will be different from the date/time of the standard N-hour bars, so
+the custom time axis is required for such indicator.</p><div id="open9" style="display:inline">
+  <p>Example of a view: The N-hours view with a custom trading day start hour&nbsp;<a href="javascript: showdiv('close9'); hidediv('open9');" onclick="javascript: showdiv('close9'); hidediv('open9');" class="action">Show<span class="side-icon dripicons-chevron-right"></span></a></p>
+</div>
+<div id="close9" style="display:none">
+  <p>Example of a view: The N-hours view with a custom trading day start hour&nbsp;<a href="javascript: showdiv('open9'); hidediv('close9');" onclick="javascript: showdiv('open9'); hidediv('close9');" class="action">Hide<span class="side-icon dripicons-chevron-down"></span></a></p>
+  <pre class="example" id="example9"><code>function Init()
+    indicator:name(&quot;N-hour candle view with customizable trading day start&quot;);
+    indicator:description(&quot;&quot;);
+    indicator:requiredSource(core.Tick);
+    indicator:type(core.View);
+ 
+    indicator.parameters:addGroup(&quot;Price Parameters&quot;);
+    indicator.parameters:addString(&quot;instrument&quot;, &quot;Instrument&quot;, &quot;&quot;, &quot;EUR/USD&quot;);
+    indicator.parameters:addString(&quot;bid&quot;, &quot;Price:&quot;, &quot;&quot;, &quot;Bid&quot;);
+    indicator.parameters:addStringAlternative(&quot;bid&quot;, &quot;Bid&quot;, &quot;&quot;, &quot;Bid&quot;);
+    indicator.parameters:addStringAlternative(&quot;bid&quot;, &quot;Ask&quot;, &quot;&quot;, &quot;Ask&quot;);
+    indicator.parameters:setFlag(&quot;instrument&quot;, core.FLAG_INSTRUMENTS);
+    indicator.parameters:addString(&quot;frame&quot;, &quot;Timeframe&quot;, &quot;&quot;, &quot;H2&quot;);
+    indicator.parameters:addStringAlternative(&quot;frame&quot;, &quot;H2&quot;, &quot;&quot;, &quot;H2&quot;);
+    indicator.parameters:addStringAlternative(&quot;frame&quot;, &quot;H3&quot;, &quot;&quot;, &quot;H3&quot;);
+    indicator.parameters:addStringAlternative(&quot;frame&quot;, &quot;H4&quot;, &quot;&quot;, &quot;H4&quot;);
+    indicator.parameters:addStringAlternative(&quot;frame&quot;, &quot;H6&quot;, &quot;&quot;, &quot;H6&quot;);
+    indicator.parameters:addStringAlternative(&quot;frame&quot;, &quot;H8&quot;, &quot;&quot;, &quot;H8&quot;);
+    indicator.parameters:addStringAlternative(&quot;frame&quot;, &quot;H12&quot;, &quot;&quot;, &quot;H12&quot;);
+    indicator.parameters:addStringAlternative(&quot;frame&quot;, &quot;D1&quot;, &quot;&quot;, &quot;D1&quot;);
+    indicator.parameters:addInteger(&quot;hour&quot;, &quot;Trading Day start hour (EST)&quot;, &quot;&quot;, 17, 0, 23);
+    indicator.parameters:addGroup(&quot;Range&quot;);
+    indicator.parameters:addDate(&quot;from&quot;, &quot;Date From&quot;, &quot;&quot;, -1000);
+    indicator.parameters:addDate(&quot;to&quot;, &quot;Date to&quot;, &quot;&quot;, 0);
+    indicator.parameters:setFlag(&quot;to&quot;, core.FLAG_DATE_OR_NULL);
+end
+ 
+local loading;
+local instrument;
+local frame;
+local hour;
+local frame;
+local history;
+local open, high, low, close, candleend;
+local offer;
+local offset;
+local bid;
+ 
+function Prepare(onlyName)
+    instrument = instance.parameters.instrument;
+    frame = instance.parameters.frame;
+    hour = instance.parameters.hour;
+    bid = instance.parameters.bid == &quot;Bid&quot;;
+ 
+    if hour == 0 then
+        offset = 0;
+    elseif hour &lt;= 12 then
+        offset = hour;
+    else
+        offset = -(24 - hour);
+    end
+ 
+ 
+    local name = profile:id() .. &quot;(&quot; .. instrument .. &quot;.&quot; ..
+                                        frame .. &quot;,&quot; ..
+                                        hour .. &quot;:00EST&quot; ..
+                                 &quot;)&quot;;
+    instance:name(name);
+ 
+    if onlyName then
+        return ;
+    end
+ 
+    -- check whether the instrument is available
+    local offers = core.host:findTable(&quot;offers&quot;);
+    local enum = offers:enumerator();
+    local row;
+ 
+    row = enum:next();
+    while row ~= nil do
+        if row.Instrument == instrument then
+            break;
+        end
+        row = enum:next();
+    end
+ 
+    assert(row ~= nil, &quot;Instrument is not found&quot;);
+ 
+    offer = row.OfferID;
+ 
+    instance:initView(instrument, row.Digits, row.PointSize, bid, instance.parameters.to == 0);
+ 
+    loading = true;
+    history = core.host:execute(&quot;getHistory&quot;, 1000, instrument, &quot;H1&quot;, instance.parameters.from, instance.parameters.to, bid);
+    if instance.parameters.to == 0 then
+        core.host:execute(&quot;subscribeTradeEvents&quot;, 2000, &quot;offers&quot;);
+    end
+ 
+    open = instance:addStream(&quot;open&quot;, core.Line, name .. &quot;.open&quot;, &quot;open&quot;, 0, 0, 0);
+    high = instance:addStream(&quot;high&quot;, core.Line, name .. &quot;.high&quot;, &quot;high&quot;, 0, 0, 0);
+    low = instance:addStream(&quot;low&quot;, core.Line, name .. &quot;.low&quot;, &quot;low&quot;, 0, 0, 0);
+    close = instance:addStream(&quot;close&quot;, core.Line, name .. &quot;.close&quot;, &quot;close&quot;, 0, 0, 0);
+    candleend = instance:addInternalStream(0, 0);
+ 
+    instance:createCandleGroup(&quot;candle&quot;, &quot;candle&quot;, open, high, low, close, nil, frame);
+end
+ 
+function Update(period, mode)
+    -- shall never be called, ignore the call
+end
+ 
+function AsyncOperationFinished(cookie, success, message, message1, message2)
+    if cookie == 1000 then
+        handleHistory();
+    elseif cookie == 2000 then
+        if message == offer then
+            handleUpdate();
+        end
+    end
+end
+ 
+function handleHistory()
+    local s = history:size() - 1;
+    local i;
+    local prevcandle = 0;
+    local cstart, cend, cdate;
+    local current = open:size() - 1;
+ 
+    for i = 0, s, 1 do
+        cdate = history:date(i);
+        if current &lt; 0 or cdate &gt;= candleend[current] then
+            cstart, cend = core.getcandle(frame, history:date(i), offset, 0);
+            instance:addViewBar(cstart);
+            current = current + 1;
+            open[current] = history.open[i];
+            high[current] = history.high[i];
+            low[current] = history.low[i];
+            close[current] = history.close[i];
+            candleend[current] = cend;
+        else
+            if high[current] &lt; history.high[i] then
+                high[current] = history.high[i];
+            end
+            if low[current] &gt; history.low[i] then
+                low[current] = history.low[i];
+            end
+            close[current] = history.close[i];
+        end
+    end
+    loading = false;
+end
+ 
+function handleUpdate()
+    if not loading and history:size() &gt; 0 then
+        local i = history:size() - 1;
+        local current = open:size() - 1;
+        local lastdate = history:date(i);
+ 
+        if lastdate &gt;= candleend[current] then
+            close[current] = history.close[i - 1];
+            cstart, cend = core.getcandle(frame, history:date(i), offset, 0);
+            instance:addViewBar(cstart);
+            current = current + 1;
+            open[current] = history.open[i];
+            high[current] = history.high[i];
+            low[current] = history.low[i];
+            close[current] = history.close[i];
+            candleend[current] = cend;
+        else
+            if high[current] &lt; history.high[i] then
+                high[current] = history.high[i];
+            end
+            if low[current] &gt; history.low[i] then
+                low[current] = history.low[i];
+            end
+            close[current] = history.close[i];
+        end
+    end
+end</code></pre>
+</div><p>
+  <center><a href="view_indicators.html">back</a></center>
+</p><script language="javascript" type="text/javascript">if(window.parent.frames[0]) window.parent.frames[0].selectItem(window.location.href);</script></body></html>

@@ -1,0 +1,70 @@
+function Init()
+{
+    indicator.name("BB Cloud indicator");
+    indicator.description("BB Cloud indicator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 20, 1, 10000);
+    indicator.parameters.addDouble("Deviation", "Deviation", "", 2.0, 0.0001, 1000.0);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("BandsClr", "Bands line color", "Bands line color", core.rgb(219, 64, 0));
+    indicator.parameters.addInteger("BandsWidth", "Bands line width", "Bands line width", 1, 1, 5);
+    indicator.parameters.addInteger("BandsStyle", "Bands line style", "Bands line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("BandsStyle", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("AverageClr", "Average line color", "Average line color", core.rgb(0, 0, 255));
+    indicator.parameters.addInteger("AverageWidth", "Average line width", "Average line width", 1, 1, 5);
+    indicator.parameters.addInteger("AverageStyle", "Average line style", "Average line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("AverageStyle", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("UpperCloudClr", "Upper cloud color", "Upper cloud color", core.rgb(128, 255, 255));
+    indicator.parameters.addColor("LowerCloudClr", "Lower cloud color", "Lower cloud color", core.rgb(255, 128, 64));
+    indicator.parameters.addInteger("Transparency", "Transparency", "", 80,0,100);
+}
+
+var first;
+var source = null;
+var Period;
+var Deviation;
+var BB;
+var BB_Top=null;
+var BB_Bottom=null;
+var BB_Middle=null;
+var BB_Middle2=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    Deviation=instance.parameters.Deviation;
+    first = source.first()+2;
+    BB = core.indicators.create("BB", source, Period, Deviation);
+    BB_Middle2=instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.Deviation + ")";
+    instance.name(name);
+    BB_Top = instance.addStream("BB_Top", core.Line, name + ".Top", "Top", instance.parameters.BandsClr, first);
+    BB_Bottom = instance.addStream("BB_Bottom", core.Line, name + ".Bottom", "Bottom", instance.parameters.BandsClr, first);
+    BB_Middle = instance.addStream("BB_Middle", core.Line, name + ".Middle", "Middle", instance.parameters.AverageClr, first);
+    BB_Top.setWidth(instance.parameters.BandsWidth);
+    BB_Top.setStyle(instance.parameters.BandsStyle);
+    BB_Bottom.setWidth(instance.parameters.BandsWidth);
+    BB_Bottom.setStyle(instance.parameters.BandsStyle);
+    BB_Middle.setWidth(instance.parameters.AverageWidth);
+    BB_Middle.setStyle(instance.parameters.AverageStyle);
+    instance.createChannelGroup("UpperGroup","Upper" , BB_Top, BB_Middle, instance.parameters.UpperCloudClr, 100-instance.parameters.Transparency);
+    instance.createChannelGroup("LowerGroup","Lower" , BB_Middle2, BB_Bottom, instance.parameters.LowerCloudClr, 100-instance.parameters.Transparency);
+}
+
+function Update(period, mode)
+{
+   if (period>first+Period) 
+   {
+    BB.update(mode);
+    BB_Top[period]=BB.TL[period];
+    BB_Bottom[period]=BB.BL[period];
+    BB_Middle[period]=BB.AL[period];
+    BB_Middle2[period]=BB.AL[period];
+   } 
+}
+

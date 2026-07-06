@@ -1,0 +1,119 @@
+//initializes the indicator
+function Init()
+{
+    indicator.name("Relative Strength Index");
+    indicator.description("Relative Strength Index");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+    indicator.setTag("group", "Classic Oscillators");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("N", "Number of periods", "The number of periods.", 10, 1, 10000);
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Line color", "The color of line", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("width", "Line width", "The width of line", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "The style of line", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LEVEL_STYLE);
+
+    indicator.parameters.addGroup("Levels");
+    indicator.parameters.addInteger("Overbought", "Overbought level", "Overbought level", 70, 0, 100);
+    indicator.parameters.addInteger("Oversold", "Oversold level", "Oversold level", 30, 0, 100);
+    indicator.parameters.addColor("OBclr", "Overbought level color", "The color of Overbought level", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("OBwidth", "Overbought level width", "The width of Overbought level", 1, 1, 5);
+    indicator.parameters.addInteger("OBstyle", "Overbought level style", "The style of Overbought level", core.LINE_SOLID);
+    indicator.parameters.setFlag("OBstyle", core.FLAG_LEVEL_STYLE);
+    indicator.parameters.addColor("OSclr", "Oversold level color", "The color of Oversold level", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("OSwidth", "Oversold level width", "The width of Oversold level", 1, 1, 5);
+    indicator.parameters.addInteger("OSstyle", "Oversold level style", "The style of Oversold level", core.LINE_SOLID);
+    indicator.parameters.setFlag("OSstyle", core.FLAG_LEVEL_STYLE);
+
+}
+
+var first = 0;
+var n = 0;
+var source = null;
+var out = null;
+var pos;
+var neg;
+
+//initializes the instance of the indicator
+function Prepare(onlyName)
+{
+    source = instance.source;
+    n = instance.parameters.N;
+    var name = profile.id() + "(" + instance.source.name() + "," + n + ")";
+    instance.name(name);
+  
+    if (onlyName == true)
+        return ;
+
+    first = source.first();
+
+    pos=instance.addInternalStream(0, 0);
+    neg=instance.addInternalStream(0, 0);
+
+    out = instance.addStream("ATR", core.Line, name, "ATR", instance.parameters.clr,  first)
+    out.setWidth(instance.parameters.width);
+    out.setStyle(instance.parameters.style);
+    out.addLevel(0);
+    out.addLevel(instance.parameters.Oversold, instance.parameters.OSstyle, instance.parameters.OSwidth, instance.parameters.OSclr);
+    out.addLevel(50);
+    out.addLevel(instance.parameters.Overbought, instance.parameters.OBstyle, instance.parameters.OBwidth, instance.parameters.OBclr);
+    out.addLevel(100);
+}
+
+// calculate the value
+function Update(period, mode)
+{
+    if (period >= first)
+    {
+        var i = 0;
+        var sump = 0;
+        var sumn = 0;
+        var positive = 0;
+        var negative = 0;
+        var diff = 0;
+        if (period == first)
+        {
+            for (i = period - n + 1; i<=period; i++)
+            {
+                diff = source[i] - source[i - 1];
+                if (diff >= 0)
+                {
+                    sump = sump + diff;
+                }
+                else
+                {
+                    sumn = sumn - diff;
+                }
+            }
+            positive = sump / n;
+            negative = sumn / n;
+        }
+        else
+        {
+            diff = source[period] - source[period - 1];
+            if (diff > 0)
+            {
+                sump = diff;
+            }
+            else
+            {
+                sumn = -diff;
+            }
+            positive = (pos[period - 1] * (n - 1) + sump) / n;
+            negative = (neg[period - 1] * (n - 1) + sumn) / n;
+        }
+        pos[period] = positive;
+        neg[period] = negative;
+        if (negative == 0)
+        {
+            out[period] = 0;
+        }
+        else
+        {
+            out[period] = 100 - (100 / (1 + positive / negative));
+        }
+    }
+
+}

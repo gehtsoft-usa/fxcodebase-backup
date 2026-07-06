@@ -1,0 +1,203 @@
+function Init()
+{
+    indicator.name("Time trading range indicator");
+    indicator.description("Time trading range indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addString("BeginTime", "Begin time", "", "01.00");
+    indicator.parameters.addString("EndTime", "End time", "", "05.30");
+    indicator.parameters.addString("BoxEndTime", "Box } time", "", "10.00");
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clrUP1", "Color UP 1", "Color UP 1", core.rgb(0, 128, 0));
+    indicator.parameters.addColor("clrUP2", "Color UP 2", "Color UP 2", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clrDN1", "Color DN 1", "Color DN 1", core.rgb(128, 0, 0));
+    indicator.parameters.addColor("clrDN2", "Color DN 2", "Color DN 2", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("Transparency", "Transparency", "", 50,0,100);
+}
+
+var first;
+var source = null;
+var BeginTime;
+var EndTime;
+var BoxEndTime;
+var BeginTime_H, BeginTime_M;
+var EndTime_H, EndTime_M;
+var BoxEndTime_H, BoxEndTime_M;
+var BM_Begin;
+var BM_End;
+var BM_BoxEnd;
+var i;
+
+function Prepare()
+{
+    source = instance.source;
+    BeginTime=instance.parameters.BeginTime;
+    EndTime=instance.parameters.EndTime;
+    BoxEndTime=instance.parameters.BoxEndTime;
+    first = source.first();
+    var name = profile.id() + "(" + source.name() + ", " + BeginTime + ", " + EndTime + ", " + BoxEndTime + ")";
+    instance.name(name);
+    hUP1=instance.addInternalStream(first, 0);
+    lUP1=instance.addInternalStream(first, 0);
+    hUP2=instance.addInternalStream(first, 0);
+    lUP2=instance.addInternalStream(first, 0);
+    hDN1=instance.addInternalStream(first, 0);
+    lDN1=instance.addInternalStream(first, 0);
+    hDN2=instance.addInternalStream(first, 0);
+    lDN2=instance.addInternalStream(first, 0);
+    BM_Begin=instance.addInternalStream(first, 0);
+    BM_End=instance.addInternalStream(first, 0);
+    BM_BoxEnd=instance.addInternalStream(first, 0);
+    instance.createChannelGroup("UpGroup1","Up1" , hUP1, lUP1, instance.parameters.clrUP1, 100-instance.parameters.Transparency);
+    instance.createChannelGroup("UpGroup2","Up2" , hUP2, lUP2, instance.parameters.clrUP2, 100-instance.parameters.Transparency);
+    instance.createChannelGroup("DnGroup1","Dn1" , hDN1, lDN1, instance.parameters.clrDN1, 100-instance.parameters.Transparency);
+    instance.createChannelGroup("DnGroup2","Dn2" , hDN2, lDN2, instance.parameters.clrDN2, 100-instance.parameters.Transparency);
+    var Pos=BeginTime.find(".");
+    BeginTime_H=tonumber(BeginTime.sub(1,Pos-1));
+    BeginTime_M=tonumber(BeginTime.sub(Pos+1));
+    Pos=EndTime.find(".");
+    EndTime_H=tonumber(EndTime.sub(1,Pos-1));
+    EndTime_M=tonumber(EndTime.sub(Pos+1));
+    Pos=BoxEndTime.find(".");
+    BoxEndTime_H=tonumber(BoxEndTime.sub(1,Pos-1));
+    BoxEndTime_M=tonumber(BoxEndTime.sub(Pos+1));
+}
+
+function Update(period, mode)
+{
+   if (period==first) 
+   {
+    BM_Begin[period]=0;
+    BM_End[period]=0;
+    BM_BoxEnd[period]=0;
+   }
+   if (period>first) 
+   {
+    var Table1=core.dateToTable(source.date(period));
+    var Table2=core.dateToTable(source.date(period-1));
+    var T1_H=Table1.hour;
+    var T1_M=Table1.min;
+    if (T1_H==0 && T1_M==0) 
+    {
+     T1_H=24;
+    }
+    
+    if (Table2.hour*60+Table2.min<=BeginTime_H*60+BeginTime_M && T1_H*60+T1_M>BeginTime_H*60+BeginTime_M) 
+    {
+     BM_Begin[period]=BM_Begin[period-1]+1;
+     hUP1.setBookmark(BM_Begin[period],period-1);
+    } 
+    else
+    {
+     BM_Begin[period]=BM_Begin[period-1];
+    }
+
+    if (Table2.hour*60+Table2.min<=EndTime_H*60+EndTime_M && T1_H*60+T1_M>EndTime_H*60+EndTime_M) 
+    {
+     BM_End[period]=BM_End[period-1]-1;
+     hUP1.setBookmark(BM_End[period],period-1);
+    } 
+    else
+    {
+     BM_End[period]=BM_End[period-1];
+    }
+    
+    if (Table2.hour*60+Table2.min<=BoxEndTime_H*60+BoxEndTime_M && T1_H*60+T1_M>BoxEndTime_H*60+BoxEndTime_M) 
+    {
+     BM_BoxEnd[period]=BM_BoxEnd[period-1]+1;
+     hUP2.setBookmark(BM_BoxEnd[period],period-1);
+    } 
+    else
+    {
+     BM_BoxEnd[period]=BM_BoxEnd[period-1];
+    }
+    
+    if (BM_Begin[period]!=0) 
+    {
+     var BeginPeriod=hUP1.getBookmark(BM_Begin[period]);
+     var EndPeriod;
+     if (BM_End[period]!=0) 
+     {
+      EndPeriod=hUP1.getBookmark(BM_End[period]);
+     } 
+     else
+     {
+      EndPeriod=period;
+     } 
+     if (EndPeriod<=BeginPeriod) 
+     {
+      EndPeriod=period;
+     }
+     var tmp=Math.minmax(source, BeginPeriod, EndPeriod);
+     var Min=tmp[0];
+     var Max=tmp[1];
+     var Open=source.open[BeginPeriod];
+     var Close=source.close[EndPeriod];
+     if (BeginPeriod<EndPeriod && period>=BeginPeriod && period<=EndPeriod+1) 
+     {
+      if (Close>Open) 
+      {
+       core.drawLine(hUP1, core.range(BeginPeriod,EndPeriod), Max, BeginPeriod, Max, EndPeriod);
+       core.drawLine(lUP1, core.range(BeginPeriod,EndPeriod), Min, BeginPeriod, Min, EndPeriod);
+       for (i=BeginPeriod; i<=EndPeriod; i++) 
+       {
+        hDN1[i]=null;
+        lDN1[i]=null;
+       }
+      } 
+      else
+      {
+       core.drawLine(hDN1, core.range(BeginPeriod,EndPeriod), Max, BeginPeriod, Max, EndPeriod);
+       core.drawLine(lDN1, core.range(BeginPeriod,EndPeriod), Min, BeginPeriod, Min, EndPeriod);
+       for (i=BeginPeriod; i<=EndPeriod; i++) 
+       {
+        hUP1[i]=null;
+        lUP1[i]=null;
+       }
+      } 
+     } 
+      
+     var BoxEndPeriod;
+     if (BM_BoxEnd[period]!=0) 
+     {
+      BoxEndPeriod=hUP2.getBookmark(BM_BoxEnd[period]);
+     } 
+     else
+     {
+      BoxEndPeriod=period;
+     } 
+     if (BoxEndPeriod<=EndPeriod) 
+     {
+      BoxEndPeriod=period;
+     }
+     if (BoxEndPeriod>EndPeriod && period>=EndPeriod && period<=BoxEndPeriod+1) 
+     {
+      if (Close>Open) 
+      {
+       core.drawLine(hUP2, core.range(EndPeriod,BoxEndPeriod), Max, EndPeriod, Max, BoxEndPeriod);
+       core.drawLine(lUP2, core.range(EndPeriod,BoxEndPeriod), Min, EndPeriod, Min, BoxEndPeriod);
+       for (i=EndPeriod; i<=period; i++) 
+       {
+        hDN2[i]=null;
+        lDN2[i]=null;
+       }
+      } 
+      else
+      {
+       core.drawLine(hDN2, core.range(EndPeriod,BoxEndPeriod), Max, EndPeriod, Max, BoxEndPeriod);
+       core.drawLine(lDN2, core.range(EndPeriod,BoxEndPeriod), Min, EndPeriod, Min, BoxEndPeriod);
+       for (i=EndPeriod; i<=period; i++) 
+       {
+        hUP2[i]=null;
+        lUP2[i]=null;
+       }
+      } 
+     }
+    } 
+    
+   } 
+}
+

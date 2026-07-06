@@ -1,0 +1,35 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 3.6 - Error Handling in C</title>
+</head>
+<body>
+<h2>3.6 - <a name="3.6">Error Handling in C</a></h2>
+
+<p>
+Internally, Lua uses the C <code>longjmp</code> facility to handle errors.
+(You can also choose to use exceptions if you use C++;
+see file <code>luaconf.h</code>.)
+When Lua faces any error
+(such as memory allocation errors, type errors, syntax errors,
+and runtime errors)
+it <em>raises</em> an error;
+that is, it does a long jump.
+A <em>protected environment</em> uses <code>setjmp</code>
+to set a recover point;
+any error jumps to the most recent active recover point.
+
+
+<p>
+Almost any function in the API may raise an error,
+for instance due to a memory allocation error.
+The following functions run in protected mode
+(that is, they create a protected environment to run),
+so they never raise an error:
+<a href="lua_newstate.html"><code>lua_newstate</code></a>, <a href="lua_close.html"><code>lua_close</code></a>, <a href="lua_load.html"><code>lua_load</code></a>,
+<a href="lua_pcall.html"><code>lua_pcall</code></a>, and <a href="lua_cpcall.html"><code>lua_cpcall</code></a>.
+
+
+<p>
+Inside a C&nbsp;function you can raise an error by calling <a href="lua_error.html"><code>lua_error</code></a>.
+</body>
+</html>

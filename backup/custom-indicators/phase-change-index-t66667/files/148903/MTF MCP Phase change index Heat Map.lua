@@ -1,0 +1,497 @@
+-- More information about this indicator can be found at:
+-- https://fxcodebase.com/code/viewtopic.php?f=17&t=66667
+
+--+------------------------------------------------------------------------------------------------+
+--|                                                            Copyright © 2023, Gehtsoft USA LLC  | 
+--|                                                                         http://fxcodebase.com  |
+--+------------------------------------------------------------------------------------------------+
+--|                                                                   Developed by : Mario Jemic   |                    
+--|                                                                       mario.jemic@gmail.com    |
+--|                                                        https://AppliedMachineLearning.systems  |
+--|                                                                       https://mario-jemic.com/ |
+--+------------------------------------------------------------------------------------------------+
+
+--+------------------------------------------------------------------------------------------------+
+--|                                           Our work would not be possible without your support. |
+--+------------------------------------------------------------------------------------------------+
+--|                                                               Paypal: https://goo.gl/9Rj74e    |
+--|                                                             Patreon :  https://goo.gl/GdXWeN   |  
+--+------------------------------------------------------------------------------------------------+
+
+ function Add(id, TF,Flag, Instrument )
+   
+    indicator.parameters:addGroup(id..". Slot" );
+	indicator.parameters:addBoolean("On".. id , "Show This Slot", "",true);	  
+ 
+    indicator.parameters:addString("TF" .. id, "Time Frame ", "", TF);
+    indicator.parameters:setFlag("TF" .. id, core.FLAG_PERIODS);
+	
+	indicator.parameters:addString("Instrument" .. id, "Instrument", "", Instrument);
+    indicator.parameters:setFlag("Instrument" .. id, core.FLAG_INSTRUMENTS);
+	
+	indicator.parameters:addGroup("Calculation"); 
+    indicator.parameters:addInteger("inpLength" .. id, "Phase change index period", "", 30, 1, 2000);	 
+    indicator.parameters:addDouble("inpLevelHigh" .. id, "Period", "", 80, 0, 100);
+	indicator.parameters:addDouble("inpLevelLow" .. id, "Period", "", 20, 0, 100);
+	indicator.parameters:addInteger("inpSmooth" .. id, "Smoothing Period", "", 30, 1, 2000);	 
+	
+	indicator.parameters:addInteger("Pow" .. id, "Pow", "", 10 , 1, 10);	 
+	indicator.parameters:addDouble("R" .. id, "R", "", 2.5 , 0.5, 2.5);
+	
+	indicator.parameters:addBoolean("inpInverted" .. id, "Inverted", "Inverted", true);  
+end
+
+ 
+ 
+function Init()
+    indicator:name("MTF MCP Phase change index Heat Map");
+    indicator:description("");
+    indicator:requiredSource(core.Bar);
+    indicator:type(core.Oscillator);
+	
+	
+	indicator.parameters:addGroup("Override" );
+	
+	indicator.parameters:addString("Method", "Override Method", "Method" , "Chart Instrument");
+    indicator.parameters:addStringAlternative("Method", "Independent", "Independent" , "Independent");
+    indicator.parameters:addStringAlternative("Method", "Chart Time Frame", "Chart Time Frame" , "Chart Time Frame");
+	indicator.parameters:addStringAlternative("Method", "Chart Instrument", "Chart Instrument" , "Chart Instrument"); 	 
+  
+ 
+ 
+	
+	
+    Add(1, "m1",  "Off", "EUR/USD"); 
+    Add(2, "m5",  "Off", "USD/JPY"); 
+    Add(3, "m15",  "Off", "GBP/USD"); 
+    Add(4, "m30",  "Off", "USD/CHF"); 
+    Add(5, "H1",  "Off", "EUR/CHF"); 
+    Add(6, "H2", "View", "AUD/USD"); 
+    Add(7, "H3",  "Off", "USD/CAD"); 
+    Add(8, "H4", "View", "NZD/USD" ); 
+    Add(9, "H6",  "Off", "NZD/USD" ); 
+    Add(10, "H8", "View", "EUR/JPY"); 
+    Add(11, "D1",  "Off", "GBP/JPY"); 
+    Add(12, "W1",  "Off", "CHF/JPY"); 
+    Add(13, "M1",  "Off", "GBP/CHF");
+
+ 
+     indicator.parameters:addGroup("Style");
+	indicator.parameters:addColor("Color", "Label Color","", core.COLOR_LABEL);
+	indicator.parameters:addColor("UpUp", "Up in Up Trend Color","", core.rgb(0, 255, 0));
+	indicator.parameters:addColor("UpDown", "Down in Up Trend Color","", core.rgb(0, 200, 0));
+	indicator.parameters:addColor("DownUp", "Up in Down Trend Color","", core.rgb(255, 0, 0));
+	indicator.parameters:addColor("DownDown", "Down in Down Trend Color","", core.rgb(200, 0, 0));
+	indicator.parameters:addColor("NeutralUp", "Up in Neutral Trend Color","", core.rgb(128, 128, 128));
+	indicator.parameters:addColor("NeutralDown", "Down in Neutral Trend Color","", core.rgb(100, 100, 100));
+
+   indicator.parameters:addDouble("VSpace", "Vertical Spacing (%)","",5, 0, 50);
+   indicator.parameters:addDouble("HSpace", "Horizontal Spacing (%)","",5, 0, 50);
+   indicator.parameters:addDouble("Size", "Font Size (%)","",90, 50, 200);
+   
+   
+end
+local On={};
+local Method;
+local source;
+local day_offset, week_offset;
+local Label = {"First", "Second", "Third", "Fourth"};
+
+local VSpace,HSpace;
+local Color;
+local Size;
+local SourceData={};
+local TF={};
+local loading={};
+local Number;
+local host;
+local RSI={}; 
+local UpUp, DownDown ;
+local UpDown, DownUp ;
+local Instrument={};
+
+local P1= {} ;
+local P2= {} ;
+local P3= {} ;
+local P4= {} ;
+local P5= {} ;
+local P6= {} ;
+local P7= {} ;
+
+local Indicator = {} ;
+ 
+ 
+
+	
+function Prepare(nameOnly)
+ 
+    source = instance.source;	
+	VSpace=(instance.parameters.VSpace/100);
+	HSpace=(instance.parameters.HSpace/100);
+	Method=instance.parameters.Method; 
+	
+	UpUp=instance.parameters.UpUp;
+	DownDown=instance.parameters.DownDown;
+	UpDown=instance.parameters.UpDown;
+	DownUp=instance.parameters.DownUp;
+	NeutralDown=instance.parameters.NeutralDown;
+	NeutralUp=instance.parameters.NeutralUp;
+	
+	 host = core.host;
+	Size=instance.parameters.Size;
+    Color=instance.parameters.Color;
+   
+   
+
+    
+     day_offset = host:execute("getTradingDayOffset");
+    week_offset = host:execute("getTradingWeekOffset");
+    local Id=0;
+    Number=0;
+    local name = profile:id() .. " " .. source:name()  .. " : " .. source:barSize();
+	instance:name(name);
+	
+	local ifirst;
+	 local s1, e1, s2, e2;
+	  s1, e1 = core.getcandle(source:barSize(), 0, 0, 0);
+	 
+	 local iTF={};
+	 for i = 1, 13, 1 do
+		       if   Method== "Chart Time Frame" then
+	            iTF[i]=source:barSize();
+				else
+				iTF[i]=  instance.parameters:getString("TF" .. i);	 
+				end
+		 		
+	end
+
+	
+	if   (nameOnly) then
+        return;
+    end
+ 
+	assert(core.indicators:findIndicator("PHASE CHANGE INDEX") ~= nil, "Please, download and install PHASE CHANGE INDEX.LUA indicator");    
+	 
+	AlertNumber=0;
+	  for i = 1, 13, 1 do
+	s2, e2 = core.getcandle(iTF[i], 0, 0, 0);
+	
+	 if  instance.parameters:getBoolean("On" .. i) and (e1 - s1) <= (e2 - s2)  then
+	 Number=Number+1;
+	 
+	      P1[Number]= instance.parameters:getInteger("inpLength" .. i);
+	      P2[Number]= instance.parameters:getDouble("inpLevelHigh" .. i);
+	      P3[Number]= instance.parameters:getDouble("inpLevelLow" .. i);
+	      P4[Number]= instance.parameters:getInteger("inpSmooth" .. i);
+		  P5[Number]= instance.parameters:getInteger("Pow" .. i);
+	      P6[Number]= instance.parameters:getDouble("R" .. i);
+		  P7[Number]= instance.parameters:getBoolean("inpInverted" .. i);
+   
+
+	
+		  
+	 Label[Number]="";
+	           
+				 
+				if  Method== "Chart Instrument" then
+	            Instrument[Number]=source:instrument();
+				Label[Number]="";
+	            else			
+				Instrument[Number]=  instance.parameters:getString("Instrument" .. i);	 
+				Label[Number]=Instrument[Number];
+				end
+				
+				 
+				 
+				if   Method== "Chart Time Frame" then 
+				TF[Number]=iTF[i];
+				else
+				TF[Number]=iTF[i];
+                Label[Number]=Label[Number] .. " - " ..  TF[Number];				
+				end
+				
+ 
+			
+				
+				   Id=Id+1;
+				 SourceData[Number]  = core.host:execute("getSyncHistory",  Instrument[Number],  TF[Number], source:isBid(), 300 , 2000 + Id , 1000 +Id);	 	 
+				 loading[Number]  = true;  	 
+				 Indicator[Number] = core.indicators:create("PHASE CHANGE INDEX", SourceData[Number].close ,  P1[Number] ,    P2[Number],  P3[Number] ,    P4[Number],  P5[Number] ,    P6[Number],    P7[Number]);   
+			 
+				   
+       end
+    end
+  
+	    instance:setLabelColor(Color);
+        instance:ownerDrawn(true);
+		core.host:execute ("setTimer", 1, 5);
+		 
+end
+
+
+function ReleaseInstance()
+core.host:execute ("killTimer", 1);
+end 
+
+ 
+function   Initialization(period,id)
+
+    local Candle;
+    Candle = core.getcandle(source:barSize(), source:date(period), day_offset, week_offset);
+  
+    if loading[id] or SourceData[id]:size() == 0  then
+        return false;
+    end
+
+    
+    if period < source:first() then
+        return false;
+    end
+
+    local P = core.findDate(SourceData[id], Candle, false);
+	 
+
+    -- candle is not found
+    if P < 0    then
+        return false;
+	else return P;	
+    end
+			
+end	
+
+
+
+-- the function is called when the async operation is finished
+function AsyncOperationFinished(cookie)
+
+ 
+
+local j;
+local FLAG=false; 
+local Num=0;
+local Id=0;
+    for j = 1, Number, 1 do
+		      Id=Id+1;
+			  if cookie == (1000 + Id) then
+			  loading[j]  = true;
+		      elseif  cookie == (2000 + Id ) then
+			  loading[j]  = false;
+			  end
+		 
+		       
+                 if loading[j] then
+				 FLAG= true;
+				 Num=Num+1;
+				 end
+	end    
+   
+    
+   if not FLAG and cookie== 1 then
+		for i= 1, Number , 1 do
+			  Indicator[i]:update(core.UpdateLast );
+		end
+		
+	end
+	
+	
+	if FLAG then
+	 core.host:execute ("setStatus", "  Loading "..((Number) - Num) .. " / " .. (Number) );	 
+	else
+	core.host:execute ("setStatus", "Loaded");	 
+    instance:updateFrom(0);    
+	end
+	
+	
+   
+        
+    return core.ASYNC_REDRAW ;
+	
+	
+end
+
+function Update(period)
+ 
+     
+end
+
+local init = false;
+
+function Draw (stage, context)
+
+    if stage  ~= 0 then
+	return;
+	end
+	 
+	 
+	local FLAG=false; 
+
+    for j = 1, Number, 1 do
+		     
+                 if loading[j] 
+				 then
+				 FLAG= true;
+				 end
+				 
+	end    
+    
+	
+	if FLAG then
+	return;	 
+	end
+   
+    local style = context.SINGLELINE + context.CENTER + context.VCENTER;
+	 
+  
+   context:setClipRectangle(context:left(), context:top(), context:right(), context:bottom());
+   
+        if not init then
+		   
+			
+			 context:createPen (1, context.SOLID, 3, Color)       
+			context:createSolidBrush(2, Color);
+			
+			context:createPen (11, context.SOLID, 3, UpUp)       
+			context:createSolidBrush(12, UpUp);
+			
+			context:createPen (21, context.SOLID, 3, UpDown)       
+			context:createSolidBrush(22, UpDown);
+		
+			
+			context:createPen (31, context.SOLID, 3, DownUp)       
+			context:createSolidBrush(32, DownUp);
+			
+			context:createPen (41, context.SOLID, 3, DownDown)       
+			context:createSolidBrush(42, DownDown);
+			
+			
+			context:createPen (51, context.SOLID, 3, NeutralUp)       
+			context:createSolidBrush(52, NeutralUp);
+			
+			context:createPen (61, context.SOLID, 3, NeutralDown)       
+			context:createSolidBrush(62, NeutralDown);		
+		 
+		  
+            init = true;
+        end
+     
+        
+        local first = math.max(source:first(), context:firstBar ());
+        local last = math.min (context:lastBar (), source:size()-1);
+		
+    
+	    X0, X1, X2 = context:positionOfBar (source:size()-1); 
+		 HCellSize =(X2-X1)*HSpace;
+		 VCellSize =((context:bottom() -context:top())/ (Number+1)); 
+	
+       
+			    for i= first, last, 1 do	 
+			   x0, x1, x2 = context:positionOfBar (i);
+			   
+			    for j= 1, Number , 1 do
+				  p=Initialization(i,j);
+				  
+				 
+				  
+				  if p~= false then
+				   
+						
+								
+										if Indicator[j].DATA:hasData(p) and Indicator[j].DATA:hasData(p-1) then 
+										
+										
+									 
+														if Indicator[j].DATA[p] > P2[j] then		 
+																if Indicator[j].DATA[p] > Indicator[j].DATA[p-1] then	
+																C2=12;
+																C1=11;
+																else
+																C2=22;
+																C1=21;
+																end		
+													 
+														elseif Indicator[j].DATA[p] < P3[j] then  
+																if Indicator[j].DATA[p] > Indicator[j].DATA[p-1] then	
+																C2=32;
+																C1=31;
+																else
+																C2=42;
+																C1=41;
+																end		
+
+														else
+
+														
+																if Indicator[j].DATA[p] > Indicator[j].DATA[p-1] then	
+																C2=52;
+																C1=51;
+																else
+																C2=62;
+																C1=61;
+																end															 
+														end
+											 
+										
+																									
+												
+											 
+												 
+												     
+									   else		
+									   C1=1; C2=2;										   
+									   end 
+									   
+						 
+				 else
+                   
+					 C1=1; C2=2;		
+										
+				end						
+				   context:drawRectangle (C1, C2, x1+HCellSize, context:top()+VCellSize/2+VCellSize * (j-1) +VCellSize* VSpace, x2-HCellSize, context:top() +VCellSize/2+ VCellSize * (j)-VCellSize* VSpace);
+				   
+				   
+					 if i== first then			 	 
+					 local width, height; 
+					 context:createFont(3, "Arial", ((X2-X1)/100)*Size, (VCellSize/100)*Size, context.NORMAL);
+					 Value= tostring( Label[j]);
+					 width, height = context:measureText (3,  Value , style)	 
+					 context:drawText(3,  Value , Color, -1, X2 +(X2-X1), context:top()+VCellSize/2+VCellSize * (j-1) +VCellSize* VSpace ,X2+(X2-X1)+width, context:top()+VCellSize/2 + VCellSize * (j)-VCellSize* VSpace, style);
+					 
+					 
+									
+
+					 end  				 
+				 
+				 
+			 
+			 end
+			 
+	   end
+	   
+	
+end
+
+
+--+------------------------------------------------------------------------------------------------+
+--|                                                                    We appreciate your support. | 
+--+------------------------------------------------------------------------------------------------+
+--|                                                               Paypal: https://goo.gl/9Rj74e    |
+--|                                                             Patreon :  https://goo.gl/GdXWeN   |  
+--+------------------------------------------------------------------------------------------------+
+--|                                                                   Developed by : Mario Jemic   |                    
+--|                                                                       mario.jemic@gmail.com    |
+--|                                                        https://AppliedMachineLearning.systems  |
+--|                                                                       https://mario-jemic.com/ |
+--+------------------------------------------------------------------------------------------------+
+
+--+------------------------------------------------------------------------------------------------+
+--|BitCoin                    : 15VCJTLaz12Amr7adHSBtL9v8XomURo9RF                                 |  
+--|Ethereum                   : 0x8C110cD61538fb6d7A2B47858F0c0AaBd663068D                         |  
+--|SOL Address                : 4tJXw7JfwF3KUPSzrTm1CoVq6Xu4hYd1vLk3VF2mjMYh                       |
+--|Cardano/ADA                : addr1v868jza77crzdc87khzpppecmhmrg224qyumud6utqf6f4s99fvqv         |  
+--|Dogecoin Address           : DBGXP1Nc18ZusSRNsj49oMEYFQgAvgBVA8                                 |
+--|SHIB Address               : 0x1817D9ebb000025609Bf5D61E269C64DC84DA735                         |              
+--|Binance(ERC20 & BSC only)  : 0xe84751063de8ade7c5fbff5e73f6502f02af4e2c                         | 
+--|BitCoin Cash               : 1BEtS465S3Su438Kc58h2sqvVvHK9Mijtg                                 | 
+--|LiteCoin                   : LLU8PSY2vsq7B9kRELLZQcKf5nJQrdeqwD                                 |  
+--+------------------------------------------------------------------------------------------------+
+ 

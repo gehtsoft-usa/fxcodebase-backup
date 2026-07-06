@@ -1,0 +1,90 @@
+function Init()
+{
+    indicator.name("YABSI");
+    indicator.description("YABSI");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UP", "Color of Up Arrow", "", core.rgb(0, 255, 0));
+	indicator.parameters.addColor("DOWN", "Color of Bottom Arrow", "", core.rgb(255, 0, 0));
+	indicator.parameters.addColor("Typical", "Color of Typical Line", "", core.rgb(0, 0, 255));
+	indicator.parameters.addInteger("width", "Width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Style","", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+	indicator.parameters.addBoolean("Show", "Show Typical", "", false);
+}
+
+var first;
+var source = null;
+
+var down = null;
+var up= null;
+var Typical;
+var Show;
+
+function Prepare()
+{
+    Show=instance.parameters.Show;
+    source = instance.source;
+    first = source.first();
+  
+	var name = profile.id() + "(" + source.name() + ")";
+    instance.name(name);
+	
+	down = instance.createTextOutput ("Up", "Up", "Wingdings", 10, core.H_Center, core.V_Bottom, instance.parameters.UP, 0);
+    up = instance.createTextOutput ("Down", "Down", "Wingdings", 10, core.H_Center, core.V_Top, instance.parameters.DOWN, 0);
+	
+	if (Show) 
+	{
+	Typical = instance.addStream("Typical", core.Line, name, "Typical", instance.parameters.Typical, source.first())
+    Typical.setWidth(instance.parameters.width);
+    Typical.setStyle(instance.parameters.style);
+	}
+	
+}
+
+var  triggerSell=false;
+var  triggerBuy=false;
+var buySellSwitch=null;
+
+ 
+function Update(period)
+{
+    if (period >= first && source.hasData(period)) 
+    {	 
+	 
+	  if (Show) 
+	  {
+	   Typical[period]= source.typical[period];
+	  }
+ 
+      triggerSell=false;
+	  triggerBuy=false;	
+	
+	  if (source.close[period-1] < source.high[period] && source.typical[period-2] <  source.close[period-1] || source.typical[period-3] < source.close[period-1])  
+	  {
+	   triggerSell=true;
+	   triggerBuy=false;
+	  }
+	  
+	  if (source.close[period-1] > source.high[period] && source.typical[period-2] >  source.close[period-1] || source.typical[period-3] > source.close[period-1]) 
+	  {
+	   triggerBuy=true;
+	   triggerSell=false;
+	  }  
+     
+	 if (triggerBuy && !buySellSwitch) 
+	 {
+	  up.set(period, source.high[period], "\108");
+	  buySellSwitch=true; 
+	 } 
+	 else if (triggerSell && buySellSwitch) 
+	 {
+	  down.set(period, source.low[period], "\108");
+	  buySellSwitch=false;
+	 }
+	
+    }
+}
+

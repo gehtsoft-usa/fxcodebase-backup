@@ -1,0 +1,105 @@
+function Init()
+{
+    indicator.name("DSS Bressert");
+    indicator.description("DSS Bressert");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addInteger("Frame", "Stochastic Period", "Stochastic Period", 13);
+    indicator.parameters.addInteger("EMAFrame", "Smooth Period", "Smooth Period", 8);
+	indicator.parameters.addInteger("SignalFrame", "Signal Period", "Signal Period", 8);
+    indicator.parameters.addColor("Stochastic_color", "Color of Stochastic", "Color of Stochastic", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("Signal_color", "Color of Signal", "Color of Signal", core.rgb(0, 255, 0));
+	
+}
+
+var Frame;
+var EMAFrame;
+var SignalFrame;
+
+var first;
+var source = null;
+
+var DSS= null;
+var EMA = null;
+
+var HIGH=null;
+var LOW=null;
+
+var DELTA=null;
+var MIT=null;
+var SmoothCoefficient=null;
+
+var Buffer=null;
+var Signal=null;
+var OUT=null;
+
+function Prepare()
+{
+    Frame = instance.parameters.Frame;
+    EMAFrame = instance.parameters.EMAFrame;
+	SignalFrame = instance.parameters.SignalFrame;
+    source = instance.source;
+    first = source.first();
+	
+	Buffer=instance.addInternalStream(0, 0);
+	OUT=instance.addInternalStream(0, 0);
+	
+
+    var name = profile.id() + "(" + source.name() + ", " + Frame + ", " + EMAFrame +", "+ SignalFrame+ ")";
+    instance.name(name);
+    DSS = instance.addStream("DSS", core.Line, name + ".DSS", "DSS", instance.parameters.Stochastic_color, first);
+	DSS.addLevel(20);
+    DSS.addLevel(80);
+	
+	EMA = core.indicators.create("EMA", OUT, SignalFrame);
+	
+    Signal = instance.addStream("SIGNAL", core.Line, name + ".Signal", "Signal", instance.parameters.Signal_color, first);
+	
+	SmoothCoefficient= 2.0 / (1.0 + EMAFrame);
+	
+}
+
+function Update(period,mode)
+{	
+    if (period > Frame && source.hasData(period)) 
+    {
+			var tmp=Math.minmax(source, period-Frame, period);
+			HIGH = tmp[1];
+			LOW = tmp[0];
+			DELTA = source.close[period] - LOW;
+			MIT = DELTA/(HIGH - LOW)*100.0;
+			Buffer[period] = SmoothCoefficient * (MIT - Buffer[period-1]) + Buffer[period-1];
+			
+			if (period > 2*Frame) 
+			{
+					tmp=Math.minmax(Buffer, period-Frame, period);
+					HIGH = tmp[1];
+					LOW = tmp[0];
+					DELTA= Buffer[period] -LOW; 
+					MIT = DELTA/(HIGH - LOW)*100.0;
+					OUT[period] = SmoothCoefficient * (MIT - OUT[period-1]) + OUT[period-1];
+					
+					if (period > 3*Frame + EMAFrame) 
+					{
+					 DSS[period]=OUT[period];
+					}
+					
+							if (period > 3*Frame + SignalFrame) 
+							{ 					
+							 EMA.update(mode);
+							 Signal[period] = EMA.DATA[period];
+							}
+						}
+			else if (period == 2*Frame) 
+			{ 
+            			
+			 OUT[period] =0;		
+			}
+		}
+	else if (period == Frame) 
+	{
+	 Buffer[period] =0;	  	
+    }
+}
+

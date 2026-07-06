@@ -1,0 +1,81 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_getinfo</title>
+</head>
+<body>
+<h3><a name="lua_getinfo"><code>lua_getinfo</code></a></h3>
+<pre>int lua_getinfo (lua_State *L, const char *what, lua_Debug *ar);</pre>
+
+<p>
+Returns information about a specific function or function invocation.
+
+
+<p>
+To get information about a function invocation,
+the parameter <code>ar</code> must be a valid activation record that was
+filled by a previous call to <a href="lua_getstack.html"><code>lua_getstack</code></a> or
+given as argument to a hook (see <a href="lua_Hook.html"><code>lua_Hook</code></a>).
+
+
+<p>
+To get information about a function you push it onto the stack
+and start the <code>what</code> string with the character '<code>&gt;</code>'.
+(In that case,
+<code>lua_getinfo</code> pops the function in the top of the stack.)
+For instance, to know in which line a function <code>f</code> was defined,
+you can write the following code:
+
+<pre>
+     lua_Debug ar;
+     lua_getfield(L, LUA_GLOBALSINDEX, "f");  /* get global 'f' */
+     lua_getinfo(L, "&gt;S", &amp;ar);
+     printf("%d\n", ar.linedefined);
+</pre>
+
+<p>
+Each character in the string <code>what</code>
+selects some fields of the structure <code>ar</code> to be filled or
+a value to be pushed on the stack:
+
+<ul>
+
+<li><b>'<code>n</code>':</b> fills in the field <code>name</code> and <code>namewhat</code>;
+</li>
+
+<li><b>'<code>S</code>':</b>
+fills in the fields <code>source</code>, <code>linedefined</code>,
+<code>lastlinedefined</code>, <code>what</code>, and <code>short_src</code>;
+</li>
+
+<li><b>'<code>l</code>':</b> fills in the field <code>currentline</code>;
+</li>
+
+<li><b>'<code>u</code>':</b> fills in the field <code>nups</code>;
+</li>
+
+<li><b>'<code>f</code>':</b>
+pushes onto the stack the function that is
+running at the given level;
+</li>
+
+<li><b>'<code>L</code>':</b>
+pushes onto the stack a table whose indices are the
+numbers of the lines that are valid on the function.
+(A <em>valid line</em> is a line with some associated code,
+that is, a line where you can put a break point.
+Non-valid lines include empty lines and comments.)
+</li>
+
+</ul>
+
+<p>
+This function returns 0 on error
+(for instance, an invalid option in <code>what</code>).
+
+
+
+
+
+<hr>
+</body>
+</html>

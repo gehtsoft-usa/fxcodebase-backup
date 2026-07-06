@@ -1,0 +1,80 @@
+function Init()
+{
+    indicator.name("Demand - Supply");
+    indicator.description("Demand - Supply");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");	
+    indicator.parameters.addInteger("Period", "Period", "Period", 14);
+	indicator.parameters.addString("Method", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "EMA" , "EMA");
+ indicator.parameters.addStringAlternative("Method", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method", "WMA", "WMA" , "WMA");
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Positiv", "Color of Positiv Supply", "Color of DS", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("Negativ", "Color of Negativ Supply", "Color of DS", core.rgb(255, 0, 0)) 
+}
+
+var Period;
+
+var first;
+var source = null;
+var Raw,MA;
+
+var DS = null;
+var Method;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+	Method = instance.parameters.Method;
+    source = instance.source;
+	
+	Raw = instance.addInternalStream(0, 0);
+	MA = core.indicators.create(Method, Raw, Period); 
+
+    first = MA.DATA.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period)+ ", " + tostring(Method) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        DS = instance.addStream("DS", core.Bar, name, "DS", instance.parameters.Positiv, first);
+		
+    }
+}
+
+function Update(period, mode)
+{
+var buy= (Math.abs(source.close[period]-source.low[period])/(source.high[period]-source.low[period]))*source.volume[period];
+var sell= (Math.abs(source.high[period]-source.close[period])/(source.high[period]-source.low[period]))*source.volume[period];
+    
+	Raw[period]= buy-sell;
+	
+	MA.update(mode);
+	
+	if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+        DS[period] = MA.DATA[period];
+		
+		if (DS[period]> 0) 
+        {
+		 DS.setColor(period, instance.parameters.Positiv);
+        } 
+		else
+        {
+		 DS.setColor(period, instance.parameters.Negativ);
+		}
+    
+}
+

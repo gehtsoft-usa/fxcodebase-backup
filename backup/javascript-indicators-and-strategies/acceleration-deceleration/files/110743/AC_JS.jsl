@@ -1,0 +1,77 @@
+//initializes the indicator
+function Init()
+{
+    indicator.name("Accelerator Oscillator");
+    indicator.description("Accelerator Oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.setTag("group", "Bill Williams");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("FM", "Fast MA periods", "Fast MA periods.", 5, 1, 10000);
+    indicator.parameters.addInteger("SM", "Slow MA periods", "Slow MA periods.", 35, 1, 10000);
+    indicator.parameters.addInteger("M", "MA periods of AC", "MA periods of AC", 5, 1, 10000);
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Uclr", "Upper bar color", "Upper bar color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("Lclr", "Lower bar color", "Lower bar color", core.rgb(255, 0, 0));
+}
+
+var first = 0;
+var FM, SM, M;
+var source = null;
+var out = null;
+var AO, MVA;
+
+//initializes the instance of the indicator
+function Prepare(onlyName)
+{
+    source = instance.source;
+    FM = instance.parameters.FM;
+    SM = instance.parameters.SM;
+    M = instance.parameters.M;
+    var name = profile.id() + "(" + instance.source.name() + "," + n + ")";
+    instance.name(name);
+  
+    if (onlyName == true)
+        return ;
+
+    first = source.first();
+
+    AO = core.indicators.create("AO", source, FM, SM);
+    MVA = core.indicators.create("MVA", AO.DATA, M);
+
+    out = instance.addStream("AC", core.Bar, name, "AC", instance.parameters.Uclr,  first)
+}
+
+// calculate the value
+function Update(period, mode)
+{
+    AO.update(mode);
+    MVA.update(mode);
+    var curr = AO.DATA[period] - MVA.DATA[period];
+    var prev = AO.DATA[period-1] - MVA.DATA[period-1];
+
+    if (period >= first)
+    {
+        out[period] = AO.DATA[period] - MVA.DATA[period];
+    }
+    
+    if (period >= first + 1)
+    {
+        if (curr > prev)
+        {
+            out.setColor(period, instance.parameters.Uclr);
+        }
+        else
+        {
+            if (curr < prev)
+            {
+                out.setColor(period, instance.parameters.Lclr);
+            }
+            else
+            {
+                out.setColor(period, out.colorI(period - 1));
+            }
+        }
+    }
+}

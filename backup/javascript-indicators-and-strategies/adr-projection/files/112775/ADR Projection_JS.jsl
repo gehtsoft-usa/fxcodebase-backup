@@ -1,0 +1,211 @@
+// TRIX index indicator
+function Init()
+{
+    indicator.name("ADR Projection");
+    indicator.description("ADR Projection");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);	   
+	
+	indicator.parameters.addGroup("ADR Calculation");
+    indicator.parameters.addInteger("N", "ADR Periods", "", 14);
+	
+	indicator.parameters.addString("Type", "Projection Type", "", "ADR");
+    indicator.parameters.addStringAlternative("Type", "ADR", "", "ADR");
+    indicator.parameters.addStringAlternative("Type", "ATR", "", "ATR");
+	
+	indicator.parameters.addBoolean("SHOW", "Show Projection", "", true);
+	indicator.parameters.addColor("color", "Line Color", "", core.rgb(0, 255, 0));
+}
+
+var ArrowSize;
+var source;
+var ADR=null;
+var Type;
+var N;
+var M;
+var D;
+var SHOW;
+var color;
+
+var host;
+var first;
+var DR,TR;
+var size;
+
+
+function Prepare()  
+{
+    color=instance.parameters.color;
+    SHOW=instance.parameters.SHOW; 
+    ArrowSize=instance.parameters.ArrowSize;  
+	Type=instance.parameters.Type;
+    N=instance.parameters.N;	
+    var name =  profile.id() + ","  + instance.source.name() ;
+	instance.name(name);	
+	
+    source = instance.source;
+	first= source.first()+N;
+    host = core.host;
+	
+	var s, e;
+    s,e	= core.getcandle(source.barSize(), 0, 0, 0);
+	size = e-s;
+	
+	if (source.pipSize() == 0.0001) 
+	{
+	 M =10000; 
+	 D= 4;
+	} 
+	else
+	{
+	 M=100;
+	 D=2;
+	}
+	
+	if (Type == "ADR") 
+	{ 	
+	 DR = instance.addInternalStream (first, 0);
+	 ADR=  core.indicators.create("MVA", DR, N);
+	} 
+	else
+	{
+	 TR = instance.addInternalStream (first, 0);
+	 ADR=  core.indicators.create("ATR", source, N);
+	}
+	
+}
+
+var MAX,MIN;
+
+function Update(period, mode)
+{
+
+    if  (source.hasData(period) && period >= first) 
+    {      
+		
+ 
+        if (Type == "ADR") 
+        { 
+		 DR[period]= source.high[period] - source.low[period];
+		} 
+		else
+		{	
+		 TR[period]=TrueRange(period);
+        }		
+		
+		if (period != source.size()-1)  
+		{
+		 return;
+		}
+		
+		ADR.update(mode);	
+	  
+		if (!ADR.DATA.hasData(period)  && !ADR.DATA.hasData(period-1))
+		{
+		 return;
+		}					
+		
+	    MAX = source.low[period] +  ADR.DATA[period];
+		MIN = source.high[period] -  ADR.DATA[period]; 
+	
+		
+		if (Type == "ADR") 
+		{  	
+		if (DR[period] >DR[period-1]) 
+		{
+		 core.host.execute ("drawLabel", 1, source.date(source.size()-1) + 3*size , MAX + 2*(MAX-MIN)/5  , "DR "+tostring( round( DR[period]* M ,0))+" (+)" ); 
+    	}
+		else if  (DR[period] < DR[period-1]) 
+		{
+		 core.host.execute ("drawLabel", 1, source.date(source.size()-1) + 3*size , MAX + 2*(MAX-MIN)/5 , "DR "+tostring( round( DR[period]* M ,0)) +" (-)" ); 
+		} 
+		else
+		{
+		 core.host.execute ("drawLabel", 1, source.date(source.size()-1) + 3*size , MAX + 2*(MAX-MIN)/5 , "DR "+tostring( round( DR[period]* M ,0)) +" (0)" ); 
+		}
+		
+		if (ADR.DATA[period] >ADR.DATA[period-1]) 
+		{
+		 core.host.execute ("drawLabel", 2, source.date(source.size()-1) + 3*size,  MAX + (MAX-MIN)/5 , "ADR "+tostring(round( ADR.DATA[period]* M,0))  +" (+)");
+		} 
+		else if  (ADR.DATA[period] < ADR.DATA[period-1]) 
+		{
+		 core.host.execute ("drawLabel", 2, source.date(source.size()-1) + 3*size,  MAX + (MAX-MIN)/5 , "ADR "+tostring(round( ADR.DATA[period]* M,0))  +" (-)");
+		} 
+		else
+		{
+		 core.host.execute ("drawLabel", 2, source.date(source.size()-1) + 3*size,  MAX + (MAX-MIN)/5 , "ADR "+tostring(round( ADR.DATA[period]* M,0))  +" (0)");
+		}		
+		
+        core.host.execute ("drawLabel", 3, source.date(source.size()-1) + 3*size, MAX  , "ADR Projections Up "+tostring(round(source.low[period] +  ADR.DATA[period], D) )); 
+		core.host.execute ("drawLabel", 4, source.date(source.size()-1) + 3*size, MIN  , "ADR Projections Down "+tostring(round( source.high[period] -  ADR.DATA[period], D) )); 
+    	}
+		else
+		{
+		
+		if (TR[period] >TR[period-1]) 
+		{
+		 core.host.execute ("drawLabel", 1, source.date(source.size()-1) + 3*size , MAX + 2*(MAX-MIN)/5  , "TR "+tostring( round( TR[period]* M,0))+ " (+)" ); 
+		} 
+		else if  (TR[period] < TR[period-1]) 
+		{
+		 core.host.execute ("drawLabel", 1, source.date(source.size()-1) + 3*size , MAX + 2*(MAX-MIN)/5  , "TR "+tostring( round( TR[period]* M,0)) +" (-)" ); 
+		} 
+		else
+		{
+		 core.host.execute ("drawLabel", 1, source.date(source.size()-1) + 3*size , MAX + 2*(MAX-MIN)/5 , "TR "+tostring( round( TR[period]* M,0)) +" (0)" ); 
+		}
+		
+		if (ADR.DATA[period] >ADR.DATA[period-1]) 
+		{
+		 core.host.execute ("drawLabel", 2, source.date(source.size()-1) + 3*size, MAX + (MAX-MIN)/5 , "ATR "+tostring(round( ADR.DATA[period] *M, 0))+ " (+)" );
+		} 
+		else if  (ADR.DATA[period] < ADR.DATA[period-1]) 
+		{
+		 core.host.execute ("drawLabel", 2, source.date(source.size()-1) + 3*size, MAX + (MAX-MIN)/5 , "ATR "+tostring(round( ADR.DATA[period] *M, 0))+ " (-)" );
+		} 
+		else
+		{
+		 core.host.execute ("drawLabel", 2, source.date(source.size()-1) + 3*size,  MAX + (MAX-MIN)/5 , "ATR "+tostring(round( ADR.DATA[period] *M, 0))+ " (0)" );
+		}
+		
+        core.host.execute ("drawLabel", 3, source.date(source.size()-1) + 3*size, source.low[period] +  ADR.DATA[period]  , "ATR Projections Up "+tostring(round( source.low[period] +  ADR.DATA[period], D)) ); 
+		core.host.execute ("drawLabel", 4, source.date(source.size()-1) + 3*size, source.high[period] -  ADR.DATA[period]  , "ATR Projections Down "+tostring(round( source.high[period] -  ADR.DATA[period], D)) ); 
+		}		
+		if (SHOW) 
+		{
+		 core.host.execute ("drawLine", 5,  source.date(first), MAX, source.date(source.size()-1), source.low[period] +  ADR.DATA[period], color);
+		 core.host.execute ("drawLine", 6, source.date(first), MIN, source.date(source.size()-1), source.high[period] -  ADR.DATA[period], color);		
+	    }
+	}
+		
+}
+
+function round(num, idp)
+{
+  if (idp && idp>0) 
+  {
+    var mult = Math.pow(10, idp);
+    return (Math.floor(num * mult + 0.5) / mult);
+  }
+  return (Math.floor(num + 0.5));
+}
+
+function TrueRange(p)
+{
+    var hl = Math.abs(source.high[p] - source.low[p]);
+    var hc = Math.abs(source.high[p] - source.close[p - 1]);
+    var lc = Math.abs(source.low[p] - source.close[p - 1]);
+
+    var tr = hl;
+    if (tr < hc) 
+    {
+        tr = hc;
+    }
+    if (tr < lc) 
+    {
+        tr = lc;
+    }
+    return (tr);
+}
+

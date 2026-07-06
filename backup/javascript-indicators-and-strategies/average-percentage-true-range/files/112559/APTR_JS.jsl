@@ -1,0 +1,55 @@
+function Init()
+{
+    indicator.name("Average Percentage True Range");
+    indicator.description("Average Percentage True Range");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 14);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period;
+var APTR=null;
+var PTR;
+var MA;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    first = source.first()+2;
+    PTR = instance.addInternalStream(first, 0);
+    MA = core.indicators.create("MVA", PTR, Period);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ")";
+    instance.name(name);
+    APTR = instance.addStream("APTR", core.Line, name + ".APTR", "APTR", instance.parameters.clr, first);
+    APTR.setWidth(instance.parameters.widthLinReg);
+    APTR.setStyle(instance.parameters.styleLinReg);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    var S1, S2, S3;
+    S1=2*(source.high[period]-source.low[period])/(source.high[period]+source.low[period]);
+    S2=2*(source.high[period]-source.close[period-1])/(source.high[period]+source.close[period-1]);
+    S3=2*(source.low[period]-source.close[period-1])/(3*source.low[period]-source.close[period-1]);
+
+    PTR[period]=100*Math.max(S1, S2, S3);
+
+    MA.update(mode);
+
+    APTR[period]=MA.DATA[period];
+   } 
+}
+

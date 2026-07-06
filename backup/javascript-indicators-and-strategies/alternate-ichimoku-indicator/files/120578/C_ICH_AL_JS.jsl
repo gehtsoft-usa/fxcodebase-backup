@@ -1,0 +1,100 @@
+function Init()
+{
+    indicator.name("Alternate Ichimoku");
+    indicator.description("An Alternate Ichimoku");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    indicator.setTag("group", "Custom");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("SSP", "Calculation Period", "Calculation Period", 75);
+    indicator.parameters.addInteger("SSK", "Tolerance Second Line", "Tolerance Second Line", 75);
+    indicator.parameters.addBoolean("M", "Draw Middle Line", "Draw Middle Line", false);
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clrTS", "CLR SToP Line", "CLR StopLine", core.rgb(255, 255, 0));
+    indicator.parameters.addColor("clrKS", "CLR TK", "CLR TK", core.rgb(0, 255, 255));
+    indicator.parameters.addColor("clrCS", "CLR TK", "CLR TK", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clrSSA", "CLR SA", "CLR SA", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("clrSSB", "CLR SB", "CLR SB", core.rgb(0, 0, 255));
+
+    indicator.parameters.addColor("clrCloud", "Cloud", "Cloud Color", core.rgb(0, 0, 255));
+    indicator.parameters.addInteger("transp", "Transparence", "Cloud Transparence", 80, 0, 100);
+}
+
+var SSP;
+var SSK;
+var M;
+
+var firstPeriod;
+var source = null;
+
+var csFirst = null;
+var slFirst = null;
+var tlFirst = null;
+var saFirst = null;
+var sbFirst = null;
+
+var SsMax, SsMin, SsMax05, SsMin05, Rsmin, Rsmax, Tsmin, Tsmax;
+
+var SL = null;
+var TL = null;
+var CS = null;
+var SA = null;
+var SB = null;
+
+function Prepare()
+{
+    SSP = instance.parameters.SSP;
+    SSK = instance.parameters.SSK;
+    M = instance.parameters.M;
+    source = instance.source;
+    firstPeriod = source.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + SSP + ", " + SSK + ", " + ")";
+    instance.name(name);
+    SL = instance.addStream("SL", core.Line, name + ".SL", "SL", instance.parameters.clrTS, SSP*2)
+    TL = instance.addStream("TL", core.Line, name + ".TL", "TL", instance.parameters.clrKS, firstPeriod + SSP*2 - 1)
+    CS = instance.addStream("CS", core.Line, name + ".CS", "CS", instance.parameters.clrCS, firstPeriod, -SSP)
+    SA = instance.addStream("SA", core.Line, name + ".SA", "SA", instance.parameters.clrSSA, SSP*2)
+    SB = instance.addStream("SB", core.Line, name + ".SB", "SB", instance.parameters.clrSSB, SSP*2)
+    
+    instance.createChannelGroup("SA-SB", "SA-SB", SA, SB, instance.parameters.clrCloud, 100 - instance.parameters.transp);
+
+    csFirst = CS.first() + SSP*2;
+    slFirst = SL.first();
+    tlFirst = TL.first();
+    saFirst = SA.first();
+    sbFirst = SB.first();
+}
+
+function Update(period)
+{
+    if (period >= SSP*2 + SSK) 
+    {
+        var tmp;
+        tmp=Math.minmax(source, period-SSP+1, period);
+        SsMax = tmp[1];
+        SsMin = tmp[0];
+        tmp=Math.minmax(source, period-SSK-SSP+1, period-SSK);
+        SsMax05 = tmp[1];
+        SsMin05 = tmp[0];
+        SA[period] = (SsMax+SsMin)/2;
+        SB[period] = (SsMax05+SsMin05)/2;
+        tmp=Math.minmax(source, period-SSP*1.62+1, period);
+        Tsmax = tmp[1];
+        Tsmin = tmp[0];
+        SL[period] = (Tsmax + Tsmin) / 2;
+        if (M) 
+        {
+            TL[period] = ((SsMax+SsMin)/2 + (SsMax05+SsMin05)/2)/2;
+            CS[period - SSP] = source.close[period];
+        }
+        
+    }
+
+}
+
+
+
+
+

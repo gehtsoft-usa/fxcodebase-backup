@@ -1,0 +1,62 @@
+function Init()
+{
+    indicator.name("SMA centered oscillator");
+    indicator.description("SMA centered oscillator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("HalfLength1", "Half length 1", "", 25);
+    indicator.parameters.addInteger("HalfLength2", "Half length 2", "", 13);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("UPclr", "UP color", "UP color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("DNclr", "DN color", "DN color", core.rgb(0, 0, 255));
+}
+
+var first;
+var source = null;
+var HalfLength1;
+var HalfLength2;
+var MaxHalfLength;
+var work3, work4, work5, work6, work7, work8;
+var Buffer1=null;
+var Buffer2=null;
+
+function Prepare()
+{
+    source = instance.source;
+    HalfLength1=instance.parameters.HalfLength1;
+    HalfLength2=instance.parameters.HalfLength2;
+    first = source.first()+2;
+    work3=instance.addInternalStream(first, 0);
+    work4=instance.addInternalStream(first, 0);
+    work5=instance.addInternalStream(first, 0);
+    work6=instance.addInternalStream(first, 0);
+    work7=instance.addInternalStream(first, 0);
+    work8=instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.HalfLength1 + ", " + instance.parameters.HalfLength2 + ")";
+    instance.name(name);
+    Buffer1 = instance.addStream("Buffer1", core.Line, name + ".Buffer1", "Buffer1", instance.parameters.clr, first);
+    Buffer2 = instance.addStream("Buffer2", core.Line, name + ".Buffer2", "Buffer2", instance.parameters.clr, first);
+    MaxHalfLength = Math.max(HalfLength1, HalfLength2);
+}
+
+function Update(period, mode)
+{
+   if (period>first+MaxHalfLength) 
+   {
+    var work1 = Math.avg(source, period-HalfLength1, period);
+    var work2 = Math.avg(source, period-HalfLength2, period);
+    work3[period] = 100*(work1-work2);
+    work4[period] = Math.avg(work3, period-HalfLength2, period);
+    work5[period] = 100*(work4[period]-work4[period-1]);
+    work6[period] = Math.avg(work5, period-HalfLength2, period);
+    work7[period] = 100*(work6[period]-work6[period-1]);
+    work8[period] = Math.avg(work7, period-HalfLength2, period);
+    Buffer1[period] = work8[period];
+    Buffer2[period] = work8[period]-work8[period-1];
+   } 
+}
+

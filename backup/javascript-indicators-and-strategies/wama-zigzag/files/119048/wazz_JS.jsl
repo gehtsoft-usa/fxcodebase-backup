@@ -1,0 +1,108 @@
+function Init()
+{
+    indicator.name("Wazz indicator");
+    indicator.description("Wazz indicator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 15);
+    indicator.parameters.addBoolean("UseDoubleSmooth", "Use {uble smooth", "", true);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP color", "UP color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DNclr", "DN color", "DN color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period;
+var UseDoubleSmooth;
+var EMA;
+var SecondEMA;
+var Buff;
+var Period4, Period8, Period12;
+var Wama;
+var HL_Buff;
+var WazzUP=null;
+var WazzDN=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    UseDoubleSmooth=instance.parameters.UseDoubleSmooth;
+    Period4=Math.floor(Period/4);
+    Period8=Math.floor(Period/8);
+    Period12=Math.floor(Period/12);
+    first = source.first()+2;
+    Buff=instance.addInternalStream(first, 0);
+    Wama=instance.addInternalStream(first, 0);
+    HL_Buff=instance.addInternalStream(first, 0);
+    EMA = core.indicators.create("EMA", source, Period);
+    SecondEMA = core.indicators.create("EMA", Buff, Period4);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ")";
+    instance.name(name);
+    WazzUP = instance.addStream("UP", core.Line, name + ".UP", "UP", instance.parameters.UPclr, first);
+    WazzUP.setWidth(instance.parameters.widthLinReg);
+    WazzUP.setStyle(instance.parameters.styleLinReg);
+    WazzDN = instance.addStream("DN", core.Line, name + ".DN", "DN", instance.parameters.DNclr, first);
+    WazzDN.setWidth(instance.parameters.widthLinReg);
+    WazzDN.setStyle(instance.parameters.styleLinReg);
+}
+
+function Update(period, mode)
+{
+   if (period>first+Period) 
+   {
+    EMA.update(mode);
+    var vel=EMA.DATA[period]-EMA.DATA[period-Period4];
+    var acc=EMA.DATA[period]-2*EMA.DATA[period-Period4]+EMA.DATA[period-Period8];
+    var aaa=EMA.DATA[period]-3*EMA.DATA[period-Period4]+3*EMA.DATA[period-Period8]-EMA.DATA[period-Period12];
+    if (UseDoubleSmooth) 
+    {
+     Buff[period]=EMA.DATA[period]+vel+acc/2+aaa/6;
+     SecondEMA.update(mode);
+     Wama[period]=SecondEMA.DATA[period];
+    } 
+    else
+    {
+     Wama[period]=EMA.DATA[period]+vel+acc/2+aaa/6;
+    }
+    HL_Buff[period]=HL_Buff[period-1];
+    if (Wama[period]>Wama[period-1]) 
+    {
+     if (HL_Buff[period-1]==null || HL_Buff[period-1]<=0) 
+     {
+      HL_Buff[period]=period;
+     }
+    } 
+    else if (Wama[period]<Wama[period-1]) 
+    {
+     if (HL_Buff[period-1]==null || HL_Buff[period-1]>=0) 
+     {
+      HL_Buff[period]=-period;
+     }
+    }
+    if (HL_Buff[period]!=HL_Buff[period-1] && HL_Buff[period-1]!=null) 
+    {
+     var prevPeriod=Math.abs(HL_Buff[period-1]);
+     if (source[period]>=source[prevPeriod]) 
+     {
+      core.drawLine(WazzUP,core.range(prevPeriod,period),source[prevPeriod],prevPeriod,source[period],period);
+     } 
+     else
+     {
+      core.drawLine(WazzDN,core.range(prevPeriod,period),source[prevPeriod],prevPeriod,source[period],period);
+     }
+    }
+   } 
+   else if (period>first) 
+   {
+    HL_Buff[period]=null;
+   } 
+}
+

@@ -1,0 +1,73 @@
+function Init()
+{
+    indicator.name("Trend / Revers Pressure");
+    indicator.description("Trend / Revers Pressure");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addInteger("Frame", "Period", "Periof", 20);    
+	indicator.parameters.addInteger("transparency", "Highlight transparency (%)", "", 30);
+}
+
+var Frame;
+
+var first;
+var source = null;
+
+var Trend = null;
+var Revers = null;
+
+var T, R;
+
+function Prepare()
+{
+    Frame = instance.parameters.Frame;
+    source = instance.source;
+    first = source.first();
+
+	
+	T =instance.addInternalStream (first, 0);
+	R =instance.addInternalStream (first, 0);
+	
+    var name = profile.id() + "(" + source.name() + ", " + Frame + ")";
+    instance.name(name);
+    Trend = instance.addStream("Trend", core.Line, name + ".Trend", "Trend", core.rgb(128, 128, 128), first);
+    Revers = instance.addStream("Revers", core.Line, name + ".Revers", "Revers", core.rgb(128, 128, 128), first);
+	
+	 Trend.setStyle(core.LINE_NONE);
+	 Revers.setStyle(core.LINE_NONE);
+
+    instance.createChannelGroup("os", "os", Trend, Revers, core.rgb(128, 128, 128), 100 - instance.parameters.transparency);
+}
+
+function Update(period)
+{
+    if (period >= first+Frame && source.hasData(period)) 
+    {
+	
+	    if (source.close[period]>source.open[period]) 
+	    {
+         T[period] =source.close[period]-source.open[period];		
+         R[period] = (source.open[period]-source.low[period])- (source.high[period]-source.close[period]);
+        } 
+		else
+		{
+		 T[period] =source.close[period]-source.open[period];		
+         R[period] = (source.close[period]-source.low[period])- (source.high[period]-source.open[period]);
+		}
+		
+	
+		 Trend[period]= Math.sum(T, period-Frame , period);		 
+		 Revers[period]= Math.sum(R, period-Frame , period);
+		 
+		 if (Trend[period] >  Revers[period]) 
+		 {
+		  Trend.setColor(period, core.rgb(0, 255, 0));
+		 } 
+		 else
+		 {
+		  Trend.setColor(period, core.rgb(255, 0, 0));
+		 }
+    }
+}
+

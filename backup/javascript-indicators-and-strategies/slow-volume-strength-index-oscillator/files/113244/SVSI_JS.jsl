@@ -1,0 +1,106 @@
+function Init()
+{
+    indicator.name("Slow Volume Strength Index oscillator");
+    indicator.description("Slow Volume Strength Index oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("EMA_Period", "EMA period", "", 6);
+    indicator.parameters.addInteger("Smooth_Period", "Smoothing period", "", 14);
+    indicator.parameters.addDouble("OB", "Overbought level", "", 80);
+    indicator.parameters.addDouble("OS", "Oversold level", "", 20);
+    indicator.parameters.addDouble("ML", "Middle line", "", 50);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "SVSI Color", "SVSI Color", core.rgb(255, 255, 0));
+    indicator.parameters.addInteger("width", "SVSI Line width", "SVSI Line width", 1, 1, 5);
+    indicator.parameters.addInteger("style", "SVSI Line style", "SVSI Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Lclr", "Overbought/Oversold Color", "Overbought/Oversold color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("Lwidth", "Overbought/Oversold Line width", "Overbought/Oversold Line width", 1, 1, 5);
+    indicator.parameters.addInteger("Lstyle", "Overbought/Oversold Line style", "Overbought/Oversold Line style", core.LINE_DASH);
+    indicator.parameters.setFlag("Lstyle", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Mclr", "Middle line Color", "Middle line Color", core.rgb(0, 0, 255));
+    indicator.parameters.addInteger("Mwidth", "Middle Line width", "Middle Line width", 1, 1, 5);
+    indicator.parameters.addInteger("Mstyle", "Middle Line style", "Middle Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("Mstyle", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var EMA_Period;
+var Smooth_Period;
+var OB;
+var OS;
+var ML;
+var SVSI;
+var EMA;
+var PosVolume, NegVolume;
+var AvgPosVol, AvgNegVol;
+
+function Prepare()
+{
+    source = instance.source;
+    EMA_Period=instance.parameters.EMA_Period;
+    Smooth_Period=instance.parameters.Smooth_Period;
+    OB=instance.parameters.OB;
+    OS=instance.parameters.OS;
+    ML=instance.parameters.ML;
+    first = source.first()+2;
+    PosVolume = instance.addInternalStream(first, 0);
+    NegVolume = instance.addInternalStream(first, 0);
+    EMA = core.indicators.create("EMA", source.close, EMA_Period);
+    AvgPosVol = core.indicators.create("MVA", PosVolume, Smooth_Period);
+    AvgNegVol = core.indicators.create("MVA", NegVolume, Smooth_Period);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.EMA_Period + ", " + instance.parameters.Smooth_Period + ")";
+    instance.name(name);
+    SVSI = instance.addStream("SVSI", core.Line, name + ".SVSI", "SVSI", instance.parameters.clr, first);
+    SVSI.setWidth(instance.parameters.width);
+    SVSI.setStyle(instance.parameters.style);
+    SVSI.addLevel(OB, instance.parameters.Lstyle, instance.parameters.Lwidth, instance.parameters.Lclr);
+    SVSI.addLevel(OS, instance.parameters.Lstyle, instance.parameters.Lwidth, instance.parameters.Lclr);
+    SVSI.addLevel(ML, instance.parameters.Mstyle, instance.parameters.Mwidth, instance.parameters.Mclr);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    EMA.update(mode);
+    if (source.close[period]>EMA.DATA[period]) 
+    {
+      PosVolume[period]=source.volume[period];
+      NegVolume[period]=0;
+    }
+    else if (source.close[period]<EMA.DATA[period]) 
+    {
+      PosVolume[period]=0;
+      NegVolume[period]=source.volume[period];
+    }  
+    else
+    {
+      PosVolume[period]=0;
+      NegVolume[period]=0;
+    }
+
+    AvgPosVol.update(mode);
+    AvgNegVol.update(mode);
+
+    var SVS;
+    if (AvgNegVol.DATA[period]!=0) 
+    {
+      SVS=AvgPosVol.DATA[period]/AvgNegVol.DATA[period];
+    }  
+    else
+    {
+      SVS=100;
+    }
+
+    if (SVS!=0) 
+    {
+      SVSI[period]=100-100/(1+SVS);
+    }
+   } 
+}
+

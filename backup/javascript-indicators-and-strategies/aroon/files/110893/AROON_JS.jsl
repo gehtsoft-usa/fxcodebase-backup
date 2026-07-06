@@ -1,0 +1,61 @@
+//initializes the indicator
+function Init()
+{
+    indicator.name("AROON");
+    indicator.description("AROON");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.setTag("group", "Trend");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("N", "Number of periods", "The number of periods.", 25, 1, 10000);
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Uclr", "Up line color", "Up line color", core.rgb(219, 64, 0));
+    indicator.parameters.addInteger("Uwidth", "Up line width", "Up line width", 1, 1, 5);
+    indicator.parameters.addInteger("Ustyle", "Up line style", "Up line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("Ustyle", core.FLAG_LEVEL_STYLE);
+    indicator.parameters.addColor("Dclr", "Down line color", "Down line color", core.rgb(0, 183, 183));
+    indicator.parameters.addInteger("Dwidth", "Down line width", "Down line width", 1, 1, 5);
+    indicator.parameters.addInteger("Dstyle", "Down line style", "Down line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("Dstyle", core.FLAG_LEVEL_STYLE);
+}
+
+var first = 0;
+var n = 0;
+var source = null;
+var Up = null;
+var Dn = null;
+
+//initializes the instance of the indicator
+function Prepare(onlyName)
+{
+    source = instance.source;
+    n = instance.parameters.N;
+    var name = profile.id() + "(" + instance.source.name() + "," + n + ")";
+    instance.name(name);
+  
+    if (onlyName == true)
+        return ;
+    first = source.first() + 1;
+
+    Up = instance.addStream("Up", core.Line, name, "Up", instance.parameters.Uclr,  first)
+    Up.setWidth(instance.parameters.Uwidth);
+    Up.setStyle(instance.parameters.Ustyle);
+    Dn = instance.addStream("Dn", core.Line, name, "Dn", instance.parameters.Dclr,  first)
+    Dn.setWidth(instance.parameters.Dwidth);
+    Dn.setStyle(instance.parameters.Dstyle);
+}
+
+// calculate the value
+function Update(period, mode)
+{
+    var vmax, pmax;
+    if (period >= first+n)
+    {
+        var tmp = Math.minmax(source, period - n + 1, period);
+        pmax=tmp[3];
+        pmin=tmp[2];
+        Up[period] = (n - (period - pmax)) / n * 100;
+        Dn[period] = (n - (period - pmin)) / n * 100;
+    }
+}

@@ -1,0 +1,91 @@
+//initializes the indicator
+function Init()
+{
+    indicator.name("EW");
+    indicator.description("Elliot Wave Indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.setTag("group", "Waves");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Trigger", "Trigger value (%)", "Trigger value (%)", 70);
+    indicator.parameters.addInteger("Period", "Number of periods", "Number of periods", 20);
+    indicator.parameters.addInteger("FastN", "Fast MA periods", "Fast MA periods.", 5);
+    indicator.parameters.addInteger("SlowN", "Slow MA periods", "Slow MA periods.", 35);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Line color", "Line color", core.rgb(0, 255, 255));
+    indicator.parameters.addInteger("width", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LEVEL_STYLE);
+}
+
+var first = 0;
+var source = null;
+var EW = null;
+var ewo;
+var srcmode;
+var Period, Trigger;
+var UPGROW, UPFALL, DNGROW, DNFALL;
+
+//initializes the instance of the indicator
+function Prepare(onlyName)
+{
+    source = instance.source;
+
+    Trigger = instance.parameters.Trigger;
+    Period = instance.parameters.Period;
+
+    ewo = core.indicators.create("EWO", source, instance.parameters.FastN, instance.parameters.SlowN, "M2", "MVA", "No");
+    first = ewo.DATA.first() + Period;
+
+    var name = profile.id() + "(" + instance.source.name() + "," + Period + ")";
+    instance.name(name);
+  
+    if (onlyName == true)
+        return ;
+
+    EW = instance.addStream("EW", core.Line, name, "EW", instance.parameters.clr,  first)
+    EW.setWidth(instance.parameters.width);
+    EW.setStyle(instance.parameters.style);
+    EW.addLevel(-1);
+    EW.addLevel(0);
+    EW.addLevel(1);
+}
+
+// calculate the value
+function Update(period, mode)
+{
+    ewo.update(mode);
+    EW[period] = 0;
+    if (period >= first)
+    {
+        var highest, lowest;
+        var tmp = Math.minmax(ewo.DATA,  period - Period + 1, period);
+        lowest=tmp[0];
+        highest=tmp[1];
+        var last = ewo.DATA[period];
+        var trend = EW[period - 1];
+        if (trend == 0)
+        {
+            if (last == highest)
+            {
+                trend = 1;
+            }
+            
+            if (last == lowest)
+            {
+                trend = -1
+            }
+        }
+        if (lowest < 0 && trend == -1 && last > (-1 * (Trigger / 100) * lowest))
+        {
+            trend = 1;
+        }
+        if (highest > 0 && trend == 1 && last < (-1 * (Trigger / 100) * highest))
+        {
+            trend = -1;
+        }
+        EW[period] = trend;
+    }
+}

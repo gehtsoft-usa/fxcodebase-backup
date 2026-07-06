@@ -1,0 +1,26 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_yield</title>
+</head>
+<body>
+<h3><a name="lua_yield"><code>lua_yield</code></a></h3>
+<pre>int lua_yield  (lua_State *L, int nresults);</pre>
+
+<p>
+Yields a coroutine.
+
+
+<p>
+This function should only be called as the
+return expression of a C&nbsp;function, as follows:
+
+<pre>
+     return lua_yield (L, nresults);
+</pre><p>
+When a C&nbsp;function calls <a href="lua_yield.html"><code>lua_yield</code></a> in that way,
+the running coroutine suspends its execution,
+and the call to <a href="lua_resume.html"><code>lua_resume</code></a> that started this coroutine returns.
+The parameter <code>nresults</code> is the number of values from the stack
+that are passed as results to <a href="lua_resume.html"><code>lua_resume</code></a>.
+</body>
+</html>

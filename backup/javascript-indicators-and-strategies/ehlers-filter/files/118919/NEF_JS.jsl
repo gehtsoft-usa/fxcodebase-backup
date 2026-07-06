@@ -1,0 +1,83 @@
+function Init()
+{
+    indicator.name("NONLINEAR EHLERS FILTER");
+    indicator.description("NONLINEAR EHLERS FILTER");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Length", "Length", "Length", 15);
+	indicator.parameters.addInteger("Period", "Momentum Period", "Period", 5);
+	
+	indicator.parameters.addString("Method", "Method", "Method" , "Momentum");
+    indicator.parameters.addStringAlternative("Method", "Momentum", "Momentum" , "Momentum");
+    indicator.parameters.addStringAlternative("Method", "Distance Coefficient", "Distance Coefficient" , "Distance Coefficient");
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("NEF_color", "Color of NEF", "Color of NEF", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var Length;
+
+var first;
+var source = null;
+var Period;
+var Method;
+
+var NEF = null;
+var Coef, RawCoef;
+
+function Prepare(nameOnly)
+{
+    Length = instance.parameters.Length;
+	Period = instance.parameters.Period;
+	Method = instance.parameters.Method;
+    source = instance.source;
+	RawCoef = instance.addInternalStream(0, 0);
+	Coef = instance.addInternalStream(0, 0);
+    first = source.first()+Period;
+  
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Length)+ ", " + tostring(Period)+ ", " + tostring(Method) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        NEF = instance.addStream("NEF", core.Line, name, "NEF", instance.parameters.NEF_color, first+Length);
+		NEF.setWidth(instance.parameters.width);
+        NEF.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period)
+{
+    if (period < first) 
+    {
+	 return;
+	}
+	
+	if (Method == "Momentum") 
+	{
+	 RawCoef[period] = Math.abs(source[period] - source[period - Period]);
+	} 
+	else
+	{
+	 RawCoef[period] = (source[period] - source[period - Period])*(source[period] - source[period - Period]);
+	}
+    Coef[period] =RawCoef[period] * source[period];
+	
+	
+    if (period < first +Length) 
+    {
+	 return;
+	}
+	
+	var Num =Math.sum(Coef, period-Length+1, period);
+	var SumCoef=Math.sum(RawCoef, period-Length+1, period);
+
+
+
+        NEF[period] = Num / SumCoef;
+    
+}
+

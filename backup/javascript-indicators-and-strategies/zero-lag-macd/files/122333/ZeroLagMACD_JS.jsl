@@ -1,0 +1,83 @@
+function Init()
+{
+    indicator.name("Zero Lag MACD");
+    indicator.description("");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addInteger("FMA", "Fast EMA periods", "", 12, 1, 1000);
+    indicator.parameters.addInteger("SMA", "Slow EMA Periods", "", 24, 1, 1000);
+    indicator.parameters.addInteger("SigMA", "Signal EMA periods", "", 9, 1, 1000);
+    indicator.parameters.addColor("MACD_color", "Color of MACD", "", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("SIG_color", "Color of Signal", "", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("HIS_color", "Color of Historgram", "", core.rgb(0, 255, 0));
+}
+
+var FMA;
+var SMA;
+var SigMA;
+
+var FMA_I;
+var SMA_I;
+var FMA_I2;
+var SMA_I2;
+var SigMA_I;
+var SigMA_I2;
+
+var firstMACD, firstSIG;
+var source = null;
+
+var MACD = null;
+var SIG = null;
+var HIS = null;
+
+function Prepare()
+{
+    FMA = instance.parameters.FMA;
+    SMA = instance.parameters.SMA;
+    SigMA = instance.parameters.SigMA;
+    source = instance.source;
+
+    var name = profile.id() + "(" + source.name() + ", " + FMA + ", " + SMA + ", " + SigMA + ")";
+    instance.name(name);
+
+    FMA_I = core.indicators.create("EMA", source, FMA);
+    SMA_I = core.indicators.create("EMA", source, SMA);
+    FMA_I2 = core.indicators.create("EMA", FMA_I.DATA, FMA);
+    SMA_I2 = core.indicators.create("EMA", SMA_I.DATA, SMA);
+
+    firstMACD = Math.max(FMA_I2.DATA.first(), SMA_I2.DATA.first());
+
+    MACD = instance.addStream("MACD", core.Line, name + ".MACD", "MACD", instance.parameters.MACD_color, firstMACD);
+
+    SigMA_I = core.indicators.create("EMA", MACD, SigMA);
+    SigMA_I2 = core.indicators.create("EMA", SigMA_I.DATA, SigMA);
+
+    firstSIG = SigMA_I2.DATA.first();
+    SIG = instance.addStream("SIG", core.Line, name + ".SIG", "SIG", instance.parameters.SIG_color, firstSIG);
+    HIS = instance.addStream("HISTOGRAM", core.Bar, name + ".HIS", "HIS", instance.parameters.HIS_color, firstSIG);
+}
+
+function Update(period, mode)
+{
+    FMA_I.update(mode);
+    FMA_I2.update(mode);
+    SMA_I.update(mode);
+    SMA_I2.update(mode);
+
+    if (period >= firstMACD) 
+    {
+        MACD[period] = (2 * FMA_I.DATA[period] - FMA_I2.DATA[period]) -
+                       (2 * SMA_I.DATA[period] - SMA_I2.DATA[period]);
+    }
+
+    SigMA_I.update(mode);
+    SigMA_I2.update(mode);
+
+    if (period >= firstSIG) 
+    {
+        SIG[period] = 2 * SigMA_I.DATA[period] - SigMA_I2.DATA[period];
+        HIS[period] = MACD[period] - SIG[period];
+    }
+}
+

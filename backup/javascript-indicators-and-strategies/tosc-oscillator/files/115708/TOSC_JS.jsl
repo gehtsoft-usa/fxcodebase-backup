@@ -1,0 +1,66 @@
+function Init()
+{
+    indicator.name("TOSC");
+    indicator.description("Difference between the recursive trendline value && the exponential moving average");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+ indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "Period", 20);
+	 indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("TOSC_color", "Color of TOSC", "Color of TOSC", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var Period;
+
+var first;
+var source = null;
+var alpha;
+
+var TOSC = null;
+var b0,X1;
+var EMA;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+    source = instance.source;
+    first = source.first();
+	b0 = instance.addInternalStream(0, 0);
+	X1 = instance.addInternalStream(0, 1);
+	EMA = core.indicators.create("EMA", source, Period);
+	alpha=2/(Period+1)
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        TOSC = instance.addStream("TOSC", core.Line, name, "TOSC", instance.parameters.TOSC_color, EMA.DATA.first());
+		TOSC.setWidth(instance.parameters.width);
+        TOSC.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period, mode)
+{
+    if (period < first) 
+    {
+	 return;
+	}
+	
+	    b0[period]  =  (1-alpha)* b0[period-1] + source[period];
+	    X1[period+1] = (1-alpha)*X1[period] + alpha*(source[period]+b0[period]-b0[period-1]);
+		
+		EMA.update(mode);
+		
+		if (period < EMA.DATA.first()) 
+		{
+		 return;
+		}
+		
+        TOSC[period]=X1[period ]- EMA.DATA[period];
+   
+}

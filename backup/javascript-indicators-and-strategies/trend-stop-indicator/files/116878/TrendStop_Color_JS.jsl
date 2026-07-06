@@ -1,0 +1,170 @@
+function Init()
+{
+    indicator.name("Trend Stop");
+    indicator.description("Trend Stop");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+	
+	indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "Period", 10);
+	indicator.parameters.addString("Type" ,"Triger", "", "Close");
+    indicator.parameters.addStringAlternative("Type", "Close", "", "Close");
+    indicator.parameters.addStringAlternative("Type", "High/Low", "", "High");
+	
+	 indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Stop_color", "Color of Stop", "Color of Stop", core.rgb(255, 255, 0));
+    indicator.parameters.addColor("Stop_colorUP", "Color of Stop (above High)", "Color of Stop (above High)", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("Stop_colorDN", "Color of Stop (below Low)", "Color of Stop (below Low)", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var Period;
+var Level={};
+var ON= {};
+var first;
+var source = null;
+var TREND;
+
+var Stop = null;
+var STOP;
+var NOT;
+var LAST;
+var Type;
+
+var MIN, MAX;
+
+function Prepare(nameOnly)
+{
+    Type = instance.parameters.Type;
+    Period = instance.parameters.Period;
+    source = instance.source;
+    first = source.first()+ Period;
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ")";
+    instance.name(name);
+
+	TREND = null
+	NOT= true;
+    LAST = 1;
+	
+    if (!(nameOnly)) 
+    {
+        Stop = instance.addStream("Stop", core.Line, name, "Stop", instance.parameters.Stop_color, first);
+        Stop.setWidth(instance.parameters.widthLinReg);
+        Stop.setStyle(instance.parameters.styleLinReg);
+    }
+}
+
+function Update(period)
+{
+    if (period < first || !source.hasData(period)) 
+    {
+     return;
+	}
+	
+	var min, max;
+	
+	var tmp=Math.minmax(source, period-Period , period);
+	min=tmp[0];
+	max=tmp[1];
+	
+	   var FLAG= false; 
+		
+	if (Type == "Close") 
+	{	
+	
+		 if (source.close[period] > Stop[period-1]  && !TREND) 
+		 {
+			 MIN = min;
+			 MAX = max;
+			 TREND = true;
+            STOP = MIN;	
+             FLAG= true;			
+         }
+		else if (source.close[period] < Stop[period-1]  &&  TREND) 
+		{
+		   MIN = min;
+			 MAX = max;
+			 TREND= false;
+			STOP = MAX; 
+		    FLAG= true;
+		}
+		else if (TREND) 
+		{
+		 STOP = min;	
+		}
+		else if (!TREND) 
+		{
+		 STOP =  max;
+		}  	
+	}
+	else
+	{
+		 if (source.high[period] > Stop[period-1]  && !TREND) 
+		 {
+			 MIN = min;
+			 MAX = max;
+			 TREND = true;
+            STOP = MIN;	
+             FLAG= true;			
+         }
+		else if (source.low[period] < Stop[period-1]  &&  TREND) 
+		{
+		   MIN = min;
+			 MAX = max;
+			 TREND= false;
+			STOP = MAX; 
+		    FLAG= true;
+		}
+		else if (TREND) 
+		{
+		 STOP = min;	
+		}
+		else if (!TREND) 
+		{
+		 STOP =  max;
+		}  
+		
+    }	
+		 				 
+		 
+	
+		if (TREND && STOP > Stop[period-1] && !FLAG) 
+		{	
+		 Stop[period] = STOP;
+		}
+		else if (!TREND && STOP <  Stop[period-1]  && !FLAG) 
+		{	
+		 Stop[period] = STOP;
+		}
+		else if (STOP > Stop[period-1] &&  FLAG) 
+		{	
+		 Stop[period] = STOP;
+		}
+		else if (STOP <  Stop[period-1]  &&  FLAG) 
+		{	
+		 Stop[period] = STOP;
+		}
+		else
+		{
+		 Stop[period]= Stop[period-1];
+		}
+		
+		if (Stop[period]>source.high[period]) 
+		{
+		 Stop.setColor(period,instance.parameters.Stop_colorUP);
+		}
+		else if (Stop[period]<source.low[period]) 
+		{
+		 Stop.setColor(period,instance.parameters.Stop_colorDN);
+		}
+		else
+		{
+		 Stop.setColor(period,instance.parameters.Stop_color);
+		}
+}
+    
+
+

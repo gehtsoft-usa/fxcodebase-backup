@@ -1,0 +1,97 @@
+function Init()
+{
+    indicator.name("VolMA indicator");
+    indicator.description("VolMA indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("RSIVolumePeriod", "Volume RSI Period", "", 20);
+    indicator.parameters.addInteger("Period", "Period", "", 50);
+    indicator.parameters.addString("Price", "Price", "", "close");
+    indicator.parameters.addStringAlternative("Price", "close", "", "close");
+    indicator.parameters.addStringAlternative("Price", "open", "", "open");
+    indicator.parameters.addStringAlternative("Price", "high", "", "high");
+    indicator.parameters.addStringAlternative("Price", "low", "", "low");
+    indicator.parameters.addStringAlternative("Price", "median", "", "median");
+    indicator.parameters.addStringAlternative("Price", "typical", "", "typical");
+    indicator.parameters.addStringAlternative("Price", "weighted", "", "weighted");
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var RSIVolumePeriod;
+var Period;
+var Price;
+var VolumeRSI;
+var VolMA=null;
+var p;
+
+function Prepare()
+{
+    source = instance.source;
+    RSIVolumePeriod=instance.parameters.RSIVolumePeriod;
+    Period=instance.parameters.Period;
+    Price=instance.parameters.Price;
+    first = source.first()+2;
+    VolumeRSI = core.indicators.create("RSI", source.volume, RSIVolumePeriod);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.RSIVolumePeriod + ", " + instance.parameters.Period + ")";
+    instance.name(name);
+    VolMA = instance.addStream("VolMA", core.Line, name + ".VolMA", "VolMA", instance.parameters.clr, first);
+    VolMA.setWidth(instance.parameters.widthLinReg);
+    VolMA.setStyle(instance.parameters.styleLinReg);
+    if (Price=="close") 
+    {
+     p=source.close;
+    } 
+    else if (Price=="open") 
+    {
+     p=source.open;
+    } 
+    else if (Price=="high") 
+    {
+     p=source.high;
+    } 
+    else if (Price=="low") 
+    {
+     p=source.low;
+    } 
+    else if (Price=="median") 
+    {
+     p=source.median;
+    } 
+    else if (Price=="typical") 
+    {
+     p=source.typical;
+    } 
+    else
+    {
+     p=source.weighted;
+    } 
+}
+
+function Update(period, mode)
+{
+   if (period>first+RSIVolumePeriod) 
+   {
+    VolumeRSI.update(mode);
+    var PeriodMA=Math.floor(VolumeRSI.DATA[period]*Period/100);
+    PeriodMA=Math.max(PeriodMA,1);
+    var StartBar=period-PeriodMA+1;
+    if (StartBar<first) 
+    {
+     VolMA[period]=null;
+    } 
+    else
+    { 
+     VolMA[period]=Math.avg(p,core.range(StartBar,period));
+    } 
+   } 
+}
+

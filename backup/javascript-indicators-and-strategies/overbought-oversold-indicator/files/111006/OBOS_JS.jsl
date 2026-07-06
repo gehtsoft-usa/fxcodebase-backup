@@ -1,0 +1,142 @@
+//initializes the indicator
+function Init()
+{
+    indicator.name("Overbought/Oversold Indicator");
+    indicator.description("Overbought/Oversold Indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("PERIOD", "Number of periods", "The number of periods.", 9);
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UP_color", "UP color", "UP color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DN_color", "DN color", "DN color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("OB_color", "Overbought/Oversold color", "Overbought/Oversold color", core.rgb(0, 0, 255));
+}
+
+var PERIOD;
+
+var first;
+var source = null;
+
+var open, low, high, close;
+var MA = {};
+var BUFFER = {};
+var BUFFER3, BUFFER4;
+
+var UP, DOWN;
+
+//initializes the instance of the indicator
+function Prepare(onlyName)
+{
+    PERIOD = instance.parameters.PERIOD;
+    source = instance.source;
+    first = source.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + PERIOD + ")";
+    instance.name(name);
+
+    BUFFER[1] = instance.addInternalStream(source.first(), 0);
+    MA[1] = core.indicators.create("EMA", BUFFER[1], PERIOD);
+    BUFFER[5] = instance.addInternalStream(MA[1].DATA.first() + PERIOD, 0);
+    
+    MA[2] = core.indicators.create("EMA", BUFFER[5], PERIOD);
+    BUFFER[6] = instance.addInternalStream(MA[2].DATA.first(), 0);
+    
+    MA[3] = core.indicators.create("EMA", BUFFER[6], PERIOD);
+    
+    UP = instance.addInternalStream(MA[3].DATA.first(), 0);
+    MA[4] = core.indicators.create("EMA", UP, PERIOD);
+
+    if (!(nameOnly))
+    {
+        open  = instance.addStream("open",  core.Line, name, "open",  core.rgb(128, 128, 128),  MA[4].DATA.first());
+        high  = instance.addStream("high",  core.Line, name, "high",  core.rgb(128, 128, 128),  MA[4].DATA.first());
+        low   = instance.addStream("low",   core.Line, name, "low",   core.rgb(128, 128, 128),  MA[4].DATA.first());
+        close = instance.addStream("close", core.Line, name, "close", core.rgb(128, 128, 128),  MA[4].DATA.first());
+        instance.createCandleGroup("OBOS", "", open, high, low, close);
+    }
+}
+
+// calculate the value
+function Update(period, mode)
+{
+    if (period < first || !(source.hasData(period)))
+    {
+        return;        
+    }
+    
+    BUFFER[1][period] = (source.high[period] + source.low[period] + source.close[period] * 2) / 4;
+    
+    MA[1].update(mode);
+    
+    if (period < MA[1].DATA.first())
+    {
+        return;
+    }
+    
+    BUFFER3 = MA[1].DATA[period];
+    
+    if (period < MA[1].DATA.first() + PERIOD)
+    {
+        return;
+    }
+
+    BUFFER4 = Math.stdev(BUFFER[1], period - PERIOD, period);
+
+    BUFFER[5][period] = (BUFFER[1][period] - BUFFER3) * 100 / BUFFER4;
+
+    MA[2].update(mode);
+    if (period < MA[2].DATA.first())
+    {
+        return;
+    }
+    
+    BUFFER[6][period] = MA[2].DATA[period];
+
+    MA[3].update(mode);
+    if (period < MA[3].DATA.first())
+    {
+        return;
+    }
+
+    UP[period] = MA[3].DATA[period];
+
+    MA[4].update(mode);
+    if (period < MA[4].DATA.first())
+    {
+        return;
+    }
+
+    DOWN = MA[4].DATA[period];
+
+    if (UP[period] < DOWN)
+    {
+        open[period] = UP[period];
+        low[period]  = DOWN;
+    }
+    else
+    {
+        open[period] = DOWN;
+        low[period]  = UP[period];
+    }
+
+    high[period]  = open[period];
+    close[period] = low[period];
+    
+    if (open[period - 1] < open[period] && close[period] < close[period - 1])
+    {
+        open.setColor(period, instance.parameters.OB_color);
+    }
+    else
+    {
+        if (UP[period] > DOWN)
+        {
+            open.setColor(period, instance.parameters.UP_color);
+        }
+        else
+        {
+            open.setColor(period, instance.parameters.DN_color);
+        }
+    }
+}

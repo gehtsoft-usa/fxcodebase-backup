@@ -1,0 +1,90 @@
+function Init()
+{
+    indicator.name("Advanced_ADX");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+   indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("LP_ADX", "ADX Period", "ADX Period", 14);   
+    indicator.parameters.addInteger("LP_DMI", "DMI Period", "DMI Period", 14);   
+	indicator.parameters.addGroup("Style");
+	indicator.parameters.addColor("Pozitiv", "Color of Up Trend", "", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("Negativ", "Color of Down Trend ", "", core.rgb(255, 0, 0));
+    indicator.parameters.addGroup("Levels");
+ 
+    indicator.parameters.addDouble("overbought", "Strong Trend Line", "",  25, 0, 100);
+    indicator.parameters.addDouble("oversold", "Weak Trend Line", "",  20, 0, 100);
+    indicator.parameters.addInteger("level_overboughtsold_width", "Width", "", 1, 1, 5);
+    indicator.parameters.addInteger("level_overboughtsold_style", "Style", "", core.LINE_SOLID);
+	 indicator.parameters.setFlag("level_overboughtsold_style", core.FLAG_LEVEL_STYLE);
+    indicator.parameters.addColor("level_overboughtsold_color", "Line COlor", "", core.rgb(255, 255, 0));
+   
+}
+
+var LP_ADX;
+var LP_DMI;
+
+var first;
+var source = null;
+
+var Short = null;
+var Long = null;
+var Indicator={};
+var Count;
+
+function Prepare(nameOnly)
+{
+    LP_ADX = instance.parameters.LP_ADX;
+    LP_DMI = instance.parameters.LP_DMI;
+   
+	
+    source = instance.source;
+   Count=0;
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(LP_ADX) + ", " + tostring(LP_DMI)+ ")";
+    instance.name(name);
+	
+	
+	 Indicator["ADX"] = core.indicators.create("ADX", source, LP_ADX);
+	  Indicator["DMI"] = core.indicators.create("DMI", source, LP_DMI);
+	  
+	   first = Math.max(Indicator["ADX"].DATA.first(), Indicator["DMI"].DATA.first());
+	  
+
+    if (!(nameOnly)) 
+    {
+     
+        Long = instance.addStream("Long", core.Bar, name + ".Long", "Long", core.rgb(0, 0, 0), first);
+		
+		  Long.addLevel(instance.parameters.overbought, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);
+           Long.addLevel(instance.parameters.oversold, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);
+    }
+}
+
+function Update(period, mode)
+{
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+	   Indicator["ADX"].update(mode);
+		Indicator["DMI"].update(mode);
+		
+      
+        Long[period] = Indicator["ADX"].DATA[period];
+		
+		
+		
+		
+				 if (Indicator["DMI"].DIP[period] > Indicator["DMI"].DIM[period]) 
+				 {
+				Long.setColor(period, instance.parameters.Pozitiv );
+			}
+				else
+				{
+				 Long.setColor(period, instance.parameters.Negativ );
+				 }
+        	    
+}
+

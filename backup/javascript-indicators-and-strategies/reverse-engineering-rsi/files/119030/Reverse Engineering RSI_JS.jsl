@@ -1,0 +1,105 @@
+function Init()
+{
+    indicator.name("Reverse Engineering RSI");
+    indicator.description("Reverse Engineering RSI");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+    indicator.parameters.addGroup("Calculation");	
+    indicator.parameters.addInteger("WildPer", "RSI Period", "RSI Period", 14);
+	indicator.parameters.addInteger("MA_Period", "MA Period", "MA Period", 45);
+	
+	indicator.parameters.addString("Method", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "EMA" , "EMA");
+	
+	
+	indicator.parameters.addGroup("Style");	
+    indicator.parameters.addColor("RevEngSMARSI_color", "Color of Reverse Engineering RSI MA", "Color of Reverse Engineering RSI MA", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var WildPer;
+var rsi, ma;
+var first;
+var source = null;
+var ExpPer;
+
+var RevEngMA = null;
+var Method,MA_Period;
+var auc, AUC;
+var ADC, adc;
+
+function Prepare(nameOnly)
+{
+    Method = instance.parameters.Method;
+	MA_Period = instance.parameters.MA_Period;
+    WildPer = instance.parameters.WildPer;
+	ExpPer=2*WildPer-1;
+	
+	  source = instance.source;
+	
+    rsi = core.indicators.create("RSI", source,WildPer );
+	ma = core.indicators.create(Method, rsi.DATA, MA_Period);
+	auc = instance.addInternalStream(0, 0);
+	adc = instance.addInternalStream(0, 0);
+	AUC = core.indicators.create("EMA", auc, ExpPer);
+	ADC = core.indicators.create("EMA", adc, ExpPer);
+	
+	
+  
+    first = ma.DATA.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(WildPer)+ ", " + tostring(MA_Period)+ ", " + tostring(Method) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        RevEngMA = instance.addStream("RevEngMA", core.Line, name, "RevEngMA", instance.parameters.RevEngSMARSI_color, first);
+		RevEngMA.setWidth(instance.parameters.width);
+        RevEngMA.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period, mode)
+{
+  if (source[period]>source[period-1]) 
+  {
+   auc[period]=source[period]-source[period-1];
+   adc[period]=0;
+  }
+  else
+  {
+   auc[period]=0;
+   adc[period]=source[period-1]-source[period];
+  }
+  
+ 
+
+    rsi.update(mode);
+	ma.update(mode);
+	AUC.update(mode);
+	ADC.update(mode);
+
+    if (period < first)
+    {
+	 return;
+	}
+
+	
+	var x=(WildPer-1)*(ADC.DATA[period]*ma.DATA[period]/(100-ma.DATA[period])-AUC.DATA[period]);
+	
+     if (x>=0) 
+     {	 
+	  RevEngMA[period] =  source[period]+x;
+	 }
+	else
+	{
+	 RevEngMA[period] =  source[period]+x*(100-ma.DATA[period])/ma.DATA[period];
+    } 
+
+	 
+   
+}
+

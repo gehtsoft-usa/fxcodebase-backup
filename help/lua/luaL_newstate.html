@@ -1,0 +1,27 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - luaL_newstate</title>
+</head>
+<body>
+<h3><a name="luaL_newstate"><code>luaL_newstate</code></a></h3>
+<pre>lua_State *luaL_newstate (void);</pre>
+
+<p>
+Creates a new Lua state, calling <a href="lua_newstate.html"><code>lua_newstate</code></a> with an
+allocation function based on the standard&nbsp;C <code>realloc</code> function
+and setting a panic function (see <a href="lua_atpanic.html"><code>lua_atpanic</code></a>) that prints
+an error message to the standard error output in case of fatal
+errors.
+
+
+<p>
+Returns the new state,
+or <code>NULL</code> if there is a memory allocation error.
+
+
+
+
+
+<hr>
+</body>
+</html>

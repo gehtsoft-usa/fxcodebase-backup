@@ -1,0 +1,145 @@
+function Init()
+{
+    indicator.name("Rate of Change with Smoothing");
+    indicator.description("");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+	indicator.parameters.addGroup("Prior to Calculation Price Smoothing");
+	
+	indicator.parameters.addString("Pre_Method", "Method", "Method" , "EMA");
+	 indicator.parameters.addStringAlternative("Pre_Method", "Don't use", "Don't use" , "Don't use");
+    indicator.parameters.addStringAlternative("Pre_Method", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Pre_Method", "EMA", "EMA" , "EMA");
+	indicator.parameters.addStringAlternative("Pre_Method", "LWMA", "LWMA" , "LWMA");
+	indicator.parameters.addStringAlternative("Pre_Method", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Pre_Method", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Pre_Method", "SMMA", "SMMA" , "SMMA");	
+	indicator.parameters.addStringAlternative("Pre_Method", "WMA", "WMA" , "WMA");
+	indicator.parameters.addStringAlternative("Pre_Method", "VIDYA", "VIDYA" , "VIDYA");
+	indicator.parameters.addInteger("Pre_Period", "Averege Period", "", 16);
+	
+    indicator.parameters.addGroup("ROC Calculation");
+    indicator.parameters.addInteger("Period", "ROC Period", "", 16, 2, 1000);
+
+	
+	
+    indicator.parameters.addGroup("Post Calculation ROC Smoothing");
+	indicator.parameters.addString("Post_Method", "Method", "Method" , "Don't use");
+	indicator.parameters.addStringAlternative("Post_Method", "Don't use", "Don't use" , "Don't use");
+    indicator.parameters.addStringAlternative("Post_Method", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Post_Method", "EMA", "EMA" , "EMA");
+	indicator.parameters.addStringAlternative("Post_Method", "LWMA", "LWMA" , "LWMA");
+	indicator.parameters.addStringAlternative("Post_Method", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Post_Method", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Post_Method", "SMMA", "SMMA" , "SMMA");	
+	indicator.parameters.addStringAlternative("Post_Method", "WMA", "WMA" , "WMA");
+	indicator.parameters.addStringAlternative("Post_Method", "VIDYA", "VIDYA" , "VIDYA");  	
+	indicator.parameters.addInteger("Post_Period", "Averege Period", "", 16);	 
+	
+	
+	    indicator.parameters.addGroup("ROC Style");
+    indicator.parameters.addColor("clrRSI", "Line Color","", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("widthRSI", "Line Width","", 1, 1, 5);
+    indicator.parameters.addInteger("styleRSI", "Line Style", "", core.FLAG_LEVEL_STYLE);
+	
+    
+}
+
+var Period; 
+var source ;  
+
+var ROC, roc;
+	    var  pre;
+		var  post;
+
+		var Pre_Method;
+		var Post_Method;
+
+		var Pre_Period;
+		var Post_Period;
+
+function Prepare()   	 
+{		
+	 Pre_Method= instance.parameters.Pre_Method;
+	 Pre_Period= instance.parameters.Pre_Period;	
+	 Post_Method= instance.parameters.Post_Method;
+	 Post_Period= instance.parameters.Post_Period;
+	
+	
+
+    Period = instance.parameters.Period;
+    source = instance.source;	
+
+	
+	
+	if (Pre_Method =="Don't use") 
+	{	 
+	 roc = core.indicators.create("ROC", source, Period);	
+	}
+	else
+	{
+	 pre = core.indicators.create(Pre_Method, source, Pre_Period);	
+	 roc = core.indicators.create("ROC", pre.DATA, Period);	
+	}
+	 
+	 
+	
+	
+	if (Post_Method == "Don't use") 
+	{
+	 first = roc.DATA.first() ;	
+	}
+	else
+	{
+     post = core.indicators.create(Post_Method, roc.DATA, Post_Period);
+	 first = post.DATA.first() ;
+	}
+	
+
+    var name = profile.id() + "(" + source.name() + ", " + Period + ")";
+    instance.name(name);
+ 
+
+    ROC = instance.addStream("ROC", core.Line, name, "ROC", instance.parameters.clrRSI, first);
+    ROC.setWidth(instance.parameters.widthRSI);
+    ROC.setStyle(instance.parameters.styleRSI);
+    ROC.setPrecision(2);    
+    ROC.addLevel(0);
+ 
+	
+	
+}
+
+function Update(period, mode)
+{
+    if (Pre_Method== "Don't use") 
+    {
+	 roc.update(mode);
+	}
+	else	
+	{
+	 pre.update(mode);	
+	 roc.update(mode);
+ 	}	
+	        
+	if (Post_Method == "Don't use") 
+	{
+	 ROC[period]= roc.DATA[period];	
+		if (period < roc.DATA.first()) 
+		{
+		 return;
+		}
+	}	
+	else	   
+	{
+		post.update(mode);
+	     if (period < post.DATA.first()) 
+	     {
+		  return;
+		}
+	ROC[period]= post.DATA[period];
+	}	
+	
+	
+}

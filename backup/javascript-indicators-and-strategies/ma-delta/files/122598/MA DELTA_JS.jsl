@@ -1,0 +1,84 @@
+function Init()
+{
+    indicator.name("Ma Delta");
+    indicator.description("Ma Delta");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+
+    indicator.parameters.addGroup("MA Calculation");
+    indicator.parameters.addInteger("N", "Periods ", "Periods BB", 10, 1, 10000);
+	indicator.parameters.addString("Method", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method", "WMA", "WMA" , "WMA");
+	
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("SMA", " MA Color", "MA", core.rgb(0, 0, 255));
+	
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+	
+	
+	indicator.parameters.addGroup("OB/OS Levels");	
+    indicator.parameters.addDouble("overbought", "Overbought/Oversold Level","", 0);
+    indicator.parameters.addInteger("level_overboughtsold_width","Line width","", 1, 1, 5);
+    indicator.parameters.addInteger("level_overboughtsold_style", "Line Style","", core.LINE_SOLID);
+    indicator.parameters.addColor("level_overboughtsold_color", "Line Color","", core.rgb(128, 128, 128));
+    indicator.parameters.setFlag("level_overboughtsold_style", core.FLAG_LEVEL_STYLE);
+
+}
+
+var N;
+var Method;
+var first;
+var source = null;
+var DELTA, Filter;
+
+var MA;
+
+function Prepare()
+{
+    N = instance.parameters.N;
+	Method = instance.parameters.Method;
+    Filter = instance.parameters.Filter;
+    source = instance.source;
+   
+
+    var name = profile.id() + "(" + source.name() + ", " + N + ", " +Method+ ")";
+    instance.name(name);    
+    
+	
+	MA = core.indicators.create(Method, source, N);
+	 first = MA.DATA.first();
+	 
+	 
+    DELTA = instance.addStream("DELTA", core.Line, name, "DELTA", instance.parameters.SMA, first);
+    DELTA.addLevel(0);
+    DELTA.addLevel(instance.parameters.overbought, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);
+	DELTA.addLevel(-instance.parameters.overbought, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);    
+	
+	
+    DELTA.setWidth(instance.parameters.width);
+    DELTA.setStyle(instance.parameters.style);
+   
+
+}
+
+function Update(period, mode)
+{
+    if (period < first) 
+    {
+	 return;
+	}
+       
+        MA.update(mode);
+        DELTA [period] = (MA.DATA[period] - MA.DATA[period-1])/source.pipSize();
+        
+ }

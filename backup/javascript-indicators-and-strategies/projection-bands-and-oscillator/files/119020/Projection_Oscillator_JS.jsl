@@ -1,0 +1,110 @@
+function Init()
+{
+    indicator.name("Projection Oscillator");
+    indicator.description("Projection Oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 14);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period;
+var Buff=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ")";
+    instance.name(name);
+    Buff = instance.addStream("Buff", core.Line, name + ".Buff", "Buff", instance.parameters.clr, first);
+    Buff.setWidth(instance.parameters.widthLinReg);
+    Buff.setStyle(instance.parameters.styleLinReg);
+    Buff.addLevel(20);
+    Buff.addLevel(50);
+    Buff.addLevel(80);
+}
+
+function Update(period, mode)
+{
+   if (period>first+Period) 
+   {
+    var SlopeHigh=Math.lregSlope(source.high,period-Period+1,period);
+    var SlopeLow=Math.lregSlope(source.low,period-Period+1,period);
+    var i;
+    var UpProjBand=source.high[period];
+    var DnProjBand=source.low[period];
+    for (i=1; i<=Period; i++) 
+    {
+     UpProjBand=Math.max(UpProjBand,source.high[period-i]+i*SlopeHigh);
+     DnProjBand=Math.min(DnProjBand,source.low[period-i]-i*SlopeLow);
+    }
+    Buff[period]=100*(source.close[period]-DnProjBand)/(UpProjBand-DnProjBand);
+   } 
+}
+
+function Init()
+{
+    indicator.name("Projection Oscillator");
+    indicator.description("Projection Oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 14);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period;
+var Buff=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ")";
+    instance.name(name);
+    Buff = instance.addStream("Buff", core.Line, name + ".Buff", "Buff", instance.parameters.clr, first);
+    Buff.setWidth(instance.parameters.widthLinReg);
+    Buff.setStyle(instance.parameters.styleLinReg);
+    Buff.addLevel(20);
+    Buff.addLevel(50);
+    Buff.addLevel(80);
+}
+
+function Update(period, mode)
+{
+   if (period>first+Period) 
+   {
+    var SlopeHigh=Math.lregSlope(source.high,period-Period+1,period);
+    var SlopeLow=Math.lregSlope(source.low,period-Period+1,period);
+    var i;
+    var UpProjBand=source.high[period];
+    var DnProjBand=source.low[period];
+    for (i=1; i<=Period; i++) 
+    {
+     UpProjBand=Math.max(UpProjBand,source.high[period-i]+i*SlopeHigh);
+     DnProjBand=Math.min(DnProjBand,source.low[period-i]-i*SlopeLow);
+    }
+    Buff[period]=100*(source.close[period]-DnProjBand)/(UpProjBand-DnProjBand);
+   } 
+}
+

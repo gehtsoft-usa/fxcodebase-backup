@@ -1,0 +1,433 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252" /><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><title>How to Use Another Indicator in Your Code?</title><style type="text/css">a, p, h1, h2, h3, h4, h5, h6, table, td, tr, li, ul, ol {
+    font-family: Verdana, Trebuchet MS, Arial;
+}
+
+a, p, td, tr, ul, ol, li {
+    font-size: 12pt;
+}
+
+h3 {
+    font-size: 13pt;
+}
+
+h2 {
+    font-size: 13pt;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+body {
+    color: #444444;
+    background-color: white;
+}
+
+A:link {
+    color: #0065b3;
+    cursor: pointer;
+}
+
+A:visited {
+    color: #0068be;
+    cursor: pointer;
+}
+
+a.action {
+  background-color: #0065b3;
+  color: white;
+  font-size: 10pt;
+  padding: 2px 2px;
+  width: 50pt;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px;
+}
+
+.side-icon {
+    float: left;
+}
+
+a.action [class*="dripicons-"]:before {
+    padding: 0 2px 0 0;
+    font-size: 12pt;
+    vertical-align: text-bottom;
+}
+
+.side-icon:after {
+  content: "";
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  border-left: 1.5px solid white;
+  transform: translate(-50%);
+}
+
+a.actiontab {
+  font-size: 10pt;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px 3px 0 0;
+}
+
+pre, code, code a {
+    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+    font-size: 12pt;
+}
+
+code.ctag {
+    background-color: #f1f1f1;
+    padding: .1em .2em;
+    border-radius: 3px;
+}
+
+pre {
+    background-color: white;
+}
+
+pre.example {
+    background-color: #f1f1f1;
+}
+
+ul {
+    list-style-type: disc;
+    margin-left: 18pt;
+}
+
+ol {
+    list-style-type: decimal;
+    margin-left: 18pt;
+}
+
+ul.hhc {
+    list-style-type: none;
+    margin-left: 1em;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+li.hhc {
+    margin-left: 0;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+table {
+  border-spacing: 0;
+  border-color: #dfe3e7;
+}
+
+tr + tr td {
+   border-top: 0;
+}
+
+tr td + td {
+  border-left: 0;
+}
+
+td {
+  border: 1px solid;
+  border-color: #dfe3e7;
+}
+
+tr:first-child td:first-child {
+   border-radius: 0.2em 0 0 0;
+}
+
+tr:first-child td:last-child {
+  border-radius: 0 0.2em 0 0;
+}
+
+tr:first-child td:only-child {
+  border-radius: 0.2em 0.2em 0 0;
+}
+
+tr:last-child td:first-child {
+    border-radius: 0 0 0 0.2em;
+}
+
+tr:last-child td:last-child {
+    border-radius: 0 0 0.2em 0;
+}
+
+tr:last-child td:only-child {
+    border-radius: 0 0 0.2em 0.2em;
+}
+
+tr:only-child td:only-child {
+    border-radius: 0.2em 0.2em 0.2em 0.2em;
+}
+
+tr:only-child td:first-child {
+   border-radius: 0.2em 0 0 0.2em;
+}
+
+tr:only-child td:last-child {
+  border-radius: 0 0.2em 0.2em 0;
+}
+
+
+td.tmain, td.tmain_nw, td.thdr {
+    background-color: rgb(255, 255, 255);
+    vertical-align: top;
+    padding: 3px;
+}
+
+td.tmain p, td.tmain_nw p, td.thdr p {
+    margin-top: 3pt;
+    margin-bottom: 3pt;
+}
+
+td.tmain_nw {
+    white-space: nowrap;
+}
+
+td.thdr {
+    background-color: #e3e3e3;
+}
+
+table.decl {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+    vertical-align: top;
+    padding: 3px;
+    width: 100%;
+}
+
+table.decl td {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+}
+
+div.note-quote {
+    border-left: 10px solid #ccc;
+    padding: 1em 10px .1em 10px;
+    margin: 1.5em 10px;
+    background-color: rgb(224, 224, 224);
+}
+
+div.note-note {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+div.note-warning {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #fff;
+    background-color: #ff6358;
+}
+div.note-warning code.ctag {
+    color: black;
+}</style>
+<link rel="stylesheet" href="res/dripicons.css"></head><body><script type="text/javascript">
+var highlighterEnabled = false;
+var maintopic = 'index';
+var helptitle = 'Indicore SDK 3';
+    function loadStarted() {
+    window.onload = loadCompleted;
+
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        var head = document.getElementsByTagName('head')[0];
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.min.js';
+        head.appendChild(script4);
+
+
+        var script2 = document.createElement('script');
+        script2.type = 'text/javascript';
+        script2.src = './highlighter/highlight.cshtml.js';
+        head.appendChild(script2);
+
+        var script3 = document.createElement('script');
+        script3.type = 'text/javascript';
+        script3.src = './highlighter/highlight.lua.js';
+        head.appendChild(script3);
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.luax.js';
+        head.appendChild(script4);
+    }
+}
+
+function loadCompleted() {
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        hljs.registerLanguage('cshtml-razor', window.hljsDefineCshtmlRazor);
+        hljs.registerLanguage('lua', window.hljsDefineLua);
+        hljs.registerLanguage('luax', window.hljsDefineLuaX);
+        x = document.querySelectorAll('pre code');
+        for (var i = 0; i < x.length; i++) {
+            if (x[i].hasAttribute('class')) {
+                hljs.highlightBlock(x[i]);
+            }
+        }
+    }
+}
+
+
+function hidediv(divname) {
+    document.getElementById(divname).style.display = 'none';
+}
+
+function showdiv(divname) {
+    document.getElementById(divname).style.display = 'inline';
+}
+
+function syncList() {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, null, document.title);
+    }
+}
+
+function syncList1(key) {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, key + '.html', document.title);
+    }
+}</script><script type="text/javascript">
+    loadStarted();
+</script><h1>How to Use Another Indicator in Your Code?</h1>
+<h2>Brief</h2>
+<p>The section provides guidlines for using other indicators in your own code.</p>
+<h2>Details</h2><p>Sometimes,it is helpful to reuse other indicator in your code to avoid repetition. For example,
+the MACD indicator uses the EMA indicator three times for different values.</p>
+<p>If you need to apply another indicator on your indicator source, you must:</p>
+<p>1) Create an instance of the indicator in your <code class="ctag">Prepare()</code> function. You can use <a href="core.indicators.html">indicator
+manager</a> to create the indicator.</p><div id="open4" style="display:none">
+  <p>Example: Indicator creation example&nbsp;<a href="javascript: showdiv('close4'); hidediv('open4');" onclick="javascript: showdiv('close4'); hidediv('open4');" class="action">Show<span class="side-icon dripicons-chevron-right"></span></a></p>
+</div>
+<div id="close4" style="display:inline">
+  <p>Example: Indicator creation example&nbsp;<a href="javascript: showdiv('open4'); hidediv('close4');" onclick="javascript: showdiv('open4'); hidediv('close4');" class="action">Hide<span class="side-icon dripicons-chevron-down"></span></a></p>
+  <pre class="example" id="example4"><code>   local mva7;                 -- the output stream of the MVA(7) indicator
+   local stream;               -- the output stream of your indicator
+   function Prepare()
+       mva7 = core.indicators:create(&quot;MVA&quot;, source, 7);
+       -- Create your own stream.
+       stream = instance:addStream(&quot;MVA72&quot;, core.Line, &quot;MVA(7)/2&quot;, &quot;MVA(7)/2&quot;, instance.parameters:getColor(&quot;C&quot;),  7);
+   end</code></pre>
+</div><p>2) Since you own the new indicator, you must also control updating of this indicator manually:</p>
+<p>Note 1) Of course, you can apply the indicator to your own output stream (or internal stream) instead of
+your source stream. But, in this case, you should call update of the subsequent indicator only after you have calculated
+values of your output stream.</p>
+<p>Note 2) Sometimes (for example, when the source collection is extended to the left), your indicator is executed
+to be updated completely. Your subsequent indicators must also be updated completely in this case. To control
+this process, you can use the values <code class="ctag">core.UpdateLast</code> and
+<code class="ctag">core.UpdateAll</code> of the <code class="ctag">Mode</code> parameter. The value
+<code class="ctag">core.UpdateLast</code> indicates that your indicator is called to
+update the last currently existing value, and the value
+<code class="ctag">core.UpdateAll</code> indicates that your indicator is called to
+completely recalculate the output.</p><div id="open5" style="display:none">
+  <p>Example: The management of the subsequent indicator calculation&nbsp;<a href="javascript: showdiv('close5'); hidediv('open5');" onclick="javascript: showdiv('close5'); hidediv('open5');" class="action">Show<span class="side-icon dripicons-chevron-right"></span></a></p>
+</div>
+<div id="close5" style="display:inline">
+  <p>Example: The management of the subsequent indicator calculation&nbsp;<a href="javascript: showdiv('open5'); hidediv('close5');" onclick="javascript: showdiv('open5'); hidediv('close5');" class="action">Hide<span class="side-icon dripicons-chevron-down"></span></a></p>
+  <pre class="example" id="example5"><code>   function Update(period, mode)
+       mva7:update(mode);
+       if (period &gt;= 7) then
+           -- Write half of the MVA value to your output stream.
+           stream[period] = mva7.DATA[period] / 2;
+       end
+   end</code></pre>
+</div><p>Sometimes, you might need to apply another indicator on some pre-calculated data, for example on a median (<code class="ctag">(open + high + close) / 3</code>).</p>
+<p>In that case you must:</p>
+<p>1) Create a <a href="instance_impl.addInternalStream.html">internal stream</a> to keep pre-calculated data.</p>
+<p>2) Apply the indicator on this stream.</p>
+<p>3) In the <code class="ctag">Update</code> function, you must fill the internal stream and only then call the
+indicator's <code class="ctag">update</code> function.</p>
+<p>Note: In case, you have to apply an indicator on the output value
+of another indicator, you must call the <code class="ctag">update</code> function in the same order as indicators were created.</p>
+<p>The example below show the simple indicator which uses exponential moving average for double smoothing of the median value.</p><div id="open6" style="display:none">
+  <p>Example&nbsp;<a href="javascript: showdiv('close6'); hidediv('open6');" onclick="javascript: showdiv('close6'); hidediv('open6');" class="action">Show<span class="side-icon dripicons-chevron-right"></span></a></p>
+</div>
+<div id="close6" style="display:inline">
+  <p>Example&nbsp;<a href="javascript: showdiv('open6'); hidediv('close6');" onclick="javascript: showdiv('open6'); hidediv('close6');" class="action">Hide<span class="side-icon dripicons-chevron-down"></span></a></p>
+  <pre class="example" id="example6"><code><font color="#7f7f7f">-- Indicator profile initialization routine</font>
+function Init()
+    indicator:name(&quot;Example&quot;);
+    indicator:description(&quot;Double smoothed median value&quot;);
+    indicator:requiredSource(core.Bar);
+    indicator:type(core.Indicator);
+ 
+    indicator.parameters:addInteger(&quot;N&quot;, &quot;Number of the periods for the first EMA&quot;, &quot;&quot;, 7, 2, 500);
+    indicator.parameters:addInteger(&quot;M&quot;, &quot;Number of the periods for the second EMA&quot;, &quot;&quot;, 7, 2, 500);
+    indicator.parameters:addColor(&quot;S1_color&quot;, &quot;Color of S1&quot;, &quot;Color of S1&quot;, core.rgb(255, 0, 0));
+end
+ 
+<font color="#7f7f7f">-- Indicator instance initialization routine</font>
+ 
+<font color="#7f7f7f">-- parameter for the first ema</font>
+local N;
+<font color="#7f7f7f">-- parameter for the second ema</font>
+local M;
+<font color="#7f7f7f">-- the first available data (source first + ema1 shift + ema2 shift)</font>
+local first;
+<font color="#7f7f7f">-- the source</font>
+local source = nil;
+<font color="#7f7f7f">-- ema instances</font>
+local ema1 = nil;
+local ema2 = nil;
+<font color="#7f7f7f">-- output streams</font>
+local S1 = nil;
+<font color="#7f7f7f">-- median stream</font>
+local median = nil;
+ 
+<font color="#7f7f7f">-- Routine</font>
+function Prepare()
+    N = instance.parameters.N;
+    M = instance.parameters.M;
+    source = instance.source;
+ 
+    <font color="#7f7f7f">-- create a stream to keep the median</font>
+    median = instance:addInternalStream(source:first(), 0);
+    <font color="#7f7f7f">-- apply the first EMA on the median</font>
+    ema1 = core.indicators:create(&quot;EMA&quot;, median, N);
+    <font color="#7f7f7f">-- apply the second EMA on the first EMA result</font>
+    ema2 = core.indicators:create(&quot;EMA&quot;, ema1.DATA, M);
+ 
+    first = ema2.DATA:first();
+    local name = profile:id() .. &quot;(&quot; .. source:name() .. &quot;, &quot; .. N .. &quot;, &quot; .. M .. &quot;)&quot;;
+    instance:name(name);
+    <font color="#7f7f7f">-- create the indicator output</font>
+    S1 = instance:addStream(&quot;S1&quot;, core.Line, name, &quot;S1&quot;, instance.parameters.S1_color, first);
+end
+ 
+<font color="#7f7f7f">-- Indicator calculation routine</font>
+function Update(period, mode)
+    if period &gt;= first and source:hasData(period) then
+        <font color="#7f7f7f">-- calculate the median value for the period</font>
+        median[period] = (source.high[period] + source.low[period] + source.close[period]) / 3;
+        <font color="#7f7f7f">-- first pass of ema</font>
+        ema1:update(mode);
+        <font color="#7f7f7f">-- second pass of ema</font>
+        ema2:update(mode);
+        <font color="#7f7f7f">-- copy the second pass ema to the output</font>
+        S1[period] = ema2.DATA[period];
+    end
+end</code></pre>
+</div><p>
+  <center><a href="sdk_main.html">back</a></center>
+</p><script language="javascript" type="text/javascript">if(window.parent.frames[0]) window.parent.frames[0].selectItem(window.location.href);</script></body></html>

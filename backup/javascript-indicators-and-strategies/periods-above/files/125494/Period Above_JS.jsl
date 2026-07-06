@@ -1,0 +1,90 @@
+function Init()
+{
+    indicator.name("Period Above");
+    indicator.description("");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+   
+   
+    indicator.parameters.addGroup("Calculation");	
+    indicator.parameters.addInteger("Period", "Period", "Period", 14);
+	indicator.parameters.addString("Method", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method", "WMA", "WMA" , "WMA");
+	indicator.parameters.addGroup("Style");	
+    indicator.parameters.addColor("PA_Up", "Color of PA Up", "Color of PA", core.rgb(0, 255, 0));
+	indicator.parameters.addColor("PA_Down", "Color of PA Down", "Color of PA", core.rgb(255, 0, 0));
+
+}
+
+var Period,Method;
+var MA;
+var first;
+var source = null;
+
+var PA = null;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+	Method= instance.parameters.Method;
+    source = instance.source;
+    
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period)+ ", " + tostring(Method)  + ")";
+    instance.name(name);
+	MA = core.indicators.create(Method, source,Period);
+	first = MA.DATA.first();
+
+    if (!(nameOnly)) 
+    {
+        PA = instance.addStream("PA", core.Bar, name, "PA", instance.parameters.PA_Up, first);
+		 
+    }
+}
+
+function Update(period,mode)
+{
+    MA.update(mode);
+	
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+	    if (source[period]> MA.DATA[period]) 
+	    {
+		 PA[period] = PA[period-1]+1;
+		} 
+		else if (source[period]< MA.DATA[period]) 
+		{
+		 PA[period] = PA[period-1]-1;
+		}
+	
+	
+	if (source[period]> MA.DATA[period] && source[period-1]< MA.DATA[period-1])	
+	{
+	 PA[period]=1;
+	} 
+	else if (source[period]< MA.DATA[period] && source[period-1]> MA.DATA[period-1])
+	{
+	 PA[period]=-1;
+	}
+	
+	if (PA[period] >0) 
+	{ 
+	 PA.setColor(period, instance.parameters.PA_Up);	
+	} 
+	else
+	{
+	 PA.setColor(period, instance.parameters.PA_Down);	
+	}
+    
+}
+

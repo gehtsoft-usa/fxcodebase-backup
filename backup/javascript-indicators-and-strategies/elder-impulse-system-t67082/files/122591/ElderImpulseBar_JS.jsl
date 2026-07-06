@@ -1,0 +1,124 @@
+function Init()
+{
+    indicator.name("Elder Impulse Bar indicator");
+    indicator.description("Elder Impulse Bar indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("EMA", "EMA periods for study", "", 13, 1, 100);
+    indicator.parameters.addInteger("MACDF", "MACD periods fast", "", 12, 1, 100);
+    indicator.parameters.addInteger("MACDS", "MACD periods slow", "", 26, 1, 100);
+    indicator.parameters.addString("app_price", "app_price", "", "close");
+    indicator.parameters.addStringAlternative("app_price", "close", "", "close");
+    indicator.parameters.addStringAlternative("app_price", "open", "", "open");
+    indicator.parameters.addStringAlternative("app_price", "high", "", "high");
+    indicator.parameters.addStringAlternative("app_price", "low", "", "low");
+    indicator.parameters.addStringAlternative("app_price", "median", "", "median");
+    indicator.parameters.addStringAlternative("app_price", "typical", "", "typical");
+    indicator.parameters.addStringAlternative("app_price", "weighted", "", "weighted");
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UP_color", "Color of up signal", "", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DOWN_color", "Color of {wn signal", "", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("NE_color", "Color of neutral signal", "", core.rgb(0, 0, 255));
+}
+
+var first;
+var source = null;
+var EMA;
+var MACDF;
+var MACDS;
+var app_price;
+var EIS;
+var HU=null;
+var LU=null;
+var HN=null;
+var LN=null;
+var HD=null;
+var LD=null;
+
+function Prepare()
+{
+    source = instance.source;
+    EMA=instance.parameters.EMA;
+    MACDF=instance.parameters.MACDF;
+    MACDS=instance.parameters.MACDS;
+    app_price=instance.parameters.app_price;
+    if (app_price=="close") 
+    {
+     EIS = core.indicators.create("ELDER_IMPULSE_SYSTEM", source.close, EMA, MACDF, MACDS);
+    } 
+    else if (app_price=="open") 
+    {
+     EIS = core.indicators.create("ELDER_IMPULSE_SYSTEM", source.open, EMA, MACDF, MACDS);
+    } 
+    else if (app_price=="high") 
+    {
+     EIS = core.indicators.create("ELDER_IMPULSE_SYSTEM", source.high, EMA, MACDF, MACDS);
+    } 
+    else if (app_price=="low") 
+    {
+     EIS = core.indicators.create("ELDER_IMPULSE_SYSTEM", source.low, EMA, MACDF, MACDS);
+    } 
+    else if (app_price=="median") 
+    {
+     EIS = core.indicators.create("ELDER_IMPULSE_SYSTEM", source.median, EMA, MACDF, MACDS);
+    } 
+    else if (app_price=="typical") 
+    {
+     EIS = core.indicators.create("ELDER_IMPULSE_SYSTEM", source.typical, EMA, MACDF, MACDS);
+    } 
+    else
+    {
+     EIS = core.indicators.create("ELDER_IMPULSE_SYSTEM", source.weighted, EMA, MACDF, MACDS);
+    }
+    first = EIS.DATA.first()+2;
+    HU=instance.addInternalStream(first, 0);
+    LU=instance.addInternalStream(first, 0);
+    HN=instance.addInternalStream(first, 0);
+    LN=instance.addInternalStream(first, 0);
+    HD=instance.addInternalStream(first, 0);
+    LD=instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.EMA + ", " + instance.parameters.MACDF + ", " + instance.parameters.MACDS + ")";
+    instance.name(name);
+    instance.createFromToBarGroup("UpGroup","Up" , HU, LU, instance.parameters.UP_color);
+    instance.createFromToBarGroup("DnGroup","Dn" , HD, LD, instance.parameters.DOWN_color);
+    instance.createFromToBarGroup("NeGroup","Ne" , HN, LN, instance.parameters.NE_color);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    EIS.update(mode);
+    if (EIS.UP[period]==100) 
+    {
+     HU[period]=source.high[period];
+     LU[period]=source.low[period];
+     HN[period]=null;
+     LN[period]=null;
+     HD[period]=null;
+     LD[period]=null;
+    } 
+    else if (EIS.DN[period]==100) 
+    {
+     HD[period]=source.high[period];
+     LD[period]=source.low[period];
+     HN[period]=null;
+     LN[period]=null;
+     HU[period]=null;
+     LU[period]=null;
+    } 
+    else if (EIS.NE[period]==100) 
+    {
+     HN[period]=source.high[period];
+     LN[period]=source.low[period];
+     HU[period]=null;
+     LU[period]=null;
+     HD[period]=null;
+     LD[period]=null;
+    }
+   } 
+}
+

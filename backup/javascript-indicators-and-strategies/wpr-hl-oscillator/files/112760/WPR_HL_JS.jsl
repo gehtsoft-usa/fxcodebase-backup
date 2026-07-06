@@ -1,0 +1,52 @@
+function Init()
+{
+    indicator.name("WPR_HL oscillator");
+    indicator.description("WPR_HL oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 14);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period;
+var WPR_HL=null;
+var HL;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    first = source.first()+2;
+    HL=instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ")";
+    instance.name(name);
+    WPR_HL = instance.addStream("WPR_HL", core.Line, name + ".WPR_HL", "WPR_HL", instance.parameters.clr, first);
+    WPR_HL.setWidth(instance.parameters.widthLinReg);
+    WPR_HL.setStyle(instance.parameters.styleLinReg);
+    WPR_HL.addLevel(-20);
+    WPR_HL.addLevel(-80);
+}
+
+function Update(period, mode)
+{
+   if (period>=first) 
+   {
+    HL[period]=source.high[period]-source.low[period];
+    var First=Math.max(first,period-Period);
+    var tmp=Math.minmax(HL,core.range(First,period));
+    var Max=tmp[1];
+    var Min=tmp[0];
+    
+    WPR_HL[period]=-100*(Max-HL[period])/(Max-Min);
+   } 
+}
+

@@ -1,0 +1,107 @@
+function Init()
+{
+    indicator.name("MA_of_Volume");
+    indicator.description("MA_of_Volume");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+
+    indicator.parameters.addInteger("Period", "Period", "", 10);
+    indicator.parameters.addString("Method" , "Type of Moving Average", "", "EMA");
+    indicator.parameters.addStringAlternative("Method" , "Exponential Moving Average", "", "EMA");
+    indicator.parameters.addStringAlternative("Method" , "Simple Moving Average", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "Smoothed Moving Average", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method" , "Linear Weighted Moving Average", "", "LWMA");
+    
+    indicator.parameters.addGroup("Style");
+
+    indicator.parameters.addBoolean("Show_MA", "Show MA", "", true);
+    indicator.parameters.addColor("clr", "Color up (Volume>=MA)", "", core.rgb(0, 200, 0));
+    indicator.parameters.addColor("clr1", "Color {wn (Volume<MA)", "", core.rgb(200, 0, 0));
+    indicator.parameters.addColor("clr2", "MA Line Color", "", core.rgb(60, 121, 196));
+    indicator.parameters.addString("Kind_of_Line" , "Kind of MA Line", "", "Solid");
+    indicator.parameters.addStringAlternative("Kind_of_Line" , "Solid line", "", "Solid");
+    indicator.parameters.addStringAlternative("Kind_of_Line" , "Dot line", "", "Dot");
+    indicator.parameters.addStringAlternative("Kind_of_Line", "Dash line", "", "Dash");
+    indicator.parameters.addStringAlternative("Kind_of_Line" , "Dash-dot line", "", "Dash-dot");
+    indicator.parameters.addInteger("Width", "MA Line Width", "", 2);
+
+}
+
+var first;
+var source = null;
+var Period;
+var Buff, Buff1;
+var Ind;
+var Method;
+var clr, clr1, clr2;
+var Kind_of_Line, Width;
+var Show_MA;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    first = source.first();
+    Method=instance.parameters.Method;
+    clr=instance.parameters.clr;
+    clr1=instance.parameters.clr1;
+    clr2=instance.parameters.clr2;
+    Kind_of_Line=instance.parameters.Kind_of_Line;
+    Width=instance.parameters.Width;
+    Show_MA=instance.parameters.Show_MA;
+
+    var name = profile.id() + "(" + source.name()+ ")";
+    instance.name(name);
+
+    
+    Buff = instance.addStream("buff", core.Bar, name + ".buff", "buff", instance.parameters.clr, first);
+    if (Show_MA==true) 
+    {
+        Buff1 = instance.addStream("Buff1", core.Line, name + ".Buff1", "Buff1", instance.parameters.clr2, first);
+        
+        if (Kind_of_Line=="Solid") 
+        {
+            Buff1.setStyle (core.LINE_SOLID);
+        }    
+        else if (Kind_of_Line=="Dot") 
+        {
+            Buff1.setStyle (core.LINE_DOT);
+        }
+        else if (Kind_of_Line=="Dash") 
+        {
+            Buff1.setStyle (core.LINE_DASH);
+        }
+        else if (Kind_of_Line=="Dash-dot") 
+        {
+            Buff1.setStyle (core.LINE_DASHDOT);
+        }   
+        Buff1.setWidth (Width);
+    }
+    else if (Show_MA==false) 
+    {
+        Buff1 = instance.addInternalStream(first);
+    }    
+    Ind=core.indicators.create(Method, source.volume, Period);
+}
+
+function Update(period, mode)
+{    
+    Ind.update(mode);
+        
+    if (period>first+Period) 
+    {
+        Buff1[period]=Ind.DATA[period];
+        Buff[period]=source.volume[period];
+        if (Buff[period]>=Buff1[period]) 
+        {
+            Buff.setColor(period,clr);
+        }
+        else if (Buff[period]<Buff1[period])  
+        {
+            Buff.setColor(period,clr1);
+        }
+    }
+}
+

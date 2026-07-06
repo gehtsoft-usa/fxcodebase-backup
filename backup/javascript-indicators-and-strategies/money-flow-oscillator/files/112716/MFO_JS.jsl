@@ -1,0 +1,53 @@
+function Init()
+{
+    indicator.name("Money Flow oscillator");
+    indicator.description("Money Flow oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 20);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period;
+var MFV;
+var MFV_MA, Vol_MA;
+var MFO=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ")";
+    instance.name(name);
+    MFV=instance.addInternalStream(first, 0);
+    MFV_MA=core.indicators.create("MVA", MFV, Period);
+    Vol_MA=core.indicators.create("MVA", source.volume, Period);
+    MFO = instance.addStream("MFO", core.Line, name + ".MFO", "MFO", instance.parameters.clr, first);
+    MFO.setWidth(instance.parameters.widthLinReg);
+    MFO.setStyle(instance.parameters.styleLinReg);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    var Multiplier=((source.high[period]-source.low[period-1])-(source.high[period-1]-source.low[period]))/((source.high[period]-source.low[period-1])+(source.high[period-1]-source.low[period]));
+    MFV[period]=Multiplier*source.volume[period];
+
+    MFV_MA.update(mode);
+    Vol_MA.update(mode);
+
+    MFO[period]=MFV_MA.DATA[period]/Vol_MA.DATA[period];
+   } 
+}
+

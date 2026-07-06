@@ -1,0 +1,94 @@
+function Init()
+{
+    indicator.name("MA Filter");
+    indicator.description("MA Filter");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+	
+	indicator.parameters.addGroup("MA");
+	indicator.parameters.addString("Method", "Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "EMA" , "EMA");
+	indicator.parameters.addStringAlternative("Method", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method", "WMA", "WMA" , "WMA");
+	indicator.parameters.addInteger("PERIOD", "Period", "Averege  Period", 20);
+	
+	indicator.parameters.addGroup("Filter");
+	indicator.parameters.addInteger("Shift", "Shift", "Shift", 0);
+	indicator.parameters.addInteger("MIN", "Min. Difference in Pips", "", 0);
+	
+
+	indicator.parameters.addGroup("Style");
+	   indicator.parameters.addColor("UP", "Color of Up", "", core.rgb( 0, 255, 0));
+    indicator.parameters.addColor("DOWN", "Color of Down", "", core.rgb(255, 0, 0));
+	indicator.parameters.addColor("NEUTRAL", "Color of Neutral", "Color of Neutral", core.rgb(128, 128, 128));
+	
+	 indicator.parameters.addInteger("width","Line Width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line Style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LEVEL_STYLE);
+  
+}
+
+var Method;
+var PERIOD;
+var Shift;
+var UP,DOWN, NEUTRAL;
+var MIN;
+
+var first;
+var source = null;
+
+var MA = null;
+
+var Indicator;
+
+function Prepare()
+{
+    MIN = instance.parameters.MIN;
+    UP = instance.parameters.UP;
+	DOWN = instance.parameters.DOWN;
+	NEUTRAL = instance.parameters.NEUTRAL;
+    PERIOD = instance.parameters.PERIOD;
+    Method = instance.parameters.Method;
+	Shift = instance.parameters.Shift;
+    source = instance.source;
+	
+	Indicator= core.indicators.create(Method, source, PERIOD);
+    first = Indicator.DATA.first()+Shift;
+
+    var name = profile.id() + "(" + source.name() + ", " + Method + ", " + PERIOD + ", " + Shift + ", " + MIN + ")";
+    instance.name(name);
+    MA = instance.addStream("MA", core.Line, name + ".MA", "MA", core.rgb(255, 0, 0), first);
+	MA.setWidth(instance.parameters.width);
+    MA.setStyle(instance.parameters.style);
+ }
+
+function Update(period, mode)
+{
+    if (period < first || !source.hasData(period)) 
+    {	
+	 return;
+	}
+	
+	Indicator.update(mode);	
+	
+	MA[period] = Indicator.DATA[period];
+	
+	if (Indicator.DATA[period] >  Indicator.DATA[period-Shift] &&  Math.abs(Indicator.DATA[period] -  Indicator.DATA[period-Shift]) >= MIN*source.pipSize()) 
+	{
+ 	 MA.setColor(period, UP);	
+ 	}
+	else if (Indicator.DATA[period] <  Indicator.DATA[period-Shift] &&  Math.abs(Indicator.DATA[period] -  Indicator.DATA[period-Shift] ) >= MIN*source.pipSize()) 
+	{
+	 MA.setColor(period, DOWN);	
+	}
+	else
+	{
+	 MA.setColor(period, NEUTRAL);
+	}
+	
+}
+

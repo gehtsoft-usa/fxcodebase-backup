@@ -1,0 +1,83 @@
+function Init()
+{
+    indicator.name("Small inside bar indicator");
+    indicator.description("Small inside bar indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addString("Direction", "Direction", "", "Both");
+    indicator.parameters.addStringAlternative("Direction", "Bullish", "", "Bullish");
+    indicator.parameters.addStringAlternative("Direction", "Bearish", "", "Bearish");
+    indicator.parameters.addStringAlternative("Direction", "Both", "", "Both");
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("BullishClr", "Bullish Color", "Bullish Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("BearishClr", "Bearish Color", "Bearish Color", core.rgb(255, 255, 0));
+    indicator.parameters.addInteger("DotSize", "Dot size", "Dot size", 2, 1, 5);
+}
+
+var first;
+var source = null;
+var Direction;
+var Bullish=null;
+var Bearish=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Direction=instance.parameters.Direction;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Direction + ")";
+    instance.name(name);
+    Bullish = instance.addStream("Bullish", core.Dot, name + ".Bullish", "Bullish", instance.parameters.BullishClr, first);
+    Bearish = instance.addStream("Bearish", core.Dot, name + ".Bearish", "Bearish", instance.parameters.BearishClr, first);
+    Bullish.setWidth(instance.parameters.DotSize);
+    Bearish.setWidth(instance.parameters.DotSize);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    var Ratio;
+    var BullFl=false;
+    var BearFl=false;
+    if (source.high[period]-source.low[period]==0) 
+    {
+     Ratio=10;
+    } 
+    else
+    {
+     Ratio=(source.high[period-1]-source.low[period-1])/(source.high[period]-source.low[period]);
+    }
+    if (source.high[period]<source.high[period-1] && source.low[period]>source.low[period-1] && Ratio>2) 
+    {
+     if (source.close[period]>source.open[period] && source.high[period]<source.median[period-1] && source.close[period-1]<source.open[period-1]) 
+     {
+      BullFl=true;
+     } 
+     if (source.close[period]<source.open[period] && source.low[period]<source.median[period-1] && source.close[period-1]>source.open[period-1]) 
+     {
+      BearFl=true;
+     } 
+    }
+    if (BullFl) 
+    {
+     Bullish[period]=source.low[period];
+    } 
+    else
+    {
+     Bullish[period]=null;
+    } 
+    if (BearFl) 
+    {
+     Bearish[period]=source.high[period]; 
+    } 
+    else
+    {
+     Bearish[period]=null; 
+    }
+   } 
+}
+

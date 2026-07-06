@@ -1,0 +1,102 @@
+function Init()
+{
+    indicator.name("WeisWave oscillator");
+    indicator.description("WeisWave oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("dif", "dif", "", 1);
+    indicator.parameters.addBoolean("Absolute", "Absolute", "", false);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP Color", "UP Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DNclr", "DN Color", "DN Color", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+var dif;
+var Absolute;
+var difPip;
+var mov, trend, wave, vol;
+var UP=null;
+var DN=null;
+
+function Prepare()
+{
+    source = instance.source;
+    dif=instance.parameters.dif;
+    Absolute=instance.parameters.Absolute;
+    first = source.first()+2;
+    mov = instance.addInternalStream(first, 0);
+    trend = instance.addInternalStream(first, 0);
+    wave = instance.addInternalStream(first, 0);
+    vol = instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.dif + ")";
+    instance.name(name);
+    UP = instance.addStream("UP", core.Bar, name + ".UP", "UP", instance.parameters.UPclr, first);
+    DN = instance.addStream("DN", core.Bar, name + ".DN", "DN", instance.parameters.DNclr, first);
+    difPip=dif*source.pipSize();
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    if (source.close[period]>source.close[period-1]) 
+    {
+     mov[period]=1;
+    } 
+    else if (source.close[period]<source.close[period-1]) 
+    {
+     mov[period]=-1;
+    } 
+    else
+    {
+     mov[period]=0;
+    }
+    if (mov[period]!=0 && mov[period]!=mov[period-1]) 
+    {
+     trend[period]=mov[period];
+    } 
+    else
+    {
+     trend[period]=trend[period-1];
+    }
+    if (trend[period]!=wave[period-1] && Math.abs(source.close[period]-source.close[period-1])>=difPip) 
+    {
+     wave[period]=trend[period];
+    } 
+    else
+    {
+     wave[period]=wave[period-1];
+    }
+    if (wave[period]==wave[period-1]) 
+    {
+     vol[period]=vol[period-1]+source.volume[period];
+    } 
+    else
+    {
+     vol[period]=source.volume[period];
+    }
+    if (wave[period]==1) 
+    {
+     UP[period]=vol[period];
+     DN[period]=0;
+    } 
+    else if (wave[period]==-1) 
+    {
+     if (Absolute) 
+     {
+      DN[period]=vol[period];
+     } 
+     else
+     {
+      DN[period]=-vol[period];
+     } 
+     UP[period]=0;
+    }
+   } 
+}
+

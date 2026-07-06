@@ -1,0 +1,76 @@
+function Init()
+{
+    indicator.name("Multiple Moving Average");
+    indicator.description("");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addInteger("Period", "Period", "Period", 5);
+    indicator.parameters.addInteger("Mode", "Mode", "Mode", 3);
+    indicator.parameters.addString("MA_Method", "Method of MA", "", "MVA");
+    indicator.parameters.addStringAlternative("MA_Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("MA_Method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("MA_Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("MA_Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("MA_Method", "TMA", "", "TMA");
+
+    indicator.parameters.addColor("clr", "Color of MA", "Color of MA", core.rgb(0, 255, 0));
+
+}
+
+var Period;
+var Mode;
+var MA_Method;
+
+var first;
+var source = null;
+var MA;
+var source_MA;
+
+var Inds={};
+var fac={};
+
+function Prepare()
+{
+    Period = instance.parameters.Period;
+    Mode = instance.parameters.Mode;
+    MA_Method = instance.parameters.MA_Method;
+    source = instance.source;
+    source_MA=source;
+    fac[0]=1;
+    for (i=1; i<=Mode; i++) 
+    {
+     Ind=core.indicators.create(MA_Method, source_MA, Period);
+     Inds[i]=Ind;
+     source_MA=Ind.DATA;
+     fac[i]=fac[i-1]*i;
+    }
+    
+    first = Inds[Mode].DATA.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + Period + ", " + Mode + ", " + MA_Method + ")";
+    instance.name(name);
+    
+    MA = instance.addStream("Mult_MA", core.Line, name + ".Mult_MA", "Mult_MA", instance.parameters.clr, first);
+}
+
+function Update(period, mode)
+{
+ if (period>first) 
+ {
+  for (i=1; i<=Mode; i++) 
+  {
+   Inds[i].update(mode);
+  }
+  
+  var sum=0.;
+  var Z=1;
+  for (i=1; i<=Mode; i++) 
+  {
+   sum=sum+Z*Inds[i].DATA[period]*fac[Mode]/(fac[i]*fac[Mode-i]);
+   Z=Z*(-1);
+  }
+  MA[period]=sum;
+
+ } 
+}
+

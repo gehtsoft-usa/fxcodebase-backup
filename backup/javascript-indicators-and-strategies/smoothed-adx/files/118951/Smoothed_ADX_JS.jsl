@@ -1,0 +1,84 @@
+function Init()
+{
+    indicator.name("Smoothed ADX indicator");
+    indicator.description("Smoothed ADX indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 14);
+    indicator.parameters.addDouble("Alpha1", "Alpha1", "", 0.25);
+    indicator.parameters.addDouble("Alpha2", "Alpha2", "", 0.33);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("DIPclr", "DIP Color", "DIP Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DIMclr", "DIM Color", "DIM Color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("ADXclr", "ADX Color", "ADX Color", core.rgb(0, 0, 255));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period;
+var Alpha1;
+var Alpha2;
+var DIP_Temp;
+var DIM_Temp;
+var ADX_Temp;
+var DMI_I;
+var ADX_I;
+var DIP=null;
+var DIM=null;
+var ADX=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    Alpha1=instance.parameters.Alpha1;
+    Alpha2=instance.parameters.Alpha2;
+    first = source.first()+2;
+    DIP_Temp = instance.addInternalStream(first, 0);
+    DIM_Temp = instance.addInternalStream(first, 0);
+    ADX_Temp = instance.addInternalStream(first, 0);
+    DMI_I = core.indicators.create("DMI", source, Period);
+    ADX_I = core.indicators.create("ADX", source, Period);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.Alpha1 + ", " + instance.parameters.Alpha2 + ")";
+    instance.name(name);
+    DIP = instance.addStream("DIP", core.Line, name + ".DIP", "DIP", instance.parameters.DIPclr, first);
+    DIM = instance.addStream("DIM", core.Line, name + ".DIM", "DIM", instance.parameters.DIMclr, first);
+    ADX = instance.addStream("ADX", core.Line, name + ".ADX", "ADX", instance.parameters.ADXclr, first);
+    DIP.setWidth(instance.parameters.widthLinReg);
+    DIP.setStyle(instance.parameters.styleLinReg);
+    DIM.setWidth(instance.parameters.widthLinReg);
+    DIM.setStyle(instance.parameters.styleLinReg);
+    ADX.setWidth(instance.parameters.widthLinReg);
+    ADX.setStyle(instance.parameters.styleLinReg);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    DMI_I.update(mode);
+    ADX_I.update(mode);
+    DIP_Temp[period]=2*DMI_I.DIP[period]+(Alpha1-2)*DMI_I.DIP[period-1]+(1-Alpha1)*DIP_Temp[period-1];
+    DIM_Temp[period]=2*DMI_I.DIM[period]+(Alpha1-2)*DMI_I.DIM[period-1]+(1-Alpha1)*DIM_Temp[period-1];
+    ADX_Temp[period]=2*ADX_I.DATA[period]+(Alpha1-2)*ADX_I.DATA[period-1]+(1-Alpha1)*ADX_Temp[period-1];
+    DIP[period]=Alpha2*DIP_Temp[period]+(1-Alpha2)*DIP[period-1];
+    DIM[period]=Alpha2*DIM_Temp[period]+(1-Alpha2)*DIM[period-1];
+    ADX[period]=Alpha2*ADX_Temp[period]+(1-Alpha2)*ADX[period-1];
+   }
+   else if (period==first) 
+   {
+    DIP_Temp[period]=0;
+    DIM_Temp[period]=0;
+    ADX_Temp[period]=0; 
+    DIP[period]=0;
+    DIM[period]=0;
+    ADX[period]=0;
+   } 
+}
+

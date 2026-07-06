@@ -1,0 +1,67 @@
+function Init()
+{
+    indicator.name("GRF leading edge moving indicator");
+    indicator.description("GRF leading edge moving indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 12);
+    indicator.parameters.addInteger("LookAhead", "Look ahead", "", 0);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(255, 255, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period;
+var LookAhead;
+var GeoAvg;
+var LEMov=null;
+var a00, a01, a11;
+var det0;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    LookAhead=instance.parameters.LookAhead;
+    first = source.first()+2;
+    GeoAvg = instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.LookAhead + ")";
+    instance.name(name);
+    LEMov = instance.addStream("LEMov", core.Line, name + ".LEMov", "LEMov", instance.parameters.clr, first);
+    LEMov.setWidth(instance.parameters.widthLinReg);
+    LEMov.setStyle(instance.parameters.styleLinReg);
+    a00=Period*(Period-1)*(2*Period-1)/6;
+    a01=Period*(Period-1)/2;
+    a11=Period;
+    det0=a00*a11-a01*a01;
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    GeoAvg[period]=Math.pow(source.high[period]*source.low[period]*source.close[period]*source.close[period], 0.25);
+    if (period>first+Period) 
+    {
+     var c0 = 0;
+     var c1 = 0;
+     var i;
+     for (i=0; i<=Period-1; i++) 
+     {
+      c0=c0+i*GeoAvg[period-i];
+      c1=c1+GeoAvg[period-i];
+     }
+     var Alpha=(c0*a11-c1*a01)/det0;
+     var Beta=(a00*c1-a01*c0)/det0;
+     LEMov[period]=Beta-Alpha*LookAhead;     
+    }
+   } 
+}
+

@@ -1,0 +1,114 @@
+function Init()
+{
+    indicator.name("Sidus indicator");
+    indicator.description("Sidus indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("FasterPeriod", "Faster period", "", 5);
+    indicator.parameters.addInteger("SlowerPeriod", "Slower period", "", 12);
+    indicator.parameters.addInteger("FasterSidusPeriod", "Faster sidus period", "", 18);
+    indicator.parameters.addInteger("SlowerSidusPeriod", "Slower sidus period", "", 28);
+    indicator.parameters.addInteger("RSIPeriod", "RSI period", "", 21);
+    indicator.parameters.addInteger("CCIPeriod", "CCI period", "", 50);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("T_UP_clr", "Tunnel UP color", "Tunnel UP color", core.rgb(0, 255, 255));
+    indicator.parameters.addColor("T_DN_clr", "Tunnel DN color", "Tunnel DN color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("DotSize", "Dot size", "Dot size", 2, 1, 5);
+    indicator.parameters.addColor("Cr_UP_clr", "Cross UP color", "Cross UP color", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("Cr_DN_clr", "Cross DN color", "Cross DN color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("ArrowSize", "Arrow size", "Arrow size", 10);
+}
+
+var first;
+var source = null;
+var FasterPeriod;
+var SlowerPeriod;
+var FasterSidusPeriod;
+var SlowerSidusPeriod;
+var RSIPeriod, CCIPeriod;
+var FasterEMA, SlowerEMA, FasterSidusEMA, SlowerSidusEMA;
+var UpTunnel, DnTunnel;
+var HL;
+var RSI, CCI;
+var Tunnel=null;
+var CrossUp=null;
+var CrossDn=null;
+
+function Prepare()
+{
+    source = instance.source;
+    FasterPeriod=instance.parameters.FasterPeriod;
+    SlowerPeriod=instance.parameters.SlowerPeriod;
+    FasterSidusPeriod=instance.parameters.FasterSidusPeriod;
+    SlowerSidusPeriod=instance.parameters.SlowerSidusPeriod;
+    RSIPeriod=instance.parameters.RSIPeriod;
+    CCIPeriod=instance.parameters.CCIPeriod;
+    first = source.first()+2;
+    UpTunnel = instance.addInternalStream(first, 0);
+    DnTunnel = instance.addInternalStream(first, 0);
+    HL = instance.addInternalStream(first, 0);
+    FasterEMA = core.indicators.create("EMA", source.close, FasterPeriod);
+    SlowerEMA = core.indicators.create("EMA", source.close, SlowerPeriod);
+    FasterSidusEMA = core.indicators.create("EMA", source.close, FasterSidusPeriod);
+    SlowerSidusEMA = core.indicators.create("EMA", source.close, SlowerSidusPeriod);
+    RSI = core.indicators.create("RSI", source.close, RSIPeriod);
+    CCI = core.indicators.create("CCI", source, CCIPeriod);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.FasterPeriod + ", " + instance.parameters.SlowerPeriod + ", " + instance.parameters.FasterSidusPeriod + ", " + instance.parameters.SlowerSidusPeriod + ", " + instance.parameters.RSIPeriod + ", " + instance.parameters.CCIPeriod + ")";
+    instance.name(name);
+    Tunnel = instance.addStream("Tunnel", core.Dot, name + ".Tunnel", "Tunnel", instance.parameters.T_UP_clr, first);
+    Tunnel.setWidth(instance.parameters.DotSize);
+    CrossUp = instance.createTextOutput ("Up", "Up", "Wingdings", instance.parameters.ArrowSize, core.H_Center, core.V_Top, instance.parameters.Cr_UP_clr, 0);
+    CrossDn = instance.createTextOutput ("Dn", "Dn", "Wingdings", instance.parameters.ArrowSize, core.H_Center, core.V_Top, instance.parameters.Cr_DN_clr, 0);
+}
+
+function Update(period, mode)
+{
+   if (period>first+10) 
+   {
+    HL[period]=source.high[period]-source.low[period];
+    FasterEMA.update(mode);
+    SlowerEMA.update(mode);
+    FasterSidusEMA.update(mode);
+    SlowerSidusEMA.update(mode);
+    RSI.update(mode);
+    CCI.update(mode);
+    var Range=Math.avg(HL, period-9, period);
+    UpTunnel[period]=UpTunnel[period-1];
+    DnTunnel[period]=DnTunnel[period-1];
+    if (FasterSidusEMA.DATA[period-1]>SlowerSidusEMA.DATA[period-1] && FasterSidusEMA.DATA[period-2]<=SlowerSidusEMA.DATA[period-2] && FasterSidusEMA.DATA[period]>SlowerSidusEMA.DATA[period]) 
+    {
+     UpTunnel[period]=1;
+     DnTunnel[period]=0;
+     Tunnel[period-1]=source.low[period-1]-Range;
+     Tunnel.setColor(period-1, instance.parameters.T_UP_clr);
+    }
+    if (FasterSidusEMA.DATA[period-1]<SlowerSidusEMA.DATA[period-1] && FasterSidusEMA.DATA[period-2]>=SlowerSidusEMA.DATA[period-2] && FasterSidusEMA.DATA[period]<SlowerSidusEMA.DATA[period]) 
+    {
+     UpTunnel[period]=0;
+     DnTunnel[period]=1;
+     Tunnel[period-1]=source.high[period-1]+Range;
+     Tunnel.setColor(period-1, instance.parameters.T_DN_clr);
+    }
+    if (((FasterEMA.DATA[period]>FasterSidusEMA.DATA[period] && FasterEMA.DATA[period]>SlowerSidusEMA.DATA[period]) || (SlowerEMA.DATA[period]>FasterSidusEMA.DATA[period] && SlowerEMA.DATA[period]>SlowerSidusEMA.DATA[period])) && (FasterEMA.DATA[period-1]<=FasterSidusEMA.DATA[period-1] || FasterEMA.DATA[period-1]<=SlowerSidusEMA.DATA[period-1]) && (SlowerEMA.DATA[period-1]<=FasterSidusEMA.DATA[period-1] || SlowerEMA.DATA[period-1]<=SlowerSidusEMA.DATA[period-1]) && RSI.DATA[period]>50 && CCI.DATA[period]>0 && UpTunnel[period]==1) 
+    {
+     UpTunnel[period]=0;
+     DnTunnel[period]=0;
+     CrossUp.set(period, source.low[period]-Range*1.6, "\225");
+    }
+    if (((FasterEMA.DATA[period]<FasterSidusEMA.DATA[period] && FasterEMA.DATA[period]<SlowerSidusEMA.DATA[period]) || (SlowerEMA.DATA[period]<FasterSidusEMA.DATA[period] && SlowerEMA.DATA[period]<SlowerSidusEMA.DATA[period])) && (FasterEMA.DATA[period-1]>=FasterSidusEMA.DATA[period-1] || FasterEMA.DATA[period-1]>=SlowerSidusEMA.DATA[period-1]) && (SlowerEMA.DATA[period-1]>=FasterSidusEMA.DATA[period-1] || SlowerEMA.DATA[period-1]>=SlowerSidusEMA.DATA[period-1]) && RSI.DATA[period]<50 && CCI.DATA[period]<0 && DnTunnel[period]==1) 
+    {
+     UpTunnel[period]=0;
+     DnTunnel[period]=0;
+     CrossDn.set(period, source.high[period]+Range*1.6, "\226");
+    }
+   } 
+   else if (period>first) 
+   {
+    UpTunnel[period]=0;
+    DnTunnel[period]=0; 
+   } 
+}
+

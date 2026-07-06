@@ -1,0 +1,23 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_lessthan</title>
+</head>
+<body>
+<h3><a name="lua_lessthan"><code>lua_lessthan</code></a></h3>
+<pre>int lua_lessthan (lua_State *L, int index1, int index2);</pre>
+
+<p>
+Returns 1 if the value at acceptable index <code>index1</code> is smaller
+than the value at acceptable index <code>index2</code>,
+following the semantics of the Lua <code>&lt;</code> operator
+(that is, may call metamethods).
+Otherwise returns&nbsp;0.
+Also returns&nbsp;0 if any of the indices is non valid.
+
+
+
+
+
+<hr>
+</body>
+</html>

@@ -1,0 +1,61 @@
+function Init()
+{
+    indicator.name("Coppock Indicator");
+    indicator.description("Identify the commencement of bull markets");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addInteger("ShortROC", "ShortROC", "ShortROC", 14,2,2000);
+    indicator.parameters.addInteger("LongROC", "LongROC", "LongROC", 11,2,2000);
+    indicator.parameters.addInteger("Frame", "Weighted Moving Average Period", "Weighted Moving Average Period", 10,2,2000);
+    indicator.parameters.addColor("Coppock_color", "Color of Coppock", "Color of Coppock", core.rgb(255, 0, 0));
+}
+
+var ShortRSI;
+var LongRSI;
+var Frame;
+var ShortFrame;
+var LongFrame;
+
+var first;
+var source = null;
+
+var Coppock = null;
+var Temp=null;
+var LWMA=null;
+
+function Prepare()
+{
+    ShortFrame = instance.parameters.ShortROC;
+    LongFrame = instance.parameters.LongROC;
+    Frame = instance.parameters.Frame;
+    source = instance.source;
+    first = source.first();
+	
+	LongRSI = core.indicators.create("ROC", source, LongFrame);
+	ShortRSI = core.indicators.create("ROC", source, ShortFrame);
+	Temp = instance.addInternalStream(0, 0);
+	LWMA = core.indicators.create("LWMA", Temp, Frame);
+
+    var name = profile.id() + "(" + source.name() + ", " + ShortFrame + ", " + LongFrame + ", " + Frame + ")";
+    instance.name(name);
+    Coppock = instance.addStream("Coppock", core.Line, name, "Coppock", instance.parameters.Coppock_color, first);
+}
+
+function Update(period,mode)
+{ 
+  if (period >= Math.max(ShortFrame , LongFrame ) && source.hasData(period)) 
+  {
+     ShortRSI.update(mode);
+	 LongRSI.update(mode);
+
+	 Temp[period]=ShortRSI.DATA[period] + LongRSI.DATA[period];
+	 
+		if (period >= Math.max(ShortFrame , LongFrame ) + Frame) 
+        {
+	     LWMA.update(mode);   
+         Coppock[period] = LWMA.DATA[period];
+		}
+    }
+}
+

@@ -1,0 +1,64 @@
+function Init()
+{
+    indicator.name("CCI dots indicator");
+    indicator.description("CCI dots indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("CCI_Period", "CCI period", "", 14);
+    indicator.parameters.addInteger("Period", "Period", "", 10);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP {t color", "UP {t color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("DNclr", "DN {t color", "DN {t color", core.rgb(0, 0, 255));
+    indicator.parameters.addInteger("DotSize", "Dot size", "Dot size", 3, 1, 5);
+}
+
+var first;
+var source = null;
+var CCI_Period;
+var Period;
+var CCI;
+var UP=null;
+var DN=null;
+
+function Prepare()
+{
+    source = instance.source;
+    CCI_Period=instance.parameters.CCI_Period;
+    Period=instance.parameters.Period;
+    first = source.first()+2;
+    CCI = core.indicators.create("CCI", source, CCI_Period);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.CCI_Period + ", " + instance.parameters.Period + ")";
+    instance.name(name);
+    UP = instance.addStream("UP", core.Dot, name + ".UP", "UP", instance.parameters.UPclr, first);
+    DN = instance.addStream("DN", core.Dot, name + ".DN", "DN", instance.parameters.DNclr, first);
+    UP.setWidth(instance.parameters.DotSize);
+    DN.setWidth(instance.parameters.DotSize);
+}
+
+function Update(period, mode)
+{
+   if (period>first+Period) 
+   {
+    CCI.update(mode);
+    var Range=(Math.avg(source.high, period-Period+1, period)-Math.avg(source.low, period-Period+1, period))/2;
+    if (CCI.DATA[period-1]>=0 && CCI.DATA[period]<0) 
+    {
+     UP[period]=source.high[period]+Range;
+     DN[period]=null;
+    } 
+    else if (CCI.DATA[period-1]<=0 && CCI.DATA[period]>0) 
+    {
+     UP[period]=null;
+     DN[period]=source.low[period]-Range;
+    } 
+    else
+    {
+     UP[period]=null;
+     DN[period]=null; 
+    }
+   } 
+}
+

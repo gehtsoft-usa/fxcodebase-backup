@@ -1,0 +1,75 @@
+function Init()
+{
+    indicator.name("Tick volume indicator");
+    indicator.description("Tick volume indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period1", "Period 1", "", 12);
+    indicator.parameters.addInteger("Period2", "Period 2", "", 12);
+    indicator.parameters.addInteger("Period3", "Period 3", "", 5);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(255, 255, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period1;
+var Period2;
+var Period3;
+var UpTicks, DnTicks;
+var EMA_Up1, EMA_Dn1;
+var EMA_Up2, EMA_Dn2;
+var TV;
+var EMA_TV;
+var TVI=null;
+var pipSize;
+
+function Prepare()
+{
+    source = instance.source;
+    Period1=instance.parameters.Period1;
+    Period2=instance.parameters.Period2;
+    Period3=instance.parameters.Period3;
+    first = source.first()+2;
+    UpTicks = instance.addInternalStream(first, 0);
+    DnTicks = instance.addInternalStream(first, 0);
+    TV = instance.addInternalStream(first, 0);
+    EMA_Up1 = core.indicators.create("EMA", UpTicks, Period1);
+    EMA_Dn1 = core.indicators.create("EMA", DnTicks, Period1);
+    EMA_Up2 = core.indicators.create("EMA", EMA_Up1.DATA, Period2);
+    EMA_Dn2 = core.indicators.create("EMA", EMA_Dn1.DATA, Period2);
+    EMA_TV = core.indicators.create("EMA", TV, Period3);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period1 + ", " + instance.parameters.Period2 + ", " + instance.parameters.Period3 + ")";
+    instance.name(name);
+    TVI = instance.addStream("TVI", core.Line, name + ".TVI", "TVI", instance.parameters.clr, first);
+    TVI.setWidth(instance.parameters.widthLinReg);
+    TVI.setStyle(instance.parameters.styleLinReg);
+    pipSize=source.pipSize();
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    UpTicks[period]=(source.volume[period]+(source.close[period]-source.open[period])/pipSize)/2;
+    DnTicks[period]=source.volume[period]-UpTicks[period];
+    EMA_Up1.update(mode);
+    EMA_Dn1.update(mode);
+    EMA_Up2.update(mode);
+    EMA_Dn2.update(mode);
+    var sum=EMA_Up2.DATA[period]+EMA_Dn2.DATA[period];
+    if (sum!=0) 
+    {
+     TV[period]=100*(EMA_Up2.DATA[period]-EMA_Dn2.DATA[period])/sum;
+    } 
+    EMA_TV.update(mode);
+    TVI[period]=EMA_TV.DATA[period];
+   } 
+}
+

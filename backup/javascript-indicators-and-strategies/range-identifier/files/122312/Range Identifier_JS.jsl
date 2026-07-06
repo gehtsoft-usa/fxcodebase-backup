@@ -1,0 +1,148 @@
+function Init()
+{
+    indicator.name("Range Identifier");
+    indicator.description("Range Identifier");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+	
+	
+	indicator.parameters.addGroup("Selector");
+	indicator.parameters.addBoolean("connectRanges", "Connect Ranges", "", false);
+	indicator.parameters.addBoolean("showMidLine", "Show MidLine", "", true);
+	indicator.parameters.addBoolean("showEMA", "Show EMA", "", true);
+	indicator.parameters.addBoolean("hc", "Highlight Consolidation", "", true);
+
+	indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("lengthEMA", "EMA Period", "EMA Period", 34);
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("ema_color", "Color of ema", "Color of ema", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("mid_color", "Color of mid", "Color of mid", core.rgb(255, 0, 0));
+	
+
+	 indicator.parameters.addColor("Up", "Channel color Up", "", core.rgb(0, 255, 0));
+	 indicator.parameters.addColor("Down", "Channel color Down", "", core.rgb(255, 0, 0));
+     indicator.parameters.addInteger("transparency", "Channel transparency (%)", "", 70, 0, 100);
+}
+
+var lengthEMA;
+var connectRanges,showMidLine,showEMA,hc;
+var first;
+var source = null;
+
+var ema = null;
+var mid = null;
+var EMA;
+var up,down;
+var hh,ll;
+
+function Prepare(nameOnly)
+{
+    lengthEMA = instance.parameters.lengthEMA;
+	connectRanges = instance.parameters.connectRanges;
+	showMidLine = instance.parameters.showMidLine;
+	showEMA = instance.parameters.showEMA;
+	hc = instance.parameters.hc;
+    source = instance.source;
+	EMA = core.indicators.create("EMA", source.close, lengthEMA);
+	
+    first = Math.max(EMA.DATA.first());
+
+	
+	up= instance.addInternalStream(first, 0);
+	down= instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + tostring(lengthEMA) + ")";
+    instance.name(name);
+	
+	hh = instance.addStream("hh", core.Line, name + ".hh", "hh", core.rgb(128, 128,128), first);
+	ll = instance.addStream("ll", core.Line, name + ".ll", "ll", core.rgb(128, 128,128), first);
+	instance.createChannelGroup("ch", "ch", hh, ll, core.rgb(128, 128,128), 100 - instance.parameters.transparency);
+
+
+    if (!(nameOnly)) 
+    {
+	    if (showEMA) 
+	    {
+         ema = instance.addStream("ema", core.Line, name + ".ema", "ema", instance.parameters.ema_color, first);
+        } 
+		else
+		{
+		 ema= instance.addInternalStream(first, 0);
+		}
+		
+		if (showMidLine) 
+		{
+         mid = instance.addStream("mid", core.Line, name + ".mid", "mid", instance.parameters.mid_color, first);
+        } 
+		else
+		{
+		 mid= instance.addInternalStream(first, 0);
+		}
+		
+    }
+}
+
+function Update(period,mode)
+{
+    EMA.update(mode);
+	
+    if (period < first ||  !source.hasData(period)) 
+    {
+	 return;
+	}
+	if (source.close[period]< up[period-1] && source.close[period]>down[period-1]) 
+	{
+	 up[period]=up[period-1];
+	} 
+	else
+	{
+	 up[period]=source.high[period];
+	}
+	
+	
+	if (source.close[period]< up[period-1] && source.close[period]>down[period-1]) 
+	{
+	 down[period]=down[period-1];
+	} 
+	else
+	{
+	 down[period]=source.low[period];
+	}
+	
+	
+	mid[period] = (up[period]+down[period])/2;	
+    ema[period] = EMA.DATA[period];
+  
+  
+    hh[period]= up[period];
+   ll[period]= down[period];
+   
+    hh.setBreak (period, false);
+	ll.setBreak (period, false);
+   
+      if (!connectRanges) 
+      {   
+   
+			   if (hh[period]!=hh[period-1] || ll[period]!=ll[period-1]) 
+			   {
+		        hh.setBreak (period, true);
+			    ll.setBreak (period, true);
+			   }			    
+	   }
+	   
+	   if (hc) 
+	   {
+	   
+		   if (source.close[period]> ema[period]) 
+		   {
+		    hh.setColor(period, instance.parameters.Up);
+		   } 
+		   else
+		   {
+		    hh.setColor(period, instance.parameters.Down);
+		   }
+      }
+   
+  
+   
+}

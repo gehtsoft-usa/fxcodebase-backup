@@ -1,0 +1,116 @@
+﻿include=common.lua.rc
+default=enu
+[enu]
+codepage=1252
+name=Commodity Channel Index
+description=Measures the position of price in relation to its moving average.
+param_CCI_line_name=Commodity Channel Index line
+
+[ara]
+codepage=1256
+name=مؤشر قناة السلع
+description=مقاييس مركز السعر بالعلاقة مع متوسطه المتحرك
+param_CCI_line_name=الخط الخاص بدليل قناة السلعة
+
+[chs]
+codepage=936
+name=顺势指标
+description=量度仓位价格与移动平均线的关系
+param_CCI_line_name=顺势指标线
+
+[cht]
+codepage=950
+name=順勢指標
+description=量度倉位價格與移動平均線的關係
+param_CCI_line_name=順勢指標線
+
+[ctt]
+codepage=950
+name=順勢指標
+description=量度倉位價格與移動平均線的關係
+param_CCI_line_name=
+
+[deu]
+codepage=1252
+name=Rohstoffkanal Index
+description=Messt die Position eines Preises bezuglich des gleitenden Durchschnitts
+param_CCI_line_name=Commodity-Channel-Index Linie
+
+[esp]
+codepage=1252
+name=Índice del Canal de Materias Primas
+description=Mide la posición del precio con relación a su media móvil
+param_CCI_line_name=índice del canal de la materia prima
+
+[fra]
+codepage=1252
+name=Commodity Channel Index
+description=Mesure la position du prix par rapport à sa moyenne mobile
+param_CCI_line_name=ligne du Commodity Channel Index
+
+[jpn]
+codepage=932
+name=CCI
+description=移動平均線に関わるポジションのプライスを計ります
+param_CCI_line_name=Commodity Channel Index ライン
+
+[kor]
+codepage=949
+name=CCI (Commodity Channel Index)
+description=이동평균에 관계된 가격 포지션 측정
+param_CCI_line_name=
+
+[rus]
+codepage=1251
+name=Индекс товарного канала
+description=Измеряет отношение цены к ее скользящему среднему.
+param_CCI_line_name=линии индекса товарного канала
+
+[tur]
+codepage=1254
+name=Mal Kanal Endeksi
+description=Fiyatın hareketli ortalamasına göre konumunu ölçer.
+param_CCI_line_name=Mal Kanal Endeksi çizgi
+
+[ita]
+codepage=1252
+name=Commodity Channel Index
+description=Misura la posizione del prezzo in relazione alla sua media mobile
+param_CCI_line_name=linea del Commodity Channel Index
+
+[heb]
+codepage=1255
+name=מדד ערוץ הסחורות
+description=מודד את המיקום של המחיר ביחס לממוצע הנע.
+param_CCI_line_name=קו מדד ערוץ הסחורות
+
+[pol]
+codepage=1250
+name=Commodity Channel Index
+description=Mierzy położenie ceny w relacji do średniej kroczącej
+param_CCI_line_name=linii CCI
+
+[cze]
+codepage=1250
+name=Commodity Channel index
+description=Měří pozici ceny ve vztahu ke klouzavému průměru.
+param_CCI_line_name=linky Commodity Channel Index
+
+[por]
+codepage=1252
+name=Índice do Canal de Matérias Primas
+description=Mede posição do preço com relação a sua média móvel
+param_CCI_line_name=linha do índice do canal de materia prima
+
+[gre]
+codepage=1253
+name=Commodity Channel Index (CCI)
+description=Μετρά τη θέση της τιμής σε σχέση με τον κινητό μέσο όρο της.
+param_CCI_line_name=γραμμής του Commodity Channel Index
+
+[hun]
+codepage=0
+name=Commodity Channel Index
+description=Az árfolyam mozgóátlaghoz viszonyított relatív helyzetét méri.
+param_CCI_line_name=Commodity Channel Index 
+

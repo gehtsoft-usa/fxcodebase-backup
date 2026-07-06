@@ -1,0 +1,256 @@
+function Init()
+{
+    indicator.name("Binary Wave indicator");
+    indicator.description("Binary Wave indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addDouble("WeightMA", "Weight of MA", "", 1);
+    indicator.parameters.addDouble("WeightMACD", "Weight of MACD", "", 1);
+    indicator.parameters.addDouble("WeightH_MACD", "Weight of Histogram MACD", "", 1);
+    indicator.parameters.addDouble("WeightCCI", "Weight of CCI", "", 1);
+    indicator.parameters.addDouble("WeightMOM", "Weight of MOM", "", 1);
+    indicator.parameters.addDouble("WeightRSI", "Weight of RSI", "", 1);
+    indicator.parameters.addDouble("WeightDMI", "Weight of DMI", "", 1);
+
+    indicator.parameters.addString("Price", "Price", "", "close");
+    indicator.parameters.addStringAlternative("Price", "close", "", "close");
+    indicator.parameters.addStringAlternative("Price", "open", "", "open");
+    indicator.parameters.addStringAlternative("Price", "high", "", "high");
+    indicator.parameters.addStringAlternative("Price", "low", "", "low");
+    indicator.parameters.addStringAlternative("Price", "median", "", "median");
+    indicator.parameters.addStringAlternative("Price", "typical", "", "typical");
+    indicator.parameters.addStringAlternative("Price", "weighted", "", "weighted");
+    indicator.parameters.addInteger("MA_Period", "Period of MA", "", 13);
+    indicator.parameters.addString("MA_Method", "Method of MA", "", "MVA");
+    indicator.parameters.addStringAlternative("MA_Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("MA_Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("MA_Method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("MA_Method", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("MA_Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("MA_Method", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("MA_Method", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("MA_Method", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("MA_Method", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("MA_Method", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("MA_Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("MA_Method", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("MA_Method", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("MA_Method", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("MA_Method", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("MA_Method", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("MA_Method", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("MA_Method", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("MA_Method", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("MA_Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("MA_Method", "JSmooth", "", "JSmooth");
+    indicator.parameters.addInteger("MACD_Fast", "Fast period of MACD", "", 12);
+    indicator.parameters.addInteger("MACD_Slow", "Slow period of MACD", "", 26);
+    indicator.parameters.addInteger("MACD_Signal", "Signal period of MACD", "", 9);
+    indicator.parameters.addInteger("CCI_Period", "Period of CCI", "", 14);
+    indicator.parameters.addInteger("MOM_Period", "Period of Momentum", "", 14);
+    indicator.parameters.addInteger("RSI_Period", "Period of RSI", "", 14);
+    indicator.parameters.addInteger("DMI_Period", "Period of DMI", "", 14);
+    indicator.parameters.addInteger("Smooth_Period", "Smooth Period", "", 20);
+    indicator.parameters.addString("Smooth_Method", "Smooth Method", "", "MVA");
+    indicator.parameters.addStringAlternative("Smooth_Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Smooth_Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Smooth_Method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("Smooth_Method", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Smooth_Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Smooth_Method", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Smooth_Method", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Smooth_Method", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Smooth_Method", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Smooth_Method", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Smooth_Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Smooth_Method", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Smooth_Method", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Smooth_Method", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Smooth_Method", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Smooth_Method", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Smooth_Method", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Smooth_Method", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Smooth_Method", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Smooth_Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Smooth_Method", "JSmooth", "", "JSmooth");
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var WeightMA;
+var WeightMACD;
+var WeightH_MACD;
+var WeightCCI;
+var WeightMOM;
+var WeightRSI;
+var WeightDMI;
+var Price;
+var MA_Period;
+var MA_Method;
+var MACD_Fast;
+var MACD_Slow;
+var MACD_Signal;
+var CCI_Period;
+var MOM_Period;
+var RSI_Period;
+var DMI_Period;
+var Smooth_Method;
+var Smooth_Period;
+var MA;
+var MACD;
+var CCI;
+var MOM;
+var RSI;
+var DMI;
+var TMP;
+var Smooth_MA;
+var Binary_Wave=null;
+
+function Prepare()
+{
+    source = instance.source;
+    WeightMA=instance.parameters.WeightMA;
+    WeightMACD=instance.parameters.WeightMACD;
+    WeightH_MACD=instance.parameters.WeightH_MACD;
+    WeightCCI=instance.parameters.WeightCCI;
+    WeightMOM=instance.parameters.WeightMOM;
+    WeightRSI=instance.parameters.WeightRSI;
+    WeightDMI=instance.parameters.WeightDMI;
+    Price=instance.parameters.Price;
+    MA_Period=instance.parameters.MA_Period;
+    MA_Method=instance.parameters.MA_Method;
+    MACD_Fast=instance.parameters.MACD_Fast;
+    MACD_Slow=instance.parameters.MACD_Slow;
+    MACD_Signal=instance.parameters.MACD_Signal;
+    CCI_Period=instance.parameters.CCI_Period;
+    MOM_Period=instance.parameters.MOM_Period;
+    RSI_Period=instance.parameters.RSI_Period;
+    DMI_Period=instance.parameters.DMI_Period;
+    Smooth_Period=instance.parameters.Smooth_Period;
+    Smooth_Method=instance.parameters.Smooth_Method;
+    first = source.first()+2;
+    TMP=instance.addInternalStream(first, 0);
+    Smooth_MA=core.indicators.create("AVERAGES", TMP, Smooth_Method, Smooth_Period, false);
+    var sourceT;
+    if (Price=="close") 
+    {
+     sourceT=source.close;
+    } 
+    else if (Price=="open") 
+    {
+     sourceT=source.open;
+    }
+    else if (Price=="high") 
+    {
+     sourceT=source.high;
+    } 
+    else if (Price=="low") 
+    {
+     sourceT=source.low;
+    } 
+    else if (Price=="median") 
+    {
+     sourceT=source.median;
+    } 
+    else if (Price=="typical") 
+    {
+     sourceT=source.typical;
+    } 
+    else
+    {
+     sourceT=source.weighted;
+    } 
+    MA = core.indicators.create("AVERAGES", sourceT, MA_Method, MA_Period, false);
+    MACD = core.indicators.create("MACD", sourceT, MACD_Fast, MACD_Slow, MACD_Signal);
+    CCI = core.indicators.create("CCI", source, CCI_Period);
+    MOM = core.indicators.create("MOMENTUM", sourceT, MOM_Period);
+    RSI = core.indicators.create("RSI", sourceT, RSI_Period);
+    DMI = core.indicators.create("DMI", source, DMI_Period);
+    var name = profile.id() + "(" + source.name() + ")";
+    instance.name(name);
+    Binary_Wave = instance.addStream("Binary_Wave", core.Line, name + ".Binary_Wave", "Binary_Wave", instance.parameters.clr, first);
+    Binary_Wave.setWidth(instance.parameters.widthLinReg);
+    Binary_Wave.setStyle(instance.parameters.styleLinReg);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    MA.update(mode);
+    MACD.update(mode);
+    CCI.update(mode);
+    MOM.update(mode);
+    RSI.update(mode);
+    DMI.update(mode);
+    var Sum=0;
+    if (source.close[period]>MA.DATA[period]) 
+    { 
+     Sum=Sum+WeightMA;
+    } 
+    else if (source.close[period]<MA.DATA[period]) 
+    {
+     Sum=Sum-WeightMA;
+    } 
+    if (MACD.MACD[period]>MACD.MACD[period-1]) 
+    {
+     Sum=Sum+WeightMACD;
+    } 
+    else if (MACD.MACD[period]<MACD.MACD[period-1]) 
+    {
+     Sum=Sum-WeightMACD;
+    }
+    if (MACD.HISTOGRAM[period]>0) 
+    {
+     Sum=Sum+WeightH_MACD;
+    } 
+    else if (MACD.HISTOGRAM[period]<0) 
+    {
+     Sum=Sum-WeightH_MACD;
+    }
+    if (CCI.DATA[period]>0) 
+    {
+     Sum=Sum+WeightCCI;
+    } 
+    else if (CCI.DATA[period]<0) 
+    {
+     Sum=Sum-WeightCCI;
+    }
+    if (MOM.DATA[period]>100) 
+    {
+     Sum=Sum+WeightMOM;
+    } 
+    else if (MOM.DATA[period]<100) 
+    {
+     Sum=Sum-WeightMOM;
+    }
+    if (RSI.DATA[period]>50) 
+    {
+     Sum=Sum+WeightRSI;
+    } 
+    else if (RSI.DATA[period]<50) 
+    {
+     Sum=Sum-WeightRSI;
+    }
+    if (DMI.DIP[period]>DMI.DIM[period]) 
+    {
+     Sum=Sum+WeightDMI;
+    } 
+    else if (DMI.DIP[period]<DMI.DIM[period]) 
+    {
+     Sum=Sum-WeightDMI;
+    }
+    TMP[period]=Sum;
+    Smooth_MA.update(mode);
+    Binary_Wave[period]=Smooth_MA.DATA[period];
+   } 
+}
+

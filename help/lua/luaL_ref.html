@@ -1,0 +1,36 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - luaL_ref</title>
+</head>
+<body>
+<h3><a name="luaL_ref"><code>luaL_ref</code></a></h3>
+<pre>int luaL_ref (lua_State *L, int t);</pre>
+
+<p>
+Creates and returns a <em>reference</em>,
+in the table at index <code>t</code>,
+for the object at the top of the stack (and pops the object).
+
+
+<p>
+A reference is a unique integer key.
+As long as you do not manually add integer keys into table <code>t</code>,
+<a href="luaL_ref.html"><code>luaL_ref</code></a> ensures the uniqueness of the key it returns.
+You can retrieve an object referred by reference <code>r</code>
+by calling <code>lua_rawgeti(L, t, r)</code>.
+Function <a href="luaL_unref.html"><code>luaL_unref</code></a> frees a reference and its associated object.
+
+
+<p>
+If the object at the top of the stack is <b>nil</b>,
+<a href="luaL_ref.html"><code>luaL_ref</code></a> returns the constant <a name="pdf-LUA_REFNIL"><code>LUA_REFNIL</code></a>.
+The constant <a name="pdf-LUA_NOREF"><code>LUA_NOREF</code></a> is guaranteed to be different
+from any reference returned by <a href="luaL_ref.html"><code>luaL_ref</code></a>.
+
+
+
+
+
+<hr>
+</body>
+</html>

@@ -1,0 +1,96 @@
+function Init()
+{
+    indicator.name("Parabolic moving average indicator");
+    indicator.description("Parabolic moving average indicator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 20);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(255, 255, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period;
+var ParMA=null;
+var sum_x=0;
+var sum_x2=0;
+var sum_x3=0;
+var sum_x4=0;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ")";
+    instance.name(name);
+    ParMA = instance.addStream("ParMA", core.Line, name + ".ParMA", "ParMA", instance.parameters.clr, first);
+    ParMA.setWidth(instance.parameters.widthLinReg);
+    ParMA.setStyle(instance.parameters.styleLinReg);
+    var i;
+    var var_tmp;
+    for (i=1;i<=Period;i++) 
+    {
+     var_tmp=i;
+     sum_x=sum_x+var_tmp;
+     var_tmp=var_tmp*i;
+     sum_x2=sum_x2+var_tmp;
+     var_tmp=var_tmp*i;
+     sum_x3=sum_x3+var_tmp;
+     var_tmp=var_tmp*i;
+     sum_x4=sum_x4+var_tmp;
+    }
+}
+
+function Update(period, mode)
+{
+   if (period>first+Period) 
+   {
+    var sum_y=0;
+    var sum_xy=0;
+    var sum_x2y=0;
+    var i;
+    var var_tmp;
+    for (i=1;i<=Period;i++) 
+    {
+     var_tmp=source[period-Period+i];
+     sum_y=sum_y+var_tmp;
+     sum_xy=sum_xy+i*var_tmp;
+     sum_x2y=sum_x2y+i*i*var_tmp;
+    }
+    var A=Period;
+    var B=sum_x;
+    var C=sum_x2;
+    var F=sum_x3;
+    var M=sum_x4;
+    var P=sum_y;
+    var R=sum_xy;
+    var S=sum_x2y;
+    var D=B;
+    var E=C;
+    var K=C;
+    var L=F;
+    var Q=D/A;
+    E=E-Q*B;
+    F=F-Q*C;
+    R=R-Q*P;
+    Q=K/A;
+    L=L-Q*B;
+    M=M-Q*C;
+    S=S-Q*P;
+    Q=L/E;
+    var B2=(S-R*Q)/(M-F*Q);
+    var B1=(R-F*B2)/E;
+    var B0=(P-B*B1-C*B2)/A;
+    var val=B0+(B1+B2*A)*A;
+    ParMA[period]=val;
+   } 
+}
+

@@ -1,0 +1,39 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 4 - The Auxiliary Library</title>
+</head>
+<body>
+<h1>4 - <a name="4">The Auxiliary Library</a></h1>
+
+<p>
+
+The <em>auxiliary library</em> provides several convenient functions
+to interface C with Lua.
+While the basic API provides the primitive functions for all 
+interactions between C and Lua,
+the auxiliary library provides higher-level functions for some
+common tasks.
+
+
+<p>
+All functions from the auxiliary library
+are defined in header file <code>lauxlib.h</code> and
+have a prefix <code>luaL_</code>.
+
+
+<p>
+All functions in the auxiliary library are built on
+top of the basic API,
+and so they provide nothing that cannot be done with this API.
+
+
+<p>
+Several functions in the auxiliary library are used to
+check C&nbsp;function arguments.
+Their names are always <code>luaL_check*</code> or <code>luaL_opt*</code>.
+All of these functions raise an error if the check is not satisfied.
+Because the error message is formatted for arguments
+(e.g., "<code>bad argument #1</code>"),
+you should not use these functions for other stack values.
+</body>
+</html>

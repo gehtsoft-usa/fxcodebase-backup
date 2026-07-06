@@ -1,0 +1,121 @@
+function Init()
+{
+    indicator.name("XBarClearCloseTrend indicator");
+    indicator.description("XBarClearCloseTrend indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 5);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr1", "UP color 1", "UP color 1", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("UPclr2", "UP color 2", "UP color 2", core.rgb(128, 128, 255));
+    indicator.parameters.addColor("UPclr3", "UP color 3", "UP color 3", core.rgb(128, 255, 255));
+    indicator.parameters.addColor("DNclr1", "DN color 1", "DN color 1", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("DNclr2", "DN color 2", "DN color 2", core.rgb(255, 128, 0));
+    indicator.parameters.addColor("DNclr3", "DN color 3", "DN color 3", core.rgb(255, 255, 128));
+}
+
+var first;
+var source = null;
+var Period;
+var trend;
+var open=null;
+var close=null;
+var high=null;
+var low=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    first = source.first()+2;
+    trend=instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ")";
+    instance.name(name);
+    open = instance.addStream("open", core.Line, name, "open", core.rgb(0, 0, 0), first)
+    high = instance.addStream("high", core.Line, name, "high", core.rgb(0, 0, 0), first)
+    low = instance.addStream("low", core.Line, name, "low", core.rgb(0, 0, 0), first)
+    close = instance.addStream("close", core.Line, name, "close", core.rgb(0, 0, 0), first)
+    instance.createCandleGroup("Candle", "", open, high, low, close);
+}
+
+function IsBarUp(bar)
+{
+ var i;
+ for (i=1; i<=Period; i++) 
+ {
+  if (source.high[bar-i]>=source.close[bar]) 
+  {
+   return (false);
+  }
+ }
+ return (true);
+}
+
+function IsBarDn(bar)
+{
+ var i;
+ for (i=1; i<=Period; i++) 
+ {
+  if (source.low[bar-i]<=source.close[bar]) 
+  {
+   return (false);
+  }
+ }
+ return (true);
+}
+
+function Update(period, mode)
+{
+   if (period>first+Period) 
+   {
+    open[period]=source.open[period];
+    close[period]=source.close[period];
+    high[period]=source.high[period];
+    low[period]=source.low[period];
+    trend[period]=trend[period-1];
+    if (trend[period-1]==1) 
+    {
+     if (IsBarUp(period)) 
+     {
+      open.setColor(period, instance.parameters.UPclr1);
+     } 
+     else if (IsBarDn(period)) 
+     {
+      open.setColor(period, instance.parameters.DNclr1);
+     } 
+     else if (source.close[period]>=source.close[period-1]) 
+     {
+      open.setColor(period, instance.parameters.UPclr2);
+      trend[period]=-1;
+     } 
+     else
+     {
+      open.setColor(period, instance.parameters.UPclr3);
+     }
+    } 
+    else
+    {
+     if (IsBarDn(period)) 
+     {
+      open.setColor(period, instance.parameters.DNclr1);
+     } 
+     else if (IsBarUp(period)) 
+     {
+      open.setColor(period, instance.parameters.UPclr1);
+      trend[period]=1;
+     } 
+     else if (source.close[period]<=source.close[period-1]) 
+     {
+      open.setColor(period, instance.parameters.DNclr2);
+     } 
+     else
+     {
+      open.setColor(period, instance.parameters.DNclr3);
+     }
+    }
+   } 
+}
+

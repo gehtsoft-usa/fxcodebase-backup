@@ -1,0 +1,94 @@
+function Init()
+{
+    indicator.name("SHtatHMA (Hysteresis Moving Avg)");
+    indicator.description("Hyster");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    indicator.setTag("group", "Hysteresis Moving Averages");
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("N", "N", "N", 200, 1, 10000);
+
+    indicator.parameters.addBoolean("ColourMode", "ColourMode", "", true);
+
+    indicator.parameters.addGroup("Style");
+    
+    indicator.parameters.addColor("MainClr", "Main color", "Main color", core.rgb(255, 255, 0));
+    
+    indicator.parameters.addColor("UPclr", "UP color", "UP color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("DNclr", "DN color", "DN color", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("SDclr", "SDclr Color", "SDclr", core.rgb(255,0,255));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 2, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first = 0;
+var n = 0;
+var source = null;
+var out = null;
+var low;
+var high;
+var p = 0.0;
+var t = 0;
+var C = 0.0;
+var l,h;
+var ColourMode;
+
+function Prepare()
+{
+    source = instance.source;
+    ColourMode=instance.parameters.ColourMode;
+    n = instance.parameters.N;
+    first = n + source.first() - 1;
+    var name = profile.id() + "(" + source.name() + "," + n + ")";
+    l = source.low;
+    h = source.high;
+    instance.name(name);
+    out = instance.addStream("HMA", core.Line, name + ".HMA", "HMA", instance.parameters.MainClr, first);
+    out.setWidth(instance.parameters.widthLinReg);
+    out.setStyle(instance.parameters.styleLinReg);
+}
+
+function Update(period)
+{
+    if (period >= first) 
+    {
+        var l; 
+        var h;
+        C = source.close;
+        l=  Math.avg(instance.source.low, period - n + 1, period);
+        h= Math.avg(instance.source.high,period - n + 1, period);     
+        if (t == 1) 
+        { 
+            p = Math.max(l,p);
+        }
+        else
+        { 
+            p = Math.min(h, p);
+        }
+        if (C[period] > p) 
+        { 
+            t = 1; 
+        }    
+        else
+        { 
+            t = -1;
+        }
+        out[period] = p;
+        if (ColourMode) 
+        {
+         if (out[period]>out[period-1]) 
+         {
+            out.setColor(period,instance.parameters.UPclr);
+         }   
+         else if (out[period]<out[period-1]) 
+         {
+            out.setColor(period,instance.parameters.DNclr);
+         }   
+         else if (out[period-2]==out[period-1]) 
+         {
+            out.setColor(period,instance.parameters.SDclr);
+         }
+        } 
+    }
+}

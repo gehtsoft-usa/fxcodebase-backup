@@ -1,0 +1,82 @@
+function Init()
+{
+    indicator.name("Decycler Oscillator");
+    indicator.description("Decycler Oscillator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+ 
+    indicator.parameters.addGroup("Calculation"); 
+ 
+	indicator.parameters.addDouble("HPPeriod", "HPPeriod ", "HPPeriod", 125);
+	indicator.parameters.addDouble("K", "K ", "K", 1);
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("color", "Color of Decycler Oscillator ", "Color of Decycler Oscillator", core.rgb(0, 255, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+ 
+	
+}
+
+var first1,first2;
+var source = null;
+var HPPeriod, K;
+
+var Decycler_Oscillator;
+var alpha1,alpha2;
+var HP;
+var DecycleOsc;
+var Decycle;
+
+function Prepare(nameOnly)
+{
+    source = instance.source;
+    first1 = source.first()+2;
+    first2 = first1+2;
+	HPPeriod=instance.parameters.HPPeriod;
+	K=instance.parameters.K;
+	 
+	 var PI = 3.1415926;
+	 var angle1 = 0.707 * 2 * PI / HPPeriod;
+     var angle2 = 0.707 * 2 * PI / ( 0.5 * HPPeriod );
+	 alpha1 = ( Math.cos( angle1 ) + Math.sin( angle1 ) - 1 ) / Math.cos( angle1 );
+	 alpha2 = ( Math.cos( angle2 ) + Math.sin( angle2 ) - 1 ) / Math.cos( angle2 ); 
+	
+	var name = profile.id() + "(" + source.name() + ")";
+    instance.name(name);
+ 
+     HP = instance.addInternalStream(first1, 0);
+	 Decycle= instance.addInternalStream(first1, 0);
+	 DecycleOsc= instance.addInternalStream(first2, 0);
+	 
+     Decycler_Oscillator  = instance.addStream("Decycler_Oscillator", core.Line, name, "Decycler Oscillator", instance.parameters.color, first2);
+	 Decycler_Oscillator.setWidth(instance.parameters.width);
+     Decycler_Oscillator.setStyle(instance.parameters.style);
+ 
+ 
+}
+
+function Update(period)
+{
+    if (period < first1 || !source.hasData(period)) 
+    {
+	 return;
+	}
+	 
+       
+    HP[period] = (1 - alpha1 / 2)*(1 - alpha1 / 2)*(source[period] - 2*source[period-1] + source[period-2]) + 2*(1 - alpha1)*HP[period-1] - (1 - alpha1)*(1 - alpha1)*HP[period-2];
+	Decycle[period] = source[period] - HP[period];
+	
+	
+	if (period < first2 || !source.hasData(period)) 
+	{
+	 return;
+	}
+	
+	DecycleOsc[period] = (1 - alpha2 / 2)*(1 - alpha2 / 2)*(Decycle[period] - 2*Decycle[period-1]+ Decycle[period-2]) + 2*(1 - alpha2)*DecycleOsc[period-1] - (1 -alpha2)*(1 - alpha2)*DecycleOsc[period-2];
+	
+	
+	Decycler_Oscillator[period]=100*K*DecycleOsc[period]/source[period];
+}
+
+ 

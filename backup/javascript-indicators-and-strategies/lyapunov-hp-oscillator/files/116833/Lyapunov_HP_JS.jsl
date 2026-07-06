@@ -1,0 +1,124 @@
+function Init()
+{
+    indicator.name("Lyapunov HP oscillator");
+    indicator.description("Lyapunov HP oscillator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("MA_Period", "MA period", "", 4);
+    indicator.parameters.addInteger("Filter", "Filter", "", 7);
+    indicator.parameters.addInteger("L_Period", "Lyapunov period", "", 525);
+    indicator.parameters.addInteger("L_Time", "Lyapunov time", "", 20);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(255, 255, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var MA_Period;
+var Filter;
+var L_Period;
+var L_Time;
+var Lyapunov_HP=null;
+var Lambda;
+var hpf, a, b, c;
+
+function Prepare()
+{
+    source = instance.source;
+    MA_Period=instance.parameters.MA_Period;
+    Filter=instance.parameters.Filter;
+    L_Period=instance.parameters.L_Period;
+    L_Time=instance.parameters.L_Time;
+    first = source.first()+2;
+    hpf = instance.addInternalStream(first, 0);
+    a = instance.addInternalStream(first, 0);
+    b = instance.addInternalStream(first, 0);
+    c = instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.MA_Period + ", " + instance.parameters.Filter + ", " + instance.parameters.L_Period + ", " + instance.parameters.L_Time + ")";
+    instance.name(name);
+    Lyapunov_HP = instance.addStream("Lyapunov_HP", core.Line, name + ".Lyapunov_HP", "Lyapunov_HP", instance.parameters.clr, first);
+    Lyapunov_HP.setWidth(instance.parameters.widthLinReg);
+    Lyapunov_HP.setStyle(instance.parameters.styleLinReg);
+    Lambda = 0.0625/Math.pow(Math.sin(3.1415926/Filter),4);
+}
+
+function Update(period, mode)
+{
+   if (period>first+L_Period && period==source.size()-1) 
+   {
+    a[period]=1+Lambda;
+    b[period]=-2*Lambda;
+    c[period]=Lambda;
+    var i;
+    for (i=first; i<=period-1; i++) 
+    {
+     a[i]=6*Lambda+1;
+     b[i]=-4*Lambda;
+     c[i]=Lambda;
+    }
+    a[period-1]=5*Lambda+1;
+    a[first]=1+Lambda;
+    a[first+1]=5*Lambda+1;
+    b[first+1]=-2*Lambda;
+    b[first]=0;
+    c[first+1]=0;
+    c[first]=0;
+    
+    var H1=0;
+    var H2=0;
+    var H3=0;
+    var H4=0;
+    var H5=0;
+    var HH1=0;
+    var HH2=0;
+    var HH3=0;
+    var HH4=0;
+    var HH5=0;
+    var HB=0;
+    var HC=0;
+    var Z=0;
+    
+    for (i=period; i>=first; i--) 
+    {
+     Z=a[i]-H4*H1-HH5*HH2;
+     HB=b[i];
+     HH1=H1;
+     H1=(HB-H4*H2)/Z;
+     b[i]=H1;
+     HC=c[i];
+     HH2=H2;
+     H2=HC/Z;
+     c[i]=H2;
+     a[i]=(source[i]-HH3*HH5-H3*H4)/Z;
+     HH3=H3;
+     H3=a[i];
+     H4=HB-H5*HH1;
+     HH5=H5;
+     H5=HC;
+    }
+    
+    H2=0;
+    H1=a[first+1];
+    hpf[first+1]=H1;
+
+    for (i=first+2; i<=period; i++) 
+    {
+     hpf[i]=a[i]-b[i]*H1-c[i]*H2;
+     H2=H1;
+     H1=hpf[i];
+    }
+    
+    for (i=period; i>=first+1; i--) 
+    {
+     Lyapunov_HP[i]=Math.log(Math.abs(hpf[i]/hpf[i-1]))*100000;
+    }
+    
+   } 
+}
+

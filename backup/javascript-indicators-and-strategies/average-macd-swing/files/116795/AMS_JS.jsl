@@ -1,0 +1,146 @@
+function Init()
+{
+    indicator.name("Average MACD Swing");
+    indicator.description("Average MACD Swing");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+	
+	indicator.parameters.addGroup("MACD Calculation");
+    indicator.parameters.addInteger("ShortPeriod", "Short Period", "Short Period", 12);
+    indicator.parameters.addInteger("LongPeriod", "Long Period", "Long Period", 26);
+    indicator.parameters.addInteger("SignalPeriod", "Signal Period", "Signal Period", 9);
+	
+	
+	indicator.parameters.addGroup("MACD Calculation");
+	indicator.parameters.addString("Method", "MA Method", "Method" , "Zero Line");
+    indicator.parameters.addStringAlternative("Method", "Zero Line", "Zero Line" , "Zero Line");
+    indicator.parameters.addStringAlternative("Method", "Signal Line", "Signal Line" , "Signal Line"); 
+	
+	 indicator.parameters.addInteger("Period", "Period", "Period", 3);
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("AMS_color", "Color of AMS", "Color of AMS", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var ShortPeriod;
+var LongPeriod;
+var SignalPeriod;
+var Method, Period;
+var first;
+var source = null;
+
+var AMS = null;
+var MACD;
+
+function Prepare(nameOnly)
+{
+    ShortPeriod = instance.parameters.ShortPeriod;
+    LongPeriod = instance.parameters.LongPeriod;
+    SignalPeriod = instance.parameters.SignalPeriod;
+	Method = instance.parameters.Method;
+	Period = instance.parameters.Period;
+	Price = instance.parameters.Price;
+    source = instance.source;
+	
+	MACD = core.indicators.create("MACD", source , ShortPeriod, LongPeriod, SignalPeriod);
+    first = source.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(ShortPeriod) + ", " + tostring(LongPeriod) + ", " + tostring(SignalPeriod) + ", " + tostring(Method) + ", " + tostring(Period)+ ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        AMS = instance.addStream("AMS", core.Line, name, "AMS", instance.parameters.AMS_color, first);
+		AMS.setWidth(instance.parameters.width);
+        AMS.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period, mode)
+{
+
+    MACD.update(mode);
+	
+    if (period < first) 
+    {
+	 return;
+	}
+	
+	
+	   
+	    if (Method== "Zero Line") 
+	    {		
+         AMS[period] = Calculate(period, MACD.MACD, 0);	
+        } 
+        else
+        {
+		 AMS[period] = Calculate(period, MACD.MACD, MACD.SIGNAL);	
+        }   
+      		
+    
+}
+
+function Calculate (period, One, Two)
+{
+  var i;
+  var Break=1;
+  var Sum=0;
+  var Array={};
+  var FIRST;
+  Array[Break]=period;
+  
+    if (Method== "Zero Line") 
+    {	
+   FIRST=  One.first() ;
+}
+   else
+   {
+   FIRST= Math.max(One.first(), Two.first());
+   }
+  
+  for (i = period; i>=FIRST+1; i--) 
+  {
+     
+      
+	   if (core.crosses (One, Two, i)) 
+	   {	   
+	    Break=Break+1;
+	    Array[Break]=i;
+	   }
+	  
+	   if (Break == Period+1) 
+	   {
+	    break;
+	   }
+   
+  }
+  
+  
+ 
+  
+  for (i = 2; i<=Period+1; i++) 
+  {
+  
+		  if  (Array[i]!= null && Array[i-1]!= null) 
+		   {
+		  		    var tmp;
+				   if (core.crossesOver (One, Two ,  Array[i])) 
+				   {
+				    tmp=Math.minmax(source, Array[i], Array[i-1]);
+				    Sum = Sum + (tmp[1] - source[Array[i]]) ;
+				   } 
+				   else if (core.crossesUnder (One, Two ,  Array[i])) 
+				   {  
+				    tmp=Math.minmax(source, Array[i], Array[i-1]);
+				    Sum = Sum - (source[Array[i]] - tmp[0])  ;
+				   }   
+				  
+				  }
+					  
+				  return (Sum/ (Break-1));
+		  
+		  }
+}

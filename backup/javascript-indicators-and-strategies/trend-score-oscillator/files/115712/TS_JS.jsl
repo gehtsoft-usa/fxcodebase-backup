@@ -1,0 +1,82 @@
+function Init()
+{
+    indicator.name("TrendScore");
+    indicator.description("TrendScore");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Start", "Start", "Start", 11);
+    indicator.parameters.addInteger("End", "End", "End", 20);
+	indicator.parameters.addInteger("Step", "Step", "Step", 1);
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("TS_color", "Color of TS", "Color of TS", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+	
+	
+	indicator.parameters.addGroup("OB/OS Levels");	
+	indicator.parameters.addColor("level_overboughtsold_color", "Line Color","", core.rgb(128, 128, 128));
+    indicator.parameters.addInteger("level_overboughtsold_width","Line width","", 1, 1, 5);
+    indicator.parameters.addInteger("level_overboughtsold_style", "Line Style","", core.LINE_SOLID);
+    indicator.parameters.setFlag("level_overboughtsold_style", core.FLAG_LEVEL_STYLE);
+}
+
+var Start;
+var End;
+var Step;
+var first;
+var source = null;
+
+var TS = null;
+
+function Prepare(nameOnly)
+{
+    Start = instance.parameters.Start;
+    End = instance.parameters.End;
+	Step = instance.parameters.Step;
+    source = instance.source;
+    first = source.first()+End;
+	
+	var i;
+	i = Math.abs(End -Start+1)/Step;
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Start) + ", " + tostring(End) + ", " + tostring(Step) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        TS = instance.addStream("TS", core.Line, name, "TS", instance.parameters.TS_color, first);
+		TS.addLevel(i, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);
+		TS.addLevel(-i, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);  
+		TS.setWidth(instance.parameters.width);
+        TS.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period)
+{
+    if (period < first) 
+    {
+	 return;
+	}
+	
+	TS[period]=0;
+	
+	var i;
+	for (i = period-Start; i>=period-End; i-=Step) 
+	{	
+	
+	    if (source[period] > source[i]) 
+	    {
+         TS[period] =  TS[period]+1;
+        } 
+		else if (source[period] < source[i]) 
+		{
+		 TS[period] =  TS[period]-1;
+		} 
+		
+	 }	
+  
+}
+

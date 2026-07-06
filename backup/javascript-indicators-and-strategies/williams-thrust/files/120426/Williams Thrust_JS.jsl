@@ -1,0 +1,123 @@
+function Init()
+{
+    indicator.name("Williams Thrust");
+    indicator.description("Williams Thrust");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Parameters");
+    indicator.parameters.addInteger("LWO", "First Larry Williams Period", "", 250, 2, 1000);
+	indicator.parameters.addInteger("MAO", "First Moving Average Period", "", 50, 2, 1000);
+	indicator.parameters.addInteger("LWT", "Second Larry Williams Period", "", 50, 2, 1000);
+	indicator.parameters.addInteger("MAT", "Second Moving Average Period", "", 10, 2, 1000);	
+	
+	indicator.parameters.addString("Method", "MA Type", "MA Type" , "EMA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "EMA" , "EMA");
+	indicator.parameters.addStringAlternative("Method", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method", "HMA", "HMA" , "HMA");
+    indicator.parameters.addStringAlternative("Method", "WMA", "WMA" , "WMA");
+}
+
+var LWO, MAO, LWT, MAT;
+
+var first;
+var source = null;
+
+var HZU = null;
+var HZL = null;
+
+var open=null;
+var close=null;
+var high=null;
+var low=null;
+
+var indicator1;
+var indicator2;
+var MVA1;
+var MVA2;
+
+var Method;
+
+function Prepare()
+{
+    Method= instance.parameters.Method;
+    LWO = instance.parameters.LWO;
+	LWT = instance.parameters.LWT;
+	MAO = instance.parameters.MAO;
+	MAT = instance.parameters.MAT;
+	
+    source = instance.source;
+    first = source.first();	
+	
+	assert(core.indicators.findIndicator(Method) != null, "Please, {wnload && install "+Method +  " indicator");
+	
+	indicator1 = core.indicators.create("RLW", source, LWO);
+	indicator2 = core.indicators.create("RLW", source, LWT);
+	
+	MVA1 = core.indicators.create(Method, indicator1.DATA, MAO);
+	MVA2 = core.indicators.create(Method, indicator2.DATA, MAT);
+
+    var name = profile.id() + "(" + source.name() + ", " + LWO+ ", "+ MAO+ ", "+ LWT+", " + MAT +","+ Method + ")";
+    instance.name(name);
+	
+	HZU = instance.addStream("HZU", core.Line, name + "HZU", "", core.rgb(127, 127, 127), first);
+    HZL = instance.addStream("HZL", core.Line, name + "HZL", "", core.rgb(127, 127, 127), first);
+    instance.createFromToBarGroup("NEUTRAL", "", HZU, HZL, core.rgb(127, 127, 127));
+	
+	open = instance.addStream("open", core.Line, name, "open", core.rgb(127, 127, 127), first)
+    high = instance.addStream("high", core.Line, name, "high", core.rgb(127, 127, 127), first)
+    low = instance.addStream("low", core.Line, name, "low", core.rgb(127, 127, 127), first)
+    close = instance.addStream("close", core.Line, name, "close", core.rgb(127, 127, 127), first)
+    instance.createCandleGroup("ZONE", "", open, high, low, close);
+    
+}
+
+function Update(period, mode )
+{
+ if (period >= first && source.hasData(period)) 
+ {
+  indicator1.update(mode);
+  indicator2.update(mode);
+      
+  MVA1.update(mode);
+  MVA2.update(mode);
+	  
+  if (MVA1.DATA.hasData(period) && MVA2.DATA.hasData(period)) 
+  {
+   if (indicator1.DATA[period] > MVA1.DATA[period] &&  indicator2.DATA[period] > MVA2.DATA[period]) 
+   {
+    high[period]= source.high[period];
+    low[period]= source.low[period];		   
+    close[period] = Math.max(source.open[period], source.close[period]);
+    open[period]  = Math.min(source.open[period], source.close[period]);   
+   } 
+   else if (indicator1.DATA[period] < MVA1.DATA[period] &&  indicator2.DATA[period] < MVA2.DATA[period]) 
+   {
+    high[period]= source.high[period];
+    low[period]= source.low[period];		   
+    close[period] = Math.min(source.open[period], source.close[period]);
+    open[period]  = Math.max(source.open[period], source.close[period]); 
+   } 
+   else
+   {
+    HZU[period] = Math.max(source.open[period], source.close[period]);
+    HZL[period] = Math.min(source.open[period], source.close[period]);
+   }
+  } 
+  else
+  {
+   HZU[period] = Math.max(source.open[period], source.close[period]);
+   HZL[period] = Math.min(source.open[period], source.close[period]);
+  }
+ } 
+ else
+ {
+  HZU[period] = Math.max(source.open[period], source.close[period]);
+  HZL[period] = Math.min(source.open[period], source.close[period]);
+ }
+}
+

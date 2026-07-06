@@ -1,0 +1,85 @@
+function Init()
+{
+    indicator.name("MA parabolic indicator");
+    indicator.description("MA parabolic indicator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 24);
+    indicator.parameters.addString("Method", "Method", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("Method", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Method", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Method", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Method", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Method", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Method", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Method", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Method", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Method", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Method", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Method", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Method", "JSmooth", "", "JSmooth");
+    indicator.parameters.addDouble("Step", "Step", "", 0.02);
+    indicator.parameters.addDouble("Maximum", "Maximum", "", 0.08);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("MAclr", "MA Color", "MA Color", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("MAwidth", "MA width", "MA width", 1, 1, 5);
+    indicator.parameters.addInteger("MAstyle", "MA style", "MA style", core.LINE_SOLID);
+    indicator.parameters.setFlag("MAstyle", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("SARclr", "SAR Color", "SAR Color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("SARwidth", "SAR width", "SAR width", 1, 1, 5);
+    indicator.parameters.addInteger("SARstyle", "SAR style", "SAR style", core.LINE_SOLID);
+    indicator.parameters.setFlag("SARstyle", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period;
+var Method;
+var Step;
+var Maximum;
+var MA_Ind;
+var MA=null;
+var SAR=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    Method=instance.parameters.Method;
+    Step=instance.parameters.Step;
+    Maximum=instance.parameters.Maximum;
+    first = source.first()+2;
+    MA_Ind = core.indicators.create("AVERAGES", source, Method, Period, false);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.Method + ", " + instance.parameters.Step + ", " + instance.parameters.Maximum + ")";
+    instance.name(name);
+    MA = instance.addStream("MA", core.Line, name + ".MA", "MA", instance.parameters.MAclr, first);
+    MA.setWidth(instance.parameters.MAwidth);
+    MA.setStyle(instance.parameters.MAstyle);
+    SAR = instance.addStream("SAR", core.Line, name + ".SAR", "SAR", instance.parameters.SARclr, first);
+    SAR.setWidth(instance.parameters.SARwidth);
+    SAR.setStyle(instance.parameters.SARstyle);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    MA_Ind.update(mode);
+    MA[period]=MA_Ind.DATA[period];
+    
+    
+   } 
+}
+

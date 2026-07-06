@@ -1,0 +1,41 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_resume</title>
+</head>
+<body>
+<h3><a name="lua_resume"><code>lua_resume</code></a></h3>
+<pre>int lua_resume (lua_State *L, int narg);</pre>
+
+<p>
+Starts and resumes a coroutine in a given thread.
+
+
+<p>
+To start a coroutine, you first create a new thread
+(see <a href="lua_newthread.html"><code>lua_newthread</code></a>);
+then you push onto its stack the main function plus any arguments;
+then you call <a href="lua_resume.html"><code>lua_resume</code></a>,
+with <code>narg</code> being the number of arguments.
+This call returns when the coroutine suspends or finishes its execution.
+When it returns, the stack contains all values passed to <a href="lua_yield.html"><code>lua_yield</code></a>,
+or all values returned by the body function.
+<a href="lua_resume.html"><code>lua_resume</code></a> returns
+<a href="pdf-LUA_YIELD.html"><code>LUA_YIELD</code></a> if the coroutine yields,
+0 if the coroutine finishes its execution
+without errors,
+or an error code in case of errors (see <a href="lua_pcall.html"><code>lua_pcall</code></a>).
+In case of errors,
+the stack is not unwound,
+so you can use the debug API over it.
+The error message is on the top of the stack.
+To restart a coroutine, you put on its stack only the values to
+be passed as results from <code>yield</code>,
+and then call <a href="lua_resume.html"><code>lua_resume</code></a>.
+
+
+
+
+
+<hr>
+</body>
+</html>

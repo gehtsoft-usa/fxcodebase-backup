@@ -1,0 +1,268 @@
+
+function Init()
+{
+    indicator.name("AO Divergence");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addInteger("AO_Short", "Period of short MA for AO", "", 5);
+    indicator.parameters.addInteger("AO_Long", "Period of long MA for AO", "", 35);
+    indicator.parameters.addBoolean("I", "Indicator mode", "Keep true value to display labels && lines. Set this parameter to false when the indicator is used in another indicator.", true);
+    indicator.parameters.addColor("D_color", "Color of Divergence line", "", core.rgb(0, 155, 255));
+    indicator.parameters.addColor("UP_color", "Color of Uptrend", "", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("DN_color", "Color of Downtend", "", core.rgb(0, 255, 0));
+
+    indicator.parameters.addBoolean("signaler_show_alert", "Show Alert", "", true);
+}
+
+var I;
+var DD;
+var UP_color;
+var DN_color;
+var _show_alert;
+
+var first;
+var source = null;
+
+var D = null;
+var UP = null;
+var DN = null;
+var AO = null;
+var lineid = null;
+
+function Prepare(nameOnly)
+{
+    _show_alert = instance.parameters.signaler_show_alert;
+    I = instance.parameters.I;
+    DD = instance.parameters.DD;
+    UP_color = instance.parameters.UP_color;
+    DN_color = instance.parameters.DN_color;
+    source = instance.source;
+    AO = core.indicators.create("AO", source, instance.parameters.AO_Short,instance.parameters.AO_Long);
+    first = AO.DATA.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.AO_Short + ", " + instance.parameters.AO_Long + ")";
+    instance.name(name);
+    if (nameOnly) {
+        return;
+    }
+    D = instance.addStream("AO", core.Line, name + ".AO", "AO", instance.parameters.D_color, first, -1);
+    if (I) 
+    {
+        UP = instance.createTextOutput ("Up", "Up", "Wingdings", 10, core.H_Center, core.V_Top, instance.parameters.UP_color, -1);
+        DN = instance.createTextOutput ("Dn", "Dn", "Wingdings", 10, core.H_Center, core.V_Bottom, instance.parameters.DN_color, -1);
+    }
+    else
+    {
+        UP = instance.addStream("UP", core.Bar, name + ".UP", "UP", instance.parameters.D_color, first, -1);
+        DN = instance.addStream("DN", core.Bar, name + ".DN", "DN", instance.parameters.D_color, first, -1);
+    }
+}
+
+var pperiod = null;
+var pperiod1 = null;
+var line_id = 0;
+
+var CLASSIC_BULLISH = 1;
+var REVERSAL_BULLISH = 2;
+var CLASSIC_BEARISH = -1;
+var REVERSAL_BEARISH = -2;
+
+function Signal(message) {
+    if (_show_alert) {
+        terminal.alertMessage(source.instrument(), source[NOW], message, source.date(NOW));
+    }
+}
+
+function Update(period, mode)
+{
+    var last = period == source.size() - 1;
+    if (pperiod != null && pperiod > period) 
+    {
+        core.host.execute("removeAll");
+    }
+    pperiod = period;
+
+    if (pperiod1 != null && pperiod1 == source.serial(period)) 
+    {
+        return ;
+    }
+    pperiod1 = source.serial(period)
+    period = period - 1;
+
+    AO.update(mode);
+    if (period >= first) 
+    {
+        D[period] = AO.DATA[period];
+        if (period >= first + 2) 
+        {
+            var bullSignal = processBullish(period - 2);
+            var bearSignal = processBearish(period - 2);
+            if (last) {
+                if (bullSignal == CLASSIC_BULLISH) {
+                    Signal("Classic bullish", source);
+                }
+                else if (bullSignal == REVERSAL_BULLISH) {
+                    Signal("Reversal bullish", source);
+                }
+                if (bearSignal == CLASSIC_BEARISH) {
+                    Signal("Classic bearish", source);
+                }
+                else if (bearSignal == REVERSAL_BEARISH) {
+                    Signal("Reversal bearish", source);
+                }
+            }
+        }
+    }
+}
+
+function processBullish(period)
+{
+    if (isTrough(period)) 
+    {
+        var curr, prev;
+        curr = period;
+        prev = prevTrough(period);
+        if (prev != null) 
+        {
+            if (AO.DATA[curr] > AO.DATA[prev] && source.low[curr] < source.low[prev]) 
+            {
+                if (I) 
+                {
+                    DN.set(curr, AO.DATA[curr], "\225", "Classic bullish");
+                    line_id = line_id + 1;
+                    core.host.execute("drawLine", line_id, source.date(prev), AO.DATA[prev], source.date(curr), AO.DATA[curr], DN_color);
+                }
+                else
+                {
+                    DN[period] = curr - prev;
+                }
+                return CLASSIC_BULLISH;
+            }
+            else if (AO.DATA[curr] < AO.DATA[prev] && source.low[curr] > source.low[prev]) 
+            {
+                if (I) 
+                {
+                    DN.set(curr, AO.DATA[curr], "\225", "Reversal bullish");
+                    line_id = line_id + 1;
+                    core.host.execute("drawLine", line_id, source.date(prev), AO.DATA[prev], source.date(curr), AO.DATA[curr], DN_color);
+                }
+                else
+                {
+                    DN[period] = -(curr - prev);
+                }
+                return REVERSAL_BULLISH;
+            }
+        }
+    }
+    return 0;
+}
+
+function isTrough(period)
+{
+    var i;
+    if (AO.DATA[period] < 0 && AO.DATA[period] < AO.DATA[period - 1] && AO.DATA[period] < AO.DATA[period + 1]) 
+    {
+        for (i = period - 1; i>=first; i--) 
+        {
+            if (AO.DATA[i] > 0) 
+            {
+                return (true);
+            }    
+            else if (AO.DATA[period] > AO.DATA[i]) 
+            {
+                return (false);
+            }
+        }
+    }
+    return (false);
+}
+
+function prevTrough(period)
+{
+    var i;
+    for (i = period - 5; i>=first; i--) 
+    {
+        if (AO.DATA[i] <= AO.DATA[i - 1] && AO.DATA[i] < AO.DATA[i - 2] && AO.DATA[i] <= AO.DATA[i + 1] && AO.DATA[i] < AO.DATA[i + 2]) 
+        {
+           return (i);
+        }
+    }
+    return (null);
+}
+
+function processBearish(period)
+{
+    if (isPeak(period)) 
+    {
+        var curr, prev;
+        curr = period;
+        prev = prevPeak(period);
+        if (prev != null) 
+        {
+            if (AO.DATA[curr] < AO.DATA[prev] && source.high[curr] > source.high[prev]) 
+            {
+                if (I) 
+                {
+                    UP.set(curr, AO.DATA[curr], "\226", "Classic bearish");
+                    line_id = line_id + 1;
+                    core.host.execute("drawLine", line_id, source.date(prev), AO.DATA[prev], source.date(curr), AO.DATA[curr], UP_color);
+                }
+                else
+                {
+                    UP[period] = curr - prev;
+                }
+                return CLASSIC_BEARISH;
+            }    
+            else if (AO.DATA[curr] > AO.DATA[prev] && source.high[curr] < source.high[prev]) 
+            {
+                if (I) 
+                {
+                    UP.set(curr, AO.DATA[curr], "\226", "Reversal bearish");
+                    line_id = line_id + 1;
+                    core.host.execute("drawLine", line_id, source.date(prev), AO.DATA[prev], source.date(curr), AO.DATA[curr], UP_color);
+                }
+                else
+                {
+                    UP[period] = -(curr - prev);
+                }
+                return REVERSAL_BEARISH;
+            }
+        }
+    }
+    return 0;
+}
+
+function isPeak(period)
+{
+    var i;
+    if (AO.DATA[period] > 0 && AO.DATA[period] > AO.DATA[period - 1] && AO.DATA[period] > AO.DATA[period + 1]) 
+    {
+        for (i = period - 1; i>=first; i--) 
+        {
+            if (AO.DATA[i] < 0) 
+            {
+                return (true);
+            }    
+            else if (AO.DATA[period] < AO.DATA[i]) 
+            {
+                return (false);
+            }
+        }
+    }
+    return (false);
+}
+
+function prevPeak(period)
+{
+    var i;
+    for (i = period - 5; i>=first; i--) 
+    {
+        if (AO.DATA[i] >= AO.DATA[i - 1] && AO.DATA[i] > AO.DATA[i - 2] && AO.DATA[i] >= AO.DATA[i + 1] && AO.DATA[i] > AO.DATA[i + 2]) 
+        {
+           return (i);
+        }
+    }
+    return (null);
+}

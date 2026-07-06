@@ -1,0 +1,161 @@
+//initializes the indicator
+function Init()
+{
+    indicator.name("Ichimoku");
+    indicator.description("Ichimoku");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    indicator.setTag("group", "Trend");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("X", "Tenkan-sen period", "Tenkan-sen period", 9);
+    indicator.parameters.addInteger("Y", "Kijun-sen period", "Kijun-sen period", 26);
+    indicator.parameters.addInteger("Z", "Senkou Span B period", "Senkou Span B period", 52);
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("TSclr", "Tenkan-sen color", "Tenkan-sen color", core.rgb(192, 192, 131));
+    indicator.parameters.addInteger("TSwidth", "Tenkan-sen width", "Tenkan-sen width", 1, 1, 5);
+    indicator.parameters.addInteger("TSstyle", "Tenkan-sen style", "Tenkan-sen style", core.LINE_SOLID);
+    indicator.parameters.setFlag("TSstyle", core.FLAG_LEVEL_STYLE);
+
+    indicator.parameters.addColor("KSclr", "Kijun-sen color", "Kijun-sen color", core.rgb(32, 196, 255));
+    indicator.parameters.addInteger("KSwidth", "Kijun-sen width", "Kijun-sen width", 1, 1, 5);
+    indicator.parameters.addInteger("KSstyle", "Kijun-sen style", "Kijun-sen style", core.LINE_SOLID);
+    indicator.parameters.setFlag("KSstyle", core.FLAG_LEVEL_STYLE);
+
+    indicator.parameters.addColor("CSclr", "Chinkou span color", "Chinkou span color", core.rgb(0, 183, 183));
+    indicator.parameters.addInteger("CSwidth", "Chinkou span width", "Chinkou span width", 1, 1, 5);
+    indicator.parameters.addInteger("CSstyle", "Chinkou span style", "Chinkou span style", core.LINE_SOLID);
+    indicator.parameters.setFlag("CSstyle", core.FLAG_LEVEL_STYLE);
+
+    indicator.parameters.addColor("SSAclr", "Senkou span A color", "Senkou span A color", core.rgb(219, 64, 0));
+    indicator.parameters.addInteger("SSAwidth", "Senkou span A width", "Senkou span A width", 1, 1, 5);
+    indicator.parameters.addInteger("SSAstyle", "Senkou span A style", "Senkou span A style", core.LINE_SOLID);
+    indicator.parameters.setFlag("SSAstyle", core.FLAG_LEVEL_STYLE);
+
+    indicator.parameters.addColor("SSBclr", "Senkou span B color", "Senkou span B color", core.rgb(0, 128, 191));
+    indicator.parameters.addInteger("SSBwidth", "Senkou span B width", "Senkou span B width", 1, 1, 5);
+    indicator.parameters.addInteger("SSBstyle", "Senkou span B style", "Senkou span B style", core.LINE_SOLID);
+    indicator.parameters.setFlag("SSBstyle", core.FLAG_LEVEL_STYLE);
+    indicator.parameters.addInteger("transp", "Cloud transparency, %", "Cloud transparency, %", 80, 0, 100);
+}
+
+var Tenkan;
+var Kijun;
+var Senkou;
+
+var firstPeriod;
+var source = null;
+
+var csFirst = null;
+var slFirst = null;
+var tlFirst = null;
+var saFirst = null;
+var sbFirst = null;
+var chFirst = null;
+
+var SL = null;
+var TL = null;
+var CS = null;
+var SA = null;
+var SB = null;
+var SA1 = null;
+var SB2 = null;
+var clrSSA, clrSSB;
+
+//initializes the instance of the indicator
+function Prepare(onlyName)
+{
+    Tenkan = instance.parameters.X;
+    Kijun = instance.parameters.Y;
+    Senkou = instance.parameters.Z;
+    source = instance.source;
+    firstPeriod = source.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + Tenkan + ", " + Kijun + ", " + Senkou + ")";
+    instance.name(name);
+    SL = instance.addStream("SL", core.Line, name + ".TL", "TL", instance.parameters.TSclr, firstPeriod + Tenkan - 1)
+    SL.setWidth(instance.parameters.TSwidth);
+    SL.setStyle(instance.parameters.TSstyle);
+    TL = instance.addStream("TL", core.Line, name + ".KL", "KL", instance.parameters.KSclr, firstPeriod + Kijun - 1)
+    TL.setWidth(instance.parameters.KSwidth);
+    TL.setStyle(instance.parameters.KSstyle);
+    CS = instance.addStream("CS", core.Line, name + ".CS", "CS", instance.parameters.CSclr, firstPeriod, -Kijun)
+    CS.setWidth(instance.parameters.CSwidth);
+    CS.setStyle(instance.parameters.CSstyle);
+    SA = instance.addStream("SA", core.Line, name + ".SA", "SA", instance.parameters.SSAclr, Math.max(SL.first(), TL.first()), Kijun)
+    SA.setWidth(instance.parameters.SSAwidth);
+    SA.setStyle(instance.parameters.SSAstyle);
+    SB = instance.addStream("SB", core.Line, name + ".SB", "SB", instance.parameters.SSBclr, firstPeriod + Senkou - 1, Kijun)
+    SB.setWidth(instance.parameters.SSBwidth);
+    SB.setStyle(instance.parameters.SSBstyle);
+
+    csFirst = CS.first() + Kijun;
+    slFirst = SL.first();
+    tlFirst = TL.first();
+    saFirst = SA.first();
+    sbFirst = SB.first();
+
+    chFirst = Math.max(saFirst, sbFirst);
+    SA1 = instance.addInternalStream(chFirst, Kijun);
+    SB1 = instance.addInternalStream(chFirst, Kijun);
+    instance.createChannelGroup("SA-SB", "SA-SB", SA1, SB1, instance.parameters.SSAclr, 100 - instance.parameters.transp);
+    clrSSA = instance.parameters.SSAclr;
+    clrSSB = instance.parameters.SSBclr;
+}
+
+// calculate the value
+function Update(period, mode)
+{
+    if (period >= csFirst)
+    {
+        CS[period - Kijun] = source.close[period];
+    }
+
+    var p, hh, ll;
+    var tmp;
+
+    if (period >= slFirst)
+    {
+        tmp=Math.minmax(source, period - Tenkan + 1, period);
+        ll=tmp[0];
+        hh=tmp[1];
+        SL[period] = (hh + ll) / 2;
+    }
+
+    if (period >= tlFirst)
+    {
+        tmp=Math.minmax(source, period - Kijun + 1, period);
+        ll=tmp[0];
+        hh=tmp[1];
+        TL[period] = (hh + ll) / 2;
+    }
+
+    var p = period + Kijun;
+
+    if (period >= saFirst)
+    {
+        SA[p] = (SL[period] + TL[period]) / 2;
+    }
+
+    if (period >= sbFirst)
+    {
+        tmp=Math.minmax(source, period - Senkou + 1, period);
+        ll=tmp[0];
+        hh=tmp[1];
+        SB[p] = (hh + ll) / 2;
+    }
+
+    if (period >= chFirst)
+    {
+        SA1[p] = SA[p];
+        SB1[p] = SB[p];
+        if (SA[p] > SB[p])
+        {
+            SA1.setColor(p, clrSSB);
+        }
+        else
+        {
+            SA1.setColor(p, clrSSA);
+        }
+    }
+}

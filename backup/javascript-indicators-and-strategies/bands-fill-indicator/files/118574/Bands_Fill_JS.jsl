@@ -1,0 +1,97 @@
+function Init()
+{
+    indicator.name("Bands fill indicator");
+    indicator.description("Bands fill indicator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 20, 1, 10000);
+    indicator.parameters.addDouble("Deviation", "Deviation", "", 2.0, 0.0001, 1000.0);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("TopClr", "Top line color", "Top line color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("BottomClr", "Bottom line color", "Bottom line color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("MiddleClr", "Middle line color", "Middle line color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("UPClr", "UP Color", "UP Color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("DNClr", "DN Color", "DN Color", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("NEClr", "NE Color", "NE Color", core.rgb(255, 255, 128));
+    indicator.parameters.addInteger("Transparency", "Transparency", "", 80,0,100);
+}
+
+var first;
+var source = null;
+var Period;
+var Deviation;
+var BB;
+var BB_Top=null;
+var BB_Bottom=null;
+var BB_Middle=null;
+var hStream=null;
+var lStream=null;
+var Trigger=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    Deviation=instance.parameters.Deviation;
+    first = source.first()+2;
+    BB = core.indicators.create("BB", source, Period, Deviation);
+    hStream=instance.addInternalStream(first, 0);
+    lStream=instance.addInternalStream(first, 0);
+    Trigger=instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.Deviation + ")";
+    instance.name(name);
+    BB_Top = instance.addStream("BB_Top", core.Line, name + ".BB_Top", "BB_Top", instance.parameters.TopClr, first);
+    BB_Bottom = instance.addStream("BB_Bottom", core.Line, name + ".BB_Bottom", "BB_Bottom", instance.parameters.BottomClr, first);
+    BB_Middle = instance.addStream("BB_Middle", core.Line, name + ".BB_Middle", "BB_Middle", instance.parameters.MiddleClr, first);
+    instance.createChannelGroup("BBGroup","BB" , hStream, lStream, instance.parameters.UPClr, 100-instance.parameters.Transparency);
+}
+
+function Update(period, mode)
+{
+   if (period>first+Period) 
+   {
+    BB.update(mode);
+    BB_Top[period]=BB.TL[period];
+    BB_Bottom[period]=BB.BL[period];
+    BB_Middle[period]=BB.AL[period];
+    Trigger[period]=Trigger[period-1];
+    if (Trigger[period]==1 && source[period]<BB_Middle[period]) 
+    {
+     Trigger[period]=0;
+    }
+    else if (Trigger[period]==-1 && source[period]>BB_Middle[period]) 
+    {
+     Trigger[period]=0; 
+    }
+    if (source[period]>=BB_Top[period]) 
+    {
+     Trigger[period]=1;
+    } 
+    else if (source[period]<=BB_Bottom[period]) 
+    {
+     Trigger[period]=-1; 
+    }
+    hStream[period]=BB_Top[period];
+    lStream[period]=BB_Bottom[period];
+    if (Trigger[period]==1) 
+    {
+     hStream.setColor(period,instance.parameters.UPClr);
+    } 
+    else if (Trigger[period]==-1) 
+    {
+     hStream.setColor(period,instance.parameters.DNClr);
+    } 
+    else
+    {
+     hStream.setColor(period,instance.parameters.NEClr);
+    }
+   } 
+   else if (period>=first) 
+   {
+    Trigger[period]=0; 
+   } 
+}
+

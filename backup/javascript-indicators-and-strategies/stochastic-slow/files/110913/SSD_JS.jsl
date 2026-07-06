@@ -1,0 +1,71 @@
+//initializes the indicator
+function Init()
+{
+    indicator.name("SSD");
+    indicator.description("Stochastic Slow");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.setTag("group", "Classic Oscillators");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("K", "Number of periods for %K", "Number of periods for %K", 5, 2, 1000);
+    indicator.parameters.addInteger("SD", "%D slowing periods", "%D slowing periods", 3, 2, 1000);
+    indicator.parameters.addInteger("D", "Number of periods for %D", "Number of periods for %D", 3, 2, 1000);
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr1", "%K Line color", "The color of %K line", core.rgb(0, 183, 183));
+    indicator.parameters.addInteger("width1", "%K Line width", "The width of %K line", 1, 1, 5);
+    indicator.parameters.addInteger("style1", "%K Line style", "The style of %K line", core.LINE_SOLID);
+    indicator.parameters.setFlag("style1", core.FLAG_LEVEL_STYLE);
+    indicator.parameters.addColor("clr2", "%D Line color", "The color of %D line", core.rgb(219, 64, 0));
+    indicator.parameters.addInteger("width2", "%D Line width", "The width of %D line", 1, 1, 5);
+    indicator.parameters.addInteger("style2", "%D Line style", "The style of %D line", core.LINE_SOLID);
+    indicator.parameters.setFlag("style2", core.FLAG_LEVEL_STYLE);
+}
+
+var first = 0;
+var k = 0;
+var sd = 0;
+var d = 0;
+var source = null;
+var K = null;
+var D = null;
+var dFirst, kFirst, skf;
+
+//initializes the instance of the indicator
+function Prepare(onlyName)
+{
+    source = instance.source;
+    k = instance.parameters.K;
+    sd = instance.parameters.SD;
+    d = instance.parameters.D;
+    var name = profile.id() + "(" + instance.source.name() + "," + k + ", " + sd + ", " + d + ")";
+    instance.name(name);
+  
+    if (onlyName == true)
+        return ;
+
+    sfk = core.indicators.create("SFK", source, k, sd);
+
+    K = instance.addStream("K", core.Line, name, "K", instance.parameters.clr1,  sfk.D.first());
+    K.setWidth(instance.parameters.width1);
+    K.setStyle(instance.parameters.style1);
+    D = instance.addStream("D", core.Line, name, "D", instance.parameters.clr2,  K.first() + d - 1);
+    D.setWidth(instance.parameters.width2);
+    D.setStyle(instance.parameters.style2);
+    dFirst = D.first();
+    kFirst = K.first();
+}
+
+// calculate the value
+function Update(period, mode)
+{
+    sfk.update(mode);
+    if (period >= kFirst)
+    {
+        K[period] = sfk.D[period];
+    }
+    if (period >= dFirst)
+    {
+        D[period] = Math.avg(K, period - d + 1, period);
+    }
+}

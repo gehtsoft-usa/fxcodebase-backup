@@ -1,0 +1,171 @@
+function Init()
+{
+    indicator.name("Real-time channel lines");
+    indicator.description("");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+     indicator.parameters.addGroup("Volatility Calculation");	
+    indicator.parameters.addInteger("AveragePeriod", "Average Period", "Average Period", 25);
+	indicator.parameters.addString("Method", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method", "WMA", "WMA" , "WMA");
+	
+		
+    indicator.parameters.addInteger("ShiftPeriod", "Shift Period", "Shift Period", 12);
+    indicator.parameters.addInteger("SummarizingPeriod", "Summarizing Period", "Summarizing Period", 50);
+	
+	 indicator.parameters.addGroup(" Index Calculation");
+	 
+	 indicator.parameters.addInteger("Short", "MA Period", "MA Period",  25);
+	 indicator.parameters.addDouble("Deviations", "Deviations", "Deviations",  2);
+
+	indicator.parameters.addString("Method1", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method1", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method1", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method1", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method1", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method1", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method1", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method1", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method1", "WMA", "WMA" , "WMA");
+	
+	 indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("MCI_color1", "Central Line Color", "Line Color", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width1", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style1", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style1", core.FLAG_LINE_STYLE);
+	
+	indicator.parameters.addColor("MCI_color2", "Top Line Color", "Line Color", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width2", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style2", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style2", core.FLAG_LINE_STYLE);
+	
+	indicator.parameters.addColor("MCI_color3", "Bottom Line Color", "Line Color", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width3", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style3", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style3", core.FLAG_LINE_STYLE);
+}
+
+var AveragePeriod;
+var TsfPeriod;
+var ShiftPeriod;
+var SummarizingPeriod;
+var Method;
+var first;
+var source = null;
+var MCI;
+var Short, Long, Method1;
+
+var sigom,MCI;
+var MA,yom,yomyom,som, Avg,varyom;
+var MA1,MA2;
+var yme;
+var TSF,ymes;
+var Top, Bottom, Central;
+var Deviations;
+
+function Prepare(nameOnly)
+{
+    AveragePeriod = instance.parameters.AveragePeriod;
+	Deviations = instance.parameters.Deviations;
+	TsfPeriod = instance.parameters.TsfPeriod;
+    ShiftPeriod = instance.parameters.ShiftPeriod;
+	Method = instance.parameters.Method;
+    SummarizingPeriod = instance.parameters.SummarizingPeriod;
+	Short = instance.parameters.Short;
+	Long = instance.parameters.Long;
+	Method1 = instance.parameters.Method1;
+    source = instance.source;
+	
+	yom= instance.addInternalStream(0, 0);
+	yomyom= instance.addInternalStream(0, 0);
+	som= instance.addInternalStream(0, 0);
+	varyom = instance.addInternalStream(0, 0);
+	sigom = instance.addInternalStream(0, 0);
+	yme= instance.addInternalStream(0, 0);
+	ymes= instance.addInternalStream(0, 0);
+	
+	
+    MA = core.indicators.create( Method, source, AveragePeriod);
+	Avg = core.indicators.create( Method, som, AveragePeriod);
+    first = MA.DATA.first()+ShiftPeriod;
+	 MA1 = core.indicators.create ( Method1, source, Short);
+	 
+	 
+	 TSF= core.indicators.create("TSF", yme, TsfPeriod);
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(AveragePeriod) + ", " + tostring(Method) + ", " + tostring(ShiftPeriod) + ", " + tostring(SummarizingPeriod) 
+	 + ", " +Short + ", " + Method1
+	
+	+ ")";
+	
+	
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        Central = instance.addStream("Central", core.Line, name, "Central", instance.parameters.MCI_color1,MA1.DATA.first());
+		Central.setWidth(instance.parameters.width1);
+        Central.setStyle(instance.parameters.style1);
+	    
+		Top = instance.addStream("Top", core.Line, name, "Top", instance.parameters.MCI_color2,MA1.DATA.first());
+		Top.setWidth(instance.parameters.width2);
+        Top.setStyle(instance.parameters.style2);
+		
+		Bottom = instance.addStream("Bottom", core.Line, name, "Bottom", instance.parameters.MCI_color3,MA1.DATA.first());
+		Bottom.setWidth(instance.parameters.width3);
+        Bottom.setStyle(instance.parameters.style3);
+
+    }
+}
+
+function Update(period, mode)
+{
+    MA.update(mode);
+	
+    if (period < first) 
+    {
+	 return;
+	}
+	
+	yom[period]= 100*(source[period]-MA.DATA[period-ShiftPeriod])/MA.DATA[period-ShiftPeriod];
+	yomyom[period]=yom[period]*yom[period];
+	
+	 if (period < first  +  SummarizingPeriod) 
+	 {
+	  return;
+	 }
+	
+	var avyom= Math.sum(yom, period-SummarizingPeriod+1, period)/SummarizingPeriod;
+	 varyom[period] = Math.sum(yomyom,period-SummarizingPeriod+1, period)/50-avyom*avyom;
+	som[period]= Math.sqrt(varyom[period-ShiftPeriod]) ;
+	
+	Avg.update(mode);
+	
+	if (period < Avg.DATA.first()) 
+	{
+	 return;
+	}
+	
+        sigom[period] = Avg.DATA[period];
+		
+		MA1.update(mode);
+		
+		
+	if (period <MA1.DATA.first()) 
+	{
+	 return;
+	}	
+	
+	Central[period]= MA1.DATA[period];
+	Top[period]= (1+Deviations*sigom[period]/100)*Central[period];
+    Bottom[period]= (1-Deviations*sigom[period]/100)*Central[period];
+	
+		
+}

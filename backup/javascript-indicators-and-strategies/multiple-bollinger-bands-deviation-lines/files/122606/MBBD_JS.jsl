@@ -1,0 +1,188 @@
+function Init()
+{
+    indicator.name("Multiple Bollinger Bands Deviation");
+    indicator.description("Multiple Bollinger Bands Deviation");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+    indicator.setTag("group", "Bollinger");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("N", "Number of periods" , "The number of periods.", 20);
+    indicator.parameters.addInteger("AD", "Number of deviations Line Shown", "" , 2,0, 100);
+	indicator.parameters.addDouble("Dev", "Number of standard deviations between Lines", "Number of standard deviations between Lines.", 1);
+	
+	indicator.parameters.addString("M" , "Method for avegage", "Method for avegage", "MVA");
+    indicator.parameters.addStringAlternative("M" , "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("M", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("M" , "LWMA", "", "LWMA");
+	
+	indicator.parameters.addGroup("Band Type");
+	indicator.parameters.addString("Type", "Type " , "", "Multiplication");
+    indicator.parameters.addStringAlternative("Type" , "MVA Multiplication", "", "Multiplication");
+    indicator.parameters.addStringAlternative("Type", "MVA Shift", "", "Shift");
+	
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addBoolean("HideAve", "Hide average line",  "Defines whether the BB average line is hidden.", false);   
+	indicator.parameters.addInteger("CLwidth", "Central Line Width", "", 1, 1, 5);
+    indicator.parameters.addInteger("CLstyle", "Central Line Style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("CLstyle", core.FLAG_LINE_STYLE);
+	
+	indicator.parameters.addInteger("LLwidth", "Outer Line Width", "", 1, 1, 5);
+    indicator.parameters.addInteger("LLstyle", "Outer Line Style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("LLstyle", core.FLAG_LINE_STYLE);
+	
+	indicator.parameters.addInteger("MLwidth", "Middle Line Width", "", 1, 1, 5);
+    indicator.parameters.addInteger("MLstyle", "Middle Line Style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("MLstyle", core.FLAG_LINE_STYLE);
+}
+
+var N;
+var D;
+var Type;
+
+var Additional;
+var UpR,UpG, UpB;
+var DownR,DownG, DownB;
+var step;
+
+var firstPeriod;
+var source = null;
+var Method;
+var AVG;
+
+var DEV = {}; 
+
+function Prepare()
+{
+    Method = instance.parameters.M;
+    Type = instance.parameters.Type;
+    N = instance.parameters.N;
+    D = instance.parameters.Dev;
+	Additional=  instance.parameters.AD;
+	
+    source = instance.source;
+    firstPeriod = source.first() + N - 1;
+	
+		
+    var name = profile.id() + "(" + source.name() + ", " + N + ", " + D + ")";
+    instance.name(name);
+    
+	var i;
+	
+	step = (255 / Additional) ;
+	
+	UpR =0;
+	UpG= 0;
+	UpB=255;
+	
+	DownR =0;
+	DownG= 0; 
+	DownB=255; 
+	
+	AVG= core.indicators.create(Method, source, N);
+	
+	for (i= 0; i<=Additional-1; i++) 
+	{ 
+	
+	  UpR  = UpR+step ;  
+	  UpB	=UpB-step;
+	 
+	CreateDev(i, name, core.rgb(UpR, UpG, UpB));
+	
+	DownG  =DownG+step;    
+	 DownB	=DownB-step; 
+	
+	CreateDev(i+Additional, name, core.rgb(DownR, DownG, DownB));
+	}
+	
+    if (!instance.parameters.HideAve) 
+    {
+        AL = instance.addStream("AL", core.Line, name + ".AL", "0", core.rgb(0, 0, 255), firstPeriod)	
+		AL.setWidth(instance.parameters.CLwidth);
+        AL.setStyle(instance.parameters.CLstyle);
+    }	
+}
+
+var FLAG= true;
+var STANDARD;
+
+function Update(period, mode)
+{
+    AVG.update(mode);
+
+    if (period >= firstPeriod && source.hasData(period)) 
+    {
+      
+        var d = Math.stdev(source, period-N+1, period);
+		 d = d*D;
+		 
+		
+         if (Type == "Shift" && FLAG && d != null) 
+         {
+	      FLAG=false;
+		  STANDARD= d;
+	     }		
+		 
+    
+        if (AVG.DATA.hasData(period))  
+        {
+            AL[period] = AVG.DATA[period];
+        }
+				
+		var i;
+	
+		for (i= 0; i<=Additional-1; i++) 
+		{ 
+		 CalcDev(i,period, AVG.DATA[period],d)
+		}		
+		
+    }
+		
+}
+
+
+function CreateDev(index, names,color)
+{
+    var label;
+    var note; 
+	    
+    if (index < Additional) 
+    {
+     label = "DEV" + index;
+	 note =index+1;
+	} 
+	else
+	{
+	 label = "DEV" + index;
+	 note = "-"+(index+1-Additional);
+	}
+	
+   if (index ==	Additional -1  || index - Additional ==	Additional -1) 
+   {
+    DEV[index] = instance.addStream(label, core.Line, names + note , note, color, firstPeriod)
+    DEV[index].setWidth(instance.parameters.LLwidth);
+    DEV[index].setStyle(instance.parameters.LLstyle);   
+   } 
+   else
+   {
+    DEV[index] = instance.addStream(label, core.Line, names + note , note, color, firstPeriod)
+    DEV[index].setWidth(instance.parameters.MLwidth);
+    DEV[index].setStyle(instance.parameters.MLstyle);
+   }
+}
+
+function CalcDev(index,period, ml,d)
+{
+       if (Type == "Multiplication") 
+       {
+        DEV[index][period] = ml + (index+1) * d;
+	    DEV[index+Additional][period] = ml - (index+1) * d;
+	   } 
+	   else
+	   {
+	    DEV[index][period] = ml + (index+1) * STANDARD;
+	    DEV[index+Additional][period] = ml - (index+1) * STANDARD;
+	   }
+	  
+}
+

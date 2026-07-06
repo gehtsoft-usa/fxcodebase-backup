@@ -1,0 +1,102 @@
+function Init()
+{
+    indicator.name("Donchian Channel")
+    indicator.description("The simple trend-following indicator. Shows highest high && lowest low for the specified number of periods.");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+	
+	indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("N", "Number of periods", "", 20, 2, 10000);
+    indicator.parameters.addString("AC", "Analyze the current period", "", "yes");
+    indicator.parameters.addStringAlternative("AC", "no", "", "no");
+    indicator.parameters.addStringAlternative("AC", "yes", "", "yes");
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clrDU", "Color of the Up line", "", core.rgb(255, 255, 0));
+	indicator.parameters.addInteger("width1", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style1", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style1", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("clrDN", "Color of the Down line", "", core.rgb(255, 255, 0));
+	indicator.parameters.addInteger("width2", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style2", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style2", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("clrDM", "Color of the middle line", "", core.rgb(255, 255, 0));
+	indicator.parameters.addInteger("width3", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style3", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style3", core.FLAG_LINE_STYLE);
+    indicator.parameters.addString("SM", "Show middle line", "", "no");
+    indicator.parameters.addStringAlternative("SM", "no", "", "no");
+    indicator.parameters.addStringAlternative("SM", "yes", "", "yes");
+
+}
+
+var first = 0;
+var n = 0;
+var ac = true;
+var sm = false;
+var source = null;
+var dn = null;
+var du = null;
+var dm = null;
+
+// initializes the instance of the indicator
+function Prepare()
+{
+    source = instance.source;
+    n = instance.parameters.N;
+    ac = (instance.parameters.AC == "yes");
+    sm = (instance.parameters.SM == "yes");
+
+    first = n + source.first() - 1;
+    if (!ac) 
+    {
+        first = first + 1;
+    }
+    var name = profile.id() + "(" + source.name() + "," + n + ")";
+    instance.name(name);
+    dn = instance.addStream("DU", core.Line, name + ".DU", "DU", instance.parameters.clrDU,  first)
+	dn.setWidth(instance.parameters.width1);
+    dn.setStyle(instance.parameters.style1);
+    du = instance.addStream("DN", core.Line, name + ".DN", "DN", instance.parameters.clrDN,  first)
+	du.setWidth(instance.parameters.width2);
+    du.setStyle(instance.parameters.style2);
+    if (sm) 
+    {
+        dm = instance.addStream("DM", core.Line, name + ".DM", "DM", instance.parameters.clrDM,  first)
+		dm.setWidth(instance.parameters.width3);
+        dm.setStyle(instance.parameters.style3);
+    }
+}
+
+function Update(period)
+{
+    if (period >= first) 
+    {
+        var range;
+        var tmp;
+        if (ac) 
+        {
+            tmp=Math.minmax(source, period-n+1, period);
+        }
+        else
+        {
+            tmp=Math.minmax(source, period-n, period-1);
+        }
+        du[period] = tmp[1];
+        dn[period] = tmp[0];
+        if (sm) 
+        {
+            dm[period] = (du[period] + dn[period]) / 2;
+        }
+    }
+	
+	var Width=(du[period]-dn[period]);
+	
+    var Value=""+Width / source.pipSize();
+	Value= " Channel width " + Value.format("%." + 1 + "f")+ " Pips";
+    var Value2=""+Width / (( dn[period]+Width)/100);
+	      Value= Value+  " Channel width " + Value2.format("%." + 4 + "f")  + " %" ;	
+	core.host.execute ("setStatus", Value)
+}
+

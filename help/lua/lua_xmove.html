@@ -1,0 +1,23 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_xmove</title>
+</head>
+<body>
+<h3><a name="lua_xmove"><code>lua_xmove</code></a></h3>
+<pre>void lua_xmove (lua_State *from, lua_State *to, int n);</pre>
+
+<p>
+Exchange values between different threads of the <em>same</em> global state.
+
+
+<p>
+This function pops <code>n</code> values from the stack <code>from</code>,
+and pushes them onto the stack <code>to</code>.
+
+
+
+
+
+<hr>
+</body>
+</html>

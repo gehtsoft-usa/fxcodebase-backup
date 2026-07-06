@@ -1,0 +1,60 @@
+function Init()
+{
+    indicator.name("INSTANTANEOUS TRENDLINE");
+    indicator.description(" INSTANTANEOUS TRENDLINE");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+    indicator.parameters.addGroup("Calculation");	
+    indicator.parameters.addInteger("Length", "Length", "Length", 20);
+	indicator.parameters.addGroup("Style");	
+    indicator.parameters.addColor("IT_color", "Color of IT", "Color of IT", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var Length;
+
+var first;
+var source = null;
+
+var IT = null;
+var SMA,Slope;
+
+function Prepare(nameOnly)
+{
+    Length = instance.parameters.Length;
+    source = instance.source;
+	
+    SMA = core.indicators.create("MVA", source, Length);
+    first = SMA.DATA.first();
+	
+	Slope = instance.addInternalStream(0, 0);
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Length) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        IT = instance.addStream("IT", core.Line, name, "IT", instance.parameters.IT_color, first);
+		IT.setWidth(instance.parameters.width);
+        IT.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period, mode)
+{   
+     SMA.update(mode);
+	
+	if (period < first || !source.hasData(period)) 
+    {	
+	 return;
+	}
+	
+	Slope[period]= source[period]-source[period- Length+1];	
+
+	var SmoothSlope = (Slope[period] + 2* Slope [period-1] + 2* Slope [period-2] + Slope[period-3])/6; 
+	IT[period]  = SMA.DATA[period] + 0.5 *SmoothSlope;
+    
+}
+

@@ -1,0 +1,67 @@
+function Init()
+{
+    indicator.name("Symphonie Trendline indicator");
+    indicator.description("Symphonie Trendline indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("CCI_Period", "Period of CCI", "", 63);
+    indicator.parameters.addInteger("ATR_Period", "Period of ATR", "", 18);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UpClr", "Up Color", "Up Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DnClr", "Dn Color", "Dn Color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var CCI_Period, ATR_Period;
+var CCI, ATR;
+var Symp_Trendline=null;
+
+function Prepare()
+{
+    source = instance.source;
+    CCI_Period=instance.parameters.CCI_Period;
+    ATR_Period=instance.parameters.ATR_Period;
+    first = source.first()+2;
+    CCI=core.indicators.create("CCI", source, CCI_Period);
+    ATR=core.indicators.create("ATR", source, ATR_Period);
+    var name = profile.id() + "(" + source.name() + ", " + CCI_Period + ", " + ATR_Period + ")";
+    instance.name(name);
+    Symp_Trendline = instance.addStream("Symp_Trendline", core.Line, name + ".Symp_Trendline", "Symp_Trendline", instance.parameters.UpClr, first);
+    Symp_Trendline.setWidth(instance.parameters.widthLinReg);
+    Symp_Trendline.setStyle(instance.parameters.styleLinReg);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    CCI.update(mode);
+    ATR.update(mode);
+    if (CCI.DATA[period]>=0) 
+    {
+     Symp_Trendline[period]=source.low[period]-ATR.DATA[period];
+     if (Symp_Trendline[period]<Symp_Trendline[period-1]) 
+     {
+      Symp_Trendline[period]=Symp_Trendline[period-1];
+     }
+     Symp_Trendline.setColor(period,instance.parameters.UpClr);
+    }
+    else
+    {
+     Symp_Trendline[period]=source.high[period]+ATR.DATA[period];
+     if (Symp_Trendline[period]>Symp_Trendline[period-1]) 
+     {
+      Symp_Trendline[period]=Symp_Trendline[period-1];
+     }
+     Symp_Trendline.setColor(period,instance.parameters.DnClr);
+    }
+   } 
+}
+

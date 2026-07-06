@@ -1,0 +1,236 @@
+function Init()
+{
+    indicator.name("MA Squeeze indicator");
+    indicator.description("MA Squeeze indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("MA1_Period", "MA1_Period", "", 5);
+    indicator.parameters.addString("MA1_Method", "MA1_Method", "", "MVA");
+    indicator.parameters.addStringAlternative("MA1_Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("MA1_Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("MA1_Method", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("MA1_Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("MA1_Method", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("MA1_Method", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("MA1_Method", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("MA1_Method", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("MA1_Method", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("MA1_Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("MA1_Method", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("MA1_Method", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("MA1_Method", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("MA1_Method", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("MA1_Method", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("MA1_Method", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("MA1_Method", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("MA1_Method", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("MA1_Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("MA1_Method", "JSmooth", "", "JSmooth");
+    indicator.parameters.addString("MA1_Price", "MA1_Price", "", "close");
+    indicator.parameters.addStringAlternative("MA1_Price", "close", "", "close");
+    indicator.parameters.addStringAlternative("MA1_Price", "open", "", "open");
+    indicator.parameters.addStringAlternative("MA1_Price", "high", "", "high");
+    indicator.parameters.addStringAlternative("MA1_Price", "low", "", "low");
+    indicator.parameters.addStringAlternative("MA1_Price", "median", "", "median");
+    indicator.parameters.addStringAlternative("MA1_Price", "typical", "", "typical");
+    indicator.parameters.addStringAlternative("MA1_Price", "weighted", "", "weighted");
+    indicator.parameters.addInteger("MA2_Period", "MA2_Period", "", 21);
+    indicator.parameters.addString("MA2_Method", "MA2_Method", "", "MVA");
+    indicator.parameters.addStringAlternative("MA2_Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("MA2_Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("MA2_Method", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("MA2_Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("MA2_Method", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("MA2_Method", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("MA2_Method", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("MA2_Method", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("MA2_Method", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("MA2_Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("MA2_Method", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("MA2_Method", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("MA2_Method", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("MA2_Method", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("MA2_Method", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("MA2_Method", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("MA2_Method", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("MA2_Method", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("MA2_Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("MA2_Method", "JSmooth", "", "JSmooth");
+    indicator.parameters.addString("MA2_Price", "MA2_Price", "", "close");
+    indicator.parameters.addStringAlternative("MA2_Price", "close", "", "close");
+    indicator.parameters.addStringAlternative("MA2_Price", "open", "", "open");
+    indicator.parameters.addStringAlternative("MA2_Price", "high", "", "high");
+    indicator.parameters.addStringAlternative("MA2_Price", "low", "", "low");
+    indicator.parameters.addStringAlternative("MA2_Price", "median", "", "median");
+    indicator.parameters.addStringAlternative("MA2_Price", "typical", "", "typical");
+    indicator.parameters.addStringAlternative("MA2_Price", "weighted", "", "weighted");
+    indicator.parameters.addBoolean("ATR_Enable", "ATR_Enable", "", true);
+    indicator.parameters.addInteger("ATR_Period", "ATR_Period", "", 50);
+    indicator.parameters.addDouble("ATR_Coeff", "ATR_Coeff", "", 0.4);
+    indicator.parameters.addInteger("ThresholdPips", "ThresholdPips", "", 15);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clrMA1", "Color MA1", "Color MA1", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clrMA2", "Color MA2", "Color MA2", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("clrSqueeze", "Color Squeeze", "Color Squeeze", core.rgb(0, 0, 255));
+    indicator.parameters.addInteger("width", "width", "width", 1, 1, 5);
+    indicator.parameters.addInteger("style", "style", "style", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LEVEL_STYLE);
+}
+
+var first;
+var source = null;
+var MA1_Period;
+var MA1_Method;
+var MA1_Price;
+var MA2_Period;
+var MA2_Method;
+var MA2_Price;
+var ATR_Enable;
+var ATR_Period;
+var ATR_Coeff;
+var ThresholdPips;
+var MA1;
+var MA2;
+var ATR;
+var Price1;
+var Price2;
+var BuffMA1=null;
+var BuffMA2=null;
+var BuffSq1=null;
+var BuffSq2=null;
+
+function Prepare()
+{
+    source = instance.source;
+    MA1_Period=instance.parameters.MA1_Period;
+    MA1_Method=instance.parameters.MA1_Method;
+    MA1_Price=instance.parameters.MA1_Price;
+    MA2_Period=instance.parameters.MA2_Period;
+    MA2_Method=instance.parameters.MA2_Method;
+    MA2_Price=instance.parameters.MA2_Price;
+    ATR_Enable=instance.parameters.ATR_Enable;
+    ATR_Period=instance.parameters.ATR_Period;
+    ATR_Coeff=instance.parameters.ATR_Coeff;
+    ThresholdPips=instance.parameters.ThresholdPips;
+    if (MA1_Price=="close") 
+    {
+     Price1=source.close;
+    } 
+    else if (MA1_Price=="open") 
+    {
+     Price1=source.open;
+    } 
+    else if (MA1_Price=="high") 
+    {
+     Price1=source.high;
+    } 
+    else if (MA1_Price=="low") 
+    {
+     Price1=source.low;
+    } 
+    else if (MA1_Price=="median") 
+    {
+     Price1=source.median;
+    } 
+    else if (MA1_Price=="typical") 
+    {
+     Price1=source.typical;
+    } 
+    else
+    {
+     Price1=source.weighted;
+    } 
+    if (MA2_Price=="close") 
+    {
+     Price2=source.close;
+    } 
+    else if (MA2_Price=="open") 
+    {
+     Price2=source.open;
+    } 
+    else if (MA2_Price=="high") 
+    {
+     Price2=source.high;
+    } 
+    else if (MA2_Price=="low") 
+    {
+     Price2=source.low;
+    } 
+    else if (MA2_Price=="median") 
+    {
+     Price2=source.median;
+    } 
+    else if (MA2_Price=="typical") 
+    {
+     Price2=source.typical;
+    } 
+    else
+    {
+     Price2=source.weighted;
+    } 
+     
+    MA1 = core.indicators.create("AVERAGES", Price1, MA1_Method, MA1_Period, false);
+    MA2 = core.indicators.create("AVERAGES", Price2, MA2_Method, MA2_Period, false);
+    if (ATR_Enable==true) 
+    {
+     ATR = core.indicators.create("ATR", source, ATR_Period);
+     first = Math.max(MA1.DATA.first(),MA2.DATA.first(),ATR.DATA.first())+2;
+    } 
+    else
+    { 
+     first = Math.max(MA1.DATA.first(),MA2.DATA.first())+2;
+    } 
+
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.MA1_Period + ", " + instance.parameters.MA1_Method + ", " + instance.parameters.MA1_Price + ", " + instance.parameters.MA2_Period + ", " + instance.parameters.MA2_Method + ", " + instance.parameters.MA2_Price + ", " + instance.parameters.ATR_Period + ", " + instance.parameters.ATR_Coeff + ", " + instance.parameters.ThresholdPips + ")";
+    instance.name(name);
+    BuffMA1 = instance.addStream("BuffMA1", core.Line, name + ".MA1", "MA1", instance.parameters.clrMA1, first);
+    BuffMA2 = instance.addStream("BuffMA2", core.Line, name + ".MA2", "MA2", instance.parameters.clrMA2, first);
+    BuffSq1 = instance.addStream("BuffSq1", core.Line, name + ".Sq1", "Sq1", instance.parameters.clrSqueeze, first);
+    BuffSq2 = instance.addStream("BuffSq2", core.Line, name + ".Sq2", "Sq2", instance.parameters.clrSqueeze, first);
+    BuffMA1.setWidth(instance.parameters.width);
+    BuffMA1.setStyle(instance.parameters.style);
+    BuffMA2.setWidth(instance.parameters.width);
+    BuffMA2.setStyle(instance.parameters.style);
+    BuffSq1.setWidth(instance.parameters.width);
+    BuffSq1.setStyle(instance.parameters.style);
+    BuffSq2.setWidth(instance.parameters.width);
+    BuffSq2.setStyle(instance.parameters.style);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    MA1.update(mode);
+    MA2.update(mode);
+    if (ATR_Enable==true) 
+    {
+     ATR.update(mode);
+    }
+    BuffMA1[period]=MA1.DATA[period];
+    BuffMA2[period]=MA2.DATA[period];
+    var Delta;
+    if (ATR_Enable==true) 
+    {
+     Delta=ATR.DATA[period]*ATR_Coeff;
+    } 
+    else
+    {
+     Delta=ThresholdPips*source.pipSize();
+    }
+    if (Math.abs(MA1.DATA[period]-MA2.DATA[period])<Delta) 
+    {
+     BuffSq1[period]=MA2.DATA[period]+Delta;
+     BuffSq2[period]=MA2.DATA[period]-Delta;
+    } 
+    else
+    {
+     BuffSq1[period]=null;
+     BuffSq2[period]=null; 
+    }
+   } 
+}
+

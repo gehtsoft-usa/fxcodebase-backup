@@ -1,0 +1,113 @@
+function Init()
+{
+    indicator.name("Centred moving average");
+    indicator.description("Centred moving average");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+     indicator.parameters.addGroup("Calculation");	
+    indicator.parameters.addInteger("Period", "Period", "Period", 14);
+	indicator.parameters.addString("Method", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method", "WMA", "WMA" , "WMA");
+	
+
+	indicator.parameters.addGroup("Style");	
+    indicator.parameters.addColor("Color", "Color of Actual CMA", "Color of Actual CMA", core.rgb(255, 0, 0));
+	indicator.parameters.addColor("Prediction", "Color of Prediction of CMA", "Color of Prediction of CMA", core.rgb(0,255, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var Period;
+var Raw;
+var first;
+var source = null;
+var Prediction;
+var Color;
+var MA;
+
+var CMA = null;
+ var Method;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+	Prediction = instance.parameters.Prediction;
+	Color = instance.parameters.Color;
+	Method = instance.parameters.Method;
+    source = instance.source;
+    first = source.first();
+	
+	Raw=instance.addInternalStream(first, 0); 
+	
+	MA = core.indicators.create(Method, Raw, Period);
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ", " + tostring(Method)  + ")";
+    instance.name(name);
+	
+    if (!(nameOnly)) 
+    {
+        CMA = instance.addStream("CMA", core.Line, name, "CMA", Color, first );
+		    CMA.setWidth(instance.parameters.width);
+        CMA.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period, mode)
+{
+   var i;
+    if (period <= first + Period /2) 
+    {	
+	   return;
+    } 
+	else if (period < source.size()-1-Period/2) 
+  {	
+    
+		 Raw[period] =source[period+Period/2]; 
+	
+	}
+	
+	
+	
+	 if (period == source.size()-1) 
+   {
+	 
+	  for (i =period-Period/2; i<=period; i++) 
+    {
+	   Raw[i] =source[source.size()-1]; 
+	  }
+	 
+	 
+	 Raw[period-Period/2-1] =source[period-1];
+	 }
+	 
+	
+   if (period < first +Period/2+1) 
+   {
+    return;
+   }
+   
+   if (period < source.size() -1 -Period/2) 
+   {
+    MA.update(mode);
+    CMA[period]=MA.DATA[period];
+    CMA.setColor(period, Color);
+   } 
+   else if (period > Period/2) 
+   {
+     MA.update(core.UpdateAll);
+	   for (i =period-Period/2; i<=period; i++) 
+     {
+	   CMA[i]=MA.DATA[i];
+	   CMA.setColor(i , Prediction);
+	   } 
+     CMA.setColor(period- (Period/2), Color);
+   }
+   
+}

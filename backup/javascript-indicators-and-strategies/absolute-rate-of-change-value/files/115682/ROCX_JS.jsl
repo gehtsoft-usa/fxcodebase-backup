@@ -1,0 +1,84 @@
+function Init()
+{
+    indicator.name("Rate Of Change (Modified version)");
+    indicator.description("The indicator shows how the chosen source has been changed");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("N", "Number of bars", "Number of bars ago to compare the current value", 1, 1, 1000);
+    indicator.parameters.addInteger("M", "Mode", "", 1);
+    indicator.parameters.addIntegerAlternative("M", "Absolute Value", "", 1);
+    indicator.parameters.addIntegerAlternative("M", "% Value", "", 2);
+    indicator.parameters.addIntegerAlternative("M", "%% Value", "", 3);
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clrROC", "Line Color", "", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("widthROC", "Line Width", "", 1, 1, 5);
+    indicator.parameters.addInteger("styleROC", "Line Style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleROC", core.FLAG_LINE_STYLE);
+}
+
+var n;
+var m;
+
+var first;
+var source = null;
+
+var ROC = null;
+
+function Prepare()
+{
+    n = instance.parameters.N;
+    m = instance.parameters.M;
+    source = instance.source;
+    first = source.first() + n + 1;
+
+    var mname;
+
+    if (m == 1) 
+    {
+        mname = "abs";
+    }    
+    else if (m == 2) 
+    {
+        mname = "%";
+    }    
+    else if (m == 3) 
+    {
+        mname = "%%";
+    }    
+    else
+    {
+        assert(false, "Unknown mode");
+    }
+
+    var name = profile.id() + "(" + source.name() + ", " + n + "," + mname + ")";
+    instance.name(name);
+    ROC = instance.addStream("ROCX", core.Line, name, "ROCX", instance.parameters.clrROC, first)
+    ROC.setWidth(instance.parameters.widthROC);
+    ROC.setStyle(instance.parameters.styleROC);
+    var precision = Math.max(2, source.getPrecision());
+    ROC.setPrecision(precision);
+    ROC.addLevel(0);
+}
+
+function Update(period)
+{
+    if (period >= first) 
+    {
+        var diff = source[period] - source[period - n];
+        if (m == 1) 
+        {
+            ROC[period] = diff;
+        }    
+        else if (m == 2) 
+        {
+            ROC[period] = diff / source[period - n] * 100;
+        }    
+        else if (m == 3) 
+        {
+            ROC[period] = diff / source[period - n] * 1000;
+        }
+    }
+}
+

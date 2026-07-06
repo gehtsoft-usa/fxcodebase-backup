@@ -1,0 +1,175 @@
+function Init()
+{
+    indicator.name("Trend Risk Indicator");
+    indicator.description("Trend Risk Indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+	
+	 indicator.parameters.addGroup("Trend Risk Indicator Calculation");
+	 indicator.parameters.addInteger("Period", "Periods for Switch", "", 3);
+
+    indicator.parameters.addGroup("T3 Trend Bands Calculation");
+    indicator.parameters.addInteger("BandBars", "Count of bars for band", "", 28);
+    indicator.parameters.addDouble("Deviation", "Deviation", "", 3.5);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Up", "Up Color", "", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("Down", "Down Color", "", core.rgb(255, 0, 0));
+	indicator.parameters.addColor("Neutral", "Neutral Color", "", core.rgb(128, 128, 128));
+	
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var BandBars;
+var Deviation;
+var SmoothPrice;
+var SmoothRange;
+var Top=null;
+var Bottom=null;
+ 
+var Color;
+var open=null;
+var close=null;
+var high=null;
+var low=null;
+var Up, Down,Neutral;
+var Period;
+
+function Prepare()
+{
+    Up=instance.parameters.Up;
+	Down=instance.parameters.Down;
+	Neutral=instance.parameters.Neutral;
+	Period=instance.parameters.Period;
+    source = instance.source;
+    BandBars=instance.parameters.BandBars;
+    Deviation=instance.parameters.Deviation;
+    first = source.first()+2;
+    SmoothPrice = instance.addInternalStream(first, 0);
+    SmoothRange = instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name()  + ", " + Period + ", " + instance.parameters.BandBars + ", " + instance.parameters.Deviation + ")";
+    instance.name(name);
+    Top = instance.addStream("TOP", core.Line, name + ".Top", "Top",  Up,  first);
+	Top.setWidth(instance.parameters.width);
+    Top.setStyle(instance.parameters.style);
+    
+    Bottom = instance.addStream("BOTTOM", core.Line, name + ".Bottom", "Bottom",  Down, first);
+	Bottom.setWidth(instance.parameters.width);
+    Bottom.setStyle(instance.parameters.style);
+	
+	open = instance.addStream("open", core.Line, name, "open", core.rgb(0, 0, 0), first)
+    high = instance.addStream("high", core.Line, name, "high", core.rgb(0, 0, 0), first)
+    low = instance.addStream("low", core.Line, name, "low", core.rgb(0, 0, 0), first)
+    close = instance.addStream("close", core.Line, name, "close", core.rgb(0, 0, 0), first)
+    instance.createCandleGroup("ZONE", "", open, high, low, close);
+	
+	
+	Color = instance.addInternalStream(0, 0);
+
+}
+
+function Update(period, mode)
+{
+    high[period]= source.high[period];
+	low[period]= source.low[period];		   
+	close[period] = source.close[period];
+	open[period]  = source.open[period];	
+	
+	
+	
+    if (period==first) 
+    {
+     SmoothPrice[period]=source.close[period];
+     SmoothRange[period]=source.high[period]-source.low[period];
+    } 
+    else if (period>first) 
+    {
+     SmoothPrice[period]=(SmoothPrice[period-1]*(BandBars-1)+source.close[period])/BandBars;
+     SmoothRange[period]=(SmoothRange[period-1]*(BandBars-1)+source.high[period]-source.low[period])/BandBars;
+  
+     Top[period]=SmoothPrice[period]+SmoothRange[period]*Deviation;
+     Bottom[period]=SmoothPrice[period]-SmoothRange[period]*Deviation;
+    }
+	
+	
+	if (period < Period) 
+	{
+	 open.setColor(period, Neutral);			
+	 return;
+	}
+	
+	
+	 Color[period] = Color[period-1];
+      Check(period);
+	  
+	
+	            if (Color[period] == 1) 
+	            { 
+				 open.setColor(period, Up);
+				} 
+				else if (Color[period] == -1)  
+				{
+				 open.setColor(period, Down);	
+				} 
+				else 
+				{	
+				 open.setColor(period, Neutral);				 
+				}
+				
+	
+ 
+	
+  }
+
+  
+function Check(period)
+{ 
+    var i;
+	var T=1;
+	var D=1;
+	var N=1;
+	
+	for (i= period; i>=period-Period+1; i--) 
+	{
+	
+	    if (source.close[i]< Top[i]) 
+	    {
+		 T=0;
+		}
+		
+		if (source.close[i]> Bottom[i]) 
+		{
+		 D=0;
+		}
+		
+		if (source.close[i]<  Bottom[i] ||  source.close[i]> Top[i]) 
+		{
+		 N=0;
+		}
+	
+	    if (T== 0 && D== 0 && N== 0) 
+	    {
+		 return;
+		}
+	
+	}
+	
+    
+    if (T== 1) 
+    { 
+     Color[period]= 1;
+    } 
+	else if (D== 1) 
+	{ 
+	 Color[period]=-1;
+	} 
+	else if (N== 1) 
+	{ 
+	 Color[period] =0; 
+    }
+}
+

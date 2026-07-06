@@ -1,0 +1,83 @@
+function Init()
+{
+    indicator.name("Custom price indicator");
+    indicator.description("Custom price indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addDouble("C_Open", "Coefficient for Open price", "", 1);
+    indicator.parameters.addDouble("C_High", "Coefficient for High price", "", 0);
+    indicator.parameters.addDouble("C_Low", "Coefficient for Low price", "", 0);
+    indicator.parameters.addDouble("C_Close", "Coefficient for Close price", "", 0);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addString("Type", "Type", "", "Dot");
+    indicator.parameters.addStringAlternative("Type", "Dot", "", "Dot");
+    indicator.parameters.addStringAlternative("Type", "Line", "", "Line");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var C_Open;
+var C_High;
+var C_Low;
+var C_Close;
+var CPrice = null;
+var C_Sum;
+
+function Prepare()
+{
+    source = instance.source;
+    C_Open=instance.parameters.C_Open;
+    C_High=instance.parameters.C_High;
+    C_Low=instance.parameters.C_Low;
+    C_Close=instance.parameters.C_Close;
+    C_Sum = C_Open+C_High+C_Low+C_Close;
+    assert(C_Sum!=0, "Sum of the coefficients can not be equal zero!");
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", ";
+    if (C_Open!=0) 
+    {
+     name = name + C_Open + "*Open+";
+    }
+    if (C_High!=0) 
+    {
+     name = name + C_High + "*High+";
+    }
+    if (C_Low!=0) 
+    {
+     name = name + C_Low + "*Low+";
+    }
+    if (C_Close!=0) 
+    {
+     name = name + C_Close + "*Close+";
+    }
+    name = name + ")/" + C_Sum;
+
+    instance.name(name);
+    if (instance.parameters.Type=="Dot") 
+    {
+     CPrice = instance.addStream("CPrice", core.Dot, name + ".CPrice", "CPrice", instance.parameters.clr, first);
+     CPrice.setWidth(instance.parameters.widthLinReg);
+    } 
+    else
+    {
+     CPrice = instance.addStream("CPrice", core.Line, name + ".CPrice", "CPrice", instance.parameters.clr, first);
+     CPrice.setWidth(instance.parameters.widthLinReg);
+     CPrice.setStyle(instance.parameters.styleLinReg);
+    } 
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    CPrice[period] = (C_Open*source.open[period]+C_High*source.high[period]+C_Low*source.low[period]+C_Close*source.close[period])/C_Sum;
+   } 
+}
+

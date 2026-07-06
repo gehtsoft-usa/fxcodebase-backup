@@ -1,0 +1,63 @@
+function Init()
+{
+    indicator.name("Volume Accumulation Percentage Indicator");
+    indicator.description("Volume Accumulation Percentage Indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+	indicator.parameters.addGroup("Calculation");
+	indicator.parameters.addInteger("Period", "Period", " " , 14); 
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("VA_color", "Color of VACC", "Color of VACC", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+
+var VA = null;
+var VACC = null;
+var Period;
+
+function Prepare(nameOnly)
+{
+    source = instance.source;
+	Period=instance.parameters.Period;
+	
+    first = source.first()+Period;
+	
+	 VA= instance.addInternalStream(0, 0);
+
+    var name = profile.id() + "(" + source.name() + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        VACC = instance.addStream("VACC", core.Bar, name, "VACC", instance.parameters.VA_color, first);
+    }
+}
+
+function Update(period)
+{	
+	    if ((source.high[period]-source.low[period]) == 0) 
+	    {
+		 VA[period]=0;
+		} 
+		else		
+		{	
+         VA[period] = source.volume[period] * ((source.close[period]-source.low[period])-(source.high[period]-source.close[period]))/(source.high[period]-source.low[period]);
+        }
+		
+		
+		
+	if (period < first) 
+	{
+	 return;	
+	}
+		
+		var TVA= Math.sum(VA, period-Period+1, period);
+		var TV= Math.sum(source.volume, period-Period+1, period);
+		
+		
+		 VACC[period] = (TVA / TV) * 100
+}
+

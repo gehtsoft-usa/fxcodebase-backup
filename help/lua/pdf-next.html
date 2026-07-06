@@ -1,0 +1,46 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - next (table [, index])</title>
+</head>
+<body>
+<h3><a name="pdf-next"><code>next (table [, index])</code></a></h3>
+
+
+<p>
+Allows a program to traverse all fields of a table.
+Its first argument is a table and its second argument
+is an index in this table.
+<code>next</code> returns the next index of the table
+and its associated value.
+When called with <b>nil</b> as its second argument,
+<code>next</code> returns an initial index
+and its associated value.
+When called with the last index,
+or with <b>nil</b> in an empty table,
+<code>next</code> returns <b>nil</b>.
+If the second argument is absent, then it is interpreted as <b>nil</b>.
+In particular,
+you can use <code>next(t)</code> to check whether a table is empty.
+
+
+<p>
+The order in which the indices are enumerated is not specified,
+<em>even for numeric indices</em>.
+(To traverse a table in numeric order,
+use a numerical <b>for</b> or the <a href="pdf-ipairs.html"><code>ipairs</code></a> function.)
+
+
+<p>
+The behavior of <code>next</code> is <em>undefined</em> if,
+during the traversal,
+you assign any value to a non-existent field in the table.
+You may however modify existing fields.
+In particular, you may clear existing fields.
+
+
+
+
+<p>
+<hr>
+</body>
+</html>

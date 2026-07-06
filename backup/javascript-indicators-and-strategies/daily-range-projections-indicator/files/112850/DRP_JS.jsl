@@ -1,0 +1,105 @@
+function Init()
+{
+    indicator.name("Daily Range Projections indicator");
+    indicator.description("Daily Range Projections indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Hclr", "High Color", "High Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("Mclr", "Middle Color", "Middle Color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("Lclr", "Low Color", "Low Color", core.rgb(0, 0, 255));
+    indicator.parameters.addInteger("DotSize", "Dot size", "Dot size", 1, 1, 5);
+}
+
+var first;
+var source = null;
+var BeginStream;
+var High=null;
+var Middle=null;
+var Low=null;
+
+function Prepare()
+{
+    source = instance.source;
+    first = source.first()+2;
+    BeginStream = instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ")";
+    instance.name(name);
+    High = instance.addStream("High", core.Dot, name + ".High", "High", instance.parameters.Hclr, first);
+    Middle = instance.addStream("Middle", core.Dot, name + ".Middle", "Middle", instance.parameters.Mclr, first);
+    Low = instance.addStream("Low", core.Dot, name + ".Low", "Low", instance.parameters.Lclr, first);
+    High.setWidth(instance.parameters.DotSize);
+    Middle.setWidth(instance.parameters.DotSize);
+    Low.setWidth(instance.parameters.DotSize);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    var D1=core.dateToTable(source.date(period)).day;
+    var D2=core.dateToTable(source.date(BeginStream[period-1])).day;
+    if (D1!=D2) 
+    {
+     BeginStream[period]=period;
+    } 
+    else
+    {
+     BeginStream[period]=BeginStream[period-1];
+    }
+    if (BeginStream[period-1]!=first) 
+    {
+     if (BeginStream[BeginStream[period]-1]!=first) 
+     {
+      var BarOpen0=BeginStream[period];
+      var BarOpen1=BeginStream[BarOpen0-1];
+      var BarOpen2=BeginStream[BarOpen1-1];
+      var Close=source.close[FindEnd(period)];
+      var Open=source.open[BarOpen0];
+      var C1=source.close[BarOpen0-1];
+      var tmp=Math.minmax(source,BarOpen1,BarOpen0-1);
+      var H1=tmp[0];
+      var L1=tmp[1];
+      var X;
+      if (Close<Open) 
+      {
+       X=(H1+L1+C1+L1)/2;
+      } 
+      else if (Close>Open) 
+      {
+       X=(H1+L1+C1+H1)/2;
+      } 
+      else
+      {
+       X=(H1+L1+C1+C1)/2;
+      }
+      High[period]=X-L1;
+      Low[period]=X-H1;
+      Middle[period]=(High[period]+Low[period])/2;
+     } 
+    }
+   } 
+   else if (period==first) 
+   {
+    BeginStream[period]=first;
+   } 
+}
+
+function FindEnd(period)
+{
+ var i=period;
+ var D1=core.dateToTable(source.date(i-1)).day;
+ while (i<=source.size()-1) 
+ {
+  var D2=core.dateToTable(source.date(i)).day;
+  if (D1!=D2) 
+  {
+   break;
+  }
+  D1=D2;
+  i=i+1;
+ }
+ return (i-1);
+}
+

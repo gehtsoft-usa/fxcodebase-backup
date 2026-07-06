@@ -1,0 +1,126 @@
+function Init()
+{
+    indicator.name("Internal Strength");
+    indicator.description("Internal Strength");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+	indicator.parameters.addGroup("Calculation"); 
+
+	
+    indicator.parameters.addInteger("Period", "RSI Period", "Period", 14);
+	
+		
+	indicator.parameters.addString("Method", "Method", "Method" , "RSI");
+    indicator.parameters.addStringAlternative("Method", "Raw", "Raw" , "Raw");
+	indicator.parameters.addStringAlternative("Method", "RSI", "RSI" , "RSI");
+	
+    indicator.parameters.addString("Type", "Type", "Type" , "Line");
+    indicator.parameters.addStringAlternative("Type", "Line", "Line" , "Line");
+	indicator.parameters.addStringAlternative("Type", "Bar", "Bar" , "Bar");	
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("color1", "Color of Raw Line", "Color of Line", core.rgb(0, 255, 0));
+	indicator.parameters.addInteger("width1", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style1", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style1", core.FLAG_LINE_STYLE);
+	
+	indicator.parameters.addColor("color2", "Color of RSI Line", "Color of Line", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width2", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style2", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style2", core.FLAG_LINE_STYLE);
+	
+	
+	indicator.parameters.addGroup("OB/OS Levels");	
+    indicator.parameters.addDouble("overbought", "Overbought Level","", 55);
+    indicator.parameters.addDouble("oversold","Oversold Level","", 45);
+	indicator.parameters.addColor("level_overboughtsold_color", "Line Color","", core.rgb(128, 128, 128));
+    indicator.parameters.addInteger("level_overboughtsold_width","Line width","", 1, 1, 5);
+    indicator.parameters.addInteger("level_overboughtsold_style", "Line Style","", core.LINE_SOLID);
+    indicator.parameters.setFlag("level_overboughtsold_style", core.FLAG_LEVEL_STYLE);
+
+}
+
+var Period; 
+var first;
+var source = null;
+
+var Raw;
+var Method;
+var rsi;
+var Type;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period; 
+	Method= instance.parameters.Method;
+	Type= instance.parameters.Type;
+    source = instance.source;
+    first = source.first();
+	 
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period)  + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {	
+		if (Method != "RSI") 
+		{	
+		    if (Type == "Line") 
+		    {
+			 Raw = instance.addStream("Raw", core.Line, name + ".Raw", "Raw", instance.parameters.color1, first);
+			 Raw.setWidth(instance.parameters.width1);
+			 Raw.setStyle(instance.parameters.style1);
+			} 
+			else
+			{	
+			 Raw = instance.addStream("Raw", core.Bar, name + ".Raw", "Raw", instance.parameters.color1, first);
+			}
+			
+			Raw.addLevel(instance.parameters.oversold/100, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);
+		    Raw.addLevel(instance.parameters.overbought/100, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);  
+			
+		}	
+		else
+		{
+		    Raw = instance.addInternalStream(first, 0);
+		}
+		
+		rsi = core.indicators.create("RSI", Raw, Period);
+		
+		if (Method != "Raw") 
+		{			
+			 if (Type == "Line") 
+			 {
+			  RSI = instance.addStream("RSI", core.Line, name + ".RSI", "RSI", instance.parameters.color2, rsi.DATA.first());
+			  RSI.setWidth(instance.parameters.width2);
+			  RSI.setStyle(instance.parameters.style2);
+		     }
+			 else
+			 {
+			  RSI = instance.addStream("RSI", core.Bar, name + ".RSI", "RSI", instance.parameters.color2, rsi.DATA.first());
+			 }
+		 }	 
+		else		
+		{
+		 RSI = instance.addInternalStream(rsi.DATA.first(), 0);
+		}
+		
+		RSI.addLevel(instance.parameters.oversold, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);
+		RSI.addLevel(instance.parameters.overbought, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);  
+    }
+}
+
+function Update(period,mode)
+{  	
+	Raw[period]=(source.close[period]-source.low[period]) / (source.high[period] -source.low[period]);
+	
+	rsi.update(mode);
+	
+	if (period < first || !source.hasData(period)) 
+	{
+	 return;
+	}
+
+    RSI[period]= rsi.DATA[period];
+}
+

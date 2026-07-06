@@ -1,0 +1,74 @@
+-- Indicator profile initialization routine
+-- Defines indicator profile properties and indicator parameters
+-- TODO: Add minimal and maximal value of numeric parameters and default color of the streams
+function Init()
+    indicator:name("Range / Volume Ratio");
+    indicator:description("Range / Volume Ratio");
+    indicator:requiredSource(core.Bar);
+    indicator:type(core.Oscillator);
+    indicator.parameters:addGroup("Calculation");
+    indicator.parameters:addString("Method", "Calculation Method", "Method" , "Open/Close");
+    indicator.parameters:addStringAlternative("Method", "High/Low", "High/Low" , "High/Low");
+    indicator.parameters:addStringAlternative("Method", "Open/Close", "Open/Close" , "Open/Close");
+    indicator.parameters:addString("Type", "Calculation Type", "Type" , "Volume/Range");
+	indicator.parameters:addStringAlternative("Type", "Volume/Range", "Volume/Range" , "Volume/Range");
+	indicator.parameters:addStringAlternative("Type", "Range/Volume", "Range/Volume" , "Range/Volume");
+	indicator.parameters:addGroup("Style");
+    indicator.parameters:addColor("Ratio_color", "Color of Ratio", "Color of Ratio", core.rgb(255, 0, 0));
+end
+
+-- Indicator instance initialization routine
+-- Processes indicator parameters and creates output streams
+-- TODO: Refine the first period calculation for each of the output streams.
+-- TODO: Calculate all constants, create instances all subsequent indicators and load all required libraries
+-- Parameters block
+local Method;
+
+local first;
+local source = nil;
+local Type;
+-- Streams block
+local Ratio = nil;
+
+-- Routine
+function Prepare(nameOnly)
+    Method = instance.parameters.Method;
+	Type= instance.parameters.Type;
+    source = instance.source;
+    first = source:first();
+
+    local name = profile:id() .. "(" .. source:name() .. ", " .. tostring(Method) .. ", " .. tostring(Type).. ")";
+    instance:name(name);
+
+    if (not (nameOnly)) then
+        Ratio = instance:addStream("Ratio", core.Bar, name, "Ratio", instance.parameters.Ratio_color, first);
+    end
+end
+
+-- Indicator calculation routine
+-- TODO: Add your code for calculation output values
+function Update(period)
+
+    
+    if period < first or not source:hasData(period) then
+	return;
+	end
+	
+	
+	if Type == "Range/Volume" then
+	     if Method == "High/Low" then	
+		 Ratio[period]=(source.high[period]-source.low[period])/source.volume[period];
+	     else
+		 Ratio[period]=math.abs(source.open[period]-source.close[period])/source.volume[period];
+		 end
+	
+     else 
+	     if Method == "High/Low" then	
+		 Ratio[period]= source.volume[period]/(source.high[period]-source.low[period]);
+	     else
+		 Ratio[period]= source.volume[period]/ math.abs(source.open[period]-source.close[period]) ;
+		 end
+     end	 
+    
+end
+

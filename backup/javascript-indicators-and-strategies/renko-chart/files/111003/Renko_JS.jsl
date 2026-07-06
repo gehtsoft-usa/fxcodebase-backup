@@ -1,0 +1,321 @@
+//initializes the indicator
+function Init()
+{
+    indicator.name("Renko chart");
+    indicator.description("Renko chart");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.View);
+
+    indicator.parameters.addGroup("Price parameters");
+    indicator.parameters.addString("instrument", "Symbol", "Symbol", "EUR/USD");
+    indicator.parameters.setFlag("instrument", core.FLAG_INSTRUMENTS);
+    indicator.parameters.addString("frame", "Period", "Period", "H1");
+    indicator.parameters.setFlag("frame", core.FLAG_BARPERIODS);
+    indicator.parameters.addBoolean("type", "Price type", "Price type", true);
+    indicator.parameters.setFlag("type", core.FLAG_BIDASK);
+    indicator.parameters.addInteger("Step", "Brick size", "Brick size", 100, 1, 1000);
+
+    indicator.parameters.addGroup("Range");
+    indicator.parameters.addDate("from", "Date from", "Date from", -1000);
+    indicator.parameters.addDate("to", "Date to", "Date to", 0);
+    indicator.parameters.setFlag("to", core.FLAG_DATE_OR_NULL);
+}
+
+var loading;
+var instrument;
+var frame;
+var StepPips;
+var history;
+var open, high, low, close, volume;
+var offer;
+var offset;
+var OneSecond;
+var LastTime;
+
+//initializes the instance of the indicator
+function Prepare(onlyName)
+{
+    instrument = instance.parameters.instrument;
+    frame = instance.parameters.frame;
+
+    var name = profile.id() + "(" + instrument + "." + frame + ")";
+    instance.name(name);
+
+    if (onlyName)
+    {
+        return ;
+    }
+
+    var offers = core.host.findTable("offers");
+    var enum = offers.enumerator();
+    var row;
+
+    row = enum.next();
+    while (row != null)
+    {
+        if (row.Instrument == instrument)
+        {
+            break;
+        }
+        row = enum.next();
+    }
+
+    assert(row != null, "Instrument not found");
+
+    offer = row.OfferID;
+
+    instance.initView(instrument, row.Digits, row.PointSize, false, instance.parameters.to == 0);
+
+    loading = true;
+    history = core.host.execute("getHistory", 1000, instrument, frame, instance.parameters.from, instance.parameters.to, instance.parameters.type);
+    if (instance.parameters.to == 0)
+    {
+        core.host.execute("subscribeTradeEvents", 2000, "offers");
+    }
+    
+    StepPips = instance.parameters.Step * history.close.pipSize();
+    core.host.execute("setStatus", "loading");
+
+    open = instance.addStream("open", core.Line, name + "." + "open", "open", 0, 0, 0);
+    high = instance.addStream("high", core.Line, name + "." + "high", "high", 0, 0, 0);
+    low = instance.addStream("low", core.Line, name + "." + "low", "low", 0, 0, 0);
+    close = instance.addStream("close", core.Line, name + "." + "close", "close", 0, 0, 0);
+    volume = instance.addStream("volume", core.Line, name + "." + "volume", "volume", 0, 0, 0);
+
+    instance.createCandleGroup("candle", "candle", open, high, low, close, volume, frame);
+    
+    OneSecond=1/86400;
+}
+
+function Update(period, mode)
+{
+
+}
+
+function AsyncOperationFinished(cookie, success, message, message1, message2)
+{
+    if (cookie == 1000)
+    {
+        if (success)
+        {
+            handleHistory();
+            core.host.execute("setStatus", "");
+        }
+        else
+        {
+            core.host.trace("The indicator could not get the history");        
+        }
+    }
+    else
+    {
+        if (cookie == 2000)
+        {
+            if (message == offer)
+            {
+                handleUpdate();
+            }
+        }
+    }
+}
+
+var lastDirection;
+
+function calcFirstValueValue(current, i)
+{
+    var source = history.close;
+    var open_val = Math.floor(source[0] / StepPips) * StepPips;
+    while (source[i] > open_val + StepPips)
+    {
+        current = current + 1;
+        if (current==0)
+        {
+            instance.addViewBar(source.date(0));
+            volume[current]=history.volume[i];
+        }
+        else
+        {
+            instance.addViewBar(open.date(current-1)+OneSecond);
+            volume[current]=0;
+        }
+        open[current] = open_val;
+        close[current] = open[current]+StepPips;
+        low[current] = open[current];
+        high[current] = close[current];
+        lastDirection = 1;
+        open_val=open_val+StepPips;
+    }
+    open_val = Math.floor(source[0] / StepPips) * StepPips;
+    while (source[i] < open_val - StepPips)
+    {
+        current = current + 1;
+        if (current==0)
+        {
+            instance.addViewBar(source.date(0));
+            volume[current]=history.volume[i];
+        }
+        else
+        {
+            instance.addViewBar(open.date(current-1)+OneSecond);
+            volume[current]=0;
+        }
+        open[current] = open_val;
+        close[current] = open[current]-StepPips;
+        high[current] = open[current];
+        low[current] = close[current];
+        lastDirection = -1;
+        open_val=open_val-StepPips;
+    }
+    
+    return current;
+}
+
+function calcValue(current, i)
+{
+    if (current == -1)
+    {
+        return calcFirstValueValue(current, i);
+    }
+    
+    var source = history.close;
+    var diff = close[current] - open[current];
+    if (diff > 0 || (diff == 0 && lastDirection == 1))
+    {
+        lastDirection = 1;
+        if (source[i] <= close[current] + StepPips && source[i] >= close[current] - 2 * StepPips)
+        {
+         volume[current]=volume[current]+history.volume[i];
+        }
+        
+        while (source[i] > close[current] + StepPips)
+        {
+            current = current + 1;
+            if (open.date(current-1) < source.date(i))
+            {
+                instance.addViewBar(source.date(i));
+                volume[current]=history.volume[i];
+            }
+            else
+            {
+                instance.addViewBar(open.date(current-1)+OneSecond);
+                volume[current]=0;
+            }
+            open[current] = close[current - 1];
+            low[current] = open[current];
+            close[current]=open[current]+StepPips;
+            high[current] = close[current];
+        }
+        if (source[i] < close[current] - 2 * StepPips)
+        {
+            while (source[i]<close[current] - StepPips)
+            {
+                current = current + 1;
+                if (open.date(current-1) < source.date(i))
+                {
+                   instance.addViewBar(source.date(i));
+                   volume[current]=history.volume[i];
+                }
+                else
+                {
+                    instance.addViewBar(open.date(current-1)+OneSecond);
+                    volume[current]=0;
+                }
+                if (close[current-1] > open[current-1])
+                {
+                    open[current] = close[current - 1] - StepPips;
+                }
+                else
+                {
+                    open[current] = close[current - 1];
+                }
+                
+                high[current] = open[current];
+                close[current]=open[current]-StepPips;
+                low[current] = close[current];
+            }  
+        }
+    }
+    
+    if (diff < 0 || (diff == 0 && lastDirection == -1))
+    {
+        lastDirection = -1;
+        if (source[i] >= close[current] - StepPips && source[i] <= close[current] + 2 * StepPips)
+        {
+         volume[current]=volume[current]+history.volume[i];
+        }
+        
+        while (source[i] < close[current] - StepPips)
+        {
+            current = current + 1;
+            if (open.date(current-1) < source.date(i))
+            {
+                instance.addViewBar(source.date(i));
+                volume[current]=history.volume[i];
+            }
+            else
+            {
+                instance.addViewBar(open.date(current-1)+OneSecond);
+                volume[current]=0;
+            }
+            open[current] = close[current - 1];
+            high[current] = open[current];
+            close[current]=open[current]-StepPips;
+            low[current] = close[current];
+        }
+        if (source[i] > close[current] + 2 * StepPips)
+        {
+            while (source[i] > close[current] + StepPips)
+            {
+                current = current + 1;
+                if (open.date(current-1) < source.date(i))
+                {
+                    instance.addViewBar(source.date(i));
+                    volume[current]=history.volume[i];
+                }
+                else
+                {
+                    instance.addViewBar(open.date(current-1)+OneSecond);
+                    volume[current]=0;
+                }
+                if (close[current-1] < open[current-1])
+                {
+                    open[current] = close[current - 1] + StepPips;
+                }
+                else
+                {
+                    open[current] = close[current - 1];
+                }
+                
+                low[current] = open[current];
+                close[current]=open[current]+StepPips;
+                high[current] = close[current];
+            }  
+        }
+    }
+    return current;
+}
+
+function handleHistory()
+{
+    var s = history.size() - 1;
+    var i;
+    var current = open.size() - 1;
+    for (i = 1; i<=s; i++)
+    {
+        current = calcValue(current, i);
+    }
+    
+    loading = false;
+    LastTime=history.date(history.size()-1);
+}
+
+function handleUpdate()
+{
+    if (!loading && history.size() > 0)
+    {
+      if (history.date(history.size()-1)!=LastTime)
+        {
+            calcValue(open.size() - 1, history.size() - 2);
+            LastTime=history.date(history.size()-1);
+        }  
+    } 
+}

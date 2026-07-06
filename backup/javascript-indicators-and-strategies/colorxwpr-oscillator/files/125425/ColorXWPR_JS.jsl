@@ -1,0 +1,136 @@
+function Init()
+{
+    indicator.name("ColorXWPR oscillator");
+    indicator.description("ColorXWPR oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("DPeriod", "DPeriod", "", 15);
+    indicator.parameters.addString("Method", "Method", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("Method", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Method", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Method", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Method", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Method", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Method", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Method", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Method", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Method", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Method", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Method", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Method", "JSmooth", "", "JSmooth");
+    indicator.parameters.addInteger("SPeriod", "SPeriod", "", 7);
+    indicator.parameters.addString("Price", "Price", "", "close");
+    indicator.parameters.addStringAlternative("Price", "close", "", "close");
+    indicator.parameters.addStringAlternative("Price", "open", "", "open");
+    indicator.parameters.addStringAlternative("Price", "high", "", "high");
+    indicator.parameters.addStringAlternative("Price", "low", "", "low");
+    indicator.parameters.addStringAlternative("Price", "median", "", "median");
+    indicator.parameters.addStringAlternative("Price", "typical", "", "typical");
+    indicator.parameters.addStringAlternative("Price", "weighted", "", "weighted");
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("WPR_Clr", "WPR Color", "WPR Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("SignalUP_Clr", "Signal UP Color", "Signal UP Color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("SignalDN_Clr", "Signal DN Color", "Signal DN Color", core.rgb(0, 0, 255));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var DPeriod;
+var Method;
+var SPeriod;
+var Price;
+var Tsource;
+var MA;
+var WPR=null;
+var XWPR=null;
+
+function Prepare()
+{
+    source = instance.source;
+    DPeriod=instance.parameters.DPeriod;
+    Method=instance.parameters.Method;
+    SPeriod=instance.parameters.SPeriod;
+    Price=instance.parameters.Price;
+    first = source.first()+2;
+    if (Price=="close") 
+    {
+     Tsource=source.close;
+    } 
+    else if (Price=="open") 
+    {
+     Tsource=source.open;
+    } 
+    else if (Price=="high") 
+    {
+     Tsource=source.high;
+    } 
+    else if (Price=="low") 
+    {
+     Tsource=source.low;
+    } 
+    else if (Price=="median") 
+    {
+     Tsource=source.median;
+    } 
+    else if (Price=="typical") 
+    {
+     Tsource=source.typical;
+    } 
+    else
+    {
+     Tsource=source.weighted;
+    } 
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.DPeriod + ", " + instance.parameters.Method + ", " + instance.parameters.SPeriod + ", " + instance.parameters.Price + ")";
+    instance.name(name);
+    WPR = instance.addStream("WPR", core.Line, name + ".WPR", "WPR", instance.parameters.WPR_Clr, first);
+    MA = core.indicators.create("AVERAGES", WPR, Method, SPeriod, false);
+    XWPR = instance.addStream("XWPR", core.Line, name + ".XWPR", "XWPR", instance.parameters.SignalUP_Clr, first);
+    WPR.setWidth(instance.parameters.widthLinReg);
+    WPR.setStyle(instance.parameters.styleLinReg);
+    XWPR.setWidth(instance.parameters.widthLinReg);
+    XWPR.setStyle(instance.parameters.styleLinReg);
+}
+
+function Update(period, mode)
+{
+   if (period>first+DPeriod) 
+   {
+    var tmp=Math.minmax(source, period-DPeriod+1, period);
+    var HH=tmp[1];
+    var LL=tmp[0];
+    if (HH!=LL) 
+    {
+     WPR[period]=-(HH-Tsource[period])*100/(HH-LL);
+    } 
+    else
+    {
+     WPR[period]=WPR[period-1];
+    }
+    MA.update(mode);
+    XWPR[period]=MA.DATA[period];
+    if (XWPR[period]>XWPR[period-1]) 
+    {
+     XWPR.setColor(period,instance.parameters.SignalUP_Clr);
+    } 
+    else
+    {
+     XWPR.setColor(period,instance.parameters.SignalDN_Clr);
+    }
+   } 
+}
+

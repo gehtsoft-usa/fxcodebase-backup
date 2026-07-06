@@ -1,0 +1,22 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - luaL_getmetafield</title>
+</head>
+<body>
+<h3><a name="luaL_getmetafield"><code>luaL_getmetafield</code></a></h3>
+<pre>int luaL_getmetafield (lua_State *L, int obj, const char *e);</pre>
+
+<p>
+Pushes onto the stack the field <code>e</code> from the metatable
+of the object at index <code>obj</code>.
+If the object does not have a metatable,
+or if the metatable does not have this field,
+returns 0 and pushes nothing.
+
+
+
+
+
+<hr>
+</body>
+</html>

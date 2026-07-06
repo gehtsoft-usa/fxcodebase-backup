@@ -1,0 +1,81 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 2.4.3 - Assignment</title>
+</head>
+<body>
+<h3>2.4.3 - <a name="2.4.3">Assignment</a></h3>
+
+<p>
+Lua allows multiple assignment.
+Therefore, the syntax for assignment
+defines a list of variables on the left side
+and a list of expressions on the right side.
+The elements in both lists are separated by commas:
+
+<pre>
+	stat ::= varlist1 `<b>=</b>&acute; explist1
+	varlist1 ::= var {`<b>,</b>&acute; var}
+	explist1 ::= exp {`<b>,</b>&acute; exp}
+</pre><p>
+Expressions are discussed in <a href="2.5.html">&sect;2.5</a>.
+
+
+<p>
+Before the assignment,
+the list of values is <em>adjusted</em> to the length of
+the list of variables.
+If there are more values than needed,
+the excess values are thrown away.
+If there are fewer values than needed,
+the list is extended with as many  <b>nil</b>'s as needed.
+If the list of expressions ends with a function call,
+then all values returned by this call enter in the list of values,
+before the adjustment
+(except when the call is enclosed in parentheses; see <a href="2.5.html">&sect;2.5</a>).
+
+
+<p>
+The assignment statement first evaluates all its expressions
+and only then are the assignments performed.
+Thus the code
+
+<pre>
+     i = 3
+     i, a[i] = i+1, 20
+</pre><p>
+sets <code>a[3]</code> to 20, without affecting <code>a[4]</code>
+because the <code>i</code> in <code>a[i]</code> is evaluated (to 3)
+before it is assigned&nbsp;4.
+Similarly, the line
+
+<pre>
+     x, y = y, x
+</pre><p>
+exchanges the values of <code>x</code> and <code>y</code>.
+
+
+<p>
+The meaning of assignments to global variables
+and table fields can be changed via metatables.
+An assignment to an indexed variable <code>t[i] = val</code> is equivalent to
+<code>settable_event(t,i,val)</code>.
+(See <a href="2.8.html">&sect;2.8</a> for a complete description of the
+<code>settable_event</code> function.
+This function is not defined or callable in Lua.
+We use it here only for explanatory purposes.)
+
+
+<p>
+An assignment to a global variable <code>x = val</code>
+is equivalent to the assignment
+<code>_env.x = val</code>,
+which in turn is equivalent to
+
+<pre>
+     settable_event(_env, "x", val)
+</pre><p>
+where <code>_env</code> is the environment of the running function.
+(The <code>_env</code> variable is not defined in Lua.
+We use it here only for explanatory purposes.)
+</body>
+</html>

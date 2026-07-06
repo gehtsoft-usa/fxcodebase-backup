@@ -1,0 +1,94 @@
+function Init()
+{
+    indicator.name("SolarWinds oscillator");
+    indicator.description("SolarWinds oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 10);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr1", "Color 1", "Color 1", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clr2", "Color 2", "Color 2", core.rgb(0, 128, 0));
+    indicator.parameters.addColor("clr3", "Color 3", "Color 3", core.rgb(255, 0, 255));
+    indicator.parameters.addColor("clr4", "Color 4", "Color 4", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("clr5", "Color 5", "Color 5", core.rgb(128, 128, 128));
+}
+
+var first;
+var source = null;
+var Period;
+var Value;
+var SW=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    first = source.first()+2;
+    Value=instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ")";
+    instance.name(name);
+    SW = instance.addStream("SW", core.Bar, name + ".SW", "SW", instance.parameters.clr1, first);
+}
+
+function Update(period, mode)
+{
+   if (period>first+Period) 
+   {
+    var tmp=Math.minmax(source, period-Period+1, period);
+    var MinP=tmp[0];
+    var MaxP=tmp[1];
+    var Price = (source.high[period]+source.low[period])/2;
+    var Res=MaxP-MinP;
+    if (Res!=0) 
+    {
+     Value[period]=(((Price-MinP)/Res-0.5)+Value[period-1])*2/3;
+    } 
+    else
+    {
+     Value[period]=0; 
+    }
+    Value[period]=Math.min(Math.max(Value[period],-1),1);
+    if (Value[period]!=1) 
+    {
+     SW[period]=(Math.log((1+Value[period])/(1-Value[period]))+SW[period-1])/2;
+    } 
+    else
+    {
+     SW[period]=0;
+    }
+    if (SW[period]>0) 
+    {
+     if (SW[period]>SW[period-1]) 
+     {
+      SW.setColor(period, instance.parameters.clr1);
+     } 
+     else if (SW[period]<SW[period-1]) 
+     {
+      SW.setColor(period, instance.parameters.clr2);
+     } 
+     else
+     {
+      SW.setColor(period, instance.parameters.clr5);
+     }
+    } 
+    else
+    {
+     if (SW[period]>SW[period-1]) 
+     {
+      SW.setColor(period, instance.parameters.clr3);
+     } 
+     else if (SW[period]<SW[period-1]) 
+     {
+      SW.setColor(period, instance.parameters.clr4);
+     } 
+     else
+     {
+      SW.setColor(period, instance.parameters.clr5);
+     }
+    }
+   } 
+}
+

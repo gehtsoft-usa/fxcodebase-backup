@@ -1,0 +1,132 @@
+function Init()
+{
+    indicator.name("LR_MA oscillator");
+    indicator.description("LR_MA oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addString("Method", "Method", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("Method", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Method", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Method", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Method", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Method", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Method", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Method", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Method", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Method", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Method", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Method", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Method", "JSmooth", "", "JSmooth");
+    indicator.parameters.addInteger("Period", "Period", "", 20);
+    indicator.parameters.addDouble("Deviation", "Deviation", "", 2);
+    indicator.parameters.addDouble("ATR_Period", "ATR period", "", 20);
+    indicator.parameters.addDouble("ATR_Factor", "ATR factor", "", 1.5);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clrUP", "Color UP", "Color UP", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clrDN", "Color DN", "Color DN", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("clrStrong", "Strong Color", "Strong Color", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("clrWeak", "Weak Color", "Weak Color", core.rgb(128, 128, 128));
+    indicator.parameters.addInteger("DotSize", "Dot size", "Dot size", 1, 1, 5);
+}
+
+var first;
+var source = null;
+var Method;
+var Period;
+var Deviation;
+var ATR_Period;
+var ATR_Factor;
+var Hist_Buff=null;
+var Dot_Buff=null;
+var MA;
+var SumBars;
+var SumSqrBars;
+var StdDev;
+var ATR;
+
+function Prepare()
+{
+    source = instance.source;
+    Method=instance.parameters.Method;
+    Period=instance.parameters.Period;
+    Deviation=instance.parameters.Deviation;
+    ATR_Period=instance.parameters.ATR_Period;
+    ATR_Factor=instance.parameters.ATR_Factor;
+    first = source.first()+2;
+    MA = core.indicators.create("AVERAGES", source.close, Method, Period, false);
+    StdDev = core.indicators.create("STDDEV", source.close, Period);
+    ATR = core.indicators.create("ATR", source, ATR_Period);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.Deviation + ", " + instance.parameters.ATR_Period + ", " + instance.parameters.ATR_Factor + ")";
+    instance.name(name);
+    Hist_Buff = instance.addStream("Hist_Buff", core.Bar, name + ".Histogram", "Histogram", instance.parameters.clrUP, first);
+    Dot_Buff = instance.addStream("Dot_Buff", core.Dot, name + ".Dot", "Dot", instance.parameters.clrStrong, first);
+    Dot_Buff.setWidth(instance.parameters.DotSize);
+    SumBars=Period*(Period-1)/2;
+    SumSqrBars=(Period-1)*Period*(2*Period-1)/6;
+}
+
+function Update(period, mode)
+{
+   if (period>first+2*Period) 
+   {
+    MA.update(mode);
+    StdDev.update(mode);
+    ATR.update(mode);
+    var SumY=0;
+    var Sum1=0;
+    var x;
+    for (x=0; x<=Period-1; x++) 
+    {
+     var tmp=Math.minmax(source, period-x-Period+1, period-x);
+     var HH=tmp[1];
+     var LL=tmp[0];
+     var dxma=source.close[period-x]-((HH+LL)/2+MA.DATA[period-x])/2;
+     Sum1=Sum1+x*dxma;
+     SumY=SumY+dxma;
+    }
+    var Sum2=SumBars*SumY;
+    var Num1=Period*Sum1-Sum2;
+    var Num2=SumBars*SumBars-Period*SumSqrBars;
+    var Slope=0;
+    if (Num2!=0) 
+    {
+     Slope=Num1/Num2;
+    }
+    var Intercept=(SumY-Slope*SumBars)/Period;
+    var LinearRegValue=Intercept+Slope*(Period-1);
+    if (LinearRegValue<0) 
+    {
+     Hist_Buff[period]=LinearRegValue;
+     Hist_Buff.setColor(period,instance.parameters.clrDN)
+    } 
+    else
+    {
+     Hist_Buff[period]=LinearRegValue;
+     Hist_Buff.setColor(period,instance.parameters.clrUP)
+    }
+    
+    var bbs=Deviation*StdDev.DATA[period]/(ATR.DATA[period]*ATR_Factor);
+    Dot_Buff[period]=0;
+    if (bbs<1) 
+    {
+     Dot_Buff.setColor(period,instance.parameters.clrWeak);
+    } 
+    else
+    {
+     Dot_Buff.setColor(period,instance.parameters.clrStrong);
+    }
+   } 
+}
+

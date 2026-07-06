@@ -1,0 +1,133 @@
+function Init()
+{
+    indicator.name("OnChart Stochastic");
+    indicator.description("Shows the location of the current close relative to the high/low range over a set number of periods.");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+ 
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("K", "Number of periods for %K", "", 5, 2, 1000);
+    indicator.parameters.addInteger("SD", "%D slowing periods", "", 3, 2, 1000);
+    indicator.parameters.addInteger("D", "Number of periods for %D", "", 3, 2, 1000);
+
+    indicator.parameters.addString("averageTypeK", "The type of smoothing algorithm for %K", "", "MVA");
+    indicator.parameters.addStringAlternative("averageTypeK","MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("averageTypeK", "EMA", "", "EMA");
+     
+
+    indicator.parameters.addString("averageTypeD","The type of smoothing algorithm for %D", "", "MVA");
+    indicator.parameters.addStringAlternative("averageTypeD", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("averageTypeD", "EMA", "", "EMA");
+	
+	
+	 indicator.parameters.addInteger("AP", "ATR Period", "", 14);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clrFirst", "K Line Color", "", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("widthFirst","K Line Width", "", 1, 1, 5);
+    indicator.parameters.addInteger("styleFirst", "K Line Style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleFirst", core.FLAG_LEVEL_STYLE);
+
+    indicator.parameters.addColor("clrSecond", "D Line Color", "", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("widthSecond", "D Line Width", "", 1, 1, 5);
+    indicator.parameters.addInteger("styleSecond", "D Line Style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleSecond", core.FLAG_LEVEL_STYLE);
+
+    indicator.parameters.addGroup("Levels");
+
+    indicator.parameters.addInteger("overbought", "Overbought Level", "", 80, 0, 100);
+    indicator.parameters.addInteger("oversold", "Oversold Level", "", 20, 0, 100);
+    indicator.parameters.addInteger("level_overboughtsold_width","OverboughtSold Line Width", "", 1, 1, 5);
+    indicator.parameters.addInteger("level_overboughtsold_style", "OverboughtSold Line Style", "", core.LINE_SOLID);
+    indicator.parameters.addColor("level_overboughtsold_color", "OverboughtSold Line Color", "", core.FLAG_LEVEL_STYLE);
+}
+ 
+var AP;
+var k;
+var d;
+var sd;
+var averageTypeK = null;
+var averageTypeD = null;
+
+var source = null;
+var obl, osl;
+  
+var Indicator;
+
+var K = null;
+var D = null;
+var ATR;
+var OB, OS;
+var MA;
+var Central;
+
+function Prepare()
+{
+    OB=instance.parameters.overbought;
+	OS=instance.parameters.oversold;
+	
+	averageTypeK=instance.parameters.averageTypeK;
+    averageTypeD=instance.parameters.averageTypeD;
+	
+    assert(instance.parameters.oversold < instance.parameters.overbought, "OverSold is bigger { OverBought");
+    AP=instance.parameters.AP;
+    k = instance.parameters.K;
+    d = instance.parameters.D;
+    sd = instance.parameters.SD;
+    source = instance.source;
+	Indicator = core.indicators.create("STOCHASTIC", source, k , d , sd , averageTypeK, averageTypeD);
+    ATR = core.indicators.create("ATR", source, AP);
+    MA = core.indicators.create( averageTypeK, source.close, AP);
+    var name = profile.id() + "(" + source.name() + ", " + k + ", " + d + ", " + sd + ", " + averageTypeK + ", " + averageTypeD + ", " +  AP + ")";
+    instance.name(name);
+   
+    K = instance.addStream("K", core.Line, name + ".K", "K", instance.parameters.clrFirst,  Math.max(Indicator.K.first(), ATR.DATA.first()) ); 
+    K.setWidth(instance.parameters.widthFirst);
+    K.setStyle(instance.parameters.styleFirst);
+    K.setPrecision(2);
+
+  
+    D = instance.addStream("D", core.Line, name + ".D", "D", instance.parameters.clrSecond, Math.max(Indicator.D.first(), ATR.DATA.first()) );
+    D.setWidth(instance.parameters.widthSecond);
+    D.setStyle(instance.parameters.styleSecond);
+    D.setPrecision(2); 
+	
+	
+	
+	osl = instance.addStream("OS", core.Line, name + ".OS", "OS", instance.parameters.level_overboughtsold_color, Math.max(Indicator.D.first(), ATR.DATA.first()) );
+    osl.setWidth(instance.parameters.level_overboughtsold_width);
+    osl.setStyle(instance.parameters.level_overboughtsold_style);
+    osl.setPrecision(2);
+
+    obl = instance.addStream("OB", core.Line, name + ".OB", "OB", instance.parameters.level_overboughtsold_color, Math.max(Indicator.D.first(), ATR.DATA.first()) );
+    obl.setWidth(instance.parameters.level_overboughtsold_width);
+    obl.setStyle(instance.parameters.level_overboughtsold_style);
+    obl.setPrecision(2);
+	
+	Central = instance.addStream("Central", core.Line, name + ".Central", "Central", instance.parameters.level_overboughtsold_color, Math.max(Indicator.D.first(), ATR.DATA.first()) );
+    Central.setWidth(instance.parameters.level_overboughtsold_width);
+    Central.setStyle(instance.parameters.level_overboughtsold_style);
+    Central.setPrecision(2);
+	 
+}
+
+function Update(period, mode) 
+{
+	Indicator.update(mode);
+	ATR.update(mode);
+	MA.update(mode);
+
+  if (period <  Math.max(Indicator.D.first(), ATR.DATA.first())) 
+  {
+   return;
+  }
+ 
+     
+      Central[period]=MA.DATA[period];
+      obl[period]=MA.DATA[period]+(ATR.DATA[period]*(OB-50)/100);
+      osl[period]=MA.DATA[period]-(ATR.DATA[period]*(50-  OS)/100);
+      K[period]=MA.DATA[period]+(Indicator.K[period] -50)/100*ATR.DATA[period];
+      D[period]=MA.DATA[period]+(Indicator.K[period]-50)/100*ATR.DATA[period]; 
+ 
+}

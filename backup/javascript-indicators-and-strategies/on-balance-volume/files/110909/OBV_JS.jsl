@@ -1,0 +1,68 @@
+//initializes the indicator
+function Init()
+{
+    indicator.name("OBV");
+    indicator.description("On Balance Volume");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.setTag("group", "Volume Indicators");
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Line color", "Line color", core.rgb(65, 105, 225));
+    indicator.parameters.addInteger("width", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LEVEL_STYLE);
+}
+
+var first = 0;
+var source = null;
+var OBV = null;
+
+//initializes the instance of the indicator
+function Prepare(onlyName)
+{
+    source = instance.source;
+    close = instance.source.close;
+    volume = instance.source.volume;
+    first = instance.source.first();
+
+    var name = profile.id() + "(" + instance.source.name() + ")";
+    instance.name(name);
+  
+    if (onlyName == true)
+        return ;
+
+    OBV = instance.addStream("OBV", core.Line, name, "OBV", instance.parameters.clr,  first)
+    OBV.setWidth(instance.parameters.width);
+    OBV.setStyle(instance.parameters.style);
+}
+
+// calculate the value
+function Update(period, mode)
+{
+    if (period == first)
+    {
+        OBV[period] = volume[period];
+    }
+    else
+    {
+        if (period > first)
+        {
+            if (close[period] > close[period - 1])
+            {
+                OBV[period] = OBV[period - 1] + volume[period];
+            }
+            else
+            {
+                if (close[period] < close[period - 1])
+                {
+                    OBV[period] = OBV[period - 1] - volume[period];
+                }
+                else
+                {
+                    OBV[period] = OBV[period - 1];
+                }
+            }
+        }
+    }
+}

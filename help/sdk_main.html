@@ -1,0 +1,646 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252" /><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><title>The Indicore SDK</title><style type="text/css">a, p, h1, h2, h3, h4, h5, h6, table, td, tr, li, ul, ol {
+    font-family: Verdana, Trebuchet MS, Arial;
+}
+
+a, p, td, tr, ul, ol, li {
+    font-size: 12pt;
+}
+
+h3 {
+    font-size: 13pt;
+}
+
+h2 {
+    font-size: 13pt;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+body {
+    color: #444444;
+    background-color: white;
+}
+
+A:link {
+    color: #0065b3;
+    cursor: pointer;
+}
+
+A:visited {
+    color: #0068be;
+    cursor: pointer;
+}
+
+a.action {
+  background-color: #0065b3;
+  color: white;
+  font-size: 10pt;
+  padding: 2px 2px;
+  width: 50pt;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px;
+}
+
+.side-icon {
+    float: left;
+}
+
+a.action [class*="dripicons-"]:before {
+    padding: 0 2px 0 0;
+    font-size: 12pt;
+    vertical-align: text-bottom;
+}
+
+.side-icon:after {
+  content: "";
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  border-left: 1.5px solid white;
+  transform: translate(-50%);
+}
+
+a.actiontab {
+  font-size: 10pt;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px 3px 0 0;
+}
+
+pre, code, code a {
+    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+    font-size: 12pt;
+}
+
+code.ctag {
+    background-color: #f1f1f1;
+    padding: .1em .2em;
+    border-radius: 3px;
+}
+
+pre {
+    background-color: white;
+}
+
+pre.example {
+    background-color: #f1f1f1;
+}
+
+ul {
+    list-style-type: disc;
+    margin-left: 18pt;
+}
+
+ol {
+    list-style-type: decimal;
+    margin-left: 18pt;
+}
+
+ul.hhc {
+    list-style-type: none;
+    margin-left: 1em;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+li.hhc {
+    margin-left: 0;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+table {
+  border-spacing: 0;
+  border-color: #dfe3e7;
+}
+
+tr + tr td {
+   border-top: 0;
+}
+
+tr td + td {
+  border-left: 0;
+}
+
+td {
+  border: 1px solid;
+  border-color: #dfe3e7;
+}
+
+tr:first-child td:first-child {
+   border-radius: 0.2em 0 0 0;
+}
+
+tr:first-child td:last-child {
+  border-radius: 0 0.2em 0 0;
+}
+
+tr:first-child td:only-child {
+  border-radius: 0.2em 0.2em 0 0;
+}
+
+tr:last-child td:first-child {
+    border-radius: 0 0 0 0.2em;
+}
+
+tr:last-child td:last-child {
+    border-radius: 0 0 0.2em 0;
+}
+
+tr:last-child td:only-child {
+    border-radius: 0 0 0.2em 0.2em;
+}
+
+tr:only-child td:only-child {
+    border-radius: 0.2em 0.2em 0.2em 0.2em;
+}
+
+tr:only-child td:first-child {
+   border-radius: 0.2em 0 0 0.2em;
+}
+
+tr:only-child td:last-child {
+  border-radius: 0 0.2em 0.2em 0;
+}
+
+
+td.tmain, td.tmain_nw, td.thdr {
+    background-color: rgb(255, 255, 255);
+    vertical-align: top;
+    padding: 3px;
+}
+
+td.tmain p, td.tmain_nw p, td.thdr p {
+    margin-top: 3pt;
+    margin-bottom: 3pt;
+}
+
+td.tmain_nw {
+    white-space: nowrap;
+}
+
+td.thdr {
+    background-color: #e3e3e3;
+}
+
+table.decl {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+    vertical-align: top;
+    padding: 3px;
+    width: 100%;
+}
+
+table.decl td {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+}
+
+div.note-quote {
+    border-left: 10px solid #ccc;
+    padding: 1em 10px .1em 10px;
+    margin: 1.5em 10px;
+    background-color: rgb(224, 224, 224);
+}
+
+div.note-note {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+div.note-warning {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #fff;
+    background-color: #ff6358;
+}
+div.note-warning code.ctag {
+    color: black;
+}</style>
+<link rel="stylesheet" href="res/dripicons.css"></head><body><script type="text/javascript">
+var highlighterEnabled = false;
+var maintopic = 'index';
+var helptitle = 'Indicore SDK 3';
+    function loadStarted() {
+    window.onload = loadCompleted;
+
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        var head = document.getElementsByTagName('head')[0];
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.min.js';
+        head.appendChild(script4);
+
+
+        var script2 = document.createElement('script');
+        script2.type = 'text/javascript';
+        script2.src = './highlighter/highlight.cshtml.js';
+        head.appendChild(script2);
+
+        var script3 = document.createElement('script');
+        script3.type = 'text/javascript';
+        script3.src = './highlighter/highlight.lua.js';
+        head.appendChild(script3);
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.luax.js';
+        head.appendChild(script4);
+    }
+}
+
+function loadCompleted() {
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        hljs.registerLanguage('cshtml-razor', window.hljsDefineCshtmlRazor);
+        hljs.registerLanguage('lua', window.hljsDefineLua);
+        hljs.registerLanguage('luax', window.hljsDefineLuaX);
+        x = document.querySelectorAll('pre code');
+        for (var i = 0; i < x.length; i++) {
+            if (x[i].hasAttribute('class')) {
+                hljs.highlightBlock(x[i]);
+            }
+        }
+    }
+}
+
+
+function hidediv(divname) {
+    document.getElementById(divname).style.display = 'none';
+}
+
+function showdiv(divname) {
+    document.getElementById(divname).style.display = 'inline';
+}
+
+function syncList() {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, null, document.title);
+    }
+}
+
+function syncList1(key) {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, key + '.html', document.title);
+    }
+}</script><script type="text/javascript">
+    loadStarted();
+</script><h1>The Indicore SDK</h1>
+<p></p>
+<table class="tmain" width="100%">
+  <tr>
+    <td colspan="2" class="thdr"><b>Articles</b></td>
+  </tr><tr>
+  <td colspan="2" class="tmain">
+    <p><a href="what.html">What Should You Do to Create an Indicator?</a></p>
+    <p>The section briefly describes the process of indicator creation.</p>
+  </td>
+</tr><tr>
+  <td colspan="2" class="tmain">
+    <p><a href="about_forex.html">About Forex</a></p>
+    <p>The section provides basic information about the Forex market. It is recommended for those who are not familiar with Forex.</p>
+  </td>
+</tr><tr>
+  <td colspan="2" class="tmain">
+    <p><a href="major_terms.html">Definitions</a></p>
+    <p>The section provides definitions for specific terms that are used in the SDK.</p>
+  </td>
+</tr><tr>
+  <td colspan="2" class="tmain">
+    <p><a href="indexing.html">Stream Indexing</a></p>
+    <p>The section briefly describes how to access to the price stream data</p>
+  </td>
+</tr><tr>
+  <td colspan="2" class="tmain">
+    <p><a href="struct.html">The Structure of an Indicator Program</a></p>
+    <p>The section describes the structure of an indicator program written in the SDK.</p>
+  </td>
+</tr><tr>
+  <td colspan="2" class="tmain">
+    <p><a href="art3_how_to_use_indicator.html">How to Use Another Indicator in Your Code?</a></p>
+    <p>The section provides guidlines for using other indicators in your own code.</p>
+  </td>
+</tr><tr>
+  <td colspan="2" class="tmain">
+    <p><a href="art4_how_to_use_localization.html">How to Support Localization?</a></p>
+    <p>The section provides guidlines for supporting localization of your indicator.</p>
+  </td>
+</tr><tr>
+  <td colspan="2" class="tmain">
+    <p><a href="art5_how_to_use_3rdparty.html">How to use 3rd party modules</a></p>
+    <p>The section provides guidlines for usage of 3rd party libraries and modules.</p>
+  </td>
+</tr><tr>
+  <td colspan="2" class="tmain">
+    <p><a href="adv_indi.html">The advanced indicator techniques</a></p>
+    <p>The section describes the advanced indicator techniques such as a view indicators and custom drawn indicators.</p>
+  </td>
+</tr><tr>
+  <td colspan="2" class="tmain">
+    <p><a href="art6_how_to_deploy.html">How to Install and Use Your Indicator in Marketscope?</a></p>
+    <p>The section describes how to use your indicator in Marketscope.</p>
+  </td>
+</tr><tr>
+  <td colspan="2" class="tmain">
+    <p><a href="sdk_det.html">What is SDK?</a></p>
+    <p>The section briefly describes the purpose of the SDK</p>
+  </td>
+</tr><tr>
+  <td colspan="2" class="tmain">
+    <p><a href="signals.html">Signals and Strategies</a></p>
+    <p>The section describes how to create signals and strategies</p>
+  </td>
+</tr><tr>
+  <td colspan="2" class="tmain">
+    <p><a href="trading.html">Trading</a></p>
+    <p>The section contains information related to trading.</p>
+  </td>
+</tr></table><p></p>
+<table class="tmain" width="100%">
+  <tr>
+    <td colspan="2" class="thdr"><b>Lua Tables</b></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%">
+      <p><a href="array.html">array</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Static 1-dimension array of numbers.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%">
+      <p><a href="bar_stream.html">bar_stream</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The stream of bars (four/five numbers).</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%">
+      <p><a href="context.html">context</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The drawing context.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%">
+      <p><a href="core.html">core</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The core functions and constants.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%">
+      <p><a href="host.html">host</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The host application.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%">
+      <p><a href="http_loader.html">http_loader</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Http loader</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%">
+      <p><a href="indicator.html">indicator</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The profile of the indicator available at the moment of the initialization of your indicator.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%">
+      <p><a href="indicator_manager.html">indicator_manager</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The indicator manager.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%">
+      <p><a href="indicore3_ffi.html">indicore3_ffi</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The ffi functions.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%">
+      <p><a href="instance.html">instance</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The instance of a nested indicator.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%">
+      <p><a href="instance_strategy.html">instance (strategy or signal)</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Instance of the current strategy (or signal).</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%">
+      <p><a href="instance_impl.html">instance_impl</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The instance of an indicator.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%">
+      <p><a href="interop.html">interop</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The Lua interoperation.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%">
+      <p><a href="interop_instance.html">interop_instance</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>An instance of the indicator or strategy in the Lua interoperation.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%">
+      <p><a href="math2d.html">math2d</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Two-dimensional geometry calculations</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%">
+      <p><a href="mathex.html">mathex</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The extended mathematical functions.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%">
+      <p><a href="output_stream.html">output_stream</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The output stream of a nested indicator.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%">
+      <p><a href="output_stream_impl.html">output_stream_impl</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The output stream of an indicator.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%">
+      <p><a href="ownerdraw_points.html">ownerdraw_points</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The collection of the points for drawing polylines and polygons.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%">
+      <p><a href="parameters.html">parameters</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The indicator or strategy parameters.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%">
+      <p><a href="profile.html">profile</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The profile of other indicator.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%">
+      <p><a href="resources.html">resources</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The content of the resource file.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%">
+      <p><a href="strategy.html">strategy</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The profile of the strategy available at the moment of its initialization.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%">
+      <p><a href="terminal.html">terminal</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The table which is used to get access to the trading terminal functions.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%">
+      <p><a href="text_output.html">text_output</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The stream of text labels of a nested indicator.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%">
+      <p><a href="text_output_impl.html">text_output_impl</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The stream of text labels of the indicator.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%">
+      <p><a href="tick_stream.html">tick_stream</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The stream of numbers.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%">
+      <p><a href="tradingtable.html">tradingtable</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The table with the trading information.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%">
+      <p><a href="tradingtable_enum.html">tradingtable_enum</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>An enumerator for the trading table.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%">
+      <p><a href="tradingtable_row.html">tradingtable_row</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>A row of the trading table.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%">
+      <p><a href="valuemap.html">valuemap</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The value map.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%">
+      <p><a href="win32.html">win32</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The table provides advanced operating system functions.</p>
+    </td>
+  </tr>
+</table><p>
+  <center><a href="index.html">back</a></center>
+</p><script language="javascript" type="text/javascript">if(window.parent.frames[0]) window.parent.frames[0].selectItem(window.location.href);</script></body></html>

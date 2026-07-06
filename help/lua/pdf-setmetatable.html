@@ -1,0 +1,27 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - setmetatable (table, metatable)</title>
+</head>
+<body>
+<h3><a name="pdf-setmetatable"><code>setmetatable (table, metatable)</code></a></h3>
+
+
+<p>
+Sets the metatable for the given table.
+(You cannot change the metatable of other types from Lua, only from&nbsp;C.)
+If <code>metatable</code> is <b>nil</b>,
+removes the metatable of the given table.
+If the original metatable has a <code>"__metatable"</code> field,
+raises an error.
+
+
+<p>
+This function returns <code>table</code>.
+
+
+
+
+<p>
+<hr>
+</body>
+</html>

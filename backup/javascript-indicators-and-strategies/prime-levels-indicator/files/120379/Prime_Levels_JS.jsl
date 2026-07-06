@@ -1,0 +1,136 @@
+function AddParam(id, Enable, Level, Color, Width, Style)
+{
+    indicator.parameters.addBoolean("Enable" + id, "Enable level " + id, "", Enable);
+    indicator.parameters.addInteger("Level" + id, "Level " + id + " (Last digits)", "", Level);
+    indicator.parameters.addColor("Color" + id, "Level " + id + " color", "", Color);
+    indicator.parameters.addInteger("Width" + id, "Level " + id + " width", "", Width);
+    indicator.parameters.addInteger("Style" + id, "Level " + id + " style", "", Style);
+    indicator.parameters.setFlag("Style" + id, core.FLAG_LINE_STYLE);
+}
+
+var pipSize;
+var ShowLabels;
+var FontSize;
+var DigitsNumber;
+var Dig;
+
+function Init()
+{
+    indicator.name("Prime levels indicator");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addInteger("DigitsNumber", "Number of last digits", "", 2);
+    
+    AddParam(1, true, 0, core.rgb(255, 0, 0), 1, core.LINE_SOLID);
+    AddParam(2, true, 50, core.rgb(0, 0, 255), 1, core.LINE_DASH);
+    AddParam(3, true, 17, core.rgb(128, 128, 0), 1, core.LINE_SOLID);
+    AddParam(4, true, 83, core.rgb(0, 255, 0), 1, core.LINE_SOLID);
+    AddParam(5, true, 67, core.rgb(0, 128, 128), 1, core.LINE_SOLID);
+    AddParam(6, true, 33, core.rgb(255, 255, 0), 1, core.LINE_SOLID);
+    AddParam(7, false, 0, core.rgb(128, 128, 128), 1, core.LINE_SOLID);
+    AddParam(8, false, 0, core.rgb(128, 128, 128), 1, core.LINE_SOLID);
+    AddParam(9, false, 0, core.rgb(128, 128, 128), 1, core.LINE_SOLID);
+    AddParam(10, false, 0, core.rgb(128, 128, 128), 1, core.LINE_SOLID);
+    
+    indicator.parameters.addBoolean("ShowLabels", "Show labels", "", true);
+    indicator.parameters.addInteger("FontSize", "Labels font size", "", 0);
+}
+
+var source = null;
+
+function Prepare(onlyName)
+{
+    source = instance.source;
+    pipSize = source.pipSize();
+    ShowLabels=instance.parameters.ShowLabels;
+    DigitsNumber=instance.parameters.DigitsNumber;
+    Dig=Math.pow(10, DigitsNumber);
+    FontSize=instance.parameters.FontSize;
+    var name = profile.id() + "(" + source.name() + ")";
+    instance.name(name);
+
+    if (onlyName) 
+    {
+        return ;
+    }
+
+    instance.ownerDrawn(true);
+    
+    instance.setLabelColor(instance.parameters.Color1);
+}
+
+function Update(period)
+{
+
+}
+
+var init = false;
+
+function Draw(stage, context)
+{
+ var i, iLevel;
+    if (stage == 0) 
+    {
+    
+        if (!init) 
+        {
+            for (i=1; i<=10; i++) 
+            {
+             context.createPen(i, context.convertPenStyle(instance.parameters.getInteger("Style" + i)), instance.parameters.getInteger("Width" + i), instance.parameters.getColor("Color" + i));
+            } 
+            if (FontSize==0) 
+            {
+               context.createFont(11, "Arial", 0, -context.pointsToPixels(pipSize), 0);
+             }
+            else
+            {  
+               context.createFont(11, "Arial", 0, FontSize, 0);
+            } 
+            init = true;
+        }
+        
+        var top = context.top();
+        var topPrice = context.priceOfPoint(top);
+        var left = context.left();
+        
+        var bottom = context.bottom();
+        var bottomPrice =context.priceOfPoint(bottom);
+        var right = context.right();
+        
+        var MaxLevel, MinLevel;
+        var Level;
+        var v, y;
+        var w, h;
+        for (i=1; i<=10; i++) 
+        {
+         if (instance.parameters.getBoolean("Enable" + i)) 
+         {
+          Level=instance.parameters.getInteger("Level" + i)*pipSize;
+          MaxLevel=Math.floor((topPrice-Level)/(Dig*pipSize))*(Dig*pipSize)+Level;
+          MinLevel=Math.ceil((bottomPrice-Level)/(Dig*pipSize))*(Dig*pipSize)+Level;
+          iLevel=MinLevel;
+          while (iLevel<=MaxLevel) 
+          {
+           var tmp=context.pointOfPrice(iLevel);
+           v=tmp[0];
+           y=tmp[1];
+           context.drawLine(i, left, y, right, y);
+           if (ShowLabels) 
+           {
+            tmp=context.measureText(11, iLevel, context.LEFT);
+            w=tmp[0];
+            h=tmp[1];
+            context.drawText(11, iLevel, instance.parameters.getColor("Color" + i), -1, right-w, y, right, y+h, context.CENTER+context.VCENTER);
+           }
+           iLevel=iLevel+Dig*pipSize;
+          }
+         }
+        }
+
+    }
+}
+
+
+

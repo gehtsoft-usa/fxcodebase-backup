@@ -1,0 +1,63 @@
+function Init()
+{
+    indicator.name("Neo parabolic indicator");
+    indicator.description("Neo parabolic indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 10);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Uclr", "Upper channel color", "Upper channel color", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("Uwidth", "Upper channel width", "Upper channel width", 1, 1, 5);
+    indicator.parameters.addInteger("Ustyle", "Upper channel style", "Upper channel style", core.LINE_SOLID);
+    indicator.parameters.setFlag("Ustyle", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Lclr", "Lower channel color", "Lower channel color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("Lwidth", "Lower channel width", "Lower channel width", 1, 1, 5);
+    indicator.parameters.addInteger("Lstyle", "Lower channel style", "Lower channel style", core.LINE_SOLID);
+    indicator.parameters.setFlag("Lstyle", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period;
+var Upper=null;
+var Lower=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ")";
+    instance.name(name);
+    Upper = instance.addStream("Upper", core.Line, name + ".Upper", "Upper", instance.parameters.Uclr, first);
+    Upper.setWidth(instance.parameters.Uwidth);
+    Upper.setStyle(instance.parameters.Ustyle);
+    Lower = instance.addStream("Lower", core.Line, name + ".Lower", "Lower", instance.parameters.Lclr, first);
+    Lower.setWidth(instance.parameters.Lwidth);
+    Lower.setStyle(instance.parameters.Lstyle);
+}
+
+function Update(period, mode)
+{
+   if (period>first+Period) 
+   {
+    var Min=0;
+    var Max=0;
+    var i;
+    var Lowest, Highest;
+    for (i=1; i<=Period; i++) 
+    {
+     var tmp=Math.minmax(source, period-i+1, period); 
+     Lowest=tmp[0];
+     Highest=tmp[1]; 
+     Min=Min+Lowest;
+     Max=Max+Highest;
+    }
+    Upper[period]=Max/Period;
+    Lower[period]=Min/Period;
+   } 
+}
+

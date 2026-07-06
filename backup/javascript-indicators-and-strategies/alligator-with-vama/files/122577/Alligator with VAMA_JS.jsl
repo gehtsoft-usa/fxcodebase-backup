@@ -1,0 +1,122 @@
+function Init()
+{
+    indicator.name("Alligator with VAMA");
+    indicator.description("Bill Williams's moving average-based trading system.");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    indicator.setTag("group", "Bill Williams");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("JawN", "Alligator Jaw smoothing periods", "", 13);
+    indicator.parameters.addInteger("JawS", "Alligator Jaw shifting periods", "", 8);
+
+    indicator.parameters.addInteger("TeethN", "Alligator Teeth smoothing periods", "", 8);
+    indicator.parameters.addInteger("TeethS", "Alligator Teeth shifting periods","", 5);
+
+    indicator.parameters.addInteger("LipsN", "Alligator Lips smoothing periods", "", 5);
+    indicator.parameters.addInteger("LipsS", "Alligator Lips shifting periods", "", 3);
+
+    indicator.parameters.addString("MTH", "Smoothing method", "", "SMMA");
+    indicator.parameters.addStringAlternative("MTH", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("MTH", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("MTH", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("MTH", "REGRESSION", "", "REGRESSION");
+    indicator.parameters.addStringAlternative("MTH", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("MTH", "VIDYA", "", "VIDYA");
+    indicator.parameters.addStringAlternative("MTH", "VIDYA92", "", "VIDYA92");
+    indicator.parameters.addStringAlternative("MTH", "WMA", "", "WMA");
+	indicator.parameters.addStringAlternative("MTH", "VAMA", "", "VAMA");
+	
+
+    indicator.parameters.addGroup("Style");
+
+    indicator.parameters.addColor("JawC", "Alligator Jaw line color", "", core.rgb(0, 0, 255));
+    indicator.parameters.addInteger("JawW", "Alligator Jaw line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("JawSt", "Alligator Jaw line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("JawSt", core.FLAG_LEVEL_STYLE);
+
+    indicator.parameters.addColor("TeethC","Alligator Teeth line color", "", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("TeethW", "Alligator Teeth line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("TeethSt", "Alligator Teeth line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("TeethSt", core.FLAG_LEVEL_STYLE);
+
+    indicator.parameters.addColor("LipsC", "Alligator Lips line color", "", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("LipsW", "Alligator Lips line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("LipsSt", "Alligator Lips line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("LipsSt", core.FLAG_LEVEL_STYLE);
+}
+
+var JawN, JawS;
+var TeethN, TeethS;
+var LipsN, LipsC;
+
+var source;
+
+var Jaw, Teeth, Lips;
+
+var JawSrc, TeethSrc, LipsSrc;
+var MTH;
+
+function Prepare()
+{
+    MTH= instance.parameters.MTH;
+    assert(core.indicators.findIndicator(MTH) != null, "Please {wnload && install " + MTH + ".lua indicator");
+    
+    JawN = instance.parameters.JawN;
+    JawS = instance.parameters.JawS;
+    TeethN = instance.parameters.TeethN;
+    TeethS = instance.parameters.TeethS;
+    LipsN = instance.parameters.LipsN;
+    LipsS = instance.parameters.LipsS;
+
+    source = instance.source;
+	
+	if (MTH == "VAMA") 
+    {
+	 JawSrc = core.indicators.create(MTH, source, JawN, "TYPICAL", core.rgb(0, 0, 0));
+     TeethSrc = core.indicators.create(MTH, source, TeethN,"TYPICAL" , core.rgb(0, 0, 0));
+     LipsSrc = core.indicators.create(MTH, source, LipsN, "TYPICAL" ,core.rgb(0, 0, 0));
+    } 
+	else
+    {
+     JawSrc = core.indicators.create(MTH, source.median, JawN, core.rgb(0, 0, 0));
+     TeethSrc = core.indicators.create(MTH, source.median, TeethN, core.rgb(0, 0, 0));
+     LipsSrc = core.indicators.create(MTH, source.median, LipsN, core.rgb(0, 0, 0));
+	}
+
+    var name = profile.id() + "(" + source.name() + ", " + JawN + "(" + JawS + ")," + TeethN + "(" + TeethS + ")," + LipsN + "(" + LipsS + "), " + MTH + ")";
+    instance.name(name);
+
+    Jaw = instance.addStream("Jaw", core.Line, name + ".Jaw", "Jaw", instance.parameters.JawC, JawSrc.DATA.first() + JawS, JawS);
+    Jaw.setWidth(instance.parameters.JawW);
+    Jaw.setStyle(instance.parameters.JawSt);
+    Teeth = instance.addStream("Teeth", core.Line, name + ".Teeth", "Teeth", instance.parameters.TeethC, TeethSrc.DATA.first() + TeethS, TeethS);
+    Teeth.setWidth(instance.parameters.TeethW);
+    Teeth.setStyle(instance.parameters.TeethSt);
+    Lips = instance.addStream("Lips", core.Line, name + ".Lips", "Lips", instance.parameters.LipsC, LipsSrc.DATA.first() + LipsS, LipsS);
+    Lips.setWidth(instance.parameters.LipsW);
+    Lips.setStyle(instance.parameters.LipsSt);
+}
+
+function Update(period, mode)
+{
+    JawSrc.update(mode);
+    TeethSrc.update(mode);
+    LipsSrc.update(mode);
+
+    if (period + JawS >= 0 && period >= JawSrc.DATA.first()) 
+    {
+        Jaw[period + JawS] = JawSrc.DATA[period];
+    }
+
+    if (period + TeethS >= 0 && period >= TeethSrc.DATA.first()) 
+    {
+        Teeth[period + TeethS] = TeethSrc.DATA[period];
+    }
+
+    if (period + LipsS >= 0 && period >= LipsSrc.DATA.first()) 
+    {
+        Lips[period + LipsS] = LipsSrc.DATA[period];
+    }
+}
+

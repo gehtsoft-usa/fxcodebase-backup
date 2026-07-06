@@ -1,0 +1,75 @@
+function Init()
+{
+    indicator.name("Ehlers RVI oscillator");
+    indicator.description("Ehlers RVI oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addInteger("Frame", "Period", "Period", 10);
+    indicator.parameters.addColor("RVI_color", "Color of RVI", "Color of RVI", core.rgb(0, 255, 0));
+	indicator.parameters.addColor("SIGNAL_color", "Color of Signal", "Color of Signal", core.rgb(255, 0, 0));
+}
+
+var Frame;
+
+var first;
+var source = null;
+
+// Streams block
+var RVI = null;
+var SIGNAL =null;
+
+var Value1=null;
+var Value2=null;
+
+// Routine
+function Prepare()
+{
+    Frame = instance.parameters.Frame;
+    source = instance.source;
+    first = source.first();
+
+	Value1= instance.addInternalStream(0, 0);
+	Value2=instance.addInternalStream(0, 0);
+	
+    var name = profile.id() + "(" + source.name() + ", " + Frame + ")";
+    instance.name(name);
+    RVI = instance.addStream("RVI", core.Line, name, "RVI", instance.parameters.RVI_color, first);
+	SIGNAL = instance.addStream("SIGNAL", core.Line, name, "SIGNAL", instance.parameters.SIGNAL_color, first);
+
+}
+
+function Update(period)
+{
+	if (period > 3 && source.hasData(period)) 
+	{
+
+		
+		var Num=0;
+		var Denom=0;	
+
+			Value1[period] = ((source.close[period] - source.open[period]) + 2*(source.close[period-1] - source.open[period-1]) + 2*(source.close[period-2] - source.open[period-2]) + (source.close[period-3] - source.open[period-3]))/6;
+			Value2[period] = ((source.high[period] - source.low[period]) + 2*(source.high[period-1] - source.low[period-1]) + 2*(source.high[period-2] - source.low[period-2]) + (source.high[period-3] - source.low[period-3]))/6;
+            
+			
+			if (period > Frame) 
+			{
+			
+					Num = Math.sum(Value1, period-Frame, period);
+					Denom = Math.sum(Value2, period-Frame, period);
+					
+					
+					if (Denom != 0) 
+					{ 
+					    RVI[period] = Num / Denom;						
+												
+					    if (period > Frame + 3) 
+					    {
+					     SIGNAL[period] = (RVI[period] + 2*RVI[period-1] + 2*RVI[period-2] + RVI[period-3])/6;    
+					    }
+					}
+			}
+	}
+   
+}
+

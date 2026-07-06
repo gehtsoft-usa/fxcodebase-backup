@@ -1,0 +1,79 @@
+function Init()
+{
+    indicator.name("RR");
+    indicator.description("RR");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+
+    indicator.parameters.addInteger ("N", "N", "", 5);
+    indicator.parameters.addDouble ("X", "X", "", 0.0001);
+
+    indicator.parameters.addGroup("Style");
+
+    indicator.parameters.addColor("clr", "Upperband Line color", "", core.rgb(58, 197, 94));
+    indicator.parameters.addInteger("line_width", "Upperband Line width", "", 3);
+    indicator.parameters.addString("line_style" , "Upperband line_style", "", "Solid");
+    indicator.parameters.addStringAlternative("line_style" , "Solid line", "", "Solid");
+    indicator.parameters.addStringAlternative("line_style" , "Dot line", "", "Dot");
+    indicator.parameters.addStringAlternative("line_style", "Dash line", "", "Dash");
+    indicator.parameters.addStringAlternative("line_style" , "Dash-dot line", "", "Dash-dot");
+
+
+}
+
+var first;
+var source = null;
+var  N, X, clr, line_style, line_width;
+var  RR, RLW, Rendiment;
+var High, Low;
+
+function Prepare()
+{
+    source = instance.source;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name()+ ")";
+    instance.name(name);
+    
+    N=instance.parameters.N;
+    X=instance.parameters.X;
+    clr=instance.parameters.clr;
+    line_width=instance.parameters.line_width;
+    line_style=instance.parameters.line_style; 
+    
+    RR = instance.addStream("RR", core.Line, name + ".RR", "RR", instance.parameters.clr, first);
+
+    if (line_style =="Solid") 
+    {
+        RR.setStyle (core.LINE_SOLID);
+    }
+    else if (line_style=="Dot") 
+    {
+        RR.setStyle (core.LINE_DOT);
+    }
+    else if (line_style=="Dash") 
+    {
+        RR.setStyle (core.LINE_DASH);
+    }
+    else if (line_style=="Dash-dot") 
+    {
+        RR.setStyle (core.LINE_DASHDOT);
+    }  
+
+    RR.setWidth (line_width);
+
+    RLW=core.indicators.create("RLW", source, N);
+    
+}
+
+function Update(period, mode)
+{    
+    if (period>first+N) 
+    {
+            RLW.update(mode);
+            Rendiment=X*Math.log(source.close[period-1]/source.close[period-N]);
+            RR[period]=(RLW.DATA[period]+Rendiment)/2;
+    }
+}
+

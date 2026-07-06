@@ -1,0 +1,73 @@
+function Init()
+{
+    indicator.name("PAIN");
+    indicator.description("PAIN");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");	
+    indicator.parameters.addInteger("Period", "Period", "Period", 10);
+	indicator.parameters.addString("Method", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method", "WMA", "WMA" , "WMA");
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Pain_color", "Color of Pain", "Color of Pain", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var Period, Method;
+
+var first;
+var source = null;
+
+var Pain = null;
+var OPEN, CLOSE, HIGH, LOW;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+	Method = instance.parameters.Method;
+    source = instance.source;
+	
+	OPEN = core.indicators.create(Method, source.open, Period);
+	CLOSE = core.indicators.create(Method, source.close, Period);
+	HIGH = core.indicators.create(Method, source.high, Period);
+	LOW = core.indicators.create(Method, source.low, Period);
+	
+    first = CLOSE.DATA.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ", " + tostring(Method)+ ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        Pain = instance.addStream("Pain", core.Line, name, "Pain", instance.parameters.Pain_color, first);
+		Pain.setWidth(instance.parameters.width);
+        Pain.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period, mode)
+{
+   CLOSE.update(mode);
+   OPEN.update(mode);
+   HIGH.update(mode);
+   LOW.update(mode);
+	
+    if (period < first) 
+    {
+	 return;
+	}
+    
+
+    Pain[period] =  ( (CLOSE.DATA[period]-OPEN.DATA[period])+(CLOSE.DATA[period]-HIGH.DATA[period])+(CLOSE.DATA[period]-LOW.DATA[period]) ) / 2;
+    
+}
+

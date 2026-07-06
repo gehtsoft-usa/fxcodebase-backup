@@ -1,0 +1,55 @@
+function Init()
+{
+    indicator.name("Figurelli Series indicator");
+    indicator.description("Figurelli Series indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    
+    indicator.parameters.addInteger("series", "series", "series", 36);
+    indicator.parameters.addInteger("interval", "interval", "interval", 6);
+
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(0, 0, 255));
+}
+
+var first;
+var source = null;
+var series;
+var interval;
+var FS=null;
+
+function Prepare()
+{
+    source = instance.source;
+    series=instance.parameters.series;
+    interval=instance.parameters.interval;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.series + ", " + instance.parameters.interval + ")";
+    instance.name(name);
+    FS = instance.addStream("FS", core.Bar, name + ".FS", "FS", instance.parameters.clr, first);
+    FS.addLevel(0);
+}
+
+function Update(period, mode)
+{
+    if (period>first+interval*series) 
+    {
+     var tot_Ask=0;
+     var tot_Bid=0;
+     var sma;
+     for (i=0; i<=series-1; i++) 
+     {
+      sma=Math.avg(source.close,core.rangeTo(period,interval*(1+i)));
+      if (source.close[period]<sma) 
+      {
+       tot_Ask=tot_Ask+1;
+      }
+      if (source.close[period]>sma) 
+      {
+       tot_Bid=tot_Bid+1;
+      }
+     }
+     var tot=tot_Bid-tot_Ask;
+     FS[period]=tot;
+    } 
+}
+

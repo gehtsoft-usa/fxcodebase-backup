@@ -1,0 +1,1189 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252" /><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><title>core</title><style type="text/css">a, p, h1, h2, h3, h4, h5, h6, table, td, tr, li, ul, ol {
+    font-family: Verdana, Trebuchet MS, Arial;
+}
+
+a, p, td, tr, ul, ol, li {
+    font-size: 12pt;
+}
+
+h3 {
+    font-size: 13pt;
+}
+
+h2 {
+    font-size: 13pt;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+body {
+    color: #444444;
+    background-color: white;
+}
+
+A:link {
+    color: #0065b3;
+    cursor: pointer;
+}
+
+A:visited {
+    color: #0068be;
+    cursor: pointer;
+}
+
+a.action {
+  background-color: #0065b3;
+  color: white;
+  font-size: 10pt;
+  padding: 2px 2px;
+  width: 50pt;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px;
+}
+
+.side-icon {
+    float: left;
+}
+
+a.action [class*="dripicons-"]:before {
+    padding: 0 2px 0 0;
+    font-size: 12pt;
+    vertical-align: text-bottom;
+}
+
+.side-icon:after {
+  content: "";
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  border-left: 1.5px solid white;
+  transform: translate(-50%);
+}
+
+a.actiontab {
+  font-size: 10pt;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px 3px 0 0;
+}
+
+pre, code, code a {
+    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+    font-size: 12pt;
+}
+
+code.ctag {
+    background-color: #f1f1f1;
+    padding: .1em .2em;
+    border-radius: 3px;
+}
+
+pre {
+    background-color: white;
+}
+
+pre.example {
+    background-color: #f1f1f1;
+}
+
+ul {
+    list-style-type: disc;
+    margin-left: 18pt;
+}
+
+ol {
+    list-style-type: decimal;
+    margin-left: 18pt;
+}
+
+ul.hhc {
+    list-style-type: none;
+    margin-left: 1em;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+li.hhc {
+    margin-left: 0;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+table {
+  border-spacing: 0;
+  border-color: #dfe3e7;
+}
+
+tr + tr td {
+   border-top: 0;
+}
+
+tr td + td {
+  border-left: 0;
+}
+
+td {
+  border: 1px solid;
+  border-color: #dfe3e7;
+}
+
+tr:first-child td:first-child {
+   border-radius: 0.2em 0 0 0;
+}
+
+tr:first-child td:last-child {
+  border-radius: 0 0.2em 0 0;
+}
+
+tr:first-child td:only-child {
+  border-radius: 0.2em 0.2em 0 0;
+}
+
+tr:last-child td:first-child {
+    border-radius: 0 0 0 0.2em;
+}
+
+tr:last-child td:last-child {
+    border-radius: 0 0 0.2em 0;
+}
+
+tr:last-child td:only-child {
+    border-radius: 0 0 0.2em 0.2em;
+}
+
+tr:only-child td:only-child {
+    border-radius: 0.2em 0.2em 0.2em 0.2em;
+}
+
+tr:only-child td:first-child {
+   border-radius: 0.2em 0 0 0.2em;
+}
+
+tr:only-child td:last-child {
+  border-radius: 0 0.2em 0.2em 0;
+}
+
+
+td.tmain, td.tmain_nw, td.thdr {
+    background-color: rgb(255, 255, 255);
+    vertical-align: top;
+    padding: 3px;
+}
+
+td.tmain p, td.tmain_nw p, td.thdr p {
+    margin-top: 3pt;
+    margin-bottom: 3pt;
+}
+
+td.tmain_nw {
+    white-space: nowrap;
+}
+
+td.thdr {
+    background-color: #e3e3e3;
+}
+
+table.decl {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+    vertical-align: top;
+    padding: 3px;
+    width: 100%;
+}
+
+table.decl td {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+}
+
+div.note-quote {
+    border-left: 10px solid #ccc;
+    padding: 1em 10px .1em 10px;
+    margin: 1.5em 10px;
+    background-color: rgb(224, 224, 224);
+}
+
+div.note-note {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+div.note-warning {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #fff;
+    background-color: #ff6358;
+}
+div.note-warning code.ctag {
+    color: black;
+}</style>
+<link rel="stylesheet" href="res/dripicons.css"></head><body><script type="text/javascript">
+var highlighterEnabled = false;
+var maintopic = 'index';
+var helptitle = 'Indicore SDK 3';
+    function loadStarted() {
+    window.onload = loadCompleted;
+
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        var head = document.getElementsByTagName('head')[0];
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.min.js';
+        head.appendChild(script4);
+
+
+        var script2 = document.createElement('script');
+        script2.type = 'text/javascript';
+        script2.src = './highlighter/highlight.cshtml.js';
+        head.appendChild(script2);
+
+        var script3 = document.createElement('script');
+        script3.type = 'text/javascript';
+        script3.src = './highlighter/highlight.lua.js';
+        head.appendChild(script3);
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.luax.js';
+        head.appendChild(script4);
+    }
+}
+
+function loadCompleted() {
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        hljs.registerLanguage('cshtml-razor', window.hljsDefineCshtmlRazor);
+        hljs.registerLanguage('lua', window.hljsDefineLua);
+        hljs.registerLanguage('luax', window.hljsDefineLuaX);
+        x = document.querySelectorAll('pre code');
+        for (var i = 0; i < x.length; i++) {
+            if (x[i].hasAttribute('class')) {
+                hljs.highlightBlock(x[i]);
+            }
+        }
+    }
+}
+
+
+function hidediv(divname) {
+    document.getElementById(divname).style.display = 'none';
+}
+
+function showdiv(divname) {
+    document.getElementById(divname).style.display = 'inline';
+}
+
+function syncList() {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, null, document.title);
+    }
+}
+
+function syncList1(key) {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, key + '.html', document.title);
+    }
+}</script><script type="text/javascript">
+    loadStarted();
+</script><h1><code>table <b>core</b></code></h1>
+<h2>Brief</h2>
+<p>The core functions and constants.</p>
+<h2>Details</h2><p>The table <code class="ctag">core</code> is always defined in the indicator, signal or strategy.</p><p></p>
+<table class="tmain" width="100%">
+  <tr>
+    <td colspan="2" class="thdr"><b>Static Public Properties</b></td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.host.html">host</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The host application.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.indicators.html">indicators</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The indicator manager.</p>
+    </td>
+  </tr>
+</table><p></p>
+<table class="tmain" width="100%">
+  <tr>
+    <td colspan="2" class="thdr"><b>Static Public Methods</b></td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.app_path.html">app_path</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Gets the path to lua5.1.dll</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.colors.html">colors</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Creates an color table</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.crosses.html">crosses</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Checks whether one stream crosses the other stream in any direction at the specified position.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.crossesOver.html">crossesOver</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Checks whether one stream crosses over the other stream at the specified position.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.crossesOverOrTouch.html">crossesOverOrTouch</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Checks whether one stream crosses over or touches the other stream at the specified position.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.crossesUnder.html">crossesUnder</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Checks whether one stream crosses under the other stream at the specified position.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.crossesUnderOrTouch.html">crossesUnderOrTouch</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Checks whether one stream crosses under or touches the other stream at the specified position.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.date.html">date</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Creates date value.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.datetime.html">datetime</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Creates date and time value.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.dateToTable.html">dateToTable</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Converts the date with a number format into the table.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.drawLine.html">drawLine</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Draws the line in the output stream.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.eraseStream.html">eraseStream</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Sets no data to the specified range of the output stream.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.findDate.html">findDate</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Searches in the price stream for the specified date.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.formatDate.html">formatDate</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Formats date/time into a string.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.getcandle.html">getcandle</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Gets the begin and end of the candle to which the specified date belongs.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.isnontrading.html">isnontrading</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Checks whether the specified date and time is the regular non-trading hours.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.makeHttpLoader.html">makeHttpLoader</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Creates an HTTP reader.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.now.html">now</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Returns the current local date and time.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.parseCsv.html">parseCsv</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Parses comma-separated values.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.range.html">range</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Creates the range table for the statistics methods using the 'from' and 'to' indexes.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.rangeFrom.html">rangeFrom</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Creates the range table for the statistics methods using the 'from' index and the size of the range.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.rangeTo.html">rangeTo</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Creates the range table for the statistics methods using the 'to' index and the size of the range.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.requires.html">requires</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Checks whether the version of indicator core is correct.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.rgb.html">rgb</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Creates the color from the red, green, and blue components.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.tableToDate.html">tableToDate</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Converts the table into the date with a number format.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.touches.html">touches</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Checks whether one stream touches the other stream at the specified position.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.valuemap.html">valuemap</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Creates a value map.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.version.html">version</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Returns the version of indicator core.</p>
+    </td>
+  </tr>
+</table><p></p>
+<table class="tmain" width="100%">
+  <tr>
+    <td colspan="2" class="thdr"><b>Public Constant Properties</b></td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.ASYNC_REDRAW.html">ASYNC_REDRAW</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The flag indicating that the indicator must be redrawn after async notification.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.Bar.html">Bar</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The type of the indicator required source or of the output.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.Both.html">Both</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The type of the strategy.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.COLOR_BACKGROUND.html">COLOR_BACKGROUND</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The identifier of the color (default color of chart background)</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.COLOR_CUSTOMLEVEL.html">COLOR_CUSTOMLEVEL</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The identifier of the color (default color of custom level lines)</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.COLOR_DOWNCANDLE.html">COLOR_DOWNCANDLE</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The identifier of the color (default color of descending candles)</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.COLOR_LABEL.html">COLOR_LABEL</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The identifier of the color (default color of labels)</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.COLOR_LINE.html">COLOR_LINE</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The identifier of the color (default color of lines)</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.COLOR_UPCANDLE.html">COLOR_UPCANDLE</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The identifier of the color (default color of ascending candles)</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.CR_BOTTOM.html">CR_BOTTOM</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The type of the label coordinate.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.CR_CENTER.html">CR_CENTER</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The type of the label coordinate.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.CR_CHART.html">CR_CHART</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The type of the label coordinate.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.CR_LEFT.html">CR_LEFT</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The type of the label coordinate.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.CR_RIGHT.html">CR_RIGHT</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The type of the label coordinate.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.CR_TOP.html">CR_TOP</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The type of the label coordinate.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.Dot.html">Dot</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The type of the indicator output.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.FLAG_ACCOUNT.html">FLAG_ACCOUNT</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The parameter behavior flag.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.FLAG_ALLOW_TRADE.html">FLAG_ALLOW_TRADE</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The parameter behavior flag.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.FLAG_BARPERIODS.html">FLAG_BARPERIODS</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The parameter behavior flag.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.FLAG_BARPERIODS_EDIT.html">FLAG_BARPERIODS_EDIT</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The parameter behavior flag.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.FLAG_BIDASK.html">FLAG_BIDASK</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The parameter behavior flag.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.FLAG_DATE.html">FLAG_DATE</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The parameter behavior flag.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.FLAG_DATE_OR_NULL.html">FLAG_DATE_OR_NULL</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The parameter behavior flag.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.FLAG_DATETIME.html">FLAG_DATETIME</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The parameter behavior flag.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.FLAG_DATETIME_OR_NULL.html">FLAG_DATETIME_OR_NULL</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The parameter behavior flag.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.FLAG_EMAIL.html">FLAG_EMAIL</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The parameter behavior flag.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.FLAG_INDICATOR.html">FLAG_INDICATOR</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The parameter behavior flag.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.FLAG_INSTRUMENTS.html">FLAG_INSTRUMENTS</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The parameter behavior flag.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.FLAG_LEVEL_STYLE.html">FLAG_LEVEL_STYLE</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The parameter behavior flag.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.FLAG_LINE_STYLE.html">FLAG_LINE_STYLE</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The parameter behavior flag.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.FLAG_ONLYINDICATORS.html">FLAG_ONLYINDICATORS</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The parameter behavior flag.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.FLAG_ONLYOSCILLATORS.html">FLAG_ONLYOSCILLATORS</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The parameter behavior flag.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.FLAG_ORDER.html">FLAG_ORDER</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The parameter behavior flag.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.FLAG_PERIODS.html">FLAG_PERIODS</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The parameter behavior flag.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.FLAG_PERIODS_EDIT.html">FLAG_PERIODS_EDIT</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The parameter behavior flag.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.FLAG_PRICE.html">FLAG_PRICE</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The parameter behavior flag.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.FLAG_SOUND.html">FLAG_SOUND</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The parameter behavior flag.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.FLAG_STRATEGY.html">FLAG_STRATEGY</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The parameter behavior flag.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.FLAG_TRADE.html">FLAG_TRADE</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The parameter behavior flag.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.H_Center.html">H_Center</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The horizonal alignment of a label.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.H_Left.html">H_Left</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The horizonal alignment of a label.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.H_Right.html">H_Right</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The horizonal alignment of a label.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.ILanguageServiceIndicator.html">ILanguageServiceIndicator</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The type of the profile (Indicator).</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.ILanguageServiceJs.html">ILanguageServiceJs</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The language of the profile (JavaScript).</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.ILanguageServiceLua.html">ILanguageServiceLua</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The language of the profile (Lua).</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.ILanguageServiceNativeWin.html">ILanguageServiceNativeWin</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The language of the profile (C++ for Windows).</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.ILanguageServiceStrategy.html">ILanguageServiceStrategy</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The type of the profile (Strategy).</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.ILanguageServiceUnknownLanguage.html">ILanguageServiceUnknownLanguage</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The language of the profile (Undefined).</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.ILanguageServiceUnknownType.html">ILanguageServiceUnknownType</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The type of the profile (Undefined).</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.Indicator.html">Indicator</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The type of the indicator.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.Line.html">Line</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The type of the indicator output.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.LINE_DASH.html">LINE_DASH</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The line style (dashed line).</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.LINE_DASHDOT.html">LINE_DASHDOT</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The line style (dash-dotted line).</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.LINE_DOT.html">LINE_DOT</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The line style (dotted line).</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.LINE_NONE.html">LINE_NONE</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The line style (invisible line).</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.LINE_SOLID.html">LINE_SOLID</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The line style (solid line).</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.Oscillator.html">Oscillator</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The type of the indicator.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.OWNER_ADDITIONAL_AREA.html">OWNER_ADDITIONAL_AREA</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The indicator is applied on an additional area.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.OWNER_INTERNAL.html">OWNER_INTERNAL</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The indicator is included in another indicator or strategy.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.OWNER_MAIN_AREA.html">OWNER_MAIN_AREA</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The indicator is applied on the main chart area.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.OWNER_UNKNOWN.html">OWNER_UNKNOWN</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The owner is unknown e.g. the command is executed in the Prepare() function while the indicator is not added on a chart yet.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.Signal.html">Signal</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The type of the strategy.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.Strategy.html">Strategy</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The type of the strategy.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.Tick.html">Tick</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The type of the indicator required source.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.TZ_EST.html">TZ_EST</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Time zone (New York time).</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.TZ_FINANCIAL.html">TZ_FINANCIAL</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The financial time time zone.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.TZ_GMT.html">TZ_GMT</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Time zone (Universal Coordinated Time).</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.TZ_LOCAL.html">TZ_LOCAL</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The user local time zone.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.TZ_SERVER.html">TZ_SERVER</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The time zone of the server.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.TZ_TS.html">TZ_TS</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The time zone chosen to show dates in the host application.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.UpdateAll.html">UpdateAll</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Indicator update mode.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.UpdateLast.html">UpdateLast</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Indicator update mode.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.UpdateNew.html">UpdateNew</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Indicator Update mode.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.V_Bottom.html">V_Bottom</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The vertical alignment of a label.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.V_Center.html">V_Center</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The vertical alignment of a label.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.V_Top.html">V_Top</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The vertical alignment of a label.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="core.View.html">View</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>The type of the indicator.</p>
+    </td>
+  </tr>
+</table><p>
+  <center><a href="sdk_main.html">back</a></center>
+</p><script language="javascript" type="text/javascript">if(window.parent.frames[0]) window.parent.frames[0].selectItem(window.location.href);</script></body></html>

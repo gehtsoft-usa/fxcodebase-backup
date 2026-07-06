@@ -1,0 +1,117 @@
+function Init()
+{
+    indicator.name("Mel Widner Averaged Rainbow");
+    indicator.description("Averaged Rainbow");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+    indicator.parameters.addGroup("Calculation");	 
+    indicator.parameters.addInteger("Period", "MA Period", "MA Period", 2);
+	indicator.parameters.addString("Method", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method", "WMA", "WMA" , "WMA");
+	indicator.parameters.addGroup("Style");	
+	indicator.parameters.addColor("Color", "Color", "Color", core.rgb(255, 0, 0));
+
+    indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var Number=10;
+var Color;
+var Period;
+var Method;
+var first={};
+var source = null;
+var ma={};
+
+var MA = {};
+var Avg, FIRST;
+var Weight={};
+
+function Prepare(nameOnly)
+{
+    Color = instance.parameters.Color;
+	Method = instance.parameters.Method;
+    Period = instance.parameters.Period;
+    source = instance.source;
+	FIRST=source.first();
+	var i;
+	Weight[1]=5;
+	Weight[2]=4;
+	Weight[3]=3;
+	Weight[4]=2;
+	Weight[5]=1;
+	Weight[6]=1;
+	Weight[7]=1;
+	Weight[8]=1;
+	Weight[9]=1;
+	Weight[10]=1;
+	for (i = 1; i<=Number; i++) 
+	{
+		if (i == 1) 
+		{
+		 ma[i] = core.indicators.create(Method, source, Period);
+		} 
+		else
+		{	
+		 ma[i] = core.indicators.create(Method, ma[i-1].DATA, Period);
+		}
+    first[i] = ma[i].DATA.first();
+	FIRST= Math.max(FIRST,first[i] );
+	}
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Number) + ", " + tostring(Period) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+	
+	    for (i = 1; i<=Number; i++) 
+	    {
+		 MA[i]= instance.addInternalStream(0, 0);
+        }
+		
+		 Avg = instance.addStream("Avg", core.Line, name, "MA " ,  Color, FIRST);
+		 Avg.setWidth(instance.parameters.width);
+         Avg.setStyle(instance.parameters.style);
+		
+    }
+}
+
+function Update(period, mode)
+{
+    if (!source.hasData(period)) 
+    {
+	 return;
+	}
+	
+	var i;	
+	var Sum=0;
+	var Num=0;
+	for (i = 1; i<=Number; i++) 
+	{	
+	 ma[i].update(mode); 
+	 if (period >= first[i]) 
+	 {
+	  MA[i][period] = ma[i].DATA[period];
+	  Num= Num+Weight[i];
+	  Sum=Sum+ma[i].DATA[period]*Weight[i] ;
+	 }
+	}
+       
+    if (period <FIRST) 
+    {
+	 return;
+	}
+	
+	Avg[period]= Sum / Num;
+}
+
+ 

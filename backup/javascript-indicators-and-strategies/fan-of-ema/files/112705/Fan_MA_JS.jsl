@@ -1,0 +1,88 @@
+function Init()
+{
+    indicator.name("FAN of EMA");
+    indicator.description("");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addInteger("Period_1", "First period", "No description", 5);
+    indicator.parameters.addString("Method", "Method", "", "Add");
+    indicator.parameters.addStringAlternative("Method", "Add", "", "Add");
+    indicator.parameters.addStringAlternative("Method", "Mult", "", "Mult");
+
+    indicator.parameters.addInteger("K", "K", "No description", 2);
+    indicator.parameters.addInteger("N", "Count of MA", "No description", 5);
+
+}
+
+var Period1;
+var K;
+var N;
+var Method;
+
+var first;
+var source = null;
+var buffs={};
+
+var Inds={};
+
+function Prepare()
+{
+    Period1 = instance.parameters.Period_1;
+    K = instance.parameters.K;
+    N = instance.parameters.N;
+    Method = instance.parameters.Method;
+    source = instance.source;
+    var Period=Period1;
+    for (i=1; i<=N; i++) 
+    {
+     Ind=core.indicators.create("EMA", source, Period);
+     Inds[i]=Ind;
+     if (Method=="Mult") 
+     {
+      Period=Period*K;
+     } 
+     else
+     {
+      Period=Period+K;
+     } 
+    }
+    
+    first = Inds[N].DATA.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + Period1 + ", " + K + ", " + N + ", " + Method + ")";
+    instance.name(name);
+    
+    for (i=1; i<=N; i++) 
+    {
+     if (i<N/3) 
+     {
+      Color=core.rgb(i*155*3/N+100,0,0);
+     } 
+     else
+     {
+      if (i>=N/3 && i<2*N/3) 
+      {
+       Color=core.rgb(0,(i-N/3)*155/N+100,0);
+      } 
+      else
+      {
+       Color=core.rgb(0,0,(i-N*2/3)*155/N+100);
+      } 
+     } 
+     buffs[i] = instance.addStream("buff" + i, core.Line, name + ".buff" + i, "buff" + i, Color, first);
+    }
+}
+
+function Update(period, mode)
+{
+ if (period>first) 
+ {
+  for (i=1; i<=N; i++) 
+  {
+   Inds[i].update(mode);
+   buffs[i][period]=Inds[i].DATA[period];
+  }
+  
+ } 
+}
+

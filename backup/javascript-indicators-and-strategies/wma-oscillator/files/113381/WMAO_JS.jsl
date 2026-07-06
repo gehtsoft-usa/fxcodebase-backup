@@ -1,0 +1,65 @@
+function Init()
+{
+    indicator.name("WMAO");
+    indicator.description("WMAO");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+
+    indicator.parameters.addInteger("Short_Length", "Short_Length", "", 10);
+    indicator.parameters.addInteger("Long_Length", "Long_Length", "", 20);
+    
+   
+    indicator.parameters.addGroup("Style");
+
+    indicator.parameters.addColor("clr1", "Up Color", "", core.rgb(0, 128, 255));
+    indicator.parameters.addColor("clr2", "Down Color", "", core.rgb(255, 128, 0));
+}
+
+var first;
+var source = null;
+var Short_Length, Long_Length;
+var clr1, clr2;
+var WMAO;
+var WMA_S, WMA_L;
+
+function Prepare()
+{
+    source = instance.source;
+    first = source.first();
+
+    Short_Length=instance.parameters.Short_Length;
+    Long_Length=instance.parameters.Long_Length;
+    clr1=instance.parameters.clr1;
+    clr2=instance.parameters.clr2;
+
+    var name = profile.id() + "(" + source.name()+ ")";
+    instance.name(name);
+
+    WMAO = instance.addStream("WMAO", core.Bar, name + ".WMAO", "WMAO", instance.parameters.clr1, first);
+
+    WMA_S=core.indicators.create("WMA", source, Short_Length);
+    WMA_L=core.indicators.create("WMA", source, Long_Length);
+    
+}
+
+function Update(period, mode)
+{
+    
+    if (period>first+Math.max(Short_Length, Long_Length)) 
+    {
+        WMA_S.update(mode);
+        WMA_L.update(mode);
+        WMAO[period] = WMA_S.DATA[period] - WMA_L.DATA[period];
+        if (WMAO[period]>=WMAO[period-1]) 
+        {
+            WMAO.setColor(period,clr1);
+        }    
+        else if (WMAO[period]<WMAO[period-1]) 
+        {
+            WMAO.setColor(period,clr2);
+        }
+    }
+}
+

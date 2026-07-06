@@ -1,0 +1,101 @@
+function Init()
+{
+    indicator.name("Rj_SlidingRange indicator");
+    indicator.description("Rj_SlidingRange indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 5);
+    indicator.parameters.addString("Method", "Method", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("Method", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Method", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Method", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Method", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Method", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Method", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Method", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Method", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Method", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Method", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Method", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Method", "JSmooth", "", "JSmooth");
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP Color", "UP Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DNclr", "DN Color", "DN Color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("Uclr", "Upper limit Color", "Upper limit Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("Lclr", "Lower limit Color", "Lower limit Color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("MainWidth", "Main Line width", "Main Line width", 2, 1, 5);
+    indicator.parameters.addInteger("MainStyle", "Main Line style", "Main Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("MainStyle", core.FLAG_LINE_STYLE);
+    indicator.parameters.addInteger("BandWidth", "Band Lines width", "Band Lines width", 1, 1, 5);
+    indicator.parameters.addInteger("BandStyle", "Band Lines style", "Band Lines style", core.LINE_DASH);
+    indicator.parameters.setFlag("BandStyle", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period;
+var Method;
+var Min, Max;
+var MA_H, MA_L;
+var MainBuff=null;
+var UpperBuff=null;
+var LowerBuff=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    Method=instance.parameters.Method;
+    first = source.first()+2;
+    Min=instance.addInternalStream(first, 0);
+    Max=instance.addInternalStream(first, 0);
+    MA_H=core.indicators.create("AVERAGES", Max, Method, Period, false);
+    MA_L=core.indicators.create("AVERAGES", Min, Method, Period, false);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.Method + ")";
+    instance.name(name);
+    MainBuff = instance.addStream("MainBuff", core.Line, name + ".Main", "Main", instance.parameters.UPclr, first);
+    UpperBuff = instance.addStream("UpperBuff", core.Line, name + ".Upper", "Upper", instance.parameters.Uclr, first);
+    LowerBuff = instance.addStream("LowerBuff", core.Line, name + ".Lower", "Lower", instance.parameters.Lclr, first);
+    MainBuff.setWidth(instance.parameters.MainWidth);
+    MainBuff.setStyle(instance.parameters.MainStyle);
+    UpperBuff.setWidth(instance.parameters.BandWidth);
+    UpperBuff.setStyle(instance.parameters.BandStyle);
+    LowerBuff.setWidth(instance.parameters.BandWidth);
+    LowerBuff.setStyle(instance.parameters.BandStyle);
+}
+
+function Update(period, mode)
+{
+   if (period>first+Period) 
+   {
+    var tmp=Math.minmax(source, period-Period+1, period);
+    Min[period]=tmp[0];
+    Max[period]=tmp[1];
+    MA_H.update(mode);
+    MA_L.update(mode);
+    UpperBuff[period]=MA_H.DATA[period];
+    LowerBuff[period]=MA_L.DATA[period];
+    MainBuff[period]=(UpperBuff[period]+LowerBuff[period])/2;
+    if (MainBuff[period]>=MainBuff[period-1]) 
+    {
+     MainBuff.setColor(period,instance.parameters.UPclr);
+    } 
+    else
+    {
+     MainBuff.setColor(period,instance.parameters.DNclr);
+    }
+   } 
+}
+

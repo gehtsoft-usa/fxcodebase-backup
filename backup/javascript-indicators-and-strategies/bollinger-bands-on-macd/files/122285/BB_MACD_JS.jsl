@@ -1,0 +1,94 @@
+function Init()
+{
+    indicator.name("BB MACD");
+    indicator.description("BB MACD");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+    
+    indicator.parameters.addInteger("FastLen", "Fast length", "Fast length", 12);
+    indicator.parameters.addInteger("SlowLen", "Slow length", "Slow length", 26);
+    indicator.parameters.addInteger("Length", "Length", "Length", 10);
+    indicator.parameters.addDouble("StDv", "Standard deviation", "Standard deviation", 2.5);
+
+    indicator.parameters.addColor("clr1", "Color 1", "Color 1", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clr2", "Color 2", "Color 2", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("clr3", "Color 3", "Color 3", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("clr4", "Color 4", "Color 4", core.rgb(255, 255, 0));
+}
+
+var first;
+var source = null;
+var bbMACD;
+var UpperBand;
+var LowerBand;
+var FastLen;
+var SlowLen;
+var Length;
+var StDv;
+var FastMA;
+var SlowMA;
+var Avg;
+var sDev;
+var buff1=null;
+var buff2=null;
+var LastState=null;
+
+function Prepare()
+{
+    source = instance.source;
+    FastLen=instance.parameters.FastLen;
+    SlowLen=instance.parameters.SlowLen;
+    Length=instance.parameters.Length;
+    StDv=instance.parameters.StDv;
+    bbMACD = instance.addInternalStream(0, 0);
+    UpperBand = instance.addInternalStream(0, 0);
+    LowerBand = instance.addInternalStream(0, 0);
+    FastMA = core.indicators.create("EMA", source, FastLen);
+    SlowMA = core.indicators.create("EMA", source, SlowLen);
+    Avg = core.indicators.create("EMA", bbMACD, Length);
+    sDev = core.indicators.create("STDDEV", bbMACD, Length);
+    first = Math.max(FastMA.DATA.first(),SlowMA.DATA.first())+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.FastLen + ", " + instance.parameters.SlowLen + ", " + instance.parameters.Length + ", " + instance.parameters.StDv + ")";
+    instance.name(name);
+    buff1 = instance.addStream("buff1", core.Line, name + ".buff1", "buff1", instance.parameters.clr1, first);
+    buff2 = instance.addStream("buff2", core.Line, name + ".buff2", "buff2", instance.parameters.clr2, first);
+    buff3 = instance.addStream("buff3", core.Line, name + ".buff3", "buff3", instance.parameters.clr3, first);
+    buff4 = instance.addStream("buff4", core.Line, name + ".buff4", "buff4", instance.parameters.clr4, first);
+}
+
+function Update(period, mode)
+{
+    FastMA.update(mode);
+    SlowMA.update(mode);
+    if (period>first) 
+    {
+     bbMACD[period]=FastMA.DATA[period]-SlowMA.DATA[period];
+     Avg.update(mode);
+     sDev.update(mode);
+     UpperBand[period]=Avg.DATA[period]+(StDv*sDev.DATA[period]);
+     LowerBand[period]=Avg.DATA[period]-(StDv*sDev.DATA[period]);
+     if (bbMACD[period]>bbMACD[period-1]) 
+     {
+      buff1[period]=bbMACD[period];
+      buff2[period]=null;
+      if (LastState!=1) 
+      {
+       buff1[period-1]=bbMACD[period-1];
+      }
+      LastState=1;
+     } 
+     else
+     {
+      buff1[period]=null;
+      buff2[period]=bbMACD[period];
+      if (LastState!=-1) 
+      {
+       buff2[period-1]=bbMACD[period-1];
+      }
+      LastState=-1;
+     }
+     buff3[period]=UpperBand[period];
+     buff4[period]=LowerBand[period];
+    } 
+}
+

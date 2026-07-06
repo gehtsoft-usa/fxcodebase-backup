@@ -1,0 +1,88 @@
+function Init()
+{
+    indicator.name("HA Difference");
+    indicator.description("HA Difference");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+	
+	indicator.parameters.addGroup("Calculation");
+	indicator.parameters.addInteger("Period", "Period", "Period" , 3);
+	indicator.parameters.addString("Method", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "EMA" , "EMA");
+ indicator.parameters.addStringAlternative("Method", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method", "WMA", "WMA" , "WMA");
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("open_color", "Color of Difference", "Color of Difference", core.rgb(0, 255, 0));
+	indicator.parameters.addInteger("width1", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style1", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style1", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("close_color", "Color of Signal", "Color of Signal", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width2", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style2", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style2", core.FLAG_LINE_STYLE);
+}
+
+var Method, Period;
+var first;
+var source = null;
+var open, close;
+
+var Difference = null;
+var Signal = null;
+var MA;
+
+function Prepare(nameOnly)
+{
+    source = instance.source; 
+	Method =instance.parameters.Method;
+	Period = instance.parameters.Period;
+    first = source.first();
+	
+	open = instance.addInternalStream(0, 0);
+	close = instance.addInternalStream(0, 0);
+
+    var name = profile.id() + "(" + source.name() + ", " + Period+ ", " + Method+ ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        Difference = instance.addStream("Difference", core.Line, name + ".Difference", "Difference", instance.parameters.open_color, first);
+		Difference.setWidth(instance.parameters.width1);
+        Difference.setStyle(instance.parameters.style1);
+		
+		MA = core.indicators.create(Method, Difference, Period);
+        Signal = instance.addStream("Signal", core.Line, name + ".Signal", "Signal", instance.parameters.close_color, MA.DATA.first());
+		Signal.setWidth(instance.parameters.width2);
+        Signal.setStyle(instance.parameters.style2);
+    }
+}
+
+function Update(period , mode)
+{
+     
+    if (period < first)  
+    {
+	 return;
+	}
+     open[period] = ( open[period-1] + close[period-1] ) / 2;
+     close[period] =  ( source.open[period] + source.high[period] + source.low[period] + source.close[period] ) / 4 ;
+	   
+	     Difference[period]=close[period]-open[period];
+	   
+	  MA.update(mode);  
+	  
+	if (period < MA.DATA.first()) 
+    {
+	 return;
+	} 
+	 
+	  Signal[period]= MA.DATA[period]; 
+     
+}
+
+ 

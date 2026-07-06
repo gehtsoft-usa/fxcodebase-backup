@@ -1,0 +1,26 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - luaL_argcheck</title>
+</head>
+<body>
+<h3><a name="luaL_argcheck"><code>luaL_argcheck</code></a></h3>
+<pre>void luaL_argcheck (lua_State *L,
+                    int cond,
+                    int numarg,
+                    const char *extramsg);</pre>
+
+<p>
+Checks whether <code>cond</code> is true.
+If not, raises an error with the following message,
+where <code>func</code> is retrieved from the call stack:
+
+<pre>
+     bad argument #&lt;numarg&gt; to &lt;func&gt; (&lt;extramsg&gt;)
+</pre>
+
+
+
+
+<hr>
+</body>
+</html>

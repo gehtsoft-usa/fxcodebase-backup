@@ -1,0 +1,98 @@
+function Init()
+{
+    indicator.name("Darvas Box");
+    indicator.description("Darvas Box");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clrUP", "UP Color", "UP Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clrDN", "DN Color", "DN Color", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+var BuffUP=null;
+var BuffDN=null;
+var box_top=0;
+var box_bottom=0;
+var state=1;
+var i;
+
+function Prepare()
+{
+    source = instance.source;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ")";
+    instance.name(name);
+    BuffUP = instance.addStream("BuffUP", core.Line, name + ".UP", "UP", instance.parameters.clrUP, first);
+    BuffDN = instance.addStream("BuffDN", core.Line, name + ".DN", "DN", instance.parameters.clrDN, first);
+}
+
+function Update(period, mode)
+{
+  if (period>first) 
+  {
+   box_top=0;
+   box_bottom=0;
+   state=1;
+   for (i=first; i<=period; i++) 
+   {
+    if (state==1) 
+    {
+     box_top=source.high[i];
+    } 
+    else if (state==2)
+    {
+     if (box_top<=source.high[i]) 
+     {
+      box_top=source.high[i];
+     }
+    } 
+    else if (state==3) 
+    {
+     if (box_top>source.high[i]) 
+     {
+      box_bottom=source.low[i];
+     } 
+     else
+     {
+      box_top=source.high[i];
+     }
+    } 
+    else if (state==4) 
+    {
+     if (box_top>source.high[i]) 
+     {
+      if (box_bottom>=source.low[i]) 
+      {
+       box_bottom=source.low[i];
+      }
+     } 
+     else
+     {
+      box_top=source.high[i];
+     }
+    } 
+    else if (state==5) 
+    {
+     if (box_top>source.high[i]) 
+     {
+      if (box_bottom>=source.low[i]) 
+      {
+       box_bottom=source.low[i];
+      }
+     } 
+     else
+     {
+      box_top=source.high[i]; 
+     }
+     state=0;
+    }
+    BuffUP[i]=box_top;
+    BuffDN[i]=box_bottom;
+    state=state+1;
+   } 
+  } 
+}
+

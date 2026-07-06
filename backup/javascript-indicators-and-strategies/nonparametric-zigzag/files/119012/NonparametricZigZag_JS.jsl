@@ -1,0 +1,69 @@
+function Init()
+{
+    indicator.name("Nonparametric Zig Zag");
+    indicator.description("Nonparametric Zig Zag");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr1", "Color 1", "Color 1", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clr2", "Color 2", "Color 2", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("DotSize", "Dot size", "Dot size", 3, 1, 5);
+}
+
+var first;
+var source = null;
+var Buff1=null;
+var Buff2=null;
+var PrevEx=null;
+
+function Prepare()
+{
+    source = instance.source;
+    first = source.first()+2;
+    PrevEx = instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ")";
+    instance.name(name);
+    Buff1 = instance.addStream("Buff1", core.Dot, name + ".Buff1", "Buff1", instance.parameters.clr1, first);
+    Buff2 = instance.addStream("Buff2", core.Dot, name + ".Buff2", "Buff2", instance.parameters.clr2, first);
+    Buff1.setWidth(instance.parameters.DotSize);
+    Buff2.setWidth(instance.parameters.DotSize);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    var tmp=Math.minmax(source, PrevEx[period-1],period-1);
+    var MaxPr=tmp[1];
+    var MinPr=tmp[0];
+    tmp=Math.minmax(source, PrevEx[period-1]+1,period);
+    var MaxPr2=tmp[1];
+    var MaxPos2=tmp[3];
+    var MinPr2=tmp[0];
+    var MinPos2=tmp[2];
+    PrevEx[period]=PrevEx[period-1];
+    var i;
+    if (source.high[period]<MaxPr && Buff1[PrevEx[period]]!=source.high[PrevEx[period]]) 
+    {
+     for (i=MaxPos2; i<=period; i++) 
+     {
+      PrevEx[i]=MaxPos2;
+     }
+     Buff1[MaxPos2]=source.high[MaxPos2];
+    }
+    else if (source.low[period]>MinPr && Buff2[PrevEx[period]]!=source.low[PrevEx[period]]) 
+    {
+     for (i=MinPos2; i<=period; i++) 
+     {
+      PrevEx[i]=MinPos2;
+     }
+     Buff2[MinPos2]=source.low[MinPos2];
+    }
+   }
+   else if (period==first) 
+   {
+    PrevEx[period]=first; 
+   } 
+}
+

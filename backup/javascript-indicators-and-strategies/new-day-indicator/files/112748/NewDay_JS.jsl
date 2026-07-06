@@ -1,0 +1,67 @@
+function Init()
+{
+    indicator.name("New day indicator");
+    indicator.description("New day indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(255, 255, 0));
+    indicator.parameters.addInteger("FontSize", "Size of font", "Size of font", 10);
+}
+
+var first;
+var source = null;
+var Buff;
+
+function Prepare()
+{
+    source = instance.source;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ")";
+    instance.name(name);
+    Buff=instance.createTextOutput ("Text", "Text", "Arial", instance.parameters.FontSize, core.H_Center, core.V_Top, instance.parameters.clr, first);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    var T1=core.dateToTable(source.date(period));
+    var T2=core.dateToTable(source.date(period-1));
+    if (T1.day!=T2.day)
+    {
+     var DayName;
+     if (T1.wday==1)
+     {
+      DayName="Su";
+     } 
+     if (T1.wday==2)
+     {
+      DayName="Mo";
+     } 
+     if (T1.wday==3)
+     {
+      DayName="Tu";
+     } 
+     if (T1.wday==4)
+     {
+      DayName="We";
+     }
+     if (T1.wday==5)
+     {
+      DayName="Th";
+     } 
+     if (T1.wday==6)
+     {
+      DayName="Fr";
+     }
+     if (T1.wday==7)
+     {
+      DayName="Sa";
+     } 
+     Buff.set(period, source.high[period], DayName);
+    }
+   } 
+}
+

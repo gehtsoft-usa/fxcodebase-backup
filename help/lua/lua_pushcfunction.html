@@ -1,0 +1,32 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_pushcfunction</title>
+</head>
+<body>
+<h3><a name="lua_pushcfunction"><code>lua_pushcfunction</code></a></h3>
+<pre>void lua_pushcfunction (lua_State *L, lua_CFunction f);</pre>
+
+<p>
+Pushes a C&nbsp;function onto the stack.
+This function receives a pointer to a C function
+and pushes onto the stack a Lua value of type <code>function</code> that,
+when called, invokes the corresponding C&nbsp;function.
+
+
+<p>
+Any function to be registered in Lua must
+follow the correct protocol to receive its parameters
+and return its results (see <a href="lua_CFunction.html"><code>lua_CFunction</code></a>).
+
+
+<p>
+The call <code>lua_pushcfunction(L, f)</code> is equivalent to
+<code>lua_pushcclosure(L, f, 0)</code>.
+
+
+
+
+
+<hr>
+</body>
+</html>

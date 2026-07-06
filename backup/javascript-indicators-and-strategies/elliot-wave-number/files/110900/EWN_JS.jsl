@@ -1,0 +1,166 @@
+//initializes the indicator
+function Init()
+{
+    indicator.name("EWN");
+    indicator.description("Elliot Wave Number");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.setTag("group", "Waves");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Trigger", "Trigger value (%)", "Trigger value (%)", 70);
+    indicator.parameters.addInteger("Period", "Number of periods", "Number of periods", 20);
+    indicator.parameters.addInteger("FastN", "Fast MA periods", "Fast MA periods.", 5);
+    indicator.parameters.addInteger("SlowN", "Slow MA periods", "Slow MA periods.", 35);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Line color", "Line color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("width", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LEVEL_STYLE);
+}
+
+var first = 0;
+var source = null;
+var EWN = null;
+var ewo, ew;
+var hMean, hiOsc, hiOsc2, hiPrice, hiPrice2;
+
+//initializes the instance of the indicator
+function Prepare(onlyName)
+{
+    source = instance.source;
+
+    ewo = core.indicators.create("EWO", source, instance.parameters.FastN, instance.parameters.SlowN, "M2", "MVA", "No");
+    ew = core.indicators.create("EW", source, instance.parameters.Trigger, instance.parameters.Period, instance.parameters.FastN, instance.parameters.SlowN);
+
+    first = ew.DATA.first() + 1;
+
+    hMean = instance.addInternalStream(0, 0);
+    hiOsc = instance.addInternalStream(0, 0);
+    hiOsc2 = instance.addInternalStream(0, 0);
+    hiPrice = instance.addInternalStream(0, 0);
+    hiPrice2 = instance.addInternalStream(0, 0);
+
+    var name = profile.id() + "(" + instance.source.name() + "," + Period + ")";
+    instance.name(name);
+  
+    if (onlyName == true)
+        return ;
+
+    EWN = instance.addStream("EWN", core.Line, name, "EWN", instance.parameters.clr,  first)
+    EWN.setWidth(instance.parameters.width);
+    EWN.setStyle(instance.parameters.style);
+    EWN.addLevel(0);
+    EWN.addLevel(5);
+}
+
+// calculate the value
+function Update(period, mode)
+{
+    ewo.update(mode);
+    ew.update(mode);
+
+    var mean;
+    if (period >= source.first())
+    {
+        mean = source.median[period];
+        hMean[period] = mean;
+    }
+    else
+    {
+        return ;
+    }
+
+    if (period == 0)
+    {
+        hiOsc[period] = -999;
+        hiOsc2[period] = -999;
+        hiPrice[period] = -999;
+        hiPrice2[period] = -999;
+        EWN[period] = 0;
+    }
+    else
+    {
+        hiOsc[period] = hiOsc[period - 1];
+        hiOsc2[period] = hiOsc2[period - 1];
+        hiPrice[period] = hiPrice[period - 1];
+        hiPrice2[period] = hiPrice2[period - 1];
+        EWN[period] = EWN[period - 1];
+    }
+
+    if (period >= first)
+    {
+        var wave = EWN[period];
+        var osc = ewo.DATA[period];
+        var et = ew.DATA[period];
+
+        hMean[period] = mean;
+
+        if (et == 1 && ew.DATA[period - 1] == -1 && osc > 0)
+        {
+            hiOsc[period] = osc;
+            hiPrice[period] = mean;
+            wave = 3;
+        }
+
+        if (wave == 3)
+        {
+            if (mean > hiPrice[period])
+            {
+                hiPrice[period] = mean;
+            }
+            if (osc > hiOsc[period])
+            {
+                hiOsc[period] = osc;
+            }
+            if (osc <= 0 && et == 1)
+            {
+                wave = 4;
+            }
+        }
+
+        var tmp = Math.minmax(hMean, period - 4, period);
+        himean=tmp[1];
+
+        if (wave == 4 && mean == himean && osc >= 0)
+        {
+            wave = 5;
+            hiOsc2[period] = osc;
+            hiPrice2[period] = mean;
+        }
+
+        if (wave == 5)
+        {
+            if (osc > hiOsc2[period])
+            {
+                hiOsc2[period] = osc;
+            }
+            if (mean > hiPrice2[period])
+            {
+                hiPrice2[period] = mean;
+            }
+        }
+
+        if (wave == 5 && hiOsc2[period] > hiOsc[period] && et == 1)
+        {
+            wave = 3;
+            hiOsc[period] = hiOsc2[period];
+            hiPrice[period] = hiPrice2[period];
+            hiOsc2[period] = -999;
+            hiPrice2[period] = -999;
+        }
+
+        if (wave == 5 && et == -1)
+        {
+            wave = 3;
+            hiOsc[period] = -999;
+            hiPrice[period] = -999;
+            hiOsc2[period] = -999;
+            hiPrice2[period] = -999;
+        }
+
+
+        EWN[period] = wave;
+    }
+}

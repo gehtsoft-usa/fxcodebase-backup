@@ -1,0 +1,103 @@
+function Init()
+{
+    indicator.name("AO_Sig indicator");
+    indicator.description("AO_Sig indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("RepulsePeriod1", "RepulsePeriod1", "", 1);
+    indicator.parameters.addInteger("RepulsePeriod2", "RepulsePeriod2", "", 5);
+    indicator.parameters.addInteger("RepulsePeriod3", "RepulsePeriod3", "", 15);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr1", "Color 1", "Color 1", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clr2", "Color 2", "Color 2", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("clr3", "Color 3", "Color 3", core.rgb(0, 0, 255));
+}
+
+var first;
+var source = null;
+var RepulsePeriod1;
+var RepulsePeriod2;
+var RepulsePeriod3;
+var PosBuffer1;
+var NegBuffer1;
+var PosBuffer2;
+var NegBuffer2;
+var PosBuffer3;
+var NegBuffer3;
+var MAPos1;
+var MANeg1;
+var MAPos2;
+var MANeg2;
+var MAPos3;
+var MANeg3;
+
+function Prepare()
+{
+    source = instance.source;
+    RepulsePeriod1=instance.parameters.RepulsePeriod1;
+    RepulsePeriod2=instance.parameters.RepulsePeriod2;
+    RepulsePeriod3=instance.parameters.RepulsePeriod3;
+    first = source.first()+2;
+    PosBuffer1 = instance.addInternalStream(first+RepulsePeriod1, 0);
+    NegBuffer1 = instance.addInternalStream(first+RepulsePeriod1, 0);
+    PosBuffer2 = instance.addInternalStream(first+RepulsePeriod2, 0);
+    NegBuffer2 = instance.addInternalStream(first+RepulsePeriod2, 0);
+    PosBuffer3 = instance.addInternalStream(first+RepulsePeriod3, 0);
+    NegBuffer3 = instance.addInternalStream(first+RepulsePeriod3, 0);
+    MAPos1 = core.indicators.create("EMA", PosBuffer1, RepulsePeriod1*5);
+    MANeg1 = core.indicators.create("EMA", NegBuffer1, RepulsePeriod1*5);
+    MAPos2 = core.indicators.create("EMA", PosBuffer2, RepulsePeriod2*5);
+    MANeg2 = core.indicators.create("EMA", NegBuffer2, RepulsePeriod2*5);
+    MAPos3 = core.indicators.create("EMA", PosBuffer3, RepulsePeriod3*5);
+    MANeg3 = core.indicators.create("EMA", NegBuffer3, RepulsePeriod3*5);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.RepulsePeriod1 + ", " + instance.parameters.RepulsePeriod2 + ", " + instance.parameters.RepulsePeriod3 + ")";
+    instance.name(name);
+    Buff1 = instance.addStream("Buff1", core.Line, name + ".Buff1", "Buff1", instance.parameters.clr1, first);
+    Buff2 = instance.addStream("Buff2", core.Line, name + ".Buff2", "Buff2", instance.parameters.clr2, first);
+    Buff3 = instance.addStream("Buff3", core.Line, name + ".Buff3", "Buff3", instance.parameters.clr3, first);
+}
+
+function Update(period, mode)
+{
+   var tmp;
+   if (period>first+RepulsePeriod1) 
+   {
+    tmp=Math.minmax(source, period-RepulsePeriod1+1, period);
+    var MinPrice1=tmp[0];
+    var MaxPrice1=tmp[1];
+    PosBuffer1[period]=(3.*source.close[period]-2.*MinPrice1-source.open[period])/source.close[period]*100.;
+    NegBuffer1[period]=(source.open[period]+2.*MaxPrice1-3.*source.close[period])/source.close[period]*100.;
+   } 
+   MAPos1.update(mode);
+   MANeg1.update(mode);
+   Buff1[period]=MAPos1.DATA[period]-MANeg1.DATA[period];
+   
+   if (period>first+RepulsePeriod2) 
+   { 
+    tmp=Math.minmax(source, period-RepulsePeriod2+1, period);
+    var MinPrice2=tmp[0];
+    var MaxPrice2=tmp[1];
+    PosBuffer2[period]=(3.*source.close[period]-2.*MinPrice2-source.open[period-RepulsePeriod2])/source.close[period]*100.;
+    NegBuffer2[period]=(source.open[period-RepulsePeriod2]+2.*MaxPrice2-3.*source.close[period])/source.close[period]*100.;
+   } 
+   MAPos2.update(mode);
+   MANeg2.update(mode);
+   Buff2[period]=MAPos2.DATA[period]-MANeg2.DATA[period];
+
+   if (period>first+RepulsePeriod3) 
+   {    
+    tmp=Math.minmax(source, period-RepulsePeriod3+1, period);
+    var MinPrice3=tmp[0];
+    var MaxPrice3=tmp[1];
+    PosBuffer3[period]=(3.*source.close[period]-2.*MinPrice3-source.open[period-RepulsePeriod3])/source.close[period]*100.;
+    NegBuffer3[period]=(source.open[period-RepulsePeriod3]+2.*MaxPrice3-3.*source.close[period])/source.close[period]*100.;
+   } 
+   MAPos3.update(mode);
+   MANeg3.update(mode);
+   Buff3[period]=MAPos3.DATA[period]-MANeg3.DATA[period];
+    
+}
+

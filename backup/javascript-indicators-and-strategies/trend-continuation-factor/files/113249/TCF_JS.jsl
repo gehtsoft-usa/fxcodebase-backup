@@ -1,0 +1,95 @@
+function Init()
+{
+    indicator.name("Trend Continuation Factor");
+    indicator.description("Trend Continuation Factor");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addInteger("CP", "Period", "Perios", 1, 1 ,2000);
+    indicator.parameters.addInteger("Period", "Period", "Perios", 35, 2,2000);
+    indicator.parameters.addColor("PTCF_color", "Color of Pozitiv TCF", "Color of TCF", core.rgb(0, 255, 0));
+	 indicator.parameters.addColor("NTCF_color", "Color of Negativ TCF", "Color of TCF", core.rgb(255, 0, 0));
+	 indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+
+}
+
+var Period;
+var CP;
+var first;
+var source = null;
+
+var TCF,NTCF;
+var pc, nc;
+var ncf, pcf;  
+
+function Prepare(nameOnly)
+{
+    CP = instance.parameters.CP;
+    Period = instance.parameters.Period;
+    source = instance.source;
+    first = source.first()+Period;
+	pc=instance.addInternalStream(0, 0);
+	nc=instance.addInternalStream(0, 0);	
+    ncf=instance.addInternalStream(0, 0);
+	pcf=instance.addInternalStream(0, 0);
+    var name = profile.id() + "(" + source.name() + ", " + tostring(CP)+ ", " + tostring(Period) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        PTCF = instance.addStream("PTCF", core.Line, name, "PTCF", instance.parameters.PTCF_color, first);
+		PTCF.setWidth(instance.parameters.width);
+        PTCF.setStyle(instance.parameters.style);
+		NTCF = instance.addStream("NTCF", core.Line, name, "NTCF", instance.parameters.NTCF_color, first);
+		NTCF.setWidth(instance.parameters.width);
+        NTCF.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period)
+{
+   
+   var  ROC;   
+   ROC= ((source[period] - source[period-CP]) / (source[period-CP])) * 100; 
+  
+   
+ if (ROC > 0 ) 
+ {
+  pc[period] = ROC;
+  nc[period] = 0;
+ } 
+ else
+ {
+  pc[period] = 0;
+  nc[period]=-ROC;
+ }
+ 
+if (nc[period] == 0) 
+{
+ ncf[period]=0;
+}
+else
+{
+ ncf[period]=ncf[period-1]+nc[period]
+}
+
+if (pc[period] == 0) 
+{
+ pcf[period]=0;
+}
+else
+{
+ pcf[period]=pcf[period-1]+pc[period]
+}
+
+   if (period < first || !source.hasData(period)) 
+   {
+	 return;
+   }
+      
+
+     PTCF[period] = Math.sum(pc, period-Period+1, period) -  Math.sum(ncf, period-Period+1, period);
+     NTCF[period] =  Math.sum(nc, period-Period+1, period) -  Math.sum(pcf, period-Period+1, period);
+}
+

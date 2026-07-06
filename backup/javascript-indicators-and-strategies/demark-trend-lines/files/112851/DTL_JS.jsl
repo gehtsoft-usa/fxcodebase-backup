@@ -1,0 +1,159 @@
+function Init()
+{
+    indicator.name("Demark Trend Lines");
+    indicator.description("Demark Trend Lines");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+     indicator.parameters.addInteger("Length", "Length", "The minimum number of periods used to mark wave.", 30, 10, 200);
+    indicator.parameters.addColor("Up_color", "Color of Up", "Color of Up", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("Down_color", "Color of Down", "Color of Down", core.rgb(255, 0, 0));
+}
+
+var Length;
+
+var first;
+var source = null;
+
+// Streams block
+var Up = null;
+var Down = null;
+var ATL;
+var MaxUp, MaxDown;
+var timer;
+
+function Prepare()
+{
+    Length = instance.parameters.Length;
+    source = instance.source;
+    first = source.first();
+	
+	assert(core.indicators.findIndicator("ATL") != null, "Please, {wnload && install ATL.LUA indicator");
+	
+	ATL = core.indicators.create("ATL", source,Length);
+	Up=instance.addInternalStream(0, 0);
+	Down=instance.addInternalStream(0, 0);	
+
+    var name = profile.id() + "(" + source.name() + ", " + Length + ")";
+    instance.name(name);
+	
+	 timer = core.host.execute("setTimer", 1, 60);
+    
+}
+
+var i;
+var PriceUp, PeriodUp, PriceDown, PeriodDown;
+function Update(period)
+{
+    if (period >= first && source.hasData(period)) 
+    {
+	ATL.update(core.UpdateAll );
+	    
+		if (ATL.UTL.hasData(period)) 
+		{
+         Up[period] = ATL.UTL[period];
+		}		
+		if (ATL.DTL.hasData(period)) 
+		{
+         Down[period] = ATL.DTL[period];	
+		}
+		
+		PriceUp=0;
+		PeriodUp=0;
+		PriceDown=0;
+		PeriodDown=0;
+		MaxUp= 0;
+		MaxDown= 0
+		
+		    if (period  == source.size() -1) 
+		    {
+				for (i= period-1;i>=first;i--) 
+				{
+                     
+                    MAX(i,"Up");		
+					
+ 					if (Up[i] == 0) 
+ 					{ 
+					 core.host.execute("drawLine", 1, source.date(i+1), Up[i+1], source.date(period), Up[period],instance.parameters.Up_color);
+					 core.host.execute("drawLine", 3, source.date(PeriodUp), PriceUp -MaxUp, source.date(period), PriceUp-MaxUp, core.rgb(255, 128, 128));
+					}	
+                   
+					if (Up[i]== 0) 
+					{
+					 break;
+					}
+				}			
+                for (i= period-1;i>=first;i--) 
+                {
+                     
+                    MAX(i,"Down");		
+					
+ 					if (Down[i] == 0) 
+ 					{ 
+					 core.host.execute("drawLine", 2, source.date(i+1), Down[i+1], source.date(period), Down[period], instance.parameters.Down_color);
+					 core.host.execute("drawLine", 4, source.date(PeriodDown), PriceDown +MaxDown , source.date(period), PriceDown + MaxDown, core.rgb(128, 255, 128));
+					}		
+					if (Down[i] == 0) 
+					{
+					 break;
+					}
+				}								
+			} 
+    }
+}
+
+function MAX (p,mode)
+{
+	 if (mode == "Up") 
+	 { 
+		if (Up[p] != null && Up[p]!=0) 
+		{ 
+			if (Up[p] < source.close[p]) 
+			{
+				if (MaxUp==0) 
+				{ 
+				 MaxUp = source.high[p] - Up[p] ;				
+				}
+				if (MaxUp < source.high[p] - Up[p]) 
+				{
+				 MaxUp = source.high[p] - Up[p];				
+				}
+			}	
+			else	
+			{
+			 PriceUp=Up[p];
+			 PeriodUp=p;	
+			}
+		}
+	 }	
+	 else
+	 {    
+		if (Down[p] != null && Down[p]!=0) 
+		{  
+			if (Down[p] > source.close[p]) 
+			{
+			
+			    if (MaxDown==0) 
+			    { 
+				 MaxDown = Down[p]- source.low[p] ;				
+				} 
+			
+				if (MaxDown < Down[p]- source.low[p]) 
+				{
+				 MaxDown = Down[p]- source.low[p] ;				
+				}
+			}			
+			else
+			{
+			 PriceDown=Down[p];
+			 PeriodDown=p;
+			}
+		}
+	  }
+}
+
+function AsyncOperationFinished(cookie, success, message)
+{
+
+ return (core.ASYNC_REDRAW);
+}

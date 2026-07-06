@@ -1,0 +1,54 @@
+function Init()
+{
+    indicator.name("Mass Index (MI)");
+    indicator.description("Mass Index (MI)");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    
+    indicator.parameters.addInteger("MA1_Period", "MA1_Period", "Period of MA1", 9);
+    indicator.parameters.addInteger("MA2_Period", "MA2_Period", "Period of MA2", 9);
+    indicator.parameters.addInteger("SumPeriod", "SumPeriod", "Number of values added", 25);
+
+    indicator.parameters.addColor("clrMI", "Color of Mass Index", "Color of Mass Index", core.rgb(0, 255, 0));
+}
+
+var first;
+var source = null;
+var MA1_Period;
+var MA2_Period;
+var SumPeriod;
+var MI;
+var HL;
+var MA;
+var MA2;
+var Res;
+
+function Prepare()
+{
+    source = instance.source;
+    MA1_Period=instance.parameters.MA1_Period;
+    MA2_Period=instance.parameters.MA2_Period;
+    SumPeriod=instance.parameters.SumPeriod;
+    HL = instance.addInternalStream(0, 0);
+    MA = core.indicators.create("EMA", HL, MA1_Period);
+    MA2 = core.indicators.create("EMA", MA.DATA, MA2_Period);
+    Res = instance.addInternalStream(0, 0);
+    first=source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + MA1_Period + ", " + MA2_Period + ", " + SumPeriod + ")";
+    instance.name(name);
+    MI = instance.addStream("MI", core.Line, name + ".Mass Index", "Mass Index", instance.parameters.clrMI, first);
+}
+
+
+function Update(period, mode)
+{
+    HL[period]=source.high[period]-source.low[period];
+    if (period>first+SumPeriod) 
+    {
+     MA.update(mode);
+     MA2.update(mode);
+     Res[period]=MA.DATA[period]/MA2.DATA[period];
+     MI[period]=Math.sum(Res,core.rangeTo(period,SumPeriod));
+    } 
+}
+

@@ -1,0 +1,24 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - table.sort (table [, comp])</title>
+</head>
+<body>
+<h3><a name="pdf-table.sort"><code>table.sort (table [, comp])</code></a></h3>
+Sorts table elements in a given order, <em>in-place</em>,
+from <code>table[1]</code> to <code>table[n]</code>,
+where <code>n</code> is the length of the table.
+If <code>comp</code> is given,
+then it must be a function that receives two table elements,
+and returns true
+when the first is less than the second
+(so that <code>not comp(a[i+1],a[i])</code> will be true after the sort).
+If <code>comp</code> is not given,
+then the standard Lua operator <code>&lt;</code> is used instead.
+
+
+<p>
+The sort algorithm is not stable;
+that is, elements considered equal by the given order
+may have their relative positions changed by the sort.
+</body>
+</html>

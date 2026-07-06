@@ -1,0 +1,4985 @@
+// More information about this indicator can be found at:
+// https://fxcodebase.com/code/viewtopic.php?f=38&t=75438
+
+// +------------------------------------------------------------------------------------------------+
+// |                                                            Copyright © 2024, Gehtsoft USA LLC  | 
+// |                                                                         http://fxcodebase.com  |
+// |                                                               Paypal:  https://goo.gl/9Rj74e   |
+// +------------------------------------------------------------------------------------------------+
+// |                                                                   Developed by : Mario Jemic   |                    
+// |                                                                       mario.jemic@gmail.com    |
+// |                                                                       https://mario-jemic.com/ | 
+// |                                                             Patreon :  http://tiny.cc/1ybwxz   |   
+// |                                                      Buy Me a Coffee:  http://tiny.cc/bj7vxz   |  
+// +-----------------+----------------------+-------------------------------------------------------+
+// |  Cryptocurrency |  Network             |  Address                                              |
+// +-----------------+----------------------+-------------------------------------------------------+
+// |  BTC            |  BTC                 |  16F5k43RXibTmna4np8bPVgmXM1CzjXFJJ                   | 
+// |  SOL            |  SOL                 |  3nh5rpUKopcYLNU4zGCdUFAkM3iRQq8VVUmuzVG6VDf2         | 
+// |  ETH            |  ERC20               |  0xe53aab6bc468a963a02d1319660ee60cf80fc8e7           |
+// |  BNB            |  BEP20               |  0xe53aab6bc468a963a02d1319660ee60cf80fc8e7           | 
+// |  USDT           |  BEP20               |  0xe53aab6bc468a963a02d1319660ee60cf80fc8e7           | 
+// |  XRP            |  BEP20               |  0xe53aab6bc468a963a02d1319660ee60cf80fc8e7           | 
+// +-----------------+----------------------+-------------------------------------------------------+ 
+
+
+#property copyright "Copyright © 2024, Gehtsoft USA LLC"
+#property link      "http://fxcodebase.com"
+#property version "1.0"
+#property strict
+#property indicator_chart_window
+#property indicator_buffers 9
+#property indicator_label1 "Upper Band"
+#property indicator_type1 DRAW_LINE
+#property indicator_color1 0x1d1daa
+#property indicator_style1 STYLE_SOLID
+#property indicator_width1 1
+#property indicator_label2 "Middle Band"
+#property indicator_type2 DRAW_LINE
+#property indicator_style2 STYLE_SOLID
+#property indicator_width2 1
+#property indicator_label3 "Lower Band"
+#property indicator_type3 DRAW_LINE
+#property indicator_color3 0x0f790f
+#property indicator_style3 STYLE_SOLID
+#property indicator_width3 1
+#property indicator_label4 "Upper Margin"
+#property indicator_type4 DRAW_LINE
+#property indicator_color4 0x1d1daa
+#property indicator_style4 STYLE_SOLID
+#property indicator_width4 1
+#property indicator_label5 "Lower Margin"
+#property indicator_type5 DRAW_LINE
+#property indicator_color5 0x0f790f
+#property indicator_style5 STYLE_SOLID
+#property indicator_width5 1
+#property indicator_label6 "Buy"
+#property indicator_type6 DRAW_ARROW
+#property indicator_color6 0x098209
+#property indicator_style6 STYLE_SOLID
+#property indicator_width6 1
+#property indicator_label7 "Sell"
+#property indicator_type7 DRAW_ARROW
+#property indicator_color7 0x0d0dea
+#property indicator_style7 STYLE_SOLID
+#property indicator_width7 1
+#property indicator_type8 DRAW_ARROW
+#property indicator_color8 0xb8173a
+#property indicator_style8 STYLE_SOLID
+#property indicator_width8 1
+#property indicator_type9 DRAW_ARROW
+#property indicator_color9 0xb8173a
+#property indicator_style9 STYLE_SOLID
+#property indicator_width9 1
+
+// Pine-script like safe operations
+// v.1.2
+
+double Nz(double val, double defaultValue = 0)
+{
+   return val == EMPTY_VALUE ? defaultValue : val;
+}
+double SafePlus(int left, double right)
+{
+   if (left == EMPTY_VALUE || right == EMPTY_VALUE)
+   {
+      return EMPTY_VALUE;
+   }
+   return left + right;
+}
+double SafePlus(double left, int right)
+{
+   if (left == EMPTY_VALUE || right == EMPTY_VALUE)
+   {
+      return EMPTY_VALUE;
+   }
+   return left + right;
+}
+int SafePlus(int left, int right)
+{
+   if (left == EMPTY_VALUE || right == EMPTY_VALUE)
+   {
+      return EMPTY_VALUE;
+   }
+   return left + right;
+}
+double SafePlus(double left, double right)
+{
+   if (left == EMPTY_VALUE || right == EMPTY_VALUE)
+   {
+      return EMPTY_VALUE;
+   }
+   return left + right;
+}
+string SafePlus(string left, string right)
+{
+   if (left == NULL || right == NULL)
+   {
+      return NULL;
+   }
+   return left + right;
+}
+
+double SafeMinus(double left, double right)
+{
+   if (left == EMPTY_VALUE || right == EMPTY_VALUE)
+   {
+      return EMPTY_VALUE;
+   }
+   return left - right;
+}
+
+double SafeDivide(double left, double right)
+{
+   if (left == EMPTY_VALUE || right == EMPTY_VALUE || right == 0)
+   {
+      return EMPTY_VALUE;
+   }
+   return left / right;
+}
+
+double SafeMultiply(double left, double right)
+{
+   if (left == EMPTY_VALUE || right == EMPTY_VALUE)
+   {
+      return EMPTY_VALUE;
+   }
+   return left * right;
+}
+
+bool SafeGreater(double left, double right)
+{
+   if (left == EMPTY_VALUE || right == EMPTY_VALUE)
+   {
+      return false;
+   }
+   return left > right;
+}
+
+bool SafeGE(double left, double right)
+{
+   if (left == EMPTY_VALUE || right == EMPTY_VALUE)
+   {
+      return false;
+   }
+   return left >= right;
+}
+
+bool SafeLess(double left, double right)
+{
+   if (left == EMPTY_VALUE || right == EMPTY_VALUE)
+   {
+      return false;
+   }
+   return left < right;
+}
+
+bool SafeLE(double left, double right)
+{
+   if (left == EMPTY_VALUE || right == EMPTY_VALUE)
+   {
+      return false;
+   }
+   return left <= right;
+}
+
+double SafeMathExp(double value)
+{
+   if (value == EMPTY_VALUE)
+   {
+      return EMPTY_VALUE;
+   }
+   return MathExp(value);
+}
+
+double SafeMathMax(double left, double right)
+{
+   if (left == EMPTY_VALUE || right == EMPTY_VALUE)
+   {
+      return EMPTY_VALUE;
+   }
+   return MathMax(left, right);
+}
+
+double SafeMathMin(double left, double right)
+{
+   if (left == EMPTY_VALUE || right == EMPTY_VALUE)
+   {
+      return EMPTY_VALUE;
+   }
+   return MathMin(left, right);
+}
+
+double SafeMathPow(double value, double power)
+{
+   if (value == EMPTY_VALUE || power == EMPTY_VALUE)
+   {
+      return EMPTY_VALUE;
+   }
+   return MathPow(value, power);
+}
+
+double SafeMathAbs(double value)
+{
+   if (value == EMPTY_VALUE)
+   {
+      return EMPTY_VALUE;
+   }
+   return MathAbs(value);
+}
+
+double SafeMathRound(double value)
+{
+   if (value == EMPTY_VALUE)
+   {
+      return EMPTY_VALUE;
+   }
+   return MathRound(value);
+}
+
+double SafeMathRound(double value, int precision)
+{
+   if (value == EMPTY_VALUE)
+   {
+      return EMPTY_VALUE;
+   }
+   return NormalizeDouble(value, precision);
+}
+
+double SafeMathSqrt(double value)
+{
+   if (value == EMPTY_VALUE)
+   {
+      return EMPTY_VALUE;
+   }
+   return MathSqrt(value);
+}
+
+int SafeSign(double value)
+{
+   if (value == EMPTY_VALUE)
+   {
+      return EMPTY_VALUE;
+   }
+   if (value == 0)
+   {
+      return 0;
+   }
+   return value > 0 ? 1 : -1;
+}
+
+double SafeLog(double value)
+{
+   if (value == EMPTY_VALUE)
+   {
+      return EMPTY_VALUE;
+   }
+   return MathLog(value);
+}
+double SafeLog10(double value)
+{
+   if (value == EMPTY_VALUE)
+   {
+      return EMPTY_VALUE;
+   }
+   return MathLog10(value);
+}
+double SafeCos(double value) 
+{
+   if (value == EMPTY_VALUE)
+   {
+      return EMPTY_VALUE;
+   }
+   return MathCos(value);
+}
+double SafeArccos(double value)
+{
+   if (value == EMPTY_VALUE)
+   {
+      return EMPTY_VALUE;
+   }
+   return MathArccos(value);
+}
+double SafeSin(double value) 
+{
+   if (value == EMPTY_VALUE)
+   {
+      return EMPTY_VALUE;
+   }
+   return MathSin(value);
+}
+double SafeArcsin(double value)
+{
+   if (value == EMPTY_VALUE)
+   {
+      return EMPTY_VALUE;
+   }
+   return MathArcsin(value);
+}
+double SafeTan(double value) 
+{
+   if (value == EMPTY_VALUE)
+   {
+      return EMPTY_VALUE;
+   }
+   return MathTan(value);
+}
+double SafeArctan(double value)
+{
+   if (value == EMPTY_VALUE)
+   {
+      return EMPTY_VALUE;
+   }
+   return MathArctan(value);
+}
+double InvertSign(double value)
+{
+   if (value == EMPTY_VALUE)
+   {
+      return EMPTY_VALUE;
+   }
+   return -value;
+}
+double SafeMathFloor(double value)
+{
+   if (value == EMPTY_VALUE)
+   {
+      return EMPTY_VALUE;
+   }
+   return MathFloor(value);
+}
+#define ColorRGB(red, green, blue, transp) (uint)(red + (green << 8) + (blue << 16) + ((uint)(transp * 2.55) << 24))
+#define GetColorOnly(clr) (clr & 0xFFFFFF)
+#define GetTranparency(clr) (int)MathRound(((clr & 0xFF000000) >> 24) / 2.55)
+#define AddTransparency(clr, transp) (clr + ((uint)(transp * 2.55) << 24))
+
+bool NumberToBool(double number)
+{
+   return number != EMPTY_VALUE && number != 0;
+}
+
+class FirstBarState
+{
+   bool _first;
+public:
+   FirstBarState()
+   {
+      _first = true;
+   }
+   void Clear()
+   {
+      _first = true;
+   }
+   bool IsFirst()
+   {
+      bool first = _first;
+      _first = false;
+      return first;
+   }
+};
+
+class NewBarState
+{
+   datetime _last;
+public:
+   NewBarState()
+   {
+      _last = 0;
+   }
+   void Clear()
+   {
+      _last = 0;
+   }
+   bool IsNew(datetime date)
+   {
+      bool isnew = _last != date;
+      _last = date;
+      return isnew;
+   }
+};
+
+uint FromGradient(double value, double bottomValue, double topValue, uint bottomColor, uint topColor)
+{
+   if (value == EMPTY_VALUE || topValue == EMPTY_VALUE)
+   {
+      return bottomColor;
+   }
+   if (bottomValue == EMPTY_VALUE)
+   {
+      return topColor;
+   }
+   return value - bottomValue < topValue - value 
+      ? bottomColor
+      : topColor;
+}
+
+double SetStream(double &stream[], int pos, double value, double defaultValue)
+{
+   stream[pos] = value == EMPTY_VALUE ? defaultValue : value;
+   return stream[pos];
+}
+
+datetime Timestamp(int year, int month, int day, int hour, int minute, int second)
+{
+   MqlDateTime time;
+   time.year = year;
+   time.mon = month;
+   time.day = day;
+   time.hour = hour;
+   time.min = minute;
+   time.sec = second;
+   return StructToTime(time);
+}
+
+class PineScriptTime
+{
+public:
+   static int Hour(datetime dt)
+   {
+      MqlDateTime date;
+      TimeToStruct(dt, date);
+      return date.hour;
+   }
+   static int Year(datetime dt)
+   {
+      MqlDateTime date;
+      TimeToStruct(dt, date);
+      return date.year;
+   }
+   static int DayOfWeek(datetime dt)
+   {
+      MqlDateTime date;
+      TimeToStruct(dt, date);
+      return date.day_of_week;
+   }
+   static int Sunday()
+   {
+      return 0;
+   }
+   static int Monday()
+   {
+      return 1;
+   }
+   static int Tuesday()
+   {
+      return 2;
+   }
+   static int Wednesday()
+   {
+      return 3;
+   }
+   static int Thursday()
+   {
+      return 4;
+   }
+   static int Friday()
+   {
+      return 5;
+   }
+   static int Saturday()
+   {
+      return 6;
+   }
+};
+
+class Runtime
+{
+public:
+   static void Error(string message)
+   {
+      Print(message);
+      ExpertRemove();
+   }
+};
+#ifndef FloatStream_IMPL
+#define FloatStream_IMPL
+
+// Stream base v1.0
+
+// Stream v.3.0
+// More templates and snippets on https://github.com/sibvic/mq4-templates
+
+interface IStream
+{
+public:
+   virtual void AddRef() = 0;
+   virtual void Release() = 0;
+   virtual int Size() = 0;
+
+   virtual bool GetValue(const int period, double &val) = 0;
+};
+
+#ifndef AStreamBase_IMP
+#define AStreamBase_IMP
+
+class AStreamBase : public IStream
+{
+   int _references;
+public:
+   AStreamBase()
+   {
+      _references = 1;
+   }
+
+   void AddRef()
+   {
+      ++_references;
+   }
+
+   void Release()
+   {
+      --_references;
+      if (_references == 0)
+         delete &this;
+   }
+};
+#endif
+// Float stream v2.3
+
+class FloatStream : public AStreamBase
+{
+   string _symbol;
+   ENUM_TIMEFRAMES _timeframe;
+   double _stream[];
+public:
+   FloatStream(const string symbol, const ENUM_TIMEFRAMES timeframe)
+   {
+      _symbol = symbol;
+      _timeframe = timeframe;
+   }
+
+   void Init()
+   {
+      ArrayInitialize(_stream, EMPTY_VALUE);
+   }
+
+   virtual int Size()
+   {
+      return iBars(_symbol, _timeframe);
+   }
+
+   void SetValue(const int period, double value)
+   {
+      int totalBars = Size();
+      int index = totalBars - period - 1;
+      if (index < 0 || totalBars <= index)
+      {
+         return;
+      }
+      EnsureStreamHasProperSize(totalBars);
+      _stream[index] = value;
+   }
+
+   bool GetValue(const int period, double &val)
+   {
+      int totalBars = Size();
+      int index = totalBars - period - 1;
+      if (index < 0 || totalBars <= index)
+      {
+         return false;
+      }
+      EnsureStreamHasProperSize(totalBars);
+      
+      val = _stream[index];
+      return _stream[index] != EMPTY_VALUE;
+   }
+private:
+   void EnsureStreamHasProperSize(int size)
+   {
+      int currentSize = ArrayRange(_stream, 0);
+      if (currentSize != size) 
+      {
+         ArrayResize(_stream, size);
+         for (int i = currentSize; i < size; ++i)
+         {
+            _stream[i] = EMPTY_VALUE;
+         }
+      }
+   }
+};
+
+#endif
+
+// Instrument info v.1.7
+// More templates and snippets on https://github.com/sibvic/mq4-templates
+
+#ifndef InstrumentInfo_IMP
+#define InstrumentInfo_IMP
+
+class InstrumentInfo
+{
+   string _symbol;
+   double _mult;
+   double _point;
+   double _pipSize;
+   int _digits;
+   double _tickSize;
+public:
+   InstrumentInfo(const string symbol)
+   {
+      _symbol = symbol;
+      _point = MarketInfo(symbol, MODE_POINT);
+      _digits = (int)MarketInfo(symbol, MODE_DIGITS); 
+      _mult = _digits == 3 || _digits == 5 ? 10 : 1;
+      _pipSize = _point * _mult;
+      _tickSize = MarketInfo(_symbol, MODE_TICKSIZE);
+   }
+
+   // Return < 0 when lot1 < lot2, > 0 when lot1 > lot2 and 0 owtherwise
+   int CompareLots(double lot1, double lot2)
+   {
+      double lotStep = SymbolInfoDouble(_symbol, SYMBOL_VOLUME_STEP);
+      if (lotStep == 0)
+      {
+         return lot1 < lot2 ? -1 : (lot1 > lot2 ? 1 : 0);
+      }
+      int lotSteps1 = (int)floor(lot1 / lotStep + 0.5);
+      int lotSteps2 = (int)floor(lot2 / lotStep + 0.5);
+      int res = lotSteps1 - lotSteps2;
+      return res;
+   }
+   
+   static double GetBid(const string symbol) { return MarketInfo(symbol, MODE_BID); }
+   double GetBid() { return GetBid(_symbol); }
+   static double GetAsk(const string symbol) { return MarketInfo(symbol, MODE_ASK); }
+   double GetAsk() { return GetAsk(_symbol); }
+   static double GetPipSize(const string symbol)
+   { 
+      double point = MarketInfo(symbol, MODE_POINT);
+      double digits = (int)MarketInfo(symbol, MODE_DIGITS); 
+      double mult = digits == 3 || digits == 5 ? 10 : 1;
+      return point * mult;
+   }
+   double GetPipSize() { return _pipSize; }
+   double GetPointSize() { return _point; }
+   string GetSymbol() { return _symbol; }
+   double GetSpread() { return (GetAsk() - GetBid()) / GetPipSize(); }
+   int GetDigits() { return _digits; }
+   double GetTickSize() { return _tickSize; }
+   double GetMinLots() { return SymbolInfoDouble(_symbol, SYMBOL_VOLUME_MIN); };
+
+   double AddPips(const double rate, const double pips)
+   {
+      return RoundRate(rate + pips * _pipSize);
+   }
+
+   double RoundRate(const double rate)
+   {
+      return NormalizeDouble(MathFloor(rate / _tickSize + 0.5) * _tickSize, _digits);
+   }
+
+   double RoundLots(const double lots)
+   {
+      double lotStep = SymbolInfoDouble(_symbol, SYMBOL_VOLUME_STEP);
+      if (lotStep == 0)
+      {
+         return 0.0;
+      }
+      return floor(lots / lotStep) * lotStep;
+   }
+
+   double LimitLots(const double lots)
+   {
+      double minVolume = GetMinLots();
+      if (minVolume > lots)
+      {
+         return 0.0;
+      }
+      double maxVolume = SymbolInfoDouble(_symbol, SYMBOL_VOLUME_MAX);
+      if (maxVolume < lots)
+      {
+         return maxVolume;
+      }
+      return lots;
+   }
+
+   double NormalizeLots(const double lots)
+   {
+      return LimitLots(RoundLots(lots));
+   }
+};
+
+#endif
+
+// Abstract stream v1.1
+// More templates and snippets on https://github.com/sibvic/mq4-templates
+
+#ifndef AStream_IMP
+
+class AStream : public IStream
+{
+protected:
+   string _symbol;
+   ENUM_TIMEFRAMES _timeframe;
+   double _shift;
+   InstrumentInfo *_instrument;
+   int _references;
+
+   AStream(const string symbol, const ENUM_TIMEFRAMES timeframe)
+   {
+      _references = 1;
+      _shift = 0.0;
+      _symbol = symbol;
+      _timeframe = timeframe;
+      _instrument = new InstrumentInfo(_symbol);
+   }
+
+   ~AStream()
+   {
+      delete _instrument;
+   }
+public:
+   void SetShift(const double shift)
+   {
+      _shift = shift;
+   }
+
+   void AddRef()
+   {
+      ++_references;
+   }
+
+   void Release()
+   {
+      --_references;
+      if (_references == 0)
+         delete &this;
+   }
+
+   int Size()
+   {
+      return iBars(_symbol, _timeframe);
+   }
+};
+#define AStream_IMP
+#endif
+
+// True range stream v2.2
+
+#ifndef TrueRangeStream_IMP
+#define TrueRangeStream_IMP
+
+class TrueRangeStream : public AStream
+{
+   bool _handleNa;
+public:
+   TrueRangeStream(const string symbol, ENUM_TIMEFRAMES timeframe, bool handleNa = false)
+      :AStream(symbol, timeframe)
+   {
+      _handleNa = handleNa;
+   }
+
+   bool GetValue(const int period, double &val)
+   {
+      int pos = Size() - period - 1;
+      if (pos < 1)
+      {
+         if (_handleNa)
+         {
+            val = CalcFirst(pos);
+            return true;
+         }
+         return false;
+      }
+      double h = iHigh(_symbol, _timeframe, period);
+      double l = iLow(_symbol, _timeframe, period);
+      double c1 = iClose(_symbol, _timeframe, period + 1);
+      double hl = MathAbs(h - l);
+      double hc = MathAbs(h - c1);
+      double lc = MathAbs(l - c1);
+
+      val = MathMax(lc, MathMax(hl, hc));
+      return true;
+   }
+private:
+   double CalcFirst(int pos)
+   {
+      double hl = MathAbs(iHigh(_symbol, _timeframe, pos) - iLow(_symbol, _timeframe, pos));
+      double hc = MathAbs(iHigh(_symbol, _timeframe, pos) - iOpen(_symbol, _timeframe, pos));
+      double lc = MathAbs(iLow(_symbol, _timeframe, pos) - iOpen(_symbol, _timeframe, pos));
+
+      return MathMax(lc, MathMax(hl, hc));
+   }
+};
+#endif
+
+
+// EMA on stream v1.0
+
+#ifndef EMAOnStream_IMP
+#define EMAOnStream_IMP
+
+class EMAOnStream : public IStream
+{
+   IStream *_source;
+   int _length;
+   double _k;
+   double _buffer[];
+   int _references;
+public:
+   EMAOnStream(IStream *source, const int length)
+   {
+      _source = source;
+      _source.AddRef();
+      _length = length;
+      _references = 1;
+      _k = 2.0 / (_length + 1.0);
+   }
+
+   ~EMAOnStream()
+   {
+      _source.Release();
+   }
+
+   void AddRef()
+   {
+      ++_references;
+   }
+
+   void Release()
+   {
+      --_references;
+      if (_references == 0)
+      {
+         delete &this;
+      }
+   }
+   
+   virtual int Size()
+   {
+      return _source.Size();
+   }
+
+   bool GetValue(const int period, double &val)
+   {
+      int totalBars = _source.Size();
+      int currentBufferSize = ArrayRange(_buffer, 0);
+      if (currentBufferSize != totalBars) 
+      {
+         ArrayResize(_buffer, totalBars);
+         for (int i = currentBufferSize; i < totalBars; ++i)
+         {
+            _buffer[i] = EMPTY_VALUE;
+         }
+      }
+      
+      if (period > totalBars - _length)
+      {
+         return false;
+      }
+
+      int bufferIndex = totalBars - 1 - period;
+      double current;
+      if (!_source.GetValue(period, current))
+      {
+         return false;
+      }
+      double last = _buffer[bufferIndex - 1] != EMPTY_VALUE ? _buffer[bufferIndex - 1] : current;
+      _buffer[bufferIndex] = (1 - _k) * last + _k * current;
+      val = _buffer[bufferIndex];
+      return true;
+   }
+};
+#endif
+// Collection of lines v1.2
+
+#ifndef LinesCollection_IMPL
+#define LinesCollection_IMPL
+
+// Line object v1.3
+
+class Line
+{
+   string _id;
+   int _x1;
+   double _y1;
+   int _x2;
+   double _y2;
+   color _clr;
+   int _width;
+   ENUM_TIMEFRAMES _timeframe;
+   string _style;
+   int _refs;
+   string _collectionId;
+   int _window;
+   bool global;
+public:
+   Line(int x1, double y1, int x2, double y2, string id, string collectionId, int window, bool global)
+   {
+      _refs = 1;
+      _x1 = x1;
+      _x2 = x2;
+      _y1 = y1;
+      _y2 = y2;
+      _id = id;
+      _clr = Blue;
+      _timeframe = (ENUM_TIMEFRAMES)_Period;
+      _window = window;
+      _collectionId = collectionId;
+      this.global = global;
+   }
+   void AddRef()
+   {
+      _refs++;
+   }
+   int Release()
+   {
+      int refs = --_refs;
+      if (refs == 0)
+      {
+         delete &this;
+      }
+      return refs;
+   }
+   
+   bool IsGlobal()
+   {
+      return global;
+   }
+
+   string GetId()
+   {
+      return _id;
+   }
+   string GetCollectionId()
+   {
+      return _collectionId;
+   }
+
+   Line* SetStyle(string style)
+   {
+      _style = style;
+      return &this;
+   }
+
+   void SetXY1(int x, double y)
+   {
+      _x1 = x;
+      _y1 = y;
+   }
+   static void SetXY1(Line* line, int x, double y)
+   {
+      if (line == NULL)
+      {
+         return;
+      }
+      line.SetXY1(x, y);
+   }
+   
+   void SetXY2(int x, double y)
+   {
+      _x2 = x;
+      _y2 = y;
+   }
+   static void SetXY2(Line* line, int x, double y)
+   {
+      if (line == NULL)
+      {
+         return;
+      }
+      line.SetXY2(x, y);
+   }
+
+   void SetX1(int x) { _x1 = x; }
+   static void SetX1(Line* line, int x) { if (line == NULL) { return; } line.SetX1(x); }
+   void SetX2(int x) { _x2 = x; }
+   static void SetX2(Line* line, int x) { if (line == NULL) { return; } line.SetX2(x); }
+   void SetY1(double y) { _y1 = y; }
+   static void SetY1(Line* line, double y) { if (line == NULL) { return; } line.SetY1(y); }
+   void SetY2(double y) { _y2 = y; }
+   static void SetY2(Line* line, double y) { if (line == NULL) { return; } line.SetY2(y); }
+
+   int GetX1() { return _x1; }
+   static int GetX1(Line* line) { if (line == NULL) { return EMPTY_VALUE; } return line.GetX1(); }
+   int GetX2() { return _x2; }
+   static int GetX2(Line* line) { if (line == NULL) { return EMPTY_VALUE; } return line.GetX2(); }
+   double GetY1() { return _y1; }
+   static double GetY1(Line* line) { if (line == NULL) { return EMPTY_VALUE; } return line.GetY1(); }
+   double GetY2() { return _y2; }
+   static double GetY2(Line* line) { if (line == NULL) { return EMPTY_VALUE; } return line.GetY2(); }
+
+   Line* SetColor(color clr)
+   {
+      _clr = clr;
+      return &this;
+   }
+
+   Line* SetWidth(int width)
+   {
+      _width = width;
+      return &this;
+   }
+
+   void Redraw()
+   {
+      int pos1 = iBars(_Symbol, _timeframe) - _x1 - 1;
+      datetime x1 = iTime(_Symbol, _timeframe, pos1);
+      int pos2 = iBars(_Symbol, _timeframe) - _x2 - 1;
+      datetime x2 = iTime(_Symbol, _timeframe, pos2);
+      if (ObjectFind(0, _id) == -1 && ObjectCreate(0, _id, OBJ_TREND, 0, x1, _y1, x2, _y2))
+      {
+         ObjectSetInteger(0, _id, OBJPROP_COLOR, _clr);
+         ObjectSetInteger(0, _id, OBJPROP_STYLE, STYLE_SOLID);
+         ObjectSetInteger(0, _id, OBJPROP_WIDTH, _width);
+         ObjectSetInteger(0, _id, OBJPROP_RAY_RIGHT, false);
+      }
+      ObjectSetDouble(0, _id, OBJPROP_PRICE1, _y1);
+      ObjectSetDouble(0, _id, OBJPROP_PRICE2, _y2);
+      ObjectSetInteger(0, _id, OBJPROP_TIME1, x1);
+      ObjectSetInteger(0, _id, OBJPROP_TIME2, x2);
+   }
+};
+
+class LinesCollection
+{
+   string _id;
+   Line* _array[];
+   static LinesCollection* _collections[];
+   static LinesCollection* _all;
+   static int _max;
+public:
+   static Line* Get(Line* line, int index)
+   {
+      if (line == NULL)
+      {
+         return NULL;
+      }
+      LinesCollection* collection = FindCollection(line.GetCollectionId());
+      if (collection == NULL)
+      {
+         return NULL;
+      }
+      return collection.GetByIndex(index);
+   }
+
+   static void Clear(bool full = false)
+   {
+      if (_all == NULL)
+      {
+         if (!full)
+         {
+            _all = new LinesCollection("");
+         }
+      }
+      else
+      {
+      
+         _all.ClearItems();
+         if (full)
+         {
+            delete _all;
+            _all = NULL;
+         }
+      }
+      for (int i = 0; i < ArraySize(_collections); ++i)
+      {
+         delete _collections[i];
+      }
+      ArrayResize(_collections, 0);
+   }
+
+   static void Delete(Line* line)
+   {
+      if (line == NULL)
+      {
+         return;
+      }
+      if (!_all.DeleteItem(line))
+      {
+         return;
+      }
+      LinesCollection* collection = FindCollection(line.GetCollectionId());
+      if (collection == NULL)
+      {
+         return;
+      }
+      collection.DeleteItem(line);
+   }
+
+   static Line* Create(string id, int x1, double y1, int x2, double y2, datetime dateId, bool global = false)
+   {
+      ResetLastError();
+      dateId = iTime(_Symbol, _Period, iBars(_Symbol, _Period) - x1 - 1);
+      string lineId = id + "_" 
+         + IntegerToString(TimeDay(dateId)) + "_"
+         + IntegerToString(TimeMonth(dateId)) + "_"
+         + IntegerToString(TimeYear(dateId)) + "_"
+         + IntegerToString(TimeHour(dateId)) + "_"
+         + IntegerToString(TimeMinute(dateId)) + "_"
+         + IntegerToString(TimeSeconds(dateId));
+      
+      Line* line = new Line(x1, y1, x2, y2, lineId, id, WindowOnDropped(), global);
+      LinesCollection* collection = FindCollection(id);
+      if (collection == NULL)
+      {
+         collection = new LinesCollection(id);
+         AddCollection(collection);
+      }
+      collection.Add(line);
+      _all.Add(line);
+      int allLinesCount = _all.Count();
+      if (allLinesCount > _max)
+      {
+         for (int i = 0; i < allLinesCount; ++i)
+         {
+            Line* lineToDelete = _all.GetByIndex(i);
+            if (!lineToDelete.IsGlobal() && lineToDelete != line)
+            {
+               Delete(lineToDelete);
+               break;
+            }
+         }
+      }
+      line.Release();
+      return line;
+   }
+
+   static void SetMaxLines(int max)
+   {
+      _max = max;
+   }
+
+   static void Redraw()
+   {
+      for (int i = 0; i < ArraySize(_collections); ++i)
+      {
+         _collections[i].RedrawLines();
+      }
+   }
+private:
+   LinesCollection(string id)
+   {
+      _id = id;
+   }
+
+   ~LinesCollection()
+   {
+      ClearItems();
+   }
+   
+   string GetId()
+   {
+      return _id;
+   }
+   
+   void ClearItems()
+   {
+      for (int i = 0; i < ArraySize(_array); ++i)
+      {
+         if (_array[i] != NULL)
+         {
+            _array[i].Release();
+         }
+      }
+      ArrayResize(_array, 0);
+   }
+   
+   int Count()
+   {
+      return ArraySize(_array);
+   }
+
+   Line* GetFirst()
+   {
+      return _array[0];
+   }
+
+   Line* GetByIndex(int index)
+   {
+      int size = ArraySize(_array);
+      if (index < 0 || index >= size)
+      {
+         return NULL;
+      }
+      return _array[size - 1 - index];
+   }
+   
+   int FindIndex(Line* line)
+   {
+      int size = ArraySize(_array);
+      for (int i = 0; i < size; ++i)
+      {
+         if (_array[i] == line)
+         {
+            return i;
+         }
+      }
+      return -1;
+   }
+
+   bool DeleteItem(Line* line)
+   {
+      int index = FindIndex(line);
+      if (index == -1)
+      {
+         return false;
+      }
+      if (_array[index] != NULL)
+      {
+         _array[index].Release();
+      }
+      int size = ArraySize(_array);
+      for (int i = index + 1; i < size; ++i)
+      {
+         _array[i - 1] = _array[i];
+      }
+      ArrayResize(_array, size - 1);
+      return true;
+   }
+   
+   void Add(Line* line)
+   {
+      int index = FindIndex(line);
+      
+      int size = ArraySize(_array);
+      ArrayResize(_array, size + 1);
+      _array[size] = line;
+      if (line != NULL)
+      {
+         line.AddRef();
+      }
+   }
+
+   void RedrawLines()
+   {
+      int size = ArraySize(_array);
+      for (int i = 0; i < size; ++i)
+      {
+         _array[i].Redraw();
+      }
+   }
+   
+   static void AddCollection(LinesCollection* collection)
+   {
+      int size = ArraySize(_collections);
+      ArrayResize(_collections, size + 1);
+      _collections[size] = collection;
+   }
+   
+   static LinesCollection* FindCollection(string id)
+   {
+      for (int i = 0; i < ArraySize(_collections); ++i)
+      {
+         if (_collections[i].GetId() == id)
+         {
+            return _collections[i];
+         }
+      }
+      return NULL;
+   }
+};
+LinesCollection* LinesCollection::_collections[];
+LinesCollection* LinesCollection::_all;
+int LinesCollection::_max = 50;
+#endif
+// str.* functions from Pine Script
+// v1.0
+
+class Str
+{
+public:
+   static string ToString(int value, string format)
+   {
+      if (format == "percent")
+      {
+         return IntegerToString(value, 2) + "%";
+      }
+      return IntegerToString(value);
+   }
+   static string ToString(double value, string format)
+   {
+      if (format == "percent")
+      {
+         return DoubleToString(value, 2) + "%";
+      }
+      return DoubleToString(value);
+   }
+   static string ToString(double value)
+   {
+      return DoubleToString(value);
+   }
+   static string ToString(int value)
+   {
+      return IntegerToString(value);
+   }
+   static string ToString(string value)
+   {
+      return value;
+   }
+   static string ReplaceAll(string source, string target, string replaceWith)
+   {
+      StringReplace(source, target, replaceWith);
+      return source;
+   }
+   static int Length(string value)
+   {
+      return StringLen(value);
+   }
+};
+
+enum StrFormatValueType
+{
+   String,
+   Integer,
+   Float
+};
+interface IStrFormatValue
+{
+public:
+   virtual StrFormatValueType GetType() = 0;
+};
+class StrFormatStringValue : public IStrFormatValue
+{
+   string value;
+public:
+   StrFormatValueType GetType() 
+   {
+      return StrFormatValueType::String;
+   }
+   
+   void SetValue(string val)
+   {
+      value = val;
+   }
+   string GetValue()
+   {
+      return value;
+   }
+};
+class StrFormatIntValue : public IStrFormatValue
+{
+   int value;
+public:
+   StrFormatValueType GetType() 
+   {
+      return StrFormatValueType::Integer;
+   }
+   
+   void SetValue(int val)
+   {
+      value = val;
+   }
+   int GetValue()
+   {
+      return value;
+   }
+};
+class StrFormatDoubleValue : public IStrFormatValue
+{
+   double value;
+public:
+   StrFormatValueType GetType() 
+   {
+      return StrFormatValueType::Float;
+   }
+   
+   void SetValue(double val)
+   {
+      value = val;
+   }
+   double GetValue()
+   {
+      return value;
+   }
+};
+class StrFormat
+{
+   string format;
+   IStrFormatValue* values[];
+   int nextValueIndex;
+public:
+   StrFormat(string format)
+   {
+      this.format = format;
+      nextValueIndex = 0;
+   }
+   ~StrFormat()
+   {
+      int size = ArraySize(values);
+      for (int i = 0; i < size; ++i)
+      {
+         delete values[i];
+      }
+   }
+   
+   StrFormat* Add(string value)
+   {
+      int size = ArraySize(values);
+      if (size <= nextValueIndex)
+      {
+         ArrayResize(values, nextValueIndex + 1);
+         values[nextValueIndex] = new StrFormatStringValue();
+      }
+      ((StrFormatStringValue*)values[nextValueIndex]).SetValue(value);
+      nextValueIndex = nextValueIndex + 1;
+      return &this;
+   }
+   StrFormat* Add(int value)
+   {
+      int size = ArraySize(values);
+      if (size <= nextValueIndex)
+      {
+         ArrayResize(values, nextValueIndex + 1);
+         values[nextValueIndex] = new StrFormatIntValue();
+      }
+      ((StrFormatIntValue*)values[nextValueIndex]).SetValue(value);
+      nextValueIndex = nextValueIndex + 1;
+      return &this;
+   }
+   StrFormat* Add(double value)
+   {
+      int size = ArraySize(values);
+      if (size <= nextValueIndex)
+      {
+         ArrayResize(values, nextValueIndex + 1);
+         values[nextValueIndex] = new StrFormatDoubleValue();
+      }
+      ((StrFormatDoubleValue*)values[nextValueIndex]).SetValue(value);
+      nextValueIndex = nextValueIndex + 1;
+      return &this;
+   }
+   
+   string Format()
+   {
+      int size = ArraySize(values);
+      string res = format;
+      for (int i = 0; i < size; ++i)
+      {
+         int pos = StringFind(res, "{" + IntegerToString(i));
+         if (pos < 0)
+         {
+            continue;
+         }
+         int end = StringFind(res, "}", pos + 1);
+         if (end < 0)
+         {
+            continue;
+         }
+         switch (values[i].GetType())
+         {
+         case StrFormatValueType::String:
+            {
+               string strValue = ((StrFormatStringValue*)values[i]).GetValue();
+               res = StringSubstr(res, 0, pos) + strValue + StringSubstr(res, end + 1);
+            }
+            break;
+         case StrFormatValueType::Integer:
+            {
+               int intValue = ((StrFormatIntValue*)values[i]).GetValue();
+               string numberFormat = StringSubstr(res, pos + 1, end - pos - 1);
+               
+               res = StringSubstr(res, 0, pos) + FormatIntValue(intValue, numberFormat) + StringSubstr(res, end + 1);
+            }
+            break;
+         case StrFormatValueType::Float:
+            {
+               double doubleValue = ((StrFormatDoubleValue*)values[i]).GetValue();
+               res = StringSubstr(res, 0, pos) + DoubleToString(doubleValue) + StringSubstr(res, end + 1);
+            }
+            break;
+         }
+      }
+      nextValueIndex = 0;
+      return res;
+   }
+private:
+   string FormatIntValue(int intValue, string numberFormat)
+   {
+      string tokens[];
+      int count = StringSplit(numberFormat, ',', tokens);
+      if (count == 1 || tokens[1] != "number")
+      {
+          return IntegerToString(intValue);
+      }
+      int precision = GetPrecision(tokens[2]);
+      if (precision == 0)
+      {
+         return IntegerToString(intValue);
+      }
+      return DoubleToString(intValue, precision);
+   }
+   
+   int GetPrecision(string format)
+   {
+      int pointPos = StringFind(format, ".");
+      if (pointPos < 0)
+      {
+         return -1;
+      }
+      return StringLen(format) - pointPos;
+   }
+};
+// Collection of labels v1.2
+
+#ifndef LabelsCollection_IMPL
+#define LabelsCollection_IMPL
+
+// Label v1.5
+
+#ifndef Label_IMPL
+#define Label_IMPL
+
+class Label
+{
+   color _color;
+   color _textColor;
+   string _text;
+   string _labelId;
+   string _collectionId;
+   string _textAlign;
+   int _x;
+   double _y;
+   string _font;
+   string _style;
+   string _size;
+   string _yloc;
+   ENUM_TIMEFRAMES _timeframe;
+   int _refs;
+   int _window;
+   bool globalLabel;
+public:
+   Label(int x, double y, string labelId, string collectionId, int window, bool globalLabel)
+   {
+      _refs = 1;
+      _window = window;
+      _textColor = Yellow;
+      _x = x;
+      _y = y;
+      _labelId = labelId;
+      _collectionId = collectionId;
+      _font = "Arial";
+      _textAlign = "";
+      _timeframe = (ENUM_TIMEFRAMES)_Period;
+      this.globalLabel = globalLabel;
+   }
+   void AddRef()
+   {
+      _refs++;
+   }
+   int Release()
+   {
+      int refs = --_refs;
+      if (refs == 0)
+      {
+         delete &this;
+      }
+      return refs;
+   }
+   
+   bool IsGlobal()
+   {
+      return globalLabel;
+   }
+   
+   string GetId()
+   {
+      return _labelId;
+   }
+   string GetCollectionId()
+   {
+      return _collectionId;
+   }
+
+   int GetX()
+   {
+      return _x;
+   }
+   static int GetX(Label* label)
+   {
+      if (label == NULL)
+      {
+         return 0;
+      }
+      return label.GetX();
+   }
+
+   double GetY()
+   {
+      return _y;
+   }
+   static double GetY(Label* label)
+   {
+      if (label == NULL)
+      {
+         return 0;
+      }
+      return label.GetY();
+   }
+   void SetX(int x) { _x = x; }
+   static void SetX(Label* label, int x) { if (label == NULL) { return; } label.SetX(x); }
+   void SetY(double y) { _y = y; }
+   static void SetY(Label* label, double y) { if (label == NULL) { return; } label.SetY(y); }
+   static void SetXY(Label* label, int x, double y) { if (label == NULL) { return; } label.SetX(x); label.SetY(y); }
+
+   Label* SetSize(string size)
+   {
+      _size = size;
+      return &this;
+   }
+   static void SetSize(Label* label, string size)
+   {
+      if (label == NULL)
+      {
+         return;
+      }
+      label.SetSize(size);
+   }
+
+   Label* SetYLoc(string yloc)
+   {
+      _yloc = yloc;
+      return &this;
+   }
+   static void SetYLoc(Label* label, string yloc)
+   {
+      if (label == NULL)
+      {
+         return;
+      }
+      label.SetYLoc(yloc);
+   }
+   
+   Label* SetColor(color clr)
+   {
+      _color = clr;
+      return &this;
+   }
+   
+   Label* SetTextColor(color clr)
+   {
+      _textColor = clr;
+      return &this;
+   }
+   
+   static void SetStyle(Label* label, string style)
+   {
+      if (label == NULL)
+      {
+         return;
+      }
+      label.SetStyle(style);
+   }
+   Label* SetStyle(string style)
+   {
+      _style = style;
+      return &this;
+   }
+   
+   static void SetText(Label* label, string text)
+   {
+      if (label == NULL)
+      {
+         return;
+      }
+      label.SetText(text);
+   }
+   Label* SetText(string text)
+   {
+      _text = text;
+      StringReplace(_text, "\n", " ");
+      if (_text == "")
+      {
+         _font = "Wingdings";
+      }
+      else
+      {
+         _font = "Arial";
+      }
+      return &this;
+   }
+   
+   static void SetTextAlign(Label* label, string textAlign)
+   {
+      if (label == NULL)
+      {
+         return;
+      }
+      label.SetTextAlign(textAlign);
+   }
+   Label* SetTextAlign(string textAlign)
+   {
+      _textAlign = textAlign;
+      return &this;
+   }
+
+   void Redraw()
+   {
+      string usedText = _text;
+      if (usedText == "")
+      {
+         if (_style == "up")
+         {
+            usedText = "\217";
+         }
+         else if (_style == "down")
+         {
+            usedText = "\218";
+         }
+      }
+      ResetLastError();
+      int pos = iBars(_Symbol, _timeframe) - _x - 1;
+      datetime x = iTime(_Symbol, _timeframe, pos);
+      double y = getY(pos);
+      
+      if (ObjectFind(0, _labelId) == -1 
+         && ObjectCreate(0, _labelId, OBJ_TEXT, _window, x, y))
+      {
+         ObjectSetString(0, _labelId, OBJPROP_FONT, "Arial");
+         ObjectSetInteger(0, _labelId, OBJPROP_FONTSIZE, getFontSize());
+         ObjectSetInteger(0, _labelId, OBJPROP_COLOR, _textColor);
+         ObjectSetInteger(0, _labelId, OBJPROP_ANCHOR, GetAnchor());
+      }
+      ObjectSetInteger(0, _labelId, OBJPROP_TIME, x);
+      ObjectSetDouble(0, _labelId, OBJPROP_PRICE1, y);
+      ObjectSetString(0, _labelId, OBJPROP_TEXT, usedText);
+   }
+private:
+   int GetAnchor()
+   {
+      if (_yloc == "abovebar")
+      {
+         return ANCHOR_LOWER;
+      }
+      if (_yloc == "belowbar")
+      {
+         return ANCHOR_UPPER;
+      }
+      return ANCHOR_CENTER;
+   }
+   int getFontSize()
+   {
+      if (_size == "tiny")
+      {
+         return 8;
+      }
+      if (_size == "small")
+      {
+         return 10;
+      }
+      if (_size == "large")
+      {
+         return 14;
+      }
+      if (_size == "huge")
+      {
+         return 16;
+      }
+      return 12;
+   }
+   double getY(int pos)
+   {
+      if (_yloc == "abovebar")
+      {
+         return iHigh(_Symbol, _timeframe, pos);
+      }
+      if (_yloc == "belowbar")
+      {
+         return iLow(_Symbol, _timeframe, pos);
+      }
+      return _y;
+   }
+};
+#endif
+
+class LabelsCollection
+{
+   string _id;
+   Label* _labels[];
+   static LabelsCollection* _collections[];
+   static LabelsCollection* _all;
+   static int _maxLabels;
+public:
+   LabelsCollection(string id)
+   {
+      _id = id;
+   }
+   
+   ~LabelsCollection()
+   {
+      ClearLabels();
+   }
+   
+   void ClearLabels()
+   {
+      for (int i = 0; i < ArraySize(_labels); ++i)
+      {
+         delete _labels[i];
+      }
+      ArrayResize(_labels, 0);
+   }
+   
+   string GetId()
+   {
+      return _id;
+   }
+   
+   int Count()
+   {
+      return ArraySize(_labels);
+   }
+   
+   Label* GetFirst()
+   {
+      return _labels[0];
+   }
+   
+   Label* GetByIndex(int index)
+   {
+      int size = ArraySize(_labels);
+      if (index < 0 || index >= size)
+      {
+         return NULL;
+      }
+      return _labels[size - 1 - index];
+   }
+
+   static Label* Get(Label* label, int index)
+   {
+      if (label == NULL)
+      {
+         return NULL;
+      }
+      LabelsCollection* collection = FindCollection(label.GetCollectionId());
+      if (collection == NULL)
+      {
+         return NULL;
+      }
+      return collection.GetByIndex(index);
+   }
+   
+   static void Clear(bool full = false)
+   {
+      for (int i = 0; i < ArraySize(_collections); ++i)
+      {
+         delete _collections[i];
+      }
+      ArrayResize(_collections, 0);
+      if (_all == NULL && !full)
+      {
+         _all = new LabelsCollection("");
+      }
+      else
+      {
+         _all.ClearLabels();
+         if (full)
+         {
+            delete _all;
+            _all = NULL;
+         }
+      }
+   }
+
+   static void Delete(Label* label)
+   {
+      if (label == NULL)
+      {
+         return;
+      }
+      _all.RemoveLabel(label);
+      LabelsCollection* collection = FindCollection(label.GetCollectionId());
+      if (collection == NULL)
+      {
+         return;
+      }
+      collection.DeleteLabel(label);
+   }
+
+   static Label* Create(string id, int x, double y, datetime dateId, bool globalLabel = false)
+   {
+      ResetLastError();
+      dateId = iTime(_Symbol, _Period, iBars(_Symbol, _Period) - x - 1);
+      string labelId = id + "_" 
+         + IntegerToString(TimeDay(dateId)) + "_"
+         + IntegerToString(TimeMonth(dateId)) + "_"
+         + IntegerToString(TimeYear(dateId)) + "_"
+         + IntegerToString(TimeHour(dateId)) + "_"
+         + IntegerToString(TimeMinute(dateId)) + "_"
+         + IntegerToString(TimeSeconds(dateId));
+      Label* label = new Label(x, y, labelId, id, WindowOnDropped(), globalLabel);
+      LabelsCollection* collection = FindCollection(id);
+      if (collection == NULL)
+      {
+         collection = new LabelsCollection(id);
+         AddCollection(collection);
+      }
+      collection.Add(label);
+      _all.Add(label);
+      int allLabelsCount = _all.Count();
+      if (allLabelsCount > _maxLabels)
+      {
+         for (int i = 0; i < allLabelsCount; ++i)
+         {
+            Label* labelToDelete = _all.GetByIndex(i);
+            if (!labelToDelete.IsGlobal() && labelToDelete != label)
+            {
+               Delete(labelToDelete);
+               break;
+            }
+         }
+      }
+      return label;
+   }
+
+   static void SetMaxLabels(int max)
+   {
+      _maxLabels = max;
+   }
+
+   static void Redraw()
+   {
+      for (int i = 0; i < ArraySize(_collections); ++i)
+      {
+         _collections[i].RedrawLabels();
+      }
+   }
+private:
+   int FindIndex(Label* label)
+   {
+      int size = ArraySize(_labels);
+      for (int i = 0; i < size; ++i)
+      {
+         if (_labels[i] == label)
+         {
+            return i;
+         }
+      }
+      return -1;
+   }
+   void RemoveLabel(Label* label)
+   {
+      int index = FindIndex(label);
+      if (index == -1)
+      {
+         return;
+      }
+      int size = ArraySize(_labels);
+      for (int i = index + 1; i < size; ++i)
+      {
+         _labels[i - 1] = _labels[i];
+      }
+      ArrayResize(_labels, size - 1);
+   }
+   void DeleteLabel(Label* label)
+   {
+      RemoveLabel(label);
+      delete label;
+   }
+   void Add(Label* label)
+   {
+      int index = FindIndex(label);
+      
+      int size = ArraySize(_labels);
+      ArrayResize(_labels, size + 1);
+      _labels[size] = label;
+   }
+
+   void RedrawLabels()
+   {
+      int size = ArraySize(_labels);
+      for (int i = 0; i < size; ++i)
+      {
+         _labels[i].Redraw();
+      }
+   }
+
+   static void AddCollection(LabelsCollection* collection)
+   {
+      int size = ArraySize(_collections);
+      ArrayResize(_collections, size + 1);
+      _collections[size] = collection;
+   }
+   
+   static LabelsCollection* FindCollection(string id)
+   {
+      for (int i = 0; i < ArraySize(_collections); ++i)
+      {
+         if (_collections[i].GetId() == id)
+         {
+            return _collections[i];
+         }
+      }
+      return NULL;
+   }
+};
+LabelsCollection* LabelsCollection::_collections[];
+LabelsCollection* LabelsCollection::_all;
+int LabelsCollection::_maxLabels = 50;
+#endif
+
+
+//Base implementation of stream based on another stream 
+//v1.1
+
+class AOnStream : public IStream
+{
+protected:
+   IStream *_source;
+   int _references;
+public:
+   AOnStream(IStream *source)
+   {
+      _references = 1;
+      _source = source;
+      if (_source != NULL)
+      {
+         _source.AddRef();
+      }
+   }
+
+   ~AOnStream()
+   {
+      _source.Release();
+   }
+   
+   void AddRef()
+   {
+      ++_references;
+   }
+
+   void Release()
+   {
+      --_references;
+      if (_references == 0)
+         delete &this;
+   }
+
+   virtual int Size()
+   {
+      return _source.Size();
+   }
+};
+// Simple price stream v1.2
+
+enum PriceType
+{
+   PriceClose = PRICE_CLOSE, // Close
+   PriceOpen = PRICE_OPEN, // Open
+   PriceHigh = PRICE_HIGH, // High
+   PriceLow = PRICE_LOW, // Low
+   PriceMedian = PRICE_MEDIAN, // Median
+   PriceTypical = PRICE_TYPICAL, // Typical
+   PriceWeighted = PRICE_WEIGHTED, // Weighted
+   PriceMedianBody, // Median (body)
+   PriceAverage, // Average
+   PriceTrendBiased, // Trend biased
+   PriceVolume, // Volume
+};
+
+class SimplePriceStream : public AStream
+{
+   PriceType _price;
+   int _periodShift;
+public:
+   SimplePriceStream(const string symbol, const ENUM_TIMEFRAMES timeframe, const PriceType __price, int periodShift = 0)
+      :AStream(symbol, timeframe)
+   {
+      _price = __price;
+      _periodShift = periodShift;
+   }
+
+   bool GetValue(const int period, double &val)
+   {
+      ResetLastError();
+      switch (_price)
+      {
+         case PriceClose:
+            val = iClose(_symbol, _timeframe, period + _periodShift);
+            break;
+         case PriceOpen:
+            val = iOpen(_symbol, _timeframe, period + _periodShift);
+            break;
+         case PriceHigh:
+            val = iHigh(_symbol, _timeframe, period + _periodShift);
+            break;
+         case PriceLow:
+            val = iLow(_symbol, _timeframe, period + _periodShift);
+            break;
+         case PriceMedian:
+            val = (iHigh(_symbol, _timeframe, period + _periodShift) + iLow(_symbol, _timeframe, period + _periodShift)) / 2.0;
+            break;
+         case PriceTypical:
+            val = (iHigh(_symbol, _timeframe, period + _periodShift) + iLow(_symbol, _timeframe, period + _periodShift) + iClose(_symbol, _timeframe, period + _periodShift)) / 3.0;
+            break;
+         case PriceWeighted:
+            val = (iHigh(_symbol, _timeframe, period + _periodShift) + iLow(_symbol, _timeframe, period + _periodShift) + iClose(_symbol, _timeframe, period + _periodShift) * 2) / 4.0;
+            break;
+         case PriceMedianBody:
+            val = (iOpen(_symbol, _timeframe, period + _periodShift) + iClose(_symbol, _timeframe, period + _periodShift)) / 2.0;
+            break;
+         case PriceAverage:
+            val = (iHigh(_symbol, _timeframe, period + _periodShift) + iLow(_symbol, _timeframe, period + _periodShift) + iClose(_symbol, _timeframe, period + _periodShift) + iOpen(_symbol, _timeframe, period + _periodShift)) / 4.0;
+            break;
+         case PriceTrendBiased:
+            {
+               double close = iClose(_symbol, _timeframe, period + _periodShift);
+               if (iOpen(_symbol, _timeframe, period + _periodShift) > iClose(_symbol, _timeframe, period + _periodShift))
+                  val = (iHigh(_symbol, _timeframe, period + _periodShift) + close) / 2.0;
+               else
+                  val = (iLow(_symbol, _timeframe, period + _periodShift) + close) / 2.0;
+            }
+            break;
+         case PriceVolume:
+            val = (double)iVolume(_symbol, _timeframe, period + _periodShift);
+            break;
+      }
+      if (GetLastError() != ERR_NO_ERROR)
+      {
+         return false;
+      }
+      val += _shift * _instrument.GetPipSize();
+      return true;
+   }
+};
+
+
+// Highest high stream v1.5
+
+class HighestHighStream : public AOnStream
+{
+   int _loopback;
+public:
+   HighestHighStream(string symbol, ENUM_TIMEFRAMES timeframe, int loopback)
+      :AOnStream(new SimplePriceStream(symbol, timeframe, PriceHigh))
+   {
+      _loopback = loopback;
+      _source.Release();
+   }
+   HighestHighStream(IStream* source, int loopback)
+      :AOnStream(source)
+   {
+      _loopback = loopback;
+   }
+
+   static bool GetValue(const int period, double &val, IStream* source, int loopback)
+   {
+      if (!source.GetValue(period, val))
+         return false;
+
+      for (int i = 1; i < loopback; ++i)
+      {
+         double value;
+         if (!source.GetValue(period + i, value))
+            return false;
+         val = MathMax(val, value);
+      }
+      return true;
+   }
+
+   bool GetValue(const int period, double &val)
+   {
+      return HighestHighStream::GetValue(period, val, _source, _loopback);
+   }
+};
+
+
+
+
+// Lowest low stream v1.5
+
+class LowestLowStream : public AOnStream
+{
+   int _loopback;
+public:
+   LowestLowStream(string symbol, ENUM_TIMEFRAMES timeframe, int loopback)
+      :AOnStream(new SimplePriceStream(symbol, timeframe, PriceLow))
+   {
+      _loopback = loopback;
+      _source.Release();
+   }
+   LowestLowStream(IStream* source, int loopback)
+      :AOnStream(source)
+   {
+      _loopback = loopback;
+   }
+
+   static bool GetValue(const int period, double &val, IStream* source, int loopback)
+   {
+      if (!source.GetValue(period, val))
+         return false;
+
+      for (int i = 1; i < loopback; ++i)
+      {
+         double value;
+         if (!source.GetValue(period + i, value))
+            return false;
+         val = MathMin(val, value);
+      }
+      return true;
+   }
+
+   bool GetValue(const int period, double &val)
+   {
+      return LowestLowStream::GetValue(period, val, _source, _loopback);
+   }
+};
+// Custom integer stream v1.1
+
+#ifndef IntStream_IMPL
+#define IntStream_IMPL
+
+// Abstract integer stream v1.0
+
+#ifndef AIntStream_IMPL
+#define AIntStream_IMPL
+// Integer Stream v.1.0
+
+#ifndef IIntStream_IMPL
+#define IIntStream_IMPL
+
+interface IIntStream
+{
+public:
+   virtual void AddRef() = 0;
+   virtual void Release() = 0;
+   virtual int Size() = 0;
+
+   virtual bool GetValue(const int period, int &val) = 0;
+};
+
+#endif
+
+class AIntStream : public IIntStream
+{
+   int _refs;   
+public:
+   AIntStream()
+   {
+      _refs = 1;
+   }
+
+   void AddRef()
+   {
+      _refs++;
+   }
+   void Release()
+   {
+      if (--_refs == 0)
+      {
+         delete &this;
+      }
+   }
+};
+
+#endif
+
+class IntStream : public AIntStream
+{
+   string _symbol;
+   ENUM_TIMEFRAMES _timeframe;
+   int _stream[];
+public:
+   IntStream(const string symbol, const ENUM_TIMEFRAMES timeframe)
+   {
+      _symbol = symbol;
+      _timeframe = timeframe;
+   }
+   void Init()
+   {
+      ArrayInitialize(_stream, EMPTY_VALUE);
+   }
+
+   virtual int Size()
+   {
+      return iBars(_symbol, _timeframe);
+   }
+
+   void SetValue(const int period, int value)
+   {
+      int totalBars = Size();
+      int index = totalBars - period - 1;
+      if (index < 0 || totalBars <= index)
+      {
+         return;
+      }
+      EnsureStreamHasProperSize(totalBars);
+      _stream[index] = value;
+   }
+
+   bool GetValue(const int period, int &val)
+   {
+      int totalBars = Size();
+      int index = totalBars - period - 1;
+      if (index < 0 || totalBars <= index)
+      {
+         return false;
+      }
+      EnsureStreamHasProperSize(totalBars);
+      
+      val = _stream[index];
+      return _stream[index] != EMPTY_VALUE;
+   }
+private:
+   void EnsureStreamHasProperSize(int size)
+   {
+      int currentSize = ArrayRange(_stream, 0);
+      if (currentSize != size) 
+      {
+         ArrayResize(_stream, size);
+         for (int i = currentSize; i < size; ++i)
+         {
+            _stream[i] = EMPTY_VALUE;
+         }
+      }
+   }
+};
+#endif
+//Signaler v2.2
+// More templates and snippets on https://github.com/sibvic/mq4-templates
+input string   AlertsSection            = ""; // == Alerts ==
+input bool     popup_alert              = false; // Popup message
+input bool     notification_alert       = false; // Push notification
+input bool     email_alert              = false; // Email
+input bool     play_sound               = false; // Play sound on alert
+input string   sound_file               = ""; // Sound file
+input bool     start_program            = false; // Start external program
+input string   program_path             = ""; // Path to the external program executable
+input bool     advanced_alert           = false; // Advanced alert (Telegram/Discord/other platform (like another MT4))
+input string   advanced_key             = ""; // Advanced alert key
+input string   advanced_server          = "https://profitrobots.com"; // Advanced alert server url
+input string   Comment2                 = "- You can get a key via @profit_robots_bot Telegram Bot. Visit ProfitRobots.com for discord/other platform keys -";
+input string   Comment3                 = "- Allow use of dll in the indicator parameters window -";
+input string   Comment4                 = "- Install AdvancedNotificationsLib.dll -";
+
+// AdvancedNotificationsLib.dll could be downloaded here: http://profitrobots.com/Home/TelegramNotificationsMT4
+#import "AdvancedNotificationsLib.dll"
+void AdvancedAlert(string key, string text, string instrument, string timeframe);
+void AdvancedAlertCustom(string key, string text, string instrument, string timeframe, string url);
+#import
+#import "shell32.dll"
+int ShellExecuteW(int hwnd,string Operation,string File,string Parameters,string Directory,int ShowCmd);
+#import
+
+enum SignalerFrequency
+{
+   SignalsAll,
+   SignalsOncePerBarClose,
+   SignalsOncePerBar
+};
+
+class Signaler
+{
+   string _prefix;
+   SignalerFrequency _frequency;
+   datetime _lastSignal;
+public:
+   Signaler(string frequency)
+   {
+      if (frequency == "all")
+      {
+         _frequency = SignalsAll;
+      }
+      else if (frequency == "once_per_bar_close")
+      {
+         _frequency = SignalsOncePerBarClose;
+      }
+      else if (frequency == "once_per_bar")
+      {
+         _frequency = SignalsOncePerBar;
+      }
+      _lastSignal = 0;
+   }
+   Signaler()
+   {
+      _lastSignal = 0;
+   }
+
+   void SetMessagePrefix(string prefix)
+   {
+      _prefix = prefix;
+   }
+
+   void Alert(string message, int position, datetime time)
+   {
+      if (position != 0)
+      {
+         return;
+      }
+      if (_frequency != SignalsAll)
+      {
+         if (_lastSignal == time)
+         {
+            return;
+         }
+      }
+      _lastSignal = time;
+      SendNotifications("", message);
+   }
+
+   void SendNotifications(const string subject, string message = NULL)
+   {
+      if (message == NULL)
+         message = subject;
+      if (_prefix != "" && _prefix != NULL)
+         message = _prefix + message;
+
+      if (start_program)
+         ShellExecuteW(0, "open", program_path, "", "", 1);
+      if (popup_alert)
+         Alert(message);
+      if (email_alert)
+         SendMail(subject, message);
+      if (play_sound)
+         PlaySound(sound_file);
+      if (notification_alert)
+         SendNotification(message);
+      if (advanced_alert && advanced_key != "" && !IsTesting())
+         AdvancedAlertCustom(advanced_key, message, "", "", advanced_server);
+   }
+};
+
+input int param1 = 1; // Buy Limit/Take Profit Line Width
+input int param2 = 20; // Label Distance
+input int param3 = 2; // Decimal Places
+input bool param4 = false; // Show Take Profit
+input bool param5 = false; // Show Market Order
+input bool param6 = false; // Show Buy Limit 1
+input bool param7 = false; // Show Buy Limit 2
+input bool param8 = false; // Show Buy Limit 3
+input double param9 = 1.04; // Take Profit % (Default 4%)
+input int param10 = 10; // Signal Strength
+input int bars_limit = 100000; // Bars limit
+Signaler* _signaler;
+class Approximation1_fS_fStream
+{
+   IStream* a;
+   double b;
+   double l0[];
+   double l0_DEFAULT_VALUE;
+   double l1[];
+   double l1_DEFAULT_VALUE;
+   double l2[];
+   double l2_DEFAULT_VALUE;
+   double l3[];
+   double l3_DEFAULT_VALUE;
+   bool _initialized;
+public:
+   Approximation1_fS_fStream(IStream* a, double b)
+   {
+      _initialized = false;
+      this.a = a;
+      a.AddRef();
+      this.b = b;
+   }
+   ~Approximation1_fS_fStream()
+   {
+      a.Release();
+   }
+   int Init(int id)
+   {
+      SetIndexBuffer(id++, l0);
+      SetIndexBuffer(id++, l1);
+      SetIndexBuffer(id++, l2);
+      SetIndexBuffer(id++, l3);
+      return id;
+   }
+   void Clear()
+   {
+      _initialized = false;
+   }
+   bool GetValue(const int pos, double &__out1)
+   {
+      if (!_initialized)
+      {
+         l0_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l0, l0_DEFAULT_VALUE);
+         l1_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l1, l1_DEFAULT_VALUE);
+         l2_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l2, l2_DEFAULT_VALUE);
+         l3_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l3, l3_DEFAULT_VALUE);
+         _initialized = true;
+      }
+      double aValue;
+      if (!a.GetValue(pos, aValue)) { aValue = EMPTY_VALUE; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l0, pos, SafePlus((1 - b) * aValue, SafeMultiply(b, Nz(l0[pos + 1]))), l0_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l1, pos, SafePlus(SafePlus((-b) * l0[pos], Nz(l0[pos + 1])), SafeMultiply(b, Nz(l1[pos + 1]))), l1_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l2, pos, SafePlus(SafePlus((-b) * l1[pos], Nz(l1[pos + 1])), SafeMultiply(b, Nz(l2[pos + 1]))), l2_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l3, pos, SafePlus(SafePlus((-b) * l2[pos], Nz(l2[pos + 1])), SafeMultiply(b, Nz(l3[pos + 1]))), l3_DEFAULT_VALUE);
+      double Approximation1 = SafeDivide((l0[pos] + 2 * l1[pos] + 2 * l2[pos] + l3[pos]), 6);
+      __out1 = Approximation1;
+      return true;
+   }
+};
+FloatStream* Approximation1_fS_f1_param1;
+Approximation1_fS_fStream* Approximation1_fS_f1;
+class Approximation2_fS_fStream
+{
+   IStream* a;
+   double b;
+   double l0[];
+   double l0_DEFAULT_VALUE;
+   double l1[];
+   double l1_DEFAULT_VALUE;
+   double l2[];
+   double l2_DEFAULT_VALUE;
+   double l3[];
+   double l3_DEFAULT_VALUE;
+   bool _initialized;
+public:
+   Approximation2_fS_fStream(IStream* a, double b)
+   {
+      _initialized = false;
+      this.a = a;
+      a.AddRef();
+      this.b = b;
+   }
+   ~Approximation2_fS_fStream()
+   {
+      a.Release();
+   }
+   int Init(int id)
+   {
+      SetIndexBuffer(id++, l0);
+      SetIndexBuffer(id++, l1);
+      SetIndexBuffer(id++, l2);
+      SetIndexBuffer(id++, l3);
+      return id;
+   }
+   void Clear()
+   {
+      _initialized = false;
+   }
+   bool GetValue(const int pos, double &__out1)
+   {
+      if (!_initialized)
+      {
+         l0_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l0, l0_DEFAULT_VALUE);
+         l1_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l1, l1_DEFAULT_VALUE);
+         l2_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l2, l2_DEFAULT_VALUE);
+         l3_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l3, l3_DEFAULT_VALUE);
+         _initialized = true;
+      }
+      double aValue;
+      if (!a.GetValue(pos, aValue)) { aValue = EMPTY_VALUE; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l0, pos, SafePlus((1 - b) * aValue, SafeMultiply(b, Nz(l0[pos + 1]))), l0_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l1, pos, SafePlus(SafePlus((-b) * l0[pos], Nz(l0[pos + 1])), SafeMultiply(b, Nz(l1[pos + 1]))), l1_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l2, pos, SafePlus(SafePlus((-b) * l1[pos], Nz(l1[pos + 1])), SafeMultiply(b, Nz(l2[pos + 1]))), l2_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l3, pos, SafePlus(SafePlus((-b) * l2[pos], Nz(l2[pos + 1])), SafeMultiply(b, Nz(l3[pos + 1]))), l3_DEFAULT_VALUE);
+      double Approximation2 = SafeDivide((l0[pos] + 2 * l1[pos] + 2 * l2[pos] + l3[pos]), 6);
+      __out1 = Approximation2;
+      return true;
+   }
+};
+FloatStream* Approximation2_fS_f2_param1;
+Approximation2_fS_fStream* Approximation2_fS_f2;
+class Approximation3_fS_fStream
+{
+   IStream* a;
+   double b;
+   double l0[];
+   double l0_DEFAULT_VALUE;
+   double l1[];
+   double l1_DEFAULT_VALUE;
+   double l2[];
+   double l2_DEFAULT_VALUE;
+   double l3[];
+   double l3_DEFAULT_VALUE;
+   bool _initialized;
+public:
+   Approximation3_fS_fStream(IStream* a, double b)
+   {
+      _initialized = false;
+      this.a = a;
+      a.AddRef();
+      this.b = b;
+   }
+   ~Approximation3_fS_fStream()
+   {
+      a.Release();
+   }
+   int Init(int id)
+   {
+      SetIndexBuffer(id++, l0);
+      SetIndexBuffer(id++, l1);
+      SetIndexBuffer(id++, l2);
+      SetIndexBuffer(id++, l3);
+      return id;
+   }
+   void Clear()
+   {
+      _initialized = false;
+   }
+   bool GetValue(const int pos, double &__out1)
+   {
+      if (!_initialized)
+      {
+         l0_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l0, l0_DEFAULT_VALUE);
+         l1_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l1, l1_DEFAULT_VALUE);
+         l2_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l2, l2_DEFAULT_VALUE);
+         l3_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l3, l3_DEFAULT_VALUE);
+         _initialized = true;
+      }
+      double aValue;
+      if (!a.GetValue(pos, aValue)) { aValue = EMPTY_VALUE; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l0, pos, SafePlus((1 - b) * aValue, SafeMultiply(b, Nz(l0[pos + 1]))), l0_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l1, pos, SafePlus(SafePlus((-b) * l0[pos], Nz(l0[pos + 1])), SafeMultiply(b, Nz(l1[pos + 1]))), l1_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l2, pos, SafePlus(SafePlus((-b) * l1[pos], Nz(l1[pos + 1])), SafeMultiply(b, Nz(l2[pos + 1]))), l2_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l3, pos, SafePlus(SafePlus((-b) * l2[pos], Nz(l2[pos + 1])), SafeMultiply(b, Nz(l3[pos + 1]))), l3_DEFAULT_VALUE);
+      double Approximation3 = SafeDivide((l0[pos] + 2 * l1[pos] + 2 * l2[pos] + l3[pos]), 6);
+      __out1 = Approximation3;
+      return true;
+   }
+};
+FloatStream* Approximation3_fS_f3_param1;
+Approximation3_fS_fStream* Approximation3_fS_f3;
+class Approximation4_fS_fStream
+{
+   IStream* a;
+   double b;
+   double l0[];
+   double l0_DEFAULT_VALUE;
+   double l1[];
+   double l1_DEFAULT_VALUE;
+   double l2[];
+   double l2_DEFAULT_VALUE;
+   double l3[];
+   double l3_DEFAULT_VALUE;
+   bool _initialized;
+public:
+   Approximation4_fS_fStream(IStream* a, double b)
+   {
+      _initialized = false;
+      this.a = a;
+      a.AddRef();
+      this.b = b;
+   }
+   ~Approximation4_fS_fStream()
+   {
+      a.Release();
+   }
+   int Init(int id)
+   {
+      SetIndexBuffer(id++, l0);
+      SetIndexBuffer(id++, l1);
+      SetIndexBuffer(id++, l2);
+      SetIndexBuffer(id++, l3);
+      return id;
+   }
+   void Clear()
+   {
+      _initialized = false;
+   }
+   bool GetValue(const int pos, double &__out1)
+   {
+      if (!_initialized)
+      {
+         l0_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l0, l0_DEFAULT_VALUE);
+         l1_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l1, l1_DEFAULT_VALUE);
+         l2_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l2, l2_DEFAULT_VALUE);
+         l3_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l3, l3_DEFAULT_VALUE);
+         _initialized = true;
+      }
+      double aValue;
+      if (!a.GetValue(pos, aValue)) { aValue = EMPTY_VALUE; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l0, pos, SafePlus((1 - b) * aValue, SafeMultiply(b, Nz(l0[pos + 1]))), l0_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l1, pos, SafePlus(SafePlus((-b) * l0[pos], Nz(l0[pos + 1])), SafeMultiply(b, Nz(l1[pos + 1]))), l1_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l2, pos, SafePlus(SafePlus((-b) * l1[pos], Nz(l1[pos + 1])), SafeMultiply(b, Nz(l2[pos + 1]))), l2_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l3, pos, SafePlus(SafePlus((-b) * l2[pos], Nz(l2[pos + 1])), SafeMultiply(b, Nz(l3[pos + 1]))), l3_DEFAULT_VALUE);
+      double Approximation4 = SafeDivide((l0[pos] + 2 * l1[pos] + 2 * l2[pos] + l3[pos]), 6);
+      __out1 = Approximation4;
+      return true;
+   }
+};
+FloatStream* Approximation4_fS_f4_param1;
+Approximation4_fS_fStream* Approximation4_fS_f4;
+class Approximation5_fS_fStream
+{
+   IStream* a;
+   double b;
+   double l0[];
+   double l0_DEFAULT_VALUE;
+   double l1[];
+   double l1_DEFAULT_VALUE;
+   double l2[];
+   double l2_DEFAULT_VALUE;
+   double l3[];
+   double l3_DEFAULT_VALUE;
+   bool _initialized;
+public:
+   Approximation5_fS_fStream(IStream* a, double b)
+   {
+      _initialized = false;
+      this.a = a;
+      a.AddRef();
+      this.b = b;
+   }
+   ~Approximation5_fS_fStream()
+   {
+      a.Release();
+   }
+   int Init(int id)
+   {
+      SetIndexBuffer(id++, l0);
+      SetIndexBuffer(id++, l1);
+      SetIndexBuffer(id++, l2);
+      SetIndexBuffer(id++, l3);
+      return id;
+   }
+   void Clear()
+   {
+      _initialized = false;
+   }
+   bool GetValue(const int pos, double &__out1)
+   {
+      if (!_initialized)
+      {
+         l0_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l0, l0_DEFAULT_VALUE);
+         l1_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l1, l1_DEFAULT_VALUE);
+         l2_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l2, l2_DEFAULT_VALUE);
+         l3_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l3, l3_DEFAULT_VALUE);
+         _initialized = true;
+      }
+      double aValue;
+      if (!a.GetValue(pos, aValue)) { aValue = EMPTY_VALUE; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l0, pos, SafePlus((1 - b) * aValue, SafeMultiply(b, Nz(l0[pos + 1]))), l0_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l1, pos, SafePlus(SafePlus((-b) * l0[pos], Nz(l0[pos + 1])), SafeMultiply(b, Nz(l1[pos + 1]))), l1_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l2, pos, SafePlus(SafePlus((-b) * l1[pos], Nz(l1[pos + 1])), SafeMultiply(b, Nz(l2[pos + 1]))), l2_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l3, pos, SafePlus(SafePlus((-b) * l2[pos], Nz(l2[pos + 1])), SafeMultiply(b, Nz(l3[pos + 1]))), l3_DEFAULT_VALUE);
+      double Approximation5 = SafeDivide((l0[pos] + 2 * l1[pos] + 2 * l2[pos] + l3[pos]), 6);
+      __out1 = Approximation5;
+      return true;
+   }
+};
+FloatStream* Approximation5_fS_f5_param1;
+Approximation5_fS_fStream* Approximation5_fS_f5;
+class Approximation6_fS_fStream
+{
+   IStream* a;
+   double b;
+   double l0[];
+   double l0_DEFAULT_VALUE;
+   double l1[];
+   double l1_DEFAULT_VALUE;
+   double l2[];
+   double l2_DEFAULT_VALUE;
+   double l3[];
+   double l3_DEFAULT_VALUE;
+   bool _initialized;
+public:
+   Approximation6_fS_fStream(IStream* a, double b)
+   {
+      _initialized = false;
+      this.a = a;
+      a.AddRef();
+      this.b = b;
+   }
+   ~Approximation6_fS_fStream()
+   {
+      a.Release();
+   }
+   int Init(int id)
+   {
+      SetIndexBuffer(id++, l0);
+      SetIndexBuffer(id++, l1);
+      SetIndexBuffer(id++, l2);
+      SetIndexBuffer(id++, l3);
+      return id;
+   }
+   void Clear()
+   {
+      _initialized = false;
+   }
+   bool GetValue(const int pos, double &__out1)
+   {
+      if (!_initialized)
+      {
+         l0_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l0, l0_DEFAULT_VALUE);
+         l1_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l1, l1_DEFAULT_VALUE);
+         l2_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l2, l2_DEFAULT_VALUE);
+         l3_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l3, l3_DEFAULT_VALUE);
+         _initialized = true;
+      }
+      double aValue;
+      if (!a.GetValue(pos, aValue)) { aValue = EMPTY_VALUE; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l0, pos, SafePlus((1 - b) * aValue, SafeMultiply(b, Nz(l0[pos + 1]))), l0_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l1, pos, SafePlus(SafePlus((-b) * l0[pos], Nz(l0[pos + 1])), SafeMultiply(b, Nz(l1[pos + 1]))), l1_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l2, pos, SafePlus(SafePlus((-b) * l1[pos], Nz(l1[pos + 1])), SafeMultiply(b, Nz(l2[pos + 1]))), l2_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l3, pos, SafePlus(SafePlus((-b) * l2[pos], Nz(l2[pos + 1])), SafeMultiply(b, Nz(l3[pos + 1]))), l3_DEFAULT_VALUE);
+      double Approximation6 = SafeDivide((l0[pos] + 2 * l1[pos] + 2 * l2[pos] + l3[pos]), 6);
+      __out1 = Approximation6;
+      return true;
+   }
+};
+FloatStream* Approximation6_fS_f6_param1;
+Approximation6_fS_fStream* Approximation6_fS_f6;
+class Approximation7_fS_fStream
+{
+   IStream* a;
+   double b;
+   double l0[];
+   double l0_DEFAULT_VALUE;
+   double l1[];
+   double l1_DEFAULT_VALUE;
+   double l2[];
+   double l2_DEFAULT_VALUE;
+   double l3[];
+   double l3_DEFAULT_VALUE;
+   bool _initialized;
+public:
+   Approximation7_fS_fStream(IStream* a, double b)
+   {
+      _initialized = false;
+      this.a = a;
+      a.AddRef();
+      this.b = b;
+   }
+   ~Approximation7_fS_fStream()
+   {
+      a.Release();
+   }
+   int Init(int id)
+   {
+      SetIndexBuffer(id++, l0);
+      SetIndexBuffer(id++, l1);
+      SetIndexBuffer(id++, l2);
+      SetIndexBuffer(id++, l3);
+      return id;
+   }
+   void Clear()
+   {
+      _initialized = false;
+   }
+   bool GetValue(const int pos, double &__out1)
+   {
+      if (!_initialized)
+      {
+         l0_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l0, l0_DEFAULT_VALUE);
+         l1_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l1, l1_DEFAULT_VALUE);
+         l2_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l2, l2_DEFAULT_VALUE);
+         l3_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l3, l3_DEFAULT_VALUE);
+         _initialized = true;
+      }
+      double aValue;
+      if (!a.GetValue(pos, aValue)) { aValue = EMPTY_VALUE; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l0, pos, SafePlus((1 - b) * aValue, SafeMultiply(b, Nz(l0[pos + 1]))), l0_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l1, pos, SafePlus(SafePlus((-b) * l0[pos], Nz(l0[pos + 1])), SafeMultiply(b, Nz(l1[pos + 1]))), l1_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l2, pos, SafePlus(SafePlus((-b) * l1[pos], Nz(l1[pos + 1])), SafeMultiply(b, Nz(l2[pos + 1]))), l2_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l3, pos, SafePlus(SafePlus((-b) * l2[pos], Nz(l2[pos + 1])), SafeMultiply(b, Nz(l3[pos + 1]))), l3_DEFAULT_VALUE);
+      double Approximation7 = SafeDivide((l0[pos] + 2 * l1[pos] + 2 * l2[pos] + l3[pos]), 6);
+      __out1 = Approximation7;
+      return true;
+   }
+};
+FloatStream* Approximation7_fS_f7_param1;
+Approximation7_fS_fStream* Approximation7_fS_f7;
+class Approximation8_fS_fStream
+{
+   IStream* a;
+   double b;
+   double l0[];
+   double l0_DEFAULT_VALUE;
+   double l1[];
+   double l1_DEFAULT_VALUE;
+   double l2[];
+   double l2_DEFAULT_VALUE;
+   double l3[];
+   double l3_DEFAULT_VALUE;
+   bool _initialized;
+public:
+   Approximation8_fS_fStream(IStream* a, double b)
+   {
+      _initialized = false;
+      this.a = a;
+      a.AddRef();
+      this.b = b;
+   }
+   ~Approximation8_fS_fStream()
+   {
+      a.Release();
+   }
+   int Init(int id)
+   {
+      SetIndexBuffer(id++, l0);
+      SetIndexBuffer(id++, l1);
+      SetIndexBuffer(id++, l2);
+      SetIndexBuffer(id++, l3);
+      return id;
+   }
+   void Clear()
+   {
+      _initialized = false;
+   }
+   bool GetValue(const int pos, double &__out1)
+   {
+      if (!_initialized)
+      {
+         l0_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l0, l0_DEFAULT_VALUE);
+         l1_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l1, l1_DEFAULT_VALUE);
+         l2_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l2, l2_DEFAULT_VALUE);
+         l3_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l3, l3_DEFAULT_VALUE);
+         _initialized = true;
+      }
+      double aValue;
+      if (!a.GetValue(pos, aValue)) { aValue = EMPTY_VALUE; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l0, pos, SafePlus((1 - b) * aValue, SafeMultiply(b, Nz(l0[pos + 1]))), l0_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l1, pos, SafePlus(SafePlus((-b) * l0[pos], Nz(l0[pos + 1])), SafeMultiply(b, Nz(l1[pos + 1]))), l1_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l2, pos, SafePlus(SafePlus((-b) * l1[pos], Nz(l1[pos + 1])), SafeMultiply(b, Nz(l2[pos + 1]))), l2_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l3, pos, SafePlus(SafePlus((-b) * l2[pos], Nz(l2[pos + 1])), SafeMultiply(b, Nz(l3[pos + 1]))), l3_DEFAULT_VALUE);
+      double Approximation8 = SafeDivide((l0[pos] + 2 * l1[pos] + 2 * l2[pos] + l3[pos]), 6);
+      __out1 = Approximation8;
+      return true;
+   }
+};
+FloatStream* Approximation8_fS_f8_param1;
+Approximation8_fS_fStream* Approximation8_fS_f8;
+class Approximation9_fS_fStream
+{
+   IStream* a;
+   double b;
+   double l0[];
+   double l0_DEFAULT_VALUE;
+   double l1[];
+   double l1_DEFAULT_VALUE;
+   double l2[];
+   double l2_DEFAULT_VALUE;
+   double l3[];
+   double l3_DEFAULT_VALUE;
+   bool _initialized;
+public:
+   Approximation9_fS_fStream(IStream* a, double b)
+   {
+      _initialized = false;
+      this.a = a;
+      a.AddRef();
+      this.b = b;
+   }
+   ~Approximation9_fS_fStream()
+   {
+      a.Release();
+   }
+   int Init(int id)
+   {
+      SetIndexBuffer(id++, l0);
+      SetIndexBuffer(id++, l1);
+      SetIndexBuffer(id++, l2);
+      SetIndexBuffer(id++, l3);
+      return id;
+   }
+   void Clear()
+   {
+      _initialized = false;
+   }
+   bool GetValue(const int pos, double &__out1)
+   {
+      if (!_initialized)
+      {
+         l0_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l0, l0_DEFAULT_VALUE);
+         l1_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l1, l1_DEFAULT_VALUE);
+         l2_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l2, l2_DEFAULT_VALUE);
+         l3_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l3, l3_DEFAULT_VALUE);
+         _initialized = true;
+      }
+      double aValue;
+      if (!a.GetValue(pos, aValue)) { aValue = EMPTY_VALUE; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l0, pos, SafePlus((1 - b) * aValue, SafeMultiply(b, Nz(l0[pos + 1]))), l0_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l1, pos, SafePlus(SafePlus((-b) * l0[pos], Nz(l0[pos + 1])), SafeMultiply(b, Nz(l1[pos + 1]))), l1_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l2, pos, SafePlus(SafePlus((-b) * l1[pos], Nz(l1[pos + 1])), SafeMultiply(b, Nz(l2[pos + 1]))), l2_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l3, pos, SafePlus(SafePlus((-b) * l2[pos], Nz(l2[pos + 1])), SafeMultiply(b, Nz(l3[pos + 1]))), l3_DEFAULT_VALUE);
+      double Approximation9 = SafeDivide((l0[pos] + 2 * l1[pos] + 2 * l2[pos] + l3[pos]), 6);
+      __out1 = Approximation9;
+      return true;
+   }
+};
+FloatStream* Approximation9_fS_f9_param1;
+Approximation9_fS_fStream* Approximation9_fS_f9;
+class Approximation10_fS_fStream
+{
+   IStream* a;
+   double b;
+   double l0[];
+   double l0_DEFAULT_VALUE;
+   double l1[];
+   double l1_DEFAULT_VALUE;
+   double l2[];
+   double l2_DEFAULT_VALUE;
+   double l3[];
+   double l3_DEFAULT_VALUE;
+   bool _initialized;
+public:
+   Approximation10_fS_fStream(IStream* a, double b)
+   {
+      _initialized = false;
+      this.a = a;
+      a.AddRef();
+      this.b = b;
+   }
+   ~Approximation10_fS_fStream()
+   {
+      a.Release();
+   }
+   int Init(int id)
+   {
+      SetIndexBuffer(id++, l0);
+      SetIndexBuffer(id++, l1);
+      SetIndexBuffer(id++, l2);
+      SetIndexBuffer(id++, l3);
+      return id;
+   }
+   void Clear()
+   {
+      _initialized = false;
+   }
+   bool GetValue(const int pos, double &__out1)
+   {
+      if (!_initialized)
+      {
+         l0_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l0, l0_DEFAULT_VALUE);
+         l1_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l1, l1_DEFAULT_VALUE);
+         l2_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l2, l2_DEFAULT_VALUE);
+         l3_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l3, l3_DEFAULT_VALUE);
+         _initialized = true;
+      }
+      double aValue;
+      if (!a.GetValue(pos, aValue)) { aValue = EMPTY_VALUE; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l0, pos, SafePlus((1 - b) * aValue, SafeMultiply(b, Nz(l0[pos + 1]))), l0_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l1, pos, SafePlus(SafePlus((-b) * l0[pos], Nz(l0[pos + 1])), SafeMultiply(b, Nz(l1[pos + 1]))), l1_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l2, pos, SafePlus(SafePlus((-b) * l1[pos], Nz(l1[pos + 1])), SafeMultiply(b, Nz(l2[pos + 1]))), l2_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l3, pos, SafePlus(SafePlus((-b) * l2[pos], Nz(l2[pos + 1])), SafeMultiply(b, Nz(l3[pos + 1]))), l3_DEFAULT_VALUE);
+      double Approximation10 = SafeDivide((l0[pos] + 2 * l1[pos] + 2 * l2[pos] + l3[pos]), 6);
+      __out1 = Approximation10;
+      return true;
+   }
+};
+FloatStream* Approximation10_fS_f10_param1;
+Approximation10_fS_fStream* Approximation10_fS_f10;
+class Approximation11_fS_fStream
+{
+   IStream* a;
+   double b;
+   double l0[];
+   double l0_DEFAULT_VALUE;
+   double l1[];
+   double l1_DEFAULT_VALUE;
+   double l2[];
+   double l2_DEFAULT_VALUE;
+   double l3[];
+   double l3_DEFAULT_VALUE;
+   bool _initialized;
+public:
+   Approximation11_fS_fStream(IStream* a, double b)
+   {
+      _initialized = false;
+      this.a = a;
+      a.AddRef();
+      this.b = b;
+   }
+   ~Approximation11_fS_fStream()
+   {
+      a.Release();
+   }
+   int Init(int id)
+   {
+      SetIndexBuffer(id++, l0);
+      SetIndexBuffer(id++, l1);
+      SetIndexBuffer(id++, l2);
+      SetIndexBuffer(id++, l3);
+      return id;
+   }
+   void Clear()
+   {
+      _initialized = false;
+   }
+   bool GetValue(const int pos, double &__out1)
+   {
+      if (!_initialized)
+      {
+         l0_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l0, l0_DEFAULT_VALUE);
+         l1_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l1, l1_DEFAULT_VALUE);
+         l2_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l2, l2_DEFAULT_VALUE);
+         l3_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l3, l3_DEFAULT_VALUE);
+         _initialized = true;
+      }
+      double aValue;
+      if (!a.GetValue(pos, aValue)) { aValue = EMPTY_VALUE; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l0, pos, SafePlus((1 - b) * aValue, SafeMultiply(b, Nz(l0[pos + 1]))), l0_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l1, pos, SafePlus(SafePlus((-b) * l0[pos], Nz(l0[pos + 1])), SafeMultiply(b, Nz(l1[pos + 1]))), l1_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l2, pos, SafePlus(SafePlus((-b) * l1[pos], Nz(l1[pos + 1])), SafeMultiply(b, Nz(l2[pos + 1]))), l2_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l3, pos, SafePlus(SafePlus((-b) * l2[pos], Nz(l2[pos + 1])), SafeMultiply(b, Nz(l3[pos + 1]))), l3_DEFAULT_VALUE);
+      double Approximation11 = SafeDivide((l0[pos] + 2 * l1[pos] + 2 * l2[pos] + l3[pos]), 6);
+      __out1 = Approximation11;
+      return true;
+   }
+};
+FloatStream* Approximation11_fS_f11_param1;
+Approximation11_fS_fStream* Approximation11_fS_f11;
+class Approximation12_fS_fStream
+{
+   IStream* a;
+   double b;
+   double l0[];
+   double l0_DEFAULT_VALUE;
+   double l1[];
+   double l1_DEFAULT_VALUE;
+   double l2[];
+   double l2_DEFAULT_VALUE;
+   double l3[];
+   double l3_DEFAULT_VALUE;
+   bool _initialized;
+public:
+   Approximation12_fS_fStream(IStream* a, double b)
+   {
+      _initialized = false;
+      this.a = a;
+      a.AddRef();
+      this.b = b;
+   }
+   ~Approximation12_fS_fStream()
+   {
+      a.Release();
+   }
+   int Init(int id)
+   {
+      SetIndexBuffer(id++, l0);
+      SetIndexBuffer(id++, l1);
+      SetIndexBuffer(id++, l2);
+      SetIndexBuffer(id++, l3);
+      return id;
+   }
+   void Clear()
+   {
+      _initialized = false;
+   }
+   bool GetValue(const int pos, double &__out1)
+   {
+      if (!_initialized)
+      {
+         l0_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l0, l0_DEFAULT_VALUE);
+         l1_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l1, l1_DEFAULT_VALUE);
+         l2_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l2, l2_DEFAULT_VALUE);
+         l3_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l3, l3_DEFAULT_VALUE);
+         _initialized = true;
+      }
+      double aValue;
+      if (!a.GetValue(pos, aValue)) { aValue = EMPTY_VALUE; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l0, pos, SafePlus((1 - b) * aValue, SafeMultiply(b, Nz(l0[pos + 1]))), l0_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l1, pos, SafePlus(SafePlus((-b) * l0[pos], Nz(l0[pos + 1])), SafeMultiply(b, Nz(l1[pos + 1]))), l1_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l2, pos, SafePlus(SafePlus((-b) * l1[pos], Nz(l1[pos + 1])), SafeMultiply(b, Nz(l2[pos + 1]))), l2_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l3, pos, SafePlus(SafePlus((-b) * l2[pos], Nz(l2[pos + 1])), SafeMultiply(b, Nz(l3[pos + 1]))), l3_DEFAULT_VALUE);
+      double Approximation12 = SafeDivide((l0[pos] + 2 * l1[pos] + 2 * l2[pos] + l3[pos]), 6);
+      __out1 = Approximation12;
+      return true;
+   }
+};
+FloatStream* Approximation12_fS_f12_param1;
+Approximation12_fS_fStream* Approximation12_fS_f12;
+class Approximation13_fS_fStream
+{
+   IStream* a;
+   double b;
+   double l0[];
+   double l0_DEFAULT_VALUE;
+   double l1[];
+   double l1_DEFAULT_VALUE;
+   double l2[];
+   double l2_DEFAULT_VALUE;
+   double l3[];
+   double l3_DEFAULT_VALUE;
+   bool _initialized;
+public:
+   Approximation13_fS_fStream(IStream* a, double b)
+   {
+      _initialized = false;
+      this.a = a;
+      a.AddRef();
+      this.b = b;
+   }
+   ~Approximation13_fS_fStream()
+   {
+      a.Release();
+   }
+   int Init(int id)
+   {
+      SetIndexBuffer(id++, l0);
+      SetIndexBuffer(id++, l1);
+      SetIndexBuffer(id++, l2);
+      SetIndexBuffer(id++, l3);
+      return id;
+   }
+   void Clear()
+   {
+      _initialized = false;
+   }
+   bool GetValue(const int pos, double &__out1)
+   {
+      if (!_initialized)
+      {
+         l0_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l0, l0_DEFAULT_VALUE);
+         l1_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l1, l1_DEFAULT_VALUE);
+         l2_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l2, l2_DEFAULT_VALUE);
+         l3_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l3, l3_DEFAULT_VALUE);
+         _initialized = true;
+      }
+      double aValue;
+      if (!a.GetValue(pos, aValue)) { aValue = EMPTY_VALUE; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l0, pos, SafePlus((1 - b) * aValue, SafeMultiply(b, Nz(l0[pos + 1]))), l0_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l1, pos, SafePlus(SafePlus((-b) * l0[pos], Nz(l0[pos + 1])), SafeMultiply(b, Nz(l1[pos + 1]))), l1_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l2, pos, SafePlus(SafePlus((-b) * l1[pos], Nz(l1[pos + 1])), SafeMultiply(b, Nz(l2[pos + 1]))), l2_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l3, pos, SafePlus(SafePlus((-b) * l2[pos], Nz(l2[pos + 1])), SafeMultiply(b, Nz(l3[pos + 1]))), l3_DEFAULT_VALUE);
+      double Approximation13 = SafeDivide((l0[pos] + 2 * l1[pos] + 2 * l2[pos] + l3[pos]), 6);
+      __out1 = Approximation13;
+      return true;
+   }
+};
+FloatStream* Approximation13_fS_f13_param1;
+Approximation13_fS_fStream* Approximation13_fS_f13;
+class Approximation14_fS_fStream
+{
+   IStream* a;
+   double b;
+   double l0[];
+   double l0_DEFAULT_VALUE;
+   double l1[];
+   double l1_DEFAULT_VALUE;
+   double l2[];
+   double l2_DEFAULT_VALUE;
+   double l3[];
+   double l3_DEFAULT_VALUE;
+   bool _initialized;
+public:
+   Approximation14_fS_fStream(IStream* a, double b)
+   {
+      _initialized = false;
+      this.a = a;
+      a.AddRef();
+      this.b = b;
+   }
+   ~Approximation14_fS_fStream()
+   {
+      a.Release();
+   }
+   int Init(int id)
+   {
+      SetIndexBuffer(id++, l0);
+      SetIndexBuffer(id++, l1);
+      SetIndexBuffer(id++, l2);
+      SetIndexBuffer(id++, l3);
+      return id;
+   }
+   void Clear()
+   {
+      _initialized = false;
+   }
+   bool GetValue(const int pos, double &__out1)
+   {
+      if (!_initialized)
+      {
+         l0_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l0, l0_DEFAULT_VALUE);
+         l1_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l1, l1_DEFAULT_VALUE);
+         l2_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l2, l2_DEFAULT_VALUE);
+         l3_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l3, l3_DEFAULT_VALUE);
+         _initialized = true;
+      }
+      double aValue;
+      if (!a.GetValue(pos, aValue)) { aValue = EMPTY_VALUE; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l0, pos, SafePlus((1 - b) * aValue, SafeMultiply(b, Nz(l0[pos + 1]))), l0_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l1, pos, SafePlus(SafePlus((-b) * l0[pos], Nz(l0[pos + 1])), SafeMultiply(b, Nz(l1[pos + 1]))), l1_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l2, pos, SafePlus(SafePlus((-b) * l1[pos], Nz(l1[pos + 1])), SafeMultiply(b, Nz(l2[pos + 1]))), l2_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l3, pos, SafePlus(SafePlus((-b) * l2[pos], Nz(l2[pos + 1])), SafeMultiply(b, Nz(l3[pos + 1]))), l3_DEFAULT_VALUE);
+      double Approximation14 = SafeDivide((l0[pos] + 2 * l1[pos] + 2 * l2[pos] + l3[pos]), 6);
+      __out1 = Approximation14;
+      return true;
+   }
+};
+FloatStream* Approximation14_fS_f14_param1;
+Approximation14_fS_fStream* Approximation14_fS_f14;
+class Approximation15_fS_fStream
+{
+   IStream* a;
+   double b;
+   double l0[];
+   double l0_DEFAULT_VALUE;
+   double l1[];
+   double l1_DEFAULT_VALUE;
+   double l2[];
+   double l2_DEFAULT_VALUE;
+   double l3[];
+   double l3_DEFAULT_VALUE;
+   bool _initialized;
+public:
+   Approximation15_fS_fStream(IStream* a, double b)
+   {
+      _initialized = false;
+      this.a = a;
+      a.AddRef();
+      this.b = b;
+   }
+   ~Approximation15_fS_fStream()
+   {
+      a.Release();
+   }
+   int Init(int id)
+   {
+      SetIndexBuffer(id++, l0);
+      SetIndexBuffer(id++, l1);
+      SetIndexBuffer(id++, l2);
+      SetIndexBuffer(id++, l3);
+      return id;
+   }
+   void Clear()
+   {
+      _initialized = false;
+   }
+   bool GetValue(const int pos, double &__out1)
+   {
+      if (!_initialized)
+      {
+         l0_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l0, l0_DEFAULT_VALUE);
+         l1_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l1, l1_DEFAULT_VALUE);
+         l2_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l2, l2_DEFAULT_VALUE);
+         l3_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l3, l3_DEFAULT_VALUE);
+         _initialized = true;
+      }
+      double aValue;
+      if (!a.GetValue(pos, aValue)) { aValue = EMPTY_VALUE; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l0, pos, SafePlus((1 - b) * aValue, SafeMultiply(b, Nz(l0[pos + 1]))), l0_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l1, pos, SafePlus(SafePlus((-b) * l0[pos], Nz(l0[pos + 1])), SafeMultiply(b, Nz(l1[pos + 1]))), l1_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l2, pos, SafePlus(SafePlus((-b) * l1[pos], Nz(l1[pos + 1])), SafeMultiply(b, Nz(l2[pos + 1]))), l2_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l3, pos, SafePlus(SafePlus((-b) * l2[pos], Nz(l2[pos + 1])), SafeMultiply(b, Nz(l3[pos + 1]))), l3_DEFAULT_VALUE);
+      double Approximation15 = SafeDivide((l0[pos] + 2 * l1[pos] + 2 * l2[pos] + l3[pos]), 6);
+      __out1 = Approximation15;
+      return true;
+   }
+};
+FloatStream* Approximation15_fS_f15_param1;
+Approximation15_fS_fStream* Approximation15_fS_f15;
+class Approximation16_fS_fStream
+{
+   IStream* a;
+   double b;
+   double l0[];
+   double l0_DEFAULT_VALUE;
+   double l1[];
+   double l1_DEFAULT_VALUE;
+   double l2[];
+   double l2_DEFAULT_VALUE;
+   double l3[];
+   double l3_DEFAULT_VALUE;
+   bool _initialized;
+public:
+   Approximation16_fS_fStream(IStream* a, double b)
+   {
+      _initialized = false;
+      this.a = a;
+      a.AddRef();
+      this.b = b;
+   }
+   ~Approximation16_fS_fStream()
+   {
+      a.Release();
+   }
+   int Init(int id)
+   {
+      SetIndexBuffer(id++, l0);
+      SetIndexBuffer(id++, l1);
+      SetIndexBuffer(id++, l2);
+      SetIndexBuffer(id++, l3);
+      return id;
+   }
+   void Clear()
+   {
+      _initialized = false;
+   }
+   bool GetValue(const int pos, double &__out1)
+   {
+      if (!_initialized)
+      {
+         l0_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l0, l0_DEFAULT_VALUE);
+         l1_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l1, l1_DEFAULT_VALUE);
+         l2_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l2, l2_DEFAULT_VALUE);
+         l3_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l3, l3_DEFAULT_VALUE);
+         _initialized = true;
+      }
+      double aValue;
+      if (!a.GetValue(pos, aValue)) { aValue = EMPTY_VALUE; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l0, pos, SafePlus((1 - b) * aValue, SafeMultiply(b, Nz(l0[pos + 1]))), l0_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l1, pos, SafePlus(SafePlus((-b) * l0[pos], Nz(l0[pos + 1])), SafeMultiply(b, Nz(l1[pos + 1]))), l1_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l2, pos, SafePlus(SafePlus((-b) * l1[pos], Nz(l1[pos + 1])), SafeMultiply(b, Nz(l2[pos + 1]))), l2_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l3, pos, SafePlus(SafePlus((-b) * l2[pos], Nz(l2[pos + 1])), SafeMultiply(b, Nz(l3[pos + 1]))), l3_DEFAULT_VALUE);
+      double Approximation16 = SafeDivide((l0[pos] + 2 * l1[pos] + 2 * l2[pos] + l3[pos]), 6);
+      __out1 = Approximation16;
+      return true;
+   }
+};
+FloatStream* Approximation16_fS_f16_param1;
+Approximation16_fS_fStream* Approximation16_fS_f16;
+class Approximation17_fS_fStream
+{
+   IStream* a;
+   double b;
+   double l0[];
+   double l0_DEFAULT_VALUE;
+   double l1[];
+   double l1_DEFAULT_VALUE;
+   double l2[];
+   double l2_DEFAULT_VALUE;
+   double l3[];
+   double l3_DEFAULT_VALUE;
+   bool _initialized;
+public:
+   Approximation17_fS_fStream(IStream* a, double b)
+   {
+      _initialized = false;
+      this.a = a;
+      a.AddRef();
+      this.b = b;
+   }
+   ~Approximation17_fS_fStream()
+   {
+      a.Release();
+   }
+   int Init(int id)
+   {
+      SetIndexBuffer(id++, l0);
+      SetIndexBuffer(id++, l1);
+      SetIndexBuffer(id++, l2);
+      SetIndexBuffer(id++, l3);
+      return id;
+   }
+   void Clear()
+   {
+      _initialized = false;
+   }
+   bool GetValue(const int pos, double &__out1)
+   {
+      if (!_initialized)
+      {
+         l0_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l0, l0_DEFAULT_VALUE);
+         l1_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l1, l1_DEFAULT_VALUE);
+         l2_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l2, l2_DEFAULT_VALUE);
+         l3_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l3, l3_DEFAULT_VALUE);
+         _initialized = true;
+      }
+      double aValue;
+      if (!a.GetValue(pos, aValue)) { aValue = EMPTY_VALUE; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l0, pos, SafePlus((1 - b) * aValue, SafeMultiply(b, Nz(l0[pos + 1]))), l0_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l1, pos, SafePlus(SafePlus((-b) * l0[pos], Nz(l0[pos + 1])), SafeMultiply(b, Nz(l1[pos + 1]))), l1_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l2, pos, SafePlus(SafePlus((-b) * l1[pos], Nz(l1[pos + 1])), SafeMultiply(b, Nz(l2[pos + 1]))), l2_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l3, pos, SafePlus(SafePlus((-b) * l2[pos], Nz(l2[pos + 1])), SafeMultiply(b, Nz(l3[pos + 1]))), l3_DEFAULT_VALUE);
+      double Approximation17 = SafeDivide((l0[pos] + 2 * l1[pos] + 2 * l2[pos] + l3[pos]), 6);
+      __out1 = Approximation17;
+      return true;
+   }
+};
+FloatStream* Approximation17_fS_f17_param1;
+Approximation17_fS_fStream* Approximation17_fS_f17;
+class Approximation18_fS_fStream
+{
+   IStream* a;
+   double b;
+   double l0[];
+   double l0_DEFAULT_VALUE;
+   double l1[];
+   double l1_DEFAULT_VALUE;
+   double l2[];
+   double l2_DEFAULT_VALUE;
+   double l3[];
+   double l3_DEFAULT_VALUE;
+   bool _initialized;
+public:
+   Approximation18_fS_fStream(IStream* a, double b)
+   {
+      _initialized = false;
+      this.a = a;
+      a.AddRef();
+      this.b = b;
+   }
+   ~Approximation18_fS_fStream()
+   {
+      a.Release();
+   }
+   int Init(int id)
+   {
+      SetIndexBuffer(id++, l0);
+      SetIndexBuffer(id++, l1);
+      SetIndexBuffer(id++, l2);
+      SetIndexBuffer(id++, l3);
+      return id;
+   }
+   void Clear()
+   {
+      _initialized = false;
+   }
+   bool GetValue(const int pos, double &__out1)
+   {
+      if (!_initialized)
+      {
+         l0_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l0, l0_DEFAULT_VALUE);
+         l1_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l1, l1_DEFAULT_VALUE);
+         l2_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l2, l2_DEFAULT_VALUE);
+         l3_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(l3, l3_DEFAULT_VALUE);
+         _initialized = true;
+      }
+      double aValue;
+      if (!a.GetValue(pos, aValue)) { aValue = EMPTY_VALUE; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l0, pos, SafePlus((1 - b) * aValue, SafeMultiply(b, Nz(l0[pos + 1]))), l0_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l1, pos, SafePlus(SafePlus((-b) * l0[pos], Nz(l0[pos + 1])), SafeMultiply(b, Nz(l1[pos + 1]))), l1_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l2, pos, SafePlus(SafePlus((-b) * l1[pos], Nz(l1[pos + 1])), SafeMultiply(b, Nz(l2[pos + 1]))), l2_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(l3, pos, SafePlus(SafePlus((-b) * l2[pos], Nz(l2[pos + 1])), SafeMultiply(b, Nz(l3[pos + 1]))), l3_DEFAULT_VALUE);
+      double Approximation18 = SafeDivide((l0[pos] + 2 * l1[pos] + 2 * l2[pos] + l3[pos]), 6);
+      __out1 = Approximation18;
+      return true;
+   }
+};
+FloatStream* Approximation18_fS_f18_param1;
+Approximation18_fS_fStream* Approximation18_fS_f18;
+IStream* tr1;
+FloatStream* Approximation1_fS_f19_param1;
+Approximation1_fS_fStream* Approximation1_fS_f19;
+IStream* tr2;
+FloatStream* Approximation2_fS_f20_param1;
+Approximation2_fS_fStream* Approximation2_fS_f20;
+IStream* tr3;
+FloatStream* Approximation3_fS_f21_param1;
+Approximation3_fS_fStream* Approximation3_fS_f21;
+IStream* tr4;
+FloatStream* Approximation4_fS_f22_param1;
+Approximation4_fS_fStream* Approximation4_fS_f22;
+IStream* tr5;
+FloatStream* Approximation5_fS_f23_param1;
+Approximation5_fS_fStream* Approximation5_fS_f23;
+IStream* tr6;
+FloatStream* Approximation6_fS_f24_param1;
+Approximation6_fS_fStream* Approximation6_fS_f24;
+IStream* tr7;
+FloatStream* Approximation7_fS_f25_param1;
+Approximation7_fS_fStream* Approximation7_fS_f25;
+IStream* tr8;
+FloatStream* Approximation8_fS_f26_param1;
+Approximation8_fS_fStream* Approximation8_fS_f26;
+IStream* tr9;
+FloatStream* Approximation9_fS_f27_param1;
+Approximation9_fS_fStream* Approximation9_fS_f27;
+IStream* tr10;
+FloatStream* Approximation10_fS_f28_param1;
+Approximation10_fS_fStream* Approximation10_fS_f28;
+IStream* tr11;
+FloatStream* Approximation11_fS_f29_param1;
+Approximation11_fS_fStream* Approximation11_fS_f29;
+IStream* tr12;
+FloatStream* Approximation12_fS_f30_param1;
+Approximation12_fS_fStream* Approximation12_fS_f30;
+IStream* tr13;
+FloatStream* Approximation13_fS_f31_param1;
+Approximation13_fS_fStream* Approximation13_fS_f31;
+IStream* tr14;
+FloatStream* Approximation14_fS_f32_param1;
+Approximation14_fS_fStream* Approximation14_fS_f32;
+IStream* tr15;
+FloatStream* Approximation15_fS_f33_param1;
+Approximation15_fS_fStream* Approximation15_fS_f33;
+IStream* tr16;
+FloatStream* Approximation16_fS_f34_param1;
+Approximation16_fS_fStream* Approximation16_fS_f34;
+IStream* tr17;
+FloatStream* Approximation17_fS_f35_param1;
+Approximation17_fS_fStream* Approximation17_fS_f35;
+IStream* tr18;
+FloatStream* Approximation18_fS_f36_param1;
+Approximation18_fS_fStream* Approximation18_fS_f36;
+FloatStream* ema1Source;
+EMAOnStream* ema1;
+FloatStream* ema2Source;
+EMAOnStream* ema2;
+FloatStream* ema3Source;
+EMAOnStream* ema3;
+FloatStream* ema4Source;
+EMAOnStream* ema4;
+double plot1[];
+double plot2[];
+double plot3[];
+double Upper_Threshold_of_Approximability2[];
+double Upper_Threshold_of_Approximability2_DEFAULT_VALUE;
+double Lower_Threshold_of_Approximability2[];
+double Lower_Threshold_of_Approximability2_DEFAULT_VALUE;
+FloatStream* ema5Source;
+EMAOnStream* ema5;
+FloatStream* ema6Source;
+EMAOnStream* ema6;
+FloatStream* ema7Source;
+EMAOnStream* ema7;
+FloatStream* ema8Source;
+EMAOnStream* ema8;
+double plot4[];
+FloatStream* ema9Source;
+EMAOnStream* ema9;
+FloatStream* ema10Source;
+EMAOnStream* ema10;
+double plot5[];
+FloatStream* ema11Source;
+EMAOnStream* ema11;
+FloatStream* ema12Source;
+EMAOnStream* ema12;
+int w_adjust;
+int away;
+int dp;
+int show_takeprofit;
+int show_marketorder;
+int show_buylimit1;
+int show_buylimit2;
+int show_buylimit3;
+double slp1;
+int Input;
+class lele_iS_iStream
+{
+   IIntStream* qual;
+   int len;
+   double bindex[];
+   double bindex_DEFAULT_VALUE;
+   double sindex[];
+   double sindex_DEFAULT_VALUE;
+   FloatStream* highest1Source;
+   FloatStream* lowest1Source;
+   bool _initialized;
+public:
+   lele_iS_iStream(IIntStream* qual, int len)
+   {
+      _initialized = false;
+      this.qual = qual;
+      qual.AddRef();
+      this.len = len;
+      highest1Source = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+      lowest1Source = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   }
+   ~lele_iS_iStream()
+   {
+      qual.Release();
+      highest1Source.Release();
+      lowest1Source.Release();
+   }
+   int Init(int id)
+   {
+      SetIndexBuffer(id++, bindex);
+      SetIndexBuffer(id++, sindex);
+      return id;
+   }
+   void Clear()
+   {
+      _initialized = false;
+   }
+   bool GetValue(const int pos, int &__out1)
+   {
+      if (!_initialized)
+      {
+         bindex_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(bindex, bindex_DEFAULT_VALUE);
+         sindex_DEFAULT_VALUE = 0.0;
+         ArrayInitialize(sindex, sindex_DEFAULT_VALUE);
+         highest1Source.Init();
+         lowest1Source.Init();
+         _initialized = true;
+      }
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(bindex, pos, Nz(bindex[pos + 1], 0), bindex_DEFAULT_VALUE);
+      if (pos + 1 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      SetStream(sindex, pos, Nz(sindex[pos + 1], 0), sindex_DEFAULT_VALUE);
+      int ret = 0;
+      if (pos + 4 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if ((SafeGreater(iClose(_Symbol, (ENUM_TIMEFRAMES)_Period, pos), iClose(_Symbol, (ENUM_TIMEFRAMES)_Period, pos + 4))))
+      {
+         SetStream(bindex, pos, bindex[pos] + 1, bindex_DEFAULT_VALUE);
+      }
+      if (pos + 4 > (iBars(_Symbol, (ENUM_TIMEFRAMES)_Period) - 1)) { return false; }
+      if ((SafeLess(iClose(_Symbol, (ENUM_TIMEFRAMES)_Period, pos), iClose(_Symbol, (ENUM_TIMEFRAMES)_Period, pos + 4))))
+      {
+         SetStream(sindex, pos, sindex[pos] + 1, sindex_DEFAULT_VALUE);
+      }
+      int qualValue;
+      if (!qual.GetValue(pos, qualValue)) { qualValue = INT_MIN; }
+      highest1Source.SetValue(pos, iHigh(_Symbol, (ENUM_TIMEFRAMES)_Period, pos));
+      double highest1Value;
+      if (!HighestHighStream::GetValue(pos, highest1Value, highest1Source, len)) { highest1Value = EMPTY_VALUE; }
+      if (((bindex[pos] > qualValue)) && ((iClose(_Symbol, (ENUM_TIMEFRAMES)_Period, pos) < iOpen(_Symbol, (ENUM_TIMEFRAMES)_Period, pos))) && SafeGE(iHigh(_Symbol, (ENUM_TIMEFRAMES)_Period, pos), highest1Value))
+      {
+         SetStream(bindex, pos, 0, bindex_DEFAULT_VALUE);
+         ret = (-1);
+      }
+      lowest1Source.SetValue(pos, iLow(_Symbol, (ENUM_TIMEFRAMES)_Period, pos));
+      double lowest1Value;
+      if (!LowestLowStream::GetValue(pos, lowest1Value, lowest1Source, len)) { lowest1Value = EMPTY_VALUE; }
+      if ((((sindex[pos] > qualValue)) && ((iClose(_Symbol, (ENUM_TIMEFRAMES)_Period, pos) > iOpen(_Symbol, (ENUM_TIMEFRAMES)_Period, pos))) && (SafeLE(iLow(_Symbol, (ENUM_TIMEFRAMES)_Period, pos), lowest1Value))))
+      {
+         SetStream(sindex, pos, 0, sindex_DEFAULT_VALUE);
+         ret = 1;
+      }
+      __out1 = ret;
+      return true;
+   }
+};
+IntStream* lele_iS_i37_param1;
+lele_iS_iStream* lele_iS_i37;
+double REPAINT_MAJ_BUR[];
+double REPAINT_MAJ_BUR_DEFAULT_VALUE;
+NewBarState* isNew1;
+double plot6[];
+double REPAINT_MAJ_BER[];
+double REPAINT_MAJ_BER_DEFAULT_VALUE;
+NewBarState* isNew2;
+double plot7[];
+double REPAINT_LTA[];
+double REPAINT_LTA_DEFAULT_VALUE;
+NewBarState* isNew3;
+double plot8[];
+double REPAINT_UTA[];
+double REPAINT_UTA_DEFAULT_VALUE;
+NewBarState* isNew4;
+double plot9[];
+double REPAINT_MAJ_BUL_ALERT[];
+double REPAINT_MAJ_BUL_ALERT_DEFAULT_VALUE;
+NewBarState* isNew5;
+double REPAINT_MAJ_BER_ALERT[];
+double REPAINT_MAJ_BER_ALERT_DEFAULT_VALUE;
+NewBarState* isNew6;
+double REPAINT_LTA_ALERT[];
+double REPAINT_LTA_ALERT_DEFAULT_VALUE;
+NewBarState* isNew7;
+double REPAINT_UTA_ALERT[];
+double REPAINT_UTA_ALERT_DEFAULT_VALUE;
+NewBarState* isNew8;
+
+string IndicatorObjPrefix;
+
+bool NamesCollision(const string name)
+{
+   for (int k = ObjectsTotal(); k >= 0; k--)
+   {
+      if (StringFind(ObjectName(0, k), name) == 0)
+      {
+         return true;
+      }
+   }
+   return false;
+}
+
+string GenerateIndicatorPrefix(const string target)
+{
+   for (int i = 0; i < 1000; ++i)
+   {
+      string prefix = target + "_" + IntegerToString(i);
+      if (!NamesCollision(prefix))
+      {
+         return prefix;
+      }
+   }
+   return target;
+}
+
+int init()
+{
+   IndicatorBuffers(165);
+   int id = 0;
+   ema1Source = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   ema1 = new EMAOnStream(ema1Source, 40);
+   ema2Source = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   ema2 = new EMAOnStream(ema2Source, 40);
+   ema3Source = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   ema3 = new EMAOnStream(ema3Source, 40);
+   ema4Source = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   ema4 = new EMAOnStream(ema4Source, 40);
+   SetIndexBuffer(id++, plot1);
+   SetIndexBuffer(id, plot2);
+   SetIndexStyle(id++, DRAW_LINE, STYLE_SOLID, 1, AddTransparency(0x808000, 50));
+   SetIndexBuffer(id++, plot3);
+   ema5Source = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   ema5 = new EMAOnStream(ema5Source, 40);
+   ema6Source = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   ema6 = new EMAOnStream(ema6Source, 40);
+   ema7Source = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   ema7 = new EMAOnStream(ema7Source, 40);
+   ema8Source = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   ema8 = new EMAOnStream(ema8Source, 40);
+   ema9Source = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   ema9 = new EMAOnStream(ema9Source, 40);
+   ema10Source = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   ema10 = new EMAOnStream(ema10Source, 40);
+   SetIndexBuffer(id++, plot4);
+   ema11Source = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   ema11 = new EMAOnStream(ema11Source, 40);
+   ema12Source = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   ema12 = new EMAOnStream(ema12Source, 40);
+   SetIndexBuffer(id++, plot5);
+   w_adjust = param1;
+   away = param2;
+   dp = param3;
+   show_takeprofit = param4;
+   show_marketorder = param5;
+   show_buylimit1 = param6;
+   show_buylimit2 = param7;
+   show_buylimit3 = param8;
+   slp1 = param9;
+   Input = param10;
+   SetIndexBuffer(id, plot6);
+   SetIndexArrow(id++, 241);
+   SetIndexBuffer(id, plot7);
+   SetIndexArrow(id++, 242);
+   SetIndexBuffer(id, plot8);
+   SetIndexArrow(id++, 241);
+   SetIndexBuffer(id, plot9);
+   SetIndexArrow(id++, 242);
+   LinesCollection::SetMaxLines(50);
+   LabelsCollection::SetMaxLabels(50);
+   _signaler = new Signaler();
+   IndicatorObjPrefix = GenerateIndicatorPrefix("");
+   IndicatorShortName("TC Top & Bottom Finder");
+   Approximation1_fS_f1_param1 = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation1_fS_f1 = new Approximation1_fS_fStream(Approximation1_fS_f1_param1, 0.1);
+   id = Approximation1_fS_f1.Init(id);
+   Approximation2_fS_f2_param1 = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation2_fS_f2 = new Approximation2_fS_fStream(Approximation2_fS_f2_param1, 0.15);
+   id = Approximation2_fS_f2.Init(id);
+   Approximation3_fS_f3_param1 = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation3_fS_f3 = new Approximation3_fS_fStream(Approximation3_fS_f3_param1, 0.2);
+   id = Approximation3_fS_f3.Init(id);
+   Approximation4_fS_f4_param1 = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation4_fS_f4 = new Approximation4_fS_fStream(Approximation4_fS_f4_param1, 0.25);
+   id = Approximation4_fS_f4.Init(id);
+   Approximation5_fS_f5_param1 = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation5_fS_f5 = new Approximation5_fS_fStream(Approximation5_fS_f5_param1, 0.3);
+   id = Approximation5_fS_f5.Init(id);
+   Approximation6_fS_f6_param1 = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation6_fS_f6 = new Approximation6_fS_fStream(Approximation6_fS_f6_param1, 0.35);
+   id = Approximation6_fS_f6.Init(id);
+   Approximation7_fS_f7_param1 = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation7_fS_f7 = new Approximation7_fS_fStream(Approximation7_fS_f7_param1, 0.4);
+   id = Approximation7_fS_f7.Init(id);
+   Approximation8_fS_f8_param1 = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation8_fS_f8 = new Approximation8_fS_fStream(Approximation8_fS_f8_param1, 0.45);
+   id = Approximation8_fS_f8.Init(id);
+   Approximation9_fS_f9_param1 = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation9_fS_f9 = new Approximation9_fS_fStream(Approximation9_fS_f9_param1, 0.5);
+   id = Approximation9_fS_f9.Init(id);
+   Approximation10_fS_f10_param1 = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation10_fS_f10 = new Approximation10_fS_fStream(Approximation10_fS_f10_param1, 0.55);
+   id = Approximation10_fS_f10.Init(id);
+   Approximation11_fS_f11_param1 = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation11_fS_f11 = new Approximation11_fS_fStream(Approximation11_fS_f11_param1, 0.6);
+   id = Approximation11_fS_f11.Init(id);
+   Approximation12_fS_f12_param1 = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation12_fS_f12 = new Approximation12_fS_fStream(Approximation12_fS_f12_param1, 0.65);
+   id = Approximation12_fS_f12.Init(id);
+   Approximation13_fS_f13_param1 = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation13_fS_f13 = new Approximation13_fS_fStream(Approximation13_fS_f13_param1, 0.7);
+   id = Approximation13_fS_f13.Init(id);
+   Approximation14_fS_f14_param1 = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation14_fS_f14 = new Approximation14_fS_fStream(Approximation14_fS_f14_param1, 0.75);
+   id = Approximation14_fS_f14.Init(id);
+   Approximation15_fS_f15_param1 = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation15_fS_f15 = new Approximation15_fS_fStream(Approximation15_fS_f15_param1, 0.8);
+   id = Approximation15_fS_f15.Init(id);
+   Approximation16_fS_f16_param1 = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation16_fS_f16 = new Approximation16_fS_fStream(Approximation16_fS_f16_param1, 0.85);
+   id = Approximation16_fS_f16.Init(id);
+   Approximation17_fS_f17_param1 = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation17_fS_f17 = new Approximation17_fS_fStream(Approximation17_fS_f17_param1, 0.9);
+   id = Approximation17_fS_f17.Init(id);
+   Approximation18_fS_f18_param1 = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation18_fS_f18 = new Approximation18_fS_fStream(Approximation18_fS_f18_param1, 0.95);
+   id = Approximation18_fS_f18.Init(id);
+   tr1 = new TrueRangeStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation1_fS_f19_param1 = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation1_fS_f19 = new Approximation1_fS_fStream(Approximation1_fS_f19_param1, 0.1);
+   id = Approximation1_fS_f19.Init(id);
+   tr2 = new TrueRangeStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation2_fS_f20_param1 = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation2_fS_f20 = new Approximation2_fS_fStream(Approximation2_fS_f20_param1, 0.15);
+   id = Approximation2_fS_f20.Init(id);
+   tr3 = new TrueRangeStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation3_fS_f21_param1 = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation3_fS_f21 = new Approximation3_fS_fStream(Approximation3_fS_f21_param1, 0.2);
+   id = Approximation3_fS_f21.Init(id);
+   tr4 = new TrueRangeStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation4_fS_f22_param1 = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation4_fS_f22 = new Approximation4_fS_fStream(Approximation4_fS_f22_param1, 0.25);
+   id = Approximation4_fS_f22.Init(id);
+   tr5 = new TrueRangeStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation5_fS_f23_param1 = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation5_fS_f23 = new Approximation5_fS_fStream(Approximation5_fS_f23_param1, 0.3);
+   id = Approximation5_fS_f23.Init(id);
+   tr6 = new TrueRangeStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation6_fS_f24_param1 = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation6_fS_f24 = new Approximation6_fS_fStream(Approximation6_fS_f24_param1, 0.35);
+   id = Approximation6_fS_f24.Init(id);
+   tr7 = new TrueRangeStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation7_fS_f25_param1 = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation7_fS_f25 = new Approximation7_fS_fStream(Approximation7_fS_f25_param1, 0.4);
+   id = Approximation7_fS_f25.Init(id);
+   tr8 = new TrueRangeStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation8_fS_f26_param1 = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation8_fS_f26 = new Approximation8_fS_fStream(Approximation8_fS_f26_param1, 0.45);
+   id = Approximation8_fS_f26.Init(id);
+   tr9 = new TrueRangeStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation9_fS_f27_param1 = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation9_fS_f27 = new Approximation9_fS_fStream(Approximation9_fS_f27_param1, 0.5);
+   id = Approximation9_fS_f27.Init(id);
+   tr10 = new TrueRangeStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation10_fS_f28_param1 = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation10_fS_f28 = new Approximation10_fS_fStream(Approximation10_fS_f28_param1, 0.55);
+   id = Approximation10_fS_f28.Init(id);
+   tr11 = new TrueRangeStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation11_fS_f29_param1 = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation11_fS_f29 = new Approximation11_fS_fStream(Approximation11_fS_f29_param1, 0.6);
+   id = Approximation11_fS_f29.Init(id);
+   tr12 = new TrueRangeStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation12_fS_f30_param1 = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation12_fS_f30 = new Approximation12_fS_fStream(Approximation12_fS_f30_param1, 0.65);
+   id = Approximation12_fS_f30.Init(id);
+   tr13 = new TrueRangeStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation13_fS_f31_param1 = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation13_fS_f31 = new Approximation13_fS_fStream(Approximation13_fS_f31_param1, 0.7);
+   id = Approximation13_fS_f31.Init(id);
+   tr14 = new TrueRangeStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation14_fS_f32_param1 = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation14_fS_f32 = new Approximation14_fS_fStream(Approximation14_fS_f32_param1, 0.75);
+   id = Approximation14_fS_f32.Init(id);
+   tr15 = new TrueRangeStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation15_fS_f33_param1 = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation15_fS_f33 = new Approximation15_fS_fStream(Approximation15_fS_f33_param1, 0.8);
+   id = Approximation15_fS_f33.Init(id);
+   tr16 = new TrueRangeStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation16_fS_f34_param1 = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation16_fS_f34 = new Approximation16_fS_fStream(Approximation16_fS_f34_param1, 0.85);
+   id = Approximation16_fS_f34.Init(id);
+   tr17 = new TrueRangeStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation17_fS_f35_param1 = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation17_fS_f35 = new Approximation17_fS_fStream(Approximation17_fS_f35_param1, 0.9);
+   id = Approximation17_fS_f35.Init(id);
+   tr18 = new TrueRangeStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation18_fS_f36_param1 = new FloatStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   Approximation18_fS_f36 = new Approximation18_fS_fStream(Approximation18_fS_f36_param1, 0.95);
+   id = Approximation18_fS_f36.Init(id);
+   SetIndexBuffer(id++, Upper_Threshold_of_Approximability2);
+   SetIndexBuffer(id++, Lower_Threshold_of_Approximability2);
+   lele_iS_i37_param1 = new IntStream(_Symbol, (ENUM_TIMEFRAMES)_Period);
+   lele_iS_i37 = new lele_iS_iStream(lele_iS_i37_param1, Input);
+   id = lele_iS_i37.Init(id);
+   SetIndexBuffer(id++, REPAINT_MAJ_BUR);
+   isNew1 = new NewBarState();
+   SetIndexBuffer(id++, REPAINT_MAJ_BER);
+   isNew2 = new NewBarState();
+   SetIndexBuffer(id++, REPAINT_LTA);
+   isNew3 = new NewBarState();
+   SetIndexBuffer(id++, REPAINT_UTA);
+   isNew4 = new NewBarState();
+   SetIndexBuffer(id++, REPAINT_MAJ_BUL_ALERT);
+   isNew5 = new NewBarState();
+   SetIndexBuffer(id++, REPAINT_MAJ_BER_ALERT);
+   isNew6 = new NewBarState();
+   SetIndexBuffer(id++, REPAINT_LTA_ALERT);
+   isNew7 = new NewBarState();
+   SetIndexBuffer(id++, REPAINT_UTA_ALERT);
+   isNew8 = new NewBarState();
+   return INIT_SUCCEEDED;
+}
+
+int deinit()
+{
+   ObjectsDeleteAll(ChartID(), IndicatorObjPrefix);
+   Approximation1_fS_f1_param1.Release();
+   delete Approximation1_fS_f1;
+   Approximation2_fS_f2_param1.Release();
+   delete Approximation2_fS_f2;
+   Approximation3_fS_f3_param1.Release();
+   delete Approximation3_fS_f3;
+   Approximation4_fS_f4_param1.Release();
+   delete Approximation4_fS_f4;
+   Approximation5_fS_f5_param1.Release();
+   delete Approximation5_fS_f5;
+   Approximation6_fS_f6_param1.Release();
+   delete Approximation6_fS_f6;
+   Approximation7_fS_f7_param1.Release();
+   delete Approximation7_fS_f7;
+   Approximation8_fS_f8_param1.Release();
+   delete Approximation8_fS_f8;
+   Approximation9_fS_f9_param1.Release();
+   delete Approximation9_fS_f9;
+   Approximation10_fS_f10_param1.Release();
+   delete Approximation10_fS_f10;
+   Approximation11_fS_f11_param1.Release();
+   delete Approximation11_fS_f11;
+   Approximation12_fS_f12_param1.Release();
+   delete Approximation12_fS_f12;
+   Approximation13_fS_f13_param1.Release();
+   delete Approximation13_fS_f13;
+   Approximation14_fS_f14_param1.Release();
+   delete Approximation14_fS_f14;
+   Approximation15_fS_f15_param1.Release();
+   delete Approximation15_fS_f15;
+   Approximation16_fS_f16_param1.Release();
+   delete Approximation16_fS_f16;
+   Approximation17_fS_f17_param1.Release();
+   delete Approximation17_fS_f17;
+   Approximation18_fS_f18_param1.Release();
+   delete Approximation18_fS_f18;
+   tr1.Release();
+   Approximation1_fS_f19_param1.Release();
+   delete Approximation1_fS_f19;
+   tr2.Release();
+   Approximation2_fS_f20_param1.Release();
+   delete Approximation2_fS_f20;
+   tr3.Release();
+   Approximation3_fS_f21_param1.Release();
+   delete Approximation3_fS_f21;
+   tr4.Release();
+   Approximation4_fS_f22_param1.Release();
+   delete Approximation4_fS_f22;
+   tr5.Release();
+   Approximation5_fS_f23_param1.Release();
+   delete Approximation5_fS_f23;
+   tr6.Release();
+   Approximation6_fS_f24_param1.Release();
+   delete Approximation6_fS_f24;
+   tr7.Release();
+   Approximation7_fS_f25_param1.Release();
+   delete Approximation7_fS_f25;
+   tr8.Release();
+   Approximation8_fS_f26_param1.Release();
+   delete Approximation8_fS_f26;
+   tr9.Release();
+   Approximation9_fS_f27_param1.Release();
+   delete Approximation9_fS_f27;
+   tr10.Release();
+   Approximation10_fS_f28_param1.Release();
+   delete Approximation10_fS_f28;
+   tr11.Release();
+   Approximation11_fS_f29_param1.Release();
+   delete Approximation11_fS_f29;
+   tr12.Release();
+   Approximation12_fS_f30_param1.Release();
+   delete Approximation12_fS_f30;
+   tr13.Release();
+   Approximation13_fS_f31_param1.Release();
+   delete Approximation13_fS_f31;
+   tr14.Release();
+   Approximation14_fS_f32_param1.Release();
+   delete Approximation14_fS_f32;
+   tr15.Release();
+   Approximation15_fS_f33_param1.Release();
+   delete Approximation15_fS_f33;
+   tr16.Release();
+   Approximation16_fS_f34_param1.Release();
+   delete Approximation16_fS_f34;
+   tr17.Release();
+   Approximation17_fS_f35_param1.Release();
+   delete Approximation17_fS_f35;
+   tr18.Release();
+   Approximation18_fS_f36_param1.Release();
+   delete Approximation18_fS_f36;
+   ema1Source.Release();
+   ema1.Release();
+   ema2Source.Release();
+   ema2.Release();
+   ema3Source.Release();
+   ema3.Release();
+   ema4Source.Release();
+   ema4.Release();
+   ema5Source.Release();
+   ema5.Release();
+   ema6Source.Release();
+   ema6.Release();
+   ema7Source.Release();
+   ema7.Release();
+   ema8Source.Release();
+   ema8.Release();
+   ema9Source.Release();
+   ema9.Release();
+   ema10Source.Release();
+   ema10.Release();
+   ema11Source.Release();
+   ema11.Release();
+   ema12Source.Release();
+   ema12.Release();
+   lele_iS_i37_param1.Release();
+   delete lele_iS_i37;
+   delete isNew1;
+   delete isNew2;
+   delete isNew3;
+   delete isNew4;
+   delete isNew5;
+   delete isNew6;
+   delete isNew7;
+   delete isNew8;
+   LinesCollection::Clear(true);
+   LabelsCollection::Clear(true);
+   delete _signaler;
+   return 0;
+}
+
+int OnCalculate(const int rates_total,
+                const int prev_calculated,
+                const datetime &time[],
+                const double &open[],
+                const double &high[],
+                const double &low[],
+                const double &close[],
+                const long &tick_volume[],
+                const long &volume[],
+                const int &spread[])
+{
+   if (prev_calculated <= 0 || prev_calculated > rates_total)
+   {
+      LinesCollection::Clear();
+      LabelsCollection::Clear();
+      Approximation1_fS_f1_param1.Init();
+      Approximation1_fS_f1.Clear();
+      Approximation2_fS_f2_param1.Init();
+      Approximation2_fS_f2.Clear();
+      Approximation3_fS_f3_param1.Init();
+      Approximation3_fS_f3.Clear();
+      Approximation4_fS_f4_param1.Init();
+      Approximation4_fS_f4.Clear();
+      Approximation5_fS_f5_param1.Init();
+      Approximation5_fS_f5.Clear();
+      Approximation6_fS_f6_param1.Init();
+      Approximation6_fS_f6.Clear();
+      Approximation7_fS_f7_param1.Init();
+      Approximation7_fS_f7.Clear();
+      Approximation8_fS_f8_param1.Init();
+      Approximation8_fS_f8.Clear();
+      Approximation9_fS_f9_param1.Init();
+      Approximation9_fS_f9.Clear();
+      Approximation10_fS_f10_param1.Init();
+      Approximation10_fS_f10.Clear();
+      Approximation11_fS_f11_param1.Init();
+      Approximation11_fS_f11.Clear();
+      Approximation12_fS_f12_param1.Init();
+      Approximation12_fS_f12.Clear();
+      Approximation13_fS_f13_param1.Init();
+      Approximation13_fS_f13.Clear();
+      Approximation14_fS_f14_param1.Init();
+      Approximation14_fS_f14.Clear();
+      Approximation15_fS_f15_param1.Init();
+      Approximation15_fS_f15.Clear();
+      Approximation16_fS_f16_param1.Init();
+      Approximation16_fS_f16.Clear();
+      Approximation17_fS_f17_param1.Init();
+      Approximation17_fS_f17.Clear();
+      Approximation18_fS_f18_param1.Init();
+      Approximation18_fS_f18.Clear();
+      Approximation1_fS_f19_param1.Init();
+      Approximation1_fS_f19.Clear();
+      Approximation2_fS_f20_param1.Init();
+      Approximation2_fS_f20.Clear();
+      Approximation3_fS_f21_param1.Init();
+      Approximation3_fS_f21.Clear();
+      Approximation4_fS_f22_param1.Init();
+      Approximation4_fS_f22.Clear();
+      Approximation5_fS_f23_param1.Init();
+      Approximation5_fS_f23.Clear();
+      Approximation6_fS_f24_param1.Init();
+      Approximation6_fS_f24.Clear();
+      Approximation7_fS_f25_param1.Init();
+      Approximation7_fS_f25.Clear();
+      Approximation8_fS_f26_param1.Init();
+      Approximation8_fS_f26.Clear();
+      Approximation9_fS_f27_param1.Init();
+      Approximation9_fS_f27.Clear();
+      Approximation10_fS_f28_param1.Init();
+      Approximation10_fS_f28.Clear();
+      Approximation11_fS_f29_param1.Init();
+      Approximation11_fS_f29.Clear();
+      Approximation12_fS_f30_param1.Init();
+      Approximation12_fS_f30.Clear();
+      Approximation13_fS_f31_param1.Init();
+      Approximation13_fS_f31.Clear();
+      Approximation14_fS_f32_param1.Init();
+      Approximation14_fS_f32.Clear();
+      Approximation15_fS_f33_param1.Init();
+      Approximation15_fS_f33.Clear();
+      Approximation16_fS_f34_param1.Init();
+      Approximation16_fS_f34.Clear();
+      Approximation17_fS_f35_param1.Init();
+      Approximation17_fS_f35.Clear();
+      Approximation18_fS_f36_param1.Init();
+      Approximation18_fS_f36.Clear();
+      ema1Source.Init();
+      ema2Source.Init();
+      ema3Source.Init();
+      ema4Source.Init();
+      ArrayInitialize(plot1, EMPTY_VALUE);
+      ArrayInitialize(plot2, EMPTY_VALUE);
+      ArrayInitialize(plot3, EMPTY_VALUE);
+      Upper_Threshold_of_Approximability2_DEFAULT_VALUE = EMPTY_VALUE;
+      ArrayInitialize(Upper_Threshold_of_Approximability2, Upper_Threshold_of_Approximability2_DEFAULT_VALUE);
+      Lower_Threshold_of_Approximability2_DEFAULT_VALUE = EMPTY_VALUE;
+      ArrayInitialize(Lower_Threshold_of_Approximability2, Lower_Threshold_of_Approximability2_DEFAULT_VALUE);
+      ema5Source.Init();
+      ema6Source.Init();
+      ema7Source.Init();
+      ema8Source.Init();
+      ArrayInitialize(plot4, EMPTY_VALUE);
+      ema9Source.Init();
+      ema10Source.Init();
+      ArrayInitialize(plot5, EMPTY_VALUE);
+      ema11Source.Init();
+      ema12Source.Init();
+      lele_iS_i37_param1.Init();
+      lele_iS_i37.Clear();
+      REPAINT_MAJ_BUR_DEFAULT_VALUE = false;
+      ArrayInitialize(REPAINT_MAJ_BUR, REPAINT_MAJ_BUR_DEFAULT_VALUE);
+      isNew1.Clear();
+      ArrayInitialize(plot6, EMPTY_VALUE);
+      REPAINT_MAJ_BER_DEFAULT_VALUE = false;
+      ArrayInitialize(REPAINT_MAJ_BER, REPAINT_MAJ_BER_DEFAULT_VALUE);
+      isNew2.Clear();
+      ArrayInitialize(plot7, EMPTY_VALUE);
+      REPAINT_LTA_DEFAULT_VALUE = false;
+      ArrayInitialize(REPAINT_LTA, REPAINT_LTA_DEFAULT_VALUE);
+      isNew3.Clear();
+      ArrayInitialize(plot8, EMPTY_VALUE);
+      REPAINT_UTA_DEFAULT_VALUE = false;
+      ArrayInitialize(REPAINT_UTA, REPAINT_UTA_DEFAULT_VALUE);
+      isNew4.Clear();
+      ArrayInitialize(plot9, EMPTY_VALUE);
+      REPAINT_MAJ_BUL_ALERT_DEFAULT_VALUE = false;
+      ArrayInitialize(REPAINT_MAJ_BUL_ALERT, REPAINT_MAJ_BUL_ALERT_DEFAULT_VALUE);
+      isNew5.Clear();
+      REPAINT_MAJ_BER_ALERT_DEFAULT_VALUE = false;
+      ArrayInitialize(REPAINT_MAJ_BER_ALERT, REPAINT_MAJ_BER_ALERT_DEFAULT_VALUE);
+      isNew6.Clear();
+      REPAINT_LTA_ALERT_DEFAULT_VALUE = false;
+      ArrayInitialize(REPAINT_LTA_ALERT, REPAINT_LTA_ALERT_DEFAULT_VALUE);
+      isNew7.Clear();
+      REPAINT_UTA_ALERT_DEFAULT_VALUE = false;
+      ArrayInitialize(REPAINT_UTA_ALERT, REPAINT_UTA_ALERT_DEFAULT_VALUE);
+      isNew8.Clear();
+   }
+   bool timeSeries = ArrayGetAsSeries(time);
+   bool openSeries = ArrayGetAsSeries(open);
+   bool highSeries = ArrayGetAsSeries(high);
+   bool lowSeries = ArrayGetAsSeries(low);
+   bool closeSeries = ArrayGetAsSeries(close);
+   bool tickVolumeSeries = ArrayGetAsSeries(tick_volume);
+   ArraySetAsSeries(time, true);
+   ArraySetAsSeries(open, true);
+   ArraySetAsSeries(high, true);
+   ArraySetAsSeries(low, true);
+   ArraySetAsSeries(close, true);
+   ArraySetAsSeries(tick_volume, true);
+
+   int toSkip = 0;
+   for (int pos = MathMin(bars_limit, rates_total - 1 - MathMax(prev_calculated - 1, toSkip)); pos >= 0 && !IsStopped(); --pos)
+   {
+      REPAINT_MAJ_BUR[pos] = pos < (rates_total - 1) ? REPAINT_MAJ_BUR[pos + 1] : false;
+      REPAINT_MAJ_BER[pos] = pos < (rates_total - 1) ? REPAINT_MAJ_BER[pos + 1] : false;
+      REPAINT_LTA[pos] = pos < (rates_total - 1) ? REPAINT_LTA[pos + 1] : false;
+      REPAINT_UTA[pos] = pos < (rates_total - 1) ? REPAINT_UTA[pos + 1] : false;
+      REPAINT_MAJ_BUL_ALERT[pos] = pos < (rates_total - 1) ? REPAINT_MAJ_BUL_ALERT[pos + 1] : false;
+      REPAINT_MAJ_BER_ALERT[pos] = pos < (rates_total - 1) ? REPAINT_MAJ_BER_ALERT[pos + 1] : false;
+      REPAINT_LTA_ALERT[pos] = pos < (rates_total - 1) ? REPAINT_LTA_ALERT[pos + 1] : false;
+      REPAINT_UTA_ALERT[pos] = pos < (rates_total - 1) ? REPAINT_UTA_ALERT[pos + 1] : false;
+      Approximation1_fS_f1_param1.SetValue(pos, open[pos]);
+      double Approximation1_fS_f1Value;
+      if (!Approximation1_fS_f1.GetValue(pos, Approximation1_fS_f1Value)) { Approximation1_fS_f1Value = EMPTY_VALUE; }
+      double Conjecture1 = Approximation1_fS_f1Value;
+      Approximation2_fS_f2_param1.SetValue(pos, open[pos]);
+      double Approximation2_fS_f2Value;
+      if (!Approximation2_fS_f2.GetValue(pos, Approximation2_fS_f2Value)) { Approximation2_fS_f2Value = EMPTY_VALUE; }
+      double Conjecture2 = Approximation2_fS_f2Value;
+      Approximation3_fS_f3_param1.SetValue(pos, open[pos]);
+      double Approximation3_fS_f3Value;
+      if (!Approximation3_fS_f3.GetValue(pos, Approximation3_fS_f3Value)) { Approximation3_fS_f3Value = EMPTY_VALUE; }
+      double Conjecture3 = Approximation3_fS_f3Value;
+      Approximation4_fS_f4_param1.SetValue(pos, open[pos]);
+      double Approximation4_fS_f4Value;
+      if (!Approximation4_fS_f4.GetValue(pos, Approximation4_fS_f4Value)) { Approximation4_fS_f4Value = EMPTY_VALUE; }
+      double Conjecture4 = Approximation4_fS_f4Value;
+      Approximation5_fS_f5_param1.SetValue(pos, open[pos]);
+      double Approximation5_fS_f5Value;
+      if (!Approximation5_fS_f5.GetValue(pos, Approximation5_fS_f5Value)) { Approximation5_fS_f5Value = EMPTY_VALUE; }
+      double Conjecture5 = Approximation5_fS_f5Value;
+      Approximation6_fS_f6_param1.SetValue(pos, open[pos]);
+      double Approximation6_fS_f6Value;
+      if (!Approximation6_fS_f6.GetValue(pos, Approximation6_fS_f6Value)) { Approximation6_fS_f6Value = EMPTY_VALUE; }
+      double Conjecture6 = Approximation6_fS_f6Value;
+      Approximation7_fS_f7_param1.SetValue(pos, open[pos]);
+      double Approximation7_fS_f7Value;
+      if (!Approximation7_fS_f7.GetValue(pos, Approximation7_fS_f7Value)) { Approximation7_fS_f7Value = EMPTY_VALUE; }
+      double Conjecture7 = Approximation7_fS_f7Value;
+      Approximation8_fS_f8_param1.SetValue(pos, open[pos]);
+      double Approximation8_fS_f8Value;
+      if (!Approximation8_fS_f8.GetValue(pos, Approximation8_fS_f8Value)) { Approximation8_fS_f8Value = EMPTY_VALUE; }
+      double Conjecture8 = Approximation8_fS_f8Value;
+      Approximation9_fS_f9_param1.SetValue(pos, open[pos]);
+      double Approximation9_fS_f9Value;
+      if (!Approximation9_fS_f9.GetValue(pos, Approximation9_fS_f9Value)) { Approximation9_fS_f9Value = EMPTY_VALUE; }
+      double Conjecture9 = Approximation9_fS_f9Value;
+      Approximation10_fS_f10_param1.SetValue(pos, open[pos]);
+      double Approximation10_fS_f10Value;
+      if (!Approximation10_fS_f10.GetValue(pos, Approximation10_fS_f10Value)) { Approximation10_fS_f10Value = EMPTY_VALUE; }
+      double Conjecture10 = Approximation10_fS_f10Value;
+      Approximation11_fS_f11_param1.SetValue(pos, open[pos]);
+      double Approximation11_fS_f11Value;
+      if (!Approximation11_fS_f11.GetValue(pos, Approximation11_fS_f11Value)) { Approximation11_fS_f11Value = EMPTY_VALUE; }
+      double Conjecture11 = Approximation11_fS_f11Value;
+      Approximation12_fS_f12_param1.SetValue(pos, open[pos]);
+      double Approximation12_fS_f12Value;
+      if (!Approximation12_fS_f12.GetValue(pos, Approximation12_fS_f12Value)) { Approximation12_fS_f12Value = EMPTY_VALUE; }
+      double Conjecture12 = Approximation12_fS_f12Value;
+      Approximation13_fS_f13_param1.SetValue(pos, open[pos]);
+      double Approximation13_fS_f13Value;
+      if (!Approximation13_fS_f13.GetValue(pos, Approximation13_fS_f13Value)) { Approximation13_fS_f13Value = EMPTY_VALUE; }
+      double Conjecture13 = Approximation13_fS_f13Value;
+      Approximation14_fS_f14_param1.SetValue(pos, open[pos]);
+      double Approximation14_fS_f14Value;
+      if (!Approximation14_fS_f14.GetValue(pos, Approximation14_fS_f14Value)) { Approximation14_fS_f14Value = EMPTY_VALUE; }
+      double Conjecture14 = Approximation14_fS_f14Value;
+      Approximation15_fS_f15_param1.SetValue(pos, open[pos]);
+      double Approximation15_fS_f15Value;
+      if (!Approximation15_fS_f15.GetValue(pos, Approximation15_fS_f15Value)) { Approximation15_fS_f15Value = EMPTY_VALUE; }
+      double Conjecture15 = Approximation15_fS_f15Value;
+      Approximation16_fS_f16_param1.SetValue(pos, open[pos]);
+      double Approximation16_fS_f16Value;
+      if (!Approximation16_fS_f16.GetValue(pos, Approximation16_fS_f16Value)) { Approximation16_fS_f16Value = EMPTY_VALUE; }
+      double Conjecture16 = Approximation16_fS_f16Value;
+      Approximation17_fS_f17_param1.SetValue(pos, open[pos]);
+      double Approximation17_fS_f17Value;
+      if (!Approximation17_fS_f17.GetValue(pos, Approximation17_fS_f17Value)) { Approximation17_fS_f17Value = EMPTY_VALUE; }
+      double Conjecture17 = Approximation17_fS_f17Value;
+      Approximation18_fS_f18_param1.SetValue(pos, open[pos]);
+      double Approximation18_fS_f18Value;
+      if (!Approximation18_fS_f18.GetValue(pos, Approximation18_fS_f18Value)) { Approximation18_fS_f18Value = EMPTY_VALUE; }
+      double Conjecture18 = Approximation18_fS_f18Value;
+      double tr1Value;
+      if (!tr1.GetValue(pos, tr1Value)) { tr1Value = EMPTY_VALUE; }
+      Approximation1_fS_f19_param1.SetValue(pos, tr1Value);
+      double Approximation1_fS_f19Value;
+      if (!Approximation1_fS_f19.GetValue(pos, Approximation1_fS_f19Value)) { Approximation1_fS_f19Value = EMPTY_VALUE; }
+      double tr2Value;
+      if (!tr2.GetValue(pos, tr2Value)) { tr2Value = EMPTY_VALUE; }
+      Approximation2_fS_f20_param1.SetValue(pos, tr2Value);
+      double Approximation2_fS_f20Value;
+      if (!Approximation2_fS_f20.GetValue(pos, Approximation2_fS_f20Value)) { Approximation2_fS_f20Value = EMPTY_VALUE; }
+      double tr3Value;
+      if (!tr3.GetValue(pos, tr3Value)) { tr3Value = EMPTY_VALUE; }
+      Approximation3_fS_f21_param1.SetValue(pos, tr3Value);
+      double Approximation3_fS_f21Value;
+      if (!Approximation3_fS_f21.GetValue(pos, Approximation3_fS_f21Value)) { Approximation3_fS_f21Value = EMPTY_VALUE; }
+      double tr4Value;
+      if (!tr4.GetValue(pos, tr4Value)) { tr4Value = EMPTY_VALUE; }
+      Approximation4_fS_f22_param1.SetValue(pos, tr4Value);
+      double Approximation4_fS_f22Value;
+      if (!Approximation4_fS_f22.GetValue(pos, Approximation4_fS_f22Value)) { Approximation4_fS_f22Value = EMPTY_VALUE; }
+      double tr5Value;
+      if (!tr5.GetValue(pos, tr5Value)) { tr5Value = EMPTY_VALUE; }
+      Approximation5_fS_f23_param1.SetValue(pos, tr5Value);
+      double Approximation5_fS_f23Value;
+      if (!Approximation5_fS_f23.GetValue(pos, Approximation5_fS_f23Value)) { Approximation5_fS_f23Value = EMPTY_VALUE; }
+      double tr6Value;
+      if (!tr6.GetValue(pos, tr6Value)) { tr6Value = EMPTY_VALUE; }
+      Approximation6_fS_f24_param1.SetValue(pos, tr6Value);
+      double Approximation6_fS_f24Value;
+      if (!Approximation6_fS_f24.GetValue(pos, Approximation6_fS_f24Value)) { Approximation6_fS_f24Value = EMPTY_VALUE; }
+      double tr7Value;
+      if (!tr7.GetValue(pos, tr7Value)) { tr7Value = EMPTY_VALUE; }
+      Approximation7_fS_f25_param1.SetValue(pos, tr7Value);
+      double Approximation7_fS_f25Value;
+      if (!Approximation7_fS_f25.GetValue(pos, Approximation7_fS_f25Value)) { Approximation7_fS_f25Value = EMPTY_VALUE; }
+      double tr8Value;
+      if (!tr8.GetValue(pos, tr8Value)) { tr8Value = EMPTY_VALUE; }
+      Approximation8_fS_f26_param1.SetValue(pos, tr8Value);
+      double Approximation8_fS_f26Value;
+      if (!Approximation8_fS_f26.GetValue(pos, Approximation8_fS_f26Value)) { Approximation8_fS_f26Value = EMPTY_VALUE; }
+      double tr9Value;
+      if (!tr9.GetValue(pos, tr9Value)) { tr9Value = EMPTY_VALUE; }
+      Approximation9_fS_f27_param1.SetValue(pos, tr9Value);
+      double Approximation9_fS_f27Value;
+      if (!Approximation9_fS_f27.GetValue(pos, Approximation9_fS_f27Value)) { Approximation9_fS_f27Value = EMPTY_VALUE; }
+      double tr10Value;
+      if (!tr10.GetValue(pos, tr10Value)) { tr10Value = EMPTY_VALUE; }
+      Approximation10_fS_f28_param1.SetValue(pos, tr10Value);
+      double Approximation10_fS_f28Value;
+      if (!Approximation10_fS_f28.GetValue(pos, Approximation10_fS_f28Value)) { Approximation10_fS_f28Value = EMPTY_VALUE; }
+      double tr11Value;
+      if (!tr11.GetValue(pos, tr11Value)) { tr11Value = EMPTY_VALUE; }
+      Approximation11_fS_f29_param1.SetValue(pos, tr11Value);
+      double Approximation11_fS_f29Value;
+      if (!Approximation11_fS_f29.GetValue(pos, Approximation11_fS_f29Value)) { Approximation11_fS_f29Value = EMPTY_VALUE; }
+      double tr12Value;
+      if (!tr12.GetValue(pos, tr12Value)) { tr12Value = EMPTY_VALUE; }
+      Approximation12_fS_f30_param1.SetValue(pos, tr12Value);
+      double Approximation12_fS_f30Value;
+      if (!Approximation12_fS_f30.GetValue(pos, Approximation12_fS_f30Value)) { Approximation12_fS_f30Value = EMPTY_VALUE; }
+      double tr13Value;
+      if (!tr13.GetValue(pos, tr13Value)) { tr13Value = EMPTY_VALUE; }
+      Approximation13_fS_f31_param1.SetValue(pos, tr13Value);
+      double Approximation13_fS_f31Value;
+      if (!Approximation13_fS_f31.GetValue(pos, Approximation13_fS_f31Value)) { Approximation13_fS_f31Value = EMPTY_VALUE; }
+      double tr14Value;
+      if (!tr14.GetValue(pos, tr14Value)) { tr14Value = EMPTY_VALUE; }
+      Approximation14_fS_f32_param1.SetValue(pos, tr14Value);
+      double Approximation14_fS_f32Value;
+      if (!Approximation14_fS_f32.GetValue(pos, Approximation14_fS_f32Value)) { Approximation14_fS_f32Value = EMPTY_VALUE; }
+      double tr15Value;
+      if (!tr15.GetValue(pos, tr15Value)) { tr15Value = EMPTY_VALUE; }
+      Approximation15_fS_f33_param1.SetValue(pos, tr15Value);
+      double Approximation15_fS_f33Value;
+      if (!Approximation15_fS_f33.GetValue(pos, Approximation15_fS_f33Value)) { Approximation15_fS_f33Value = EMPTY_VALUE; }
+      double tr16Value;
+      if (!tr16.GetValue(pos, tr16Value)) { tr16Value = EMPTY_VALUE; }
+      Approximation16_fS_f34_param1.SetValue(pos, tr16Value);
+      double Approximation16_fS_f34Value;
+      if (!Approximation16_fS_f34.GetValue(pos, Approximation16_fS_f34Value)) { Approximation16_fS_f34Value = EMPTY_VALUE; }
+      double tr17Value;
+      if (!tr17.GetValue(pos, tr17Value)) { tr17Value = EMPTY_VALUE; }
+      Approximation17_fS_f35_param1.SetValue(pos, tr17Value);
+      double Approximation17_fS_f35Value;
+      if (!Approximation17_fS_f35.GetValue(pos, Approximation17_fS_f35Value)) { Approximation17_fS_f35Value = EMPTY_VALUE; }
+      double tr18Value;
+      if (!tr18.GetValue(pos, tr18Value)) { tr18Value = EMPTY_VALUE; }
+      Approximation18_fS_f36_param1.SetValue(pos, tr18Value);
+      double Approximation18_fS_f36Value;
+      if (!Approximation18_fS_f36.GetValue(pos, Approximation18_fS_f36Value)) { Approximation18_fS_f36Value = EMPTY_VALUE; }
+      double Inapproximability = SafeDivide((SafePlus(SafePlus(SafePlus(SafePlus(SafePlus(SafePlus(SafePlus(SafePlus(SafePlus(SafePlus(SafePlus(SafePlus(SafePlus(SafePlus(SafePlus(SafePlus(SafePlus(Approximation1_fS_f19Value, Approximation2_fS_f20Value), Approximation3_fS_f21Value), Approximation4_fS_f22Value), Approximation5_fS_f23Value), Approximation6_fS_f24Value), Approximation7_fS_f25Value), Approximation8_fS_f26Value), Approximation9_fS_f27Value), Approximation10_fS_f28Value), Approximation11_fS_f29Value), Approximation12_fS_f30Value), Approximation13_fS_f31Value), Approximation14_fS_f32Value), Approximation15_fS_f33Value), Approximation16_fS_f34Value), Approximation17_fS_f35Value), Approximation18_fS_f36Value)), 18);
+      double amlag = SafeDivide((SafePlus(SafePlus(SafePlus(SafePlus(SafePlus(SafePlus(SafePlus(SafePlus(SafePlus(SafePlus(SafePlus(SafePlus(SafePlus(SafePlus(SafePlus(SafePlus(SafePlus(Conjecture1, Conjecture2), Conjecture3), Conjecture4), Conjecture5), Conjecture6), Conjecture7), Conjecture8), Conjecture9), Conjecture10), Conjecture11), Conjecture12), Conjecture13), Conjecture14), Conjecture15), Conjecture16), Conjecture17), Conjecture18)), 18);
+      double Upper_Threshold_of_Approximability1 = SafePlus(amlag, SafeMultiply(Inapproximability, 1.618));
+      SetStream(Upper_Threshold_of_Approximability2, pos, SafePlus(amlag, SafeMultiply(SafeMultiply(2, Inapproximability), 1.618)), Upper_Threshold_of_Approximability2_DEFAULT_VALUE);
+      double Lower_Threshold_of_Approximability1 = SafeMinus(amlag, SafeMultiply(Inapproximability, 1.618));
+      SetStream(Lower_Threshold_of_Approximability2, pos, SafeMinus(amlag, SafeMultiply(SafeMultiply(2, Inapproximability), 1.618)), Lower_Threshold_of_Approximability2_DEFAULT_VALUE);
+      uint bcolor = 0x808000;
+      ema1Source.SetValue(pos, close[pos]);
+      double ema1Value;
+      if (!ema1.GetValue(pos, ema1Value)) { ema1Value = EMPTY_VALUE; }
+      ema2Source.SetValue(pos, high[pos] - low[pos]);
+      double ema2Value;
+      if (!ema2.GetValue(pos, ema2Value)) { ema2Value = EMPTY_VALUE; }
+      uint lower_color = (SafeLess(SafeMinus(ema1Value, SafeMultiply(ema2Value, 4)), Lower_Threshold_of_Approximability2[pos]) ? 0x0f790f : 0x0f790f);
+      ema3Source.SetValue(pos, close[pos]);
+      double ema3Value;
+      if (!ema3.GetValue(pos, ema3Value)) { ema3Value = EMPTY_VALUE; }
+      ema4Source.SetValue(pos, high[pos] - low[pos]);
+      double ema4Value;
+      if (!ema4.GetValue(pos, ema4Value)) { ema4Value = EMPTY_VALUE; }
+      uint upper_color = (SafeGreater(SafePlus(ema3Value, SafeMultiply(ema4Value, 4)), Upper_Threshold_of_Approximability2[pos]) ? 0x1d1daa : 0x1d1daa);
+      plot1[pos] = Upper_Threshold_of_Approximability2[pos];
+      double hplot2 = plot1[pos];
+      color plot2_color = AddTransparency(bcolor, 50);
+      if (plot2_color != EMPTY_VALUE) { plot2[pos] = amlag; }
+      else { plot2[pos] = EMPTY_VALUE; }
+      double alplot = plot2[pos];
+      plot3[pos] = Lower_Threshold_of_Approximability2[pos];
+      double lplot2 = plot3[pos];
+      if (pos + 1 > (rates_total - 1)) { continue; }
+      if (pos + 1 > (rates_total - 1)) { continue; }
+      if (pos + 1 > (rates_total - 1)) { continue; }
+      int crossdn = SafeLess(high[pos], Upper_Threshold_of_Approximability2[pos + 1]) && SafeGE(high[pos + 1], Upper_Threshold_of_Approximability2[pos + 1]);
+      if (pos + 1 > (rates_total - 1)) { continue; }
+      if (pos + 1 > (rates_total - 1)) { continue; }
+      if (pos + 1 > (rates_total - 1)) { continue; }
+      int crossup = SafeGreater(low[pos], Lower_Threshold_of_Approximability2[pos + 1]) && SafeLE(low[pos + 1], Lower_Threshold_of_Approximability2[pos + 1]);
+      ema5Source.SetValue(pos, close[pos]);
+      double ema5Value;
+      if (!ema5.GetValue(pos, ema5Value)) { ema5Value = EMPTY_VALUE; }
+      ema6Source.SetValue(pos, high[pos] - low[pos]);
+      double ema6Value;
+      if (!ema6.GetValue(pos, ema6Value)) { ema6Value = EMPTY_VALUE; }
+      uint u_color = (SafeGreater(Upper_Threshold_of_Approximability2[pos], SafePlus(ema5Value, SafeMultiply(ema6Value, 4))) ? 0x1d1daa : INT_MIN);
+      ema7Source.SetValue(pos, close[pos]);
+      double ema7Value;
+      if (!ema7.GetValue(pos, ema7Value)) { ema7Value = EMPTY_VALUE; }
+      ema8Source.SetValue(pos, high[pos] - low[pos]);
+      double ema8Value;
+      if (!ema8.GetValue(pos, ema8Value)) { ema8Value = EMPTY_VALUE; }
+      uint l_color = (SafeLess(Lower_Threshold_of_Approximability2[pos], SafeMinus(ema7Value, SafeMultiply(ema8Value, 4))) ? 0x0f790f : INT_MIN);
+      ema9Source.SetValue(pos, close[pos]);
+      double ema9Value;
+      if (!ema9.GetValue(pos, ema9Value)) { ema9Value = EMPTY_VALUE; }
+      ema10Source.SetValue(pos, high[pos] - low[pos]);
+      double ema10Value;
+      if (!ema10.GetValue(pos, ema10Value)) { ema10Value = EMPTY_VALUE; }
+      plot4[pos] = SafePlus(ema9Value, SafeMultiply(ema10Value, 4));
+      double u = plot4[pos];
+      ema11Source.SetValue(pos, close[pos]);
+      double ema11Value;
+      if (!ema11.GetValue(pos, ema11Value)) { ema11Value = EMPTY_VALUE; }
+      ema12Source.SetValue(pos, high[pos] - low[pos]);
+      double ema12Value;
+      if (!ema12.GetValue(pos, ema12Value)) { ema12Value = EMPTY_VALUE; }
+      plot5[pos] = SafeMinus(ema11Value, SafeMultiply(ema12Value, 4));
+      double l = plot5[pos];
+      int p_display = true;
+      int label_direction = true;
+      string updown = (label_direction ? "down" : "up");
+      string down = (label_direction ? "up" : "down");
+      double liveprice = close[pos];
+      int show_selllimitone = true;
+      uint TPC = Green;
+      uint BLC = Gray;
+      int tpl_display = true;
+      int slp = true;
+      int blp1 = 1;
+      int blp2 = 1;
+      double blp3 = 0.77;
+      double blp4 = 0.55;
+      double blp5 = 0.27;
+      double bep1 = 0.906;
+      double bep2 = 0.807;
+      double bep3 = 0.712;
+      double bep4 = 0.624;
+      double long_tp = liveprice * slp1;
+      double long_bl1 = liveprice * blp1;
+      double long_bl2 = liveprice * blp2;
+      double long_bl3 = liveprice * blp3;
+      double long_bl4 = liveprice * blp4;
+      double long_bl5 = liveprice * blp5;
+      double long_be1 = liveprice * bep1;
+      double long_be2 = liveprice * bep2;
+      double long_be3 = liveprice * bep3;
+      double long_be4 = liveprice * bep4;
+      if (show_marketorder)
+      {
+         Line* bl2 = LinesCollection::Create(IndicatorObjPrefix + "line_1_id", ((rates_total - 1) - pos), long_bl2, ((rates_total - 1) - pos) + away + 100, long_bl2, time[pos]).SetColor(BLC).SetWidth(w_adjust).SetStyle("solid");
+         LinesCollection::Delete(LinesCollection::Get(bl2, 1));
+      }
+      if (show_buylimit1)
+      {
+         Line* bl3 = LinesCollection::Create(IndicatorObjPrefix + "line_2_id", ((rates_total - 1) - pos), long_bl3, ((rates_total - 1) - pos) + away + 100, long_bl3, time[pos]).SetColor(BLC).SetWidth(w_adjust).SetStyle("solid");
+         LinesCollection::Delete(LinesCollection::Get(bl3, 1));
+      }
+      if (show_buylimit2)
+      {
+         Line* bl4 = LinesCollection::Create(IndicatorObjPrefix + "line_3_id", ((rates_total - 1) - pos), long_bl4, ((rates_total - 1) - pos) + away + 100, long_bl4, time[pos]).SetColor(BLC).SetWidth(w_adjust).SetStyle("solid");
+         LinesCollection::Delete(LinesCollection::Get(bl4, 1));
+      }
+      if (show_buylimit3)
+      {
+         Line* bl5 = LinesCollection::Create(IndicatorObjPrefix + "line_4_id", ((rates_total - 1) - pos), long_bl5, ((rates_total - 1) - pos) + away + 100, long_bl5, time[pos]).SetColor(BLC).SetWidth(w_adjust).SetStyle("solid");
+         LinesCollection::Delete(LinesCollection::Get(bl5, 1));
+      }
+      if (show_takeprofit)
+      {
+         Line* lt = LinesCollection::Create(IndicatorObjPrefix + "line_5_id", ((rates_total - 1) - pos), long_tp, ((rates_total - 1) - pos) + away + 100, long_tp, time[pos]).SetColor(TPC).SetWidth(w_adjust).SetStyle("solid");
+         LinesCollection::Delete(LinesCollection::Get(lt, 1));
+      }
+      if ((pos == 0))
+      {
+         double p1 = (slp ? long_tp : blp4);
+         double p2 = (slp ? long_bl1 : blp4);
+         double p3 = (slp ? long_bl1 : blp4);
+         double p4 = (slp ? long_bl2 : blp4);
+         double p5 = (slp ? long_bl3 : blp4);
+         double p6 = (slp ? long_bl4 : blp4);
+         double p7 = (slp ? long_bl5 : blp4);
+         string p1t = Str::ToString(NormalizeDouble(p1, dp));
+         int ln = 0;
+         ln = SafeMinus(Str::Length(p1t), Str::Length(Str::ToString((int)(p1))));
+         if ((ln == 0))
+         {
+            p1t = SafePlus(p1t, ".");
+         }
+         while ((ln < dp + 1))
+         {
+            p1t = SafePlus(p1t, "0");
+            ln = SafeMinus(Str::Length(p1t), Str::Length(Str::ToString((int)(p1))));
+         }
+         string p2t = Str::ToString(NormalizeDouble(p2, dp));
+         ln = SafeMinus(Str::Length(p2t), Str::Length(Str::ToString((int)(p2))));
+         if ((ln == 0))
+         {
+            p2t = SafePlus(p2t, ".");
+         }
+         while ((ln < dp + 1))
+         {
+            p2t = SafePlus(p2t, "0");
+            ln = SafeMinus(Str::Length(p2t), Str::Length(Str::ToString((int)(p2))));
+         }
+         string p3t = Str::ToString(NormalizeDouble(p3, dp));
+         ln = SafeMinus(Str::Length(p3t), Str::Length(Str::ToString((int)(p3))));
+         if ((ln == 0))
+         {
+            p3t = SafePlus(p3t, ".");
+         }
+         while ((ln < dp + 1))
+         {
+            p3t = SafePlus(p3t, "0");
+            ln = SafeMinus(Str::Length(p3t), Str::Length(Str::ToString((int)(p3))));
+         }
+         string p4t = Str::ToString(NormalizeDouble(p4, dp));
+         ln = SafeMinus(Str::Length(p4t), Str::Length(Str::ToString((int)(p4))));
+         if ((ln == 0))
+         {
+            p4t = SafePlus(p4t, ".");
+         }
+         while ((ln < dp + 1))
+         {
+            p4t = SafePlus(p4t, "0");
+            ln = SafeMinus(Str::Length(p4t), Str::Length(Str::ToString((int)(p4))));
+         }
+         string p5t = Str::ToString(NormalizeDouble(p5, dp));
+         ln = SafeMinus(Str::Length(p5t), Str::Length(Str::ToString((int)(p5))));
+         if ((ln == 0))
+         {
+            p5t = SafePlus(p5t, ".");
+         }
+         while ((ln < dp + 1))
+         {
+            p5t = SafePlus(p5t, "0");
+            ln = SafeMinus(Str::Length(p5t), Str::Length(Str::ToString((int)(p5))));
+         }
+         string p6t = Str::ToString(NormalizeDouble(p6, dp));
+         ln = SafeMinus(Str::Length(p6t), Str::Length(Str::ToString((int)(p6))));
+         if ((ln == 0))
+         {
+            p6t = SafePlus(p6t, ".");
+         }
+         while ((ln < dp + 1))
+         {
+            p6t = SafePlus(p6t, "0");
+            ln = SafeMinus(Str::Length(p6t), Str::Length(Str::ToString((int)(p6))));
+         }
+         string p7t = Str::ToString(NormalizeDouble(p7, dp));
+         ln = SafeMinus(Str::Length(p7t), Str::Length(Str::ToString((int)(p7))));
+         if ((ln == 0))
+         {
+            p7t = SafePlus(p7t, ".");
+         }
+         while ((ln < dp + 1))
+         {
+            p7t = SafePlus(p7t, "0");
+            ln = SafeMinus(Str::Length(p7t), Str::Length(Str::ToString((int)(p7))));
+         }
+         if (show_takeprofit)
+         {
+            Label* lbl1 = LabelsCollection::Create(IndicatorObjPrefix + "label_1_id", ((rates_total - 1) - pos) + away, long_tp, time[pos]).SetColor(0x262422).SetText(SafePlus(((p_display ? p1t : NULL)), " - TAKE PROFIT")).SetTextColor(White).SetStyle(updown).SetSize("normal").SetYLoc("price").SetTextAlign("right");
+            LabelsCollection::Delete(LabelsCollection::Get(lbl1, 1));
+         }
+         if (show_marketorder)
+         {
+            Label* lbl3 = LabelsCollection::Create(IndicatorObjPrefix + "label_2_id", ((rates_total - 1) - pos) + away, long_bl2, time[pos]).SetColor(0x262422).SetText(SafePlus(((p_display ? p4t : NULL)), " - MARKET ORDER ")).SetTextColor(White).SetStyle(down).SetSize("normal").SetYLoc("price").SetTextAlign("right");
+            LabelsCollection::Delete(LabelsCollection::Get(lbl3, 1));
+         }
+         if (show_buylimit1)
+         {
+            Label* lbl4 = LabelsCollection::Create(IndicatorObjPrefix + "label_3_id", ((rates_total - 1) - pos) + away, long_bl3, time[pos]).SetColor(0x262422).SetText(SafePlus(((p_display ? p5t : NULL)), " - BUY LIMIT 1 ")).SetTextColor(White).SetStyle(down).SetSize("normal").SetYLoc("price").SetTextAlign("right");
+            LabelsCollection::Delete(LabelsCollection::Get(lbl4, 1));
+         }
+         if (show_buylimit2)
+         {
+            Label* lbl5 = LabelsCollection::Create(IndicatorObjPrefix + "label_4_id", ((rates_total - 1) - pos) + away, long_bl4, time[pos]).SetColor(0x262422).SetText(SafePlus(((p_display ? p6t : NULL)), " - BUY LIMIT 2 ")).SetTextColor(White).SetStyle(down).SetSize("normal").SetYLoc("price").SetTextAlign("right");
+            LabelsCollection::Delete(LabelsCollection::Get(lbl5, 1));
+         }
+         if (show_buylimit3)
+         {
+            Label* lbl6 = LabelsCollection::Create(IndicatorObjPrefix + "label_5_id", ((rates_total - 1) - pos) + away, long_bl5, time[pos]).SetColor(0x262422).SetText(SafePlus(((p_display ? p7t : NULL)), " - BUY LIMIT 3")).SetTextColor(White).SetStyle(down).SetSize("normal").SetYLoc("price").SetTextAlign("right");
+            LabelsCollection::Delete(LabelsCollection::Get(lbl6, 1));
+         }
+      }
+      int ValueOne = (2);
+      lele_iS_i37_param1.SetValue(pos, ValueOne);
+      int lele_iS_i37Value;
+      if (!lele_iS_i37.GetValue(pos, lele_iS_i37Value)) { lele_iS_i37Value = INT_MIN; }
+      int major = lele_iS_i37Value;
+      double major_bearish_reversal = (((major == (-1)) ? high[pos] : EMPTY_VALUE));
+      double major_bullish_reversal = (((major == 1) ? low[pos] : EMPTY_VALUE));
+      if (isNew1.IsNew(time[pos]))
+      {
+         SetStream(REPAINT_MAJ_BUR, pos, false, REPAINT_MAJ_BUR_DEFAULT_VALUE);
+      }
+      if (NumberToBool(major_bullish_reversal))
+      {
+         SetStream(REPAINT_MAJ_BUR, pos, true, REPAINT_MAJ_BUR_DEFAULT_VALUE);
+      }
+      int MAJ_BUR_NO_REPAINT = (pos > 0);
+      int plotshape6_condition = NumberToBool(major_bullish_reversal) && MAJ_BUR_NO_REPAINT;
+      if (plotshape6_condition == true) { plot6[pos] = low[pos]; }
+      if (isNew2.IsNew(time[pos]))
+      {
+         SetStream(REPAINT_MAJ_BER, pos, false, REPAINT_MAJ_BER_DEFAULT_VALUE);
+      }
+      if (NumberToBool(major_bearish_reversal))
+      {
+         SetStream(REPAINT_MAJ_BER, pos, true, REPAINT_MAJ_BER_DEFAULT_VALUE);
+      }
+      int MAJ_BER_NO_REPAINT = (pos > 0);
+      int plotshape7_condition = NumberToBool(major_bearish_reversal) && MAJ_BER_NO_REPAINT;
+      if (plotshape7_condition == true) { plot7[pos] = high[pos]; }
+      if (isNew3.IsNew(time[pos]))
+      {
+         SetStream(REPAINT_LTA, pos, false, REPAINT_LTA_DEFAULT_VALUE);
+      }
+      if (NumberToBool(Lower_Threshold_of_Approximability2[pos]))
+      {
+         SetStream(REPAINT_LTA, pos, true, REPAINT_LTA_DEFAULT_VALUE);
+      }
+      int LTA_NO_REPAINT = (pos > 0);
+      int plotshape8_condition = (crossup ? NumberToBool(Lower_Threshold_of_Approximability2[pos]) && LTA_NO_REPAINT : (-1));
+      if (plotshape8_condition == true) { plot8[pos] = low[pos]; }
+      if (isNew4.IsNew(time[pos]))
+      {
+         SetStream(REPAINT_UTA, pos, false, REPAINT_UTA_DEFAULT_VALUE);
+      }
+      if (NumberToBool(Upper_Threshold_of_Approximability2[pos]))
+      {
+         SetStream(REPAINT_UTA, pos, true, REPAINT_UTA_DEFAULT_VALUE);
+      }
+      int UTA_NO_REPAINT = (pos > 0);
+      int plotshape9_condition = (crossdn ? NumberToBool(Upper_Threshold_of_Approximability2[pos]) && UTA_NO_REPAINT : (-1));
+      if (plotshape9_condition == true) { plot9[pos] = high[pos]; }
+      if (isNew5.IsNew(time[pos]))
+      {
+         SetStream(REPAINT_MAJ_BUL_ALERT, pos, false, REPAINT_MAJ_BUL_ALERT_DEFAULT_VALUE);
+      }
+      if (NumberToBool(major_bullish_reversal))
+      {
+         SetStream(REPAINT_MAJ_BUL_ALERT, pos, true, REPAINT_MAJ_BUL_ALERT_DEFAULT_VALUE);
+      }
+      int MAJ_BUL_ALERT_NO_REPAINT = (pos > 0);
+      if (NumberToBool(major_bullish_reversal) && MAJ_BUL_ALERT_NO_REPAINT) { _signaler.SendNotifications("Buy", "Buy Signal"); }
+      if (isNew6.IsNew(time[pos]))
+      {
+         SetStream(REPAINT_MAJ_BER_ALERT, pos, false, REPAINT_MAJ_BER_ALERT_DEFAULT_VALUE);
+      }
+      if (NumberToBool(major_bearish_reversal))
+      {
+         SetStream(REPAINT_MAJ_BER_ALERT, pos, true, REPAINT_MAJ_BER_ALERT_DEFAULT_VALUE);
+      }
+      int MAJ_BER_ALERT_NO_REPAINT = (pos > 0);
+      if (NumberToBool(major_bearish_reversal) && MAJ_BER_ALERT_NO_REPAINT) { _signaler.SendNotifications("Sell", "Sell Signal"); }
+      if (isNew7.IsNew(time[pos]))
+      {
+         SetStream(REPAINT_LTA_ALERT, pos, false, REPAINT_LTA_ALERT_DEFAULT_VALUE);
+      }
+      if (NumberToBool(Lower_Threshold_of_Approximability2[pos]))
+      {
+         SetStream(REPAINT_LTA_ALERT, pos, true, REPAINT_LTA_ALERT_DEFAULT_VALUE);
+      }
+      int REPAINT_LTA_ALERT_NO_REPAINT = (pos > 0);
+      if ((crossup ? NumberToBool(Lower_Threshold_of_Approximability2[pos]) && REPAINT_LTA_ALERT_NO_REPAINT : (-1))) { _signaler.SendNotifications("Strong Buy", "Strong Buy Signal"); }
+      if (isNew8.IsNew(time[pos]))
+      {
+         SetStream(REPAINT_UTA_ALERT, pos, false, REPAINT_UTA_ALERT_DEFAULT_VALUE);
+      }
+      if (NumberToBool(Upper_Threshold_of_Approximability2[pos]))
+      {
+         SetStream(REPAINT_UTA_ALERT, pos, true, REPAINT_UTA_ALERT_DEFAULT_VALUE);
+      }
+      int UTA_ALERT_NO_REPAINT = (pos > 0);
+      if ((crossdn ? NumberToBool(Upper_Threshold_of_Approximability2[pos]) && UTA_ALERT_NO_REPAINT : (-1))) { _signaler.SendNotifications("Strong Sell", "Strong Sell Signal"); }
+   }
+
+   ArraySetAsSeries(time, timeSeries);
+   ArraySetAsSeries(open, openSeries);
+   ArraySetAsSeries(high, highSeries);
+   ArraySetAsSeries(low, lowSeries);
+   ArraySetAsSeries(close, closeSeries);
+   ArraySetAsSeries(tick_volume, tickVolumeSeries);
+   LinesCollection::Redraw();
+   LabelsCollection::Redraw();
+   return rates_total;
+}
+// More information about this indicator can be found at:
+// https://fxcodebase.com/code/viewtopic.php?f=38&t=75438
+
+// +------------------------------------------------------------------------------------------------+
+// |                                                            Copyright © 2024, Gehtsoft USA LLC  | 
+// |                                                                         http://fxcodebase.com  |
+// |                                                               Paypal:  https://goo.gl/9Rj74e   |
+// +------------------------------------------------------------------------------------------------+
+// |                                                                   Developed by : Mario Jemic   |                    
+// |                                                                       mario.jemic@gmail.com    |
+// |                                                                       https://mario-jemic.com/ | 
+// |                                                             Patreon :  http://tiny.cc/1ybwxz   |   
+// |                                                      Buy Me a Coffee:  http://tiny.cc/bj7vxz   |  
+// +-----------------+----------------------+-------------------------------------------------------+
+// |  Cryptocurrency |  Network             |  Address                                              |
+// +-----------------+----------------------+-------------------------------------------------------+
+// |  BTC            |  BTC                 |  16F5k43RXibTmna4np8bPVgmXM1CzjXFJJ                   | 
+// |  SOL            |  SOL                 |  3nh5rpUKopcYLNU4zGCdUFAkM3iRQq8VVUmuzVG6VDf2         | 
+// |  ETH            |  ERC20               |  0xe53aab6bc468a963a02d1319660ee60cf80fc8e7           |
+// |  BNB            |  BEP20               |  0xe53aab6bc468a963a02d1319660ee60cf80fc8e7           | 
+// |  USDT           |  BEP20               |  0xe53aab6bc468a963a02d1319660ee60cf80fc8e7           | 
+// |  XRP            |  BEP20               |  0xe53aab6bc468a963a02d1319660ee60cf80fc8e7           | 
+// +-----------------+----------------------+-------------------------------------------------------+

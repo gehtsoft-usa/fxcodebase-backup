@@ -1,0 +1,120 @@
+function Init()
+{
+    indicator.name("Diff MA Histogram indicator");
+    indicator.description("Diff MA Histogram indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 10);
+    indicator.parameters.addString("Price", "Price", "", "close");
+    indicator.parameters.addStringAlternative("Price", "close", "", "close");
+    indicator.parameters.addStringAlternative("Price", "open", "", "open");
+    indicator.parameters.addStringAlternative("Price", "high", "", "high");
+    indicator.parameters.addStringAlternative("Price", "low", "", "low");
+    indicator.parameters.addStringAlternative("Price", "median", "", "median");
+    indicator.parameters.addStringAlternative("Price", "typical", "", "typical");
+    indicator.parameters.addStringAlternative("Price", "weighted", "", "weighted");
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clrUP", "Color UP", "Color UP", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clrDN", "Color DN", "Color DN", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+var SourcePrice;
+var Period;
+var Price;
+var Diff;
+var BuffUP=null;
+var BuffDN=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    Price=instance.parameters.Price;
+    if (Price=="close") 
+    {
+     SourcePrice=source.close;
+    } 
+    else if (Price=="open") 
+    {
+     SourcePrice=source.open;
+    } 
+    else if (Price=="high") 
+    {
+     SourcePrice=source.high;
+    } 
+    else if (Price=="low") 
+    {
+     SourcePrice=source.low;
+    } 
+    else if (Price=="median") 
+    {
+     SourcePrice=source.median;
+    } 
+    else if (Price=="typical") 
+    {
+     SourcePrice=source.typical;
+    } 
+    else
+    {
+     SourcePrice=source.weighted;
+    } 
+    first = source.first()+2;
+    Diff = instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + " " + instance.parameters.Price + ")";
+    instance.name(name);
+    BuffUP = instance.addStream("BuffUP", core.Bar, name + ".UP", "UP", instance.parameters.clrUP, first);
+    BuffDN = instance.addStream("BuffDN", core.Bar, name + ".DN", "DN", instance.parameters.clrDN, first);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    var CountUP=0;
+    var SumUP=0;
+    var CountDN=0;
+    var SumDN=0;
+    var i=period;
+    while (i>=first && (CountUP<Period || CountDN<Period)) 
+    {
+     if (source.close[i]>source.open[i] && CountUP<Period) 
+     {
+      CountUP=CountUP+1;
+      SumUP=SumUP+SourcePrice[i];
+     }
+     if (source.close[i]<source.open[i] && CountDN<Period) 
+     {
+      CountDN=CountDN+1;
+      SumDN=SumDN+SourcePrice[i];
+     }
+     i=i-1;
+    }
+    if (CountUP>0 && CountDN>0) 
+    {
+     var MA_UP=SumUP/CountUP;
+     var MA_DN=SumDN/CountDN;
+     Diff[period]=MA_UP-MA_DN;
+     if (Diff[period]>Diff[period-1]) 
+     {
+      BuffUP[period]=Diff[period];
+      BuffDN[period]=null;
+     } 
+     else if (Diff[period]<Diff[period-1]) 
+     {
+      BuffDN[period]=Diff[period];
+      BuffUP[period]=null;
+     }
+    } 
+    else
+    {
+     BuffUP[period]=null; 
+     BuffDN[period]=null;
+    } 
+   } 
+}
+

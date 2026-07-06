@@ -1,0 +1,96 @@
+function Init()
+{
+    indicator.name("Slow Relative Strength Index oscillator");
+    indicator.description("Slow Relative Strength Index oscillator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 8);
+    indicator.parameters.addInteger("Smoothing_Period", "Smoothing Period", "", 5);
+    indicator.parameters.addDouble("OB", "Overbought level", "", 80);
+    indicator.parameters.addDouble("OS", "Oversold level", "", 20);
+    indicator.parameters.addDouble("ML", "Middle line", "", 50);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "SRSI Color", "SRSI Color", core.rgb(255, 255, 0));
+    indicator.parameters.addInteger("width", "SRSI Line width", "SRSI Line width", 1, 1, 5);
+    indicator.parameters.addInteger("style", "SRSI Line style", "SRSI Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Lclr", "Overbought/Oversold Color", "Overbought/Oversold color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("Lwidth", "Overbought/Oversold Line width", "Overbought/Oversold Line width", 1, 1, 5);
+    indicator.parameters.addInteger("Lstyle", "Overbought/Oversold Line style", "Overbought/Oversold Line style", core.LINE_DASH);
+    indicator.parameters.setFlag("Lstyle", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Mclr", "Middle line Color", "Middle line Color", core.rgb(0, 0, 255));
+    indicator.parameters.addInteger("Mwidth", "Middle Line width", "Middle Line width", 1, 1, 5);
+    indicator.parameters.addInteger("Mstyle", "Middle Line style", "Middle Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("Mstyle", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period;
+var Smoothing_Period;
+var SRSI=null;
+var SF;
+var NetChgAvg, TotChgAvg;
+var EMA;
+var OB;
+var OS;
+var ML;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    Smoothing_Period=instance.parameters.Smoothing_Period;
+    OB=instance.parameters.OB;
+    OS=instance.parameters.OS;
+    ML=instance.parameters.ML;
+    EMA = core.indicators.create("EMA", source, Smoothing_Period);
+    first = EMA.DATA.first()+Period;
+    NetChgAvg = instance.addInternalStream(first, 0);
+    TotChgAvg = instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.Smoothing_Period + ")";
+    instance.name(name);
+    SRSI = instance.addStream("SRSI", core.Line, name + ".SRSI", "SRSI", instance.parameters.clr, first);
+    SRSI.setWidth(instance.parameters.width);
+    SRSI.setStyle(instance.parameters.style);
+    SF=1/Period;
+    SRSI.addLevel(OB, instance.parameters.Lstyle, instance.parameters.Lwidth, instance.parameters.Lclr);
+    SRSI.addLevel(OS, instance.parameters.Lstyle, instance.parameters.Lwidth, instance.parameters.Lclr);
+    SRSI.addLevel(ML, instance.parameters.Mstyle, instance.parameters.Mwidth, instance.parameters.Mclr);
+}
+
+function Update(period, mode)
+{
+  if (period>=first) 
+  {
+    EMA.update(mode);
+    if (period==first) 
+    {
+      NetChgAvg[period]=(EMA.DATA[period]-EMA.DATA[period-Period])/Period;
+      TotChgAvg[period]=Math.abs(EMA.DATA[period]-EMA.DATA[period-1]);
+    }  
+    else
+    {
+      var Change;
+      var ChgRatio;
+      Change=EMA.DATA[period]-EMA.DATA[period-1];
+      NetChgAvg[period]=NetChgAvg[period-1]+SF*(Change-NetChgAvg[period-1]);
+      TotChgAvg[period]=TotChgAvg[period-1]+SF*(Math.abs(Change)-TotChgAvg[period-1]);
+
+      if (TotChgAvg[period]!=0) 
+      {
+        ChgRatio=NetChgAvg[period]/TotChgAvg[period];
+      }  
+      else
+      {
+        ChgRatio=0;
+      }
+
+      SRSI[period]=50*(ChgRatio+1);
+    } 
+  }
+}
+

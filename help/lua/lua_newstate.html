@@ -1,0 +1,24 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_newstate</title>
+</head>
+<body>
+<h3><a name="lua_newstate"><code>lua_newstate</code></a></h3>
+<pre>lua_State *lua_newstate (lua_Alloc f, void *ud);</pre>
+
+<p>
+Creates a new, independent state.
+Returns <code>NULL</code> if cannot create the state
+(due to lack of memory).
+The argument <code>f</code> is the allocator function;
+Lua does all memory allocation for this state through this function.
+The second argument, <code>ud</code>, is an opaque pointer that Lua
+simply passes to the allocator in every call.
+
+
+
+
+
+<hr>
+</body>
+</html>

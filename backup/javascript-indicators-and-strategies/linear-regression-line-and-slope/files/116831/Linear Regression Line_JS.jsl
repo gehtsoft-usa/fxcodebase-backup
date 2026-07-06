@@ -1,0 +1,80 @@
+function Init()
+{
+    indicator.name("Linear Regression Line");
+    indicator.description("Linear Regression Line");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addInteger("PERIOD", "Period", "Perios",10);
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Up", "Color of Up Trend", "", core.rgb(0, 255, 0));
+	 indicator.parameters.addColor("Dn", "Color of Down Trend", "", core.rgb(255, 0, 0));
+}
+
+var PERIOD;
+
+var first;
+var source = null;
+
+var LRL = null;
+
+function Prepare(nameOnly)
+{
+    PERIOD = instance.parameters.PERIOD;
+    source = instance.source;
+    first = source.first()+PERIOD;
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(PERIOD) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        LRL = instance.addStream("LRL", core.Line, name, "LRL", instance.parameters.Up, first);
+    }
+}
+
+function Update(period)
+{
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+	var x=0;
+	var y=0;
+	var xy=0;
+ 	var x2=0;
+	var y=0;
+
+    var  i;
+	
+		for (i= 0; i<=PERIOD-1; i++) 
+		{
+			y = y+source[period-i];
+			xy=xy+source[period-i]*i;
+			x=x+i;
+			x2=x2+i*i;
+		}		
+	
+	
+	var m,temp;
+	temp = PERIOD * x2 - x * x;
+	 m = (PERIOD * xy - x * y) / temp; 
+	 
+	 var yint;
+	 
+	 yint = (y + m * x) / PERIOD; 	
+     LRL[period] = yint - m * PERIOD;
+	 
+	 if (LRL[period] >  LRL[period-1]) 
+	 {
+	  LRL.setColor(period, instance.parameters.Up);
+	 } 
+	else
+	{
+	 LRL.setColor(period, instance.parameters.Dn);
+
+    }
+  
+}
+

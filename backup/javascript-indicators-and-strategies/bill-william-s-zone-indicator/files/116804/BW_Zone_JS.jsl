@@ -1,0 +1,100 @@
+function Init()
+{
+    indicator.name("Bill William's zone indicator");
+    indicator.description("Bill William's zone indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Fast_Period", "Fast period", "", 5);
+    indicator.parameters.addInteger("Slow_Period", "Slow period", "", 35);
+    indicator.parameters.addInteger("AD_Period", "AD period", "", 5);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP color", "UP color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DNclr", "DN color", "DN color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("DotSize", "Dot size", "Dot size", 3, 1, 5);
+}
+
+var first;
+var source = null;
+var Fast_Period;
+var Slow_Period;
+var AD_Period;
+var UP=null;
+var DN=null;
+var AO, AC;
+var Dir;
+
+function Prepare()
+{
+    source = instance.source;
+    Fast_Period=instance.parameters.Fast_Period;
+    Slow_Period=instance.parameters.Slow_Period;
+    AD_Period=instance.parameters.AD_Period;
+    first = source.first()+2;
+    Dir=instance.addInternalStream(first, 0);
+    AO = core.indicators.create("AO", source, Fast_Period, Slow_Period);
+    AC = core.indicators.create("AC", source, Fast_Period, Slow_Period, AD_Period);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Fast_Period + ", " + instance.parameters.Slow_Period + ", " + instance.parameters.AD_Period + ")";
+    instance.name(name);
+    UP = instance.addStream("UP", core.Dot, name + ".UP", "UP", instance.parameters.UPclr, first);
+    DN = instance.addStream("DN", core.Dot, name + ".DN", "DN", instance.parameters.DNclr, first);
+    UP.setWidth(instance.parameters.DotSize);
+    DN.setWidth(instance.parameters.DotSize);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    AO.update(mode);
+    AC.update(mode);
+    Dir[period]=Dir[period-1];
+    if (AO.DATA[period]>AO.DATA[period-1] && AO.DATA[period-1]>AO.DATA[period-2] && AO.DATA[period-2]>AO.DATA[period-3] && AO.DATA[period-3]>AO.DATA[period-4] && AC.DATA[period]>AC.DATA[period-1] && AC.DATA[period-1]>AC.DATA[period-2] && AC.DATA[period-2]>AC.DATA[period-3] && AC.DATA[period-3]>AC.DATA[period-4]) 
+    {
+     if (Dir[period]!=1) 
+     {
+      Dir[period]=1;
+      UP[period]=source.high[period];
+     } 
+     else
+     {
+      UP[period]=null; 
+     }
+    } 
+    else
+    {
+     UP[period]=null;
+    }
+    if (AO.DATA[period]<AO.DATA[period-1] && AO.DATA[period-1]<AO.DATA[period-2] && AO.DATA[period-2]<AO.DATA[period-3] && AO.DATA[period-3]<AO.DATA[period-4] && AC.DATA[period]<AC.DATA[period-1] && AC.DATA[period-1]<AC.DATA[period-2] && AC.DATA[period-2]<AC.DATA[period-3] && AC.DATA[period-3]<AC.DATA[period-4]) 
+    {
+     if (Dir[period]!=-1) 
+     {
+      Dir[period]=-1;
+      DN[period]=source.low[period];
+     } 
+     else
+     {
+      DN[period]=null; 
+     }
+    } 
+    else
+    {
+     DN[period]=null;
+    }
+    if ((AO.DATA[period]<AO.DATA[period-1] || AC.DATA[period]<AC.DATA[period-1]) && Dir[period]==1) 
+    {
+     Dir[period]=0;
+    } 
+    else if ((AO.DATA[period]>AO.DATA[period-1] || AC.DATA[period]>AC.DATA[period-1]) && Dir[period]==-1) 
+    {
+     Dir[period]=0;
+    }
+   } 
+   else if (period==first) 
+   {
+    Dir[period]=0; 
+   } 
+}
+

@@ -1,0 +1,84 @@
+function Init()
+{
+    indicator.name("Adaptable Moving Average");
+    indicator.description("Adaptable Moving Average");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+
+	indicator.parameters.addGroup("Calculation"); 
+    indicator.parameters.addInteger("B", "Before Period", "Before Period", 7);
+    indicator.parameters.addInteger("F", "Forward Period", "Forward Period", 7);
+	
+	
+	indicator.parameters.addGroup("Style"); 
+    indicator.parameters.addColor("AMA_color", "Color of AMA", "Color of AMA", core.rgb(255, 0, 0));
+	
+	 indicator.parameters.addInteger("S", "Line Style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("S", core.FLAG_LEVEL_STYLE);
+    indicator.parameters.addInteger("W", "Line Width", "", 1, 1, 5);
+}
+
+var B;
+var F;
+
+var first;
+var source = null;
+
+var AMA = null;
+
+function Prepare(nameOnly)
+{
+    B = instance.parameters.B;
+    F = instance.parameters.F;
+    source = instance.source;
+    first = source.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(B) + ", " + tostring(F) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        AMA = instance.addStream("AMA", core.Line, name, "AMA", instance.parameters.AMA_color, first);
+		AMA.setStyle(instance.parameters.S);
+        AMA.setWidth(instance.parameters.W);
+    }
+}
+
+function Update(period)
+{     
+	 if (period < source.size()-1) 
+     {
+	  AMA[period]= Calculate(period,B, F, source)
+	  return;
+	 }
+
+    var p;	 
+	 
+	 for (p = source.size()-1 - B; p<=source.size()-1; p++) 
+     {
+	  AMA[p]= Calculate(p,B, F, source)
+	 }
+}
+
+function  Calculate(p,B, F, Source) 
+{
+   var Sum=0;
+   var Count = 0
+   
+   var i;
+   
+   for (i =  (p -B); i<=p+F-1; i++) 
+   {
+    if  (i <  (Source.size()-1 )  && i  >  (Source.first() )) 
+    {
+    Sum = Sum + Source[i];
+     Count=  Count+1;
+    }
+    
+   }
+     
+   
+   return    (Sum/Count) ;
+
+}
+

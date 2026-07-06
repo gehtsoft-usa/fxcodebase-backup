@@ -1,0 +1,58 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 2.10 - Garbage Collection</title>
+</head>
+<body>
+<h2>2.10 - <a name="2.10">Garbage Collection</a></h2>
+
+<p>
+Lua performs automatic memory management.
+This means that
+you have to worry neither about allocating memory for new objects
+nor about freeing it when the objects are no longer needed.
+Lua manages memory automatically by running
+a <em>garbage collector</em> from time to time
+to collect all <em>dead objects</em>
+(that is, these objects that are no longer accessible from Lua).
+All objects in Lua are subject to automatic management:
+tables, userdata, functions, threads, and strings.
+
+
+<p>
+Lua implements an incremental mark-and-sweep collector.
+It uses two numbers to control its garbage-collection cycles:
+the <em>garbage-collector pause</em> and
+the <em>garbage-collector step multiplier</em>.
+
+
+<p>
+The garbage-collector pause
+controls how long the collector waits before starting a new cycle.
+Larger values make the collector less aggressive.
+Values smaller than 1 mean the collector will not wait to
+start a new cycle.
+A value of 2 means that the collector waits for the total memory in use
+to double before starting a new cycle.
+
+
+<p>
+The step multiplier
+controls the relative speed of the collector relative to
+memory allocation.
+Larger values make the collector more aggressive but also increase
+the size of each incremental step.
+Values smaller than 1 make the collector too slow and
+may result in  the collector never finishing a cycle.
+The default, 2, means that the collector runs at "twice"
+the speed of memory allocation.
+
+
+<p>
+You can change these numbers by calling <a href="lua_gc.html"><code>lua_gc</code></a> in C
+or <a href="pdf-collectgarbage.html"><code>collectgarbage</code></a> in Lua.
+Both get percentage points as arguments
+(so an argument of 100 means a real value of 1).
+With these functions you can also control 
+the collector directly (e.g., stop and restart it).
+</body>
+</html>

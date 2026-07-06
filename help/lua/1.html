@@ -1,0 +1,50 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 1 - Introduction</title>
+</head>
+<body>
+<h1>1 - <a name="1">Introduction</a></h1>
+
+<p>
+Lua is an extension programming language designed to support
+general procedural programming with data description
+facilities.
+It also offers good support for object-oriented programming,
+functional programming, and data-driven programming.
+Lua is intended to be used as a powerful, light-weight
+scripting language for any program that needs one.
+Lua is implemented as a library, written in <em>clean</em> C
+(that is, in the common subset of ANSI&nbsp;C and C++).
+
+
+<p>
+Being an extension language, Lua has no notion of a "main" program:
+it only works <em>embedded</em> in a host client,
+called the <em>embedding program</em> or simply the <em>host</em>.
+This host program can invoke functions to execute a piece of Lua code,
+can write and read Lua variables,
+and can register C&nbsp;functions to be called by Lua code.
+Through the use of C&nbsp;functions, Lua can be augmented to cope with
+a wide range of different domains,
+thus creating customized programming languages sharing a syntactical framework.
+The Lua distribution includes a sample host program called <code>lua</code>,
+which uses the Lua library to offer a complete, stand-alone Lua interpreter.
+
+
+<p>
+Lua is free software,
+and is provided as usual with no guarantees,
+as stated in its license.
+The implementation described in this manual is available
+at Lua's official web site, <code>www.lua.org</code>.
+
+
+<p>
+Like any other reference manual,
+this document is dry in places.
+For a discussion of the decisions behind the design of Lua,
+see the technical papers available at Lua's web site.
+For a detailed introduction to programming in Lua,
+see Roberto's book, <em>Programming in Lua</em>.
+</body>
+</html>

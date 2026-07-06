@@ -1,0 +1,97 @@
+function Init()
+{
+    indicator.name("Range Contraction");
+    indicator.description("Range Contraction");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+	
+	indicator.parameters.addGroup("Calculation");
+	 indicator.parameters.addDouble("Threshold", "Threshold", "Threshold", 50);
+	 indicator.parameters.addBoolean("On", "Range Contraction", "", true);
+	 indicator.parameters.addBoolean("Flag", "Previous Period", "", false); 
+	 
+	 
+	indicator.parameters.addGroup("Line Style");
+    indicator.parameters.addColor("RangeContraction_color", "Color of RangeContraction", "Color of RangeContraction", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+	
+ 
+    indicator.parameters.addInteger("Size", "Font Size", "", 12, 4, 20);
+    indicator.parameters.addColor("Color", "Color of Range Contraction", "", core.rgb(0,255,0));
+	
+	indicator.parameters.addGroup("Threshold Style");	
+	    indicator.parameters.addColor("level_overboughtsold_color", "Line Color","", core.rgb(128, 128, 128));
+    indicator.parameters.addInteger("level_overboughtsold_width","Line width","", 1, 1, 5);
+    indicator.parameters.addInteger("level_overboughtsold_style", "Line Style","", core.LINE_SOLID);
+    indicator.parameters.setFlag("level_overboughtsold_style", core.FLAG_LEVEL_STYLE);
+}
+
+var On, Size, Color;
+var Flag;
+var first;
+var source = null;
+var Threshold;
+
+var RangeContraction = null;
+var Contraction;
+
+function Prepare(nameOnly)
+{
+    source = instance.source;
+	On= instance.parameters.On;
+	Flag= instance.parameters.Flag;
+	Size= instance.parameters.Size;
+	Color= instance.parameters.Color;
+    first = source.first();
+    Threshold= instance.parameters.Threshold;
+    var name = profile.id() + "(" + source.name() + ", " + Threshold+ ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        RangeContraction = instance.addStream("RangeContraction", core.Line, name, "RangeContraction", instance.parameters.RangeContraction_color, first);
+		RangeContraction.setWidth(instance.parameters.width);
+        RangeContraction.setStyle(instance.parameters.style);
+		RangeContraction.addLevel(Threshold, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);
+		if (On) 
+		{
+		 Contraction = instance.createTextOutput("Contraction", "Contraction", "Wingdings", Size, core.H_Center, core.V_Top, Color, 0);
+		 core.host.execute ("attachTextToChart", "Contraction")
+		}
+    }
+}
+
+function Update(period)
+{
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+	 if (Flag) 
+	 {
+	  RangeContraction[period] = (source.high[period-1]-source.low[period-1])/ ((source.high[period-2]-source.low[period-2])/100);
+	 } 
+	 else
+	 {
+        RangeContraction[period] = (source.high[period]-source.low[period])/ ((source.high[period-1]-source.low[period-1])/100);
+	}	
+		
+	if (!On) 
+	{
+     return;
+    }
+ 
+    if (RangeContraction[period]	<Threshold) 
+    {
+	 Contraction.set(period, source.high[period],  "\108","Contraction");
+	} 
+	else
+	{
+	 Contraction.setNoData (period);
+	}
+    
+}
+

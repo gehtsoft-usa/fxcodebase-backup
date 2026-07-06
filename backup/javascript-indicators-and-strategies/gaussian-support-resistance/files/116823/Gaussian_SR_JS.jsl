@@ -1,0 +1,126 @@
+function Init()
+{
+    indicator.name("Gaussian Support Resistance");
+    indicator.description("Gaussian Support Resistance");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 20);
+    indicator.parameters.addInteger("Level", "Level", "", 5, 1, 20);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Uclr", "Upper line color", "Upper line color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("Uwidth", "Upper line width", "Upper line width", 1, 1, 5);
+    indicator.parameters.addInteger("Ustyle", "Upper line style", "Upper line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("Ustyle", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Lclr", "Lower line color", "Lower line color", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("Lwidth", "Lower line width", "Lower line width", 1, 1, 5);
+    indicator.parameters.addInteger("Lstyle", "Lower line style", "Lower line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("Lstyle", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Mclr", "Middle line color", "Middle line color", core.rgb(128, 128, 128));
+    indicator.parameters.addInteger("Mwidth", "Middle line width", "Middle line width", 1, 1, 5);
+    indicator.parameters.addInteger("Mstyle", "Middle line style", "Middle line style", core.LINE_DASH);
+    indicator.parameters.setFlag("Mstyle", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period;
+var Level;
+var S_H, S_L;
+var G_C={};
+var G_U=null;
+var G_L=null;
+var G_M=null;
+var G_Size;
+var MinF;
+
+function Get_G_Size(L)
+{
+ if (L<3) 
+ {
+  return (L);
+ } 
+ else
+ {
+  var a1=2;
+  var a2=3;
+  var i;
+  for (i=3; i<=L; i++) 
+  {
+   a2=a1+a2;
+   a1=a2-a1;
+  }
+  return (a2);
+ }
+}
+
+function InitG_C(Size)
+{
+ var i;
+ var sum=0;
+ for (i=0; i<=Size-1; i++) 
+ {
+  G_C[i]=Math.exp(-9*i*i/((Size+1)*(Size+1)));
+  sum=sum+G_C[i];
+ }
+ if (sum!=0) 
+ {
+  for (i=0; i<=Size-1; i++) 
+  {
+   G_C[i]=G_C[i]/sum;
+  }
+ } 
+ return;
+}
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    Level=instance.parameters.Level;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.Level + ")";
+    instance.name(name);
+    G_Size=Get_G_Size(Level);
+    MinF=Math.max(G_Size, Period);
+    first = source.first()+2;
+    S_H=instance.addInternalStream(first, 0);
+    S_L=instance.addInternalStream(first, 0);
+    InitG_C(G_Size);
+    G_U = instance.addStream("G_U", core.Line, name + ".G_U", "G_U", instance.parameters.Uclr, first);
+    G_U.setWidth(instance.parameters.Uwidth);
+    G_U.setStyle(instance.parameters.Ustyle);
+    G_L = instance.addStream("G_L", core.Line, name + ".G_L", "G_L", instance.parameters.Lclr, first);
+    G_L.setWidth(instance.parameters.Lwidth);
+    G_L.setStyle(instance.parameters.Lstyle);
+    G_M = instance.addStream("G_M", core.Line, name + ".G_M", "G_M", instance.parameters.Mclr, first);
+    G_M.setWidth(instance.parameters.Mwidth);
+    G_M.setStyle(instance.parameters.Mstyle);
+}
+
+function G_Value(src, period)
+{
+ var i;
+ var sum=0;
+ for (i=0; i<=G_Size-1; i++) 
+ {
+  sum=sum+G_C[i]*src[period-i];
+ }
+ return (sum);
+}
+
+function Update(period, mode)
+{
+   if (period>first+MinF) 
+   {
+    S_H[period]=G_Value(source.high, period);
+    S_L[period]=G_Value(source.low, period);
+    var tmp=Math.minmax(S_H, period-Period+1, period);
+    G_U[period] = tmp[1];
+    tmp=Math.minmax(S_L, period-Period+1, period);
+    G_L[period] = tmp[0];
+    G_M[period]=(G_U[period]+G_L[period])/2;
+   } 
+}
+

@@ -1,0 +1,107 @@
+function Init()
+{
+    indicator.name("Tow Lines");
+    indicator.description("Tow Lines");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    indicator.parameters.addGroup("Calculation");	
+	indicator.parameters.addInteger("Period1", "A Line Period", "Period",20, 1,2000);
+	indicator.parameters.addInteger("Period2", "B Line Period", "Period",6, 1,2000);
+	indicator.parameters.addInteger("Period3", "C Line Period", "Period",5, 1,2000);
+	
+	indicator.parameters.addGroup("Style");	 
+    indicator.parameters.addColor("color1", "Color of A", "Color of A", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width1", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style1", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style1", core.FLAG_LINE_STYLE);
+	
+	indicator.parameters.addColor("color2", "Color of B", "Color of C", core.rgb(0, 255, 0));
+	indicator.parameters.addInteger("width2", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style2", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style2", core.FLAG_LINE_STYLE);
+	
+	
+	indicator.parameters.addColor("color3", "Color of C", "Color of C", core.rgb(0, 0, 255));
+	indicator.parameters.addInteger("width3", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style3", "Line style", "", core.LINE_DOT );
+    indicator.parameters.setFlag("style3", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+
+var A = null;
+var B = null;
+var C = null;
+var MID;
+var MA1, MA2;
+var Period1,Period2,Period3;
+
+function Prepare(nameOnly)
+{
+    source = instance.source;
+	Period1=instance.parameters.Period1;
+    Period2=instance.parameters.Period2;
+	Period3=instance.parameters.Period3;
+
+    var name = profile.id() + "(" + source.name() + ", " + Period1+ ", " + Period2+ ", " + Period3+ ")";
+    instance.name(name);
+	
+	
+	MID = instance.addInternalStream(0, 0);
+	
+	first = source.first()+Period1;
+
+    if (!(nameOnly)) 
+    {
+        A = instance.addStream("A", core.Line, name, "A", instance.parameters.color1, first);
+		A.setWidth(instance.parameters.width1);
+        A.setStyle(instance.parameters.style1);
+		
+		MA1 = core.indicators.create("MVA", A,Period2);
+		MA2 = core.indicators.create("MVA", source.close,Period3);
+		
+		B = instance.addStream("B", core.Line, name, "B", instance.parameters.color2, MA1.DATA.first());
+		B.setWidth(instance.parameters.width2);
+        B.setStyle(instance.parameters.style2);
+		C = instance.addStream("C", core.Line, name, "C", instance.parameters.color3, MA2.DATA.first());
+		C.setWidth(instance.parameters.width3);
+        C.setStyle(instance.parameters.style3);
+    }
+}
+
+function Update(period,mode)
+{
+    MID[period]= (3*source.close[period] +  source.low[period] + source.open[period]+ source.high[period])/6;
+	
+	MA2.update(mode);	
+	if (period > MA2.DATA.first()) 
+	{ 
+		C[period] = MA2.DATA[period];
+	}
+	
+	
+    if (period  <first) 
+    {
+	 return;
+	}
+	
+	var Sum1=0;
+	var Sum2=0;
+	
+	for (i= 1; i<=Period1; i++) 
+	{
+	 Sum1=Sum1+ (Period1-i+1)* MID[period-i+1]; 
+	 Sum2=Sum2+i;
+	}	
+	
+	A[period]=Sum1/Sum2;
+		
+	MA1.update(mode);
+	if (period > MA1.DATA.first()) 
+	{
+	 B[period] = MA1.DATA[period];
+	}
+	 
+}
+

@@ -1,0 +1,501 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252" /><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><title>Closed Trades(table)</title><style type="text/css">a, p, h1, h2, h3, h4, h5, h6, table, td, tr, li, ul, ol {
+    font-family: Verdana, Trebuchet MS, Arial;
+}
+
+a, p, td, tr, ul, ol, li {
+    font-size: 12pt;
+}
+
+h3 {
+    font-size: 13pt;
+}
+
+h2 {
+    font-size: 13pt;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+body {
+    color: #444444;
+    background-color: white;
+}
+
+A:link {
+    color: #0065b3;
+    cursor: pointer;
+}
+
+A:visited {
+    color: #0068be;
+    cursor: pointer;
+}
+
+a.action {
+  background-color: #0065b3;
+  color: white;
+  font-size: 10pt;
+  padding: 2px 2px;
+  width: 50pt;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px;
+}
+
+.side-icon {
+    float: left;
+}
+
+a.action [class*="dripicons-"]:before {
+    padding: 0 2px 0 0;
+    font-size: 12pt;
+    vertical-align: text-bottom;
+}
+
+.side-icon:after {
+  content: "";
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  border-left: 1.5px solid white;
+  transform: translate(-50%);
+}
+
+a.actiontab {
+  font-size: 10pt;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px 3px 0 0;
+}
+
+pre, code, code a {
+    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+    font-size: 12pt;
+}
+
+code.ctag {
+    background-color: #f1f1f1;
+    padding: .1em .2em;
+    border-radius: 3px;
+}
+
+pre {
+    background-color: white;
+}
+
+pre.example {
+    background-color: #f1f1f1;
+}
+
+ul {
+    list-style-type: disc;
+    margin-left: 18pt;
+}
+
+ol {
+    list-style-type: decimal;
+    margin-left: 18pt;
+}
+
+ul.hhc {
+    list-style-type: none;
+    margin-left: 1em;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+li.hhc {
+    margin-left: 0;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+table {
+  border-spacing: 0;
+  border-color: #dfe3e7;
+}
+
+tr + tr td {
+   border-top: 0;
+}
+
+tr td + td {
+  border-left: 0;
+}
+
+td {
+  border: 1px solid;
+  border-color: #dfe3e7;
+}
+
+tr:first-child td:first-child {
+   border-radius: 0.2em 0 0 0;
+}
+
+tr:first-child td:last-child {
+  border-radius: 0 0.2em 0 0;
+}
+
+tr:first-child td:only-child {
+  border-radius: 0.2em 0.2em 0 0;
+}
+
+tr:last-child td:first-child {
+    border-radius: 0 0 0 0.2em;
+}
+
+tr:last-child td:last-child {
+    border-radius: 0 0 0.2em 0;
+}
+
+tr:last-child td:only-child {
+    border-radius: 0 0 0.2em 0.2em;
+}
+
+tr:only-child td:only-child {
+    border-radius: 0.2em 0.2em 0.2em 0.2em;
+}
+
+tr:only-child td:first-child {
+   border-radius: 0.2em 0 0 0.2em;
+}
+
+tr:only-child td:last-child {
+  border-radius: 0 0.2em 0.2em 0;
+}
+
+
+td.tmain, td.tmain_nw, td.thdr {
+    background-color: rgb(255, 255, 255);
+    vertical-align: top;
+    padding: 3px;
+}
+
+td.tmain p, td.tmain_nw p, td.thdr p {
+    margin-top: 3pt;
+    margin-bottom: 3pt;
+}
+
+td.tmain_nw {
+    white-space: nowrap;
+}
+
+td.thdr {
+    background-color: #e3e3e3;
+}
+
+table.decl {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+    vertical-align: top;
+    padding: 3px;
+    width: 100%;
+}
+
+table.decl td {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+}
+
+div.note-quote {
+    border-left: 10px solid #ccc;
+    padding: 1em 10px .1em 10px;
+    margin: 1.5em 10px;
+    background-color: rgb(224, 224, 224);
+}
+
+div.note-note {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+div.note-warning {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #fff;
+    background-color: #ff6358;
+}
+div.note-warning code.ctag {
+    color: black;
+}</style>
+<link rel="stylesheet" href="res/dripicons.css"></head><body><script type="text/javascript">
+var highlighterEnabled = false;
+var maintopic = 'index';
+var helptitle = 'Indicore SDK 3';
+    function loadStarted() {
+    window.onload = loadCompleted;
+
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        var head = document.getElementsByTagName('head')[0];
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.min.js';
+        head.appendChild(script4);
+
+
+        var script2 = document.createElement('script');
+        script2.type = 'text/javascript';
+        script2.src = './highlighter/highlight.cshtml.js';
+        head.appendChild(script2);
+
+        var script3 = document.createElement('script');
+        script3.type = 'text/javascript';
+        script3.src = './highlighter/highlight.lua.js';
+        head.appendChild(script3);
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.luax.js';
+        head.appendChild(script4);
+    }
+}
+
+function loadCompleted() {
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        hljs.registerLanguage('cshtml-razor', window.hljsDefineCshtmlRazor);
+        hljs.registerLanguage('lua', window.hljsDefineLua);
+        hljs.registerLanguage('luax', window.hljsDefineLuaX);
+        x = document.querySelectorAll('pre code');
+        for (var i = 0; i < x.length; i++) {
+            if (x[i].hasAttribute('class')) {
+                hljs.highlightBlock(x[i]);
+            }
+        }
+    }
+}
+
+
+function hidediv(divname) {
+    document.getElementById(divname).style.display = 'none';
+}
+
+function showdiv(divname) {
+    document.getElementById(divname).style.display = 'inline';
+}
+
+function syncList() {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, null, document.title);
+    }
+}
+
+function syncList1(key) {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, key + '.html', document.title);
+    }
+}</script><script type="text/javascript">
+    loadStarted();
+</script><h1>Closed Trades(table)</h1>
+<h2>Brief</h2>
+<p>The section describes the &quot;Closed Trades&quot; table.</p>
+<h2>Details</h2><p>The table includes information pertinent to positions that have been closed during the current trading day. The table shows such data as
+realized profit/loss, charged commission, cumulative interest, and other.</p><table class="tmain">
+  <tr>
+    <td class="thdr"><p>Name</p></td>
+    <td class="thdr"><p>Type</p></td>
+    <td class="thdr"><p>Description</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>TradeID</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The unique number of the closed position.
+Corresponds to <code class="ctag">TradeID</code> in the <a href="TTTrades.html"><code>Trades</code></a> table.
+The number is unique within the connection (Real or Demo).</p>
+<p>You can search by this column.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>AccountID</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The unique number of the account the position is closed on. The number is unique within the connection (Real or Demo).
+In Order2Go, an account is always referred to by its <code class="ctag">Account ID</code>.</p>
+<p>You can search by this column.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>AccountName</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The unique name of the account the position is closed on.
+This is the name that is displayed to the FX Trading Station user.
+The name is unique within the connection (Real or Demo).</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>OfferID</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The unique number of the instrument the position is opened in.</p>
+<p>You can search by this column.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Instrument</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The symbol indicating the instrument the position is open in. For example, EUR/USD, USD/JPY, GBP/USD.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Lot</p></td>
+    <td class="tmain"><p>Integer</p></td>
+    <td class="tmain"><p>Total closing amount.</p>
+<p><b>Forex:</b> The amount of the order expressed in the base currency of the instrument.
+For example, 20,000 for EUR/USD means that the amount of the order
+is 20,000 Euros, for USD/JPY - 20,000 US dollars, etc.</p>
+<p><b>CFD:</b> With CFD, the amount of the order is expressed in contracts.
+For example, 5000 for SILVER means that this order/position is for 5000 contracts of SILVER.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>AmountK</p></td>
+    <td class="tmain"><p>Double</p></td>
+    <td class="tmain"><p>Total closing amount in thousands.</p>
+<p><b>Forex:</b> The amount of the order (in thousands) as specified by the FX Trading Station user.
+For example, 20 for EUR/USD means that the amount of the order is 20,000 Euros, for USD/JPY -
+20,000 US dollars, etc.</p>
+<p><b>CFD:</b> The number of contracts (in thousands). For example, the position for 5000 contracts will display 5 in this field.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>BS</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The trade operation the position is closed by. Possible values:</p><table class="tmain">
+  <tr>
+    <td class="tmain"><p><code class="ctag">B</code></p></td>
+    <td class="tmain"><p>Buy.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">S</code></p></td>
+    <td class="tmain"><p>Sell.</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Open</p></td>
+    <td class="tmain"><p>Double</p></td>
+    <td class="tmain"><p>The price the position was opened at.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Close</p></td>
+    <td class="tmain"><p>Double</p></td>
+    <td class="tmain"><p>The price the position was closed at.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>PL</p></td>
+    <td class="tmain"><p>Double</p></td>
+    <td class="tmain"><p>The profit/loss (on 1 contract) of the position expressed in pips.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>GrossPL</p></td>
+    <td class="tmain"><p>Double</p></td>
+    <td class="tmain"><p>The profit/loss of the position in the account currency.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Com</p></td>
+    <td class="tmain"><p>Double</p></td>
+    <td class="tmain"><p>The commission, i.e. the amount of funds that is subtracted from the account
+for various reasons which are defined individually for each particular account
+by the terms and conditions of the trading agreement.
+The commission is expressed in the account currency.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Int</p></td>
+    <td class="tmain"><p>Double</p></td>
+    <td class="tmain"><p>The interest, i.e. the cumulative amount of funds that is added to/subtracted
+from the account for holding the position overnight. The interest is expressed in the account currency.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>OpenTime</p></td>
+    <td class="tmain"><p>DateTime</p></td>
+    <td class="tmain"><p>The date and time when the position was opened. The date and time are in the EST/EDT time.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>CloseTime</p></td>
+    <td class="tmain"><p>DateTime</p></td>
+    <td class="tmain"><p>The date and time when the position was closed. The date and time are in the EST/EDT time.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Kind</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The type of the account the position was opened on. Possible values:</p><table class="tmain">
+  <tr>
+    <td class="tmain"><p><code class="ctag">32</code></p></td>
+    <td class="tmain"><p>Trading account.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">36</code></p></td>
+    <td class="tmain"><p>Managed account.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">38</code></p></td>
+    <td class="tmain"><p>Controlled account.</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>OpenOrderID</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The unique number of the order the position was opened by.</p>
+<p>You can search by this column.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>OpenOrderReqID</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The unique identifier of the order request the position was opened by.
+(see <code class="ctag">RequestID</code> column of the orders table).</p>
+<p>You can search by this column.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>CloseOrderID</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The unique number of the order the position was closed by.</p>
+<p>You can search by this column.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>CloseOrderReqID</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The unique identifier of the order request the position was closed by.
+(see <code class="ctag">RequestID</code> column of the orders table).</p>
+<p>You can search by this column.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>OQTXT</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The text comment added to the order the position was opened by.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>CQTXT</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>The text comment added to the order the position was closed by.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>TradeIDOrigin</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>This column is filled in case the trade was created as a result of partial closing of another trade and
+contains the trade id of this partially closed trade.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>TradeIDRemain</p></td>
+    <td class="tmain"><p>String</p></td>
+    <td class="tmain"><p>This column is filled in case the trade was closed partially and contains the identifier of the trade
+which was created for the remaining amount.</p></td>
+  </tr>
+</table><p>
+  <center><a href="TradingTables.html">back</a></center>
+</p><script language="javascript" type="text/javascript">if(window.parent.frames[0]) window.parent.frames[0].selectItem(window.location.href);</script></body></html>

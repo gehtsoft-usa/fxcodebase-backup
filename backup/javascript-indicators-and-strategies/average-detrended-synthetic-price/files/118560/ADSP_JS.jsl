@@ -1,0 +1,85 @@
+function Init()
+{
+    indicator.name("Detrended Synthetic Price");
+    indicator.description("Detrended Synthetic Price");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("1. MA Calculation");	
+    indicator.parameters.addInteger("Period1", "Period", "Period", 14);
+	
+	indicator.parameters.addString("Method1", "MA Method", "Method" , "EMA");
+    indicator.parameters.addStringAlternative("Method1", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method1", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method1", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method1", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method1", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method1", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method1", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method1", "WMA", "WMA" , "WMA");
+	
+	indicator.parameters.addGroup("2. MA Calculation");	
+    indicator.parameters.addInteger("Period2", "Period", "Period", 28);
+	
+	indicator.parameters.addString("Method2", "MA Method", "Method" , "EMA");
+    indicator.parameters.addStringAlternative("Method2", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method2", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method2", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method2", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method2", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method2", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method2", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method2", "WMA", "WMA" , "WMA");
+	
+	 indicator.parameters.addGroup("Style");	
+    indicator.parameters.addColor("DSP_color", "Color of DSP", "Color of DSP", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var Period1,Method1;
+var Period2,Method2;
+var MA1, MA2;
+var first;
+var source = null;
+
+var DSP = null;
+
+function Prepare(nameOnly)
+{
+    Period1 = instance.parameters.Period1;
+	Method1 = instance.parameters.Method1;
+	Period2 = instance.parameters.Period2;
+	Method2 = instance.parameters.Method2;
+    source = instance.source;
+	
+	MA1 = core.indicators.create(Method1, source, Period1);
+	MA2 = core.indicators.create(Method2, source, Period2);
+    first = Math.max(MA1.DATA.first(),MA2.DATA.first());
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period1) + ", " + tostring(Method1) + ", " + tostring(Period2) + ", " + tostring(Method2)+ ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        DSP = instance.addStream("DSP", core.Line, name, "DSP", instance.parameters.DSP_color, first);
+		DSP.setWidth(instance.parameters.width);
+        DSP.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period, mode)
+{
+    MA1.update(mode);
+	MA2.update(mode);
+    
+	if (period < first) 
+    {
+       return;
+    }
+	
+	
+	DSP[period]= MA1.DATA[period]-MA2.DATA[period];
+	
+}
+

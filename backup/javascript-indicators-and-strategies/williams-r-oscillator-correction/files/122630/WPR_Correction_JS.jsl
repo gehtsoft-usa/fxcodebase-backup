@@ -1,0 +1,89 @@
+function Init()
+{
+    indicator.name("WPR Correction oscillator");
+    indicator.description("WPR Correction oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("WPR_Period", "WPR_Period", "", 14);
+    indicator.parameters.addDouble("WPR_Level", "WPR_Level", "", -50);
+    indicator.parameters.addString("MA_Method", "MA_Method", "", "MVA");
+    indicator.parameters.addStringAlternative("MA_Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("MA_Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("MA_Method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("MA_Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("MA_Method", "TMA", "", "TMA");
+    indicator.parameters.addInteger("MA_Period", "MA_Period", "", 50);
+    
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr1", "Color UP Trend", "Color UP Trend", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clr2", "Color UP", "Color UP", core.rgb(255, 255, 0));
+    indicator.parameters.addColor("clr3", "Color DN", "Color DN", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("clr4", "Color DN Trend", "Color DN Trend", core.rgb(255, 128, 0));
+}
+
+var first;
+var source = null;
+var WPR_Period;
+var WPR_Level;
+var MA_Method;
+var MA_Period;
+var WPR;
+var MA;
+var buff1=null;
+var buff2=null;
+var buff3=null;
+var buff4=null;
+
+function Prepare()
+{
+    source = instance.source;
+    WPR_Period=instance.parameters.WPR_Period;
+    WPR_Level=instance.parameters.WPR_Level;
+    MA_Method=instance.parameters.MA_Method;
+    MA_Period=instance.parameters.MA_Period;
+    
+    WPR = core.indicators.create("WILLIAMSPERCENTRANGE", source, WPR_Period);
+    MA = core.indicators.create(MA_Method, WPR.DATA, MA_Period);
+    
+    first = MA.DATA.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.WPR_Period + ", " + instance.parameters.WPR_Level + ", " + instance.parameters.MA_Method + ", " + instance.parameters.MA_Period + ")";
+    instance.name(name);
+    buff1 = instance.createTextOutput ("UP Trend", "UP Trend", "Wingdings", 10, core.H_Center, core.V_Center, instance.parameters.clr1, 0);
+    buff2 = instance.createTextOutput ("UP", "UP", "Wingdings", 10, core.H_Center, core.V_Center, instance.parameters.clr2, 0);
+    buff3 = instance.createTextOutput ("DN", "DN", "Wingdings", 10, core.H_Center, core.V_Center, instance.parameters.clr3, 0);
+    buff4 = instance.createTextOutput ("DN Trend", "DN Trend", "Wingdings", 10, core.H_Center, core.V_Center, instance.parameters.clr4, 0);
+}
+
+function Update(period, mode)
+{
+    if (period>first) 
+    {
+     WPR.update(mode);
+     MA.update(mode);
+     if (WPR.DATA[period]>=WPR_Level) 
+     {
+      if (WPR.DATA[period]>MA.DATA[period]) 
+      {
+       buff1.set(period, 50, "\110");
+      } 
+      else
+      {
+       buff2.set(period, 50, "\110");
+      }
+     } 
+     else
+     {
+      if (WPR.DATA[period]>MA.DATA[period]) 
+      {
+       buff3.set(period, 50, "\110");
+      } 
+      else
+      {
+       buff4.set(period, 50, "\110");
+      }
+     }
+    } 
+}
+

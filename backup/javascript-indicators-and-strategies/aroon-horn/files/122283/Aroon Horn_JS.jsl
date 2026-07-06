@@ -1,0 +1,79 @@
+function Init()
+{
+    indicator.name("Aroon Horn");
+    indicator.description("Aroon Horn");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "Period", 10);
+	indicator.parameters.addDouble("Filter", "Filter", "Filter", 25);
+	
+	indicator.parameters.addGroup("Style");
+	indicator.parameters.addColor("Up", "Color of Up", "Color of Up", core.rgb(0,255,0));
+	indicator.parameters.addColor("Down", "Color of Down", "Color of Down", core.rgb(255,0,0));
+    indicator.parameters.addColor("Neutral", "Color of Neutral", "Color of Neutral", core.rgb(128, 128, 128));
+}
+
+var Period;
+var Filter;
+var first;
+var source = null;
+var Neutral,Up,Down;
+
+var AH = null;
+var Aroon;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+	Filter= instance.parameters.Filter;
+	Neutral= instance.parameters.Neutral;
+	Up= instance.parameters.Up;
+	Down= instance.parameters.Down;
+    source = instance.source;
+	
+	Aroon = core.indicators.create("AROON", source, Period);
+    first = Aroon.DATA.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ", " + tostring(Filter)  + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        AH = instance.addStream("AH", core.Bar, name, "AH", Neutral, first);
+    }
+}
+
+function Update(period,mode)
+{
+    Aroon.update(mode);
+	
+	 
+	 
+    if (period < first) 
+    {
+	 return;
+	}
+	
+	
+    AH[period] = 10 * (Aroon.UP[period] - Aroon.DOWN[period]) / Period;
+	 
+	 
+	         if ((AH[period] >= 0) && (AH[period] > Filter)) 
+             {
+           
+               AH.setColor(period,Up);
+           }
+            else if ((AH[period] < 0) && (AH[period] < (-1) * Filter)) 
+            {
+            
+               AH.setColor(period,Down);
+           }
+            else
+            {
+            
+               AH.setColor(period,Neutral);
+           }
+           
+}
+

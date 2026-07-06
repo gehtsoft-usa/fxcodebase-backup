@@ -1,0 +1,84 @@
+function Init()
+{
+    indicator.name("ASCTrendK indicator");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    
+    indicator.parameters.addInteger("RISK", "RISK", "No description", 3);
+}
+
+var first;
+var RISK;
+var source = null;
+var open = null;
+var high = null;
+var low = null;
+var close = null;
+
+function Prepare()
+{
+    source = instance.source;
+    RISK=instance.parameters.RISK;
+    first = source.first();
+    Table_value2=instance.addInternalStream(0, 0);
+    var name = profile.id() + "(" + source.name() + ", " + RISK + ")";
+    instance.name(name);
+    open = instance.addStream("open", core.Line, name, "open", core.rgb(0, 0, 0), first)
+    high = instance.addStream("high", core.Line, name, "high", core.rgb(0, 0, 0), first)
+    low = instance.addStream("low", core.Line, name, "low", core.rgb(0, 0, 0), first)
+    close = instance.addStream("close", core.Line, name, "close", core.rgb(0, 0, 0), first)
+    instance.createCandleGroup("HA", "HA", open, high, low, close);
+}
+
+function Update(period, mode)
+{
+    if (period>first+10) 
+    {
+     var x1=67+RISK;
+     var x2=33-RISK;
+     var ASC_Trend_Up=0; 
+     var ASC_Trend_Down=0; 
+     var SummRange=0; 
+     var AvgRange=0;
+     for (u=0; u<=9; u++) 
+     {
+      SummRange=SummRange+source.high[period-u]-source.low[period-u];
+     }
+     AvgRange=SummRange/10.;
+     var WprPeriod=3+RISK*2;
+     for (u=0; u<=9; u++) 
+     {
+      if (Math.abs(source.open[period-u]-source.close[period-u-1])>=AvgRange*2.) 
+      {
+       WprPeriod=3;
+      }
+     }
+     for (u=0; u<=6; u++) 
+     {
+      if (Math.abs(source.close[period-u-3]-source.close[period-u])>=AvgRange*4.6) 
+      {
+       WprPeriod=4;
+      }
+     }
+     var tmp=Math.minmax(source, period-WprPeriod+1, period);
+     var WPR=-(tmp[1]-source.close[period])*100./(tmp[1]-tmp[0]);
+     var WprAbs=100+WPR;
+     if (WprAbs<x2) 
+     {
+      open[period]=source.close[period];
+      close[period]=source.open[period];
+      high[period]=source.low[period];
+      low[period]=source.high[period];
+     }
+     if (WprAbs>x1) 
+     {
+      open[period]=source.open[period];
+      close[period]=source.close[period];
+      high[period]=source.high[period];
+      low[period]=source.low[period];
+     }
+
+    }
+}
+

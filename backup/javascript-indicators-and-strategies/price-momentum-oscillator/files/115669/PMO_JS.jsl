@@ -1,0 +1,107 @@
+function Init()
+{
+    indicator.name("Price Momentum Oscillator");
+    indicator.description("Price Momentum Oscillator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("one", "Short Period", "Period", 20);
+	indicator.parameters.addInteger("two", "Long Period", "Period", 35);
+	indicator.parameters.addInteger("Period", "Signal Period", "Period", 10);
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("PMO_color", "Color of PMO", "Color of PMO", core.rgb(0, 255, 0));
+	indicator.parameters.addInteger("width1", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style1", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style1", core.FLAG_LINE_STYLE);
+	
+	 indicator.parameters.addColor("Signal_color", "Color of Signal", "Color of Signal", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width2", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style2", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style2", core.FLAG_LINE_STYLE);
+}
+
+var one, two;
+
+var first;
+var source = null;
+var RawOne,RawTwo;
+
+var PMO = null;
+var SmoothingMultiplierOne,SmoothingMultiplierTwo;
+var CustomSmoothingFunctionOne;
+var CustomSmoothingFunctionTwo;
+var Signal;
+var EMA;
+var Period;
+
+function Prepare(nameOnly)
+{
+    one = instance.parameters.one;
+	two = instance.parameters.two;
+	Period= instance.parameters.Period;
+    source = instance.source;
+    first = source.first();
+	
+	RawOne = instance.addInternalStream(0, 0);
+	RawTwo = instance.addInternalStream(0, 0);
+	CustomSmoothingFunctionOne= instance.addInternalStream(0, 0);
+    CustomSmoothingFunctionTwo= instance.addInternalStream(0, 0);
+	
+	SmoothingMultiplierOne = (2 / one);
+	SmoothingMultiplierTwo = (2 / two);
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(one) + ", " + tostring(two) + ", " + tostring(Period)+ ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        PMO = instance.addStream("PMO", core.Line, name, "PMO", instance.parameters.PMO_color, first);
+		PMO.setWidth(instance.parameters.width1);
+        PMO.setStyle(instance.parameters.style1);
+		
+		EMA = core.indicators.create("EMA", PMO, Period);
+		
+		Signal = instance.addStream("SIGNAL", core.Line, name, "Signal", instance.parameters.Signal_color, first);
+		Signal.setWidth(instance.parameters.width2);
+        Signal.setStyle(instance.parameters.style2);
+    }
+}
+
+function Update(period,mode)
+{
+   if (period < first || !source.hasData(period)) 
+   {
+	return;
+   }  
+	 
+   RawOne[period] =(( (source[period]/source[period-1]) * 100)-100)  ;
+   
+   Two(RawOne,period)
+   
+   RawTwo[period]= 10*CustomSmoothingFunctionTwo[period];
+	
+    One(RawTwo,period);
+	
+        PMO[period] = CustomSmoothingFunctionOne[period];
+		
+		EMA.update(mode);
+		if (period < EMA.DATA.first()) 
+		{
+		 return;
+		}
+		
+		Signal[period]= EMA.DATA[period];
+    
+}
+
+function One ( Close, period)
+{
+ CustomSmoothingFunctionOne[period] = (Close[period] - CustomSmoothingFunctionOne[period-1]) * SmoothingMultiplierOne +  CustomSmoothingFunctionOne[period-1];
+}
+
+function Two(Close, period)
+{
+ CustomSmoothingFunctionTwo[period] = (Close[period] - CustomSmoothingFunctionTwo[period-1]) * SmoothingMultiplierTwo +  CustomSmoothingFunctionTwo[period-1];
+}
+ 

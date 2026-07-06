@@ -1,0 +1,86 @@
+function Init()
+{
+    indicator.name("Smoothed Momentum");
+    indicator.description("Smoothed Momentum");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("MP", "Momentum Period", "Momentum Period", 12);
+    indicator.parameters.addString("MS", "Momentum smoothing method", "Momentum smoothing method", "MVA");
+	indicator.parameters.addStringAlternative("MS", "No smoothing", "", "NO");
+    indicator.parameters.addStringAlternative("MS", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("MS", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("MS", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("MS", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("MS", "Wilders", "", "WMA");
+    indicator.parameters.addInteger("MSP", "Momentum Smoothing Period", "Momentum Smoothing Period", 20);
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Momentum_color", "Color of Momentum", "Color of Momentum", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var MP;
+var MS;
+var MSP;
+
+var first;
+var source = null;
+
+var Momentum;
+var iMomentum;
+var M;
+
+function Prepare(nameOnly)
+{
+    MP = instance.parameters.MP;
+    MS = instance.parameters.MS;
+    MSP = instance.parameters.MSP;
+    source = instance.source;
+    first = source.first()+MP;
+	
+	iMomentum=instance.addInternalStream (0, 0); 
+	
+	 if (MS != "NO") 
+     {	 
+	  M = core.indicators.create( MS, iMomentum, MSP);  
+	  ifirst=M.DATA.first();
+     } 
+	 else
+     {
+	  ifirst=first;
+	 }
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(MP) + ", " + tostring(MS) + ", " + tostring(MSP) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        Momentum = instance.addStream("Momentum", core.Line, name, "Momentum", instance.parameters.Momentum_color, ifirst);
+		Momentum.setWidth(instance.parameters.width);
+        Momentum.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period,mode)
+{
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+	iMomentum[period]=source[period]*100./source[period-MP];
+	
+	 if (MS != "NO") 
+     {
+	  M.update(mode);
+	  Momentum[period]=  M.DATA[period];
+     } 
+	 else
+     {
+	  Momentum[period]=  iMomentum[period];
+	 }    
+}
+

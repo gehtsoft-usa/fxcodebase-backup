@@ -1,0 +1,130 @@
+function Init()
+{
+    indicator.name("Winer");
+    indicator.description("Winer");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "Period", 10);
+    indicator.parameters.addInteger("SmoothingPeriod", "Smoothing period", "Smoothing period", 5);
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Up", "Color of Up", "Color of Up", core.rgb(0, 255, 0));
+	indicator.parameters.addColor("Down", "Color of Down", "Color of Down", core.rgb( 255, 0, 0));
+}
+
+var Period;
+var SmoothingPeriod;
+var Up, Down;
+var first, FIRST;
+var source = null;
+var OO, HH, CC, LL;
+
+var COST,pa5, rsv, pak, pad;
+var MA1, MA2;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+	Up = instance.parameters.Up;
+	Down = instance.parameters.Down;
+    SmoothingPeriod = instance.parameters.SmoothingPeriod;
+    source = instance.source;	
+	 first = source.first()+SmoothingPeriod;
+	  
+	assert(source.supportsVolume(), "The source must have volume");
+	
+	COST  = instance.addInternalStream(0, 0);
+	pa5  = instance.addInternalStream(0, 0);
+	rsv  = instance.addInternalStream(0, 0);
+	
+	MA1 = core.indicators.create("EMA", rsv, Period);
+	
+	pak  = instance.addInternalStream(0, 0);
+	pad  = instance.addInternalStream(0, 0);
+	
+	MA2 = core.indicators.create("EMA", pak, Period);
+	
+	
+   
+	FIRST= Math.max(MA1.DATA.first(),MA2.DATA.first());
+	
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ", " + tostring(SmoothingPeriod) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+      HH = instance.addInternalStream(0, 0);
+	  LL = instance.addInternalStream(0, 0);
+	  instance.createFromToBarGroup ("Winer", "Winer", HH, LL, Up)
+    }
+}
+
+function Update(period, mode)
+{
+    
+	COST[period]= ((2*source.close[period]+source.high[period]+source.low[period])/4)*source.volume[period];
+ 
+ 
+ 
+ if (period < first)  
+ {
+        return;	
+ }
+	
+ var scost5 = Math.sum(COST,period -SmoothingPeriod+1, period );
+ var svolume5 = Math.sum(source.volume,period -SmoothingPeriod+1, period );
+  pa5[period] = scost5/svolume5;
+  
+   if (period < first +Period)  
+   {
+        return;	
+   }
+ 
+ var tmp=Math.minmax(pa5,period- Period+1, period);
+ rsv[period] = (pa5[period]-tmp[0])/(tmp[1]-tmp[0])*100;
+
+ MA1.update(mode); 
+ pak[period]= MA1.DATA[period];
+ 
+ MA2.update(mode);
+ 
+ if (period < MA2.DATA.first()) 
+ {
+  return;
+ }
+ 
+ 
+ pad[period]= MA2.DATA[period];
+ 
+ if (period < FIRST) 
+ {
+  return;
+ }
+ 
+ HH[period]= Math.max(pak[period], pad[period]); 
+ LL[period]= Math.min(pak[period], pad[period]); 
+ core.host.execute ("setStatus", "High . " + HH[period] + ", Low . " + LL[period] )
+ 
+	 if  (pak[period] >  pad[period]) 
+	 {
+	  HH.setColor(period, Up);
+	 } 
+	 else
+	 {
+	 HH.setColor(period, Down);
+	 }
+ }
+
+
+
+
+
+
+
+
+
+
+
+
+

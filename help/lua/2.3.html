@@ -1,0 +1,94 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 2.3 - Variables</title>
+</head>
+<body>
+<h2>2.3 - <a name="2.3">Variables</a></h2>
+
+<p>
+Variables are places that store values.
+
+There are three kinds of variables in Lua:
+global variables, local variables, and table fields.
+
+
+<p>
+A single name can denote a global variable or a local variable
+(or a function's formal parameter,
+which is a particular kind of local variable):
+
+<pre>
+	var ::= Name
+</pre><p>
+Name denotes identifiers, as defined in <a href="2.1.html">&sect;2.1</a>.
+
+
+<p>
+Variables are assumed to be global unless explicitly declared local
+(see <a href="2.4.7.html">&sect;2.4.7</a>).
+Local variables are <em>lexically scoped</em>:
+local variables can be freely accessed by functions
+defined inside their scope (see <a href="2.6.html">&sect;2.6</a>).
+
+
+<p>
+Before the first assignment to a variable, its value is <b>nil</b>.
+
+
+<p>
+Square brackets are used to index a table:
+
+<pre>
+	var ::= prefixexp `<b>[</b>&acute; exp `<b>]</b>&acute;
+</pre><p>
+The meaning of accesses to global variables 
+and table fields can be changed via metatables.
+An access to an indexed variable <code>t[i]</code> is equivalent to
+a call <code>gettable_event(t,i)</code>.
+(See <a href="2.8.html">&sect;2.8</a> for a complete description of the
+<code>gettable_event</code> function.
+This function is not defined or callable in Lua.
+We use it here only for explanatory purposes.)
+
+
+<p>
+The syntax <code>var.Name</code> is just syntactic sugar for
+<code>var["Name"]</code>:
+
+<pre>
+	var ::= prefixexp `<b>.</b>&acute; Name
+</pre>
+
+<p>
+All global variables live as fields in ordinary Lua tables,
+called <em>environment tables</em> or simply
+<em>environments</em> (see <a href="2.9.html">&sect;2.9</a>).
+Each function has its own reference to an environment,
+so that all global variables in this function
+will refer to this environment table.
+When a function is created,
+it inherits the environment from the function that created it.
+To get the environment table of a Lua function,
+you call <a href="pdf-getfenv.html"><code>getfenv</code></a>.
+To replace it,
+you call <a href="pdf-setfenv.html"><code>setfenv</code></a>.
+(You can only manipulate the environment of C&nbsp;functions
+through the debug library; (see <a href="5.9.html">&sect;5.9</a>).)
+
+
+<p>
+An access to a global variable <code>x</code>
+is equivalent to <code>_env.x</code>,
+which in turn is equivalent to
+
+<pre>
+     gettable_event(_env, "x")
+</pre><p>
+where <code>_env</code> is the environment of the running function.
+(See <a href="2.8.html">&sect;2.8</a> for a complete description of the
+<code>gettable_event</code> function.
+This function is not defined or callable in Lua.
+Similarly, the <code>_env</code> variable is not defined in Lua.
+We use them here only for explanatory purposes.)
+</body>
+</html>

@@ -1,0 +1,92 @@
+function Init()
+{
+    indicator.name("Deviation Oscillator");
+    indicator.description("Deviation Oscillator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");	
+	indicator.parameters.addInteger("Period1", "Period", "Period",40, 1,2000);
+    indicator.parameters.addInteger("Period2", "Period", "Period",80, 1,2000);
+	
+	indicator.parameters.addString("Method", "MA Method", "Method" , "EMA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method", "WMA", "WMA" , "WMA");
+	
+	indicator.parameters.addGroup("Style");	 
+ 
+	
+	indicator.parameters.addColor("color", "Line Color", "Color of Line", core.rgb(0, 255, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+	
+ 
+}
+
+var first1,first2;
+var source = null;
+
+var A = null;
+ 
+var MA;
+ var pd;
+var Period1,Period2 ;
+var Method;
+
+function Prepare(nameOnly)
+{
+    source = instance.source;
+	Period1=instance.parameters.Period1;
+	Period2=instance.parameters.Period2;
+	Method=instance.parameters.Method;
+	
+    var name = profile.id() + "(" + source.name() + ", " + Period1 + ", " + Period2+ ", " + Method+ ")";
+    instance.name(name);
+	
+	 MA= core.indicators.create(Method, source,Period1);
+	 
+	 pd = instance.addInternalStream(0, 0);
+	
+	first1 =MA.DATA.first();
+	first2=first1+Period2;
+
+    if (!(nameOnly)) 
+    {
+        A = instance.addStream("Deviation", core.Line, name, "Deviation", instance.parameters.color, first2);
+		A.setWidth(instance.parameters.width );
+        A.setStyle(instance.parameters.style );
+    }
+}
+
+function Update(period, mode)
+{ 
+
+MA.update(mode);	
+
+if (period< first1) 
+{
+ return;
+}
+
+pd[period]=source [period]- MA.DATA[period];
+
+if (period< first2) 
+{
+ return;
+}
+
+var tmp=Math.minmax(pd, period-Period2,period);
+var lpd=tmp[0];
+var hpd=tmp[1];
+
+var nf=200/(hpd-lpd);
+	 
+A[period]=((pd[period]-lpd)*nf)-100;
+}
+ 

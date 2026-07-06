@@ -1,0 +1,65 @@
+function Init()
+{
+    indicator.name("DMI Difference");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+	
+	indicator.parameters.addGroup("DMI Calculation");
+	indicator.parameters.addInteger("Period", "Period", "", 14, 2, 1000);
+	
+	indicator.parameters.addGroup("Style");
+	indicator.parameters.addColor("color", "Line Color", "", core.rgb(0, 255, 0));
+	indicator.parameters.addInteger("width", "Line Width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line Style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LEVEL_STYLE);
+}
+
+var first;
+var source = null;
+
+var  open=null;
+
+var Max, Step, Period;
+
+var DMI;
+var SAR;
+
+function Prepare()
+{
+    Period= instance.parameters.Period;	
+	source = instance.source;
+	
+	DMI=core.indicators.create("DMI",  source, Period);
+
+   
+    var name = profile.id() + "(" + source.name() +", "+ Period+ ")";
+    instance.name(name);
+	
+	
+	first= DMI.DATA.first();
+
+    	
+	open = instance.addStream("Difference", core.Line, name, "Difference",  instance.parameters.color, first);
+	open.setWidth(instance.parameters.width );
+    open.setStyle(instance.parameters.style );
+   
+}
+
+function Update(period, mode)
+{		
+			if (period < first) 
+			{
+			 return;
+			}
+	
+
+    
+			   DMI.update(mode);
+			open[period]= DMI.DIP[period]-DMI.DIM[period];
+
+		
+ }
+
+

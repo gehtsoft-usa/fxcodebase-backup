@@ -1,0 +1,145 @@
+function Init()
+{
+    indicator.name("Murrey's Math Oscillator");
+    indicator.description("Murrey's Math Oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");	
+    indicator.parameters.addInteger("length", "Look back Length", "Look back Length", 100);
+    indicator.parameters.addDouble("mult", "Mutiplier", "Mutiplier", 0.125);
+    indicator.parameters.addBoolean("lines", "Show Murrey Math Fractals", "Show Murrey Math Fractals", true);
+
+	
+	indicator.parameters.addGroup("Style");
+ 
+	indicator.parameters.addColor("P1_color", "1.Positive Zone Color", "Zone Color", core.rgb(173, 255, 47));
+	indicator.parameters.addColor("P2_color", "2. Positive Zone Color", "Zone Color", core.rgb(50, 205, 50));
+	indicator.parameters.addColor("P3_color", "3. Positive Zone Color", "Zone Color", core.rgb(60, 179, 113));
+	indicator.parameters.addColor("P4_color", "4. Positive Zone Color", "Zone Color", core.rgb(0, 128, 0));
+	indicator.parameters.addColor("N1_color", "1. Negative Zone Color", "Zone Color", core.rgb(205, 92, 92));
+	indicator.parameters.addColor("N2_color", "2. Negative Zone Color", "Zone Color", core.rgb(250, 128, 114));
+	indicator.parameters.addColor("N3_color", "3. Negative Zone Color", "Zone Color", core.rgb(255, 160, 122));
+	indicator.parameters.addColor("N4_color", "4. Negative Zone Color", "Zone Color", core.rgb(255, 0, 0));
+	indicator.parameters.addColor("Neutral_color", "Neutral Color", "Neutral Color", core.rgb(0, 0, 288));
+	
+	
+	indicator.parameters.addGroup("Line Levels");	
+    indicator.parameters.addColor("level_overboughtsold_color", "Line Color","", core.rgb(128, 128, 128));
+    indicator.parameters.addInteger("level_overboughtsold_width","Line width","", 1, 1, 5);
+    indicator.parameters.addInteger("level_overboughtsold_style", "Line Style","", core.LINE_SOLID);
+    indicator.parameters.setFlag("level_overboughtsold_style", core.FLAG_LEVEL_STYLE);
+}
+
+var length;
+var mult;
+var lines;
+
+var first;
+var source = null; 
+var oscillator = null;
+
+function Prepare(nameOnly)
+{
+    length = instance.parameters.length;
+    mult = instance.parameters.mult;
+    lines = instance.parameters.lines;
+    source = instance.source;
+    first = source.first()+length;
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(length) + ", " + tostring(mult) + ", " + tostring(lines) + ")";
+    instance.name(name); 
+	
+    if (!(nameOnly)) 
+    {
+        oscillator = instance.addStream("oscillator", core.Bar, name, "oscillator", instance.parameters.Neutral_color, first);
+		if (lines) 
+		{
+		 oscillator.addLevel(mult*2 , instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);
+		 oscillator.addLevel(mult*4 , instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);  
+		 oscillator.addLevel(mult*6 , instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);    
+		 oscillator.addLevel(mult*8 , instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);    	
+         oscillator.addLevel(-mult*2 , instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);
+		 oscillator.addLevel(-mult*4 , instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);  
+		 oscillator.addLevel(-mult*6 , instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);    
+		 oscillator.addLevel(-mult*8 , instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);   	
+        }		
+    }
+}
+
+function Update(period) 
+{
+		
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+    
+	var tmp = Math.minmax(source,period-length+1, period);
+	var lo=tmp[0];
+	var hi=tmp[1];
+    var range = hi - lo;
+	var multiplier = range * mult;
+    var midline = lo + multiplier * 4;
+
+
+    oscillator[period] =  (source.close[period] - midline)/(range/2);
+	
+	var Color;
+	
+	if (oscillator[period] > 0) 
+	{
+	   
+	    if (oscillator[period] <= mult*2)  
+	    {
+		 Color=instance.parameters.P1_color;
+		} 
+		else if (oscillator[period] <= mult*4) 
+		{
+		 Color=instance.parameters.P2_color;
+		} 
+		else if (oscillator[period] <= mult*6) 
+		{
+		 Color=instance.parameters.P3_color;
+	    }
+		else if (oscillator[period] <= mult*8) 
+		{
+		 Color=instance.parameters.P4_color;
+		} 
+		else
+		{
+		 Color=instance.parameters.Neutral_color;
+		}
+	}
+	
+	else if (oscillator[period] < 0) 
+	{
+	
+	    if (oscillator[period] >=  -mult*2) 
+	    {
+		 Color=instance.parameters.N1_color; 
+		} 
+		else if (oscillator[period] >= -mult*4) 
+		{
+		 Color=instance.parameters.N2_color;
+		} 
+		else if (oscillator[period] >= -mult*6) 
+		{
+		 Color=instance.parameters.N3_color;
+		} 
+		else if (oscillator[period] >= -mult*8) 
+		{
+		 Color=instance.parameters.N4_color;
+		} 
+		else
+		{
+		 Color=instance.parameters.Neutral_color;
+		}
+	}
+	else
+	{
+		Color=instance.parameters.Neutral_color;	
+	}
+	oscillator.setColor(period, Color);
+     
+}
+

@@ -1,0 +1,408 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 2.8 - Metatables</title>
+</head>
+<body>
+<h2>2.8 - <a name="2.8">Metatables</a></h2>
+
+<p>
+Every value in Lua may have a <em>metatable</em>.
+This <em>metatable</em> is an ordinary Lua table
+that defines the behavior of the original value
+under certain special operations.
+You can change several aspects of the behavior
+of operations over a value by setting specific fields in its metatable.
+For instance, when a non-numeric value is the operand of an addition,
+Lua checks for a function in the field <code>"__add"</code> in its metatable.
+If it finds one,
+Lua calls this function to perform the addition.
+
+
+<p>
+We call the keys in a metatable <em>events</em>
+and the values <em>metamethods</em>.
+In the previous example, the event is <code>"add"</code> 
+and the metamethod is the function that performs the addition.
+
+
+<p>
+You can query the metatable of any value
+through the <a href="pdf-getmetatable.html"><code>getmetatable</code></a> function.
+
+
+<p>
+You can replace the metatable of tables
+through the <a href="pdf-setmetatable.html"><code>setmetatable</code></a>
+function.
+You cannot change the metatable of other types from Lua
+(except using the debug library);
+you must use the C&nbsp;API for that.
+
+
+<p>
+Tables and userdata have individual metatables
+(although multiple tables and userdata can share
+a same table as their metatable);
+values of all other types share one single metatable per type.
+So, there is one single metatable for all numbers,
+and for all strings, etc.
+
+
+<p>
+A metatable may control how an object behaves in arithmetic operations,
+order comparisons, concatenation, length operation, and indexing.
+A metatable can also define a function to be called when a userdata
+is garbage collected.
+For each of these operations Lua associates a specific key
+called an <em>event</em>.
+When Lua performs one of these operations over a value,
+it checks whether this value has a metatable with the corresponding event.
+If so, the value associated with that key (the metamethod)
+controls how Lua will perform the operation.
+
+
+<p>
+Metatables control the operations listed next.
+Each operation is identified by its corresponding name.
+The key for each operation is a string with its name prefixed by
+two underscores, '<code>__</code>';
+for instance, the key for operation "add" is the
+string <code>"__add"</code>.
+The semantics of these operations is better explained by a Lua function
+describing how the interpreter executes the operation.
+
+
+<p>
+The code shown here in Lua is only illustrative;
+the real behavior is hard coded in the interpreter
+and it is much more efficient than this simulation.
+All functions used in these descriptions
+(<a href="pdf-rawget.html"><code>rawget</code></a>, <a href="pdf-tonumber.html"><code>tonumber</code></a>, etc.)
+are described in <a href="5.1.html">&sect;5.1</a>.
+In particular, to retrieve the metamethod of a given object,
+we use the expression
+
+<pre>
+     metatable(obj)[event]
+</pre><p>
+This should be read as
+
+<pre>
+     rawget(getmetatable(obj) or {}, event)
+</pre><p>
+That is, the access to a metamethod does not invoke other metamethods,
+and the access to objects with no metatables does not fail
+(it simply results in <b>nil</b>).
+
+
+
+<ul>
+
+<li><b>"add":</b>
+the <code>+</code> operation.
+
+
+
+<p>
+The function <code>getbinhandler</code> below defines how Lua chooses a handler
+for a binary operation.
+First, Lua tries the first operand.
+If its type does not define a handler for the operation,
+then Lua tries the second operand.
+
+<pre>
+     function getbinhandler (op1, op2, event)
+       return metatable(op1)[event] or metatable(op2)[event]
+     end
+</pre><p>
+By using this function,
+the behavior of the <code>op1 + op2</code> is
+
+<pre>
+     function add_event (op1, op2)
+       local o1, o2 = tonumber(op1), tonumber(op2)
+       if o1 and o2 then  -- both operands are numeric?
+         return o1 + o2   -- '+' here is the primitive 'add'
+       else  -- at least one of the operands is not numeric
+         local h = getbinhandler(op1, op2, "__add")
+         if h then
+           -- call the handler with both operands
+           return h(op1, op2)
+         else  -- no handler available: default behavior
+           error(&middot;&middot;&middot;)
+         end
+       end
+     end
+</pre><p>
+</li>
+
+<li><b>"sub":</b>
+the <code>-</code> operation.
+
+Behavior similar to the "add" operation.
+</li>
+
+<li><b>"mul":</b>
+the <code>*</code> operation.
+
+Behavior similar to the "add" operation.
+</li>
+
+<li><b>"div":</b>
+the <code>/</code> operation.
+
+Behavior similar to the "add" operation.
+</li>
+
+<li><b>"mod":</b>
+the <code>%</code> operation.
+
+Behavior similar to the "add" operation,
+with the operation
+<code>o1 - floor(o1/o2)*o2</code> as the primitive operation.
+</li>
+
+<li><b>"pow":</b>
+the <code>^</code> (exponentiation) operation.
+
+Behavior similar to the "add" operation,
+with the function <code>pow</code> (from the C&nbsp;math library)
+as the primitive operation.
+</li>
+
+<li><b>"unm":</b>
+the unary <code>-</code> operation.
+
+
+<pre>
+     function unm_event (op)
+       local o = tonumber(op)
+       if o then  -- operand is numeric?
+         return -o  -- '-' here is the primitive 'unm'
+       else  -- the operand is not numeric.
+         -- Try to get a handler from the operand
+         local h = metatable(op).__unm
+         if h then
+           -- call the handler with the operand
+           return h(op)
+         else  -- no handler available: default behavior
+           error(&middot;&middot;&middot;)
+         end
+       end
+     end
+</pre><p>
+</li>
+
+<li><b>"concat":</b>
+the <code>..</code> (concatenation) operation.
+
+
+<pre>
+     function concat_event (op1, op2)
+       if (type(op1) == "string" or type(op1) == "number") and
+          (type(op2) == "string" or type(op2) == "number") then
+         return op1 .. op2  -- primitive string concatenation
+       else
+         local h = getbinhandler(op1, op2, "__concat")
+         if h then
+           return h(op1, op2)
+         else
+           error(&middot;&middot;&middot;)
+         end
+       end
+     end
+</pre><p>
+</li>
+
+<li><b>"len":</b>
+the <code>#</code> operation.
+
+
+<pre>
+     function len_event (op)
+       if type(op) == "string" then
+         return strlen(op)         -- primitive string length
+       elseif type(op) == "table" then
+         return #op                -- primitive table length
+       else
+         local h = metatable(op).__len
+         if h then
+           -- call the handler with the operand
+           return h(op)
+         else  -- no handler available: default behavior
+           error(&middot;&middot;&middot;)
+         end
+       end
+     end
+</pre><p>
+See <a href="2.5.5.html">&sect;2.5.5</a> for a description of the length of a table.
+</li>
+
+<li><b>"eq":</b>
+the <code>==</code> operation.
+
+The function <code>getcomphandler</code> defines how Lua chooses a metamethod
+for comparison operators.
+A metamethod only is selected when both objects
+being compared have the same type
+and the same metamethod for the selected operation.
+
+<pre>
+     function getcomphandler (op1, op2, event)
+       if type(op1) ~= type(op2) then return nil end
+       local mm1 = metatable(op1)[event]
+       local mm2 = metatable(op2)[event]
+       if mm1 == mm2 then return mm1 else return nil end
+     end
+</pre><p>
+The "eq" event is defined as follows:
+
+<pre>
+     function eq_event (op1, op2)
+       if type(op1) ~= type(op2) then  -- different types?
+         return false   -- different objects
+       end
+       if op1 == op2 then   -- primitive equal?
+         return true   -- objects are equal
+       end
+       -- try metamethod
+       local h = getcomphandler(op1, op2, "__eq")
+       if h then
+         return h(op1, op2)
+       else
+         return false
+       end
+     end
+</pre><p>
+<code>a ~= b</code> is equivalent to <code>not (a == b)</code>.
+</li>
+
+<li><b>"lt":</b>
+the <code>&lt;</code> operation.
+
+
+<pre>
+     function lt_event (op1, op2)
+       if type(op1) == "number" and type(op2) == "number" then
+         return op1 &lt; op2   -- numeric comparison
+       elseif type(op1) == "string" and type(op2) == "string" then
+         return op1 &lt; op2   -- lexicographic comparison
+       else
+         local h = getcomphandler(op1, op2, "__lt")
+         if h then
+           return h(op1, op2)
+         else
+           error(&middot;&middot;&middot;);
+         end
+       end
+     end
+</pre><p>
+<code>a &gt; b</code> is equivalent to <code>b &lt; a</code>.
+</li>
+
+<li><b>"le":</b>
+the <code>&lt;=</code> operation.
+
+
+<pre>
+     function le_event (op1, op2)
+       if type(op1) == "number" and type(op2) == "number" then
+         return op1 &lt;= op2   -- numeric comparison
+       elseif type(op1) == "string" and type(op2) == "string" then
+         return op1 &lt;= op2   -- lexicographic comparison
+       else
+         local h = getcomphandler(op1, op2, "__le")
+         if h then
+           return h(op1, op2)
+         else
+           h = getcomphandler(op1, op2, "__lt")
+           if h then
+             return not h(op2, op1)
+           else
+             error(&middot;&middot;&middot;);
+           end
+         end
+       end
+     end
+</pre><p>
+<code>a &gt;= b</code> is equivalent to <code>b &lt;= a</code>.
+Note that, in the absence of a "le" metamethod,
+Lua tries the "lt", assuming that <code>a &lt;= b</code> is
+equivalent to <code>not (b &lt; a)</code>.
+</li>
+
+<li><b>"index":</b>
+The indexing access <code>table[key]</code>.
+
+
+<pre>
+     function gettable_event (table, key)
+       local h
+       if type(table) == "table" then
+         local v = rawget(table, key)
+         if v ~= nil then return v end
+         h = metatable(table).__index
+         if h == nil then return nil end
+       else
+         h = metatable(table).__index
+         if h == nil then
+           error(&middot;&middot;&middot;);
+         end
+       end
+       if type(h) == "function" then
+         return h(table, key)      -- call the handler
+       else return h[key]          -- or repeat operation on it
+       end
+     end
+</pre><p>
+</li>
+
+<li><b>"newindex":</b>
+The indexing assignment <code>table[key] = value</code>.
+
+
+<pre>
+     function settable_event (table, key, value)
+       local h
+       if type(table) == "table" then
+         local v = rawget(table, key)
+         if v ~= nil then rawset(table, key, value); return end
+         h = metatable(table).__newindex
+         if h == nil then rawset(table, key, value); return end
+       else
+         h = metatable(table).__newindex
+         if h == nil then
+           error(&middot;&middot;&middot;);
+         end
+       end
+       if type(h) == "function" then
+         return h(table, key,value)    -- call the handler
+       else h[key] = value             -- or repeat operation on it
+       end
+     end
+</pre><p>
+</li>
+
+<li><b>"call":</b>
+called when Lua calls a value.
+
+
+<pre>
+     function function_event (func, ...)
+       if type(func) == "function" then
+         return func(...)   -- primitive call
+       else
+         local h = metatable(func).__call
+         if h then
+           return h(func, ...)
+         else
+           error(&middot;&middot;&middot;)
+         end
+       end
+     end
+</pre><p>
+</li>
+
+</ul>
+</body>
+</html>

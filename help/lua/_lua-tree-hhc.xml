@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<help-content>
+<node name="Lua 5.1 Reference Manual" local="lua/lua_51_reference_manual.html">
+<node name="1 - Introduction" local="lua/1.html"></node>
+<node name="2 - The Language" local="lua/2.html">
+<node name="2.1 - Lexical Conventions" local="lua/2.1.html"></node>
+<node name="2.2 - Values and Types" local="lua/2.2.html">
+<node name="2.2.1 - Coercion" local="lua/2.2.1.html"></node>
+</node>
+<node name="2.3 - Variables" local="lua/2.3.html"></node>
+<node name="2.4 - Statements" local="lua/2.4.html">
+<node name="2.4.1 - Chunks" local="lua/2.4.1.html"></node>
+<node name="2.4.2 - Blocks" local="lua/2.4.2.html"></node>
+<node name="2.4.3 - Assignment" local="lua/2.4.3.html"></node>
+<node name="2.4.4 - Control Structures" local="lua/2.4.4.html"></node>
+<node name="2.4.5 - For Statement" local="lua/2.4.5.html"></node>
+<node name="2.4.6 - Function Calls as Statements" local="lua/2.4.6.html"></node>
+<node name="2.4.7 - Local Declarations" local="lua/2.4.7.html"></node>
+</node>
+<node name="2.5 - Expressions" local="lua/2.5.html">
+<node name="2.5.1 - Arithmetic Operators" local="lua/2.5.1.html"></node>
+<node name="2.5.2 - Relational Operators" local="lua/2.5.2.html"></node>
+<node name="2.5.3 - Logical Operators" local="lua/2.5.3.html"></node>
+<node name="2.5.4 - Concatenation" local="lua/2.5.4.html"></node>
+<node name="2.5.5 - The Length Operator" local="lua/2.5.5.html"></node>
+<node name="2.5.6 - Precedence" local="lua/2.5.6.html"></node>
+<node name="2.5.7 - Table Constructors" local="lua/2.5.7.html"></node>
+<node name="2.5.8 - Function Calls" local="lua/2.5.8.html"></node>
+<node name="2.5.9 - Function Definitions" local="lua/2.5.9.html"></node>
+</node>
+<node name="2.6 - Visibility Rules" local="lua/2.6.html"></node>
+<node name="2.7 - Error Handling" local="lua/2.7.html"></node>
+<node name="2.8 - Metatables" local="lua/2.8.html"></node>
+<node name="2.9 - Environments" local="lua/2.9.html"></node>
+<node name="2.10 - Garbage Collection" local="lua/2.10.html">
+<node name="2.10.1 - Garbage-Collection Metamethods" local="lua/2.10.1.html"></node>
+<node name="2.10.2 - Weak Tables" local="lua/2.10.2.html"></node>
+</node>
+<node name="2.11 - Coroutines" local="lua/2.11.html"></node>
+</node>
+<node name="3 - The Application Program Interface" local="lua/3.html">
+<node name="3.1 - The Stack" local="lua/3.1.html"></node>
+<node name="3.2 - Stack Size" local="lua/3.2.html"></node>
+<node name="3.3 - Pseudo-Indices" local="lua/3.3.html"></node>
+<node name="3.4 - C Closures" local="lua/3.4.html"></node>
+<node name="3.5 - Registry" local="lua/3.5.html"></node>
+<node name="3.6 - Error Handling in C" local="lua/3.6.html"></node>
+<node name="3.7 - Functions and Types" local="lua/3.7.html">
+<node name="lua_Alloc" local="lua/lua_Alloc.html"></node>
+<node name="lua_atpanic" local="lua/lua_atpanic.html"></node>
+<node name="lua_call" local="lua/lua_call.html"></node>
+<node name="lua_CFunction" local="lua/lua_CFunction.html"></node>
+<node name="lua_checkstack" local="lua/lua_checkstack.html"></node>
+<node name="lua_close" local="lua/lua_close.html"></node>
+<node name="lua_concat" local="lua/lua_concat.html"></node>
+<node name="lua_cpcall" local="lua/lua_cpcall.html"></node>
+<node name="lua_createtable" local="lua/lua_createtable.html"></node>
+<node name="lua_dump" local="lua/lua_dump.html"></node>
+<node name="lua_equal" local="lua/lua_equal.html"></node>
+<node name="lua_error" local="lua/lua_error.html"></node>
+<node name="lua_gc" local="lua/lua_gc.html"></node>
+<node name="lua_getallocf" local="lua/lua_getallocf.html"></node>
+<node name="lua_getfenv" local="lua/lua_getfenv.html"></node>
+<node name="lua_getfield" local="lua/lua_getfield.html"></node>
+<node name="lua_getglobal" local="lua/lua_getglobal.html"></node>
+<node name="lua_getmetatable" local="lua/lua_getmetatable.html"></node>
+<node name="lua_gettable" local="lua/lua_gettable.html"></node>
+<node name="lua_gettop" local="lua/lua_gettop.html"></node>
+<node name="lua_insert" local="lua/lua_insert.html"></node>
+<node name="lua_Integer" local="lua/lua_Integer.html"></node>
+<node name="lua_isboolean" local="lua/lua_isboolean.html"></node>
+<node name="lua_iscfunction" local="lua/lua_iscfunction.html"></node>
+<node name="lua_isfunction" local="lua/lua_isfunction.html"></node>
+<node name="lua_islightuserdata" local="lua/lua_islightuserdata.html"></node>
+<node name="lua_isnil" local="lua/lua_isnil.html"></node>
+<node name="lua_isnumber" local="lua/lua_isnumber.html"></node>
+<node name="lua_isstring" local="lua/lua_isstring.html"></node>
+<node name="lua_istable" local="lua/lua_istable.html"></node>
+<node name="lua_isthread" local="lua/lua_isthread.html"></node>
+<node name="lua_isuserdata" local="lua/lua_isuserdata.html"></node>
+<node name="lua_lessthan" local="lua/lua_lessthan.html"></node>
+<node name="lua_load" local="lua/lua_load.html"></node>
+<node name="lua_newstate" local="lua/lua_newstate.html"></node>
+<node name="lua_newtable" local="lua/lua_newtable.html"></node>
+<node name="lua_newthread" local="lua/lua_newthread.html"></node>
+<node name="lua_newuserdata" local="lua/lua_newuserdata.html"></node>
+<node name="lua_next" local="lua/lua_next.html"></node>
+<node name="lua_Number" local="lua/lua_Number.html"></node>
+<node name="lua_objlen" local="lua/lua_objlen.html"></node>
+<node name="lua_pcall" local="lua/lua_pcall.html"></node>
+<node name="lua_pop" local="lua/lua_pop.html"></node>
+<node name="lua_pushboolean" local="lua/lua_pushboolean.html"></node>
+<node name="lua_pushcclosure" local="lua/lua_pushcclosure.html"></node>
+<node name="lua_pushcfunction" local="lua/lua_pushcfunction.html"></node>
+<node name="lua_pushfstring" local="lua/lua_pushfstring.html"></node>
+<node name="lua_pushinteger" local="lua/lua_pushinteger.html"></node>
+<node name="lua_pushlightuserdata" local="lua/lua_pushlightuserdata.html"></node>
+<node name="lua_pushlstring" local="lua/lua_pushlstring.html"></node>
+<node name="lua_pushnil" local="lua/lua_pushnil.html"></node>
+<node name="lua_pushnumber" local="lua/lua_pushnumber.html"></node>
+<node name="lua_pushstring" local="lua/lua_pushstring.html"></node>
+<node name="lua_pushthread" local="lua/lua_pushthread.html"></node>
+<node name="lua_pushvalue" local="lua/lua_pushvalue.html"></node>
+<node name="lua_pushvfstring" local="lua/lua_pushvfstring.html"></node>
+<node name="lua_rawequal" local="lua/lua_rawequal.html"></node>
+<node name="lua_rawget" local="lua/lua_rawget.html"></node>
+<node name="lua_rawgeti" local="lua/lua_rawgeti.html"></node>
+<node name="lua_rawset" local="lua/lua_rawset.html"></node>
+<node name="lua_rawseti" local="lua/lua_rawseti.html"></node>
+<node name="lua_Reader" local="lua/lua_Reader.html"></node>
+<node name="lua_register" local="lua/lua_register.html"></node>
+<node name="lua_remove" local="lua/lua_remove.html"></node>
+<node name="lua_replace" local="lua/lua_replace.html"></node>
+<node name="lua_resume" local="lua/lua_resume.html"></node>
+<node name="lua_setallocf" local="lua/lua_setallocf.html"></node>
+<node name="lua_setfenv" local="lua/lua_setfenv.html"></node>
+<node name="lua_setfield" local="lua/lua_setfield.html"></node>
+<node name="lua_setglobal" local="lua/lua_setglobal.html"></node>
+<node name="lua_setmetatable" local="lua/lua_setmetatable.html"></node>
+<node name="lua_settable" local="lua/lua_settable.html"></node>
+<node name="lua_settop" local="lua/lua_settop.html"></node>
+<node name="lua_State" local="lua/lua_State.html"></node>
+<node name="lua_status" local="lua/lua_status.html"></node>
+<node name="lua_toboolean" local="lua/lua_toboolean.html"></node>
+<node name="lua_tocfunction" local="lua/lua_tocfunction.html"></node>
+<node name="lua_tointeger" local="lua/lua_tointeger.html"></node>
+<node name="lua_tolstring" local="lua/lua_tolstring.html"></node>
+<node name="lua_tonumber" local="lua/lua_tonumber.html"></node>
+<node name="lua_topointer" local="lua/lua_topointer.html"></node>
+<node name="lua_tostring" local="lua/lua_tostring.html"></node>
+<node name="lua_tothread" local="lua/lua_tothread.html"></node>
+<node name="lua_touserdata" local="lua/lua_touserdata.html"></node>
+<node name="lua_type" local="lua/lua_type.html"></node>
+<node name="lua_typename" local="lua/lua_typename.html"></node>
+<node name="lua_Writer" local="lua/lua_Writer.html"></node>
+<node name="lua_xmove" local="lua/lua_xmove.html"></node>
+<node name="lua_yield" local="lua/lua_yield.html"></node>
+</node>
+<node name="3.8 - The Debug Interface" local="lua/3.8.html">
+<node name="lua_Debug" local="lua/lua_Debug.html"></node>
+<node name="lua_gethook" local="lua/lua_gethook.html"></node>
+<node name="lua_gethookcount" local="lua/lua_gethookcount.html"></node>
+<node name="lua_gethookmask" local="lua/lua_gethookmask.html"></node>
+<node name="lua_getinfo" local="lua/lua_getinfo.html"></node>
+<node name="lua_getlocal" local="lua/lua_getlocal.html"></node>
+<node name="lua_getstack" local="lua/lua_getstack.html"></node>
+<node name="lua_getupvalue" local="lua/lua_getupvalue.html"></node>
+<node name="lua_Hook" local="lua/lua_Hook.html"></node>
+<node name="lua_sethook" local="lua/lua_sethook.html"></node>
+<node name="lua_setlocal" local="lua/lua_setlocal.html"></node>
+<node name="lua_setupvalue" local="lua/lua_setupvalue.html"></node>
+</node>
+</node>
+<node name="4 - The Auxiliary Library" local="lua/4.html">
+<node name="4.1 - Functions and Types" local="lua/4.1.html">
+<node name="luaL_addchar" local="lua/luaL_addchar.html"></node>
+<node name="luaL_addlstring" local="lua/luaL_addlstring.html"></node>
+<node name="luaL_addsize" local="lua/luaL_addsize.html"></node>
+<node name="luaL_addstring" local="lua/luaL_addstring.html"></node>
+<node name="luaL_addvalue" local="lua/luaL_addvalue.html"></node>
+<node name="luaL_argcheck" local="lua/luaL_argcheck.html"></node>
+<node name="luaL_argerror" local="lua/luaL_argerror.html"></node>
+<node name="luaL_Buffer" local="lua/luaL_Buffer.html"></node>
+<node name="luaL_buffinit" local="lua/luaL_buffinit.html"></node>
+<node name="luaL_callmeta" local="lua/luaL_callmeta.html"></node>
+<node name="luaL_checkany" local="lua/luaL_checkany.html"></node>
+<node name="luaL_checkint" local="lua/luaL_checkint.html"></node>
+<node name="luaL_checkinteger" local="lua/luaL_checkinteger.html"></node>
+<node name="luaL_checklong" local="lua/luaL_checklong.html"></node>
+<node name="luaL_checklstring" local="lua/luaL_checklstring.html"></node>
+<node name="luaL_checknumber" local="lua/luaL_checknumber.html"></node>
+<node name="luaL_checkoption" local="lua/luaL_checkoption.html"></node>
+<node name="luaL_checkstack" local="lua/luaL_checkstack.html"></node>
+<node name="luaL_checkstring" local="lua/luaL_checkstring.html"></node>
+<node name="luaL_checktype" local="lua/luaL_checktype.html"></node>
+<node name="luaL_checkudata" local="lua/luaL_checkudata.html"></node>
+<node name="luaL_dofile" local="lua/luaL_dofile.html"></node>
+<node name="luaL_dostring" local="lua/luaL_dostring.html"></node>
+<node name="luaL_error" local="lua/luaL_error.html"></node>
+<node name="luaL_getmetafield" local="lua/luaL_getmetafield.html"></node>
+<node name="luaL_getmetatable" local="lua/luaL_getmetatable.html"></node>
+<node name="luaL_gsub" local="lua/luaL_gsub.html"></node>
+<node name="luaL_loadbuffer" local="lua/luaL_loadbuffer.html"></node>
+<node name="luaL_loadfile" local="lua/luaL_loadfile.html"></node>
+<node name="luaL_loadstring" local="lua/luaL_loadstring.html"></node>
+<node name="luaL_newmetatable" local="lua/luaL_newmetatable.html"></node>
+<node name="luaL_newstate" local="lua/luaL_newstate.html"></node>
+<node name="luaL_openlibs" local="lua/luaL_openlibs.html"></node>
+<node name="luaL_optint" local="lua/luaL_optint.html"></node>
+<node name="luaL_optinteger" local="lua/luaL_optinteger.html"></node>
+<node name="luaL_optlong" local="lua/luaL_optlong.html"></node>
+<node name="luaL_optlstring" local="lua/luaL_optlstring.html"></node>
+<node name="luaL_optnumber" local="lua/luaL_optnumber.html"></node>
+<node name="luaL_optstring" local="lua/luaL_optstring.html"></node>
+<node name="luaL_prepbuffer" local="lua/luaL_prepbuffer.html"></node>
+<node name="luaL_pushresult" local="lua/luaL_pushresult.html"></node>
+<node name="luaL_ref" local="lua/luaL_ref.html"></node>
+<node name="luaL_Reg" local="lua/luaL_Reg.html"></node>
+<node name="luaL_register" local="lua/luaL_register.html"></node>
+<node name="luaL_typename" local="lua/luaL_typename.html"></node>
+<node name="luaL_typerror" local="lua/luaL_typerror.html"></node>
+<node name="luaL_unref" local="lua/luaL_unref.html"></node>
+<node name="luaL_where" local="lua/luaL_where.html"></node>
+</node>
+</node>
+<node name="5 - Standard Libraries" local="lua/5.html">
+<node name="5.1 - Basic Functions" local="lua/5.1.html">
+<node name="assert (v [, message])" local="lua/pdf-assert.html"></node>
+<node name="collectgarbage (opt [, arg])" local="lua/pdf-collectgarbage.html"></node>
+<node name="dofile (filename)" local="lua/pdf-dofile.html"></node>
+<node name="error (message [, level])" local="lua/pdf-error.html"></node>
+<node name="_G" local="lua/pdf-_G.html"></node>
+<node name="getfenv (f)" local="lua/pdf-getfenv.html"></node>
+<node name="getmetatable (object)" local="lua/pdf-getmetatable.html"></node>
+<node name="ipairs (t)" local="lua/pdf-ipairs.html"></node>
+<node name="load (func [, chunkname])" local="lua/pdf-load.html"></node>
+<node name="loadfile ([filename])" local="lua/pdf-loadfile.html"></node>
+<node name="loadstring (string [, chunkname])" local="lua/pdf-loadstring.html"></node>
+<node name="next (table [, index])" local="lua/pdf-next.html"></node>
+<node name="pairs (t)" local="lua/pdf-pairs.html"></node>
+<node name="pcall (f, arg1, ...)" local="lua/pdf-pcall.html"></node>
+<node name="print (...)" local="lua/pdf-print.html"></node>
+<node name="rawequal (v1, v2)" local="lua/pdf-rawequal.html"></node>
+<node name="rawget (table, index)" local="lua/pdf-rawget.html"></node>
+<node name="rawset (table, index, value)" local="lua/pdf-rawset.html"></node>
+<node name="select (index, ...)" local="lua/pdf-select.html"></node>
+<node name="setfenv (f, table)" local="lua/pdf-setfenv.html"></node>
+<node name="setmetatable (table, metatable)" local="lua/pdf-setmetatable.html"></node>
+<node name="tonumber (e [, base])" local="lua/pdf-tonumber.html"></node>
+<node name="tostring (e)" local="lua/pdf-tostring.html"></node>
+<node name="type (v)" local="lua/pdf-type.html"></node>
+<node name="unpack (list [, i [, j]])" local="lua/pdf-unpack.html"></node>
+<node name="_VERSION" local="lua/pdf-_VERSION.html"></node>
+<node name="xpcall (f, err)" local="lua/pdf-xpcall.html"></node>
+</node>
+<node name="5.2 - Coroutine Manipulation" local="lua/5.2.html">
+<node name="coroutine.create (f)" local="lua/pdf-coroutine.create.html"></node>
+<node name="coroutine.resume (co [, val1, ...])" local="lua/pdf-coroutine.resume.html"></node>
+<node name="coroutine.running ()" local="lua/pdf-coroutine.running.html"></node>
+<node name="coroutine.status (co)" local="lua/pdf-coroutine.status.html"></node>
+<node name="coroutine.wrap (f)" local="lua/pdf-coroutine.wrap.html"></node>
+<node name="coroutine.yield (...)" local="lua/pdf-coroutine.yield.html"></node>
+</node>
+<node name="5.3 - Modules" local="lua/5.3.html">
+<node name="module (name [, ...])" local="lua/pdf-module.html"></node>
+<node name="require (modname)" local="lua/pdf-require.html"></node>
+<node name="package.cpath" local="lua/pdf-package.cpath.html"></node>
+<node name="package.loaded" local="lua/pdf-package.loaded.html"></node>
+<node name="package.loadlib (libname, funcname)" local="lua/pdf-package.loadlib.html"></node>
+<node name="package.path" local="lua/pdf-package.path.html"></node>
+<node name="package.preload" local="lua/pdf-package.preload.html"></node>
+<node name="package.seeall (module)" local="lua/pdf-package.seeall.html"></node>
+</node>
+<node name="5.4 - String Manipulation" local="lua/5.4.html">
+<node name="string.byte (s [, i [, j]])" local="lua/pdf-string.byte.html"></node>
+<node name="string.char (...)" local="lua/pdf-string.char.html"></node>
+<node name="string.dump (function)" local="lua/pdf-string.dump.html"></node>
+<node name="string.find (s, pattern [, init [, plain]])" local="lua/pdf-string.find.html"></node>
+<node name="string.format (formatstring, ...)" local="lua/pdf-string.format.html"></node>
+<node name="string.gmatch (s, pattern)" local="lua/pdf-string.gmatch.html"></node>
+<node name="string.gsub (s, pattern, repl [, n])" local="lua/pdf-string.gsub.html"></node>
+<node name="string.len (s)" local="lua/pdf-string.len.html"></node>
+<node name="string.lower (s)" local="lua/pdf-string.lower.html"></node>
+<node name="string.match (s, pattern [, init])" local="lua/pdf-string.match.html"></node>
+<node name="string.rep (s, n)" local="lua/pdf-string.rep.html"></node>
+<node name="string.reverse (s)" local="lua/pdf-string.reverse.html"></node>
+<node name="string.sub (s, i [, j])" local="lua/pdf-string.sub.html"></node>
+<node name="string.upper (s)" local="lua/pdf-string.upper.html"></node>
+<node name="5.4.1 - Patterns" local="lua/5.4.1.html">
+<node name="Character Class:" local="lua/character_class.html"></node>
+<node name="Pattern Item:" local="lua/pattern_item.html"></node>
+<node name="Pattern:" local="lua/pattern.html"></node>
+<node name="Captures:" local="lua/captures.html"></node>
+</node>
+</node>
+<node name="5.5 - Table Manipulation" local="lua/5.5.html">
+<node name="table.concat (table [, sep [, i [, j]]])" local="lua/pdf-table.concat.html"></node>
+<node name="table.insert (table, [pos,] value)" local="lua/pdf-table.insert.html"></node>
+<node name="table.maxn (table)" local="lua/pdf-table.maxn.html"></node>
+<node name="table.remove (table [, pos])" local="lua/pdf-table.remove.html"></node>
+<node name="table.sort (table [, comp])" local="lua/pdf-table.sort.html"></node>
+</node>
+<node name="5.6 - Mathematical Functions" local="lua/5.6.html">
+<node name="math.abs (x)" local="lua/pdf-math.abs.html"></node>
+<node name="math.acos (x)" local="lua/pdf-math.acos.html"></node>
+<node name="math.asin (x)" local="lua/pdf-math.asin.html"></node>
+<node name="math.atan (x)" local="lua/pdf-math.atan.html"></node>
+<node name="math.atan2 (x, y)" local="lua/pdf-math.atan2.html"></node>
+<node name="math.ceil (x)" local="lua/pdf-math.ceil.html"></node>
+<node name="math.cos (x)" local="lua/pdf-math.cos.html"></node>
+<node name="math.cosh (x)" local="lua/pdf-math.cosh.html"></node>
+<node name="math.deg (x)" local="lua/pdf-math.deg.html"></node>
+<node name="math.exp (x)" local="lua/pdf-math.exp.html"></node>
+<node name="math.floor (x)" local="lua/pdf-math.floor.html"></node>
+<node name="math.fmod (x, y)" local="lua/pdf-math.fmod.html"></node>
+<node name="math.frexp (x)" local="lua/pdf-math.frexp.html"></node>
+<node name="math.huge" local="lua/pdf-math.huge.html"></node>
+<node name="math.ldexp (m, e)" local="lua/pdf-math.ldexp.html"></node>
+<node name="math.log (x)" local="lua/pdf-math.log.html"></node>
+<node name="math.log10 (x)" local="lua/pdf-math.log10.html"></node>
+<node name="math.max (x, ...)" local="lua/pdf-math.max.html"></node>
+<node name="math.min (x, ...)" local="lua/pdf-math.min.html"></node>
+<node name="math.modf (x)" local="lua/pdf-math.modf.html"></node>
+<node name="math.pi" local="lua/pdf-math.pi.html"></node>
+<node name="math.pow (x, y)" local="lua/pdf-math.pow.html"></node>
+<node name="math.rad (x)" local="lua/pdf-math.rad.html"></node>
+<node name="math.random ([m [, n]])" local="lua/pdf-math.random.html"></node>
+<node name="math.randomseed (x)" local="lua/pdf-math.randomseed.html"></node>
+<node name="math.sin (x)" local="lua/pdf-math.sin.html"></node>
+<node name="math.sinh (x)" local="lua/pdf-math.sinh.html"></node>
+<node name="math.sqrt (x)" local="lua/pdf-math.sqrt.html"></node>
+<node name="math.tan (x)" local="lua/pdf-math.tan.html"></node>
+<node name="math.tanh (x)" local="lua/pdf-math.tanh.html"></node>
+</node>
+<node name="5.7 - Input and Output Facilities" local="lua/5.7.html">
+<node name="io.close ([file])" local="lua/pdf-io.close.html"></node>
+<node name="io.flush ()" local="lua/pdf-io.flush.html"></node>
+<node name="io.input ([file])" local="lua/pdf-io.input.html"></node>
+<node name="io.lines ([filename])" local="lua/pdf-io.lines.html"></node>
+<node name="io.open (filename [, mode])" local="lua/pdf-io.open.html"></node>
+<node name="io.output ([file])" local="lua/pdf-io.output.html"></node>
+<node name="io.popen ([prog [, mode]])" local="lua/pdf-io.popen.html"></node>
+<node name="io.read (...)" local="lua/pdf-io.read.html"></node>
+<node name="io.tmpfile ()" local="lua/pdf-io.tmpfile.html"></node>
+<node name="io.type (obj)" local="lua/pdf-io.type.html"></node>
+<node name="io.write (...)" local="lua/pdf-io.write.html"></node>
+<node name="file table" local="lua/pdf-file.html"></node>
+</node>
+<node name="5.8 - Operating System Facilities" local="lua/5.8.html">
+<node name="os.clock ()" local="lua/pdf-os.clock.html"></node>
+<node name="os.date ([format [, time]])" local="lua/pdf-os.date.html"></node>
+<node name="os.difftime (t2, t1)" local="lua/pdf-os.difftime.html"></node>
+<node name="os.execute ([command])" local="lua/pdf-os.execute.html"></node>
+<node name="os.exit ([code])" local="lua/pdf-os.exit.html"></node>
+<node name="os.getenv (varname)" local="lua/pdf-os.getenv.html"></node>
+<node name="os.remove (filename)" local="lua/pdf-os.remove.html"></node>
+<node name="os.rename (oldname, newname)" local="lua/pdf-os.rename.html"></node>
+<node name="os.setlocale (locale [, category])" local="lua/pdf-os.setlocale.html"></node>
+<node name="os.time ([table])" local="lua/pdf-os.time.html"></node>
+<node name="os.tmpname ()" local="lua/pdf-os.tmpname.html"></node>
+</node>
+<node name="5.9 - The Debug Library" local="lua/5.9.html">
+<node name="debug.debug ()" local="lua/pdf-debug.debug.html"></node>
+<node name="debug.getfenv (o)" local="lua/pdf-debug.getfenv.html"></node>
+<node name="debug.gethook ([thread])" local="lua/pdf-debug.gethook.html"></node>
+<node name="debug.getinfo ([thread,] function [, what])" local="lua/pdf-debug.getinfo.html"></node>
+<node name="debug.getlocal ([thread,] level, local)" local="lua/pdf-debug.getlocal.html"></node>
+<node name="debug.getmetatable (object)" local="lua/pdf-debug.getmetatable.html"></node>
+<node name="debug.getregistry ()" local="lua/pdf-debug.getregistry.html"></node>
+<node name="debug.getupvalue (func, up)" local="lua/pdf-debug.getupvalue.html"></node>
+<node name="debug.setfenv (object, table)" local="lua/pdf-debug.setfenv.html"></node>
+<node name="debug.sethook ([thread,] hook, mask [, count])" local="lua/pdf-debug.sethook.html"></node>
+<node name="debug.setlocal ([thread,] level, local, value)" local="lua/pdf-debug.setlocal.html"></node>
+<node name="debug.setmetatable (object, table)" local="lua/pdf-debug.setmetatable.html"></node>
+<node name="debug.setupvalue (func, up, value)" local="lua/pdf-debug.setupvalue.html"></node>
+<node name="debug.traceback ([thread,] [message])" local="lua/pdf-debug.traceback.html"></node>
+</node>
+</node>
+<node name="6 - Lua Stand-alone" local="lua/6.html"></node>
+<node name="7 - Incompatibilities with the Previous Version" local="lua/7.html">
+<node name="7.1 - Changes in the Language" local="lua/7.1.html"></node>
+<node name="7.2 - Changes in the Libraries" local="lua/7.2.html"></node>
+<node name="7.3 - Changes in the API" local="lua/7.3.html"></node>
+</node>
+<node name="8 - The Complete Syntax of Lua" local="lua/8.html"></node>
+</node>
+</help-content>

@@ -1,0 +1,106 @@
+function Init()
+{
+    indicator.name("Market Direction Indicator");
+    indicator.description("Market Direction Indicator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("lenMA1", "Short Length", "Short Length", 13);
+    indicator.parameters.addInteger("lenMA2", "Long Length", "Long Length", 55);
+    indicator.parameters.addInteger("cutoff", "No-trend cutoff", "No-trend cutoff", 2);
+	 indicator.parameters.addBoolean("sbz", "Show Below Zero", "Show Below Zero", false);
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Neutral_color", "Color of Neutral", "Color of Neutral", core.rgb(128, 128, 128));
+	indicator.parameters.addColor("UpUp_color", "Color of Up in Up Trend", "Color of Up Trend", core.rgb(0, 255, 0));
+	indicator.parameters.addColor("DownUp_color", "Color of Down in Up Trend", "Color of Up Trend", core.rgb(50,205,50));
+	indicator.parameters.addColor("UpDown_color", "Color of Up in Down Trend", "Color of Down Trend", core.rgb(255, 0, 0));
+	indicator.parameters.addColor("DownDown_color", "Color of Down in Down Trend", "Color of Down Trend", core.rgb(255, 153, 0));
+	
+}
+
+var lenMA1;
+var lenMA2;
+var cutoff;
+var sbz;
+var first;
+var source = null;
+ 
+var mdi = null;
+var cp;
+
+function Prepare(nameOnly)
+{
+    lenMA1 = instance.parameters.lenMA1;
+    lenMA2 = instance.parameters.lenMA2;
+    cutoff = instance.parameters.cutoff;
+	sbz = instance.parameters.sbz;
+    source = instance.source;
+	first = source.first()+Math.max(lenMA1, lenMA2);
+
+	
+	cp = instance.addInternalStream(0, 0);
+	 
+    var name = profile.id() + "(" + source.name() + ", " + tostring(lenMA1) + ", " + tostring(lenMA2) + ", " + tostring(cutoff) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        mdi = instance.addStream("mdi", core.Bar, name, "mdi", instance.parameters.Neutral_color, first);
+    }
+}
+
+function Update(period)
+{
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+	cp[period]=Calculate(period);
+    
+	if (sbz) 
+	{
+	 mdi[period] =Math.abs(100*( cp[period-1] - cp[period])/((source[period]+source[period-1])/2));
+	} 
+	else
+	{
+	 mdi[period] =100*( cp[period-1] - cp[period])/((source[period]+source[period-1])/2);
+	}
+	
+	var Color;
+	
+	if (mdi[period]<-cutoff) 
+	{
+		 if  (mdi[period]>mdi[period-1]) 
+		 {
+		  Color=instance.parameters.UpDown_color;
+		 } 
+		 else
+		 {
+		  Color=instance.parameters.DownDown_color;
+		 }
+	}	 
+	else if (mdi[period]>cutoff) 
+	{
+		 if  (mdi[period]>mdi[period-1]) 
+		 {
+		  Color=instance.parameters.UpUp_color;
+		 } 
+		 else
+		 {
+		 Color=instance.parameters.DownUp_color;
+		 }
+	}	 
+	else
+	{
+	 Color=instance.parameters.Neutral_color;
+	}
+    mdi.setColor(period, Color);
+}
+
+
+function Calculate(period)
+{
+ return (lenMA1*(Math.sum(source, period-lenMA2+1, period)) - lenMA2*(Math.sum(source, period-lenMA1+1, period)) / (lenMA2-lenMA1));
+}
+ 

@@ -1,0 +1,170 @@
+function Init()
+{
+    indicator.name("Brooky trend strength indicator");
+    indicator.description("Brooky trend strength indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("slow_period", "slow_period", "", 26);
+    indicator.parameters.addInteger("fast_period", "fast_period", "", 12);
+    indicator.parameters.addInteger("signal_period", "signal_period", "", 9);
+    indicator.parameters.addString("slow_period_method", "slow_period_method", "", "MVA");
+    indicator.parameters.addStringAlternative("slow_period_method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("slow_period_method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("slow_period_method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("slow_period_method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("slow_period_method", "TMA", "", "TMA");
+    indicator.parameters.addString("fast_period_method", "fast_period_method", "", "MVA");
+    indicator.parameters.addStringAlternative("fast_period_method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("fast_period_method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("fast_period_method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("fast_period_method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("fast_period_method", "TMA", "", "TMA");
+    indicator.parameters.addString("signal_period_method", "signal_period_method", "", "MVA");
+    indicator.parameters.addStringAlternative("signal_period_method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("signal_period_method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("signal_period_method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("signal_period_method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("signal_period_method", "TMA", "", "TMA");
+    indicator.parameters.addString("Price", "Price", "", "close");
+    indicator.parameters.addStringAlternative("Price", "open", "", "open");
+    indicator.parameters.addStringAlternative("Price", "close", "", "close");
+    indicator.parameters.addStringAlternative("Price", "high", "", "high");
+    indicator.parameters.addStringAlternative("Price", "low", "", "low");
+    indicator.parameters.addStringAlternative("Price", "median", "", "median");
+    indicator.parameters.addStringAlternative("Price", "typical", "", "typical");
+    indicator.parameters.addStringAlternative("Price", "weighted", "", "weighted");
+    indicator.parameters.addDouble("min_move", "min_move", "", 1.);
+    indicator.parameters.addInteger("hi_lo_bars_back", "hi_lo_bars_back", "", 5);
+    
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr1", "Slow Color", "Slow Color", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("clr2", "UP Color", "UP Color", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("clr3", "DN Color", "DN Color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("clr4", "Signal Color", "Signal Color", core.rgb(128, 128, 128));
+    indicator.parameters.addColor("clr5", "TUP Color", "TUP Color", core.rgb(0, 255, 255));
+    indicator.parameters.addColor("clr6", "TDN Color", "TDN Color", core.rgb(255, 128, 128));
+}
+
+var first;
+var source = null;
+var slow_period;
+var fast_period;
+var signal_period;
+var slow_period_method;
+var fast_period_method;
+var signal_period_method;
+var Price;
+var min_move;
+var hi_lo_bars_back;
+var MAfast;
+var StdDev;
+var ATR;
+var BuffSlow=null;
+var BuffUP=null;
+var BuffDN=null;
+var BuffSignal=null;
+var BuffTUP=null;
+var BuffTDN=null;
+var MASig;
+
+function Prepare()
+{
+    source = instance.source;
+    slow_period=instance.parameters.slow_period;
+    fast_period=instance.parameters.fast_period;
+    signal_period=instance.parameters.signal_period;
+    slow_period_method=instance.parameters.slow_period_method;
+    fast_period_method=instance.parameters.fast_period_method;
+    signal_period_method=instance.parameters.signal_period_method;
+    Price=instance.parameters.Price;
+    min_move=instance.parameters.min_move;
+    hi_lo_bars_back=instance.parameters.hi_lo_bars_back;
+    if (instance.parameters.Price=="open") 
+    {
+     MAfast = core.indicators.create(fast_period_method, source.open, fast_period);
+     StdDev = core.indicators.create("STDDEV2", source.open, slow_period, slow_period_method);
+    } 
+    else if (instance.parameters.Price=="close") 
+    {
+     MAfast = core.indicators.create(fast_period_method, source.close, fast_period);
+     StdDev = core.indicators.create("STDDEV2", source.close, slow_period, slow_period_method);
+    } 
+    else if (instance.parameters.Price=="high") 
+    {
+     MAfast = core.indicators.create(fast_period_method, source.high, fast_period);
+     StdDev = core.indicators.create("STDDEV2", source.high, slow_period, slow_period_method);
+    } 
+    else if (instance.parameters.Price=="low") 
+    {
+     MAfast = core.indicators.create(fast_period_method, source.low, fast_period);
+     StdDev = core.indicators.create("STDDEV2", source.low, slow_period, slow_period_method);
+    } 
+    else if (instance.parameters.Price=="median") 
+    {
+     MAfast = core.indicators.create(fast_period_method, source.median, fast_period);
+     StdDev = core.indicators.create("STDDEV2", source.median, slow_period, slow_period_method);
+    } 
+    else if (instance.parameters.Price=="typical") 
+    {
+     MAfast = core.indicators.create(fast_period_method, source.typical, fast_period);
+     StdDev = core.indicators.create("STDDEV2", source.typical, slow_period, slow_period_method);
+    } 
+    else
+    {
+     MAfast = core.indicators.create(fast_period_method, source.weighted, fast_period);
+     StdDev = core.indicators.create("STDDEV2", source.weighted, slow_period, slow_period_method);
+    }    
+    ATR = core.indicators.create("ATR", source, slow_period);
+     
+    first = Math.max(MAfast.DATA.first(),StdDev.DATA.first(),ATR.DATA.first(),source.first()+hi_lo_bars_back)+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.slow_period + ", " + instance.parameters.fast_period + ", " + instance.parameters.signal_period + ", " + instance.parameters.slow_period_method + ", " + instance.parameters.fast_period_method + ", " + instance.parameters.signal_period_method + ", " + instance.parameters.Price + ", " + instance.parameters.min_move + ", " + instance.parameters.hi_lo_bars_back + ")";
+    instance.name(name);
+    BuffSlow = instance.addStream("BuffSlow", core.Line, name + ".Slow", "Slow", instance.parameters.clr1, first);
+    BuffUP = instance.addStream("BuffUP", core.Bar, name + ".UP", "UP", instance.parameters.clr2, first);
+    BuffDN = instance.addStream("BuffDN", core.Bar, name + ".DN", "DN", instance.parameters.clr3, first);
+    BuffSignal = instance.addStream("BuffSignal", core.Line, name + ".Signal", "Signal", instance.parameters.clr4, first);
+    BuffTUP = instance.addStream("BuffTUP", core.Bar, name + ".TUP", "TUP", instance.parameters.clr5, first);
+    BuffTDN = instance.addStream("BuffTDN", core.Bar, name + ".TDN", "TDN", instance.parameters.clr6, first);
+    MASig = core.indicators.create(signal_period_method, BuffSlow, signal_period);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    MAfast.update(mode);
+    StdDev.update(mode);
+    ATR.update(mode);
+    var ma_now=MAfast.DATA[period];
+    var ma_b4=MAfast.DATA[period-1];
+    var tmp=Math.minmax(source, period-hi_lo_bars_back+1, period);
+    var minV=tmp[0];
+    var minP=tmp[2];
+    var maxV=tmp[1];
+    var maxP=tmp[3];
+    var moveV=Math.abs(minP-maxP)*100000.*source.pipSize();
+    BuffSlow[period]=StdDev.DATA[period]-ATR.DATA[period];
+    if (ma_now>=ma_b4 && moveV>=min_move) 
+    {
+     BuffUP[period]=BuffSlow[period];
+    }
+    if (ma_now<=ma_b4 && moveV>=min_move) 
+    {
+     BuffDN[period]=BuffSlow[period];
+    }
+    if (ma_now<=ma_b4 && moveV<=min_move) 
+    {
+     BuffTUP[period]=BuffSlow[period];
+    }
+    if (ma_now>=ma_b4 && moveV<=min_move) 
+    {
+     BuffTDN[period]=BuffSlow[period];
+    }
+    MASig.update(mode);
+    BuffSignal[period]=MASig.DATA[period];
+   } 
+}
+

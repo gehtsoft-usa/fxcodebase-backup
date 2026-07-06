@@ -1,0 +1,65 @@
+function Init()
+{
+    indicator.name("EMAPredictive3 indicator");
+    indicator.description("EMAPredictive3 indicator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addDouble("ShortPeriod", "Short period", "", 8);
+    indicator.parameters.addDouble("LongPeriod", "Long period", "", 25);
+    indicator.parameters.addDouble("ExtraTimeForward", "Extra time forward", "", 1);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(255, 255, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var ShortPeriod;
+var LongPeriod;
+var ExtraTimeForward;
+var EMAPredictive3=null;
+var p1, p3, t1, t3, t;
+var MA1, MA3;
+
+function Prepare()
+{
+    source = instance.source;
+    ShortPeriod=instance.parameters.ShortPeriod;
+    LongPeriod=instance.parameters.LongPeriod;
+    ExtraTimeForward=instance.parameters.ExtraTimeForward;
+    first = source.first()+2;
+    MA1=instance.addInternalStream(first, 0);
+    MA3=instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.ShortPeriod + ", " + instance.parameters.LongPeriod + ", " + instance.parameters.ExtraTimeForward + ")";
+    instance.name(name);
+    EMAPredictive3 = instance.addStream("EMAPredictive3", core.Line, name + ".EMAPredictive3", "EMAPredictive3", instance.parameters.clr, first);
+    EMAPredictive3.setWidth(instance.parameters.widthLinReg);
+    EMAPredictive3.setStyle(instance.parameters.styleLinReg);
+    p1=2/(LongPeriod+1);
+    p3=2/(ShortPeriod+1);
+    t1=(LongPeriod-1)/2;
+    t3=(ShortPeriod-1)/2;
+    t=ShortPeriod+ExtraTimeForward;
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    MA1[period]=p1*source[period]+(1-p1)*MA1[period-1];
+    MA3[period]=p3*source[period]+(1-p3)*MA3[period-1];
+    var slope1=(MA3[period]-MA1[period])/(t1-t3);
+    EMAPredictive3[period]=MA3[period]+slope1*t;
+   } 
+   else if (period==first) 
+   {
+    MA1[period]=source[period];
+    MA3[period]=source[period]; 
+   } 
+}
+

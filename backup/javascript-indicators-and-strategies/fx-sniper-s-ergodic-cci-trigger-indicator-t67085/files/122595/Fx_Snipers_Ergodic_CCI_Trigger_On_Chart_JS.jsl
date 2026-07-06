@@ -1,0 +1,66 @@
+function Init()
+{
+    indicator.name("Fx Sniper's Ergodic CCI Trigger on chart");
+    indicator.description("Fx Sniper's Ergodic CCI Trigger on chart");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    
+    indicator.parameters.addInteger("pq", "pq", "pq", 4);
+    indicator.parameters.addInteger("pr", "pr", "pr", 8);
+    indicator.parameters.addInteger("ps", "ps", "ps", 5);
+    indicator.parameters.addInteger("trigger", "trigger", "trigger", 4);
+    indicator.parameters.addString("MA_Method", "Method of MA", "", "MVA");
+    indicator.parameters.addStringAlternative("MA_Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("MA_Method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("MA_Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("MA_Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("MA_Method", "TMA", "", "TMA");
+    
+
+    indicator.parameters.addColor("clr1", "Color of UP", "Color of UP", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clr2", "Color of DN", "Color of DN", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+var pq;
+var pr;
+var ps;
+var trigger;
+var MA_Method;
+var Ind;
+var UP;
+var DN;
+
+function Prepare()
+{
+    source = instance.source;
+    pq=instance.parameters.pq;
+    pr=instance.parameters.pr;
+    ps=instance.parameters.ps;
+    trigger=instance.parameters.trigger;
+    MA_Method=instance.parameters.MA_Method;
+    Ind = core.indicators.create("FX_SNIPER'S_ERGODIC_CCI_TRIGGER", source, pq,pr,ps,trigger,MA_Method);
+    first = Ind.DATA.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.pq + ", " + instance.parameters.pr + ", " + instance.parameters.ps + ", " + instance.parameters.trigger + ", " + instance.parameters.MA_Method + ")";
+    instance.name(name);
+    UP = instance.createTextOutput ("Up", "Up", "Wingdings", 10, core.H_Center, core.V_Bottom, instance.parameters.clr1, 0);
+    DN = instance.createTextOutput ("Dn", "Dn", "Wingdings", 10, core.H_Center, core.V_Top, instance.parameters.clr2, 0);
+}
+
+function Update(period, mode)
+{
+    if (period>first) 
+    {
+     Ind.update(mode);
+     if (Ind.buff1[period]>Ind.buff2[period] && Ind.buff1[period-1]<=Ind.buff2[period-1]) 
+     {
+      UP.set(period, source.low[period], "\225", "UP");
+     }
+     if (Ind.buff1[period]<Ind.buff2[period] && Ind.buff1[period-1]>=Ind.buff2[period-1]) 
+     {
+      DN.set(period, source.high[period], "\226", "DN");
+     }
+    } 
+}
+

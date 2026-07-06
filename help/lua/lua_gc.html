@@ -1,0 +1,69 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_gc</title>
+</head>
+<body>
+<h3><a name="lua_gc"><code>lua_gc</code></a></h3>
+<pre>int lua_gc (lua_State *L, int what, int data);</pre>
+
+<p>
+Controls the garbage collector.
+
+
+<p>
+This function performs several tasks,
+according to the value of the parameter <code>what</code>:
+
+<ul>
+
+<li><b><code>LUA_GCSTOP</code>:</b>
+stops the garbage collector.
+</li>
+
+<li><b><code>LUA_GCRESTART</code>:</b>
+restarts the garbage collector.
+</li>
+
+<li><b><code>LUA_GCCOLLECT</code>:</b>
+performs a full garbage-collection cycle.
+</li>
+
+<li><b><code>LUA_GCCOUNT</code>:</b>
+returns the current amount of memory (in Kbytes) in use by Lua.
+</li>
+
+<li><b><code>LUA_GCCOUNTB</code>:</b>
+returns the remainder of dividing the current amount of bytes of
+memory in use by Lua by 1024.
+</li>
+
+<li><b><code>LUA_GCSTEP</code>:</b>
+performs an incremental step of garbage collection.
+The step "size" is controlled by <code>data</code>
+(larger values mean more steps) in a non-specified way.
+If you want to control the step size
+you must experimentally tune the value of <code>data</code>.
+The function returns 1 if the step finished a
+garbage-collection cycle.
+</li>
+
+<li><b><code>LUA_GCSETPAUSE</code>:</b>
+sets <code>data</code>/100 as the new value
+for the <em>pause</em> of the collector (see <a href="2.10.html">&sect;2.10</a>).
+The function returns the previous value of the pause.
+</li>
+
+<li><b><code>LUA_GCSETSTEPMUL</code>:</b>
+sets <code>arg</code>/100 as the new value for the <em>step multiplier</em> of
+the collector (see <a href="2.10.html">&sect;2.10</a>).
+The function returns the previous value of the step multiplier.
+</li>
+
+</ul>
+
+
+
+
+<hr>
+</body>
+</html>

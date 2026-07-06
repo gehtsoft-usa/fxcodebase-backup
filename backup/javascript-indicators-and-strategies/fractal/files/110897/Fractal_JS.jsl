@@ -1,0 +1,71 @@
+//initializes the indicator
+function Init()
+{
+    indicator.name("Fractal");
+    indicator.description("Fractal");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    indicator.setTag("group", "Bill Williams");
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clrUP", "Up fractal color", "Up fractal color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clrDN", "Down fractal color", "Down fractal color", core.rgb(255, 0, 0));
+    indicator.parameters.addBoolean("ShowPrice", "Show fractal price", "Show fractal price", false);
+    indicator.parameters.addColor("clrPrice", "Prices color", "Prices color", core.rgb(128, 128, 128));
+}
+
+var source;
+var up, down;
+var up1, down1;
+
+//initializes the instance of the indicator
+function Prepare(onlyName)
+{
+    source = instance.source;
+    var name = profile.id() + "(" + instance.source.name() + ")";
+    instance.name(name);
+  
+    if (onlyName == true)
+        return ;
+
+    up = instance.createTextOutput("Up", "Up", "Wingdings", 9, core.H_Center, core.V_Top, instance.parameters.clrUP, 0);
+    down = instance.createTextOutput("Dn", "Dn", "Wingdings", 9, core.H_Center, core.V_Bottom, instance.parameters.clrDN, 0);
+    up1 = instance.createTextOutput("", "UpL", "Verdana", 7, core.H_Right, core.V_Top, instance.parameters.clrPrice, 0);
+    down1 = instance.createTextOutput("", "DnL", "Verdana", 7, core.H_Right, core.V_Bottom, instance.parameters.clrPrice, 0);
+}
+
+// calculate the value
+function Update(period, mode)
+{
+    if (period > 6)
+    {
+        var curr = source.high[period - 2];
+        if (curr > source.high[period - 4] && curr > source.high[period - 3] && curr > source.high[period - 1] && curr > source.high[period])
+        {
+            up.set(period - 2, source.high[period - 2], "\217", source.high[period - 2]);
+            if (instance.parameters.ShowPrice)
+            {
+                up1.set(period - 2, source.high[period - 2], "  " + source.high[period - 2]);
+            }
+        }
+        else
+        {
+            up.setNoData(period - 2);
+            up1.setNoData(period - 2);
+        }
+        curr = source.low[period - 2];
+        if (curr < source.low[period - 4] && curr < source.low[period - 3] && curr < source.low[period - 1] && curr < source.low[period])
+        {
+            down.set(period - 2, source.low[period - 2], "\218", source.low[period - 2]);
+            if (instance.parameters.ShowPrice)
+            {
+                down1.set(period - 2, source.low[period - 2], "  " + source.low[period - 2]);
+            }
+        }
+        else
+        {
+            down.setNoData(period - 2);
+            down1.setNoData(period - 2);
+        }
+    }
+}

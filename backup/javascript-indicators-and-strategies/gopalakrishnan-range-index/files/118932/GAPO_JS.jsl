@@ -1,0 +1,52 @@
+function Init()
+{
+    indicator.name("Gopalakrishnan Range Index");
+    indicator.description("Gopalakrishnan Range Index");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "Period", 14);
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("GAPO_color", "Color of GAPO", "Color of GAPO", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var Period;
+
+var first;
+var source = null;
+
+var GAPO = null;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+    source = instance.source;
+    first = source.first()+Period;
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        GAPO = instance.addStream("GAPO", core.Line, name, "GAPO", instance.parameters.GAPO_color, first);
+		GAPO.setWidth(instance.parameters.width);
+        GAPO.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period)
+{
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+	    var tmp=Math.minmax(source, period-Period+1, period);
+	    var min=tmp[0];
+        var max=tmp[1];
+        GAPO[period] = Math.log(max-min)/Math.log(Period);
+    
+}
+

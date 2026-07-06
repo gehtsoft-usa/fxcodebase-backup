@@ -1,0 +1,747 @@
+-- More information about this indicator can be found at:
+-- http://fxcodebase.com/
+
+--+------------------------------------------------------------------+
+--|                               Copyright © 2019, Gehtsoft USA LLC |
+--|                                            http://fxcodebase.com |
+--+------------------------------------------------------------------+
+--|                                      Developed by : Mario Jemic  |
+--|                                          mario.jemic@gmail.com   |
+--+------------------------------------------------------------------+
+--|                                 Support our efforts by donating  |
+--|                                    Paypal: https://goo.gl/9Rj74e |
+--+------------------------------------------------------------------+
+--|                                Patreon :  https://goo.gl/GdXWeN  |
+--|                    BitCoin : 15VCJTLaz12Amr7adHSBtL9v8XomURo9RF  |
+--|                BitCoin Cash: 1BEtS465S3Su438Kc58h2sqvVvHK9Mijtg  |
+--|           Ethereum : 0x8C110cD61538fb6d7A2B47858F0c0AaBd663068D  |
+--|                   LiteCoin : LLU8PSY2vsq7B9kRELLZQcKf5nJQrdeqwD  |
+--+------------------------------------------------------------------+
+
+local indi_alerts = {};
+indi_alerts.Version = "1.11";
+indi_alerts.inverted_arrows = false;
+local alert_stages = { 2 };
+
+function IsUpCondition(period)
+
+    if Indicator== nil or period <= Indicator.DATA:first() or   Indicator.DATA:size()-1 < 2 then
+    return false;
+	else
+    return core.crossesOver(Indicator.DATA, 0, period);	
+    end
+	
+
+end
+
+function IsDownCondition(period)
+
+    if Indicator== nil or period <= Indicator.DATA:first() or  Indicator.DATA:size()-1 < 2  then
+    return false;
+	else
+    return core.crossesUnder(Indicator.DATA, 0, period);	
+    end
+	
+
+end
+
+function Init()
+    indicator:name("CCI with targets")
+    indicator:description("")
+    indicator:requiredSource(core.Bar)
+    indicator:type(core.Indicator)
+    
+    indicator.parameters:addString("TF", "Indicator Time Frame", "", "D1")
+    indicator.parameters:setFlag("TF", core.FLAG_BARPERIODS_EDIT)
+    indicator.parameters:addInteger("cci_period", "CCI Period", "Period", 20)
+    
+    indicator.parameters:addDouble("Level1", "1. Target Ratio", "", 1)
+    indicator.parameters:addDouble("Level2", "2. Target Ratio", "", 1.5)
+    indicator.parameters:addDouble("Level3", "3. Target Ratio", "", 2)
+    indicator.parameters:addDouble("Level4", "Trigger Line (in pips)", "", 0)
+
+    indicator.parameters:addBoolean("Historical", "Show Historical", "", true)
+    indicator.parameters:addString("ShowLabel", "Show Label", "", "no")
+    indicator.parameters:addStringAlternative("ShowLabel", "Do not show", "", "no")
+    indicator.parameters:addStringAlternative("ShowLabel", "At the left", "", "left")
+    indicator.parameters:addStringAlternative("ShowLabel", "At the right", "", "right")
+
+    indicator.parameters:addInteger("Lookback", "Label Lookback Period", "", 100)
+
+    indicator.parameters:addGroup("Line Style")
+    indicator.parameters:addColor("StartLineColor", "Start Line Color", "", core.rgb(0, 0, 255))
+    indicator.parameters:addInteger("width1", "Line width", "", 1, 1, 5)
+    indicator.parameters:addInteger("style1", "Line style", "", core.LINE_SOLID)
+    indicator.parameters:setFlag("style1", core.FLAG_LINE_STYLE)
+
+    indicator.parameters:addGroup("Label Style")
+    indicator.parameters:addColor("LabelColor", "Label Color", "", core.COLOR_LABEL)
+    indicator.parameters:addBoolean("LabelBackground", "Add Label Background", "", false)
+    indicator.parameters:addColor("LabelBackgroundColor", "Label Background Color", "", core.COLOR_BACKGROUND)
+    indicator.parameters:addInteger("FontSize", "Label Size", "", 8)
+    indicator.parameters:addColor("StopLineColor", "Stop Line Color", "", core.rgb(255, 0, 0))
+    indicator.parameters:addInteger("width2", "Line width", "", 1, 1, 5)
+    indicator.parameters:addInteger("style2", "Line style", "", core.LINE_SOLID)
+    indicator.parameters:setFlag("style2", core.FLAG_LINE_STYLE)
+
+    indicator.parameters:addColor("TargetLineColor1", "1. Target Line Color", "", core.rgb(0, 255, 0))
+    indicator.parameters:addInteger("width3", "Line width", "", 1, 1, 5)
+    indicator.parameters:addInteger("style3", "Line style", "", core.LINE_SOLID)
+    indicator.parameters:setFlag("style3", core.FLAG_LINE_STYLE)
+
+    indicator.parameters:addColor("TargetLineColor2", "2. Target  Line Color", "", core.rgb(0, 255, 0))
+    indicator.parameters:addInteger("width4", "Line width", "", 1, 1, 5)
+    indicator.parameters:addInteger("style4", "Line style", "", core.LINE_SOLID)
+    indicator.parameters:setFlag("style4", core.FLAG_LINE_STYLE)
+
+    indicator.parameters:addColor("TargetLineColor3", "3. Target  Line Color", "", core.rgb(0, 255, 0))
+    indicator.parameters:addInteger("width5", "Line width", "", 1, 1, 5)
+    indicator.parameters:addInteger("style5", "Line style", "", core.LINE_SOLID)
+    indicator.parameters:setFlag("style5", core.FLAG_LINE_STYLE)
+
+    indicator.parameters:addColor("TargetLineColor4", "Trigger Line Color", "", core.rgb(0, 255, 0))
+    indicator.parameters:addInteger("width6", "Line width", "", 1, 1, 5)
+    indicator.parameters:addInteger("style6", "Line style", "", core.LINE_SOLID)
+    indicator.parameters:setFlag("style6", core.FLAG_LINE_STYLE)
+
+    indi_alerts:AddParameters(indicator.parameters);
+    indi_alerts:AddAlert("CCI/0")
+end
+
+local Number = 1
+local Size
+local Show
+local Live
+local FIRST = true
+local OnlyOnce
+local UpTrendColor, DownTrendColor
+local OnlyOnceFlag
+local ShowAlert
+local Shift = 0
+
+local first
+local source = nil
+local btf_source = nil
+local position = nil
+
+local FontSize, LabelColor, font
+
+local Level1, Level2, Level3, Level4
+local LabelBackgroundColor
+local LabelBackground
+local Historical, ShowLabel
+local Lookback
+local TF
+local dayoffset
+local weekoffset
+local cci_period
+
+local labels = {}
+local last_label_id = 0;
+function CreateLabel(color, style, width)
+    local label = {};
+    label.Id = last_label_id + 1;
+    label.LabelId = last_label_id + 2;
+    label.Color = color;
+    label.Style = style;
+    label.Width = width;
+    last_label_id = label.LabelId;
+    function label:Draw(p, color)
+        local str = win32.formatNumber(self.Rate, false, source:getPrecision());
+        core.host:execute("drawLine", New(p, self.Id), self.DateEnd, self.Rate, self.Date, self.Rate, self.Color, self.Style, self.Width, str)
+        if not LabelBackground and ShowLabel ~= "no" then
+            if ShowLabel == "left" then
+                core.host:execute("drawLabel1", New(p, self.LabelId), self.DateEnd, core.CR_CHART, self.Rate, core.CR_CHART, core.H_Right, core.V_Top, font, LabelColor, self.Text)
+            else
+                core.host:execute("drawLabel1", New(p, self.LabelId), self.Date, core.CR_CHART, self.Rate, core.CR_CHART, core.H_Left, core.V_Top, font, LabelColor, self.Text)             --   date = source:date(period)
+            end
+        end
+    end
+    return label;
+end
+
+function Prepare(nameOnly)
+    local name = profile:id() .. "(" .. instance.source:name() .. ")"
+    instance:name(name)
+    if (nameOnly) then
+        return
+    end
+    indi_alerts:Prepare();
+    indi_alerts.source = instance.source;
+    instance:drawOnMainChart(true);
+    instance:ownerDrawn(true);
+    cci_period = instance.parameters.cci_period;
+
+    dayoffset  = core.host:execute("getTradingDayOffset")
+    weekoffset = core.host:execute("getTradingWeekOffset")
+    source = instance.source
+    TF = instance.parameters.TF
+    local s1, e1, s2, e2
+    s1, e1 = core.getcandle(source:barSize(), 0, 0, 0)
+    s2, e2 = core.getcandle(TF, 0, 0, 0)
+    assert((e1 - s1) <= (e2 - s2), "The chosen time frame must be equal to or bigger than the chart time frame!")
+
+    btf_source = core.host:execute("getSyncHistory", source:instrument(), TF, source:isBid(), 0, 100, 101)
+    loading    = true
+
+    LabelBackgroundColor = instance.parameters.LabelBackgroundColor
+    LabelBackground = instance.parameters.LabelBackground
+    FontSize = instance.parameters.FontSize
+    LabelColor = instance.parameters.LabelColor
+    Historical = instance.parameters.Historical
+    ShowLabel = instance.parameters.ShowLabel
+
+    font = core.host:execute("createFont", "Arial", FontSize, false, false)
+
+    OnlyOnceFlag = true
+    FIRST = true
+    OnlyOnce = instance.parameters.OnlyOnce
+    Show = instance.parameters.Show
+    Live = instance.parameters.Live
+    Lookback = instance.parameters.Lookback
+
+    Level1 = instance.parameters.Level1
+    Level2 = instance.parameters.Level2
+    Level3 = instance.parameters.Level3
+    Level4 = instance.parameters.Level4
+    
+    labels[#labels + 1] = CreateLabel(instance.parameters.StartLineColor, instance.parameters.style1, instance.parameters.width1);
+    labels[#labels + 1] = CreateLabel(instance.parameters.StopLineColor, instance.parameters.style2, instance.parameters.width2);
+    labels[#labels + 1] = CreateLabel(instance.parameters.TargetLineColor1, instance.parameters.style3, instance.parameters.width3);
+    labels[#labels + 1] = CreateLabel(instance.parameters.TargetLineColor2, instance.parameters.style4, instance.parameters.width4);
+    labels[#labels + 1] = CreateLabel(instance.parameters.TargetLineColor3, instance.parameters.style5, instance.parameters.width5);
+    if Level4 ~= 0 then
+        labels[#labels + 1] = CreateLabel(instance.parameters.TargetLineColor4, instance.parameters.style6, instance.parameters.width6);
+    end
+
+    first = source:first() + 1
+
+    position = instance:addInternalStream(0, 0)
+
+    Indicator = core.indicators:create("CCI", btf_source, cci_period);
+
+    FIRST_CANDLE = nil
+end
+
+local init = false
+function Draw(stage, context)
+    indi_alerts:Draw(stage, context, source);
+    if stage ~= 2 then
+        return
+    end
+    if not init then
+        context:createFont(2, "Arial", 0, context:pointsToPixels(FontSize), 0)
+        context:createSolidBrush(3, LabelBackgroundColor)
+        init = true
+    end
+    for _, label in ipairs(labels) do
+        DrawLabel(label, context)
+    end
+end
+
+function DrawLabel(label, context)
+    if label.Text ~= nil then
+        local visible, y = context:pointOfPrice(label.Rate)
+        local width, height = context:measureText(2, label.Text, 0)
+        local x
+        local pos
+        if ShowLabel == "left" then
+            x = context:positionOfDate(label.DateEnd)
+            pos = context.RIGHT + context.TOP
+        else
+            x = context:positionOfDate(label.Date) - width
+            pos = context.LEFT + context.TOP
+        end
+        context:drawText(2, label.Text, LabelColor, LabelBackgroundColor, x, y - height, x + width, y, pos)
+    end
+end
+
+local ID = 0
+local ids = {}
+function New(period, id)
+    if ids[period] == nil then
+        ids[period] = {}
+    end
+    if ids[period][id] == nil then
+        ids[period][id] = ID + 1
+        ID = ID + 1
+    end
+    return ids[period][id]
+end
+
+function GetPeriod(period)
+    local Candle = core.getcandle(TF, source:date(period), dayoffset, weekoffset)
+    if loading or btf_source:size() == 0 then
+        return false
+    end
+    if period < source:first() then
+        return false
+    end
+
+    local p = core.findDate(btf_source, Candle, false)
+    -- candle is not found
+    if p < 0 then
+        return false
+    else
+        return p
+    end
+end
+
+function GetPrevPeriod(p)
+    if p == 0 then
+        return -1;
+    end
+    local prev_date = btf_source:date(p - 1);
+    return core.findDate(source, prev_date, false);
+end
+
+function Update(period, mode)
+    Indicator:update(mode);
+    local P = GetPeriod(period)
+    if not P then
+        return
+    end
+    if period < first then
+        ID = 0
+        return
+    elseif period == first then
+        ID = 0
+    end
+    local prev_period = GetPrevPeriod(P);
+    if (period == first or prev_period == -1) then
+        position[period] = 0
+    else
+        position[period] = position[period - 1]
+    end
+
+    if position[period] ~= -1 and IsDownCondition(P) then
+        position[period] = -1
+    elseif position[period] ~= 1 and IsUpCondition(P) then
+        position[period] = 1
+    end
+
+    if (not Historical and period < source:size() - 1) or (Historical and period < source:size() - 1 - Lookback) then
+        return
+    end
+
+    local p = FindLast(period)
+    local Delta
+    if p ~= 0 then
+        local signalVal = source.close[period];
+        if position[p] == 1 then
+            Delta = math.abs(signalVal - source.high[p])
+            labels[1].Rate = source.high[p]
+            labels[2].Rate = source.high[p] - Delta;
+            labels[3].Rate = source.high[p] + Delta * Level1
+            labels[4].Rate = source.high[p] + Delta * Level2
+            labels[5].Rate = source.high[p] + Delta * Level3
+            if labels[6] ~= nil then
+                labels[6].Rate = source.high[p] + source:pipSize() * Level4
+            end
+        elseif position[p] == -1 then
+            Delta = math.abs(signalVal - source.low[p])
+            labels[1].Rate = source.low[p]
+            labels[2].Rate = source.low[p] + Delta;
+            labels[3].Rate = source.low[p] - Delta * Level1
+            labels[4].Rate = source.low[p] - Delta * Level2
+            labels[5].Rate = source.low[p] - Delta * Level3
+            if labels[6] ~= nil then
+                labels[6].Rate = source.low[p] - source:pipSize() * Level4
+            end
+        else
+            return;
+        end
+        labels[1].Text = string.format("Entry : %s", labels[1].Rate)
+        labels[2].Text = string.format("Stop : %s (%s)", labels[2].Rate, win32.formatNumber(Delta / source:pipSize(), false, 1))
+        labels[3].Text = string.format("1. Target : %s (%s)", win32.formatNumber(labels[3].Rate, false, source:getPrecision()), win32.formatNumber(Delta * Level1 / source:pipSize(), false, 1))
+        labels[4].Text = string.format("2. Target : %s (%s)", win32.formatNumber(labels[4].Rate, false, source:getPrecision()), win32.formatNumber((Delta * Level2) / source:pipSize(), false, 1))
+        labels[5].Text = string.format("3. Target : %s (%s)", win32.formatNumber(labels[5].Rate, false, source:getPrecision()), win32.formatNumber((Delta * Level3) / source:pipSize(), false, 1))
+        if labels[6] ~= nil then
+            labels[6].Text = string.format("Trigger : %s (%s)", win32.formatNumber(labels[6].Rate, false, source:getPrecision()), win32.formatNumber(Level4, false, 1))
+        end
+
+        for i,label in ipairs(labels) do
+            label.Date = source:date(period)
+            label.DateEnd = source:date(p)
+            label:Draw(p);
+        end
+    end
+    for _, alert in ipairs(indi_alerts.Alerts) do Activate(alert,P, period, period ~= source:size() - 1); end
+end
+
+function Activate(alert, P, period, historical_period)
+    if indi_alerts.Live ~= "Live" then period = period - 1; end
+    alert.Alert[period] = 0;
+    if not alert.ON then
+        if indi_alerts.FIRST then indi_alerts.FIRST = false; end
+        return;
+    end
+    if alert.id == 1 then
+        if (IsUpCondition(P)) then
+            alert:UpAlert(source, period, alert.Label .. ". Bull pattern", source.high[period], historical_period);
+        elseif (IsDownCondition(P)) then
+            alert:DownAlert(source, period, alert.Label .. ". Bear pattern", source.low[period], historical_period);
+        end
+    end
+
+    if indi_alerts.FIRST then indi_alerts.FIRST = false; end
+end
+
+function ReleaseInstance()
+    core.host:execute("deleteFont", font)
+end
+
+function FindLast(period)
+    for i = period, first, -1 do
+        if position[i] ~= position[i - 1] then
+            return i
+        end
+    end
+
+    return 0;
+end
+
+-- the function is called when the async operation is finished
+function AsyncOperationFinished(cookie)
+    indi_alerts:AsyncOperationFinished(cookie, success, message, message1, message2)
+    if cookie == 100 then
+        loading = false
+     instance:updateFrom(0)
+    elseif cookie == 101 then
+        loading = true
+    end
+end
+
+indi_alerts.last_id = 0;
+indi_alerts.FIRST = true;
+indi_alerts._alerts = {};
+indi_alerts._advanced_alert_timer = nil;
+function indi_alerts:AddParameters(parameters)
+    indicator.parameters:addGroup("Alert Mode");  
+    indicator.parameters:addString("Live", "End of Turn / Live", "", "Live");
+    indicator.parameters:addStringAlternative("Live", "End of Turn", "", "End of Turn");
+    indicator.parameters:addStringAlternative("Live", "Live", "", "Live");
+    indicator.parameters:addBoolean("strategy_output", "Output for strategies", "Used by the strategies", false);
+
+    indicator.parameters:addInteger("ToTime", "Convert the date to", "", 6)
+    indicator.parameters:addIntegerAlternative("ToTime", "EST", "", 1)
+    indicator.parameters:addIntegerAlternative("ToTime", "UTC", "", 2)
+    indicator.parameters:addIntegerAlternative("ToTime", "Local", "", 3)
+    indicator.parameters:addIntegerAlternative("ToTime", "Server", "", 4)
+    indicator.parameters:addIntegerAlternative("ToTime", "Financial", "", 5)
+    indicator.parameters:addIntegerAlternative("ToTime", "Display", "", 6)
+    
+    indicator.parameters:addGroup("Alert Style");
+    indicator.parameters:addInteger("Size", "Label Size", "", 10, 1 , 100);
+    
+    indicator.parameters:addGroup("Alerts");
+    indicator.parameters:addBoolean("Show", "Show Dialog box Alert", "", true);
+    indicator.parameters:addBoolean("ShowAlert", "Show Alert", "", true);
+    
+    indicator.parameters:addGroup("Alerts Sound");
+    indicator.parameters:addBoolean("PlaySound", "Play Sound", "", true);    
+    indicator.parameters:addBoolean("RecurrentSound", "Recurrent Sound", "", false);
+    
+    indicator.parameters:addGroup("Alerts Email");
+    indicator.parameters:addBoolean("SendEmail", "Send Email", "", true);
+    indicator.parameters:addString("Email", "Email", "", "");
+    indicator.parameters:setFlag("Email", core.FLAG_EMAIL);
+
+    indicator.parameters:addGroup("External Alerts");
+    indicator.parameters:addBoolean("use_advanced_alert", "Send Advanced Alert", "Telegram/Discord/other platform (like MT4)", false)
+	indicator.parameters:addString("advanced_alert_key", "Advanced Alert Key",
+		"You can get a key via @profit_robots_bot Telegram Bot. Visit ProfitRobots.com for Discord/other platform keys", "")
+end
+
+function indi_alerts:AsyncOperationFinished(cookie, success, message, message1, message2) if cookie == self._advanced_alert_timer and #self._alerts > 0 then if self._advanced_alert_key == nil then return; end local data = self:ArrayToJSON(self._alerts); self._alerts = {}; local req = http_lua.createRequest(); local query = string.format('{"Key":"%s","StrategyName":"%s","Platform":"FXTS2","Notifications":%s}', self._advanced_alert_key, string.gsub(self.StrategyName or "", '"', '\\"'), data); req:setRequestHeader("Content-Type", "application/json"); req:setRequestHeader("Content-Length", tostring(string.len(query))); req:start("http://profitrobots.com/api/v1/notification", "POST", query); end end
+function indi_alerts:ToJSON(item)
+    local json = {};
+    function json:AddStr(name, value) local separator = ""; if self.str ~= nil then separator = ","; else self.str = ""; end self.str = self.str .. string.format("%s\"%s\":\"%s\"", separator, tostring(name), tostring(value)); end
+    function json:AddNumber(name, value) local separator = ""; if self.str ~= nil then separator = ","; else self.str = ""; end self.str = self.str .. string.format("%s\"%s\":%f", separator, tostring(name), value or 0); end
+    function json:AddBool(name, value) local separator = ""; if self.str ~= nil then separator = ","; else self.str = ""; end self.str = self.str .. string.format("%s\"%s\":%s", separator, tostring(name), value and "true" or "false"); end
+    function json:ToString() return "{" .. (self.str or "") .. "}"; end
+    local first = true; for idx,t in pairs(item) do  local stype = type(t) if stype == "number" then json:AddNumber(idx, t); elseif stype == "string" then json:AddStr(idx, t); elseif stype == "boolean" then json:AddBool(idx, t); elseif stype == "function" or stype == "table" then else core.host:trace(tostring(idx) .. " " .. tostring(stype)); end end
+    return json:ToString();
+end
+function indi_alerts:ArrayToJSON(arr) local str = "["; for i, t in ipairs(self._alerts) do local json = self:ToJSON(t); if str == "[" then str = str .. json; else str = str .. "," .. json; end end return str .. "]"; end
+function indi_alerts:AddAlert(label)
+    self.last_id = self.last_id + 1;
+    indicator.parameters:addGroup(label .. " Alert");
+
+    indicator.parameters:addBoolean("ON" .. self.last_id , "Show " .. label .." Alert" , "", true);
+
+    indicator.parameters:addString("drawing_mode" .. self.last_id, "Drawing mode", "", "arrows");
+    indicator.parameters:addStringAlternative("drawing_mode" .. self.last_id, "Arrows", "", "arrows");
+    indicator.parameters:addStringAlternative("drawing_mode" .. self.last_id, "Vertical lines", "", "vlines");
+
+    indicator.parameters:addFile("Up" .. self.last_id, label .. " Cross Over Sound", "", "");
+    indicator.parameters:setFlag("Up" .. self.last_id, core.FLAG_SOUND);
+    indicator.parameters:addInteger("UpSymbol" .. self.last_id, "Up Symbol", "", 217);
+    indicator.parameters:addColor("UpColor" .. self.last_id, "Up Color", "", core.rgb(0, 255, 0));
+    
+    indicator.parameters:addFile("Down" .. self.last_id, label .. " Cross Under Sound", "", "");
+    indicator.parameters:setFlag("Down" .. self.last_id, core.FLAG_SOUND);
+    indicator.parameters:addInteger("DownSymbol" .. self.last_id, "Down Symbol", "", 218);
+    indicator.parameters:addColor("DownColor" .. self.last_id, "Down Color", "", core.rgb(255, 0, 0));
+
+    indicator.parameters:addString("Label" .. self.last_id, "Label", "", label);
+end
+
+function indi_alerts:AddSingleAlert(Label)
+    self.last_id = self.last_id + 1;
+    indicator.parameters:addGroup(Label .. " Alert");
+
+    indicator.parameters:addBoolean("ON" .. self.last_id , "Show " .. Label .." Alert" , "", true);
+
+    indicator.parameters:addFile("Up" .. self.last_id, Label .. " Sound", "", "");
+    indicator.parameters:setFlag("Up" .. self.last_id, core.FLAG_SOUND);
+    indicator.parameters:addInteger("UpSymbol" .. self.last_id, "Symbol", "", 217);
+    indicator.parameters:addColor("UpColor" .. self.last_id, "Color", "", core.rgb(0, 255, 0));
+    
+    indicator.parameters:addString("Label" .. self.last_id, "Label", "", Label);
+end
+
+function indi_alerts:DrawAlert(context, alert, period)
+    if not alert.Alert:hasData(period) then
+        return;
+    end
+
+    if alert.Alert[period] == 1 then
+        local x = context:positionOfBar(period);
+        if alert.DrawingMode == "arrows" then
+            visible, y = context:pointOfPrice(alert.AlertLevel[period]);
+            width, height = context:measureText(self._stages[alert.Stage].FONT_ID, alert.UpSymbol, 0);
+            local x1 = x - width / 2;
+            local x2 = x + width / 2;
+            local y1, y2;
+            if self.inverted_arrows then
+                y1 = y;
+                y2 = y + height;
+            else
+                y1 = y - height;
+                y2 = y;
+            end
+			context:drawText(self._stages[alert.Stage].FONT_ID, alert.UpSymbol, alert.UpColor, -1, x1, y1, x2, y2, 0);
+        else
+            context:drawLine(alert.UpLinePen, x, context:top(), x, context:bottom());
+        end
+	elseif alert.Alert[period] == -1 then
+        local x = context:positionOfBar(period);
+        if alert.DrawingMode == "arrows" then
+            visible, y = context:pointOfPrice(alert.AlertLevel[period]);
+            width, height = context:measureText(self._stages[alert.Stage].FONT_ID, alert.DownSymbol, 0);
+            local x1 = x - width / 2;
+            local x2 = x + width / 2;
+            local y1, y2;
+            if self.inverted_arrows then
+                y1 = y - height;
+                y2 = y;
+            else
+                y1 = y;
+                y2 = y + height;
+            end
+            context:drawText(self._stages[alert.Stage].FONT_ID, alert.DownSymbol, alert.DownColor, -1, x1, y1, x2, y2, 0);
+        else
+            context:drawLine(alert.DownLinePen, x, context:top(), x, context:bottom());
+        end
+    end
+end
+indi_alerts.NextId = 1;
+indi_alerts._stages = {};
+function indi_alerts:Draw(stage, context)
+    if self._stages[stage] == nil then
+        self._stages[stage] = {};
+        self._stages[stage].createFont = false;
+        for _, level in ipairs(self.Alerts) do
+            if level.Stage == stage then
+                if level.DrawingMode == "vlines" then
+                    level.UpLinePen = self.NextId;
+                    self.NextId = self.NextId + 1;
+                    level.DownLinePen = self.NextId;
+                    self.NextId = self.NextId + 1;
+                    context:createPen(level.UpLinePen, context.SOLID, 1, level.UpColor);
+                    context:createPen(level.DownLinePen, context.SOLID, 1, level.DownColor);
+                else
+                    self._stages[stage].createFont = true;
+                end
+            end
+        end
+        if self._stages[stage].createFont and self._stages[stage].FONT_ID == nil then
+            self._stages[stage].FONT_ID = self.NextId;
+			self.NextId = self.NextId + 1;
+            context:createFont(self._stages[stage].FONT_ID, "Wingdings", context:pointsToPixels(self.Size), context:pointsToPixels(self.Size), 0);
+        end
+    end
+    for period = math.max(context:firstBar(), self.source:first()), math.min(context:lastBar(), self.source:size()-1), 1 do
+        for _, level in ipairs(self.Alerts) do
+            if level.Stage == stage then
+                self:DrawAlert(context, level, period);
+            end
+        end
+    end
+end
+indi_alerts.Alerts = {};
+function indi_alerts:GetTimezone()
+    local tz = instance.parameters.ToTime;
+    if tz == 1 then
+        return core.TZ_EST
+    elseif tz == 2 then
+        return core.TZ_UTC
+    elseif tz == 3 then
+        return core.TZ_LOCAL
+    elseif tz == 4 then
+        return core.TZ_SERVER
+    elseif tz == 5 then
+        return core.TZ_FINANCIAL
+    elseif tz == 6 then
+        return core.TZ_TS
+    end
+end
+function indi_alerts:Prepare()
+    self.Show = instance.parameters.Show;
+    self.Live = instance.parameters.Live;
+    self.ShowAlert = instance.parameters.ShowAlert;
+    self.ToTime = self:GetTimezone();
+    
+    self.Size = instance.parameters.Size;
+    self.SendEmail = instance.parameters.SendEmail;
+
+    self.PlaySound = instance.parameters.PlaySound;
+    local i;
+    for i = 1, 100 do 
+        local on = instance.parameters:getBoolean("ON" .. i);
+        if on == nil then
+            break;
+        end 
+        local alert = {};
+        alert.id = i;
+        alert.Stage = alert_stages[i];
+        alert.Label = instance.parameters:getString("Label" .. i);
+        alert.ON = on;
+        alert.DrawingMode = instance.parameters:getString("drawing_mode" .. i);
+        alert.UpSymbol = string.char(instance.parameters:getInteger("UpSymbol" .. i));
+        local down_symbol = instance.parameters:getInteger("DownSymbol" .. i);
+        if down_symbol ~= nil then
+            alert.DownSymbol = string.char(down_symbol);
+        end
+        alert.UpColor = instance.parameters:getColor("UpColor" .. i);
+        alert.DownColor = instance.parameters:getColor("DownColor" .. i);
+        alert.Up = self.PlaySound and instance.parameters:getString("Up" .. i) or nil;
+        alert.Down = self.PlaySound and instance.parameters:getString("Down" .. i) or nil;
+        if alert.DownSymbol == nil then
+            alert.DownSymbol = alert.UpSymbol;
+            alert.DownColor = alert.UpColor;
+            alert.Down = alert.Up;
+        end
+        assert(not(self.PlaySound) or (self.PlaySound and alert.Up ~= "") or (self.PlaySound and alert.Up ~= ""), "Sound file must be chosen"); 
+        assert(not(self.PlaySound) or (self.PlaySound and alert.Down ~= "") or (self.PlaySound and alert.Down ~= ""), "Sound file must be chosen");
+        alert.U = nil;
+        alert.D = nil;
+        if instance.parameters.strategy_output then
+            alert.Alert = instance:addStream("strat_signal_" .. i, core.Dot, "strat_signal_" .. i, "Strategy signal #" .. i, core.rgb(0, 0, 0), 0, 0);
+        else
+            alert.Alert = instance:addInternalStream(0, 0);
+        end
+        alert.AlertLevel = instance:addInternalStream(0, 0);
+        function alert:DownAlert(source, period, text, level, historical_period)
+            shift = indi_alerts.Live ~= "Live" and 1 or 0;
+            self.Alert[period] = -1;
+            self.AlertLevel[period] = level;
+            self.U = nil;
+            if self.D ~= source:serial(period) and period == source:size() - 1 - shift and not indi_alerts.FIRST then
+                self.D = source:serial(period);
+                if not historical_period then
+                    indi_alerts:SoundAlert(self.Down);
+                    indi_alerts:EmailAlert(self.Label, text, period);
+                    indi_alerts:SendAlert(self.Label, text, period);
+                    if indi_alerts.Show then
+                        indi_alerts:Pop(self.Label, text);
+                    end
+                end
+            end
+        end
+        function alert:UpAlert(source, period, text, level, historical_period)
+            shift = indi_alerts.Live ~= "Live" and 1 or 0;
+            self.Alert[period] = 1;
+            self.AlertLevel[period] = level;
+            self.D = nil;
+            if self.U ~= source:serial(period) and period == source:size() - 1 - shift and not indi_alerts.FIRST then
+                self.U = source:serial(period);
+                if not historical_period then
+                    indi_alerts:SoundAlert(self.Up);
+                    indi_alerts:EmailAlert(self.Label, text, period);
+                    indi_alerts:SendAlert(self.Label, text, period);
+                    if indi_alerts.Show then
+                        indi_alerts:Pop(self.Label, text);
+                    end
+                end
+            end
+        end
+        function alert:GetLast(period)
+            for i = period, 0, -1 do
+                if self.Alert:hasData(i) and self.Alert[i] ~= 0 then
+                    return self.Alert[i], i, self.AlertLevel[i];
+                end
+            end
+        end
+        self.Alerts[#self.Alerts + 1] = alert;
+    end
+
+    self.Email = self.SendEmail and instance.parameters.Email or nil;
+    assert(not(self.SendEmail) or (self.SendEmail and self.Email ~= ""), "E-mail address must be specified");
+    self.RecurrentSound = instance.parameters.RecurrentSound;
+
+    if instance.parameters.advanced_alert_key ~= "" and instance.parameters.use_advanced_alert then
+        self._advanced_alert_key = instance.parameters.advanced_alert_key;
+        require("http_lua");
+        self._advanced_alert_timer = 1234;
+        core.host:execute("setTimer", self._advanced_alert_timer, 1);
+    end
+end
+
+function indi_alerts:Pop(label, note)
+    core.host:execute("prompt", 1, label, self.source:instrument() .. " " .. label .. " : " .. note);
+end
+
+function indi_alerts:SoundAlert(Sound)
+    if not self.PlaySound then
+        return;
+    end
+    terminal:alertSound(Sound, self.RecurrentSound);
+end
+
+function indi_alerts:EmailAlert(label, Subject, period)
+    if not self.SendEmail then
+        return
+    end
+
+    local now = self.source:date(period);
+    now = core.host:execute("convertTime", core.TZ_EST, self.ToTime, now);
+    local DATA = core.dateToTable(now)
+    local delim = "\013\010";  
+    local Note = profile:id().. delim.. " Label : " ..label  .. delim .. " Alert : " .. Subject;   
+    local Symbol = "Instrument : " .. self.source:instrument() ;
+    local Time =  " Date : " .. DATA.month.." / ".. DATA.day .." Time:  ".. DATA.hour  .." / ".. DATA.min .." / ".. DATA.sec; 
+    local TF = "Time Frame : " .. source:barSize()
+    local text = Note  .. delim ..  Symbol .. delim .. TF .. delim .. Time;
+    terminal:alertEmail(self.Email, profile:id(), text);
+end
+
+function indi_alerts:SendAlert(label, Subject, period)
+    if not self.ShowAlert then
+        return;
+    end
+    
+    local now = self.source:date(period);
+    now = core.host:execute("convertTime", core.TZ_EST, self.ToTime, now);
+    local DATA = core.dateToTable(now)
+    local delim = "\013\010";  
+    local Note = profile:id().. delim.. " Label : " ..label  .. delim .. " Alert : " .. Subject;
+    local Symbol= "Instrument : " .. self.source:instrument() ;
+    local Time =  " Date : " .. DATA.month.." / ".. DATA.day .." Time:  ".. DATA.hour  .." / ".. DATA.min .." / ".. DATA.sec;  
+    local TF = "Time Frame : " .. source:barSize()
+    local text = Note  .. delim ..  Symbol .. delim .. TF .. delim .. Time;
+    terminal:alertMessage(self.source:instrument(), self.source[NOW], text, self.source:date(NOW));
+end
+
+function indi_alerts:AlertTelegram(message, instrument, timeframe) local alert = {}; alert.Text = message or ""; alert.Instrument = instrument or ""; alert.TimeFrame = timeframe or ""; self._alerts[#self._alerts + 1] = alert; end

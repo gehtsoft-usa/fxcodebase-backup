@@ -1,0 +1,55 @@
+function Init()
+{
+    indicator.name("Symphonie Sentiment indicator");
+    indicator.description("Symphonie Sentiment indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 12);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UpClr", "Up Color", "Up Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DnClr", "Dn Color", "Dn Color", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+var Period;
+var St;
+var Symp_Sentiment=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    first = source.first()+2;
+    St=instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + Period + ")";
+    instance.name(name);
+    Symp_Sentiment = instance.addStream("Symp_Sentiment", core.Bar, name + ".Symp_Sentiment", "Symp_Sentiment", instance.parameters.UpClr, first);
+}
+
+function Update(period, mode)
+{
+   if (period>first+Period) 
+   {
+    var tmp=Math.minmax(source, core.rangeTo(period, Period));
+    var Max=tmp[1];
+    var Min=tmp[0];
+    var St_Temp=0.66*((source.median[period]-Min)/(Max-Min)-0.5)+0.67*St[period-1];
+    St_Temp=Math.max(St_Temp,-1);
+    St_Temp=Math.min(St_Temp,1);
+    St[period]=St_Temp;
+    Symp_Sentiment[period]=(Math.log((1+St[period])/(1-St[period]))+Symp_Sentiment[period-1])/2;
+    if (Symp_Sentiment[period]>=0) 
+    {
+     Symp_Sentiment.setColor(period,instance.parameters.UpClr);
+    } 
+    else
+    {
+     Symp_Sentiment.setColor(period,instance.parameters.DnClr);
+    }
+   } 
+}
+

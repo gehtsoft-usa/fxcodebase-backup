@@ -1,0 +1,98 @@
+function Init()
+{
+    indicator.name("Redrawn curved channel");
+    indicator.description("Redrawn curved channel");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Bars_Shift", "Shift of bars", "", 4);
+    indicator.parameters.addInteger("s", "s", "", 10);
+    indicator.parameters.addInteger("cb", "cb", "Count of bars", 1000);
+    indicator.parameters.addDouble("Envelope_Width", "Envelope_Width", "Width of envelopes", 0.2);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("TopClr", "Top Color", "Top Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("MiddleClr", "Middle Color", "Middle Color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("BottomClr", "Bottom Color", "Bottom Color", core.rgb(0, 0, 255));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Bars_Shift;
+var s;
+var cb;
+var Envelope_Width;
+var TopBuff=null;
+var MiddleBuff=null;
+var BottomBuff=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Bars_Shift=instance.parameters.Bars_Shift;
+    s=instance.parameters.s;
+    cb=instance.parameters.cb;
+    Envelope_Width=instance.parameters.Envelope_Width;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Bars_Shift + ", " + instance.parameters.s + ", " + instance.parameters.cb + ", " + instance.parameters.Envelope_Width + ")";
+    instance.name(name);
+    TopBuff = instance.addStream("TopBuff", core.Line, name + ".Top", "Top", instance.parameters.TopClr, first);
+    MiddleBuff = instance.addStream("MiddleBuff", core.Line, name + ".Middle", "Middle", instance.parameters.MiddleClr, first);
+    BottomBuff = instance.addStream("BottomBuff", core.Line, name + ".Bottom", "Bottom", instance.parameters.BottomClr, first);
+    TopBuff.setWidth(instance.parameters.widthLinReg);
+    TopBuff.setStyle(instance.parameters.styleLinReg);
+    MiddleBuff.setWidth(instance.parameters.widthLinReg);
+    MiddleBuff.setStyle(instance.parameters.styleLinReg);
+    BottomBuff.setWidth(instance.parameters.widthLinReg);
+    BottomBuff.setStyle(instance.parameters.styleLinReg);
+}
+
+function Update(period, mode)
+{
+   if (period==source.size()-1) 
+   {
+    var pt=Bars_Shift;
+    var m,i,x;
+    var aa,bb,cc;
+    var cb_=Math.min(cb,source.size()-1-first-2*pt);
+    
+    for (m=0; m<=s; m++) 
+    {
+     for (i=0; i<=cb_; i+=pt) 
+     {
+      if (m==0) 
+      {
+       MiddleBuff[period-cb_-pt]=source[period-cb_-pt];
+       MiddleBuff[period-i]=source[period-i];
+       MiddleBuff[period-cb_-2*pt]=source[period-cb_-2*pt];
+      } 
+      else if (m!=s) 
+      {
+       MiddleBuff[period-i-pt]=0.5*(MiddleBuff[period-i]+MiddleBuff[period-i-2*pt]);
+       MiddleBuff[period]=0.5*(MiddleBuff[period]+MiddleBuff[period-pt]);
+       MiddleBuff[period-cb_-2*pt]=0.5*(MiddleBuff[period-cb_-2*pt]+MiddleBuff[period-cb_-pt]);
+      }
+      if (m==s) 
+      {
+       aa=i;
+       bb=i+pt;
+       cc=i+2*pt;
+       for (x=i; x<=i+pt-1; x++) 
+       {
+        MiddleBuff[period-x]=MiddleBuff[period-aa]*((x-bb)*(x-cc))/((aa-bb)*(aa-cc))+MiddleBuff[period-bb]*((x-aa)*(x-cc))/((bb-aa)*(bb-cc))+MiddleBuff[period-cc]*((x-aa)*(x-bb))/((cc-aa)*(cc-bb));
+       }
+      }
+     }
+    }
+    for (i=period-cb_; i<=period; i++) 
+    {
+     TopBuff[i]=MiddleBuff[i]*(1+Envelope_Width/100);
+     BottomBuff[i]=MiddleBuff[i]/(1+Envelope_Width/100);
+    }
+   } 
+}
+

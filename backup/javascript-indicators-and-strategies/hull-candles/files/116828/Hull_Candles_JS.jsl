@@ -1,0 +1,104 @@
+function Init()
+{
+    indicator.name("Hull candles");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    indicator.setTag("group", "Trend");
+    indicator.setTag("replaceSource", "t");
+
+    indicator.parameters.addString("Method", "Method", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("Method", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Method", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Method", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Method", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Method", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Method", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Method", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Method", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Method", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Method", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Method", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Method", "JSmooth", "", "JSmooth");
+    indicator.parameters.addInteger("Period", "Period", "", 10);
+}
+
+var Method;
+var Period;
+var Period2;
+var first;
+
+var MA_O, MA_H, MA_L, MA_C;
+var MA_O2, MA_H2, MA_L2, MA_C2;
+
+var open = null;
+var high = null;
+var low = null;
+var close = null;
+
+function Prepare()
+{
+    source = instance.source;
+   
+    Method = instance.parameters.Method;
+    Period = instance.parameters.Period;
+    Period2 = Math.floor(Period/2);
+   
+    first = source.first();
+    
+    MA_O = core.indicators.create("AVERAGES", source.open, Method, Period, false);
+    MA_H = core.indicators.create("AVERAGES", source.high, Method, Period, false);
+    MA_L = core.indicators.create("AVERAGES", source.low, Method, Period, false);
+    MA_C = core.indicators.create("AVERAGES", source.close, Method, Period, false);
+
+    MA_O2 = core.indicators.create("AVERAGES", source.open, Method, Period2, false);
+    MA_H2 = core.indicators.create("AVERAGES", source.high, Method, Period2, false);
+    MA_L2 = core.indicators.create("AVERAGES", source.low, Method, Period2, false);
+    MA_C2 = core.indicators.create("AVERAGES", source.close, Method, Period2, false);
+
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Method + ", " + instance.parameters.Period + ")";
+    instance.name(name);
+    open = instance.addStream("open", core.Line, name, "open", core.rgb(0, 0, 0), first)
+    high = instance.addStream("high", core.Line, name, "high", core.rgb(0, 0, 0), first)
+    low = instance.addStream("low", core.Line, name, "low", core.rgb(0, 0, 0), first)
+    close = instance.addStream("close", core.Line, name, "close", core.rgb(0, 0, 0), first)
+    instance.createCandleGroup("Hull candles", "Hull candles", open, high, low, close);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    MA_O.update(mode);
+    MA_H.update(mode);
+    MA_L.update(mode);
+    MA_C.update(mode);
+
+    MA_O2.update(mode);
+    MA_H2.update(mode);
+    MA_L2.update(mode);
+    MA_C2.update(mode);
+    
+    var X_O = 2*MA_O2.DATA[period]-MA_O.DATA[period];
+    var X_H = 2*MA_H2.DATA[period]-MA_H.DATA[period];
+    var X_L = 2*MA_L2.DATA[period]-MA_L.DATA[period];
+    var X_C = 2*MA_C2.DATA[period]-MA_C.DATA[period];
+    
+    high[period] = Math.max(X_H, open[period-1], close[period-1]);
+    low[period] = Math.min(X_L, open[period-1], close[period-1]);
+    open[period] = (open[period-1]+close[period-1])/2;
+    close[period] = (X_O+X_H+X_L+X_C)/4;
+   } 
+}
+
+
+

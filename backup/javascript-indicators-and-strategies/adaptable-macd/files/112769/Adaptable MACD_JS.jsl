@@ -1,0 +1,301 @@
+
+function Init()
+{
+    indicator.name("Moving Average Convergence/Divergence");
+    indicator.description("A trend-following momentum indicator that shows the relationship between two moving averages of prices.");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+	
+	indicator.parameters.addGroup("Selection"); 
+	indicator.parameters.addBoolean("H", "Histogram On", "", true);
+	indicator.parameters.addBoolean("M", "Macd On", "", true);
+	indicator.parameters.addBoolean("S", "Signal On", "", true);
+    
+	indicator.parameters.addGroup("Calculation"); 	
+    indicator.parameters.addInteger("SN", "Short MA", "The period of the short EMA.", 12, 2, 1000);
+    indicator.parameters.addInteger("LN", "Long MA", "The period of the long EMA.", 26, 2, 1000);
+    indicator.parameters.addInteger("IN", "Signal line", "The number of periods for the signal line.", 9, 2, 1000);
+	
+	 indicator.parameters.addGroup("Short MA Method");
+    indicator.parameters.addString("Method1", "Method", "", "EMA");
+    indicator.parameters.addStringAlternative("Method1", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method1", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method1", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Method1", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method1", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Method1", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Method1", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Method1", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method1", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Method1", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Method1", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Method1", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Method1", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Method1", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Method1", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Method1", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Method1", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Method1", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Method1", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Method1", "JSmooth", "", "JSmooth");
+	
+	 indicator.parameters.addGroup("Long MA Method");
+    indicator.parameters.addString("Method2", "Method", "", "EMA");
+    indicator.parameters.addStringAlternative("Method2", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method2", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method2", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Method2", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method2", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Method2", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Method2", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Method2", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method2", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Method2", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Method2", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Method2", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Method2", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Method2", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Method2", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Method2", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Method2", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Method2", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Method2", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Method2", "JSmooth", "", "JSmooth");
+	
+	 indicator.parameters.addGroup("Signal MA Method");
+    indicator.parameters.addString("Method3", "Method", "", "MVA");
+    indicator.parameters.addStringAlternative("Method3", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method3", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method3", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Method3", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method3", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Method3", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Method3", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Method3", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method3", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Method3", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Method3", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Method3", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Method3", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Method3", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Method3", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Method3", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Method3", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Method3", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Method3", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Method3", "JSmooth", "", "JSmooth");
+ 
+  	
+	indicator.parameters.addGroup("Type"); 
+    indicator.parameters.addString("Type", "Method", "" , "Absolute");
+    indicator.parameters.addStringAlternative("Type", "Absolute", "" , "Absolute");
+    indicator.parameters.addStringAlternative("Type", "Relativ", "Relativ" , "Relativ");	
+	
+	 indicator.parameters.addBoolean("MH", "MACD as Histogram", "", false);
+	
+	
+	indicator.parameters.addGroup("Style"); 
+	indicator.parameters.addColor("MACD_color", "MACD color", "The color of MACD.", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("SIGNAL_color", "Signal color", "The color of SIGNAL.", core.rgb(0, 0, 255));
+	indicator.parameters.addColor("UPHISTOGRAM_color", "Up Histogram color", "The color of Up Histogram.", core.rgb(0, 255, 0));
+	indicator.parameters.addColor("DOWNHISTOGRAM_color", "Down Histogram color", "The color of Down Histogram.", core.rgb(255, 0, 0));
+}
+
+var SN;
+var LN;
+var IN;
+var M;
+var H;
+var S;
+var MH;
+
+var firstPeriodMACD;
+
+var firstPeriodSIGNAL;
+var source = null;
+
+var EMAS = null;
+var EMAL = null;
+var MVAI = null;
+
+// Streams block
+var MACD = null;
+var SIGNALOUT = null;
+var SIGNAL=null;
+var HISTOGRAM=null;
+var OUT;
+var Type;
+
+var Method1,Method2, Method3;
+
+// Routine
+function Prepare()
+{
+    MH=instance.parameters.MH;
+  
+     Method1=instance.parameters.Method1
+	  Method2=instance.parameters.Method2;
+	  Method3=instance.parameters.Method3;
+    Type= instance.parameters.Type;
+    SN = instance.parameters.SN;
+    LN = instance.parameters.LN;
+    IN = instance.parameters.IN;
+	M = instance.parameters.M;
+    H = instance.parameters.H;
+	S = instance.parameters.S;
+    source = instance.source;
+
+    // Check parameters
+    if (LN <= SN) 
+    {
+       error("The short EMA period must be smaller than long EMA period");
+    }
+
+  
+	 EMAS = core.indicators.create("AVERAGES", source, Method2, SN, false);
+    EMAL = core.indicators.create("AVERAGES", source, Method2, LN, false);
+	//end
+	
+	MACD = instance.addInternalStream(0,0); 
+	SIGNAL = instance.addInternalStream(0,0); 
+	
+	
+    var name;
+	
+    // Base name of the indicator.
+	if  (!MH) 
+	{    
+	 name = profile.id() + "(" + source.name() + ", " + SN + ", " + LN + ", " + IN + ", "+ Type + ", " +Method1 + ", " +Method2 + ", " + Method3 +")";
+	} 
+	else if  (MH)  
+	{
+	 name = profile.id() + "(" + source.name() + ", " + SN + ", " + LN + ", " + Type + ", " +Method1 + ", " + Method2 + ")";
+	}
+	
+    instance.name(name);
+
+    firstPeriodMACD = EMAL.DATA.first();	
+	
+	if (MH) 
+	{
+	 H= false;
+	 S= false;	
+	 OUT = instance.addStream("MACD", core.Bar, name + ".MACD", "MACD", instance.parameters.MACD_color, firstPeriodMACD);
+	} 
+	else
+	{
+	 OUT = instance.addStream("MACD", core.Line, name + ".MACD", "MACD", instance.parameters.MACD_color, firstPeriodMACD);
+	}
+   
+	MVAI = core.indicators.create("AVERAGES", MACD, Method3, IN, false);
+	
+    firstPeriodSIGNAL = MVAI.DATA.first();
+	if (!MH) 
+	{ 
+			SIGNALOUT = instance.addStream("SIGNAL", core.Line, name + ".SIGNAL", "SIGNAL", instance.parameters.SIGNAL_color, firstPeriodSIGNAL);
+			if  (Type == "Absolute") 
+			{
+			 HISTOGRAM = instance.addStream("HISTOGRAM", core.Bar, name + "HISTOGRAM", "HISTOGRAM", instance.parameters.UPHISTOGRAM_color, firstPeriodSIGNAL);
+			}
+	}
+}
+
+// Indicator calculation routine
+function Update(period, mode)
+{
+    EMAS.update(mode);
+    EMAL.update(mode);
+	
+	if (Type == "Absolute") 
+	{
+
+				if (period >= firstPeriodMACD) 
+				{
+					// calculate MACD output
+					MACD[period] = EMAS.DATA[period] - EMAL.DATA[period];
+				
+					if (M) 
+					{
+					 OUT[period]=MACD[period];	
+
+                             	if (MH) 
+                             	{
+								 if (OUT[period] > OUT[period-1]) 
+								 {
+								  OUT.setColor(period, instance.parameters.UPHISTOGRAM_color);                     
+								 } 
+								 else
+								 {
+								  OUT.setColor(period, instance.parameters.DOWNHISTOGRAM_color); 
+								 } 
+								}		
+											
+					}
+				}
+
+				// update MVA on the MACD
+				MVAI.update(mode);
+				if (period >= firstPeriodSIGNAL) 
+				{
+					SIGNAL[period] = MVAI.DATA[period]; 
+					if ((S) &&  !MH) 
+					{ 
+					 SIGNALOUT[period] = SIGNAL[period];
+					}
+					// calculate histogram as a difference between MACD && signal
+					if ((H)  && !MH) 
+					{
+				  	 HISTOGRAM[period] = MACD[period] - SIGNAL[period];
+					
+						 if (HISTOGRAM[period] > HISTOGRAM[period-1]) 
+						 {
+						  HISTOGRAM.setColor(period, instance.parameters.UPHISTOGRAM_color);
+						 } 
+						 else
+						 {
+						   HISTOGRAM.setColor(period, instance.parameters.DOWNHISTOGRAM_color);
+						 }
+					
+					}
+				}
+			}
+	else if (period >= firstPeriodMACD) 
+	{
+					// calculate MACD output
+					MACD[period] = (EMAS.DATA[period] - EMAL.DATA[period])/ ( EMAL.DATA[period]/100);	
+                    	
+				
+					if (M) 
+					{
+					 OUT[period]=MACD[period];		
+					 
+					
+						if (MH) 
+						{
+								 if (OUT[period] > OUT[period-1]) 
+								 {
+								  OUT.setColor(period, instance.parameters.UPHISTOGRAM_color);                     
+								 } 
+								else
+								{
+								 OUT.setColor(period, instance.parameters.DOWNHISTOGRAM_color); 
+								}		
+						}  	
+					}
+					
+				
+
+				// update MVA on the MACD
+				MVAI.update(mode);
+				if ((period >= firstPeriodSIGNAL) &&  !MH) 
+				{
+					SIGNAL[period] = MVAI.DATA[period]; 
+					if (S) 
+					{ 
+					 SIGNALOUT[period] = SIGNAL[period];
+					}
+				}	
+	}
+}
+
+

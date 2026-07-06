@@ -1,0 +1,29 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_getstack</title>
+</head>
+<body>
+<h3><a name="lua_getstack"><code>lua_getstack</code></a></h3>
+<pre>int lua_getstack (lua_State *L, int level, lua_Debug *ar);</pre>
+
+<p>
+Get information about the interpreter runtime stack.
+
+
+<p>
+This function fills parts of a <a href="lua_Debug.html"><code>lua_Debug</code></a> structure with
+an identification of the <em>activation record</em>
+of the function executing at a given level.
+Level&nbsp;0 is the current running function,
+whereas level <em>n+1</em> is the function that has called level <em>n</em>.
+When there are no errors, <a href="lua_getstack.html"><code>lua_getstack</code></a> returns 1;
+when called with a level greater than the stack depth,
+it returns 0.
+
+
+
+
+
+<hr>
+</body>
+</html>

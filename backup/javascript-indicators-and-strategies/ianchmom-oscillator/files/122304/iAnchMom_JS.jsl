@@ -1,0 +1,77 @@
+function Init()
+{
+    indicator.name("iAnchMom oscillator");
+    indicator.description("iAnchMom oscillator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("SMA_Period", "SMA period", "", 34);
+    indicator.parameters.addInteger("EMA_Period", "EMA period", "", 20);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr1", "Positive Up color", "Positive Up color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clr2", "Positive Dn color", "Positive Dn color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("clr3", "Negative Up color", "Negative Up color", core.rgb(0, 0, 255));
+    indicator.parameters.addColor("clr4", "Negative Dn color", "Negative Dn color", core.rgb(255, 0, 255));
+}
+
+var first;
+var source = null;
+var SMA_Period;
+var EMA_Period;
+var SMA, EMA;
+var iAnchMom=null;
+
+function Prepare()
+{
+    source = instance.source;
+    SMA_Period=instance.parameters.SMA_Period;
+    EMA_Period=instance.parameters.EMA_Period;
+    first = source.first()+2;
+    SMA = core.indicators.create("MVA", source, SMA_Period);
+    EMA = core.indicators.create("EMA", source, EMA_Period);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.SMA_Period + ", " + instance.parameters.EMA_Period + ")";
+    instance.name(name);
+    iAnchMom = instance.addStream("iAnchMom", core.Bar, name + ".iAnchMom", "iAnchMom", instance.parameters.clr1, first);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    SMA.update(mode);
+    EMA.update(mode);
+    if (SMA.DATA[period]!=0) 
+    {
+     iAnchMom[period]=100*(EMA.DATA[period]/SMA.DATA[period]-1);
+    } 
+    else
+    {
+     iAnchMom[period]=null;
+    } 
+    if (iAnchMom[period]>0) 
+    {
+     if (iAnchMom[period]>iAnchMom[period-1]) 
+     {
+      iAnchMom.setColor(period, instance.parameters.clr1);
+     } 
+     else
+     {
+      iAnchMom.setColor(period, instance.parameters.clr2);
+     }
+    } 
+    else
+    {
+     if (iAnchMom[period]>iAnchMom[period-1]) 
+     {
+      iAnchMom.setColor(period, instance.parameters.clr3);
+     } 
+     else
+     {
+      iAnchMom.setColor(period, instance.parameters.clr4);
+     }
+    }
+   } 
+}
+

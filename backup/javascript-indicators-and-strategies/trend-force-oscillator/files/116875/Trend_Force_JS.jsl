@@ -1,0 +1,85 @@
+function Init()
+{
+    indicator.name("Trend force oscillator");
+    indicator.description("Trend force oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 12);
+    indicator.parameters.addInteger("ATR_Period", "ATR period", "", 7);
+    indicator.parameters.addInteger("ATR_Coeff", "ATR coeff", "", 2);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("PUPclr", "Positive UP color", "Positive UP color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("PDNclr", "Positive DN color", "Positive DN color", core.rgb(255, 255, 128));
+    indicator.parameters.addColor("NUPclr", "Negative UP color", "Negative UP color", core.rgb(255, 128, 0));
+    indicator.parameters.addColor("NDNclr", "Negative DN color", "Negative DN color", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+var Period;
+var ATR_Period;
+var ATR_Coeff;
+var ATR;
+var MinSt, MaxSt;
+var MaxPeriod;
+var Trend_Force=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    ATR_Period=instance.parameters.ATR_Period;
+    ATR_Coeff=instance.parameters.ATR_Coeff;
+    first = source.first()+2;
+    MinSt = instance.addInternalStream(first, 0);
+    MaxSt = instance.addInternalStream(first, 0);
+    ATR = core.indicators.create("ATR", source, ATR_Period);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.ATR_Period + ", " + instance.parameters.ATR_Coeff + ")";
+    instance.name(name);
+    Trend_Force = instance.addStream("Trend_Force", core.Bar, name + ".Trend_Force", "Trend_Force", instance.parameters.PUPclr, first);
+    MaxPeriod=Math.max(Period, ATR_Period);
+}
+
+function Update(period, mode)
+{
+   if (period>first+MaxPeriod) 
+   {
+    ATR.update(mode);
+    var tmp = Math.minmax(source, period-ATR_Period+1, period);
+    var Min=tmp[0];
+    var Max=tmp[1];
+    MinSt[period]=Max-ATR_Coeff*ATR.DATA[period];
+    MaxSt[period]=Min+ATR_Coeff*ATR.DATA[period];
+    var tmp=Math.minmax(MinSt, period-Period+1, period);
+    var Up=tmp[1];
+    tmp=Math.minmax(MaxSt, period-Period+1, period);
+    var Dn=tmp[0];
+    Trend_Force[period]=Up-Dn;
+    if (Trend_Force[period]>0) 
+    {
+     if (Trend_Force[period]>=Trend_Force[period-1]) 
+     {
+      Trend_Force.setColor(period, instance.parameters.PUPclr);
+     } 
+     else
+     {
+      Trend_Force.setColor(period, instance.parameters.PDNclr);
+     }
+    }  
+    else
+    {
+     if (Trend_Force[period]>=Trend_Force[period-1]) 
+     {
+      Trend_Force.setColor(period, instance.parameters.NUPclr);
+     } 
+     else
+     {
+      Trend_Force.setColor(period, instance.parameters.NDNclr);
+     } 
+    }
+   } 
+}
+

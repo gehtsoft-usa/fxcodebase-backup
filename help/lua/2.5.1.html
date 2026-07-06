@@ -1,0 +1,25 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 2.5.1 - Arithmetic Operators</title>
+</head>
+<body>
+<h3>2.5.1 - <a name="2.5.1">Arithmetic Operators</a></h3><p>
+Lua supports the usual arithmetic operators:
+the binary <code>+</code> (addition),
+<code>-</code> (subtraction), <code>*</code> (multiplication),
+<code>/</code> (division), <code>%</code> (modulo), and <code>^</code> (exponentiation);
+and unary <code>-</code> (negation).
+If the operands are numbers, or strings that can be converted to
+numbers (see <a href="2.2.1.html">&sect;2.2.1</a>),
+then all operations have the usual meaning.
+Exponentiation works for any exponent.
+For instance, <code>x^(-0.5)</code> computes the inverse of the square root of <code>x</code>.
+Modulo is defined as
+
+<pre>
+     a % b == a - math.floor(a/b)*b
+</pre><p>
+That is, it is the remainder of a division that rounds
+the quotient towards minus infinity.
+</body>
+</html>

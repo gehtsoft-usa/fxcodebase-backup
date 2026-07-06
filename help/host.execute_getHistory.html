@@ -1,0 +1,605 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252" /><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><title>host:execute(&amp;quot;getHistory&amp;quot;, ...)</title><style type="text/css">a, p, h1, h2, h3, h4, h5, h6, table, td, tr, li, ul, ol {
+    font-family: Verdana, Trebuchet MS, Arial;
+}
+
+a, p, td, tr, ul, ol, li {
+    font-size: 12pt;
+}
+
+h3 {
+    font-size: 13pt;
+}
+
+h2 {
+    font-size: 13pt;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+body {
+    color: #444444;
+    background-color: white;
+}
+
+A:link {
+    color: #0065b3;
+    cursor: pointer;
+}
+
+A:visited {
+    color: #0068be;
+    cursor: pointer;
+}
+
+a.action {
+  background-color: #0065b3;
+  color: white;
+  font-size: 10pt;
+  padding: 2px 2px;
+  width: 50pt;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px;
+}
+
+.side-icon {
+    float: left;
+}
+
+a.action [class*="dripicons-"]:before {
+    padding: 0 2px 0 0;
+    font-size: 12pt;
+    vertical-align: text-bottom;
+}
+
+.side-icon:after {
+  content: "";
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  border-left: 1.5px solid white;
+  transform: translate(-50%);
+}
+
+a.actiontab {
+  font-size: 10pt;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px 3px 0 0;
+}
+
+pre, code, code a {
+    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+    font-size: 12pt;
+}
+
+code.ctag {
+    background-color: #f1f1f1;
+    padding: .1em .2em;
+    border-radius: 3px;
+}
+
+pre {
+    background-color: white;
+}
+
+pre.example {
+    background-color: #f1f1f1;
+}
+
+ul {
+    list-style-type: disc;
+    margin-left: 18pt;
+}
+
+ol {
+    list-style-type: decimal;
+    margin-left: 18pt;
+}
+
+ul.hhc {
+    list-style-type: none;
+    margin-left: 1em;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+li.hhc {
+    margin-left: 0;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+table {
+  border-spacing: 0;
+  border-color: #dfe3e7;
+}
+
+tr + tr td {
+   border-top: 0;
+}
+
+tr td + td {
+  border-left: 0;
+}
+
+td {
+  border: 1px solid;
+  border-color: #dfe3e7;
+}
+
+tr:first-child td:first-child {
+   border-radius: 0.2em 0 0 0;
+}
+
+tr:first-child td:last-child {
+  border-radius: 0 0.2em 0 0;
+}
+
+tr:first-child td:only-child {
+  border-radius: 0.2em 0.2em 0 0;
+}
+
+tr:last-child td:first-child {
+    border-radius: 0 0 0 0.2em;
+}
+
+tr:last-child td:last-child {
+    border-radius: 0 0 0.2em 0;
+}
+
+tr:last-child td:only-child {
+    border-radius: 0 0 0.2em 0.2em;
+}
+
+tr:only-child td:only-child {
+    border-radius: 0.2em 0.2em 0.2em 0.2em;
+}
+
+tr:only-child td:first-child {
+   border-radius: 0.2em 0 0 0.2em;
+}
+
+tr:only-child td:last-child {
+  border-radius: 0 0.2em 0.2em 0;
+}
+
+
+td.tmain, td.tmain_nw, td.thdr {
+    background-color: rgb(255, 255, 255);
+    vertical-align: top;
+    padding: 3px;
+}
+
+td.tmain p, td.tmain_nw p, td.thdr p {
+    margin-top: 3pt;
+    margin-bottom: 3pt;
+}
+
+td.tmain_nw {
+    white-space: nowrap;
+}
+
+td.thdr {
+    background-color: #e3e3e3;
+}
+
+table.decl {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+    vertical-align: top;
+    padding: 3px;
+    width: 100%;
+}
+
+table.decl td {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+}
+
+div.note-quote {
+    border-left: 10px solid #ccc;
+    padding: 1em 10px .1em 10px;
+    margin: 1.5em 10px;
+    background-color: rgb(224, 224, 224);
+}
+
+div.note-note {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+div.note-warning {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #fff;
+    background-color: #ff6358;
+}
+div.note-warning code.ctag {
+    color: black;
+}</style>
+<link rel="stylesheet" href="res/dripicons.css"></head><body><script type="text/javascript">
+var highlighterEnabled = false;
+var maintopic = 'index';
+var helptitle = 'Indicore SDK 3';
+    function loadStarted() {
+    window.onload = loadCompleted;
+
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        var head = document.getElementsByTagName('head')[0];
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.min.js';
+        head.appendChild(script4);
+
+
+        var script2 = document.createElement('script');
+        script2.type = 'text/javascript';
+        script2.src = './highlighter/highlight.cshtml.js';
+        head.appendChild(script2);
+
+        var script3 = document.createElement('script');
+        script3.type = 'text/javascript';
+        script3.src = './highlighter/highlight.lua.js';
+        head.appendChild(script3);
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.luax.js';
+        head.appendChild(script4);
+    }
+}
+
+function loadCompleted() {
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        hljs.registerLanguage('cshtml-razor', window.hljsDefineCshtmlRazor);
+        hljs.registerLanguage('lua', window.hljsDefineLua);
+        hljs.registerLanguage('luax', window.hljsDefineLuaX);
+        x = document.querySelectorAll('pre code');
+        for (var i = 0; i < x.length; i++) {
+            if (x[i].hasAttribute('class')) {
+                hljs.highlightBlock(x[i]);
+            }
+        }
+    }
+}
+
+
+function hidediv(divname) {
+    document.getElementById(divname).style.display = 'none';
+}
+
+function showdiv(divname) {
+    document.getElementById(divname).style.display = 'inline';
+}
+
+function syncList() {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, null, document.title);
+    }
+}
+
+function syncList1(key) {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, key + '.html', document.title);
+    }
+}</script><script type="text/javascript">
+    loadStarted();
+</script><h1><code>public method <b>host:execute("getHistory", ...)</b></code></h1><h2>Brief</h2>
+<p>Loads the history of the specified instrument.</p>
+<table class="tmain" width="100%">
+  <tr>
+    <td class="thdr"><b>Declaration</b></td>
+  </tr>
+  <tr>
+    <td class="tmain"><table class="decl">
+  <tr>
+    <td>Lua</td>
+  </tr>
+  <tr>
+    <td><code>string&nbsp;host:<b>execute</b> (&quot;getHistory&quot;, cookie, instrument, barSize, from, to, bidOrAsk)</code></td>
+  </tr>
+</table></td>
+  </tr>
+</table><p></p>
+<table class="tmain" width="100%">
+  <tr>
+    <td colspan="2" class="thdr"><b>Parameters</b></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>cookie</code></td>
+    <td class="tmain" width="69%"><p>The integer value to be passed to the <code class="ctag">AsyncOperationFinished</code> function of the indicator
+when data is loaded.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>instrument</code></td>
+    <td class="tmain" width="69%"><p>The name of the instrument.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>barSize</code></td>
+    <td class="tmain" width="69%"><p>The size of the bar. See also <a href="tick_stream.barSize.html"><code>tick_stream:barSize()</code></a> for information
+about the period codes.</p>
+<p>Use &quot;t1&quot; to load ticks.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>from</code></td>
+    <td class="tmain" width="69%"><p>The date and time of the price collection beginning as a number. This number means the number of days past
+midnight December 30, 1899. If the <code class="ctag">from</code> value is 0 (zero), the default number of bars (depends on
+the server settings, usually 300) will be loaded before the date specified in <code class="ctag">to</code> parameter.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>to</code></td>
+    <td class="tmain" width="69%"><p>The date and time of the price collection end as a number. The number means the number of days past
+midnight December 30, 1899. Use 0 (zero) to get the data up to the current moment and leave the collection
+subscribed to the new data, so when a new tick arrives, the collection will be updated to contain the most
+fresh data. The default date is the current time.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain_nw" width="31%"><code>bidOrAsk</code></td>
+    <td class="tmain" width="69%"><p>The flag indicating whether bid (<code class="ctag">true</code>) or ask (<code class="ctag">false</code>) prices must be loaded.</p></td>
+  </tr>
+</table><h2>Details</h2><p>The function returns either <a href="bar_stream.html"><code>bar_stream</code></a> or <a href="tick_stream.html"><code>tick_stream</code></a>
+depending on the bar size specified in the request.</p>
+<p>This function is asynchronous, i.e. the data isn't available immediately. This function only
+starts loading of the data. When the loading is finished, the <code class="ctag">AsyncOperationFinished</code>
+function of the indicator or strategy is called.</p>
+<p>The recommended approach is the following:</p>
+<p>1) Declare the global flag called <code class="ctag">loading</code> and assign <code class="ctag">false</code> by default.</p>
+<p>2) In the <code class="ctag">Update()</code> function, check the <code class="ctag">loading</code> flag and its returns in case it
+is <code class="ctag">true</code>.</p>
+<p>3) When your indicator decides to load the data:</p>
+<p>3.1) set the <code class="ctag">loading</code> flag to <code class="ctag">true</code>.</p>
+<p>3.2) set a bookmark on the output stream on the first period which cannot be calculated
+without additional data.</p>
+<p>3.3) call <code class="ctag">host:execute(&quot;getHistory1&quot;, ...)</code> to start data loading.</p>
+<p>4) In AsyncOperationFinished()</p>
+<p>4.1) set the <code class="ctag">loading</code> flag to <code class="ctag">false</code>.</p>
+<p>4.2) get the period of the bookmark set on the output stream.</p>
+<p>4.3) call <code class="ctag">instance:updateFrom()</code> using the bookmarked period as a parameter. The method
+forces recalculation of the indicator starting at the specified period.</p>
+<p>Note: This function is optional and may be not supported by the host application.</p>
+<p>Note: Please keep the object returned by the method in a <b>global</b> variable to avoid
+its removing by the garbage collector. Storing of the <code class="ctag">open</code>, <code class="ctag">close</code> and other
+tick sub-streams of the bar stream does not protect the main stream from being removed by
+the garbage collector.</p>
+<p>The method can be used in both indicators and strategies.</p>
+<p>Use the <a href="host.execute_getHistory1.html"><code>host:execute(&quot;getHistory1&quot;, ...)</code></a> method
+for loading a certain quantity of bars.</p>
+<p>Also use <a href="host.execute_extendHistory.html"><code>host:execute(&quot;extendHistory, ...)</code></a> for loading
+more data to the history.</p>
+<p>See also the <a href="host.execute_getSyncHistory.html"><code>host:execute(&quot;getSyncHistory&quot;, ...)</code></a> method
+if you want to have the history synchronized with an indicator source.</p>
+<p>Note: When debugging such indicators always switch on the &quot;Pre-deliver data&quot; option in the indicator
+parameters.</p><div id="open44" style="display:none">
+  <p>Example: A template of the indicator which loads other instrument data.&nbsp;<a href="javascript: showdiv('close44'); hidediv('open44');" onclick="javascript: showdiv('close44'); hidediv('open44');" class="action">Show<span class="side-icon dripicons-chevron-right"></span></a></p>
+</div>
+<div id="close44" style="display:inline">
+  <p>Example: A template of the indicator which loads other instrument data.&nbsp;<a href="javascript: showdiv('open44'); hidediv('close44');" onclick="javascript: showdiv('open44'); hidediv('close44');" class="action">Hide<span class="side-icon dripicons-chevron-down"></span></a></p>
+  <pre class="example" id="example44"><code> 
+   function Init()
+       indicator:name(&quot;Sample oscillator&quot;);
+       indicator:description(&quot; &quot;);
+       indicator:requiredSource(core.Bar);
+       indicator:type(core.Oscillator);
+ 
+       indicator.parameters:addString(&quot;INST&quot;, &quot;The instrument to load&quot;, &quot;&quot;, &quot;&quot;);
+       indicator.parameters:setFlag(&quot;INST&quot;, core.FLAG_INSTRUMENTS);
+   end
+ 
+   local source;       -- the indicator source
+   local other;        -- the additional data stream
+   local loading;      -- flag indicating the other data stream is being loaded
+   local load_from;    -- the date/time the data was loaded the last time from
+   local instrument;   -- the instrument to be loaded
+   local output;       -- the indicator output stream;
+ 
+   function Prepare()
+       source = instance.source;
+ 
+       instrument = instance.parameters.INST;
+       assert(instrument ~= instance.source:instrument(), &quot;Please choose different instrument&quot;);
+ 
+       local name;
+       name = profile:id() .. &quot;(&quot; .. instrument .. &quot;)&quot;;
+       instance:name(name);
+ 
+ 
+       output = instance:addStream(&quot;other&quot;, core.Line, name, &quot;other&quot;, core.rgb(255, 0, 0), source:first());
+   end
+ 
+   function Update(period, mode)
+       local from, to;
+ 
+       if period &lt; source:first() then
+           return ;
+       end
+ 
+       if other == nil then
+           -- if the data is not loaded yet at all
+           -- load the data
+           from = source:date(source:first());   -- oldest data to load
+           if source:isAlive() then              -- newest data to load or 0 if the source is &quot;alive&quot;
+               to = 0;
+           else
+               to = source:date(source:size() - 1);
+           end
+           load_from = from;
+           loading = true;
+           other = core.host:execute(&quot;getHistory&quot;, 1, instrument, source:barSize(), from, to, source:isBid());
+           return ;
+       end
+ 
+       if loading then
+           return ;
+       end
+ 
+       local curr_date = source:date(period);
+       if curr_date &lt; load_from then
+           -- if the data we are trying to get is oldest than previously loaded
+           -- the extend the history to the oldest data we can request
+           from = source:date(source:first());     -- load from the oldest data we have in source
+           if other:size() &gt; other:first() then
+               to = other:date(other:first());     -- to the oldest data we have in other instrument
+           else
+               to = load_from;
+           end
+           load_from = from;
+           loading = true;
+           core.host:execute(&quot;extendHistory&quot;, 1, other, from, to);
+           return ;
+       end
+ 
+       -- the date is in the loaded range
+       -- try to find it
+       local other_period = core.findDate(other, curr_date, true);
+       if other_period ~= -1 then
+           output[period] = other.close[other_period];
+       end
+   end
+ 
+   function AsyncOperationFinished(cookie, success, message)
+       if cookie == 1 then
+           loading = false;
+           -- update the indicator output when loading is finished
+           instance:updateFrom(source:first());
+           return ;
+       end
+   end</code></pre>
+</div><div id="open45" style="display:none">
+  <p>Example: A template of the indicator which loads other time frame data.&nbsp;<a href="javascript: showdiv('close45'); hidediv('open45');" onclick="javascript: showdiv('close45'); hidediv('open45');" class="action">Show<span class="side-icon dripicons-chevron-right"></span></a></p>
+</div>
+<div id="close45" style="display:inline">
+  <p>Example: A template of the indicator which loads other time frame data.&nbsp;<a href="javascript: showdiv('open45'); hidediv('close45');" onclick="javascript: showdiv('open45'); hidediv('close45');" class="action">Hide<span class="side-icon dripicons-chevron-down"></span></a></p>
+  <pre class="example" id="example45"><code>   function Init()
+       indicator:name(&quot;Sample indicator&quot;);
+       indicator:description(&quot; &quot;);
+       indicator:requiredSource(core.Bar);
+       indicator:type(core.Indicator);
+ 
+       indicator.parameters:addString(&quot;TF&quot;, &quot;The timeframe to load&quot;, &quot;&quot;, &quot;&quot;);
+       indicator.parameters:setFlag(&quot;TF&quot;, core.FLAG_PERIODS);
+   end
+ 
+   local source;                -- the indicator source
+   local other;                 -- the additional data stream
+   local loading;               -- flag indicating the other data stream is being loaded
+   local load_from;             -- the date/time the data was loaded the last time from
+   local TF;                    -- the timeframe to be loaded
+   local output;                -- the indicator output stream;
+   local offset, weekoffset;    -- params for candle calculation
+ 
+   function Prepare()
+       source = instance.source;
+       TF = instance.parameters.TF;
+ 
+       offset = core.host:execute(&quot;getTradingDayOffset&quot;);
+       weekoffset = core.host:execute(&quot;getTradingWeekOffset&quot;);
+ 
+       -- check whether chosen time frame is higher than
+       local s1, e1, s2, e2;
+       s1, e1 = core.getcandle(source:barSize(), offset, weekoffset);
+       s2, e2 = core.getcandle(TF, offset, weekoffset);
+       assert((e2 - s2) &gt; (e1 - s1), &quot;The chosen time frame must be longer than the source time frame&quot;);
+ 
+       local name;
+       name = profile:id() .. &quot;(&quot; .. TF .. &quot;)&quot;;
+       instance:name(name);
+ 
+ 
+       H = instance:addStream(&quot;H&quot;, core.Line, name .. &quot;.H&quot;, &quot;H&quot;, core.rgb(255, 0, 0), source:first());
+       L = instance:addStream(&quot;L&quot;, core.Line, name .. &quot;.L&quot;, &quot;L&quot;, core.rgb(255, 0, 0), source:first());
+   end
+ 
+   function Update(period, mode)
+       local from, to;
+ 
+       if period &lt; source:first() then
+           return ;
+       end
+ 
+       if other == nil then
+           -- if the data is not loaded yet at all
+           -- load the data
+           from = source:date(source:first());   -- oldest data to load
+           from = core.getcandle(TF, from, offset, weekoffset);
+           if source:isAlive() then              -- newest data to load or 0 if the source is &quot;alive&quot;
+               to = 0;
+           else
+               to = source:date(source:size() - 1);
+               to = core.getcandle(TF, to, offset, weekoffset);
+           end
+           load_from = from;
+           loading = true;
+           other = core.host:execute(&quot;getHistory&quot;, 1, source:instrument(), TF, from, to, source:isBid());
+           return ;
+       end
+ 
+       if loading then
+           return ;
+       end
+ 
+       local curr_date = source:date(period);
+       curr_date = core.getcandle(TF, curr_date, offset, weekoffset);
+ 
+       if curr_date &lt; load_from then
+           -- if the data we are trying to get is oldest than previously loaded
+           -- the extend the history to the oldest data we can request
+           from = source:date(source:first());     -- load from the oldest data we have in source
+           from = core.getcandle(TF, from, offset, weekoffset);
+           if other:size() &gt; other:first() then
+               to = other:date(other:first());     -- to the oldest data we have in other instrument
+           else
+               to = load_from;
+           end
+           load_from = from;
+           loading = true;
+           core.host:execute(&quot;extendHistory&quot;, 1, other, from, to);
+           return ;
+       end
+ 
+       -- the date is in the loaded range
+       -- try to find it
+       local other_period = core.findDate(other, curr_date, true);
+       if other_period ~= -1 then
+           H[period] = other.high[other_period];
+           L[period] = other.low[other_period];
+       end
+   end
+ 
+   function AsyncOperationFinished(cookie, success, message)
+       if cookie == 1 then
+           loading = false;
+           -- update the indicator output when loading is finished
+           instance:updateFrom(source:first());
+           return ;
+       end
+   end</code></pre>
+</div><p>Declared in <a href="host.html">host</a></p>
+<p>
+  <center><a href="host.html">back</a></center>
+</p><script language="javascript" type="text/javascript">syncList1('host');</script></body></html>

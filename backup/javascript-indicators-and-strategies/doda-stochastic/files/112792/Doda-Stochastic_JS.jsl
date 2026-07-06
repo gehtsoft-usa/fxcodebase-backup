@@ -1,0 +1,127 @@
+function Init()
+{
+    indicator.name("Doda-Stochastic");
+    indicator.description("Doda-Stochastic");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");	
+    indicator.parameters.addInteger("Slw", "Slow Period", "Slow Period", 8);
+    indicator.parameters.addInteger("Pds", "Stochastic Period", "Stochastic Period", 13);
+    indicator.parameters.addInteger("Slwsignal", "Signal Period", "Signal Period", 9);
+	
+	indicator.parameters.addGroup("Style");	
+    indicator.parameters.addColor("K_color", "Color of K", "Color of K", core.rgb(0, 255, 0));
+	indicator.parameters.addInteger("width1", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style1", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style1", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("D_color", "Color of D", "Color of D", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width2", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style2", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style2", core.FLAG_LINE_STYLE);
+	
+	indicator.parameters.addGroup("OB/OS Levels");	
+    indicator.parameters.addDouble("overbought", "Overbought Level","", 80);
+    indicator.parameters.addDouble("oversold","Oversold Level","", 20);
+	    indicator.parameters.addColor("level_overboughtsold_color", "Line Color","", core.rgb(128, 128, 128));
+    indicator.parameters.addInteger("level_overboughtsold_width","Line width","", 1, 1, 5);
+    indicator.parameters.addInteger("level_overboughtsold_style", "Line Style","", core.LINE_SOLID);
+    indicator.parameters.setFlag("level_overboughtsold_style", core.FLAG_LEVEL_STYLE);
+}
+
+var Slw;
+var Pds;
+var Slwsignal;
+
+var first;
+var source = null;
+var R;
+var K = null;
+var D = null;
+var smconst, smconst1;
+// Routine
+function Prepare(nameOnly)
+{
+    Slw = instance.parameters.Slw;
+    Pds = instance.parameters.Pds;
+    Slwsignal = instance.parameters.Slwsignal;
+	
+	R= instance.addInternalStream(0, 0);
+	
+	smconst=2/(1+Slw);
+    smconst1=2/(1+Slwsignal);
+	
+    source = instance.source;
+    first = source.first()+Pds;
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Slw) + ", " + tostring(Pds) + ", " + tostring(Slwsignal) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        K = instance.addStream("K", core.Line, name + ".K", "K", instance.parameters.K_color, first);
+        D = instance.addStream("D", core.Line, name + ".D", "D", instance.parameters.D_color, first);
+		K.setWidth(instance.parameters.width1);
+        K.setStyle(instance.parameters.style1);
+		D.setWidth(instance.parameters.width2);
+        D.setStyle(instance.parameters.style2);
+		
+		K.addLevel(instance.parameters.oversold, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);
+		K.addLevel(instance.parameters.overbought, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);    
+    }
+}
+
+function Update(period)
+{
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+    
+     var minLow, minHigh;
+	 var Now;	  	 
+	 var Range;
+	 
+	    //Range=(High[Highest(NULL,0,MODE_HIGH,shift+Pds,Pds)]-Low[Lowest(NULL,0,MODE_LOW,shift+Pds,Pds)]);
+        var tmp = Math.minmax(source, period - Pds, period-1);		
+        minLow=tmp[0];
+        maxHigh=tmp[1];
+		Range= maxHigh-minLow;
+	
+		if (Range!= 0) 
+		{
+		 Now=100*((source.close[period]-minLow)/Range)
+		}
+		else
+		{
+		 Now=50;
+        }				
+		
+       R[period] =smconst *(Now- R[period-1])+ R[period-1];
+	   
+	     if (period < first +Pds) 
+	     {
+		  return;
+		 }	   
+	   
+	     
+	    tmp = Math.minmax(R, period - Pds, period-1);
+        minLow=tmp[0];
+        maxHigh=tmp[1];
+		Range= maxHigh-minLow;
+		
+		if (Range!= 0) 
+		{
+		 Now=100*((R[period]-minLow)/Range)
+		} 
+		else
+		{
+		 Now=50;
+        }			   
+	   
+	    K[period]= smconst *(Now-K[period-1])+K[period-1];		
+        D[period] = smconst1 *(K[period]-D[period-1])+D[period-1];
+		
+	
+    
+}
+

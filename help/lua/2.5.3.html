@@ -1,0 +1,40 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 2.5.3 - Logical Operators</title>
+</head>
+<body>
+<h3>2.5.3 - <a name="2.5.3">Logical Operators</a></h3><p>
+The logical operators in Lua are
+<b>and</b>, <b>or</b>, and <b>not</b>.
+Like the control structures (see <a href="2.4.4.html">&sect;2.4.4</a>),
+all logical operators consider both <b>false</b> and <b>nil</b> as false
+and anything else as true.
+
+
+<p>
+The negation operator <b>not</b> always returns <b>false</b> or <b>true</b>.
+The conjunction operator <b>and</b> returns its first argument
+if this value is <b>false</b> or <b>nil</b>;
+otherwise, <b>and</b> returns its second argument.
+The disjunction operator <b>or</b> returns its first argument
+if this value is different from <b>nil</b> and <b>false</b>;
+otherwise, <b>or</b> returns its second argument.
+Both <b>and</b> and <b>or</b> use short-cut evaluation;
+that is,
+the second operand is evaluated only if necessary.
+Here are some examples:
+
+<pre>
+     10 or 20            --&gt; 10
+     10 or error()       --&gt; 10
+     nil or "a"          --&gt; "a"
+     nil and 10          --&gt; nil
+     false and error()   --&gt; false
+     false and nil       --&gt; false
+     false or nil        --&gt; nil
+     10 and 20           --&gt; 20
+</pre><p>
+(In this manual,
+--> indicates the result of the preceding expression.)
+</body>
+</html>

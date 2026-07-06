@@ -1,0 +1,78 @@
+function Init()
+{
+    indicator.name("Super Trend Bar");
+    indicator.description("Super Trend Bar");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Super Trend Calculation");  
+    indicator.parameters.addInteger("S", "Number of periods", "No description", 10);
+    indicator.parameters.addDouble("M", "Multiplier", "No description", 1.5);
+	indicator.parameters.addGroup("Style");
+	 indicator.parameters.addColor("Up", "Color for Up Trend", "", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("Dn", "Color for Down Trend", "", core.rgb(255, 0, 0));
+	 indicator.parameters.addColor("No", "Color for No Trend", "", core.rgb(255, 255, 0));
+}
+
+var M,S;
+var first;
+var source = null;
+
+var Indicator={};
+var Out = null;
+
+function Prepare(nameOnly)
+{
+    M = instance.parameters.M;   
+    S = instance.parameters.S;	
+    source = instance.source;
+    
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(S) + ", " + tostring(M) + ")";
+    instance.name(name);
+	
+	
+	assert(core.indicators.findIndicator("ST") != null, "Please, download  ST.lua Indicator");	
+
+	 Indicator[1] = core.indicators.create("ST", source, S, M);
+
+	 
+	 first =Indicator[1].DATA.first();
+
+    if (!(nameOnly)) 
+    {
+        Out = instance.addStream("Out", core.Bar, name, "Out", instance.parameters.Up, first);
+		Out.addLevel(0, core.LINE_NONE , 1, core.rgb(0, 0, 0));
+		Out.addLevel(1, core.LINE_NONE , 1, core.rgb(0, 0, 0));
+    }
+}
+
+function Update(period, mode)
+{
+    if (period < period ||  !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+	 Indicator[1].update(mode);
+	
+	 
+	  Out[period] = 1;
+	 
+	 if (source.close[period] > Indicator[1].DATA[period])	
+	 {
+	  Out.setColor(period, instance.parameters.Up);  
+	 } 
+	 else if (source.close[period] < Indicator[1].DATA[period])	
+	 {
+	  Out.setColor(period, instance.parameters.Dn);  
+	 } 
+	 else
+	 {
+	  Out.setColor(period, instance.parameters.No);  
+	 }
+	
+       
+    
+}
+

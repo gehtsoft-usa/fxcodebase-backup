@@ -1,0 +1,59 @@
+function Init()
+{
+    indicator.name("FP channel indicator");
+    indicator.description("FP channel indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 100, 3, 1000);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("TopClr", "Top Color", "Top Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("MiddleClr", "Middle Color", "Middle Color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("BottomClr", "Bottom Color", "Bottom Color", core.rgb(0, 0, 255));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period;
+var TopBuff=null;
+var MiddleBuff=null;
+var BottomBuff=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ")";
+    instance.name(name);
+    TopBuff = instance.addStream("TopBuff", core.Line, name + ".Top", "Top", instance.parameters.TopClr, first);
+    MiddleBuff = instance.addStream("MiddleBuff", core.Line, name + ".Middle", "Middle", instance.parameters.MiddleClr, first);
+    BottomBuff = instance.addStream("BottomBuff", core.Line, name + ".Bottom", "Bottom", instance.parameters.BottomClr, first);
+    TopBuff.setWidth(instance.parameters.widthLinReg);
+    TopBuff.setStyle(instance.parameters.styleLinReg);
+    MiddleBuff.setWidth(instance.parameters.widthLinReg);
+    MiddleBuff.setStyle(instance.parameters.styleLinReg);
+    BottomBuff.setWidth(instance.parameters.widthLinReg);
+    BottomBuff.setStyle(instance.parameters.styleLinReg);
+}
+
+function Update(period, mode)
+{
+   if (period>first+Period) 
+   {
+    var tmp=Math.minmax(source, period-Period+1, period);
+    var max=tmp[1];
+    var min=tmp[0];
+    var pivot=(source.close[period-1]+source.close[period-2]+source.close[period-3])/3;
+    var sum=max+min+pivot;
+    MiddleBuff[period]=sum/3;
+    TopBuff[period]=(sum-min)/2;
+    BottomBuff[period]=(sum-max)/2;
+   } 
+}
+

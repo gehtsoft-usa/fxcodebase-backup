@@ -1,0 +1,34 @@
+# NRTR Color Line
+
+> Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=41285  
+> Forum: 17 · Topic 41285 · 2 post(s)
+
+
+---
+
+## NRTR Color Line
+
+**Alexander.Gettinger** · Tue Jun 18, 2013 12:30 pm
+
+This indicator is a ported MQL5 indicator from [http://www.mql5.com/en/code/1698](http://www.mql5.com/en/code/1698)
+
+ 
+
+![NRTR.PNG](images/67505/NRTR.PNG)
+
+
+
+Download:
+
+ [NRTR.lua](files/67505/NRTR.lua)
+
+The indicator was revised and updated
+
+
+---
+
+## Re: NRTR Color Line
+
+**Apprentice** · Sat May 27, 2017 11:22 am
+
+Indicator was revised and updated.

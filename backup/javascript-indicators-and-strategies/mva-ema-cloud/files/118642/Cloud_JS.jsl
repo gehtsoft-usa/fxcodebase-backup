@@ -1,0 +1,314 @@
+function Init()
+{
+    indicator.name("MVA/EMA Cloud Cloud");
+    indicator.description("MVA/EMA Cloud Cloud");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+	indicator.parameters.addGroup("Method One");
+	indicator.parameters.addInteger("SF", "First Averege Period", "First Averege  Period", 20);
+	indicator.parameters.addString("Method1", "Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method1", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method1", "EMA", "EMA" , "EMA");
+	indicator.parameters.addStringAlternative("Method1", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method1", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method1", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method1", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method1", "HMA", "HMA" , "HMA");
+    indicator.parameters.addStringAlternative("Method1", "WMA", "WMA" , "WMA");
+	indicator.parameters.addStringAlternative("Method1", "VAMA", "VAMA" , "VAMA");	
+	indicator.parameters.addStringAlternative("Method1", "NONLAGMA", "NONLAGMA", "NONLAGMA"); 
+	
+	indicator.parameters.addString("Type1", "CLOSE", "", "C");
+    indicator.parameters.addStringAlternative("Type1", "OPEN", "", "O");
+    indicator.parameters.addStringAlternative("Type1", "HIGH", "", "H");
+    indicator.parameters.addStringAlternative("Type1", "LOW", "", "L");
+    indicator.parameters.addStringAlternative("Type1","CLOSE", "", "C");
+    indicator.parameters.addStringAlternative("Type1", "MEDIAN", "", "M");
+    indicator.parameters.addStringAlternative("Type1", "TYPICAL", "", "T");
+    indicator.parameters.addStringAlternative("Type1", "WEIGHTED", "", "W");
+	
+	
+	indicator.parameters.addGroup("Method Two");
+	indicator.parameters.addInteger("LF", "Second Averege Period", "Second Averege Period", 100);
+	indicator.parameters.addString("Method2", "Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method2", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method2", "EMA", "EMA" , "EMA");
+	indicator.parameters.addStringAlternative("Method2", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method2", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method2", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method2", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method2", "HMA", "HMA" , "HMA");
+    indicator.parameters.addStringAlternative("Method2", "WMA", "WMA" , "WMA");
+	indicator.parameters.addStringAlternative("Method2", "VAMA", "VAMA" , "VAMA");	
+	indicator.parameters.addStringAlternative("Method2", "NONLAGMA", "NONLAGMA", "NONLAGMA"); 
+	
+	
+	indicator.parameters.addString("Type2", "CLOSE", "", "C");
+    indicator.parameters.addStringAlternative("Type2", "OPEN", "", "O");
+    indicator.parameters.addStringAlternative("Type2", "HIGH", "", "H");
+    indicator.parameters.addStringAlternative("Type2", "LOW", "", "L");
+    indicator.parameters.addStringAlternative("Type2","CLOSE", "", "C");
+    indicator.parameters.addStringAlternative("Type2", "MEDIAN", "", "M");
+    indicator.parameters.addStringAlternative("Type2", "TYPICAL", "", "T");
+    indicator.parameters.addStringAlternative("Type2", "WEIGHTED", "", "W");
+     
+	
+	indicator.parameters.addGroup("Style");	
+	 indicator.parameters.addBoolean("Lines", "Show MA Lines", "" , false); 
+	 indicator.parameters.addInteger("Transparency", "Transparency", "", 40,0,100);
+    indicator.parameters.addColor("Up", "Color of Up", "Color of Up", core.rgb( 0, 255, 0));
+    indicator.parameters.addColor("UpDown", "Color of UpDown", "Color of UpDown", core.rgb(125, 255, 125));
+	indicator.parameters.addColor("DownUp", "Color of DownUp", "Color of DownUp", core.rgb(255, 125, 125));
+    indicator.parameters.addColor("Down", "Color of Down", "Color of Down", core.rgb(255, 0, 0));
+	
+	
+	indicator.parameters.addGroup("Non Lag MA Parameters One");   
+    indicator.parameters.addInteger("Filter1", "Filter", "Filter", 0);
+    indicator.parameters.addInteger("ColorBarBack1", "ColorBarBack", "ColorBarBack", 2);
+    indicator.parameters.addDouble("Deviation1", "Deviation", "Deviation", 0);
+	
+	indicator.parameters.addGroup("Non Lag MA Parameters Two");   
+    indicator.parameters.addInteger("Filter2", "Filter", "Filter", 0);
+    indicator.parameters.addInteger("ColorBarBack2", "ColorBarBack", "ColorBarBack", 2);
+    indicator.parameters.addDouble("Deviation2", "Deviation", "Deviation", 0);
+	
+}
+
+var ShortFrame=null;
+var LongFrame=null;
+var Method1=null;
+var Method2=null;
+var Lines;
+var Filter1;
+var ColorBarBack1;
+var Deviation1;
+var Filter2;
+var ColorBarBack2;
+var Deviation2;
+
+var first;
+var source = null;
+
+var LongDATA = null;
+var ShortDATA = null;
+
+var UUL=null;
+var UUS=null;
+
+var UDL=null;
+var UDS=null;
+
+var DUL=null;
+var DUS=null;
+
+var DDL=null;
+var DDS=null;
+
+var Transparency;
+var Type1;
+var Type2;
+var P1,P1;
+
+function Prepare()
+{
+    Filter1=instance.parameters.Filter1;
+    ColorBarBack1=instance.parameters.ColorBarBack1;
+    Deviation1=instance.parameters.Deviation1;
+	
+	Filter2=instance.parameters.Filter2;
+    ColorBarBack2=instance.parameters.ColorBarBack2;
+    Deviation2=instance.parameters.Deviation2;
+	
+	Type=instance.parameters.Type;
+    Transparency= instance.parameters.Transparency;
+    Lines = instance.parameters.Lines;
+    ShortFrame = instance.parameters.SF;
+    LongFrame = instance.parameters.LF;
+	Method = instance.parameters.Method;
+	Method1 = instance.parameters.Method1;
+	Method2 = instance.parameters.Method2;
+	
+	
+	Transparency= 100-Transparency;
+	
+    source = instance.source;
+    first = source.first();
+	
+	if (Type1 == "O") 
+	{
+        P1 = source.open;
+    }    
+    else if (Type1 == "H") 
+    {
+        P1 = source.high;
+    }    
+    else if (Type1 == "L") 
+    {
+        P1 = source.low;
+    }    
+    else if (Type1 == "M") 
+    {
+        P1 = source.median;
+    }
+    else if (Type1 == "T") 
+    {
+        P1 = source.typical;
+    }
+    else if (Type1 == "W") 
+    {
+        P1 = source.weighted;
+    }
+    else
+    {
+        P1 = source.close;
+    }
+	
+	if (Type2 == "O") 
+	{
+        P2 = source.open;
+    }
+    else if (Type2 == "H") 
+    {
+        P2 = source.high;
+    }
+    else if (Type2 == "L") 
+    {
+        P2 = source.low;
+    }
+    else if (Type2 == "M") 
+    {
+        P2 = source.median;
+    }
+    else if (Type2 == "T") 
+    {
+        P2 = source.typical;
+    }
+    else if (Type2 == "W") 
+    {
+        P2 = source.weighted;
+    }
+    else
+    {
+        P2 = source.close;
+    }
+	
+	
+	
+	if (Method1 == "VAMA") 
+	{
+	 ShortDATA= core.indicators.create(Method1, source, ShortFrame);
+	}
+	else if (Method1 == "NONLAGMA") 
+	{
+	 LongDATA= core.indicators.create(Method1, P1, ShortFrame, Filter1, ColorBarBack1,Deviation1,true);
+	}
+	else
+	{
+	 LongDATA= core.indicators.create(Method1, P1, ShortFrame);
+	}
+	
+	if (Method2 == "VAMA") 
+	{
+	 ShortDATA= core.indicators.create(Method2, source, LongFrame);
+	}
+	else if (Method2 == "NONLAGMA") 
+	{
+	 ShortDATA= core.indicators.create(Method2, P2, LongFrame, Filter2, ColorBarBack2,Deviation2,true);
+	}
+	else
+	{
+	 ShortDATA= core.indicators.create(Method2, P2, LongFrame);
+	}
+	
+	
+	assert(core.indicators.findIndicator(Method1) != null, "Please, download && install "+Method1+  " indicator");
+	assert(core.indicators.findIndicator(Method2) != null, "Please, download && install "+Method2+  " indicator");
+
+    var name = profile.id() + "(" + source.name() + ", " + ShortFrame + ", " + LongFrame+ ", " + Method1+ ", "+ Method2  + ")";
+    instance.name(name);
+    
+   if (Lines) 
+   {
+   
+    UUL=instance.addStream("UUL", core.Dot, name, "UUL", core.rgb( 128, 128, 128), first);
+    UUS=instance.addStream("UUS", core.Dot, name, "UUS", core.rgb( 128, 128, 128), first);
+    UDL=instance.addStream("UDL", core.Dot, name, "UDL", core.rgb( 128, 128, 128), first);
+    UDS=instance.addStream("UDS", core.Dot, name, "UDS", core.rgb( 128, 128, 128), first);
+    DUL=instance.addStream("DUL", core.Dot, name, "DUL", core.rgb( 128, 128, 128), first);
+    DUS=instance.addStream("DUS", core.Dot, name, "DUS", core.rgb( 128, 128, 128), first);
+    DDL=instance.addStream("DDL", core.Dot, name, "DDL", core.rgb( 128, 128, 128), first);
+    DDS=instance.addStream("DDS", core.Dot, name, "DDS", core.rgb( 128, 128, 128), first);
+   }
+   else
+   {
+    UUL=instance.addInternalStream(first, 0);
+    UUS=instance.addInternalStream(first, 0);
+
+    UDL=instance.addInternalStream(first, 0);
+    UDS=instance.addInternalStream(first, 0);
+
+    DUL=instance.addInternalStream(first, 0);
+    DUS=instance.addInternalStream(first, 0);  
+   
+    DDL=instance.addInternalStream(first, 0);
+    DDS=instance.addInternalStream(first, 0);
+   }
+	
+	
+	instance.createFromToBarGroup("UpGroup","Up" , UUL, UUS, instance.parameters.Up);
+	instance.createFromToBarGroup("UpDownGroup","UpDown" , UDL, UDS, instance.parameters.UpDown);
+	instance.createFromToBarGroup("DownUpGroup","DownUp" , DUL, DUS, instance.parameters.DownUp);
+	instance.createFromToBarGroup("DownGroup","Down" , DDL, DDS, instance.parameters.Down);
+	
+}
+
+function Update(period,mode)
+{
+    if (period > 1 && source.hasData(period)) 
+    {
+	
+	    LongDATA.update(mode);
+		ShortDATA.update(mode);
+		
+				if (period > 1 && source.hasData(period)) 
+				{
+						if (LongDATA.DATA.hasData(period) &&  ShortDATA.DATA.hasData(period-1) && LongDATA.DATA.hasData(period-1) &&  ShortDATA.DATA.hasData(period)) 
+						{
+						
+						if (LongDATA.DATA[period] >= LongDATA.DATA[period-1]  && ShortDATA.DATA[period] >= ShortDATA.DATA[period-1])
+						{
+						UUL[period-1] = LongDATA.DATA[period-1];
+						UUS[period-1] = ShortDATA.DATA[period-1];
+						UUL[period] = LongDATA.DATA[period];
+						UUS[period] = ShortDATA.DATA[period];
+						}
+					}
+						
+						 if (LongDATA.DATA[period] >= LongDATA.DATA[period-1]  && ShortDATA.DATA[period] < ShortDATA.DATA[period-1])
+						 {
+						UDL[period-1] = LongDATA.DATA[period-1];
+						UDS[period-1] = ShortDATA.DATA[period-1];
+						UDL[period] = LongDATA.DATA[period];
+						UDS[period] = ShortDATA.DATA[period];
+						}
+						
+						if (LongDATA.DATA[period] < LongDATA.DATA[period-1]  && ShortDATA.DATA[period] >= ShortDATA.DATA[period-1])
+						{
+						DUL[period-1] = LongDATA.DATA[period-1];
+						DUS[period-1] = ShortDATA.DATA[period-1];
+						DUL[period] = LongDATA.DATA[period];
+						DUS[period] = ShortDATA.DATA[period];
+						}
+						
+						if (LongDATA.DATA[period] < LongDATA.DATA[period-1]  && ShortDATA.DATA[period] < ShortDATA.DATA[period-1])
+						{
+						DDL[period-1] = LongDATA.DATA[period-1];
+						DDS[period-1] = ShortDATA.DATA[period-1];
+						DDL[period] = LongDATA.DATA[period];
+						DDS[period] = ShortDATA.DATA[period];
+						}
+				}
+		}
+		
+    
+}

@@ -1,0 +1,107 @@
+function Init()
+{
+    indicator.name("Wide Range Predictor");
+    indicator.description("Wide Range Predictor");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+     indicator.parameters.addGroup("Calculation");	
+    indicator.parameters.addInteger("Period", "Period", "Period", 10);
+	 indicator.parameters.addGroup("Style");	
+    indicator.parameters.addColor("Range_Up", "Color of Range Up", " ", core.rgb(255, 0, 0));
+	indicator.parameters.addColor("Range_Down", "Color of Range Down", " ", core.rgb(200, 0, 0));
+	indicator.parameters.addColor("Range_MA", "Color of Body MA", " ", core.rgb(0, 0, 255));
+	
+    indicator.parameters.addColor("Body_Up", "Color of Body Up", " ", core.rgb(0, 255, 0));
+	indicator.parameters.addColor("Body_Down", "Color of Body Down", " ", core.rgb(0, 200, 0));
+	indicator.parameters.addColor("Body_MA", "Color of Body MA", " ", core.rgb(0, 0, 255));
+	
+    indicator.parameters.addColor("Neutral", "Color of Neutral", "Color of Neutral", core.rgb(128, 128, 128));
+}
+
+var Period;
+
+var first;
+var source = null;
+
+var Range = null;
+var Body = null;
+var range, body;
+var Neutral;
+var Range_Up, Range_Down;
+var Body_Up, Body_Down;
+var Up, Down;
+var Range_MA, Body_MA;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+	Range_MA = instance.parameters.Range_MA;
+	Body_MA = instance.parameters.Body_MA;
+	Range_Up = instance.parameters.Range_Up;
+	Range_Down = instance.parameters.Range_Down;
+    Body_Up = instance.parameters.Body_Up;
+	Body_Down = instance.parameters.Body_Down;
+    source = instance.source;
+	Neutral = instance.parameters.Neutral;	 
+	 
+    first = source.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        Range = instance.addStream("Range", core.Bar, name + ".Range", "Range", Neutral, first);
+        Body = instance.addStream("Body", core.Bar, name + ".Body", "Body", Neutral, first);
+		
+		range = core.indicators.create("MVA", Range, Period);
+	    body = core.indicators.create("MVA", Body, Period);
+		
+		Up = instance.addStream("Range_MA", core.Line, name + ".Range_MA", "Range_MA", Range_MA, range.DATA.first() );
+		Down = instance.addStream("Body_MA", core.Line, name + ".Body_MA", "Body_MA",Body_MA, body.DATA.first());
+       
+    }
+}
+
+function Update(period, mode)
+{
+   Range.setColor(period, Neutral);
+	Body.setColor(period, Neutral);
+    if (period < first)   
+    { 
+	 return;
+	}
+	
+   Range[period] = source.high[period] - source.low[period];
+   Body[period] = Math.abs(source.close[period]-source.open[period]);
+   
+    range.update(mode);
+	body.update(mode);
+	
+	if (period < range.DATA.first()) 
+	{
+	 return;
+	}
+	
+	Up[period]=range.DATA[period];
+	Down[period]=body.DATA[period];
+	
+	if (Range[period] > range.DATA[period]) 
+	{
+	 Range.setColor(period, Range_Up);
+	} 
+	else
+	{
+	 Range.setColor(period, Range_Down);
+	}
+
+    if (Body[period] > body.DATA[period]) 
+    {
+	 Body.setColor(period, Body_Up);
+	} 
+    else
+    {
+	 Body.setColor(period, Body_Down);
+    }	
+}
+

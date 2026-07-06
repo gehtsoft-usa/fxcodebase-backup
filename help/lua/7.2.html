@@ -1,0 +1,61 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 7.2 - Changes in the Libraries</title>
+</head>
+<body>
+<h2>7.2 - <a name="7.2">Changes in the Libraries</a></h2>
+<ul>
+
+<li>
+Function <code>string.gfind</code> was renamed <a href="pdf-string.gmatch.html"><code>string.gmatch</code></a>.
+(Option <code>LUA_COMPAT_GFIND</code>)
+</li>
+
+<li>
+When <a href="pdf-string.gsub.html"><code>string.gsub</code></a> is called with a function as its
+third argument,
+whenever this function returns <b>nil</b> or <b>false</b> the
+replacement string is the whole match,
+instead of the empty string.
+</li>
+
+<li>
+Function <code>table.setn</code> was deprecated.
+Function <code>table.getn</code> corresponds
+to the new length operator (<code>#</code>);
+use the operator instead of the function.
+(Option <code>LUA_COMPAT_GETN</code>)
+</li>
+
+<li>
+Function <code>loadlib</code> was renamed <a href="pdf-package.loadlib.html"><code>package.loadlib</code></a>.
+(Option <code>LUA_COMPAT_LOADLIB</code>)
+</li>
+
+<li>
+Function <code>math.mod</code> was renamed <a href="pdf-math.fmod.html"><code>math.fmod</code></a>.
+(Option <code>LUA_COMPAT_MOD</code>)
+</li>
+
+<li>
+Functions <code>table.foreach</code> and <code>table.foreachi</code> are deprecated.
+You can use a for loop with <code>pairs</code> or <code>ipairs</code> instead.
+</li>
+
+<li>
+There were substantial changes in function <a href="pdf-require.html"><code>require</code></a> due to
+the new module system.
+However, the new behavior is mostly compatible with the old,
+but <code>require</code> gets the path from <a href="pdf-package.path.html"><code>package.path</code></a> instead
+of from <code>LUA_PATH</code>.
+</li>
+
+<li>
+Function <a href="pdf-collectgarbage.html"><code>collectgarbage</code></a> has different arguments.
+Function <code>gcinfo</code> is deprecated;
+use <code>collectgarbage("count")</code> instead.
+</li>
+
+</ul>
+</body>
+</html>

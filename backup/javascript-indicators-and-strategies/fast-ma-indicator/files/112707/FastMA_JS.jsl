@@ -1,0 +1,57 @@
+function Init()
+{
+    indicator.name("Fast MA indicator");
+    indicator.description("Fast MA indicator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 40);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("width", "width", "width", 1, 1, 5);
+    indicator.parameters.addInteger("style", "style", "style", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LEVEL_STYLE);
+}
+
+var first;
+var source = null;
+var Period;
+var Buff=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ")";
+    instance.name(name);
+    Buff = instance.addStream("Buff", core.Line, name + ".Buff", "Buff", instance.parameters.clr, first);
+    Buff.setWidth(instance.parameters.width);
+    Buff.setStyle(instance.parameters.style);
+}
+
+function Update(period, mode)
+{
+   if (period>first+Period) 
+   {
+    var i;
+    var Sum=0;
+    var SumW=0;
+    var SumP=0;
+    var SumP2=0;
+    for (i=0; i<=Period-1; i++) 
+    {
+     Sum=Sum+source[period-i];
+     SumW=SumW+source[period-i]*i;
+     SumP=SumP+i;
+     SumP2=SumP2+i*i;
+    }
+    var var3=SumP2*Period-SumP*SumP;
+    var var2=(SumW*Period-SumP*Sum)/var3;
+    var var1=(Sum-SumP*var2)/Period;
+    Buff[period]=var1;
+   } 
+}
+

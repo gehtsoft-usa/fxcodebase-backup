@@ -1,0 +1,75 @@
+function Init()
+{
+    indicator.name("True stochastic");
+    indicator.description("True stochastic");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("PeriodK1", "Period K for stochastic 1", "Period K for stochastic 1", 8);
+    indicator.parameters.addInteger("PeriodD1", "Period D for stochastic 1", "Period D for stochastic 1", 3);
+    indicator.parameters.addInteger("PeriodK2", "Period K for stochastic 2", "Period K for stochastic 2", 16);
+    indicator.parameters.addInteger("PeriodD2", "Period D for stochastic 2", "Period D for stochastic 2", 3);
+    indicator.parameters.addInteger("PeriodK3", "Period K for stochastic 3", "Period K for stochastic 3", 34);
+    indicator.parameters.addInteger("PeriodD3", "Period D for stochastic 3", "Period D for stochastic 3", 3);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr1", "Color of Stochastic 1", "Color of Stochastic 1", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clr2", "Color of Stochastic 2", "Color of Stochastic 2", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("clr3", "Color of Stochastic 3", "Color of Stochastic 3", core.rgb(0, 0, 255));
+}
+
+var first;
+var source = null;
+var PeriodK1;
+var PeriodD1;
+var PeriodK2;
+var PeriodD2;
+var PeriodK3;
+var PeriodD3;
+var Stochastic1;
+var Stochastic2;
+var Stochastic3;
+var buff1;
+var buff2;
+var buff3;
+
+function Prepare()
+{
+    source = instance.source;
+    PeriodK1=instance.parameters.PeriodK1;
+    PeriodD1=instance.parameters.PeriodD1;
+    PeriodK2=instance.parameters.PeriodK2;
+    PeriodD2=instance.parameters.PeriodD2;
+    PeriodK3=instance.parameters.PeriodK3;
+    PeriodD3=instance.parameters.PeriodD3;
+    Stochastic1 = core.indicators.create("STOCHASTIC", source, PeriodK1,PeriodD1,2);
+    Stochastic2 = core.indicators.create("STOCHASTIC", source, PeriodK2,PeriodD2,2);
+    Stochastic3 = core.indicators.create("STOCHASTIC", source, PeriodK3,PeriodD3,2);
+    first = Math.max(Stochastic1.DATA.first(),Stochastic2.DATA.first(),Stochastic3.DATA.first())+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.PeriodK1 + ", " + instance.parameters.PeriodD1 + ", " + instance.parameters.PeriodK2 + ", " + instance.parameters.PeriodD2 + ", " + instance.parameters.PeriodK3 + ", " + instance.parameters.PeriodD3 + ")";
+    instance.name(name);
+    buff1 = instance.addStream("Stochastic1", core.Line, name + ".Stochastic1", "Stochastic1", instance.parameters.clr1, first);
+    buff2 = instance.addStream("Stochastic2", core.Line, name + ".Stochastic2", "Stochastic2", instance.parameters.clr2, first);
+    buff3 = instance.addStream("Stochastic3", core.Line, name + ".Stochastic3", "Stochastic3", instance.parameters.clr3, first);
+}
+
+function Update(period, mode)
+{
+    Stochastic1.update(mode);
+    Stochastic2.update(mode);
+    Stochastic3.update(mode);
+    if (period>first+PeriodK1)
+    {
+     buff1[period]=Stochastic1.K[period];
+    } 
+    if (period>first+PeriodK2) 
+    {
+     buff2[period]=Stochastic2.K[period];
+    }
+    if (period>first+PeriodK3) 
+    { 
+     buff3[period]=Stochastic3.K[period];
+    } 
+}
+

@@ -1,0 +1,92 @@
+function Init()
+{
+    indicator.name("Battleplan indicator");
+    indicator.description("Battleplan indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addDouble("Inf", "Inf", "", 18000);
+    indicator.parameters.addDouble("Sup", "Sup", "", 21000);
+    indicator.parameters.addInteger("CycleLength", "Cycle length", "", 60);
+    indicator.parameters.addDouble("Trend", "Trend", "", 0);
+    indicator.parameters.addInteger("Ncycle", "N cycle", "", 2);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Inf, Sup;
+var CycleLength;
+var Trend;
+var Ncycle;
+var Battleplan = null;
+var StartPeriod = null;
+var b;
+
+function StrToTime(Str)
+{
+ var Y,M,D,Hour,Min;
+ var Pos;
+ var Str_=Str;
+ Pos=Str.find("/");
+ M=(Str_.sub(1,Pos-1));
+ Str_=Str_.sub(Pos+1);
+ Pos=Str_.find("/");
+ D=tonumber(Str_.sub(1,Pos-1));
+ Str_=Str_.sub(Pos+1);
+ Pos=Str_.find(" ");
+ Y=tonumber(Str_.sub(1,Pos-1));
+ Str_=Str_.sub(Pos+1);
+ Pos=Str_.find(".");
+ Hour=tonumber(Str_.sub(1,Pos-1));
+ Min=tonumber(Str_.sub(Pos+1));
+ return (core.datetime(Y,M,D,Hour,Min,0));
+}
+
+function Prepare()
+{
+    source = instance.source;
+    Inf=instance.parameters.Inf;
+    Sup=instance.parameters.Sup;
+    CycleLength=instance.parameters.CycleLength;
+    Trend=instance.parameters.Trend;
+    Ncycle=instance.parameters.Ncycle;
+    first = source.first()+2;
+    b = instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Inf + ", " + instance.parameters.Sup + ", " + instance.parameters.Trend + ", " + instance.parameters.Ncycle + ")";
+    instance.name(name);
+    Battleplan = instance.addStream("Battleplan", core.Line, name + ".Battleplan", "Battleplan", instance.parameters.clr, first);
+    Battleplan.setWidth(instance.parameters.widthLinReg);
+    Battleplan.setStyle(instance.parameters.styleLinReg);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    if (StartPeriod == null) 
+    {
+     StartPeriod = period;
+    } 
+    else
+    {
+     var x = (360/CycleLength)*(period-StartPeriod+1);
+     var Cycle = Math.sin((x-90)*3.1415926/180)+Math.sin((Ncycle*x-90)*3.1415926/180)+Math.sin((2*Ncycle*x-90)*3.1415926/180)+Math.sin((4*Ncycle*x-90)*3.1415926/180);
+     var c = 0.01029*Trend;
+     b[period] = b[period-1]+c;
+     Battleplan[period] = (Cycle+b[period]+10)*((Sup-Inf)/15)+Inf;
+    }
+   } 
+   else
+   {
+    StartPeriod = null;
+    b[period] = 0;
+   } 
+}
+

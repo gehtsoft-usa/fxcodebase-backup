@@ -1,0 +1,127 @@
+function Init()
+{
+    indicator.name(" Adaptive Market Level");
+    indicator.description(" Adaptive Market Level");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Fractal", "Fractal", "No description", 6);
+    indicator.parameters.addInteger("Lag", "Lag", "Lag", 7);
+	
+	indicator.parameters.addGroup("Style");	
+    indicator.parameters.addColor("Up", "Color of Up AML", "Color of AML", core.rgb(0, 255, 0));
+	indicator.parameters.addColor("Down", "Color of Down AML", "Color of AML", core.rgb(255, 0, 0))
+	indicator.parameters.addColor("Neutral", "Color of Neutral AML", "Color of AML", core.rgb(0, 0, 255))
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var Fractal;
+var Lag;
+
+var first;
+var source = null;
+
+var AML = null;
+var fr;
+
+function Prepare(nameOnly)
+{
+    Fractal = instance.parameters.Fractal;
+    Lag = instance.parameters.Lag;
+    source = instance.source;
+    first = source.first()+2*Fractal;
+    
+	
+    fr = instance.addInternalStream(0, 0);
+
+	
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Fractal) + ", " + tostring(Lag) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        AML = instance.addStream("AML", core.Line, name, "AML", instance.parameters.Neutral, first+Lag );
+		AML.setWidth(instance.parameters.width);
+        AML.setStyle(instance.parameters.style);
+		
+    }
+}
+
+function Update(period)
+{
+    if (period < first) 
+    {
+	   return;
+	   }
+	
+	
+	  var  R1 = Range(Fractal,period)/Fractal; 	  
+      var  R2 = Range(Fractal,period-Fractal)/Fractal; 
+      var  R3 = Range(2*Fractal,period)/(2*Fractal); 
+	  
+	  
+	  var dim = 0;
+	  
+      if (R1+R2 > 0 && R3 > 0) 
+      { 
+         dim = (Math.log(R1+R2)-Math.log(R3) )* 1.44269504088896;
+      }		 
+
+      var  alpha = Math.exp (-Lag*(dim-1.0));
+      if (alpha > 1.0) 
+        { 
+          alpha = 1.0; 
+        }
+      if (alpha < 0.01) 
+        { 
+          alpha = 0.01; 
+        }
+
+      var  price = (source.high[period]+source.low[period]+2*source.open[period]+2*source.close[period])/6;
+      fr[period] = alpha * price + (1.0 - alpha) * fr[period-1];    
+	  
+	  if (period < first+Lag) 
+    {
+	   return;
+	  }
+	  
+
+      if (Math.abs(fr[period]-fr[period-Lag]) >= Lag*Lag*source.pipSize()) 
+      {
+           AML[period]  = fr[period];
+      }
+      else
+      {
+          AML[period] =   AML[period-1];
+     } 
+	 	 
+	
+		if (AML[period] >AML[period-1]) 
+    {
+		 AML.setColor(period, instance.parameters.Up);
+    } 
+		else if (AML[period] < AML[period-1]) 
+    {
+		 AML.setColor(period, instance.parameters.Down);
+    } 
+		else
+    {
+		 AML.setColor(period, instance.parameters.Neutral);
+		}
+   
+   
+}
+
+
+function Range(  Period, period) 
+{
+  var min, max;
+    var tmp=Math.minmax (source, period-Period+1, period)  
+    min=tmp[0];
+    max=tmp[1];
+   return (max - min); 
+}
+
+

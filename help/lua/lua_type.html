@@ -1,0 +1,32 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_type</title>
+</head>
+<body>
+<h3><a name="lua_type"><code>lua_type</code></a></h3>
+<pre>int lua_type (lua_State *L, int index);</pre>
+
+<p>
+Returns the type of the value in the given acceptable index,
+or <code>LUA_TNONE</code> for a non-valid index
+(that is, an index to an "empty" stack position).
+The types returned by <a href="lua_type.html"><code>lua_type</code></a> are coded by the following constants
+defined in <code>lua.h</code>:
+<code>LUA_TNIL</code>,
+<code>LUA_TNUMBER</code>,
+<code>LUA_TBOOLEAN</code>,
+<code>LUA_TSTRING</code>,
+<code>LUA_TTABLE</code>,
+<code>LUA_TFUNCTION</code>,
+<code>LUA_TUSERDATA</code>,
+<code>LUA_TTHREAD</code>,
+and
+<code>LUA_TLIGHTUSERDATA</code>.
+
+
+
+
+
+<hr>
+</body>
+</html>

@@ -1,0 +1,107 @@
+function Init()
+{
+    indicator.name("Reverse Min Max");
+    indicator.description("Reverse Min Max");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Min Max Period", "Min Max Period", 20);	
+    indicator.parameters.addInteger("Reverse", "Reverse Period", "Reverse Period", 5);
+	
+
+	
+	indicator.parameters.addGroup("Style");
+	
+		indicator.parameters.addBoolean("Show", "Show Min/Max", "", false);
+    indicator.parameters.addColor("Min_color", "Color of Min", "Color of Min", core.rgb(0, 0, 255));	
+    indicator.parameters.addColor("Max_color", "Color of Max", "Color of Max", core.rgb(0, 0, 255));
+	 indicator.parameters.addInteger("width1", "Width", "Width", 1, 1, 5);
+    indicator.parameters.addInteger("style1", "Style", "Style", core.LINE_SOLID);
+    indicator.parameters.setFlag("style1", core.FLAG_LINE_STYLE);
+	
+    indicator.parameters.addColor("ReverseMin_color", "Color of ReverseMin", "Color of ReverseMin", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("ReverseMax_color", "Color of ReverseMax", "Color of ReverseMax", core.rgb(0, 255, 0));
+	 indicator.parameters.addInteger("width2", "Width", "Width", 1, 1, 5);
+    indicator.parameters.addInteger("style2", "Style", "Style", core.LINE_SOLID);
+    indicator.parameters.setFlag("style2", core.FLAG_LINE_STYLE);
+}
+
+var Period;
+var Reverse;
+var Show;
+var first;
+var source = null;
+
+var Min = null;
+var Max = null;
+var ReverseMin = null;
+var ReverseMax = null;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+	Show = instance.parameters.Show;
+    Reverse = instance.parameters.Reverse;
+    source = instance.source;
+    first = source.first() +Period;
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ", " + tostring(Reverse) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+	
+	
+	    if (Show) 
+        {
+         Min = instance.addStream("Min", core.Line, name + ".Min", "Min", instance.parameters.Min_color, first);
+		 Min.setWidth(instance.parameters.width1);
+         Min.setStyle(instance.parameters.style1);
+		
+         Max = instance.addStream("Max", core.Line, name + ".Max", "Max", instance.parameters.Max_color, first);
+		 Max.setWidth(instance.parameters.width1);
+         Max.setStyle(instance.parameters.style1);
+		}
+		else
+        {
+		 Max = instance.addInternalStream(0, 0);
+		 Min = instance.addInternalStream(0, 0);
+		}
+		
+		
+        ReverseMin = instance.addStream("ReverseMin", core.Line, name + ".ReverseMin", "ReverseMin", instance.parameters.ReverseMin_color, first);
+		ReverseMin.setWidth(instance.parameters.width2);
+        ReverseMin.setStyle(instance.parameters.style2);
+		
+        ReverseMax = instance.addStream("ReverseMax", core.Line, name + ".ReverseMax", "ReverseMax", instance.parameters.ReverseMax_color,  source.first() +Reverse);
+		ReverseMax.setWidth(instance.parameters.width2);
+        ReverseMax.setStyle(instance.parameters.style2);
+    }
+}
+
+function Update(period)
+{
+
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+	    var tmp=Math.minmax(source, period-Period+1,  period-1);
+	    var min=tmp[0];
+        var max=tmp[1];
+        Min[period] =min;
+        Max[period] = max;
+		
+		
+		if (period < source.first() +Reverse) 
+        {
+		 return;
+		}
+		
+        tmp=Math.minmax(source.low, period-Reverse+1,  period-1);      
+        ReverseMin[period] = tmp[1]; 		
+        tmp=Math.minmax(source.high, period-Reverse+1,  period-1);      
+        ReverseMax[period] =  tmp[0];
+     
+}
+

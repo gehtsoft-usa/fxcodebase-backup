@@ -1,0 +1,73 @@
+function Init()
+{
+    indicator.name("Volatility Channel");
+    indicator.description("Volatility Channel");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "Period", 14);
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Top_color", "Color of Top", "Color of Top", core.rgb(0, 255, 0));
+	indicator.parameters.addInteger("twidth", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("tstyle", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("tstyle", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Bottom_color", "Color of Bottom", "Color of Bottom", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("bwidth", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("bstyle", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("bstyle", core.FLAG_LINE_STYLE);
+}
+
+var Period;
+
+var first;
+var source = null;
+
+var Top = null;
+var Bottom = null;
+var T, B;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+    source = instance.source;
+    first = source.first()+Period;
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+	    T = instance.addInternalStream(0, 0);
+		B = instance.addInternalStream(0, 0);
+        Top = instance.addStream("Top", core.Line, name + ".Top", "Top", instance.parameters.Top_color, first);
+		Top.setWidth(instance.parameters.twidth);
+        Top.setStyle(instance.parameters.tstyle);
+        Bottom = instance.addStream("Bottom", core.Line, name + ".Bottom", "Bottom", instance.parameters.Bottom_color, first);
+		Bottom.setWidth(instance.parameters.bwidth);
+        Bottom.setStyle(instance.parameters.bstyle);
+    }
+}
+
+function Update(period)
+{
+    if (period >= first && source.hasData(period)) 
+    {
+	
+	   var min, max;
+	 
+	
+	    T[period] = ( (  source.typical[period] * 2 ) - source.high[period]) ;
+        B[period] = ( (  source.typical[period]  * 2 ) -  source.low[period]);  
+		
+        var tmp=Math.minmax(T, period-Period+1, period );
+
+	    max = tmp[1];
+
+        tmp=Math.minmax(B, period-Period+1, period );
+	    min = tmp[0];
+	   
+        Top[period] = Math.max(max, T[period]);
+        Bottom[period] = Math.min( min, B[period]);
+    }
+}
+

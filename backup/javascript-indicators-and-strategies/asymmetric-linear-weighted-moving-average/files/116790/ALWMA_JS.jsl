@@ -1,0 +1,117 @@
+function Init()
+{
+    indicator.name("Asymmetric Linear Weighted Moving Average");
+    indicator.description("Asymmetric Linear Weighted Moving Average");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+
+	 indicator.parameters.addString("Mode", "Mode", "", "Regular");
+	  indicator.parameters.addStringAlternative("Mode", "Regular", "", "Regular");
+	 indicator.parameters.addStringAlternative("Mode", "Inverse", "", "Inverse");
+	  indicator.parameters.addStringAlternative("Mode", "Asymmetric", "", "Asymmetric");
+	  indicator.parameters.addStringAlternative("Mode", "Inverse Asymmetric", "", "Inverse_Asymmetric");
+	
+	
+    indicator.parameters.addInteger("PERIOD", "Period", "Period", 20);
+    indicator.parameters.addColor("AEMA_color", "Color of AEMA", "Color of AEMA", core.rgb(255, 0, 0));
+}
+
+var PERIOD;
+var Mode;
+var STEP;
+
+var first;
+var source = null;
+
+var AEMA = null;
+
+function Prepare(nameOnly)
+{
+    PERIOD = instance.parameters.PERIOD;
+    source = instance.source;
+    first = source.first()+PERIOD;
+    Mode = instance.parameters.Mode;
+	
+	STEP= PERIOD /( PERIOD/2);
+    	
+    var name = profile.id() + "(" + source.name() + ", " + tostring(PERIOD)+ ", " + tostring( Mode) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        AEMA = instance.addStream("AEMA", core.Line, name, "AEMA", instance.parameters.AEMA_color, first);
+    }
+}
+
+function Update(period)
+{
+ if (period > first && source.hasData(period)) 
+ {
+  var TOTAL=0;
+		
+  var i;
+  var COUNT= 0;
+  var k=0;
+  var TOTAL=0;
+		
+  for (i= period - PERIOD; i<=period; i++) 
+  {
+   if (Mode == "Regular") 
+   {
+    COUNT=COUNT+1;
+   } 
+   else if (Mode == "Inverse") 
+   {
+    if (COUNT == 0) 
+    {
+     COUNT =PERIOD;
+    } 
+    else
+    {
+     COUNT =COUNT-1;
+    }
+   } 		
+   else if (Mode == "Asymmetric") 
+   {	
+    if (COUNT == 0) 
+    {							
+     COUNT = STEP;							
+    } 
+    else
+    {     
+     if (period - i <    PERIOD /2) 
+     {
+      COUNT=COUNT+ STEP;	
+     } 
+     else
+     {
+      COUNT=COUNT- STEP;	
+     }		
+    }
+   } 
+   else
+   {
+    if (COUNT == 0) 
+    {							
+     COUNT = PERIOD;							
+    } 
+    else
+    {
+     if (period - i <    PERIOD /2) 
+     {
+      COUNT=COUNT- STEP;	
+     } 
+     else
+     {
+      COUNT=COUNT+ STEP;	
+     }		
+    }
+   }
+   
+   k=k+COUNT;				
+   TOTAL= TOTAL + source[i]*COUNT; 
+  }	     
+  AEMA[period]= TOTAL/k;
+ }
+}
+

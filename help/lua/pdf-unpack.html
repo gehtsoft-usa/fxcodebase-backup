@@ -1,0 +1,24 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - unpack (list [, i [, j]])</title>
+</head>
+<body>
+<h3><a name="pdf-unpack"><code>unpack (list [, i [, j]])</code></a></h3>
+Returns the elements from the given table.
+This function is equivalent to
+
+<pre>
+     return list[i], list[i+1], &middot;&middot;&middot;, list[j]
+</pre><p>
+except that the above code can be written only for a fixed number
+of elements.
+By default, <code>i</code> is&nbsp;1 and <code>j</code> is the length of the list,
+as defined by the length operator (see <a href="2.5.5.html">&sect;2.5.5</a>).
+
+
+
+
+<p>
+<hr>
+</body>
+</html>

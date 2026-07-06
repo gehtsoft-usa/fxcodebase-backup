@@ -1,0 +1,63 @@
+function Init()
+{
+    indicator.name("Linear Regression Line");
+    indicator.description("Linear Regression Line");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+	
+	
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("PERIOD", "Period", "Perios",20);
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Up", "Color of Up Trend", "", core.rgb(0, 255, 0));
+	 indicator.parameters.addColor("Dn", "Color of Down Trend", "", core.rgb(255, 0, 0));
+	  indicator.parameters.addInteger("style", "Style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LEVEL_STYLE);
+    	indicator.parameters.addInteger("width", "Width", "", 1, 1, 5);
+	
+}
+
+var PERIOD;
+
+var first;
+var source = null;
+
+var LRL = null;
+
+function Prepare(nameOnly)
+{
+    PERIOD = instance.parameters.PERIOD;
+    source = instance.source;
+    first = source.first()+PERIOD;
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(PERIOD) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        LRL = instance.addStream("LRL", core.Line, name, "LRL", instance.parameters.Up, first);
+		LRL.setWidth(instance.parameters.width);
+        LRL.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period)
+{
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+
+     LRL[period] =   Math.lreg(source, period - PERIOD + 1, period)
+	 
+	 if  (LRL[period] >  LRL[period-1]) 
+     {
+	  LRL.setColor(period, instance.parameters.Up);
+     } 
+	 else
+     {   
+	  LRL.setColor(period, instance.parameters.Dn);
+     }
+  
+}
+

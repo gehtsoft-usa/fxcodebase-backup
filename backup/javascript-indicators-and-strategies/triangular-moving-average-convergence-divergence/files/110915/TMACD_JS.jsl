@@ -1,0 +1,51 @@
+//initializes the indicator
+function Init()
+{
+    indicator.name("TMACD");
+    indicator.description("Triangular Moving Average Convergence/Divergence");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+    indicator.setTag("group", "Oscillators");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("SN", "Fast MA periods", "Fast MA periods.", 7);
+    indicator.parameters.addInteger("LN", "Slow MA periods", "Slow MA periods.", 14);
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(219, 64, 0));
+}
+
+var first = 0;
+var SN = 0;
+var LN = 0;
+var source = null;
+var TMACD = null;
+var TMAS, TMAL;
+
+//initializes the instance of the indicator
+function Prepare(onlyName)
+{
+    source = instance.source;
+    SN = instance.parameters.SN;
+    LN = instance.parameters.LN;
+    var name = profile.id() + "(" + instance.source.name() + "," + SN + ", " + LN + ")";
+    instance.name(name);
+  
+    if (onlyName == true)
+        return ;
+    TMAS = core.indicators.create("TMA", source, SN);
+    TMAL = core.indicators.create("TMA", source, LN);
+    first = Math.max(TMAS.DATA.first(), TMAL.DATA.first());
+
+    TMACD = instance.addStream("TMACD", core.Bar, name, "TMACD", instance.parameters.clr,  first)
+}
+
+// calculate the value
+function Update(period, mode)
+{
+    if (period >= first)
+    {
+        TMAS.update(mode);
+        TMAL.update(mode);
+        TMACD[period] = TMAS.DATA[period] - TMAL.DATA[period];
+    }
+}

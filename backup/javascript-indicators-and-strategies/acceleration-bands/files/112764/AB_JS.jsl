@@ -1,0 +1,66 @@
+function Init()
+{
+    indicator.name("Acceleration Bands");
+    indicator.description("Acceleration Bands");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+	indicator.parameters.addInteger("TF", "Period", "Period", 20,2,2000); 
+    indicator.parameters.addDouble("CF", "Factor", "Factor", 0.001,0.01,0.0001);
+    indicator.parameters.addColor("Top_color", "Color of Top", "Color of Top", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("Bottom_color", "Color of Bottom", "Color of Bottom", core.rgb(255, 0, 0));
+}
+
+var Factor=null;
+
+var first;
+var source = null;
+
+// Streams block
+var Top = null;
+var Bottom = null;
+var AVGTOP = null;
+var AVGBottom = null;
+var Frame=null;
+var UP=null;
+var DOWN=null;
+
+// Routine
+function Prepare()
+{
+    Frame = instance.parameters.TF;
+    Factor = instance.parameters.CF;
+    source = instance.source;
+    first = source.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + Factor + ", " + Frame + ")";
+    instance.name(name);
+    Top = instance.addStream("Top", core.Line, name + ".Top", "Top", instance.parameters.Top_color, first);
+    Bottom = instance.addStream("Bottom", core.Line, name + ".Bottom", "Bottom", instance.parameters.Bottom_color, first);
+	
+	UP = instance.addInternalStream(0,0); 
+    DOWN = instance.addInternalStream(0,0); 
+	
+	AVGTOP = core.indicators.create("MVA", UP, Frame);
+	AVGBOTTOM = core.indicators.create("MVA", DOWN, Frame);
+	
+}
+
+function Update(period,mode)
+{   
+		
+       UP[period] = ( source.high[period] * ( 1 + 2 * (((( source.high[period] - source.low[period] )/(( source.high[period] + source.low[period] ) / 2 )) * 1000 ) * Factor )));
+       DOWN[period] = ( source.low[period] * ( 1 - 2 * (((( source.high[period] - source.low[period])/(( source.high[period] + source.low[period] ) / 2 )) * 1000 ) * Factor )));
+      
+	  
+	 if (period > Frame && source.hasData(period)) 
+     {  
+	     AVGTOP.update(mode);
+		 AVGBOTTOM.update(mode);
+		 Top[period]= AVGTOP.DATA[period];
+		 Bottom[period]=AVGBOTTOM.DATA[period];
+     }
+	
+	
+}
+

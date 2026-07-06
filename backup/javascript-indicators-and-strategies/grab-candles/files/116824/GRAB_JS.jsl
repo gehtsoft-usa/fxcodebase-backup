@@ -1,0 +1,150 @@
+function Init()
+{
+    indicator.name("Grab Candles");
+    indicator.description("Grab Candles");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+	
+	indicator.parameters.addGroup("MA"); 
+    indicator.parameters.addInteger("Period", "Period", "Period", 34);   
+	
+		indicator.parameters.addString("Method", "Method", "Method" , "EMA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "EMA" , "EMA");
+	indicator.parameters.addStringAlternative("Method", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method", "WMA", "WMA" , "WMA");
+	
+	
+	indicator.parameters.addGroup("Style");
+	indicator.parameters.addBoolean("Show", "Show MA Lines", "", true);
+    indicator.parameters.addColor("Short_Up", "Color of Down Trend Up", "", core.rgb(255, 0, 0));
+	indicator.parameters.addColor("Short_Down", "Color of Down Trend Down", "", core.rgb(200, 0, 0));
+    indicator.parameters.addColor("Long_Up", "Color of Up Trend Up", "", core.rgb(0, 255, 0));
+	 indicator.parameters.addColor("Long_Down", "Color of Up Trend Down", "", core.rgb(0, 200, 0));
+    indicator.parameters.addColor("Range_Up", "Color of Range Up", "", core.rgb(128, 128, 128));
+	indicator.parameters.addColor("Range_Down", "Color of Range Down", "", core.rgb(100, 100, 100));
+}
+
+var Period;
+
+var first;
+var source = null;
+
+var Open = null;
+var Close = null;
+var High = null;
+var Low = null;
+
+var Method;
+
+
+var MA={};
+var OUT={};
+
+var Show;
+
+function Prepare()
+{
+    Period = instance.parameters.Period;
+    source = instance.source;
+	Show = instance.parameters.Show;
+	Method = instance.parameters.Method;
+    
+
+    var name = profile.id() + "(" + source.name() + ", " + Method + ", " + Period + ")";
+    instance.name(name);
+   
+		 
+	 MA["High"] =   core.indicators.create(Method, source.high, Period);	 
+	 MA["Low"] =   core.indicators.create(Method, source.low, Period);	 
+	 MA["Close"] =   core.indicators.create(Method, source.close, Period);	 
+	 
+	 first = MA["Low"].DATA.first();
+	 
+	  Open = instance.addStream("O", core.Line, name + ".Open", "Open", core.rgb(0, 0, 0), first);
+    Close = instance.addStream("C", core.Line, name + ".Close", "Close", core.rgb(0, 0, 0), first);
+    High = instance.addStream("H", core.Line, name + ".High", "High", core.rgb(0, 0, 0), first);
+    Low = instance.addStream("L", core.Line, name + ".Low", "Low", core.rgb(0, 0, 0), first);
+	
+	 instance.createCandleGroup("ZONE", "", Open, High, Low, Close);
+	
+	if (Show) 
+	{
+	 OUT["High"] = instance.addStream("High", core.Line, name + ".High", "High", instance.parameters.Short_Up, first);
+     OUT["Low"] = instance.addStream("Low", core.Line, name + ".Low", "Low", instance.parameters.Long_Up, first);
+     OUT["Close"] = instance.addStream("Close", core.Line, name + ".Close", "Close", instance.parameters.Range_Up, first);
+ 	}
+	else
+	{
+	 OUT["High"] =  instance.addInternalStream (0, 0);
+     OUT["Low"] =  instance.addInternalStream (0, 0);
+     OUT["Close"] =  instance.addInternalStream (0, 0);
+	
+	}
+   
+	 
+}
+
+function Update(period,mode)
+{
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+	MA["High"].update(mode);
+	MA["Low"].update(mode);
+	MA["Close"].update(mode);
+	
+	OUT["High"][period]= MA["High"].DATA[period];
+	OUT["Low"][period]= MA["Low"].DATA[period];
+	OUT["Close"][period]= MA["Close"].DATA[period];	
+	
+	    Open[period] = source.open[period];
+        Close[period] = source.close[period];
+        High[period] = source.high[period];
+        Low[period] = source.low[period];
+	
+	
+	if (source.open[period]<= source.close[period] && source.close[period] > MA["High"].DATA[period]) 
+	{
+	
+       Open.setColor(period, instance.parameters.Long_Up);
+   }
+	else if (source.open[period] >= source.close[period] && source.close[period] > MA["High"].DATA[period]) 
+	{
+	
+	 Open.setColor(period, instance.parameters.Long_Down);
+		
+	}	
+	
+	
+	if (source.open[period]<= source.close[period] && source.close[period] < MA["Low"].DATA[period]) 
+	{
+	
+       Open.setColor(period, instance.parameters.Short_Up);
+   }
+	else if (source.open[period] >= source.close[period] && source.close[period] < MA["Low"].DATA[period]) 
+	{
+	
+	 Open.setColor(period, instance.parameters.Short_Down);
+	}	
+    
+	
+	if (source.open[period]<= source.close[period] && source.close[period] < MA["High"].DATA[period] && source.close[period] > MA["Low"].DATA[period]) 
+	{
+	
+       Open.setColor(period, instance.parameters.Range_Up);
+   }
+	else if (source.open[period] >=source.close[period] && source.close[period] < MA["High"].DATA[period] && source.close[period] > MA["Low"].DATA[period]) 
+	{
+	
+	Open.setColor(period, instance.parameters.Range_Down);
+		
+	}	
+}
+

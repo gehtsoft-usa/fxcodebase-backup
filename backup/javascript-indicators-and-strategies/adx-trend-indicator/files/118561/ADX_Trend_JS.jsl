@@ -1,0 +1,77 @@
+function Init()
+{
+    indicator.name("ADX trend indicator");
+    indicator.description("ADX trend indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("ADX1_Period", "ADX 1 Period", "", 10);
+    indicator.parameters.addInteger("ADX2_Period", "ADX 2 Period", "", 14);
+    indicator.parameters.addInteger("ADX3_Period", "ADX 3 Period", "", 20);
+    indicator.parameters.addDouble("Level1", "Level 1", "", 35);
+    indicator.parameters.addDouble("Level2", "Level 2", "", 30);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP Color", "UP Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DNclr", "DN Color", "DN Color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("DotSize", "Dot size", "Dot size", 3, 1, 5);
+}
+
+var first;
+var source = null;
+var ADX1_Period;
+var ADX2_Period;
+var ADX3_Period;
+var Level1;
+var Level2;
+var ADX1;
+var ADX2;
+var ADX3;
+var DMI;
+var Buff=null;
+
+function Prepare()
+{
+    source = instance.source;
+    ADX1_Period=instance.parameters.ADX1_Period;
+    ADX2_Period=instance.parameters.ADX2_Period;
+    ADX3_Period=instance.parameters.ADX3_Period;
+    Level1=instance.parameters.Level1;
+    Level2=instance.parameters.Level2;
+    first = source.first()+2;
+    ADX1 = core.indicators.create("ADX", source, ADX1_Period);
+    ADX2 = core.indicators.create("ADX", source, ADX2_Period);
+    ADX3 = core.indicators.create("ADX", source, ADX3_Period);
+    DMI = core.indicators.create("DMI", source, ADX1_Period);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.ADX1_Period + ", " + instance.parameters.ADX2_Period + ", " + instance.parameters.ADX3_Period + ")";
+    instance.name(name);
+    Buff = instance.addStream("Buff", core.Dot, name + ".Dot", "Dot", instance.parameters.UPclr, first);
+    Buff.setWidth(instance.parameters.DotSize);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    ADX1.update(mode);
+    ADX2.update(mode);
+    ADX3.update(mode);
+    DMI.update(mode);
+    if (ADX1.DATA[period-1]<ADX1.DATA[period] && ADX2.DATA[period-1]<ADX2.DATA[period] && ADX3.DATA[period-1]<ADX3.DATA[period] && ADX1.DATA[period]>Level1 && ADX2.DATA[period]>Level2) 
+    {
+     var di=DMI.DIP[period]-DMI.DIM[period];
+     if (di>0) 
+     {
+      Buff[period]=source.high[period];
+      Buff.setColor(period,instance.parameters.UPclr);
+    }
+     else
+     {
+      Buff[period]=source.low[period];
+      Buff.setColor(period,instance.parameters.DNclr);
+     }
+    }
+   } 
+}
+

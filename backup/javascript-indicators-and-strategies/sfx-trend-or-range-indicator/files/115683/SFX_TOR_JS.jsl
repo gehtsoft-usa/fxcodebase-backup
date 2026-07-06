@@ -1,0 +1,136 @@
+function Init()
+{
+    indicator.name("SFX Trend Or Range Indicator");
+    indicator.description("SFX Trend Or Range Indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("ATRPeriod", "ATRPeriod", "", 12);
+    indicator.parameters.addInteger("StdDevPeriod", "StdDevPeriod", "", 12);
+    indicator.parameters.addString("StdDevPrice", "StdDevPrice", "", "close");
+    indicator.parameters.addStringAlternative("StdDevPrice", "close", "", "close");
+    indicator.parameters.addStringAlternative("StdDevPrice", "open", "", "open");
+    indicator.parameters.addStringAlternative("StdDevPrice", "high", "", "high");
+    indicator.parameters.addStringAlternative("StdDevPrice", "low", "", "low");
+    indicator.parameters.addStringAlternative("StdDevPrice", "median", "", "median");
+    indicator.parameters.addStringAlternative("StdDevPrice", "typical", "", "typical");
+    indicator.parameters.addStringAlternative("StdDevPrice", "weighted", "", "weighted");
+    indicator.parameters.addInteger("MAPeriod", "MAPeriod", "", 3);
+    indicator.parameters.addString("MAMethod", "MAMethod", "", "MVA");
+    indicator.parameters.addStringAlternative("MAMethod", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("MAMethod", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("MAMethod", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("MAMethod", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("MAMethod", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("MAMethod", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("MAMethod", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("MAMethod", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("MAMethod", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("MAMethod", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("MAMethod", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("MAMethod", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("MAMethod", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("MAMethod", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("MAMethod", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("MAMethod", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("MAMethod", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("MAMethod", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("MAMethod", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("MAMethod", "JSmooth", "", "JSmooth");
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("ATR_clr", "ATR Color", "ATR Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("StdDev_clr", "StdDev Color", "StdDev Color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("MA_clr", "MA Color", "MA Color", core.rgb(0, 0, 255));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var ATRPeriod;
+var StdDevPeriod;
+var StdDevPrice;
+var MAPeriod;
+var MAMethod;
+var ATR;
+var StdDev;
+var MA;
+var BuffATR=null;
+var BuffStdDev=null;
+var BuffMA=null;
+
+function Prepare()
+{
+    source = instance.source;
+    ATRPeriod=instance.parameters.ATRPeriod;
+    StdDevPeriod=instance.parameters.StdDevPeriod;
+    StdDevPrice=instance.parameters.StdDevPrice;
+    MAPeriod=instance.parameters.MAPeriod;
+    MAMethod=instance.parameters.MAMethod;
+    first = source.first()+2;
+    ATR = core.indicators.create("ATR", source, ATRPeriod);
+    if (StdDevPrice=="close") 
+    {
+     StdDev = core.indicators.create("STDDEV", source.close, StdDevPeriod);
+    } 
+    else if (StdDevPrice=="open") 
+    {
+     StdDev = core.indicators.create("STDDEV", source.open, StdDevPeriod);
+    } 
+    else if (StdDevPrice=="high") 
+    {
+     StdDev = core.indicators.create("STDDEV", source.high, StdDevPeriod);
+    } 
+    else if (StdDevPrice=="low") 
+    {
+     StdDev = core.indicators.create("STDDEV", source.low, StdDevPeriod);
+    } 
+    else if (StdDevPrice=="median") 
+    {
+     StdDev = core.indicators.create("STDDEV", source.median, StdDevPeriod);
+    } 
+    else if (StdDevPrice=="typical") 
+    {
+     StdDev = core.indicators.create("STDDEV", source.typical, StdDevPeriod);
+    } 
+    else
+    {
+     StdDev = core.indicators.create("STDDEV", source.weighted, StdDevPeriod);
+    } 
+     
+    MA = core.indicators.create("AVERAGES", StdDev.DATA, MAMethod, MAPeriod, false);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.ATRPeriod + ", " + instance.parameters.StdDevPeriod + ", " + instance.parameters.StdDevPrice + ", " + instance.parameters.MAMethod + ", " + instance.parameters.MAPeriod + ")";
+    instance.name(name);
+    BuffATR = instance.addStream("BuffATR", core.Line, name + ".ATR", "ATR", instance.parameters.ATR_clr, first);
+    BuffStdDev = instance.addStream("BuffStdDev", core.Line, name + ".StdDev", "StdDev", instance.parameters.StdDev_clr, first);
+    BuffMA = instance.addStream("BuffMA", core.Line, name + ".MA", "MA", instance.parameters.MA_clr, first);
+    BuffATR.setWidth(instance.parameters.widthLinReg);
+    BuffATR.setStyle(instance.parameters.styleLinReg);
+    BuffStdDev.setWidth(instance.parameters.widthLinReg);
+    BuffStdDev.setStyle(instance.parameters.styleLinReg);
+    BuffMA.setWidth(instance.parameters.widthLinReg);
+    BuffMA.setStyle(instance.parameters.styleLinReg);
+}
+
+function Update(period, mode)
+{
+   if (period>first+ATRPeriod) 
+   {
+    ATR.update(mode);
+    BuffATR[period]=ATR.DATA[period];
+   } 
+   if (period>first+StdDevPeriod) 
+   {
+    StdDev.update(mode);
+    if (StdDev.DATA[period]>0) 
+    {
+     BuffStdDev[period]=StdDev.DATA[period];
+     MA.update(mode);
+     BuffMA[period]=MA.DATA[period];
+    } 
+   } 
+}
+

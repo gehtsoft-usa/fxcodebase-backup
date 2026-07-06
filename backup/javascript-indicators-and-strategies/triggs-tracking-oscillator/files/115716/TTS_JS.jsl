@@ -1,0 +1,118 @@
+function Init()
+{
+    indicator.name("Triggs Tracking");
+    indicator.description("Triggs Tracking");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addDouble("A", "A", "A", 0.5, 0.5,1.0);
+    indicator.parameters.addColor("Slow_color", "Color of Slow", "Color of Slow", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("Fast_color", "Color of Fast", "Color of Fast", core.rgb(0, 255, 0));
+}
+
+var A;
+var B;
+
+var first;
+var source = null;
+
+var Slow = null;
+var Fast = null;
+var  L1  = null;
+var  L2  = null;
+var  L3  = null;
+var  L4  = null;
+var  L5  = null;
+var  L6  = null;
+var  L7  = null;
+var  L8  = null;
+var  L9  = null;
+var  L10= null;
+var  L11  = null;
+
+function Prepare()
+{
+    A = instance.parameters.A;
+    source = instance.source;
+    first = source.first();
+	
+	B=1-A;
+	
+	L1  = instance.addInternalStream(first+1, 0);
+	L2  = instance.addInternalStream(first+1, 0);
+	L3  = instance.addInternalStream(first, 0);
+	L4  = instance.addInternalStream(first+1, 0);
+	L5  = instance.addInternalStream(first+1, 0);
+	L6  = instance.addInternalStream(first+1, 0);
+	L7  = instance.addInternalStream(first+2, 0);
+    L8  = instance.addInternalStream(first+2, 0);
+    L9  = instance.addInternalStream(first+1, 0);
+	L10  = instance.addInternalStream(first+2, 0);
+    L11  = instance.addInternalStream(first+2, 0);
+    var name = profile.id() + "(" + source.name() + ", " + A + ")";
+    instance.name(name);
+    Slow = instance.addStream("Slow", core.Line, name + ".Slow", "Slow", instance.parameters.Slow_color, first+3);
+    Fast = instance.addStream("Fast", core.Line, name + ".Fast", "Fast", instance.parameters.Fast_color, first+3);
+	
+	Fast.addLevel(-0.25);
+	Fast.addLevel(0.25);
+	Fast.addLevel(-0.50);
+	Fast.addLevel(0.50);
+	Fast.addLevel(-0.75);
+	Fast.addLevel(0.75);
+}
+
+function Update(period)
+{
+ if (period ==first) 
+ {
+  L3[period]=source.close[first];
+ }	 
+	 
+ if (period ==first+1) 
+ {
+  L6[period]=source.close[first]/40;
+  L9[period]= source.close[first]/40;
+ }	 
+ if (period ==first+2) 
+ {
+  L7[period]= L6[period]/ L8[period];
+  L8[period]=0.5;
+  L10[period]=L9[period]/L11[period];
+  L11[period]=0.5;
+ }	 
+
+ if (period >= first+1 && source.hasData(period)) 
+ {    
+  L1[period]= source.close[period]*A;
+  L2[period]= L3[period-1]*B;
+  if (period >=2) 
+  {
+   L3[period]= L1[period]+L2[period];
+  }
+  L4[period]= source.close[period]-L3[period];
+  L5[period]= Math.abs(L4[period]);
+  if (period >= 3) 
+  {
+   L6[period]= 0.1*L4[period]+0.9*L6[period-1];
+  }
+  if (period >= 4) 
+  {
+   L7[period]= 0.1*L5[period]+0.9*L7[period-1];
+   L8[period]= L6[period]/L7[period];
+   Slow[period] = L8[period];
+  }
+  if (period >= 3) 
+  {
+   L9[period]= 0.2*L4[period] + 0.8*L9[period-1];
+  }
+	
+  if (period >= 4) 
+  {
+   L10[period]= 0.2*L5[period] + 0.8*L10[period-1];
+   L11[period]=L9[period]/L10[period];
+   Fast[period] = L11[period];
+  }
+ }
+}
+

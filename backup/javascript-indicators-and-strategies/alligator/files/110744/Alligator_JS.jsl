@@ -1,0 +1,102 @@
+//initializes the indicator
+function Init()
+{
+    indicator.name("Alligator");
+    indicator.description("Alligator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    indicator.setTag("group", "Bill Williams");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("JPeriod", "Alligator Jaw smoothing period", "Alligator Jaw smoothing period", 13);
+    indicator.parameters.addInteger("JShift", "Alligator Jaw shifting period", "Alligator Jaw shifting period", 8);
+    indicator.parameters.addInteger("TPeriod", "Alligator Teeth smoothing period", "Alligator Teeth smoothing period", 8);
+    indicator.parameters.addInteger("TShift", "Alligator Teeth shifting period", "Alligator Teeth shifting period", 5);
+    indicator.parameters.addInteger("LPeriod", "Alligator Lips smoothing period", "Alligator Lips smoothing period", 5);
+    indicator.parameters.addInteger("LShift", "Alligator Lips shifting period", "Alligator Lips shifting period", 3);
+    indicator.parameters.addString("MTH", "Smoothing method", "", "SMMA");
+    indicator.parameters.addStringAlternative("MTH", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("MTH", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("MTH", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("MTH", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("MTH", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("MTH", "Wilder", "", "Wilder");
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Jclr", "Alligator Jaw color", "The color of Alligator Jaw", core.rgb(0, 128, 255));
+    indicator.parameters.addInteger("Jwidth", "Alligator Jaw width", "The width of Alligator Jaw", 1, 1, 5);
+    indicator.parameters.addInteger("Jstyle", "Alligator Jaw style", "The style of Alligator Jaw", core.LINE_SOLID);
+    indicator.parameters.setFlag("Jstyle", core.FLAG_LEVEL_STYLE);
+    indicator.parameters.addColor("Tclr", "Alligator Teeth color", "The color of Alligator Teeth", core.rgb(255, 80, 80));
+    indicator.parameters.addInteger("Twidth", "Alligator Teeth width", "The width of Alligator Teeth", 1, 1, 5);
+    indicator.parameters.addInteger("Tstyle", "Alligator Teeth style", "The style of Alligator Teeth", core.LINE_SOLID);
+    indicator.parameters.setFlag("Tstyle", core.FLAG_LEVEL_STYLE);
+    indicator.parameters.addColor("Lclr", "Alligator Lips color", "The color of Alligator Lips", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("Lwidth", "Alligator Lips width", "The width of Alligator Lips", 1, 1, 5);
+    indicator.parameters.addInteger("Lstyle", "Alligator Lips style", "The style of Alligator Lips", core.LINE_SOLID);
+    indicator.parameters.setFlag("Lstyle", core.FLAG_LEVEL_STYLE);
+}
+
+var first = 0;
+var JawN, JawS;
+var TeethN, TeethS;
+var LipsN, LipsC;
+var source = null;
+var Jaw = null;
+var Teeth = null;
+var Lips = null;
+var JawSrc, TeethSrc, LipsSrc;
+
+//initializes the instance of the indicator
+function Prepare(onlyName)
+{
+    source = instance.source;
+    JawN = instance.parameters.JPeriod;
+    JawS = instance.parameters.JShift;
+    TeethN = instance.parameters.TPeriod;
+    TeethS = instance.parameters.TShift;
+    LipsN = instance.parameters.LPeriod;
+    LipsS = instance.parameters.LShift;
+    JawSrc = core.indicators.create(instance.parameters.MTH, source.median, JawN, core.rgb(0, 0, 0));
+    TeethSrc = core.indicators.create(instance.parameters.MTH, source.median, TeethN, core.rgb(0, 0, 0));
+    LipsSrc = core.indicators.create(instance.parameters.MTH, source.median, LipsN, core.rgb(0, 0, 0));
+    var name = profile.id() + "(" + instance.source.name() + ")";
+    instance.name(name);
+  
+    if (onlyName == true)
+        return ;
+
+    first = source.first();
+
+    Jaw = instance.addStream("Jaw", core.Line, name, "Jaw", instance.parameters.Jclr,  first + JawS, JawS)
+    Jaw.setWidth(instance.parameters.Jwidth);
+    Jaw.setStyle(instance.parameters.Jstyle);
+    Teeth = instance.addStream("Teeth", core.Line, name, "Teeth", instance.parameters.Tclr,  first + TeethS, TeethS)
+    Teeth.setWidth(instance.parameters.Twidth);
+    Teeth.setStyle(instance.parameters.Tstyle);
+    Lips = instance.addStream("Lips", core.Line, name, "Lips", instance.parameters.Lclr,  first + LipsS, LipsS)
+    Lips.setWidth(instance.parameters.Lwidth);
+    Lips.setStyle(instance.parameters.Lstyle);
+}
+
+// calculate the value
+function Update(period, mode)
+{
+    JawSrc.update(mode);
+    TeethSrc.update(mode);
+    LipsSrc.update(mode);
+
+    if (period + JawS >= 0 && period >= JawSrc.DATA.first())
+    {
+        Jaw[period + JawS] = JawSrc.DATA[period];
+    }
+
+    if (period + TeethS >= 0 && period >= TeethSrc.DATA.first())
+    {
+        Teeth[period + TeethS] = TeethSrc.DATA[period];
+    }
+
+    if (period + LipsS >= 0 && period >= LipsSrc.DATA.first())
+    {
+        Lips[period + LipsS] = LipsSrc.DATA[period];
+    }
+}

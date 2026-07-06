@@ -1,0 +1,53 @@
+function Init()
+{
+    indicator.name("Delta");
+    indicator.description("Delta");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addColor("Price_color", "Color of Price", "Color of Price", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("Delta_color", "Color of Delta", "Color of Delta", core.rgb(0, 255, 0));
+}
+
+var first;
+var source = null;
+
+var Price = null;
+var Delta = null;
+
+var ROW;
+
+function Prepare()
+{    
+    source = instance.source;
+    first = source.first();
+    
+	ROW= instance.addInternalStream(first, 0);
+	
+    var name = profile.id() + "(" + source.name()  + ")";
+    instance.name(name);
+    Price = instance.addStream("Price", core.Line, name + ".Price", "Price", instance.parameters.Price_color, first+1);
+    Delta = instance.addStream("Delta", core.Line, name + ".Delta", "Delta", instance.parameters.Delta_color, first+1);
+}
+
+function Update(period)
+{    
+	if (period >= first && source.hasData(period)) 
+	{
+	
+	ROW[period]=(source.close[period]+source.open[period]+source.high[period]+source.low[period])/4;
+	
+			if (period > first) 
+			{
+			
+			   var DIV = Math.log10(ROW[period-1]/ROW[period]);
+			
+				 Price[period] = ROW[period];		
+			   
+				 Delta[period] =  ROW[period] + DIV;
+			   
+			}	
+    }
+}
+
+

@@ -1,0 +1,28 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - luaL_argerror</title>
+</head>
+<body>
+<h3><a name="luaL_argerror"><code>luaL_argerror</code></a></h3>
+<pre>int luaL_argerror (lua_State *L, int numarg, const char *extramsg);</pre>
+
+<p>
+Raises an error with the following message,
+where <code>func</code> is retrieved from the call stack:
+
+<pre>
+     bad argument #&lt;numarg&gt; to &lt;func&gt; (&lt;extramsg&gt;)
+</pre>
+
+<p>
+This function never returns,
+but it is an idiom to use it in C&nbsp;functions
+as <code>return luaL_argerror(<em>args</em>)</code>.
+
+
+
+
+
+<hr>
+</body>
+</html>

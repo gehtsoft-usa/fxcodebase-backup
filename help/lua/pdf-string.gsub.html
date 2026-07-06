@@ -1,0 +1,87 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - string.gsub (s, pattern, repl [, n])</title>
+</head>
+<body>
+<h3><a name="pdf-string.gsub"><code>string.gsub (s, pattern, repl [, n])</code></a></h3>
+Returns a copy of <code>s</code>
+in which all occurrences of the <code>pattern</code> have been
+replaced by a replacement string specified by <code>repl</code>,
+which may be a string, a table, or a function.
+<code>gsub</code> also returns, as its second value,
+the total number of substitutions made.
+
+
+<p>
+If <code>repl</code> is a string, then its value is used for replacement.
+The character&nbsp;<code>%</code> works as an escape character:
+any sequence in <code>repl</code> of the form <code>%<em>n</em></code>,
+with <em>n</em> between 1 and 9,
+stands for the value of the <em>n</em>-th captured substring (see below).
+The sequence <code>%0</code> stands for the whole match.
+The sequence <code>%%</code> stands for a single&nbsp;<code>%</code>.
+
+
+<p>
+If <code>repl</code> is a table, then the table is queried for every match,
+using the first capture as the key;
+if the pattern specifies no captures,
+then the whole match is used as the key.
+
+
+<p>
+If <code>repl</code> is a function, then this function is called every time a
+match occurs, with all captured substrings passed as arguments,
+in order;
+if the pattern specifies no captures,
+then the whole match is passed as a sole argument.
+
+
+<p>
+If the value returned by the table query or by the function call
+is a string or a number,
+then it is used as the replacement string;
+otherwise, if it is <b>false</b> or <b>nil</b>,
+then there is no replacement
+(that is, the original match is kept in the string).
+
+
+<p>
+The optional last parameter <code>n</code> limits
+the maximum number of substitutions to occur.
+For instance, when <code>n</code> is 1 only the first occurrence of
+<code>pattern</code> is replaced.
+
+
+<p>
+Here are some examples:
+
+<pre>
+     x = string.gsub("hello world", "(%w+)", "%1 %1")
+     --&gt; x="hello hello world world"
+     
+     x = string.gsub("hello world", "%w+", "%0 %0", 1)
+     --&gt; x="hello hello world"
+     
+     x = string.gsub("hello world from Lua", "(%w+)%s*(%w+)", "%2 %1")
+     --&gt; x="world hello Lua from"
+     
+     x = string.gsub("home = $HOME, user = $USER", "%$(%w+)", os.getenv)
+     --&gt; x="home = /home/roberto, user = roberto"
+     
+     x = string.gsub("4+5 = $return 4+5$", "%$(.-)%$", function (s)
+           return loadstring(s)()
+         end)
+     --&gt; x="4+5 = 9"
+     
+     local t = {name="lua", version="5.1"}
+     x = string.gsub("$name%-$version.tar.gz", "%$(%w+)", t)
+     --&gt; x="lua-5.1.tar.gz"
+</pre>
+
+
+
+<p>
+<hr>
+</body>
+</html>

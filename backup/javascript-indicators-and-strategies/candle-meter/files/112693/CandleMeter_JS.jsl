@@ -1,0 +1,79 @@
+function Init()
+{
+    indicator.name("Candle meter");
+    indicator.description("Candle meter");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP Color", "UP Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DNclr", "DN Color", "DN Color", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+var CandleMeter=null;
+
+function Prepare()
+{
+    source = instance.source;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ")";
+    instance.name(name);
+    CandleMeter = instance.addStream("CandleMeter", core.Bar, name + ".CandleMeter", "CandleMeter", instance.parameters.UPclr, first);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    var Direction;
+    if (source.close[period]>source.open[period]) 
+    {
+     if (CandleMeter[period-1]>0) 
+     {
+      CandleMeter[period]=CandleMeter[period-1]+1;
+     } 
+     else
+     {
+      CandleMeter[period]=1;
+     }
+     CandleMeter.setColor(period,instance.parameters.UPclr);
+    } 
+    else
+    {
+      if (source.close[period]<source.open[period]) 
+      {
+       if (CandleMeter[period-1]<0) 
+       {
+        CandleMeter[period]=CandleMeter[period-1]-1;
+       } 
+       else
+       {
+        CandleMeter[period]=-1;
+       }
+       CandleMeter.setColor(period,instance.parameters.DNclr);
+      } 
+      else
+      {
+       CandleMeter[period]=CandleMeter[period-1];
+       if (CandleMeter[period]>0) 
+       {
+        CandleMeter.setColor(period,instance.parameters.UPclr);
+       } 
+       else
+       {
+        CandleMeter.setColor(period,instance.parameters.DNclr);
+       }
+      } 
+    }
+   }
+   else
+   {
+    if (period==first) 
+    {
+     CandleMeter[period]=0;
+    }
+   }  
+}
+

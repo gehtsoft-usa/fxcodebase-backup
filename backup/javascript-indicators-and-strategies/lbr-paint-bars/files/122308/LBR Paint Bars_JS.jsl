@@ -1,0 +1,149 @@
+function Init()
+{
+    indicator.name("LBR Paint Bars");
+    indicator.description("LBR Paint Bars");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addDouble("factor", "Factor", "Factor", 2.5);
+    indicator.parameters.addInteger("ATRLength", "ATR Length", "ATR Length", 9);
+    indicator.parameters.addInteger("HLLength", "HL Length", "HL Length", 16);
+	
+	indicator.parameters.addGroup("Style");
+	
+	indicator.parameters.addBoolean("Overlay", "Show Overlay", "Show Overlay", true);
+	indicator.parameters.addBoolean("Lines", "Show Lines", "Show Lines", true);
+    indicator.parameters.addColor("Up", "Color of Up Trend", "Color of Up Trend", core.rgb(0, 255, 0));
+	indicator.parameters.addColor("Down", "Color of Down Trend", "Color of Down Trend", core.rgb(255, 0, 0));
+	indicator.parameters.addColor("Neutral", "Color of Neutral Trend", "Color of Neutral Trend", core.rgb(128, 128, 128));
+	
+	indicator.parameters.addColor("color1", "Color of 1. Band", "Color of 1. Band", core.rgb(0, 255, 0));
+	indicator.parameters.addInteger("width1", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style1", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style1", core.FLAG_LINE_STYLE);
+	indicator.parameters.addColor("color2", "Color of 2. Band", "Color of 2. Band", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width2", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style2", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style2", core.FLAG_LINE_STYLE);
+}
+
+var factor;
+var ATRLength;
+var HLLength;
+
+var first;
+var source = null;
+
+var Neutral,Up, Down;
+
+var open=null;
+var close=null;
+var high=null;
+var low=null;
+var ATR;
+var Overlay
+var band1, band2;
+var Lines;
+
+function Prepare(nameOnly)
+{
+    factor = instance.parameters.factor;
+    ATRLength = instance.parameters.ATRLength;
+    HLLength = instance.parameters.HLLength;
+	Overlay= instance.parameters.Overlay;
+	Lines= instance.parameters.Lines;
+	Up = instance.parameters.Up;
+	Down = instance.parameters.Down;
+	Neutral = instance.parameters.Neutral;
+    source = instance.source;
+	
+	ATR  = core.indicators.create("ATR", source,ATRLength );
+    first =Math.max( ATR.DATA.first(),HLLength);
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(factor) + ", " + tostring(ATRLength) + ", " + tostring(HLLength) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {        
+    open = instance.addStream("open", core.Line, name, "open", core.rgb(0, 0, 0), first);
+    high = instance.addStream("high", core.Line, name, "high", core.rgb(0, 0, 0), first);
+    low = instance.addStream("low", core.Line, name, "low", core.rgb(0, 0, 0), first);
+    close = instance.addStream("close", core.Line, name, "close", core.rgb(0, 0, 0), first);
+	
+	if (Overlay) 
+	{
+    instance.createCandleGroup("ZONE", "", open, high, low, close);
+	}
+	
+		if (Lines) 
+		{
+		band1= instance.addStream("band1", core.Line, name, "band1", instance.parameters.color1, first);
+		band1.setWidth(instance.parameters.width1);
+		band1.setStyle(instance.parameters.style1);
+		band2= instance.addStream("band2", core.Line, name, "band2", instance.parameters.color2, first);
+		band2.setWidth(instance.parameters.width2);
+		band2.setStyle(instance.parameters.style2);
+	}
+		else
+		{
+		band1= instance.addInternalStream(0, 0);
+        band2= instance.addInternalStream(0, 0);
+		}
+    }
+}
+
+function Update(period,mode)
+{
+    high[period]= source.high[period];
+	low[period]= source.low[period];		   
+	close[period] = source.close[period];
+	open[period]  = source.open[period];
+	
+	ATR.update(mode);
+	
+    if (period < first || !source.hasData(period)) 
+    {
+	 open.setColor(period, Neutral);
+	 return;
+	}
+	
+	
+	
+	var Delta = factor * ATR.DATA[period];
+	var tmp=Math.minmax(source, period-HLLength+1, period, period);
+    band1[period] = tmp[0] + Delta;
+    band2[period]= tmp[1] - Delta;
+
+    if (source.close[period] > band1[period] && source.close[period] > band2[period]) 
+    { 
+	 UpperVolatility = true;
+	} 
+	else
+	{
+	 UpperVolatility= false;
+	}
+	
+    if (source.close[period] < band1[period] && source.close[period] < band2[period]) 
+    { 
+	 LowerVolatility = true;
+	} 
+	else 
+	{
+	 LowerVolatility=false;
+	}
+
+	
+	if (UpperVolatility) 
+	{
+	 open.setColor(period, Up);
+	} 
+    else if (LowerVolatility) 
+    {
+	 open.setColor(period, Down);
+	} 
+	else
+	{
+	 open.setColor(period, Neutral);
+	}
+
+}

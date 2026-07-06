@@ -1,0 +1,37 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 5.9 - The Debug Library</title>
+</head>
+<body>
+<h2>5.9 - <a name="5.9">The Debug Library</a></h2>
+
+<p>
+This library provides
+the functionality of the debug interface to Lua programs.
+You should exert care when using this library.
+The functions provided here should be used exclusively for debugging
+and similar tasks, such as profiling.
+Please resist the temptation to use them as a
+usual programming tool:
+they can be very slow.
+Moreover, several of its functions
+violate some assumptions about Lua code
+(e.g., that variables local to a function
+cannot be accessed from outside or
+that userdata metatables cannot be changed by Lua code)
+and therefore can compromise otherwise secure code.
+
+
+<p>
+All functions in this library are provided
+inside the <a name="pdf-debug"><code>debug</code></a> table.
+All functions that operate over a thread
+have an optional first argument which is the
+thread to operate over.
+The default is always the current thread.
+
+
+<p>
+<hr>
+</body>
+</html>

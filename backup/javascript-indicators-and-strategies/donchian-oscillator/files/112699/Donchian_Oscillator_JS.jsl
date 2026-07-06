@@ -1,0 +1,65 @@
+function Init()
+{
+    indicator.name("Donchian Oscillator");
+    indicator.description("Donchian Oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 20, 1, 1000);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clrUP", "Color UP", "Color UP", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clrDN", "Color DN", "Color DN", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("width", "Dot width", "Dot width", 3, 1, 5);
+}
+
+var first;
+var source = null;
+var Period;
+var BuffUP=null;
+var BuffDN=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ")";
+    instance.name(name);
+    BuffUP = instance.addStream("BuffUP", core.Dot, name + ".UP", "UP", instance.parameters.clrUP, first);
+    BuffDN = instance.addStream("BuffDN", core.Dot, name + ".DN", "DN", instance.parameters.clrDN, first);
+    BuffUP.setWidth(instance.parameters.width);
+    BuffDN.setWidth(instance.parameters.width);
+    BuffUP.addLevel(-1.5);
+    BuffUP.addLevel(1.5);
+    
+}
+
+function Update(period, mode)
+{
+   if (period>first+Period) 
+   {
+    var tmp=Math.minmax(source,core.rangeTo(period-1,Period));
+    var MinPrice=tmp[0];
+    var MaxPrice=tmp[1];
+    if (source.close[period]>MaxPrice) 
+    {
+     BuffUP[period]=1;
+    } 
+    else
+    {
+     BuffUP[period]=null; 
+    }
+    if (source.close[period]<MinPrice) 
+    {
+     BuffDN[period]=-1;
+    } 
+    else
+    {
+     BuffDN[period]=null; 
+    }
+   } 
+    
+}
+

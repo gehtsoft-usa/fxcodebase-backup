@@ -1,0 +1,70 @@
+function Init()
+{
+    indicator.name("Ehlers TwoPole smoothes oscillator");
+    indicator.description("Ehlers TwoPole smoothes oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    
+    indicator.parameters.addInteger("CuttOff", "CuttOff", "", 15);
+    indicator.parameters.addDouble("alpha", "alpha", "", 0.15);
+    indicator.parameters.addInteger("shift", "shift", "", 0);
+
+    indicator.parameters.addColor("clr_Line", "Color of Line", "Color of Line", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clr_buff1", "Color of Buff1", "Color of Buff1", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("clr_buff2", "Color of Buff2", "Color of Buff2", core.rgb(0, 0, 255));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var CuttOff;
+var alpha;
+var shift;
+var Buff1=null;
+var Buff2=null;
+var BuffLine=null;
+var Ind;
+
+function Prepare()
+{
+    source = instance.source;
+    CuttOff=instance.parameters.CuttOff;
+    alpha=instance.parameters.alpha;
+    shift=instance.parameters.shift;
+    Ind = core.indicators.create("EHLERS_TWOPOLE_SMOOTHED_FILTER", source, CuttOff);
+    first = Ind.DATA.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.CuttOff + ", " + instance.parameters.alpha + ", " + instance.parameters.shift + ")";
+    instance.name(name);
+    Buff1 = instance.addStream("Buff1", core.Bar, name + ".Buff1", "Buff1", instance.parameters.clr_buff1, first);
+    Buff2 = instance.addStream("Buff2", core.Bar, name + ".Buff2", "Buff2", instance.parameters.clr_buff2, first);
+    BuffLine = instance.addStream("BuffLine", core.Line, name + ".BuffLine", "BuffLine", instance.parameters.clr_Line, first);
+    BuffLine.setWidth(instance.parameters.widthLinReg);
+    BuffLine.setStyle(instance.parameters.styleLinReg);
+    BuffLine.addLevel(0);
+}
+
+function Update(period, mode)
+{
+    if (period>first) 
+    {
+     Ind.update(mode);
+     var Val=Ind.DATA[period]-Ind.DATA[period-1];
+     var Val1=Ind.DATA[period-1]-Ind.DATA[period-2];
+     var Val2=Ind.DATA[period-2]-Ind.DATA[period-3];
+     BuffLine[period]=(alpha-(alpha*alpha/4.))*Val+(alpha*alpha/2.)*Val1-(alpha-3.*alpha*alpha/4.)*Val2+2.*(1-alpha)*BuffLine[period-1]-(1-alpha)*(1-alpha)*BuffLine[period-2];
+     if (BuffLine[period]<BuffLine[period-1]) 
+     {
+      Buff1[period]=BuffLine[period];
+      Buff2[period]=null;
+     } 
+     else
+     {
+      Buff1[period]=null;
+      Buff2[period]=BuffLine[period];
+     }
+     
+    } 
+}
+

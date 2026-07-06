@@ -1,0 +1,99 @@
+function Init()
+{
+    indicator.name("Volume Adjusted Moving Average");
+    indicator.description("Volume Adjusted Moving Average");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+	indicator.setTag("group", "Volume Indicators");
+	
+	indicator.parameters.addGroup("VAMA Parameters");
+	indicator.parameters.addInteger("Frame","Period", "", 8, 2, 2000);
+	
+	indicator.parameters.addGroup("Price Type");
+	indicator.parameters.addString("Type", "CLOSE", "", "C");
+    indicator.parameters.addStringAlternative("Type", "OPEN", "", "O");
+    indicator.parameters.addStringAlternative("Type", "HIGH", "", "H");
+    indicator.parameters.addStringAlternative("Type", "LOW", "", "L");
+    indicator.parameters.addStringAlternative("Type","CLOSE", "", "C");
+    indicator.parameters.addStringAlternative("Type", "MEDIAN", "", "M");
+    indicator.parameters.addStringAlternative("Type", "TYPICAL", "", "T");
+    indicator.parameters.addStringAlternative("Type", "WEIGHTED", "", "W");
+   
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addInteger("width","Width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("VAMA_color", "Color of VAMA", "Color of VAMA", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+var PriceTimesVolume;
+var VAMA = null;
+var Frame;
+
+var Type;
+var p;
+
+function Prepare()
+{
+    Frame = instance.parameters.Frame;
+	Type=instance.parameters.Type;
+    source = instance.source;
+    first = source.first();
+	
+	 if (Type == "O") 
+     {
+        p = source.open;
+     }   
+    else if (Type == "H") 
+    {
+        p = source.high;
+    }    
+    else if (Type == "L") 
+    {
+        p = source.low;
+    }    
+    else if (Type == "M") 
+    {
+        p = source.median;
+    }    
+    else if (Type == "T") 
+    {
+        p = source.typical;
+    }    
+    else if (Type == "W") 
+    {
+        p = source.weighted;
+    }    
+    else
+    {
+        p = source.close;
+    }
+	
+	
+	PriceTimesVolume = instance.addInternalStream(first,0);
+
+    var name = profile.id() + "(" + source.name() + ")";
+    instance.name(name);
+    VAMA = instance.addStream("VAMA", core.Line, name, "VAMA", instance.parameters.VAMA_color, first);
+	VAMA.setWidth(instance.parameters.width);
+    VAMA.setStyle(instance.parameters.style);
+	
+}
+
+function Update(period)
+{
+    if (period >= first && source.hasData(period)) 
+    {
+	
+	     	PriceTimesVolume[period]=p[period] *source.volume[period];
+	   
+	    if (period > Frame) 
+        {
+				VAMA[period] = Math.sum(PriceTimesVolume, period-Frame, period)/Math.sum(source.volume, period-Frame, period);	
+		}
+		
+    }
+	
+}

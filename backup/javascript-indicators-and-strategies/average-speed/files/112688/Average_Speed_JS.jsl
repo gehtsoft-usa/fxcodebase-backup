@@ -1,0 +1,55 @@
+function Init()
+{
+    indicator.name("Average speed");
+    indicator.description("Average speed");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 3);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "Up color", "Up color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DNclr", "Dn color", "Dn color", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+var Period;
+var Speed;
+var AS=null;
+var pipSize;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    first = source.first()+2;
+    Speed = instance.addInternalStream(first, 0);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ")";
+    instance.name(name);
+    AS = instance.addStream("AS", core.Bar, name + ".AS", "AS", instance.parameters.UPclr, first);
+    pipSize=source.pipSize();
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    var dt=source.date(period)-source.date(period-1);
+    Speed[period]=Math.abs(source[period]-source[period-1])/(pipSize*dt);
+    if (period>=first+Period) 
+    {
+     AS[period]=Math.avg(Speed, period-Period+1, period);
+     if (AS[period]>=AS[period-1]) 
+     {
+      AS.setColor(period, instance.parameters.UPclr);
+     } 
+     else
+     {
+      AS.setColor(period, instance.parameters.DNclr);
+     }
+    } 
+   } 
+}
+

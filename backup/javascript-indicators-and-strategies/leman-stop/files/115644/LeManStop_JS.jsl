@@ -1,0 +1,144 @@
+function Init()
+{
+    indicator.name("LeMan Stop");
+    indicator.description("LeMan Stop");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    indicator.parameters.addGroup("Calculation");
+
+    indicator.parameters.addInteger("per", "Period", "Period", 24);
+    indicator.parameters.addInteger("coef", "Coefficient", "Coefficient", 4);	
+    indicator.parameters.addInteger("fastP", "Fast MA Period", "Fast MA Period", 9);
+	indicator.parameters.addString("Method1", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method1", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method1", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method1", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method1", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method1", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method1", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method1", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method1", "WMA", "WMA" , "WMA");
+    indicator.parameters.addInteger("slowP", "Slow MA Period", "Slow MA Period", 18);
+	indicator.parameters.addString("Method2", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method2", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method2", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method2", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method2", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method2", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method2", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method2", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method2", "WMA", "WMA" , "WMA");
+	
+   indicator.parameters.addGroup("Style");
+
+    indicator.parameters.addColor("R", "Color of Resistance", "Color of LMS", core.rgb(255, 0, 0)); 
+	 indicator.parameters.addColor("S", "Color of Support", "Color of Support", core.rgb(0, 255, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+
+}
+
+var per;
+var coef;
+var fastP;
+var slowP;
+var fast, slow;
+var Method2, Method1;
+var first;
+var source = null;
+var MA;
+
+var ExtBuffer = null;
+var HO, OL;
+
+function Prepare(nameOnly)
+{
+    Method2 = instance.parameters.Method2;
+	Method1 = instance.parameters.Method1;
+    per = instance.parameters.per;
+    coef = instance.parameters.coef;
+    fastP = instance.parameters.fastP;
+    slowP = instance.parameters.slowP;
+    source = instance.source;
+	
+	
+	fast = core.indicators.create( Method1,source.close, fastP);
+	slow = core.indicators.create(Method2, source.close, slowP);
+    first = Math.max(slow.DATA.first(), fast.DATA.first(), per);
+	
+	HO = instance.addInternalStream(0, 0);
+    OL = instance.addInternalStream(0, 0);
+	
+    var name = profile.id() + "(" + source.name() + ", " + tostring(per) + ", " + tostring(coef) + ", " + tostring(fastP) + ", " + tostring(Method1) + ", " + tostring(slowP)  + ", " + tostring(Method2)+ ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        ExtBuffer= instance.addStream("LMS", core.Line, name, "LMS", instance.parameters.R, first);
+		ExtBuffer.setWidth(instance.parameters.width);
+        ExtBuffer.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period, mode)
+{
+    fast.update(mode);
+	slow.update(mode);
+	
+	HO[period]= source.high[period]-source.open[period];
+	OL[period]= source.open[period]-source.low[period];
+	
+	if (period < first)  
+	{
+       return;
+    }
+	
+	var  EMA0 = fast.DATA[period]- slow.DATA[period];
+    var  EMA1 = fast.DATA[period-1]- slow.DATA[period-1];
+    var  PreStop = ExtBuffer[period-1];
+	
+	var x,Stop;
+	
+	if (EMA0 > 0) 
+	{
+		x = Math.avg (HO, period -per+1, period);
+		
+		
+		Stop = source.open[period-1]-(coef*x);
+		
+		  if (Stop < PreStop && (EMA1 > 0))   
+		  {
+//				Stop = PreStop;
+				
+		  }
+		
+	}
+	if (EMA0 < 0) 
+	{
+	 x = Math.avg (OL, period -per+1, period);
+		
+	 Stop = source.open[period-1]+(coef*x);
+	
+	  if ((Stop > PreStop) && (EMA1 < 0)) 
+	  {
+//            Stop = PreStop;
+			
+       }
+	
+	}
+	
+	ExtBuffer[period] = Stop;
+	
+	if (ExtBuffer[period] > source.close[period]) 
+	{
+         ExtBuffer.setColor(period,  instance.parameters.R);
+    }     
+	else if (ExtBuffer[period] < source.close[period]) 
+	{
+ 	 ExtBuffer.setColor(period,  instance.parameters.S);
+	}
+	
+	 
+}
+

@@ -1,0 +1,29 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - luaL_loadbuffer</title>
+</head>
+<body>
+<h3><a name="luaL_loadbuffer"><code>luaL_loadbuffer</code></a></h3>
+<pre>int luaL_loadbuffer (lua_State *L,
+                     const char *buff,
+                     size_t sz,
+                     const char *name);</pre>
+
+<p>
+Loads a buffer as a Lua chunk.
+This function uses <a href="lua_load.html"><code>lua_load</code></a> to load the chunk in the
+buffer pointed to by <code>buff</code> with size <code>sz</code>.
+
+
+<p>
+This function returns the same results as <a href="lua_load.html"><code>lua_load</code></a>.
+<code>name</code> is the chunk name,
+used for debug information and error messages.
+
+
+
+
+
+<hr>
+</body>
+</html>

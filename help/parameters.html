@@ -1,0 +1,537 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252" /><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><title>parameters</title><style type="text/css">a, p, h1, h2, h3, h4, h5, h6, table, td, tr, li, ul, ol {
+    font-family: Verdana, Trebuchet MS, Arial;
+}
+
+a, p, td, tr, ul, ol, li {
+    font-size: 12pt;
+}
+
+h3 {
+    font-size: 13pt;
+}
+
+h2 {
+    font-size: 13pt;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+body {
+    color: #444444;
+    background-color: white;
+}
+
+A:link {
+    color: #0065b3;
+    cursor: pointer;
+}
+
+A:visited {
+    color: #0068be;
+    cursor: pointer;
+}
+
+a.action {
+  background-color: #0065b3;
+  color: white;
+  font-size: 10pt;
+  padding: 2px 2px;
+  width: 50pt;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px;
+}
+
+.side-icon {
+    float: left;
+}
+
+a.action [class*="dripicons-"]:before {
+    padding: 0 2px 0 0;
+    font-size: 12pt;
+    vertical-align: text-bottom;
+}
+
+.side-icon:after {
+  content: "";
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  border-left: 1.5px solid white;
+  transform: translate(-50%);
+}
+
+a.actiontab {
+  font-size: 10pt;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px 3px 0 0;
+}
+
+pre, code, code a {
+    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+    font-size: 12pt;
+}
+
+code.ctag {
+    background-color: #f1f1f1;
+    padding: .1em .2em;
+    border-radius: 3px;
+}
+
+pre {
+    background-color: white;
+}
+
+pre.example {
+    background-color: #f1f1f1;
+}
+
+ul {
+    list-style-type: disc;
+    margin-left: 18pt;
+}
+
+ol {
+    list-style-type: decimal;
+    margin-left: 18pt;
+}
+
+ul.hhc {
+    list-style-type: none;
+    margin-left: 1em;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+li.hhc {
+    margin-left: 0;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+table {
+  border-spacing: 0;
+  border-color: #dfe3e7;
+}
+
+tr + tr td {
+   border-top: 0;
+}
+
+tr td + td {
+  border-left: 0;
+}
+
+td {
+  border: 1px solid;
+  border-color: #dfe3e7;
+}
+
+tr:first-child td:first-child {
+   border-radius: 0.2em 0 0 0;
+}
+
+tr:first-child td:last-child {
+  border-radius: 0 0.2em 0 0;
+}
+
+tr:first-child td:only-child {
+  border-radius: 0.2em 0.2em 0 0;
+}
+
+tr:last-child td:first-child {
+    border-radius: 0 0 0 0.2em;
+}
+
+tr:last-child td:last-child {
+    border-radius: 0 0 0.2em 0;
+}
+
+tr:last-child td:only-child {
+    border-radius: 0 0 0.2em 0.2em;
+}
+
+tr:only-child td:only-child {
+    border-radius: 0.2em 0.2em 0.2em 0.2em;
+}
+
+tr:only-child td:first-child {
+   border-radius: 0.2em 0 0 0.2em;
+}
+
+tr:only-child td:last-child {
+  border-radius: 0 0.2em 0.2em 0;
+}
+
+
+td.tmain, td.tmain_nw, td.thdr {
+    background-color: rgb(255, 255, 255);
+    vertical-align: top;
+    padding: 3px;
+}
+
+td.tmain p, td.tmain_nw p, td.thdr p {
+    margin-top: 3pt;
+    margin-bottom: 3pt;
+}
+
+td.tmain_nw {
+    white-space: nowrap;
+}
+
+td.thdr {
+    background-color: #e3e3e3;
+}
+
+table.decl {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+    vertical-align: top;
+    padding: 3px;
+    width: 100%;
+}
+
+table.decl td {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+}
+
+div.note-quote {
+    border-left: 10px solid #ccc;
+    padding: 1em 10px .1em 10px;
+    margin: 1.5em 10px;
+    background-color: rgb(224, 224, 224);
+}
+
+div.note-note {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+div.note-warning {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #fff;
+    background-color: #ff6358;
+}
+div.note-warning code.ctag {
+    color: black;
+}</style>
+<link rel="stylesheet" href="res/dripicons.css"></head><body><script type="text/javascript">
+var highlighterEnabled = false;
+var maintopic = 'index';
+var helptitle = 'Indicore SDK 3';
+    function loadStarted() {
+    window.onload = loadCompleted;
+
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        var head = document.getElementsByTagName('head')[0];
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.min.js';
+        head.appendChild(script4);
+
+
+        var script2 = document.createElement('script');
+        script2.type = 'text/javascript';
+        script2.src = './highlighter/highlight.cshtml.js';
+        head.appendChild(script2);
+
+        var script3 = document.createElement('script');
+        script3.type = 'text/javascript';
+        script3.src = './highlighter/highlight.lua.js';
+        head.appendChild(script3);
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.luax.js';
+        head.appendChild(script4);
+    }
+}
+
+function loadCompleted() {
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        hljs.registerLanguage('cshtml-razor', window.hljsDefineCshtmlRazor);
+        hljs.registerLanguage('lua', window.hljsDefineLua);
+        hljs.registerLanguage('luax', window.hljsDefineLuaX);
+        x = document.querySelectorAll('pre code');
+        for (var i = 0; i < x.length; i++) {
+            if (x[i].hasAttribute('class')) {
+                hljs.highlightBlock(x[i]);
+            }
+        }
+    }
+}
+
+
+function hidediv(divname) {
+    document.getElementById(divname).style.display = 'none';
+}
+
+function showdiv(divname) {
+    document.getElementById(divname).style.display = 'inline';
+}
+
+function syncList() {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, null, document.title);
+    }
+}
+
+function syncList1(key) {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, key + '.html', document.title);
+    }
+}</script><script type="text/javascript">
+    loadStarted();
+</script><h1><code>table <b>parameters</b></code></h1>
+<h2>Brief</h2>
+<p>The indicator or strategy parameters.</p>
+<h2>Details</h2><p><b>Parameters in Init() function</b></p>
+<p>The table parameters is available in the <code class="ctag">Init()</code> function of the indicator or strategy
+as <code class="ctag">indicator.parameters</code> (for indicators) or <code class="ctag">strategy.parameters</code> (for strategy).</p>
+<p>The table is used to create the parameter set of the indicator or strategy which will
+be shown to a user when the indicator (or strategy) is created.</p>
+<p>The parameters are shown in the same order as they are created. The parameters can be
+grouped using <a href="parameters.addGroup.html"><code>addGroup()</code></a> method. All parameters
+created after calling this method are included into the last created group. Groups
+are also shown in the order of creation.</p>
+<p><b>Parameters of <a href="profile.html"><code>profile()</code></a> of an indicator</b></p>
+<p>The parameters of this instance of the indicator or strategy
+is available via <a href="instance_impl.parameters.html"><code>instance_impl.parameters</code></a>.</p>
+<p>The parameters for other indicators can be obtained via
+<a href="profile.parameters.html"><code>profile:parameters()</code></a> method.</p>
+<p>Note that in addition to methods, you can get access to the parameters as to
+properties of the parameters table, i.e. <code class="ctag">parameters.N</code> equals the <code class="ctag">parameter:getInteger(&quot;N&quot;);</code>
+for the integer parameter named <code class="ctag">N</code> or equals the <code class="ctag">parameter:getString(&quot;N&quot;);</code>
+for the string parameter named <code class="ctag">N</code>.</p><p></p>
+<table class="tmain" width="100%">
+  <tr>
+    <td colspan="2" class="thdr"><b>Static Public Methods</b></td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="parameters.new.html">new</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Creates a new instance of a parameters table.</p>
+    </td>
+  </tr>
+</table><p></p>
+<table class="tmain" width="100%">
+  <tr>
+    <td colspan="2" class="thdr"><b>Public Methods</b></td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="parameters.addBoolean.html">addBoolean</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Adds a new boolean parameter.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="parameters.addColor.html">addColor</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Adds a new color parameter.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="parameters.addDate.html">addDate</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Adds a date or date/time parameter</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="parameters.addDouble.html">addDouble</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Adds a new double parameter.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="parameters.addFile.html">addFile</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Adds a file parameter</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="parameters.addGroup.html">addGroup</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Starts the group of the parameters.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="parameters.addInteger.html">addInteger</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Adds a new integer parameter.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="parameters.addIntegerAlternative.html">addIntegerAlternative</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Adds an alternative for the integer parameter.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="parameters.addString.html">addString</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Adds a new string parameter.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="parameters.addStringAlternative.html">addStringAlternative</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Adds an alternative for the string parameter.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="parameters.getBoolean.html">getBoolean</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Gets a boolean value of the indicator parameter.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="parameters.getColor.html">getColor</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Gets a color value of the indicator parameter.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="parameters.getCustomParameters.html">getCustomParameters</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Gets information about the parameters set associated with this parameter.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="parameters.getDouble.html">getDouble</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Gets a real number value of the indicator parameter.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="parameters.getFile.html">getFile</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Gets a file name value of the indicator parameter.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="parameters.getInteger.html">getInteger</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Gets an integer value of the indicator parameter.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="parameters.getString.html">getString</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Gets a string value of the indicator parameter.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="parameters.setBoolean.html">setBoolean</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Sets a boolean value of the indicator parameter.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="parameters.setColor.html">setColor</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Sets a color value of the indicator parameter.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="parameters.setDouble.html">setDouble</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Sets a real number value of the indicator parameter.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="parameters.setFlag.html">setFlag</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Sets the parameter's flag</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="parameters.setInteger.html">setInteger</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Sets an integer value of the indicator parameter.</p>
+    </td>
+  </tr>
+  <tr>
+    <td class="tmain">
+      <p><a href="parameters.setString.html">setString</a></p>
+    </td>
+    <td class="tmain" width="69%">
+      <p>Sets a string value of the indicator parameter.</p>
+    </td>
+  </tr>
+</table><p>
+  <center><a href="sdk_main.html">back</a></center>
+</p><script language="javascript" type="text/javascript">if(window.parent.frames[0]) window.parent.frames[0].selectItem(window.location.href);</script></body></html>

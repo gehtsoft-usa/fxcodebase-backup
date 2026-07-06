@@ -1,0 +1,60 @@
+//initializes the indicator
+function Init()
+{
+    indicator.name("Average true range");
+    indicator.description("Average true range");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.setTag("group", "Volatility");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("N", "Number of periods", "The number of periods.", 10, 1, 10000);
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Line color", "The color of line", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("width", "Line width", "The width of line", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "The style of line", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LEVEL_STYLE);
+}
+
+var first = 0;
+var n = 0;
+var source = null;
+var out = null;
+
+//initializes the instance of the indicator
+function Prepare(onlyName)
+{
+    source = instance.source;
+    n = instance.parameters.N;
+    var name = profile.id() + "(" + instance.source.name() + "," + n + ")";
+    instance.name(name);
+  
+    if (onlyName == true)
+        return ;
+
+    first = source.first();
+
+    tr=instance.addInternalStream(0, 0);
+
+    out = instance.addStream("ATR", core.Line, name, "ATR", instance.parameters.clr,  first)
+    out.setWidth(instance.parameters.width);
+    out.setStyle(instance.parameters.style);
+}
+
+// calculate the value
+function Update(period, mode)
+{
+    if (period >= first)
+    {
+        var hl = Math.abs(source.high[period] - source.low[period]);
+        var hc = Math.abs(source.high[period] - source.close[period - 1]);
+        var lc = Math.abs(source.low[period] - source.close[period - 1]);
+
+        tr[period]=Math.max(hl, hc, lc);
+    }
+
+    if (period >= first+n)
+    {
+        out[period]=Math.avg(tr, period - n + 1, period);
+    }
+}

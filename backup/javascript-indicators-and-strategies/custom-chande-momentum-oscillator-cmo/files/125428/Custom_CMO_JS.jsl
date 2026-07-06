@@ -1,0 +1,79 @@
+function Init()
+{
+    indicator.name("CMO");
+    indicator.description("");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+    indicator.setTag("group", "Classic Oscillators");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("P", "Period", "", 9);
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("CMO_color", "Line Color", "", core.rgb(0, 0, 255));
+    indicator.parameters.addInteger("CMO_width", "Line Width", "", 1, 1, 5);
+    indicator.parameters.addInteger("CMO_style", "Line Style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("CMO_style", core.FLAG_LEVEL_STYLE);
+	
+	 indicator.parameters.addGroup("Oversold/Overbought levels");
+	 indicator.parameters.addInteger("Oversold", "Oversold", "", 100);
+	  indicator.parameters.addInteger("Overbought", "Overbought", "", -100);
+}
+
+var P;
+var sc;
+
+var first;
+var first_cm;
+var source = null;
+
+var cmo1 = null;
+var cmo2 = null;
+var CMO = null;
+
+function Prepare()
+{
+    P = instance.parameters.P;
+    source = instance.source;
+    first_cm = source.first() + 1;
+    first = first_cm + P;
+    sc = 2 / (P + 1);
+    var name = profile.id() + "(" + source.name() + ", " + P + ")";
+    instance.name(name);
+    cmo1 = instance.addInternalStream(first_cm, 0);
+    cmo2 = instance.addInternalStream(first_cm, 0);
+    CMO = instance.addStream("CMO", core.Line, name, "CMO", instance.parameters.CMO_color, first);
+    CMO.setWidth(instance.parameters.CMO_width);
+    CMO.setStyle(instance.parameters.CMO_style);
+    CMO.addLevel(instance.parameters.Oversold);
+    CMO.addLevel(0);
+    CMO.addLevel(instance.parameters.Overbought);
+}
+
+function Update(period)
+{
+    cmo1[period] = 0;
+    cmo2[period] = 0;
+
+    if (period >= first_cm) 
+    {
+        var diff;
+        diff = source[period] - source[period - 1];
+        if (diff > 0) 
+        {
+            cmo1[period] = diff;
+        }    
+        else if (diff < 0) 
+        {
+            cmo2[period] = -diff;
+        }
+    }
+
+    if (period >= first) 
+    {
+        var p, cmo, s1, s2;
+        p = period - P + 1;
+        s1 = Math.sum(cmo1, p, period);
+        s2 = Math.sum(cmo2, p, period);
+        CMO[period] = (s1 - s2) / (s1 + s2) * 100;
+    }
+}

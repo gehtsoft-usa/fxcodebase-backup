@@ -1,0 +1,154 @@
+function Init()
+{
+    indicator.name("Mirror RSI indicator");
+    indicator.description("Mirror RSI indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addString("Price1", "Price1", "", "close");
+    indicator.parameters.addStringAlternative("Price1", "open", "", "open");
+    indicator.parameters.addStringAlternative("Price1", "close", "", "close");
+    indicator.parameters.addStringAlternative("Price1", "high", "", "high");
+    indicator.parameters.addStringAlternative("Price1", "low", "", "low");
+    indicator.parameters.addStringAlternative("Price1", "median", "", "median");
+    indicator.parameters.addStringAlternative("Price1", "typical", "", "typical");
+    indicator.parameters.addStringAlternative("Price1", "weighted", "", "weighted");
+    indicator.parameters.addInteger("Period1", "Period1", "", 20);
+    indicator.parameters.addString("Price2", "Price2", "", "open");
+    indicator.parameters.addStringAlternative("Price2", "open", "", "open");
+    indicator.parameters.addStringAlternative("Price2", "close", "", "close");
+    indicator.parameters.addStringAlternative("Price2", "high", "", "high");
+    indicator.parameters.addStringAlternative("Price2", "low", "", "low");
+    indicator.parameters.addStringAlternative("Price2", "median", "", "median");
+    indicator.parameters.addStringAlternative("Price2", "typical", "", "typical");
+    indicator.parameters.addStringAlternative("Price2", "weighted", "", "weighted");
+    indicator.parameters.addInteger("Period2", "Period2", "", 20);
+    indicator.parameters.addString("MethodSig", "MethodSig", "", "MVA");
+    indicator.parameters.addStringAlternative("MethodSig", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("MethodSig", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("MethodSig", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("MethodSig", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("MethodSig", "TMA", "", "TMA");
+    indicator.parameters.addInteger("PeriodSig", "PeriodSig", "", 20);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr1", "Color 1", "Color 1", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clr2", "Color 2", "Color 2", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("clrSig", "Color Signal", "Color Signal", core.rgb(0, 0, 255));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Price1;
+var Price2;
+var Period1;
+var Period2;
+var MethodSig;
+var PeriodSig;
+var RSI1;
+var RSI2;
+var MASig;
+var Buff1=null;
+var Buff2=null;
+var BuffSig=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Price1=instance.parameters.Price1;
+    Period1=instance.parameters.Period1;
+    Price2=instance.parameters.Price2;
+    Period2=instance.parameters.Period2;
+    MethodSig=instance.parameters.MethodSig;
+    PeriodSig=instance.parameters.PeriodSig;
+    if (Price1=="open") 
+    {
+     RSI1 = core.indicators.create("RSI", source.open, Period1);
+    }
+    else if (Price1=="close") 
+    {
+     RSI1 = core.indicators.create("RSI", source.close, Period1);
+    } 
+    else if (Price1=="high") 
+    {
+     RSI1 = core.indicators.create("RSI", source.high, Period1);
+    } 
+    else if (Price1=="low") 
+    {
+     RSI1 = core.indicators.create("RSI", source.low, Period1);
+    } 
+    else if (Price1=="median") 
+    {
+     RSI1 = core.indicators.create("RSI", source.median, Period1);
+    } 
+    else if (Price1=="typical") 
+    {
+     RSI1 = core.indicators.create("RSI", source.typical, Period1);
+    } 
+    else
+    {
+     RSI1 = core.indicators.create("RSI", source.weighted, Period1);
+    } 
+    
+    if (Price2=="open") 
+    {
+     RSI2 = core.indicators.create("RSI", source.open, Period2);
+    } 
+    else if (Price2=="close") 
+    {
+     RSI2 = core.indicators.create("RSI", source.close, Period2);
+    } 
+    else if (Price2=="high") 
+    {
+     RSI2 = core.indicators.create("RSI", source.high, Period2);
+    } 
+    else if (Price2=="low") 
+    {
+     RSI2 = core.indicators.create("RSI", source.low, Period2);
+    } 
+    else if (Price2=="median") 
+    {
+     RSI2 = core.indicators.create("RSI", source.median, Period2);
+    } 
+    else if (Price2=="typical") 
+    {
+     RSI2 = core.indicators.create("RSI", source.typical, Period2);
+    } 
+    else
+    {
+     RSI2 = core.indicators.create("RSI", source.weighted, Period2);
+    } 
+     
+    first = Math.max(RSI1.DATA.first(),RSI2.DATA.first())+2;
+    var name = profile.id() + "(" + source.name() + ", "  + instance.parameters.Price1 + ", " + instance.parameters.Period1 +  ", " + instance.parameters.Price2 + ", " + instance.parameters.Period2 + ", " + instance.parameters.MethodSig + ", " + instance.parameters.PeriodSig + ")";
+    instance.name(name);
+    Buff1 = instance.addStream("Buff1", core.Line, name + ".Buff1", "Buff1", instance.parameters.clr1, first);
+    Buff2 = instance.addStream("Buff2", core.Line, name + ".Buff2", "Buff2", instance.parameters.clr2, first);
+    BuffSig = instance.addStream("BuffSig", core.Line, name + ".Signal", "Signal", instance.parameters.clrSig, first);
+    Buff1.setWidth(instance.parameters.widthLinReg);
+    Buff1.setStyle(instance.parameters.styleLinReg);
+    Buff2.setWidth(instance.parameters.widthLinReg);
+    Buff2.setStyle(instance.parameters.styleLinReg);
+    BuffSig.setWidth(instance.parameters.widthLinReg);
+    BuffSig.setStyle(instance.parameters.styleLinReg);
+    MASig = core.indicators.create(MethodSig, Buff1, PeriodSig);
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    RSI1.update(mode);
+    RSI2.update(mode);
+    Buff1[period]=RSI1.DATA[period]-RSI2.DATA[period];
+    Buff2[period]=RSI2.DATA[period]-RSI1.DATA[period];
+    MASig.update(mode);
+    BuffSig[period]=MASig.DATA[period];
+   } 
+    
+}
+

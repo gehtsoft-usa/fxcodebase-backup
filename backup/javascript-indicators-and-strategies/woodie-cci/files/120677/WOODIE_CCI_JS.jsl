@@ -1,0 +1,153 @@
+function Init()
+{
+    indicator.name("Woodie CCI with histogramm coloring");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+	indicator.parameters.addGroup("Calculation"); 
+    indicator.parameters.addInteger("F", "Fast CCI Periods", "", 12);
+    indicator.parameters.addInteger("S", "Slow CCI periods", "", 50);
+    indicator.parameters.addInteger("N", "Length of neutral zone in bars", "", 6);
+	
+	indicator.parameters.addGroup("Overbought / Oversold Levels");
+	indicator.parameters.addInteger("Overbought", "Overbought", "",100);
+	indicator.parameters.addInteger("Oversold", "Oversold", "", -100);
+        indicator.parameters.addInteger("level_overboughtsold_width", "Level lines width", "The width of the overbought/oversold levels", 1, 1, 5);
+        indicator.parameters.addInteger("level_overboughtsold_style", "Level lines stype", "The style of the overbought/oversold levels", core.LINE_SOLID);
+        indicator.parameters.addColor("level_overboughtsold_color", "Level lines color", "The color of the overbought/oversold levels"  , core.rgb(96, 96, 138));
+        indicator.parameters.setFlag("level_overboughtsold_style", core.FLAG_LEVEL_STYLE);
+
+
+	
+	indicator.parameters.addGroup("Style");
+	indicator.parameters.addInteger("F_width", "Up Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("F_style", "Up Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("F_style", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("F_color", "Color of Fast CCI", "", core.rgb(255, 255, 0));
+		
+	indicator.parameters.addInteger("S_width", "Up Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("S_style", "Up Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("S_style", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("S_color", "Color of Slow CCI", "", core.rgb(255, 128, 0));
+	
+    indicator.parameters.addColor("H_color", "Color of neutral bars", "", core.rgb(192, 192, 192));
+    indicator.parameters.addColor("HR_color", "Color of red bars", "", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("HB_color", "Color of blue bar", "", core.rgb(0, 0, 255));
+	
+	indicator.parameters.addGroup("Slow Bar/Line Style");
+	indicator.parameters.addString("Slow", "Style", "", "Bar");
+	indicator.parameters.addStringAlternative("Slow", "Bar", "", "Bar");
+	indicator.parameters.addStringAlternative("Slow", "Line", "", "Line");
+}
+
+var Fast;
+var Slow;
+var N;
+
+var Slow;
+
+var first;
+var source = null;
+var CCIF;
+var CCIS;
+
+var F = null;
+var S = null;
+var Z = null;
+
+function Prepare()
+{
+    Fast = instance.parameters.F;
+    Slow = instance.parameters.S;
+    N = instance.parameters.N;
+
+    source = instance.source;
+    CCIF = core.indicators.create("CCI", source, Fast);
+    CCIS = core.indicators.create("CCI", source, Slow);
+    first = Math.max(CCIF.DATA.first(), CCIS.DATA.first());
+    var name = profile.id() + "(" + source.name() + ", " + Fast + ", " + Slow + ")";
+    instance.name(name);
+    Z = instance.addInternalStream(0, 0);
+    F = instance.addStream("F", core.Line, name + ".F", "F", instance.parameters.F_color, first);
+	F.setWidth(instance.parameters.F_width);
+    F.setStyle(instance.parameters.F_style);
+	
+	if (Slow == "Line") 
+    {
+     S = instance.addStream("S", core.Line, name + ".S", "S", instance.parameters.S_color, first);
+    } 
+	else
+    {
+	 S = instance.addStream("S", core.Bar, name + ".S", "S", instance.parameters.S_color, first);
+	}
+
+    F.addLevel(instance.parameters.Oversold, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);
+    F.addLevel(0, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);
+    F.addLevel(instance.parameters.Overbought, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);
+
+}
+
+function Update(period, mode)
+{
+    CCIF.update(mode);
+    CCIS.update(mode);
+    if (period >= first) 
+    {
+        F[period] = CCIF.DATA[period];
+        S[period] = CCIS.DATA[period];
+
+        var flag = false;
+        var v = 0;
+
+        if (period >= first + 1) 
+        {
+            if ((S[period] >= 0 && S[period - 1] < 0) || (S[period] < 0 && S[period - 1] >= 0)) 
+            {
+                    v = 1;
+                    flag = true;
+            }
+            else if (Z[period - 1] > 0) 
+            {
+                flag = true;
+                v = Z[period - 1] + 1;
+            }
+           } 
+        else
+        {
+            flag = true;
+            v = 1;
+        }
+
+        if (flag) 
+        {
+            Z[period] = v;
+            if (Z[period] > N) 
+            {
+                flag = false;
+            }
+        }
+
+        if (flag) 
+        {
+            S.setColor(period,instance.parameters.H_color);	
+        } 
+        else
+        {
+            Z[period] = 0;
+            if (S[period] > 0) 
+            {
+                S.setColor(period,instance.parameters.HB_color);	
+            }    
+            else
+            {
+                 S.setColor(period,instance.parameters.HR_color);	
+            }
+        }
+    }
+    else
+    {
+        Z[period] = 0;
+    }
+}
+

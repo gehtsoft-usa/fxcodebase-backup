@@ -1,0 +1,160 @@
+function Init()
+{
+    indicator.name("Demand Index by James Sibbet");
+    indicator.description("Demand Index by James Sibbet");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+	
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Length", "Period", "", 5);
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("DI_color", "Color of DI", "Color of DI", core.rgb(255, 0, 0));
+		indicator.parameters.addInteger("width", "Line Width", "", 1, 1, 5);
+     indicator.parameters.addInteger("style", "DEMA Line Style", "", core.LINE_SOLID);
+	indicator.parameters.setFlag("style", core.FLAG_LEVEL_STYLE);	
+	
+}
+
+var Length;
+
+var first;
+var source = null;
+
+var DI = null;
+
+var VA;
+var VolAvg;
+
+var WghtClose;
+var AvgTR;
+
+var BuyPres;
+var SellPres;
+
+var ATR;
+
+function Prepare()
+{
+    Length = instance.parameters.Length;
+    source = instance.source;
+    first = source.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + Length + ")";
+    instance.name(name);
+	
+	VA=core.indicators.create("MVA", source.volume,Length );
+	
+	BuyPres=instance.addInternalStream (first, 0);
+	SellPres=instance.addInternalStream (first, 0);
+	
+	TR=instance.addInternalStream (first, 0);
+	ATR=core.indicators.create("MVA", TR,Length );
+	
+	AvgTR=instance.addInternalStream (first, 0);
+	VolAvg=instance.addInternalStream (first, 0);
+	WghtClose = instance.addInternalStream (first, 0);
+	
+    DI = instance.addStream("DI", core.Line, name, "DI", instance.parameters.DI_color, first+Length+1);
+	DI.setWidth(instance.parameters.width);
+	DI.setStyle(instance.parameters.style);
+}
+
+function Update(period,mode)
+{
+    if (period >= first && source.hasData(period)) 
+    {
+       
+
+ VA.update(core.UpdateLast);
+
+ if (period == Length) 
+ {
+  VolAvg[period] = VA.DATA[period]; 
+ }
+ 
+ if (period <= Length) 
+ { 
+  return;
+ }
+
+ WghtClose[period] = (source.high[period] + source.low[period] + source.close[period] + source.close[period]) * 0.25;
+ 
+ TR[period] = Math.max(source.high[period-1],source.high[period]) - Math.min(source.low[period-1],source.low[period]);
+ 
+ ATR.update(core.UpdateLast);
+ AvgTR[period] = ATR.DATA[period];
+VolAvg[period] = ((VolAvg[period-1] * (Length - 1)) + source.volume[period]) / Length;
+
+if (WghtClose[period] != 0 && WghtClose[period-1] != 0 && 	AvgTR[period] != 0 && VolAvg[period] != 0) 
+{
+
+var WtCRatio = (WghtClose[period] - WghtClose[period-1]) / Math.min(WghtClose[period],WghtClose[period-1]) ;
+var VolRatio = source.volume[period] / VolAvg[period];
+var Constant = ((WghtClose[period] * 3) /AvgTR[period]) * Math.abs (WtCRatio);
+if (Constant > 88) 
+{
+ Constant = 88 ;
+}
+
+
+Constant = VolRatio / Math.exp (Constant);
+
+var BuyP,SellP;
+
+if (WtCRatio > 0) 
+{
+ 		BuyP = VolRatio;
+		SellP = Constant;
+}
+else
+{
+		BuyP = Constant;
+		SellP = VolRatio;
+}
+
+BuyPres[period] = ((BuyPres [period-1] * (Length - 1)) + BuyP) / Length;
+SellPres[period] = ((SellPres [period-1] * (Length - 1)) + SellP) / Length;
+
+var TempDI = 1;
+var Sign;
+
+if (SellPres[period] > BuyPres[period]) 
+{
+
+		Sign = -1;
+        if (SellPres[period] != 0) 
+        {
+		 TempDI = BuyPres[period] / SellPres[period];
+		}
+}
+else
+{
+		Sign = 1;
+        if (BuyPres[period] != 0) 
+        { 
+		 TempDI = SellPres[period] / BuyPres[period];
+		}
+}
+
+var DMIndx;
+
+     TempDI = TempDI * Sign;
+	if (TempDI < 0) 
+	{
+	  DMIndx = -1 - TempDI
+	}
+	else
+	{
+	  DMIndx = 1 - TempDI ;
+	}  
+
+
+ DI[period] = DMIndx;
+}
+
+
+	  
+    }
+}
+

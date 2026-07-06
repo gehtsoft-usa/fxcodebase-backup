@@ -1,0 +1,38 @@
+function Init()
+{
+    indicator.name("Simple Slope");
+    indicator.description("Simple Slope");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addInteger("period", "Period", "Period", 14);
+    indicator.parameters.addColor("slope_color", "Color of slope", "Color of slope", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+
+var slope = null;
+var frame=0;
+
+function Prepare()
+{
+    frame = instance.parameters.period;
+    source = instance.source;
+    first = source.first();
+	
+    var name = profile.id() + "(" + source.name() + ", " + frame + ")";
+    instance.name(name);
+    slope = instance.addStream("SL", core.Line, name, "slope", instance.parameters.slope_color, first);
+}
+
+function Update(period)
+{ 
+   if (period >= frame && source.hasData(period)) 
+   {
+   
+	slope[period]=(source.close[period]-source.close[period-frame])/(period-(period-frame));
+		
+    }
+}
+

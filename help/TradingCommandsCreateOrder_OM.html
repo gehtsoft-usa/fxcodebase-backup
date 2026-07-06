@@ -1,0 +1,455 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252" /><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><title>Create a True Market Order</title><style type="text/css">a, p, h1, h2, h3, h4, h5, h6, table, td, tr, li, ul, ol {
+    font-family: Verdana, Trebuchet MS, Arial;
+}
+
+a, p, td, tr, ul, ol, li {
+    font-size: 12pt;
+}
+
+h3 {
+    font-size: 13pt;
+}
+
+h2 {
+    font-size: 13pt;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+body {
+    color: #444444;
+    background-color: white;
+}
+
+A:link {
+    color: #0065b3;
+    cursor: pointer;
+}
+
+A:visited {
+    color: #0068be;
+    cursor: pointer;
+}
+
+a.action {
+  background-color: #0065b3;
+  color: white;
+  font-size: 10pt;
+  padding: 2px 2px;
+  width: 50pt;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px;
+}
+
+.side-icon {
+    float: left;
+}
+
+a.action [class*="dripicons-"]:before {
+    padding: 0 2px 0 0;
+    font-size: 12pt;
+    vertical-align: text-bottom;
+}
+
+.side-icon:after {
+  content: "";
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  border-left: 1.5px solid white;
+  transform: translate(-50%);
+}
+
+a.actiontab {
+  font-size: 10pt;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px 3px 0 0;
+}
+
+pre, code, code a {
+    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+    font-size: 12pt;
+}
+
+code.ctag {
+    background-color: #f1f1f1;
+    padding: .1em .2em;
+    border-radius: 3px;
+}
+
+pre {
+    background-color: white;
+}
+
+pre.example {
+    background-color: #f1f1f1;
+}
+
+ul {
+    list-style-type: disc;
+    margin-left: 18pt;
+}
+
+ol {
+    list-style-type: decimal;
+    margin-left: 18pt;
+}
+
+ul.hhc {
+    list-style-type: none;
+    margin-left: 1em;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+li.hhc {
+    margin-left: 0;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+table {
+  border-spacing: 0;
+  border-color: #dfe3e7;
+}
+
+tr + tr td {
+   border-top: 0;
+}
+
+tr td + td {
+  border-left: 0;
+}
+
+td {
+  border: 1px solid;
+  border-color: #dfe3e7;
+}
+
+tr:first-child td:first-child {
+   border-radius: 0.2em 0 0 0;
+}
+
+tr:first-child td:last-child {
+  border-radius: 0 0.2em 0 0;
+}
+
+tr:first-child td:only-child {
+  border-radius: 0.2em 0.2em 0 0;
+}
+
+tr:last-child td:first-child {
+    border-radius: 0 0 0 0.2em;
+}
+
+tr:last-child td:last-child {
+    border-radius: 0 0 0.2em 0;
+}
+
+tr:last-child td:only-child {
+    border-radius: 0 0 0.2em 0.2em;
+}
+
+tr:only-child td:only-child {
+    border-radius: 0.2em 0.2em 0.2em 0.2em;
+}
+
+tr:only-child td:first-child {
+   border-radius: 0.2em 0 0 0.2em;
+}
+
+tr:only-child td:last-child {
+  border-radius: 0 0.2em 0.2em 0;
+}
+
+
+td.tmain, td.tmain_nw, td.thdr {
+    background-color: rgb(255, 255, 255);
+    vertical-align: top;
+    padding: 3px;
+}
+
+td.tmain p, td.tmain_nw p, td.thdr p {
+    margin-top: 3pt;
+    margin-bottom: 3pt;
+}
+
+td.tmain_nw {
+    white-space: nowrap;
+}
+
+td.thdr {
+    background-color: #e3e3e3;
+}
+
+table.decl {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+    vertical-align: top;
+    padding: 3px;
+    width: 100%;
+}
+
+table.decl td {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+}
+
+div.note-quote {
+    border-left: 10px solid #ccc;
+    padding: 1em 10px .1em 10px;
+    margin: 1.5em 10px;
+    background-color: rgb(224, 224, 224);
+}
+
+div.note-note {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+div.note-warning {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #fff;
+    background-color: #ff6358;
+}
+div.note-warning code.ctag {
+    color: black;
+}</style>
+<link rel="stylesheet" href="res/dripicons.css"></head><body><script type="text/javascript">
+var highlighterEnabled = false;
+var maintopic = 'index';
+var helptitle = 'Indicore SDK 3';
+    function loadStarted() {
+    window.onload = loadCompleted;
+
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        var head = document.getElementsByTagName('head')[0];
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.min.js';
+        head.appendChild(script4);
+
+
+        var script2 = document.createElement('script');
+        script2.type = 'text/javascript';
+        script2.src = './highlighter/highlight.cshtml.js';
+        head.appendChild(script2);
+
+        var script3 = document.createElement('script');
+        script3.type = 'text/javascript';
+        script3.src = './highlighter/highlight.lua.js';
+        head.appendChild(script3);
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.luax.js';
+        head.appendChild(script4);
+    }
+}
+
+function loadCompleted() {
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        hljs.registerLanguage('cshtml-razor', window.hljsDefineCshtmlRazor);
+        hljs.registerLanguage('lua', window.hljsDefineLua);
+        hljs.registerLanguage('luax', window.hljsDefineLuaX);
+        x = document.querySelectorAll('pre code');
+        for (var i = 0; i < x.length; i++) {
+            if (x[i].hasAttribute('class')) {
+                hljs.highlightBlock(x[i]);
+            }
+        }
+    }
+}
+
+
+function hidediv(divname) {
+    document.getElementById(divname).style.display = 'none';
+}
+
+function showdiv(divname) {
+    document.getElementById(divname).style.display = 'inline';
+}
+
+function syncList() {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, null, document.title);
+    }
+}
+
+function syncList1(key) {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, key + '.html', document.title);
+    }
+}</script><script type="text/javascript">
+    loadStarted();
+</script><h1>Create a True Market Order</h1><p>A true market order opens a position at any currently available market rate.</p>
+<p>Please note that if hedging is disabled for the account, the command, first, closes
+existing opposite positions for the same account and instrument and only then opens a
+new position in the remaining amount.</p><table class="tmain">
+  <tr>
+    <td class="thdr"><p>Valuemap field</p></td>
+    <td class="thdr"><p>Datatype</p></td>
+    <td class="thdr"><p>Description</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Command</p></td>
+    <td class="tmain"><p>string</p></td>
+    <td class="tmain"><p>The command. Must be <code class="ctag">CreateOrder</code>.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>OrderType</p></td>
+    <td class="tmain"><p>string</p></td>
+    <td class="tmain"><p>The type of the order. Must be <code class="ctag">OM</code>.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>OfferID</p></td>
+    <td class="tmain"><p>string</p></td>
+    <td class="tmain"><p>The identifier of the instrument the order should be placed for.
+The value must be obtained from the &quot;Offers&quot; table, the <code class="ctag">OfferID</code> column.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>AcctID</p></td>
+    <td class="tmain"><p>string</p></td>
+    <td class="tmain"><p>The identifier of the account the order should be placed for.
+The value must be obtained from the &quot;Accounts&quot; table, the <code class="ctag">AccountID</code> column.</p>
+<p>Please note that the account identifier may not necessarily be equal to the account name
+which is shown in the Trading Station application.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>BuySell</p></td>
+    <td class="tmain"><p>string</p></td>
+    <td class="tmain"><p>The order direction.</p>
+<p>The value must be <code class="ctag">B</code> - for buy orders and <code class="ctag">S</code> - for sell orders.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>Quantity</p></td>
+    <td class="tmain"><p>number</p></td>
+    <td class="tmain"><p>The quantity of the instrument to be bought or sold. The quantity is expressed in contracts and must
+be divisible by the value of the lot size (see <code class="ctag">baseUnitSize</code> trading option in the following call:
+<a href="host.execute_getTradingProperty.html"><code>core.host:execute(&quot;getTradingProperty&quot;, ...)</code></a>).</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>GTC</p></td>
+    <td class="tmain"><p>string</p></td>
+    <td class="tmain"><p>Time-In-Force value.</p>
+<p>Can be GTC (Good-Till-Cancelled), IOC (Immediate-or-Cancel), FOK (Fill-or-Kill), or DAY (Day).</p>
+<p>The value is optional.</p>
+<p>Market orders are IOC orders by default.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>CustomID</p></td>
+    <td class="tmain"><p>string</p></td>
+    <td class="tmain"><p>The custom identifier of the order. This value will be populated into all
+order-related QTXT columns of the following tables: &quot;Orders&quot;, &quot;Trades&quot;, and &quot;Closed Trades&quot;.</p>
+<p>The value is optional.</p></td>
+  </tr>
+</table><p>You can also create a pair of stop and limit orders for the trade using the same command. Please refer to
+<a href="TradingCommandsCreateOrder_A.html">Attach Stop and/or Limit Orders to the Command</a> for
+details.</p><div id="open13" style="display:none">
+  <p>Example: Create Open Market Order and then wait while trade appears&nbsp;<a href="javascript: showdiv('close13'); hidediv('open13');" onclick="javascript: showdiv('close13'); hidediv('open13');" class="action">Show<span class="side-icon dripicons-chevron-right"></span></a></p>
+</div>
+<div id="close13" style="display:inline">
+  <p>Example: Create Open Market Order and then wait while trade appears&nbsp;<a href="javascript: showdiv('open13'); hidediv('close13');" onclick="javascript: showdiv('open13'); hidediv('close13');" class="action">Hide<span class="side-icon dripicons-chevron-down"></span></a></p>
+  <pre class="example" id="example13"><code>   function Init()
+       strategy:name(&quot;Sample&quot;);
+       strategy:description(&quot;&quot;);
+ 
+       strategy.parameters:addString(&quot;Account&quot;, &quot;Account to trade&quot;, &quot;&quot;, &quot;&quot;);
+       strategy.parameters:setFlag(&quot;Account&quot;, core.FLAG_ACCOUNT);
+       strategy.parameters:addInteger(&quot;Amount&quot;, &quot;Amount in lots to trade&quot;, &quot;&quot;, 1, 1, 100);
+   end
+ 
+   local offer;
+   local account;
+   local amount;
+ 
+   function Prepare(onlyName)
+       instance:name(profile:id() .. &quot;(&quot; .. instance.bid:instrument() .. &quot;)&quot;);
+ 
+       if onlyName then
+           return ;
+       end
+ 
+       account = instance.parameters.Account;
+       local lotSize = core.host:execute(&quot;getTradingProperty&quot;, &quot;baseUnitSize&quot;, instance.bid:instrument(), account);
+       amount = lotSize * instance.parameters.Amount;
+       offer = core.host:findTable(&quot;offers&quot;):find(&quot;Instrument&quot;, instance.bid:instrument()).OfferID;
+   end
+ 
+   local create = true;
+   local trade = false;
+   local requestId;
+ 
+   function Update()
+       if create then
+           create = false;
+ 
+           -- create order
+           local valuemap = core.valuemap();
+           valuemap.Command = &quot;CreateOrder&quot;;
+           valuemap.OrderType = &quot;OM&quot;;
+           valuemap.OfferID = offer;
+           valuemap.AcctID = account;
+           valuemap.Quantity = amount;
+           valuemap.BuySell = &quot;B&quot;;     -- use &quot;S&quot; to sell
+ 
+           local success, msg = terminal:execute(100, valuemap);
+ 
+           if not (success) then
+               terminal:alertMessage(instance.bid:instrument(), instance.bid[NOW], &quot;create order failed:&quot; .. msg, instance.bid:date(NOW));
+           else
+               requestId = core.parseCsv(msg, &quot;,&quot;)[0];
+               terminal:alertMessage(instance.bid:instrument(), instance.bid[NOW], &quot;order sent:&quot; .. requestId, instance.bid:date(NOW));
+           end
+       elseif not(trade) then
+           -- check whether trade has been created
+           local row;
+           row = core.host:findTable(&quot;trades&quot;):find(&quot;OpenOrderReqID&quot;, requestId);
+           if row ~= nil then
+               trade = true;
+               terminal:alertMessage(instance.bid:instrument(), instance.bid[NOW], &quot;trade created:&quot; .. row.TradeID, instance.bid:date(NOW));
+               trade = true;
+           end
+       end
+   end
+ 
+   function AsyncOperationFinished(cookie, success, msg)
+       if cookie == 100 then
+           if not(success) then
+               terminal:alertMessage(instance.bid:instrument(), instance.bid[NOW], &quot;create order failed:&quot; .. msg, instance.bid:date(NOW));
+           else
+               terminal:alertMessage(instance.bid:instrument(), instance.bid[NOW], &quot;order created:&quot; .. msg, instance.bid:date(NOW));
+           end
+       end
+   end</code></pre>
+</div><p>
+  <center><a href="TradingCommandsCreateOrder.html">back</a></center>
+</p><script language="javascript" type="text/javascript">if(window.parent.frames[0]) window.parent.frames[0].selectItem(window.location.href);</script></body></html>

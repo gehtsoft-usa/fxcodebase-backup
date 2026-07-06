@@ -1,0 +1,24 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_status</title>
+</head>
+<body>
+<h3><a name="lua_status"><code>lua_status</code></a></h3>
+<pre>int lua_status (lua_State *L);</pre>
+
+<p>
+Returns the status of the thread <code>L</code>.
+
+
+<p>
+The status can be 0 for a normal thread,
+an error code if the thread finished its execution with an error,
+or <a name="pdf-LUA_YIELD"><code>LUA_YIELD</code></a> if the thread is suspended.
+
+
+
+
+
+<hr>
+</body>
+</html>

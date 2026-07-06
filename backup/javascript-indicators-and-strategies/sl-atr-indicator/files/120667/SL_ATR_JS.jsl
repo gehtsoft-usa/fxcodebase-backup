@@ -1,0 +1,56 @@
+function Init()
+{
+    indicator.name("SL_ATR indicator");
+    indicator.description("SL_ATR indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("ATR_Period", "Period of ATR", "", 10,1,1000);
+    indicator.parameters.addDouble("K", "K", "", 1);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Upper_Cloud_Clr", "Upper Cloud Color", "Upper Cloud Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("Lower_Cloud_Clr", "Lower Cloud Color", "Lower Cloud Color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("Transparency", "Transparency", "", 50,0,100);
+}
+
+var first;
+var source = null;
+var ATR_Period;
+var K;
+var ATR;
+var H_Upper=null;
+var L_Upper=null;
+var H_Lower=null;
+var L_Lower=null;
+
+function Prepare()
+{
+    source = instance.source;
+    ATR_Period=instance.parameters.ATR_Period;
+    K=instance.parameters.K;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.ATR_Period + ", " + instance.parameters.K + ")";
+    instance.name(name);
+    ATR = core.indicators.create("ATR", source, ATR_Period);
+    H_Upper = instance.addInternalStream(first, 0);
+    L_Upper = instance.addInternalStream(first, 0);
+    H_Lower = instance.addInternalStream(first, 0);
+    L_Lower = instance.addInternalStream(first, 0);
+    instance.createChannelGroup("UpperCloud", "UpperCloud", H_Upper, L_Upper, instance.parameters.Upper_Cloud_Clr, 100 - instance.parameters.Transparency);
+    instance.createChannelGroup("LowerCloud", "LowerCloud", H_Lower, L_Lower, instance.parameters.Lower_Cloud_Clr, 100 - instance.parameters.Transparency);
+}
+
+function Update(period, mode)
+{
+   if (period>first+ATR_Period) 
+   {
+    ATR.update(mode);
+    H_Upper[period]=source.high[period]+K*ATR.DATA[period];
+    L_Upper[period]=source.low[period]+K*ATR.DATA[period];
+    H_Lower[period]=source.high[period]-K*ATR.DATA[period];
+    L_Lower[period]=source.low[period]-K*ATR.DATA[period];
+   } 
+}
+

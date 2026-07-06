@@ -1,0 +1,103 @@
+function Init()
+{
+    indicator.name("Ergodic Tick volume indicator");
+    indicator.description("Ergodic Tick volume indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period1", "Period 1", "", 12);
+    indicator.parameters.addInteger("Period2", "Period 2", "", 12);
+    indicator.parameters.addInteger("Period3", "Period 3", "", 1);
+    indicator.parameters.addInteger("EPeriod1", "Ergodic period 1", "", 5);
+    indicator.parameters.addInteger("EPeriod2", "Ergodic period 2", "", 5);
+    indicator.parameters.addInteger("EPeriod3", "Ergodic period 3", "", 5);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Color", "Color", core.rgb(255, 255, 0));
+    indicator.parameters.addInteger("width", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("Sclr", "Signal color", "Signal color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("Swidth", "Signal line width", "Signal line width", 1, 1, 5);
+    indicator.parameters.addInteger("Sstyle", "Signal line style", "Signal line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("Sstyle", core.FLAG_LINE_STYLE);
+}
+
+var first;
+var source = null;
+var Period1;
+var Period2;
+var Period3;
+var EPeriod1;
+var EPeriod2;
+var EPeriod3;
+var UpTicks, DnTicks;
+var EMA_Up1, EMA_Dn1;
+var EMA_Up2, EMA_Dn2;
+var TV;
+var EMA_TV;
+var EMA_TVI1, EMA_TVI2, EMA_TVI3;
+var TVI;
+var pipSize;
+var ETVI=null;
+var Signal=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period1=instance.parameters.Period1;
+    Period2=instance.parameters.Period2;
+    Period3=instance.parameters.Period3;
+    EPeriod1=instance.parameters.EPeriod1;
+    EPeriod2=instance.parameters.EPeriod2;
+    EPeriod3=instance.parameters.EPeriod3;
+    first = source.first()+2;
+    UpTicks = instance.addInternalStream(first, 0);
+    DnTicks = instance.addInternalStream(first, 0);
+    TV = instance.addInternalStream(first, 0);
+    TVI = instance.addInternalStream(first, 0);
+    EMA_Up1 = core.indicators.create("EMA", UpTicks, Period1);
+    EMA_Dn1 = core.indicators.create("EMA", DnTicks, Period1);
+    EMA_Up2 = core.indicators.create("EMA", EMA_Up1.DATA, Period2);
+    EMA_Dn2 = core.indicators.create("EMA", EMA_Dn1.DATA, Period2);
+    EMA_TV = core.indicators.create("EMA", TV, Period3);
+    EMA_TVI1 = core.indicators.create("EMA", TVI, EPeriod1);
+    EMA_TVI2 = core.indicators.create("EMA", EMA_TVI1.DATA, EPeriod2);
+    EMA_TVI3 = core.indicators.create("EMA", EMA_TVI2.DATA, EPeriod3);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period1 + ", " + instance.parameters.Period2 + ", " + instance.parameters.Period3 + ", " + instance.parameters.EPeriod1 + ", " + instance.parameters.EPeriod2 + ", " + instance.parameters.EPeriod3 + ")";
+    instance.name(name);
+    ETVI = instance.addStream("ETVI", core.Line, name + ".ETVI", "ETVI", instance.parameters.clr, first);
+    ETVI.setWidth(instance.parameters.width);
+    ETVI.setStyle(instance.parameters.style);
+    Signal = instance.addStream("Signal", core.Line, name + ".Signal", "Signal", instance.parameters.Sclr, first);
+    Signal.setWidth(instance.parameters.Swidth);
+    Signal.setStyle(instance.parameters.Sstyle);
+    pipSize=source.pipSize();
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    UpTicks[period]=(source.volume[period]+(source.close[period]-source.open[period])/pipSize)/2;
+    DnTicks[period]=source.volume[period]-UpTicks[period];
+    EMA_Up1.update(mode);
+    EMA_Dn1.update(mode);
+    EMA_Up2.update(mode);
+    EMA_Dn2.update(mode);
+    var sum=EMA_Up2.DATA[period]+EMA_Dn2.DATA[period];
+    if (sum!=0) 
+    {
+     TV[period]=100*(EMA_Up2.DATA[period]-EMA_Dn2.DATA[period])/sum;
+    } 
+    EMA_TV.update(mode);
+    TVI[period]=EMA_TV.DATA[period];
+    EMA_TVI1.update(mode);
+    EMA_TVI2.update(mode);
+    EMA_TVI3.update(mode);
+    ETVI[period]=EMA_TVI2.DATA[period];
+    Signal[period]=EMA_TVI3.DATA[period];
+   } 
+}
+

@@ -1,0 +1,65 @@
+function Init()
+{
+    indicator.name("Average Average True Range");
+    indicator.description(" ");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addInteger("ATR", "ATR Period", " ", 14);
+    indicator.parameters.addInteger("MA", "MA Period", "No description", 50);
+    indicator.parameters.addColor("Up", "Color of Up Bar", "", core.rgb(0, 255, 0));
+	indicator.parameters.addColor("Dn", "Color of Down Bar", "", core.rgb(255,0, 0));
+}
+
+var ATR;
+var MA;
+
+var first;
+var source = null;
+
+var AATR = null;
+var Indicator={};
+
+function Prepare(nameOnly)
+{
+    ATR = instance.parameters.ATR;
+    MA = instance.parameters.MA;
+    source = instance.source;
+  
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(ATR) + ", " + tostring(MA) + ")";
+    instance.name(name);
+    Indicator["ATR"] = core.indicators.create("ATR", source, ATR);
+	 Indicator["MVA"] = core.indicators.create("MVA", Indicator["ATR"].DATA, MA);
+	 
+	   first = Math.max( Indicator["MVA"].DATA.first(), Indicator["ATR"].DATA.first());
+
+    if (!(nameOnly)) 
+    {
+        AATR = instance.addStream("AATR", core.Bar, name, "AATR", instance.parameters.Up, first);
+    }
+}
+
+function Update(period, mode)
+{
+    if (period <first || !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+       Indicator["ATR"].update(mode); 
+	    Indicator["MVA"].update(mode);  
+
+	   AATR[period] = Indicator["MVA"].DATA[period];
+	   
+	   if (AATR[period] > AATR[period-1]) 
+       {
+	    AATR.setColor(period, instance.parameters.Up);
+       }
+	   else
+       {
+	    AATR.setColor(period, instance.parameters.Dn);
+	   }
+   
+}
+

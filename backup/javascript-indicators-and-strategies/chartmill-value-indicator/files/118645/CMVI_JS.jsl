@@ -1,0 +1,86 @@
+function Init()
+{
+    indicator.name("Chartmill Value Indicator");
+    indicator.description("Chartmill Value Indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");	
+    indicator.parameters.addInteger("Period", "Period", "Period", 5);
+	indicator.parameters.addString("Method", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method", "WMA", "WMA" , "WMA");
+	
+	indicator.parameters.addGroup("Style");	
+    indicator.parameters.addColor("Up", "Color of Up", "Color of Up Candle", core.COLOR_UPCANDLE);
+	indicator.parameters.addColor("Dn", "Color of Down", "Color of Down Candle", core.COLOR_DOWNCANDLE);
+
+}
+
+var Period;
+var Method;
+var first;
+var source = null;
+
+var open=null;
+var close=null;
+var high=null;
+var low=null;
+var MA, ATR;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+	Method = instance.parameters.Method;
+    source = instance.source;
+    
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ", " + tostring(Method) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+	MA = core.indicators.create(Method, source.median, Period);
+	ATR = core.indicators.create("ATR", source, Period);
+	first = Math.max(MA.DATA.first(),ATR.DATA.first());
+	
+    open = instance.addStream("open", core.Line, name, "open", core.rgb(0, 0, 0), first)
+    high = instance.addStream("high", core.Line, name, "high", core.rgb(0, 0, 0), first)
+    low = instance.addStream("low", core.Line, name, "low", core.rgb(0, 0, 0), first)
+    close = instance.addStream("close", core.Line, name, "close", core.rgb(0, 0, 0), first)
+    instance.createCandleGroup("CMVI", "", open, high, low, close);
+    }
+}
+
+function Update(period, mode)
+{
+    MA.update(mode);
+	ATR.update(mode);
+	
+    if (period < first && source.hasData(period)) 
+    {
+	 return;
+	}
+	
+	close[period] = (source.close[period] - MA.DATA[period]) / ATR.DATA[period];
+	high[period] = (source.high[period]  - MA.DATA[period]) / ATR.DATA[period];
+	low[period] = (source.low[period] - MA.DATA[period]) / ATR.DATA[period];
+	open[period] = (source.open[period]  - MA.DATA[period]) / ATR.DATA[period];
+	
+	if (open[period]>open[period]) 
+    {
+	 open.setColor(period, instance.parameters.Up);
+    }
+	else if (open[period]>open[period]) 
+    {
+     open.setColor(period, instance.parameters.Dn);
+	}
+
+	
+}
+

@@ -1,0 +1,27 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - luaL_unref</title>
+</head>
+<body>
+<h3><a name="luaL_unref"><code>luaL_unref</code></a></h3>
+<pre>void luaL_unref (lua_State *L, int t, int ref);</pre>
+
+<p>
+Releases reference <code>ref</code> from the table at index <code>t</code>
+(see <a href="luaL_ref.html"><code>luaL_ref</code></a>).
+The entry is removed from the table,
+so that the referred object can be collected.
+The reference <code>ref</code> is also freed to be used again.
+
+
+<p>
+If <code>ref</code> is <a href="pdf-LUA_NOREF.html"><code>LUA_NOREF</code></a> or <a href="pdf-LUA_REFNIL.html"><code>LUA_REFNIL</code></a>,
+<a href="luaL_unref.html"><code>luaL_unref</code></a> does nothing.
+
+
+
+
+
+<hr>
+</body>
+</html>

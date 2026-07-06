@@ -1,0 +1,86 @@
+function Init()
+{
+    indicator.name("Color RSI indicator");
+    indicator.description("Color RSI indicator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 5);
+    indicator.parameters.addDouble("OverBought", "OverBought", "", 80);
+    indicator.parameters.addDouble("OverSold", "OverSold", "", 20);
+    indicator.parameters.addBoolean("ShowArrow", "Show arrow", "", true);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("RSIclr", "RSI Color", "RSI Color", core.rgb(128, 128, 128));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("OBclr", "OverBought Color", "OverBought Color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("OSclr", "OverSold Color", "OverSold Color", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("DotSize", "Dot size", "Dot size", 2, 1, 5);
+    indicator.parameters.addColor("UpArrowclr", "Up arrow Color", "Up arrow Color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("DnArrowclr", "Down arrow Color", "Down arrow Color", core.rgb(0, 255, 0));
+}
+
+var first;
+var source = null;
+var Period;
+var OverBought;
+var OverSold;
+var ShowArrow;
+var RSI_Ind;
+var RSI=null;
+var OB=null;
+var OS=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    OverBought=instance.parameters.OverBought;
+    OverSold=instance.parameters.OverSold;
+    ShowArrow=instance.parameters.ShowArrow;
+    first = source.first()+2;
+    RSI_Ind = core.indicators.create("RSI", source, Period);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.OverBought + ", " + instance.parameters.OverSold + ")";
+    instance.name(name);
+    RSI = instance.addStream("RSI", core.Line, name + ".RSI", "RSI", instance.parameters.RSIclr, first);
+    OB = instance.addStream("OB", core.Dot, name + ".OverBought", "OverBought", instance.parameters.OBclr, first);
+    OS = instance.addStream("OS", core.Dot, name + ".OverSold", "OverSold", instance.parameters.OSclr, first);
+    RSI.setWidth(instance.parameters.widthLinReg);
+    RSI.setStyle(instance.parameters.styleLinReg);
+    OB.setWidth(instance.parameters.DotSize);
+    OS.setWidth(instance.parameters.DotSize);
+    if (ShowArrow) 
+    {
+     UpArrow = instance.createTextOutput ("Up", "Up", "Wingdings", 10, core.H_Center, core.V_Top, instance.parameters.UpArrowclr);
+     DnArrow = instance.createTextOutput ("Dn", "Dn", "Wingdings", 10, core.H_Center, core.V_Bottom, instance.parameters.DnArrowclr);
+    }
+}
+
+function Update(period, mode)
+{
+   if (period>first+Period) 
+   {
+    RSI_Ind.update(mode);
+    RSI[period]=RSI_Ind.DATA[period];
+    if (RSI_Ind.DATA[period]>OverBought) 
+    {
+     OB[period]=RSI_Ind.DATA[period];
+     if (ShowArrow && RSI_Ind.DATA[period-1]<OverBought) 
+     {
+      UpArrow.set(period, RSI_Ind.DATA[period], "\226");
+     }
+    }
+    if (RSI_Ind.DATA[period]<OverSold) 
+    {
+     OS[period]=RSI_Ind.DATA[period];
+     if (ShowArrow && RSI_Ind.DATA[period-1]>OverSold) 
+     {
+      DnArrow.set(period, RSI_Ind.DATA[period], "\225");
+     }
+    }
+   } 
+}
+

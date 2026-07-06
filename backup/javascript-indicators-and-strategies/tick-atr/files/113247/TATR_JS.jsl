@@ -1,0 +1,66 @@
+function Init()
+{
+    indicator.name("Tick ATR");
+    indicator.description("Tick ATR");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addInteger("Period", "Period", "Period", 14);
+	indicator.parameters.addString("Method", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method", "WMA", "WMA" , "WMA");
+	
+	
+    indicator.parameters.addColor("TATR_color", "Color of TATR", "Color of TATR", core.rgb(255, 0, 0)); 
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var Period;
+var Method;
+var first;
+var source = null;
+var atr, tr;
+
+var TATR = null;
+
+function Prepare(nameOnly)
+{
+    Method = instance.parameters.Method;
+    Period = instance.parameters.Period;
+    source = instance.source;
+	tr=    instance.addInternalStream(0, 0);
+	atr = core.indicators.create(Method,tr, Period);	
+    first = atr.DATA.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period)+ ", " + tostring(Method) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        TATR = instance.addStream("TATR", core.Line, name, "TATR", instance.parameters.TATR_color, first);
+		TATR.setWidth(instance.parameters.width);
+        TATR.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period, mode)
+{
+    tr[period] = Math.abs(source[period-1]-source[period]) ;   
+	
+	atr.update(mode);
+    if (period < first)   
+    {
+	 return;
+	}
+        TATR[period] =atr.DATA[period] ;   
+    
+}
+

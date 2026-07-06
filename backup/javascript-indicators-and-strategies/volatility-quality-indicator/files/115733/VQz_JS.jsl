@@ -1,0 +1,104 @@
+function Init()
+{
+    indicator.name("VQz indicator");
+    indicator.description("VQz indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 7);
+    indicator.parameters.addString("Method", "Method", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("Method", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Method", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Method", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Method", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Method", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Method", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Method", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Method", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Method", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Method", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Method", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Method", "JSmooth", "", "JSmooth");
+    indicator.parameters.addInteger("Smoothing", "Smoothong", "", 1);
+    indicator.parameters.addInteger("Filter", "Filter", "", 5);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("UPclr", "UP Color", "UP Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("DNclr", "DN Color", "DN Color", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+var Period;
+var Method;
+var Smoothing;
+var Filter;
+var Filter_pip;
+var VQ;
+var MA_H, MA_L, MA_O, MA_C;
+var UP=null;
+var DN=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    Method=instance.parameters.Method;
+    Smoothing=instance.parameters.Smoothing;
+    Filter=instance.parameters.Filter;
+    Filter_pip=Filter*source.pipSize();
+    first = source.first()+2;
+    VQ = instance.addInternalStream(first, 0);
+    MA_H = core.indicators.create("AVERAGES", source.high, Method, Period, false);
+    MA_L = core.indicators.create("AVERAGES", source.low, Method, Period, false);
+    MA_O = core.indicators.create("AVERAGES", source.open, Method, Period, false);
+    MA_C = core.indicators.create("AVERAGES", source.close, Method, Period, false);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.Method + ", " + instance.parameters.Smoothing + ", " + instance.parameters.Filter + ")";
+    instance.name(name);
+    UP = instance.addStream("UP", core.Bar, name + ".UP", "UP", instance.parameters.UPclr, first);
+    DN = instance.addStream("DN", core.Bar, name + ".DN", "DN", instance.parameters.DNclr, first);
+}
+
+function Update(period, mode)
+{
+   if (period>first+Period+Smoothing) 
+   {
+    var Curr;
+    MA_H.update(mode);
+    MA_L.update(mode);
+    MA_O.update(mode);
+    MA_C.update(mode);
+    var h=MA_H.DATA[period];
+    var l=MA_L.DATA[period];
+    var o=MA_O.DATA[period];
+    var c=MA_C.DATA[period];
+    var c2=MA_C.DATA[period-Smoothing];
+    var Max=Math.max(h-l,h-c2,c2-l);
+    VQ[period]=Math.abs(((c-c2)/Max+(c-o)/(h-l))*0.5)*((c-c2+(c-o))*0.5);
+    if (Math.abs(VQ[period])<Filter_pip) 
+    {
+     VQ[period]=VQ[period-1];
+    }
+    if (VQ[period]>0) 
+    {
+     UP[period]=1;
+     DN[period]=0;
+    } 
+    else if (VQ[period]<0) 
+    {
+     UP[period]=0;
+     DN[period]=1;
+    }
+   } 
+}
+

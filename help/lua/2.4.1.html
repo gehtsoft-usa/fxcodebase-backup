@@ -1,0 +1,42 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 2.4.1 - Chunks</title>
+</head>
+<body>
+<h3>2.4.1 - <a name="2.4.1">Chunks</a></h3>
+
+<p>
+The unit of execution of Lua is called a <em>chunk</em>.
+A chunk is simply a sequence of statements,
+which are executed sequentially.
+Each statement can be optionally followed by a semicolon:
+
+<pre>
+	chunk ::= {stat [`<b>;</b>&acute;]}
+</pre><p>
+There are no empty statements and thus '<code>;;</code>' is not legal.
+
+
+<p>
+Lua handles a chunk as the body of an anonymous function 
+with a variable number of arguments
+(see <a href="2.5.9.html">&sect;2.5.9</a>).
+As such, chunks can define local variables,
+receive arguments, and return values.
+
+
+<p>
+A chunk may be stored in a file or in a string inside the host program.
+When a chunk is executed, first it is pre-compiled into instructions for
+a virtual machine,
+and then the compiled code is executed
+by an interpreter for the virtual machine.
+
+
+<p>
+Chunks may also be pre-compiled into binary form;
+see program <code>luac</code> for details.
+Programs in source and compiled forms are interchangeable;
+Lua automatically detects the file type and acts accordingly.
+</body>
+</html>

@@ -1,0 +1,70 @@
+function Init()
+{
+    indicator.name("Linear Regression Trend Histogram");
+    indicator.description("Linear Regression Trend Histogram");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+	
+    indicator.parameters.addGroup("Calculation");	
+    indicator.parameters.addInteger("Period", "Period", "Period", 34);
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("Up", "Color of LRT Up", "Color of LRT", core.rgb(0, 255, 0));
+	indicator.parameters.addColor("Down", "Color of LRT Down", "Color of LRT", core.rgb(255, 0, 0));
+}
+
+var Period;
+
+var first;
+var source = null;
+
+var LRT = null;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+    source = instance.source;
+    first = source.first()+Period;
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        LRT = instance.addStream("LRT", core.Bar, name, "LRT", instance.parameters.Up, first);
+    }
+}
+
+function Update(period)
+{
+    if (period < first) 
+    {
+	 return;
+	}
+		
+	var  a, b, c, sumy, sumx, sumxy, sumx2,i;
+	sumy=0.0; sumx=0.0; sumxy=0.0; sumx2=0.0;
+	
+	for (i=1; i<=Period; i++) 
+    {
+   
+      sumy=sumy+source[period-Period+i];
+      sumxy=sumxy+source[period-Period+i]*i;
+      sumx=sumx+i;
+      sumx2=sumx2+i*i;
+    }
+
+	c=sumx2*Period-sumx*sumx;
+    b=(sumxy*Period-sumx*sumy)/c;
+    LRT[period]=b/source.pipSize(); 
+	
+	if (LRT[period] >LRT[period-1]) 
+    { 
+	 LRT.setColor(period, instance.parameters.Up);
+    } 
+    else
+    {
+	LRT.setColor(period, instance.parameters.Down);
+    }
+ 
+}
+

@@ -1,0 +1,35 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_getupvalue</title>
+</head>
+<body>
+<h3><a name="lua_getupvalue"><code>lua_getupvalue</code></a></h3>
+<pre>const char *lua_getupvalue (lua_State *L, int funcindex, int n);</pre>
+
+<p>
+Gets information about a closure's upvalue.
+(For Lua functions,
+upvalues are the external local variables that the function uses,
+and that are consequently included in its closure.)
+<a href="lua_getupvalue.html"><code>lua_getupvalue</code></a> gets the index <code>n</code> of an upvalue,
+pushes the upvalue's value onto the stack,
+and returns its name.
+<code>funcindex</code> points to the closure in the stack.
+(Upvalues have no particular order,
+as they are active through the whole function.
+So, they are numbered in an arbitrary order.)
+
+
+<p>
+Returns <code>NULL</code> (and pushes nothing)
+when the index is greater than the number of upvalues.
+For C&nbsp;functions, this function uses the empty string <code>""</code>
+as a name for all upvalues.
+
+
+
+
+
+<hr>
+</body>
+</html>

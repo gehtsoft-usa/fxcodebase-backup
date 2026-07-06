@@ -1,0 +1,225 @@
+function Init()
+{
+    indicator.name("RichardTaoKDStochastic");
+    indicator.description("Richard Tao Adaptive Stochastic");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.setTag("group", "Tao");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("N", "Periods for %K", "", 30, 2, 1000);
+    indicator.parameters.addInteger("M", "Periods for Smooth", "", 3);
+    indicator.parameters.addInteger("D", "Distance percentage", "", 100);
+    indicator.parameters.addInteger("C", "Coefficient percentage", "", 100);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clrT", "LineColor of the T", "", core.rgb(0, 64, 128));
+    indicator.parameters.addColor("clrF", "LineColor of the F", "", core.rgb(128, 64, 0));
+    indicator.parameters.addColor("clrS", "LineColor of the S", "", core.rgb(0, 128, 0));
+}
+
+var fk;
+var mk;
+var md;
+
+var source = null;
+var smin = null;
+var smax = null;
+var FastK = null;
+var fFirst = null;
+
+var T = null;
+var M = null;
+var F = null;
+var S = null;
+
+function Prepare()
+{
+    fk = instance.parameters.N;
+    mk = instance.parameters.M;
+    if (mk < 4) 
+    { 
+        md = 3;
+    }
+    else
+    { 
+        md = mk; 
+    }
+    source = instance.source;
+
+    smin = instance.addInternalStream(source.first() + fk - 1, 0);
+    smax = instance.addInternalStream(source.first() + fk - 1, 0);
+    FastK = instance.addInternalStream(smin.first(), 0);
+    fFirst = FastK.first();
+    
+    var name = profile.id() + "(" + source.name() + ", " + fk + ", " + mk + ")";
+    instance.name(name);
+
+    T = instance.addStream("T", core.Line, name + ".T", "T", instance.parameters.clrT, fFirst + mk);
+    F = instance.addStream("F", core.Line, name + ".F", "F", instance.parameters.clrF, T.first())
+    S = instance.addStream("S", core.Line, name + ".S", "S", instance.parameters.clrS, T.first());
+    M = instance.addInternalStream(T.first()+md, 0);
+	
+    T.addLevel(50+instance.parameters.D/100*25);
+    T.addLevel(50-instance.parameters.D/100*25);
+
+}
+
+var prehilo = 0;
+
+function Update(period, mode)
+{
+    if (period >= fFirst) 
+    {
+        var rangeT = core.rangeTo(period, fk);
+        var tmp=Math.minmax(source, period-fk+1, period);
+        var minLow = tmp[0];
+        var maxHigh = tmp[1];
+        smin[period] = source.close[period] - minLow;
+        smax[period] = maxHigh - minLow;
+        if (smax[period] > 0) 
+        {
+            FastK[period] = smin[period] / smax[period] * 100;
+        }
+        else
+        {
+            FastK[period] = 50;
+        }
+    }
+    if (period >= T.first()) 
+    {
+        var sumMax = Math.sum(smax, period-mk+1, period);
+        if (sumMax == 0) 
+        {
+            T[period] = 50;
+        }
+        else
+        {
+            var sumMin = Math.sum(smin, period-mk+1, period);
+            T[period] = sumMin / sumMax * 100;
+        }
+    }
+    if (period >= M.first()) 
+    {
+        M[period] = Math.avg(T, period-md+1, period);
+        
+        F[period] = GetFastSignal(T, F, instance.parameters.D/100*25, instance.parameters.C/100, period);
+        S[period] = GetSlowSignal(T, F, S, fk, instance.parameters.D/100*25, instance.parameters.C/100, period);
+    }
+}
+
+function GetFastSignal(T, F, dist, coef, period)
+{
+    var cent = 50;
+    var dift = (T[period] - T[period-1]);
+    var thet = T[period];
+    var pres = cent;
+    if (F.hasData(period-1)) 
+    { 
+        pres = F[period-1] ;
+    }
+    
+    var signal = pres;
+    var dire = 0;
+    
+    if ((thet-pres)*dift > 0) 
+    {
+        //move far
+        if ((thet-cent)*dift>0 && Math.abs(thet-cent)-dist>0)
+        { 
+            dire=0.5; 
+        }
+        else
+        { 
+            dire=0.1; 
+        }
+    }
+    else
+    {
+        //move near
+        //if (thet-cent)*dift<0 && Math.abs(thet-cent)-dist>0  { dire=0.5 }
+        if ((thet-cent)*dift<0) 
+        { 
+            dire=0.5; 
+        }
+    }
+    //set step follow
+    signal = pres + (thet-pres)*dire*(coef);
+    
+    return (signal);
+}
+
+function GetSlowSignal(T, F, S, N, dist, coef, period)
+{
+    var cent = 50;
+    var thet = T[period];
+    var pret = T[period-1];
+    var thef = F[period];
+    var pref = F[period];
+    var pres = cent;
+    if (S.hasData(period-1)) 
+    {
+        pres = (S[period-1]);
+        pref = F[period-1];
+    }
+    
+    var signal = pres;
+    var dire = 0;
+    
+    if (Math.abs(thet-cent)-dist > 0) 
+    {
+        if (prehilo<=0 && (thet-cent)-dist>0) 
+        { 
+            prehilo=1; 
+        }
+        if (prehilo>=0 && (thet-cent)+dist<0) 
+        { 
+            prehilo=-1; 
+        }
+    }
+        
+    if ((thef-pref)*(pref-pres)<0) 
+    {
+        //converge
+        dire = -2.0;
+        signal = pres + (thef-pref)*dire*(coef);
+    }
+    else
+    {
+        //diverge
+        if ((thef-pres)*(thef-cent)>0) 
+        { 
+            dire = 2.618/N;
+        }
+        else
+        { 
+            dire = 1/N; 
+        }
+        signal = pres + (thef-pres)*dire*(coef);
+    }
+    //boundry correction
+    signal = Math.max(0, signal);
+    signal = Math.min(100, signal);
+
+    //crossesunder correction
+    if ((thet-signal)<=0 && pret-pres>=0 && (thet-cent)+dist>0) 
+    { 
+        signal=cent+dist; 
+    } 
+    if ((thet-signal)<=0 && pret-pres>=0 && (thet-cent)+dist<0) 
+    { 
+        signal=cent; 
+    } 
+    //crossesover correction
+    if ((thet-signal)>=0 && pret-pres<=0 && (thet-cent)-dist<0) 
+    { 
+        signal=cent-dist; 
+    } 
+    if ((thet-signal)>=0 && pret-pres<=0 && (thet-cent)-dist>0) 
+    { 
+        signal=cent; 
+    } 
+     
+    return (signal);
+}
+

@@ -1,0 +1,21 @@
+﻿default=enu
+[enu]
+codepage=1252
+R_Name=Indi Cross
+R_Description=
+R_ParamGroup=Parameters
+R_SignalGroup=Notification
+R_FastN=Fast MA periods
+R_SlowN=Slow MA periods
+R_Method=Smoothing method
+R_PriceType=Price type
+R_Bid=Bid
+R_Ask=Ask
+R_PeriodType=Period size
+R_ShowAlert=Show alert
+R_PlaySound=Play sound
+R_SoundFile=Sound file
+R_MvaParamError=Number of periods for Fast MA must be less than number of periods for Slow MA
+R_SoundFileError=Sound file must be specified
+R_BUY=BUY
+R_SELL=SELL

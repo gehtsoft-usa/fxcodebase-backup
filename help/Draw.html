@@ -1,0 +1,466 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252" /><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><title>Draw(stage, context) function</title><style type="text/css">a, p, h1, h2, h3, h4, h5, h6, table, td, tr, li, ul, ol {
+    font-family: Verdana, Trebuchet MS, Arial;
+}
+
+a, p, td, tr, ul, ol, li {
+    font-size: 12pt;
+}
+
+h3 {
+    font-size: 13pt;
+}
+
+h2 {
+    font-size: 13pt;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+body {
+    color: #444444;
+    background-color: white;
+}
+
+A:link {
+    color: #0065b3;
+    cursor: pointer;
+}
+
+A:visited {
+    color: #0068be;
+    cursor: pointer;
+}
+
+a.action {
+  background-color: #0065b3;
+  color: white;
+  font-size: 10pt;
+  padding: 2px 2px;
+  width: 50pt;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px;
+}
+
+.side-icon {
+    float: left;
+}
+
+a.action [class*="dripicons-"]:before {
+    padding: 0 2px 0 0;
+    font-size: 12pt;
+    vertical-align: text-bottom;
+}
+
+.side-icon:after {
+  content: "";
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  border-left: 1.5px solid white;
+  transform: translate(-50%);
+}
+
+a.actiontab {
+  font-size: 10pt;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px 3px 0 0;
+}
+
+pre, code, code a {
+    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+    font-size: 12pt;
+}
+
+code.ctag {
+    background-color: #f1f1f1;
+    padding: .1em .2em;
+    border-radius: 3px;
+}
+
+pre {
+    background-color: white;
+}
+
+pre.example {
+    background-color: #f1f1f1;
+}
+
+ul {
+    list-style-type: disc;
+    margin-left: 18pt;
+}
+
+ol {
+    list-style-type: decimal;
+    margin-left: 18pt;
+}
+
+ul.hhc {
+    list-style-type: none;
+    margin-left: 1em;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+li.hhc {
+    margin-left: 0;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+table {
+  border-spacing: 0;
+  border-color: #dfe3e7;
+}
+
+tr + tr td {
+   border-top: 0;
+}
+
+tr td + td {
+  border-left: 0;
+}
+
+td {
+  border: 1px solid;
+  border-color: #dfe3e7;
+}
+
+tr:first-child td:first-child {
+   border-radius: 0.2em 0 0 0;
+}
+
+tr:first-child td:last-child {
+  border-radius: 0 0.2em 0 0;
+}
+
+tr:first-child td:only-child {
+  border-radius: 0.2em 0.2em 0 0;
+}
+
+tr:last-child td:first-child {
+    border-radius: 0 0 0 0.2em;
+}
+
+tr:last-child td:last-child {
+    border-radius: 0 0 0.2em 0;
+}
+
+tr:last-child td:only-child {
+    border-radius: 0 0 0.2em 0.2em;
+}
+
+tr:only-child td:only-child {
+    border-radius: 0.2em 0.2em 0.2em 0.2em;
+}
+
+tr:only-child td:first-child {
+   border-radius: 0.2em 0 0 0.2em;
+}
+
+tr:only-child td:last-child {
+  border-radius: 0 0.2em 0.2em 0;
+}
+
+
+td.tmain, td.tmain_nw, td.thdr {
+    background-color: rgb(255, 255, 255);
+    vertical-align: top;
+    padding: 3px;
+}
+
+td.tmain p, td.tmain_nw p, td.thdr p {
+    margin-top: 3pt;
+    margin-bottom: 3pt;
+}
+
+td.tmain_nw {
+    white-space: nowrap;
+}
+
+td.thdr {
+    background-color: #e3e3e3;
+}
+
+table.decl {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+    vertical-align: top;
+    padding: 3px;
+    width: 100%;
+}
+
+table.decl td {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+}
+
+div.note-quote {
+    border-left: 10px solid #ccc;
+    padding: 1em 10px .1em 10px;
+    margin: 1.5em 10px;
+    background-color: rgb(224, 224, 224);
+}
+
+div.note-note {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+div.note-warning {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #fff;
+    background-color: #ff6358;
+}
+div.note-warning code.ctag {
+    color: black;
+}</style>
+<link rel="stylesheet" href="res/dripicons.css"></head><body><script type="text/javascript">
+var highlighterEnabled = false;
+var maintopic = 'index';
+var helptitle = 'Indicore SDK 3';
+    function loadStarted() {
+    window.onload = loadCompleted;
+
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        var head = document.getElementsByTagName('head')[0];
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.min.js';
+        head.appendChild(script4);
+
+
+        var script2 = document.createElement('script');
+        script2.type = 'text/javascript';
+        script2.src = './highlighter/highlight.cshtml.js';
+        head.appendChild(script2);
+
+        var script3 = document.createElement('script');
+        script3.type = 'text/javascript';
+        script3.src = './highlighter/highlight.lua.js';
+        head.appendChild(script3);
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.luax.js';
+        head.appendChild(script4);
+    }
+}
+
+function loadCompleted() {
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        hljs.registerLanguage('cshtml-razor', window.hljsDefineCshtmlRazor);
+        hljs.registerLanguage('lua', window.hljsDefineLua);
+        hljs.registerLanguage('luax', window.hljsDefineLuaX);
+        x = document.querySelectorAll('pre code');
+        for (var i = 0; i < x.length; i++) {
+            if (x[i].hasAttribute('class')) {
+                hljs.highlightBlock(x[i]);
+            }
+        }
+    }
+}
+
+
+function hidediv(divname) {
+    document.getElementById(divname).style.display = 'none';
+}
+
+function showdiv(divname) {
+    document.getElementById(divname).style.display = 'inline';
+}
+
+function syncList() {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, null, document.title);
+    }
+}
+
+function syncList1(key) {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, key + '.html', document.title);
+    }
+}</script><script type="text/javascript">
+    loadStarted();
+</script><h1>Draw(stage, context) function</h1><p>If the indicator has <a href="instance_impl.ownerDrawn.html">declared itself as an owner-drawn indicator</a>, the <code class="ctag">Draw()</code> function must be
+defined in the indicator.</p>
+<p>The Draw() function of the indicator is called every time when the chart, that contains the owner-drawn indicator, is being repainted.</p>
+<p>If the indicator is an oscillator is has <a href="instance_impl.drawOnMainChart.html">declared itself as an owner-drawn for the main price area</a>,
+the Draw() function will be also called when a main chart area is drawn. Please note that the context passed for main price area stages is
+not the same as the context passed for the indicator area, so you have to create all required objects for this context as well.</p>
+<p>The function has two parameters:</p><table class="tmain">
+  <tr>
+    <td class="thdr"><p>Parameter</p></td>
+    <td class="thdr"><p>Description</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">stage</code></p></td>
+    <td class="tmain"><p>The painting stage. Actually, the function is called for each repaint of the chart for three times for each owner drawn area:</p><table class="tmain">
+  <tr>
+    <td class="tmain"><p><code class="ctag">stage==0</code></p></td>
+    <td class="tmain"><p>The function is called right after the chart grid is drawn.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">stage==1</code></p></td>
+    <td class="tmain"><p>The function is called after the price and all indicators which are applied before this indicator is painted.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">stage==2</code></p></td>
+    <td class="tmain"><p>The function is called after all visible streams and objects of the indicator are painted.</p></td>
+  </tr>
+</table><table class="tmain">
+  <tr>
+    <td class="tmain"><p><code class="ctag">stage==100</code></p></td>
+    <td class="tmain"><p>The function is called right after the chart grid in main chart area is drawn.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">stage==101</code></p></td>
+    <td class="tmain"><p>The function is called after the price in main chart area is painted.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">stage==102</code></p></td>
+    <td class="tmain"><p>The function is called after all visible streams and objects of the indicator are painted in main chart area.</p></td>
+  </tr>
+</table></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p><code class="ctag">context</code></p></td>
+    <td class="tmain"><p>The painting context. The parameter is an instance of <a href="context.html"><code>context</code></a> table and must be used
+to get all information about the chart and to draw objects on the chart.</p></td>
+  </tr>
+</table><p>The function works differently from the objects created via <a href="host.execute_drawLine.html"><code>host:execute(&quot;drawLine&quot;)</code></a> function. It is called
+every time when chart is painted and the host application does not keep or track any information about the objects created during the draw.
+Also, all <a href="context.html"><code>context</code></a> methods works in terms of pixels, not in terms of date/time and price, so every time when
+the chart is scrolled, zoomed,  or the size of the chart window is changed, the position and size of the objects are changed accordingly.</p>
+<p>The Draw() function is a very powerful tool to create almost any presentation the indicator may need, but, because it performs a lot of work
+and is called every time when the chart is painted (and it is <b>very</b> often), the developer must be very vigilant about the performance
+of this function. Please read the <a href="od_performance.html">Performance of Draw() function</a> article carefully.</p>
+<p>Below there is an example of owner-drawn indicator implementing a Draw() function. This indicator makes a semi-transparent fill of the area below
+the prices. The top of the area is defined by the close prices of the chart.</p><div id="open10" style="display:none">
+  <p>close_path.lua&nbsp;<a href="javascript: showdiv('close10'); hidediv('open10');" onclick="javascript: showdiv('close10'); hidediv('open10');" class="action">Show<span class="side-icon dripicons-chevron-right"></span></a></p>
+</div>
+<div id="close10" style="display:inline">
+  <p>close_path.lua&nbsp;<a href="javascript: showdiv('open10'); hidediv('close10');" onclick="javascript: showdiv('open10'); hidediv('close10');" class="action">Hide<span class="side-icon dripicons-chevron-down"></span></a></p>
+  <pre class="example" id="example10"><code>function Init()
+    indicator:name(&quot;Draw the close price path&quot;);
+    indicator:description(&quot;&quot;);
+    indicator:requiredSource(core.Bar);
+    indicator:type(core.Indicator);
+ 
+    indicator.parameters:addGroup(&quot;Style&quot;);
+    indicator.parameters:addColor(&quot;color&quot;, &quot;Fill Color&quot;, &quot;&quot;, core.rgb(0, 255, 255));
+    indicator.parameters:addInteger(&quot;transparency&quot;, &quot;Fill Transparency&quot;, &quot;0 - opaque, 100 - transparent&quot;, 75, 0, 100);
+end
+ 
+local first = 0;
+local source = nil;
+local output;
+local color;
+local transparency;
+ 
+-- initializes the instance of the indicator
+function Prepare(onlyName)
+    source = instance.source;
+    first = source:first();
+    local name = profile:id() .. &quot;(&quot; .. source:name() .. &quot;)&quot;;
+    instance:name(name);
+ 
+    if onlyName then
+        return ;
+    end
+ 
+    output = instance:addStream(&quot;output&quot;, core.Line, name, &quot;output&quot;, instance.parameters.color, 0);
+    output:setVisible(false);
+    instance:ownerDrawn(true);
+ 
+    color = instance.parameters.color;
+    transparency = instance.parameters.transparency;
+    if transparency == 100 then
+        transparency = 255;
+    elseif transparency == 0 then
+        transparency = 0;
+    else
+        transparency = math.floor(255 * (transparency / 100.0) + 0.5);
+    end
+end
+ 
+function Update(period)
+    output[period] = source.close[period];
+end
+ 
+local init = false;
+ 
+function Draw(stage, context)
+    if stage == 0 then
+        if not init then
+            context:createSolidBrush(1, color);
+            init = true;
+        end
+ 
+        local points = context:createPoints();
+        local first = true;
+        local last = nil;
+        local m, p;
+ 
+        context:startEnumeration();
+        while true do
+            index, x, x1, x2, c1, c2 = context:nextBar();
+            if index == nil then
+                break;
+            end
+            if first then
+                if index == 0 then
+                    m, p = context:pointOfPrice(source.open[index]);
+                    points:add(context:left(), p);
+                else
+                    m, p = context:pointOfPrice(source.open[index - 1]);
+                    points:add(context:left(), p);
+                end
+                first = false;
+            end
+            last = index;
+            m, p = context:pointOfPrice(output[index]);
+            points:add(c2, p);
+        end
+ 
+        if (last ~= nil) then
+            m, p = context:pointOfPrice(output[last]);
+            points:add(context:right(), p);
+            points:add(context:right(), context:bottom());
+            points:add(context:left(), context:bottom());
+ 
+            context:drawPolygon(-1, 1, points, transparency);
+        end
+    end
+end</code></pre>
+</div><p>
+  <center><a href="od_indicators.html">back</a></center>
+</p><script language="javascript" type="text/javascript">if(window.parent.frames[0]) window.parent.frames[0].selectItem(window.location.href);</script></body></html>

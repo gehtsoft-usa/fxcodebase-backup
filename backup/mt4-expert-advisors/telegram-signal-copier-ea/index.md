@@ -1,0 +1,65 @@
+# TELEGRAM SIGNAL COPIER EA
+
+> Source: https://fxcodebase.com/code/viewtopic.php?f=38&t=71467  
+> Forum: 38 · Topic 71467 · 3 post(s)
+
+
+---
+
+## TELEGRAM SIGNAL COPIER EA
+
+**raja1351995** · Wed Sep 01, 2021 6:38 am
+
+TELEGRAM SIGNAL COPIER EA MT5 ,MT4
+
+SELL XAUUSD ( SIGNAL FORMAT )
+
+ENTRY: 1814
+
+SL: 1816
+TP: 1784
+
+BUY XAUUSD ( SIGNAL FORMAT )
+
+ENTRY: 1814
+
+SL: 1816
+TP: 1784
+
+( CUSTOM PIPS -I NEED ENTER MANUALLY IN PIPS )
+
+ALL TRADING SIGNALS XAUUSD ONLY.
+
+BREAKEVEN -CUSTOM PIPS
+
+SL CUSTOM PIPS
+
+TP CUSTOM PIPS (SOMETIMES TP1 TP2 TP3 EA NEED TO IDENTIFY TP1 -TP )
+
+CUSTOM LOT SIZE + RISK IN % I NEED TWO OPTIONS.
+
+I AM ALREADY SETUP FORWARD SIGNALS PRIVATE CHANNEL TO MY OWN GROUP
+
+( I HAVE TOKEN to access the HTTP API (BotFather BOT ) PLEASE REFER SCREENSHOT )
+
+I NEED ONLY TELEGRAM SIGNAL COPIER EA . ( USE THE TOKEN COPY SIGNALS FROM MY OWN GROUP )
+
+
+---
+
+## Re: TELEGRAM SIGNAL COPIER EA
+
+**Apprentice** · Thu Sep 02, 2021 2:23 am
+
+Your request is added to the development list.
+Development reference 795.
+
+
+---
+
+## Re: TELEGRAM SIGNAL COPIER EA
+
+**Apprentice** · Mon Mar 28, 2022 1:53 am
+
+Try this version.
+[https://fxcodebase.com/code/viewtopic.php?f=38&t=72004](https://fxcodebase.com/code/viewtopic.php?f=38&t=72004)

@@ -1,0 +1,92 @@
+function Init()
+{
+    indicator.name("REX Indicator");
+    indicator.description("REX Indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+	
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("SP", "Smoothing Period", "Smoothing Period", 14);
+    indicator.parameters.addInteger("SS", "Signal Period", "Signal Period", 14);
+	
+	
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("REX_color", "Color of REX", "Color of REX", core.rgb(0, 255, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+	
+	
+    indicator.parameters.addColor("SIGNAL_color", "Color of SIGNAL", "Color of SIGNAL", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("Swidth", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("Sstyle", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("Sstyle", core.FLAG_LINE_STYLE);
+}
+
+var SP;
+var SS;
+
+var first;
+var source = null;
+
+// Streams block
+var REX = null;
+var SIGNAL = null;
+var TVB;
+// Routine
+function Prepare(nameOnly)
+{
+    SP = instance.parameters.SP;
+    SS = instance.parameters.SS;
+    source = instance.source;
+    first = source.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(SP) + ", " + tostring(SS) + ")";
+    instance.name(name);
+	
+	TVB=instance.addInternalStream(first, 0);	
+	
+	MA1= core.indicators.create("MVA",TVB , SP);
+    MA2= core.indicators.create("MVA",MA1.DATA , SS);
+	
+    if (!(nameOnly)) 
+    {
+        REX = instance.addStream("REX", core.Line, name + ".REX", "REX", instance.parameters.REX_color, first);
+		REX.setWidth(instance.parameters.width);
+        REX.setStyle(instance.parameters.style);
+		
+        SIGNAL = instance.addStream("SIGNAL", core.Line, name + ".SIGNAL", "SIGNAL", instance.parameters.SIGNAL_color, first);
+		SIGNAL.setWidth(instance.parameters.Swidth);
+        SIGNAL.setStyle(instance.parameters.Sstyle);
+    }
+}
+
+function Update(period, mode)
+{
+    if (period >= first && source.hasData(period)) 
+    {
+	
+	    TVB[period]= 3 * source.close[period]-(source.low[period]+source.open[period]+source.high[period]);
+		
+		MA1.update(mode);
+        MA2.update(mode);
+		
+		
+		if (period < MA1.DATA.first()) 
+		{
+		 return;
+		}		
+		
+        REX[period] = MA1.DATA[period];	       
+		
+		if (period < MA2.DATA.first()) 
+		{
+		 return;
+		}
+		
+		 SIGNAL[period] =MA2.DATA[period];
+		
+    }
+}
+

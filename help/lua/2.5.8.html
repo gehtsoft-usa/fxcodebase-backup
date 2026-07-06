@@ -1,0 +1,94 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 2.5.8 - Function Calls</title>
+</head>
+<body>
+<h3>2.5.8 - <a name="2.5.8">Function Calls</a></h3><p>
+A function call in Lua has the following syntax:
+
+<pre>
+	functioncall ::= prefixexp args
+</pre><p>
+In a function call,
+first prefixexp and args are evaluated.
+If the value of prefixexp has type <em>function</em>,
+then this function is called
+with the given arguments.
+Otherwise, the prefixexp "call" metamethod is called,
+having as first parameter the value of prefixexp,
+followed by the original call arguments
+(see <a href="2.8.html">&sect;2.8</a>).
+
+
+<p>
+The form
+
+<pre>
+	functioncall ::= prefixexp `<b>:</b>&acute; Name args
+</pre><p>
+can be used to call "methods".
+A call <code>v:name(<em>args</em>)</code>
+is syntactic sugar for <code>v.name(v,<em>args</em>)</code>,
+except that <code>v</code> is evaluated only once.
+
+
+<p>
+Arguments have the following syntax:
+
+<pre>
+	args ::= `<b>(</b>&acute; [explist1] `<b>)</b>&acute;
+	args ::= tableconstructor
+	args ::= String
+</pre><p>
+All argument expressions are evaluated before the call.
+A call of the form <code>f{<em>fields</em>}</code> is
+syntactic sugar for <code>f({<em>fields</em>})</code>;
+that is, the argument list is a single new table.
+A call of the form <code>f'<em>string</em>'</code>
+(or <code>f"<em>string</em>"</code> or <code>f[[<em>string</em>]]</code>)
+is syntactic sugar for <code>f('<em>string</em>')</code>;
+that is, the argument list is a single literal string.
+
+
+<p>
+As an exception to the free-format syntax of Lua,
+you cannot put a line break before the '<code>(</code>' in a function call.
+This restriction avoids some ambiguities in the language.
+If you write
+
+<pre>
+     a = f
+     (g).x(a)
+</pre><p>
+Lua would see that as a single statement, <code>a = f(g).x(a)</code>.
+So, if you want two statements, you must add a semi-colon between them.
+If you actually want to call <code>f</code>,
+you must remove the line break before <code>(g)</code>.
+
+
+<p>
+A call of the form <code>return</code> <em>functioncall</em> is called
+a <em>tail call</em>.
+Lua implements <em>proper tail calls</em>
+(or <em>proper tail recursion</em>):
+in a tail call,
+the called function reuses the stack entry of the calling function.
+Therefore, there is no limit on the number of nested tail calls that
+a program can execute.
+However, a tail call erases any debug information about the
+calling function.
+Note that a tail call only happens with a particular syntax,
+where the <b>return</b> has one single function call as argument;
+this syntax makes the calling function return exactly
+the returns of the called function.
+So, none of the following examples are tail calls:
+
+<pre>
+     return (f(x))        -- results adjusted to 1
+     return 2 * f(x)
+     return x, f(x)       -- additional results
+     f(x); return         -- results discarded
+     return x or f(x)     -- results adjusted to 1
+</pre>
+</body>
+</html>

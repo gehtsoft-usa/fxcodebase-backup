@@ -1,0 +1,191 @@
+function Init()
+{
+    indicator.name("Color SAR");
+    indicator.description("Helps to define the direction of the prevailing trend && the moment to close positions opened during the reversal.");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    indicator.parameters.addDouble("Step", "Step", "", 0.02, 0.001, 1);
+    indicator.parameters.addDouble("Max", "Max", "", 0.2, 0.001, 10);
+    indicator.parameters.addColor("clrUp", "Up Line Color", "", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("clrDown", "Down Line Color", "", core.rgb(0, 255, 0));
+}
+
+var first;
+var source = null;
+var tradeHigh = null;
+var tradeLow = null;
+var parOp = null;
+var position = null;
+var af = null;
+var Step;
+var Max;
+
+var SAR = null;
+var UP = null;
+var DOWN = null;
+
+function Prepare()
+{
+    source = instance.source;
+    first = source.first() + 1;
+
+    Step = instance.parameters.Step;
+    Max = instance.parameters.Max;
+
+    var name = profile.id() + "(" + source.name() + "," + Step + "," + Max + ")";
+    instance.name(name);
+
+
+    tradeHigh = instance.addInternalStream(0, 0);
+    tradeLow = instance.addInternalStream(0, 0);
+    parOp = instance.addInternalStream(0, 0);
+    position = instance.addInternalStream(0, 0);
+    af = instance.addInternalStream(0, 0);
+    SAR = instance.addInternalStream(first, 0);
+    UP = instance.addStream("UP", core.Dot, name + ".Up", "UP", instance.parameters.clrUp, first)
+    DOWN = instance.addStream("DN", core.Dot, name + ".Dn", "DN", instance.parameters.clrDown, first)
+}
+
+function Update(period)
+{
+    var init = Step;
+    var quant = Step;
+    var maxVal = Max;
+    var lastHighest = 0;
+    var lastLowest = 0;
+    var high = 0;
+    var low = 0;
+    var prevHigh = 0;
+    var prevLow = 0;
+    if (period >= first) 
+    {
+        high = source.high[period];
+        low = source.low[period];
+        prevHigh = source.high[period - 1];
+        prevLow = source.low[period - 1];
+        if (period == first) 
+        {
+            tradeHigh[period] = prevHigh;
+            tradeLow[period] = prevLow;
+            position[period] = -1;
+            parOp[period] = prevHigh;
+            af[period] = 0;
+        }
+        else
+        {
+            parOp[period] = parOp[period - 1];
+            position[period] = position[period - 1];
+            tradeHigh[period] = tradeHigh[period - 1];
+            tradeLow[period] = tradeLow[period - 1];
+            af[period] = af[period - 1];
+        }
+        lastHighest = tradeHigh[period];
+        lastLowest = tradeLow[period];
+        if (high > lastHighest) 
+        {
+            tradeHigh[period] = high;
+        }
+
+        if (low < lastLowest) 
+        {
+            tradeLow[period] = low;
+        }
+
+        if (position[period] == 1) 
+        {
+            if (low < parOp[period]) 
+            {
+                position[period] = -1;
+                SAR[period] = lastHighest;
+                tradeHigh[period] = high;
+                tradeLow[period] = low;
+                af[period] = init;
+                parOp[period] = SAR[period] + af[period] * (tradeLow[period] - SAR[period]);
+                if (parOp[period] < high) 
+                {
+                    parOp[period] = high;
+                }
+                if (parOp[period] < prevHigh) 
+                {
+                    parOp[period] = prevHigh;
+                }
+            }
+            else
+            {
+                SAR[period] = parOp[period];
+                if (tradeHigh[period] > tradeHigh[period - 1] && af[period] < maxVal) 
+                {
+                    af[period] = af[period] + quant;
+                    if (af[period] > maxVal) 
+                    {
+                        af[period] = maxVal;
+                    }
+                }
+
+                parOp[period] = SAR[period] + af[period] * (tradeHigh[period] - SAR[period]);
+                if (parOp[period] > low) 
+                {
+                    parOp[period] = low;
+                }
+                if (parOp[period] > prevLow) 
+                {
+                    parOp[period] = prevLow;
+                }
+            }
+        }
+        else
+        {
+            if (high > parOp[period]) 
+            {
+                position[period] = 1;
+                SAR[period] = lastLowest;
+                tradeHigh[period] = high;
+                tradeLow[period] = low;
+                af[period] = init;
+                parOp[period] = SAR[period] + af[period] * (tradeHigh[period] - SAR[period]);
+                if (parOp[period] > low) 
+                {
+                    parOp[period] = low;
+                }
+                if (parOp[period] > prevLow) 
+                {
+                    parOp[period] = prevLow;
+                }
+            }
+            else
+            {
+                SAR[period] = parOp[period];
+                if (tradeLow[period] < tradeLow[period - 1] && af[period] < maxVal) 
+                {
+                    af[period] = af[period] + quant;
+                    if (af[period] > maxVal) 
+                    {
+                        af[period] = maxVal;
+                    }
+                }
+
+                parOp[period] = SAR[period] + af[period] * (tradeLow[period] - SAR[period]);
+                if (parOp[period] < high) 
+                {
+                    parOp[period] = high;
+                }
+                if (parOp[period] < prevHigh) 
+                {
+                    parOp[period] = prevHigh;
+                }
+            }
+        }
+
+        if (position[period] == 1) 
+        {
+            DOWN[period] = SAR[period];
+        }
+        else
+        {
+            UP[period] = SAR[period];
+        }
+    }
+}
+
+
+

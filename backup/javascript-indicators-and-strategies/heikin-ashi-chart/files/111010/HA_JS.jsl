@@ -1,0 +1,57 @@
+//initializes the indicator
+function Init()
+{
+    indicator.name("Heikin-Ashi Chart");
+    indicator.description("Heikin-Ashi Chart");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    indicator.setTag("group", "Trend");
+    indicator.setTag("replaceSource", "t");
+}
+
+var open = null;
+var high = null;
+var low = null;
+var close = null;
+var source = null;
+var first = 0;
+
+//initializes the instance of the indicator
+function Prepare(onlyName)
+{
+    source = instance.source;
+    first = source.first() + 1;
+    var name = profile.id() + "(" + instance.source.name() + ")";
+    instance.name(name);
+  
+    if (onlyName == true)
+        return ;
+    var host=core.host;
+    var stream_color = host.execute("getProperty", "LabelColor");
+    open = instance.addStream("open", core.Line, name + ".open", "open", stream_color, first)
+    high = instance.addStream("high", core.Line, name + ".high", "high", stream_color, first)
+    low = instance.addStream("low", core.Line, name + ".low", "low", stream_color, first)
+    close = instance.addStream("close", core.Line, name + ".close", "close", stream_color, first)
+    instance.createCandleGroup(name, "HA", open, high, low, close);
+}
+
+// calculate the value
+function Update(period, mode)
+{
+    if (period >= first)
+    {
+        if (period == first)
+        {
+            open[period] = (source.open[period - 1] + source.close[period - 1]) / 2;
+        }
+        else
+        {
+            open[period] = (open[period - 1] + close[period - 1]) / 2;
+        }
+        
+        close[period] = (source.open[period] + source.high[period] + source.low[period] + source.close[period]) / 4;
+        high[period] = Math.max(open[period], close[period], source.high[period]);
+        low[period] = Math.min(open[period], close[period], source.low[period]);
+    }
+    
+}

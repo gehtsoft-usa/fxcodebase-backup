@@ -1,0 +1,110 @@
+//initializes the indicator
+function Init()
+{
+    indicator.name("ASI");
+    indicator.description("Accumulation Swing Index");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.setTag("group", "Swing");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("T", "T", "T", 300, 2, 1000);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Line color", "Line color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("width", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LEVEL_STYLE);
+}
+
+var first = 0;
+var source = null;
+var ASI = null;
+var T;
+
+//initializes the instance of the indicator
+function Prepare(onlyName)
+{
+    source = instance.source;
+    first = source.first()+1;
+
+    T = source.pipSize() * instance.parameters.T;
+    var name = profile.id() + "(" + instance.source.name() + ")";
+    instance.name(name);
+  
+    if (onlyName == true)
+        return ;
+
+    ASI = instance.addStream("ASI", core.Line, name, "ASI", instance.parameters.clr,  first)
+    ASI.setWidth(instance.parameters.width);
+    ASI.setStyle(instance.parameters.style);
+}
+
+// calculate the value
+function Update(period, mode)
+{
+    var open, close, abs;
+
+    if (period >= first)
+    {
+        open = source.open;
+        close = source.close;
+        abs = Math.abs;
+
+        var nom = close[period] - close[period - 1]
+            + (0.5 * (close[period] - open[period]))
+            + (0.25 * (close[period - 1] - open[period - 1]));
+
+
+        var closePrev = close[period - 1];
+        var highCurr = source.high[period];
+        var lowCurr = source.low[period];
+        var hc = abs(highCurr - closePrev);
+        var lc = abs(lowCurr - closePrev);
+        var hl = abs(highCurr - lowCurr);
+        var co = abs(closePrev - open[period - 1]);
+
+        var TR = Math.max(hc, lc, hl);
+
+        var ER = 0;
+
+        if (closePrev > highCurr)
+        {
+            ER = hc;
+        }
+        else
+        {
+            if (closePrev < lowCurr)
+            {
+                ER = lc;
+            }
+            else
+            {
+                ER = 0
+            }
+        }
+
+        var SH = co;
+        var K = Math.max(hc, lc);
+        var R = TR - 0.5 * ER + 0.25 * SH;
+
+        if (R == 0)
+        {
+            SI = 0;
+        }
+        else
+        {
+            SI = 50 * nom * (K / T) / R;
+        }
+
+        if (period == first)
+        {
+            ASI[period] = SI;
+        }
+        else
+        {
+            ASI[period] = ASI[period - 1] + SI;
+        }
+
+    }
+}

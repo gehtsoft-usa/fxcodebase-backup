@@ -1,0 +1,88 @@
+function Init()
+{
+    indicator.name("Customizable Awesome Oscillator");
+    indicator.description("Awesome Oscillator with alternative choice of moving averages.");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+    indicator.setTag("group", "Bill Williams");
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("FM", "","", 5, 2, 10000);
+    indicator.parameters.addInteger("SM", "","", 35, 2, 10000);
+	indicator.parameters.addString("Method", "MA Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method", "WMA", "WMA" , "WMA");
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("GO_color","Higher Bars","", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("RO_color", "Lower Bars","", core.rgb(255, 0, 0));
+}
+
+var FM;
+var SM;
+var SC;
+var Method;
+var first;
+var source = null;
+
+var CL = null;
+
+var FMVA = null;
+var SMVA = null;
+var GO, RO;
+
+function Prepare()
+{
+    FM = instance.parameters.FM;
+    SM = instance.parameters.SM;
+    SC = instance.parameters.SC;
+	Method = instance.parameters.Method;
+
+    assert(FM < SM, "Number of periods for the fast MA must be less than for the slow MA.");
+
+    source = instance.source;
+    first = source.first() + SM;
+
+    FMVA = core.indicators.create(Method, source, FM);
+    SMVA = core.indicators.create(Method, source, SM);
+
+    var name = profile.id() + "(" + source.name() + ", " + FM + ", " + SM + ")";
+    instance.name(name);
+    CL = instance.addStream("AO", core.Bar, name + ".AO", "AO", instance.parameters.GO_color, first);
+    CL.addLevel(0);
+    GO = instance.parameters.GO_color;
+    RO = instance.parameters.RO_color;
+}
+
+function Update(period, mode)
+{
+    FMVA.update(mode);
+    SMVA.update(mode);
+
+    if (period >= first) 
+    {
+        CL[period] = FMVA.DATA[period] - SMVA.DATA[period];
+    }
+
+    if (period >= first + 1) 
+    {
+        if (CL[period] > CL[period - 1]) 
+        {
+            CL.setColor(period, GO);
+        }    
+        else if ((CL[period] < CL[period - 1])) 
+        {
+            CL.setColor(period, RO);
+        }
+        else
+        {
+            CL.setColor(period, CL.colorI(period - 1));
+        }
+    }
+}
+

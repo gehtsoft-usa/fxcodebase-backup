@@ -1,0 +1,64 @@
+function Init()
+{
+    indicator.name("Ehlers Filter");
+    indicator.description("Ehlers Filter");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "Period", 14);
+	indicator.parameters.addInteger("Momentum", "Momentum", "Momentum", 5);
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("EF_color", "Color of EF", "Color of EF", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+}
+
+var Period;
+var Momentum;
+var first;
+var source = null;
+var PriceCoef, Coef;
+
+var EF = null;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+	Momentum = instance.parameters.Momentum;
+    source = instance.source;
+    first = source.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period)+ ", " + tostring(Momentum) + ")";
+    instance.name(name);
+    Coef= instance.addInternalStream(0, 0);
+	PriceCoef= instance.addInternalStream(0, 0);
+    if (!(nameOnly)) 
+    {
+        EF = instance.addStream("EF", core.Line, name, "EF", instance.parameters.EF_color, first +  Momentum +Period);
+		EF.setWidth(instance.parameters.width);
+        EF.setStyle(instance.parameters.style);
+    }
+}
+
+function Update(period)
+{
+    if (period< first +  Momentum) 
+    {
+	 return;
+	}
+	
+	
+	Coef[period] = Math.abs(source[period] - source[period  - Momentum]);
+	PriceCoef[period] = Coef[period]*source[period];
+	
+	if (period< first +  Momentum +Period) 
+    {
+	 return;
+	}
+ 
+ 
+        EF[period] = Math.sum(PriceCoef, period-Period+1, period)/Math.sum(Coef, period-Period+1, period)
+    
+}
+

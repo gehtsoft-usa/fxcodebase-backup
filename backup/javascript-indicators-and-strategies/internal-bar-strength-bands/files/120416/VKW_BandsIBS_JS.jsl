@@ -1,0 +1,134 @@
+function Init()
+{
+    indicator.name("VKW_BandsIBS indicator");
+    indicator.description("VKW_BandsIBS indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addString("Method1", "Method 1", "", "MVA");
+    indicator.parameters.addStringAlternative("Method1", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method1", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method1", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("Method1", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Method1", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method1", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Method1", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Method1", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Method1", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method1", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Method1", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Method1", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Method1", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Method1", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Method1", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Method1", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Method1", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Method1", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Method1", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Method1", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Method1", "JSmooth", "", "JSmooth");
+    indicator.parameters.addInteger("Period1", "Period1", "", 5);
+    indicator.parameters.addString("Price", "Price", "", "Close-Low");
+    indicator.parameters.addStringAlternative("Price", "Close-Low", "", "Close-Low");
+    indicator.parameters.addStringAlternative("Price", "High-Close", "", "High-Close");
+    indicator.parameters.addInteger("ExtrPeriod", "Extremum Period", "", 25);
+    indicator.parameters.addString("Method2", "Method 2", "", "MVA");
+    indicator.parameters.addStringAlternative("Method2", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("Method2", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("Method2", "KAMA", "", "KAMA");
+    indicator.parameters.addStringAlternative("Method2", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("Method2", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("Method2", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("Method2", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("Method2", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("Method2", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method2", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("Method2", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("Method2", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("Method2", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("Method2", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("Method2", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("Method2", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("Method2", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("Method2", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("Method2", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("Method2", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("Method2", "JSmooth", "", "JSmooth");
+    indicator.parameters.addInteger("Period2", "Period2", "", 3);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("IBS_Clr", "IBS Color", "IBS Color", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("Top_Clr", "Top Color", "Top Color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("Bottom_Clr", "Bottom Color", "Bottom Color", core.rgb(0, 0, 255));
+}
+
+var first;
+var source = null;
+var Method1;
+var Period1;
+var Price;
+var ExtrPeriod;
+var Method2;
+var Period2;
+var IBS=null;
+var TopBand=null;
+var BottomBand=null;
+var Price1, Price2;
+var CurIBS;
+var MA;
+
+function Prepare()
+{
+    source = instance.source;
+    Method1=instance.parameters.Method1;
+    Period1=instance.parameters.Period1;
+    Price=instance.parameters.Price;
+    ExtrPeriod=instance.parameters.ExtrPeriod;
+    Method2=instance.parameters.Method2;
+    Period2=instance.parameters.Period2;
+    first = source.first()+2;
+    CurIBS = instance.addInternalStream(0, 0);
+    MA=core.indicators.create(Method1, CurIBS, Period1);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Method1 + ", " + instance.parameters.Period1 + ", " + instance.parameters.Price + ", " + instance.parameters.ExtrPeriod + ", " + instance.parameters.Method2 + ", " + instance.parameters.Period2 + ")";
+    instance.name(name);
+    IBS = instance.addStream("IBS", core.Line, name + ".IBS", "IBS", instance.parameters.IBS_Clr, first);
+    TopBand = instance.addStream("TopBand", core.Line, name + ".TopBand", "TopBand", instance.parameters.Top_Clr, first);
+    BottomBand = instance.addStream("BottomBand", core.Line, name + ".BottomBand", "BottomBand", instance.parameters.Bottom_Clr, first);
+    IBS.addLevel(40);
+    IBS.addLevel(60);
+    if (Price=="Close-Low") 
+    {
+     Price1=source.close;
+     Price2=source.low;
+    } 
+    else
+    {
+     Price1=source.high;
+     Price2=source.close;
+    }
+}
+
+function Update(period, mode)
+{
+   if (period>first) 
+   {
+    var Range=source.high[period]-source.low[period];
+    if (Range!=0) 
+    {
+     CurIBS[period]=100*(Price1[period]-Price2[period])/Range; 
+    } 
+    else
+    {
+     CurIBS[period]=0;
+    }
+    MA.update(mode);
+    IBS[period]=MA.DATA[period];
+    var tmp=Math.minmax(IBS, Math.max(first,period-ExtrPeriod), period-1);
+    var Min=tmp[0];
+    var Max=tmp[1];
+    TopBand[period]=Max;
+    BottomBand[period]=Min;
+   } 
+}
+

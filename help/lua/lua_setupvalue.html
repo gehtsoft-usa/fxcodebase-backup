@@ -1,0 +1,22 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_setupvalue</title>
+</head>
+<body>
+<h3><a name="lua_setupvalue"><code>lua_setupvalue</code></a></h3>
+<pre>const char *lua_setupvalue (lua_State *L, int funcindex, int n);</pre>
+
+<p>
+Sets the value of a closure's upvalue.
+Parameters <code>funcindex</code> and <code>n</code> are as in <a href="lua_getupvalue.html"><code>lua_getupvalue</code></a>
+(see <a href="lua_getupvalue.html"><code>lua_getupvalue</code></a>).
+It assigns the value at the top of the stack
+to the upvalue and returns its name.
+It also pops the value from the stack.
+
+
+<p>
+Returns <code>NULL</code> (and pops nothing)
+when the index is greater than the number of upvalues.
+</body>
+</html>

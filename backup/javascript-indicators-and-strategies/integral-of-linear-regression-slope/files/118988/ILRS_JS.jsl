@@ -1,0 +1,90 @@
+function Init()
+{
+    indicator.name("ILRS");
+    indicator.description("ILRS");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger ("N", "N", "", 3);
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Line color", "", core.rgb(58, 197, 94));
+    indicator.parameters.addInteger("line_width", "Line width", "", 3);
+    indicator.parameters.addString("line_style" , "line_style", "", "Solid");
+    indicator.parameters.addStringAlternative("line_style" , "Solid line", "", "Solid");
+    indicator.parameters.addStringAlternative("line_style" , "Dot line", "", "Dot");
+    indicator.parameters.addStringAlternative("line_style", "Dash line", "", "Dash");
+    indicator.parameters.addStringAlternative("line_style" , "Dash-dot line", "", "Dash-dot");
+
+}
+
+var first;
+var source = null;
+var  N, clr, line_style, line_width;
+var  ILRS;
+var MVA, Sumy, Sum1, Sum2, Sum;
+
+function Prepare()
+{
+    source = instance.source;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name()+ ")";
+    instance.name(name);
+    
+    N=instance.parameters.N;
+    clr=instance.parameters.clr;
+    line_width=instance.parameters.line_width;
+    line_style=instance.parameters.line_style; 
+
+    ILRS = instance.addStream("ILRS", core.Line, name + ".ILRS", "ILRS", instance.parameters.clr, first);
+
+    if (line_style =="Solid") 
+    {
+        ILRS.setStyle (core.LINE_SOLID);
+    }    
+    else if (line_style=="Dot") 
+    {
+        ILRS.setStyle (core.LINE_DOT);
+    }
+    else if (line_style=="Dash") 
+    {
+        ILRS.setStyle (core.LINE_DASH);
+    }
+    else if (line_style=="Dash-dot") 
+    {
+        ILRS.setStyle (core.LINE_DASHDOT);
+    }  
+
+    ILRS.setWidth (line_width);
+
+    Sum1 = instance.addInternalStream(first);
+    Sumy = instance.addInternalStream(first);
+
+    MVA=core.indicators.create("MVA", source, N);
+
+}
+
+function Update(period, mode)
+{
+
+    Sum=N*(N-1)*0.5;
+    Sum2=N*(N-1)*(2*N-1)/6;
+    if (period>first+N) 
+    {
+        MVA.update(mode);
+        var j;
+        Sumy[period]=source[period];
+        Sum1[period]=0;
+        for (j=1; j<=N-1; j++) 
+        {
+            Sumy[period]=Sumy[period]+source[period-j];
+            Sum1[period]=Sum1[period]+j*source[period-j];
+        }
+        if ((Sum*Sum-N*Sum2)!=0)
+        {
+            ILRS[period]=(N*Sum1[period]-Sum*Sumy[period])/(Sum*Sum-N*Sum2)+MVA.DATA[period];
+        }
+    }
+}
+

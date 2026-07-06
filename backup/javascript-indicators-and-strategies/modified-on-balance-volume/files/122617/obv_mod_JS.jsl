@@ -1,0 +1,69 @@
+function Init()
+{
+    indicator.name("On Balance Volume modified");
+    indicator.description("Displays volume as a histogram");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.setTag("group", "Volume Indicators");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addDouble("Gate", "Gate, in pips", "", 2);
+
+    indicator.parameters.addColor("clrV", "Indicator Color", "", core.rgb(65, 105, 225));
+    indicator.parameters.addInteger("widthLinReg", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("styleLinReg", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleLinReg", core.FLAG_LINE_STYLE);
+}
+
+var source;
+var close;
+var volume;
+var first;
+var V;
+var GatePips;
+
+function Prepare()
+{
+    source = instance.source;
+
+    assert(instance.source.supportsVolume(), "The source must have volume");
+
+    close = instance.source.close;
+    volume = instance.source.volume;
+    first = instance.source.first();
+
+
+    var name;
+    name = profile.id() + "(" + instance.source.name() + ", " + instance.parameters.Gate + ")";
+    instance.name(name);
+
+    V = instance.addStream("OBV", core.Line, name, "OBV", instance.parameters.clrV, first);
+    V.setWidth(instance.parameters.widthLinReg);
+    V.setStyle(instance.parameters.styleLinReg);
+    V.setPrecision(0);
+    GatePips=instance.parameters.Gate*source.pipSize();
+}
+
+function Update(period, mode)
+{
+    if (period == first) 
+    {
+        V[period] = volume[period];
+    }    
+    else if (period > first) 
+    {
+        if (close[period] > close[period - 1]+GatePips) 
+        {
+            V[period] = V[period - 1] + volume[period];
+        }    
+        else if (close[period] < close[period - 1]-GatePips) 
+        {
+            V[period] = V[period - 1] - volume[period];
+        }    
+        else
+        {
+            V[period] = V[period - 1];
+        }
+    }
+}
+

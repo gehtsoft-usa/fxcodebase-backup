@@ -1,0 +1,99 @@
+//initializes the indicator
+function Init()
+{
+    indicator.name("AD");
+    indicator.description("Accumulation/Distribution");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.setTag("group", "Volume Indicators");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addString("Method", "Calculation mode", "Calculation mode", "CI");
+    indicator.parameters.addStringAlternative("Method", "Classic", "Classic", "CS");
+    indicator.parameters.addStringAlternative("Method", "Classic incremental", "Classic incremental", "CI");
+    indicator.parameters.addStringAlternative("Method", "Trade Station", "Trade Station", "TS");
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Line color", "Line color", core.rgb(255, 0, 0));
+    indicator.parameters.addInteger("width", "Line width", "Line width", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "Line style", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LEVEL_STYLE);
+}
+
+var first = 0;
+var source = null;
+var AD = null;
+var o, h, l, c, v;
+var Method;
+
+//initializes the instance of the indicator
+function Prepare(onlyName)
+{
+    source = instance.source;
+    o = source.open;
+    h = source.high;
+    l = source.low;
+    c = source.close;
+    v = source.volume;
+    first = source.first();
+
+    Method = 2;
+    if (instance.parameters.Method == "CS")
+    {
+        Method = 1;
+    }
+    if (instance.parameters.Method == "CI")
+    {
+        Method = 2;
+    }
+    if (instance.parameters.Method == "TS")
+    {
+        Method = 3;
+    }
+
+    var name = profile.id() + "(" + instance.source.name() + ")";
+    instance.name(name);
+  
+    if (onlyName == true)
+        return ;
+
+    AD = instance.addStream("AD", core.Line, name, "AD", instance.parameters.clr,  first)
+    AD.setWidth(instance.parameters.width);
+    AD.setStyle(instance.parameters.style);
+    AD.addLevel(0);
+}
+
+// calculate the value
+function Update(period, mode)
+{
+    if (period >= first)
+    {
+        if (Method == 1 || Method == 2)
+        {
+            if (h[period] - l[period] == 0)
+            {
+                AD[period] = 0;
+            }
+            else
+            {
+                AD[period] = ((c[period] - l[period]) - (h[period] - c[period])) / (h[period] - l[period]) * v[period];
+            }
+        }
+        else
+        {
+            if (h[period] - l[period] == 0)
+            {
+                AD[period] = 0;
+            }
+            else
+            {
+                AD[period] = (c[period] - o[period]) / (h[period] - l[period]) * v[period];
+            }
+        }
+
+        if (period >= first + 1 && Method == 2 || Method == 3)
+        {
+            AD[period] = AD[period] + AD[period - 1];
+        }
+    }
+}

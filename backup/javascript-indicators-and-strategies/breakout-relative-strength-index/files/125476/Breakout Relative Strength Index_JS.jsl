@@ -1,0 +1,108 @@
+function Init()
+{
+    indicator.name("Breakout Relative Strength Index");
+    indicator.description("Breakout Relative Strength Index");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "Period", 14);
+	
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("BRSI_color", "Color of BRSI", "Color of BRSI", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+
+    indicator.parameters.addGroup("OB/OS Levels");	
+    indicator.parameters.addDouble("overbought", "Overbought Level","", 80);
+    indicator.parameters.addDouble("oversold","Oversold Level","", 20);
+	indicator.parameters.addColor("level_overboughtsold_color", "Line Color","", core.rgb(128, 128, 128));
+    indicator.parameters.addInteger("level_overboughtsold_width","Line width","", 1, 1, 5);
+    indicator.parameters.addInteger("level_overboughtsold_style", "Line Style","", core.LINE_SOLID);
+    indicator.parameters.setFlag("level_overboughtsold_style", core.FLAG_LEVEL_STYLE);
+}
+
+var Period;
+
+var first;
+var source = null;
+var Indicator;
+
+var BRSI = null;
+var p,n;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+    source = instance.source;
+ 
+    first = source.first()+2;
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ")";
+    instance.name(name);
+	
+	    Breakout_Power = instance.addInternalStream(0, 0);
+		n = instance.addInternalStream(0, 0);
+		p = instance.addInternalStream(0, 0);
+
+    if (!(nameOnly)) 
+    {	  
+        BRSI = instance.addStream("BRSI", core.Line, name, "BRSI", instance.parameters.BRSI_color, first+Period);
+        BRSI.addLevel(instance.parameters.oversold, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);
+		BRSI.addLevel(instance.parameters.overbought, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);    
+		BRSI.setWidth(instance.parameters.width);
+        BRSI.setStyle(instance.parameters.style);  
+    }
+}
+
+function Update(period,mode)
+{   
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+    var tmp=Math.minmax(source,period-1, period);
+    var min=tmp[0];
+    var max=tmp[1];
+	
+	var Breakout_Price = (source.open[period-1] + max + min + source.close[period]) / 4; 
+    var Breakout_Strength = (source.close[period]-source.open[period-1])/(max-min);
+	var Breakout_Volume=source.volume[period]+source.volume[period-1];
+	
+    Breakout_Power[period] = Breakout_Price * Breakout_Strength * Breakout_Volume;
+  
+	if (Breakout_Power[period] > Breakout_Power[period-1]) 
+    {
+	 p[period]=Math.abs(Breakout_Power[period]);
+	 n[period]=0;
+    } 
+	else
+    {
+	 n[period]=Math.abs(Breakout_Power[period]);
+	 p[period]=0;
+    }
+	
+   if (period < Period) 
+   {
+    return;
+   }
+   
+var P= Math.sum(p, period-Period+1, period );
+var N= Math.sum(n, period-Period+1, period );
+
+var Breakout_Ratio;
+
+if (N== 0) 
+{
+ BRSI[period]=0;
+} 
+else
+{
+ BRSI[period] = 100 - (100 / (1 + P/N))
+}
+ 
+    
+}
+

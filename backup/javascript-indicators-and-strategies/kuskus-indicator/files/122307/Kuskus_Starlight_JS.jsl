@@ -1,0 +1,101 @@
+function Init()
+{
+    indicator.name("Kuskus Starlight indicator");
+    indicator.description("Kuskus Starlight indicator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    
+    indicator.parameters.addInteger("RangePeriods", "RangePeriods", "RangePeriods", 30);
+    indicator.parameters.addDouble("PriceSmoothing", "PriceSmoothing", "PriceSmoothing", 0.3);
+    indicator.parameters.addDouble("IndexSmoothing", "IndexSmoothing", "IndexSmoothing", 0.3);
+
+    indicator.parameters.addColor("clrUP", "Color UP", "Color UP", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clrDN", "Color DN", "Color DN", core.rgb(255, 0, 0));
+}
+
+var first;
+var source = null;
+var RangePeriods;
+var PriceSmoothing;
+var IndexSmoothing;
+var buff1;
+var buff2;
+var Array1;
+var Array2;
+
+function Prepare()
+{
+    source = instance.source;
+    RangePeriods=instance.parameters.RangePeriods;
+    PriceSmoothing=instance.parameters.PriceSmoothing;
+    IndexSmoothing=instance.parameters.IndexSmoothing;
+    if (PriceSmoothing>=1) 
+    {
+     PriceSmoothing=0.9999;
+    }
+    if (PriceSmoothing<0.) 
+    {
+     PriceSmoothing=0.;
+    }
+    if (IndexSmoothing>=1) 
+    {
+     IndexSmoothing=0.9999;
+    }
+    if (IndexSmoothing<0.) 
+    {
+     IndexSmoothing=0.;
+    }
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.RangePeriods + ", " + instance.parameters.PriceSmoothing + ", " + instance.parameters.IndexSmoothing + ")";
+    instance.name(name);
+    Array1= instance.addInternalStream(0, 0);
+    Array2= instance.addInternalStream(0, 0);
+    buff1 = instance.addStream("buff1", core.Bar, name + ".buffUP", "buffUP", instance.parameters.clrUP, first);
+    buff2 = instance.addStream("buff2", core.Bar, name + ".buffDN", "buffDN", instance.parameters.clrDN, first);
+}
+
+function Update(period, mode)
+{
+    if (period>first+2*RangePeriods+4) 
+    {
+     var tmp=Math.minmax(source, period-RangePeriods+1, period);
+     var LowestLow=tmp[0];
+     var HighestHigh=tmp[1];
+     if (HighestHigh-LowestLow<0.1*source.pipSize()) 
+     {
+      HighestHigh=LowestLow+0.1*source.pipSize();
+     }
+     var GreatestRange=HighestHigh-LowestLow;
+     var MidPrice=(source.high[period]+source.low[period])/2.;
+     var PriceLocation=0.;
+     if (GreatestRange!=0.) 
+     {
+      PriceLocation=(MidPrice-LowestLow)/GreatestRange;
+      PriceLocation=2.*PriceLocation-1.;
+     } 
+     Array2[period]=PriceSmoothing*Array2[period-1]+(1.-PriceSmoothing)*PriceLocation;
+     var SmoothedLocation=Array2[period];
+     SmoothedLocation=Math.min(SmoothedLocation,0.99);
+     SmoothedLocation=Math.max(SmoothedLocation,-0.99);
+     var FishIndex=0.;
+     if (1.-SmoothedLocation!=0.) 
+     {
+      FishIndex=Math.log((1.+SmoothedLocation)/(1.-SmoothedLocation));
+     }
+     Array1[period]=IndexSmoothing*Array1[period-1]+(1.-IndexSmoothing)*FishIndex;
+     var SmoothedFish=Array2[period];
+     
+     if (SmoothedFish>0.) 
+     {
+      buff1[period]=SmoothedFish;
+      buff2[period]=null;
+     } 
+     else
+     {
+      buff1[period]=null;
+      buff2[period]=SmoothedFish;
+     }
+     
+    } 
+}
+

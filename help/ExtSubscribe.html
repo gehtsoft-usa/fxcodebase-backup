@@ -1,0 +1,391 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252" /><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><title>ExtSubscribe function of helper.lua</title><style type="text/css">a, p, h1, h2, h3, h4, h5, h6, table, td, tr, li, ul, ol {
+    font-family: Verdana, Trebuchet MS, Arial;
+}
+
+a, p, td, tr, ul, ol, li {
+    font-size: 12pt;
+}
+
+h3 {
+    font-size: 13pt;
+}
+
+h2 {
+    font-size: 13pt;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+body {
+    color: #444444;
+    background-color: white;
+}
+
+A:link {
+    color: #0065b3;
+    cursor: pointer;
+}
+
+A:visited {
+    color: #0068be;
+    cursor: pointer;
+}
+
+a.action {
+  background-color: #0065b3;
+  color: white;
+  font-size: 10pt;
+  padding: 2px 2px;
+  width: 50pt;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px;
+}
+
+.side-icon {
+    float: left;
+}
+
+a.action [class*="dripicons-"]:before {
+    padding: 0 2px 0 0;
+    font-size: 12pt;
+    vertical-align: text-bottom;
+}
+
+.side-icon:after {
+  content: "";
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  border-left: 1.5px solid white;
+  transform: translate(-50%);
+}
+
+a.actiontab {
+  font-size: 10pt;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px 3px 0 0;
+}
+
+pre, code, code a {
+    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+    font-size: 12pt;
+}
+
+code.ctag {
+    background-color: #f1f1f1;
+    padding: .1em .2em;
+    border-radius: 3px;
+}
+
+pre {
+    background-color: white;
+}
+
+pre.example {
+    background-color: #f1f1f1;
+}
+
+ul {
+    list-style-type: disc;
+    margin-left: 18pt;
+}
+
+ol {
+    list-style-type: decimal;
+    margin-left: 18pt;
+}
+
+ul.hhc {
+    list-style-type: none;
+    margin-left: 1em;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+li.hhc {
+    margin-left: 0;
+    padding: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+table {
+  border-spacing: 0;
+  border-color: #dfe3e7;
+}
+
+tr + tr td {
+   border-top: 0;
+}
+
+tr td + td {
+  border-left: 0;
+}
+
+td {
+  border: 1px solid;
+  border-color: #dfe3e7;
+}
+
+tr:first-child td:first-child {
+   border-radius: 0.2em 0 0 0;
+}
+
+tr:first-child td:last-child {
+  border-radius: 0 0.2em 0 0;
+}
+
+tr:first-child td:only-child {
+  border-radius: 0.2em 0.2em 0 0;
+}
+
+tr:last-child td:first-child {
+    border-radius: 0 0 0 0.2em;
+}
+
+tr:last-child td:last-child {
+    border-radius: 0 0 0.2em 0;
+}
+
+tr:last-child td:only-child {
+    border-radius: 0 0 0.2em 0.2em;
+}
+
+tr:only-child td:only-child {
+    border-radius: 0.2em 0.2em 0.2em 0.2em;
+}
+
+tr:only-child td:first-child {
+   border-radius: 0.2em 0 0 0.2em;
+}
+
+tr:only-child td:last-child {
+  border-radius: 0 0.2em 0.2em 0;
+}
+
+
+td.tmain, td.tmain_nw, td.thdr {
+    background-color: rgb(255, 255, 255);
+    vertical-align: top;
+    padding: 3px;
+}
+
+td.tmain p, td.tmain_nw p, td.thdr p {
+    margin-top: 3pt;
+    margin-bottom: 3pt;
+}
+
+td.tmain_nw {
+    white-space: nowrap;
+}
+
+td.thdr {
+    background-color: #e3e3e3;
+}
+
+table.decl {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+    vertical-align: top;
+    padding: 3px;
+    width: 100%;
+}
+
+table.decl td {
+    border: 0px none;
+    border: collapse;
+    background-color: rgb(192, 192, 192);
+}
+
+div.note-quote {
+    border-left: 10px solid #ccc;
+    padding: 1em 10px .1em 10px;
+    margin: 1.5em 10px;
+    background-color: rgb(224, 224, 224);
+}
+
+div.note-note {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+div.note-warning {
+    position: relative;
+    padding: .0rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+
+    color: #fff;
+    background-color: #ff6358;
+}
+div.note-warning code.ctag {
+    color: black;
+}</style>
+<link rel="stylesheet" href="res/dripicons.css"></head><body><script type="text/javascript">
+var highlighterEnabled = false;
+var maintopic = 'index';
+var helptitle = 'Indicore SDK 3';
+    function loadStarted() {
+    window.onload = loadCompleted;
+
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        var head = document.getElementsByTagName('head')[0];
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.min.js';
+        head.appendChild(script4);
+
+
+        var script2 = document.createElement('script');
+        script2.type = 'text/javascript';
+        script2.src = './highlighter/highlight.cshtml.js';
+        head.appendChild(script2);
+
+        var script3 = document.createElement('script');
+        script3.type = 'text/javascript';
+        script3.src = './highlighter/highlight.lua.js';
+        head.appendChild(script3);
+
+        var script4 = document.createElement('script');
+        script4.type = 'text/javascript';
+        script4.src = './highlighter/highlight.luax.js';
+        head.appendChild(script4);
+    }
+}
+
+function loadCompleted() {
+    if (highlighterEnabled && !window.location.href.indexOf('mk:') == 0) {
+        hljs.registerLanguage('cshtml-razor', window.hljsDefineCshtmlRazor);
+        hljs.registerLanguage('lua', window.hljsDefineLua);
+        hljs.registerLanguage('luax', window.hljsDefineLuaX);
+        x = document.querySelectorAll('pre code');
+        for (var i = 0; i < x.length; i++) {
+            if (x[i].hasAttribute('class')) {
+                hljs.highlightBlock(x[i]);
+            }
+        }
+    }
+}
+
+
+function hidediv(divname) {
+    document.getElementById(divname).style.display = 'none';
+}
+
+function showdiv(divname) {
+    document.getElementById(divname).style.display = 'inline';
+}
+
+function syncList() {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, null, document.title);
+    }
+}
+
+function syncList1(key) {
+    if(window.parent.frames[0]) {
+        window.parent.frames[0].selectItem(window.location.href, key + '.html', document.title);
+    }
+}</script><script type="text/javascript">
+    loadStarted();
+</script><h1>ExtSubscribe function of helper.lua</h1>
+<h2>Brief</h2>
+<p>The function is designed to subscribe for bar histories in the strategies</p>
+<h2>Details</h2><p><b>Declaration</b></p>
+<p><code class="ctag"><b>ExtSubscribe</b>(id, instrument, period, bid, kind)</code></p>
+<p><b>Brief</b>
+The function subscribes a strategy for a bar history. In order to use this function please follow
+the instruction in the <a href="signal_helper.html">Applying the strategy on candle data using the helper</a>
+article.</p>
+<p>300 bars of this history is initially loaded. After that, at every tick the <code class="ctag">helper.lua</code> checks
+whether another bar of the requested collection is recently closed (in other words it checks whether
+the tick is the first tick after a bar is closed. In case it is, the <code class="ctag">helper.lua</code> calls
+<a href="ExtUpdate.html"><code>ExtUpdate</code></a> function of the strategy.</p>
+<p>In case both tick and bar data is required, you must subscribe for ticks using the same function. In this case
+no data will be loaded, the <code class="ctag">instance.bid</code> or <code class="ctag">instance.ask</code> collections are returned.</p>
+<p><b>Parameters</b></p><table class="tmain">
+  <tr>
+    <td class="thdr"><p>Name</p></td>
+    <td class="thdr"><p>Description</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>id</p></td>
+    <td class="tmain"><p>The integer number which will be used as an unique
+identifier of your subscription. This identifier must also be different
+from the identifies of the times and commands.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>instrument</p></td>
+    <td class="tmain"><p>The name of the instrument (e.g. &quot;EUR/USD&quot;) or nil to use the instrument
+on which the strategy is applied.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>period</p></td>
+    <td class="tmain"><p>The code of the period (length of the time frame). See the <a href="tick_stream.barSize.html"><code>tick_stream:barSize()</code></a>
+method for more details about the period codes.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>bid</p></td>
+    <td class="tmain"><p>The boolean flag <code class="ctag">true</code> will request for bid prices history and the flag <code class="ctag">false</code> for ask price history.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>kind</p></td>
+    <td class="tmain"><p>A string parameter which defines which prices must be collected. Can have one of the following values:</p><table class="tmain">
+  <tr>
+    <td class="tmain"><p>&quot;bar&quot;</p></td>
+    <td class="tmain"><p>The method returns an instance of the <a href="bar_stream.html"><code>bar_stream</code></a>
+table which will contain OHLC bars of the requested instrument during the
+requested time frame.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>&quot;open&quot;</p></td>
+    <td class="tmain"><p>The method returns an instance of the <a href="tick_stream.html"><code>tick_stream</code></a>
+table which will contain open prices of bars of the requested instrument during the
+requested time frame.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>&quot;high&quot;</p></td>
+    <td class="tmain"><p>The method returns an instance of the <a href="tick_stream.html"><code>tick_stream</code></a>
+table which will contain high prices of bars of the requested instrument during the
+requested time frame.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>&quot;low&quot;</p></td>
+    <td class="tmain"><p>The method returns an instance of the <a href="tick_stream.html"><code>tick_stream</code></a>
+table which will contain low prices of bars of the requested instrument during the
+requested time frame.</p></td>
+  </tr>
+  <tr>
+    <td class="tmain"><p>&quot;close&quot;</p></td>
+    <td class="tmain"><p>The method returns an instance of the <a href="tick_stream.html"><code>tick_stream</code></a>
+table which will contain the close prices of bars of the requested instrument during the
+requested time frame.</p></td>
+  </tr>
+</table></td>
+  </tr>
+</table><p>The function returns a price stream. The data are not available immediately, stream is empty and
+data is being loaded.</p><p>
+  <center><a href="signal_helper.html">back</a></center>
+</p><script language="javascript" type="text/javascript">if(window.parent.frames[0]) window.parent.frames[0].selectItem(window.location.href);</script></body></html>

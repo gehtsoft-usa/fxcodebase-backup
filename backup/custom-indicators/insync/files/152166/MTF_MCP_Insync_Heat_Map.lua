@@ -1,0 +1,471 @@
+-- More information about this indicator can be found at:
+-- http://fxcodebase.com/code/viewtopic.php?f=17&t=32957
+
+--+------------------------------------------------------------------------------------------------+
+--|                                                            Copyright © 2022, Gehtsoft USA LLC  |
+--|                                                                         http://fxcodebase.com  |
+--+------------------------------------------------------------------------------------------------+
+--|                                                              Support our efforts by donating   |
+--|                                                                 Paypal: https://goo.gl/9Rj74e  |
+--+------------------------------------------------------------------------------------------------+
+--|                                                                   Developed by : Mario Jemic   |
+--|                                                                       mario.jemic@gmail.com    |
+--|                                                        https://AppliedMachineLearning.systems  |
+--|                                                             Patreon :  https://goo.gl/GdXWeN   |
+--+------------------------------------------------------------------------------------------------+
+
+--Your donations will allow the service to continue onward.
+--+------------------------------------------------------------------------------------------------+
+--|BitCoin                    : 15VCJTLaz12Amr7adHSBtL9v8XomURo9RF                                 |
+--|Ethereum                   : 0x8C110cD61538fb6d7A2B47858F0c0AaBd663068D                         |
+--|SOL Address                : 4tJXw7JfwF3KUPSzrTm1CoVq6Xu4hYd1vLk3VF2mjMYh                       |
+--|Cardano/ADA                : addr1v868jza77crzdc87khzpppecmhmrg224qyumud6utqf6f4s99fvqv         |
+--|Dogecoin Address           : DBGXP1Nc18ZusSRNsj49oMEYFQgAvgBVA8                                 |
+--|SHIB Address               : 0x1817D9ebb000025609Bf5D61E269C64DC84DA735                         |
+--|Binance(ERC20 & BSC only)  : 0xe84751063de8ade7c5fbff5e73f6502f02af4e2c                         |
+--|BitCoin Cash               : 1BEtS465S3Su438Kc58h2sqvVvHK9Mijtg                                 |
+--|LiteCoin                   : LLU8PSY2vsq7B9kRELLZQcKf5nJQrdeqwD                                 |
+--+------------------------------------------------------------------------------------------------+
+
+function Add(id, TF, Flag, Instrument)
+	indicator.parameters:addGroup(id .. ". Slot")
+	indicator.parameters:addBoolean("On" .. id, "Show This Slot", "", true)
+
+	indicator.parameters:addString("TF" .. id, "Time Frame ", "", TF)
+	indicator.parameters:setFlag("TF" .. id, core.FLAG_PERIODS)
+
+	indicator.parameters:addString("Instrument" .. id, "Instrument", "", Instrument)
+	indicator.parameters:setFlag("Instrument" .. id, core.FLAG_INSTRUMENTS)
+end
+
+function Init()
+	indicator:name("MTF MCP Heat Map Template")
+	indicator:description("")
+	indicator:requiredSource(core.Bar)
+	indicator:type(core.Oscillator)
+
+	indicator.parameters:addGroup("Bollinger Calculation")
+	indicator.parameters:addInteger("B1", "Period", "", 20)
+	indicator.parameters:addInteger("B2", "Multiplicator", "", 2)
+
+	indicator.parameters:addGroup("MFI Calculation")
+	indicator.parameters:addInteger("MFI1", "Period", "", 20)
+
+	indicator.parameters:addGroup("CCI Calculation")
+	indicator.parameters:addInteger("C1", "Period", "", 14)
+
+	indicator.parameters:addGroup("RSI Calculation")
+	indicator.parameters:addInteger("R1", "Period", "", 14)
+
+	indicator.parameters:addGroup("Stochastic Calculation")
+	indicator.parameters:addInteger("S1", "K Period", "", 14)
+	indicator.parameters:addInteger("S2", "D Period", "", 3)
+	indicator.parameters:addInteger("S3", "Smoothing Period", "", 2)
+
+	indicator.parameters:addGroup("Ease of Movement Calculation")
+	indicator.parameters:addInteger("E1", "Period", "", 10)
+
+	indicator.parameters:addGroup("MACD Calculation")
+	indicator.parameters:addInteger("M1", "Short Period", "", 12)
+	indicator.parameters:addInteger("M2", "Long Period", "", 26)
+	indicator.parameters:addInteger("M3", "Signal Period", "", 9)
+	indicator.parameters:addInteger("M4", "Smoothing Period", "", 10)
+
+	indicator.parameters:addGroup("ROC Calculation")
+	indicator.parameters:addInteger("ROC1", "Period", "", 10)
+	indicator.parameters:addInteger("ROC2", "Smoothing Period", "", 10)
+
+	indicator.parameters:addGroup("Smoothing Calculation")
+	indicator.parameters:addInteger("MA_Period", "MA Period", "", 14)
+	indicator.parameters:addString("MA_Method", "MA Method", "Method", "MVA")
+	indicator.parameters:addStringAlternative("MA_Method", "MVA", "MVA", "MVA")
+	indicator.parameters:addStringAlternative("MA_Method", "EMA", "EMA", "EMA")
+	indicator.parameters:addStringAlternative("MA_Method", "LWMA", "LWMA", "LWMA")
+	indicator.parameters:addStringAlternative("MA_Method", "TMA", "TMA", "TMA")
+	indicator.parameters:addStringAlternative("MA_Method", "SMMA", "SMMA", "SMMA")
+	indicator.parameters:addStringAlternative("MA_Method", "KAMA", "KAMA", "KAMA")
+	indicator.parameters:addStringAlternative("MA_Method", "VIDYA", "VIDYA", "VIDYA")
+	indicator.parameters:addStringAlternative("MA_Method", "WMA", "WMA", "WMA")
+
+	indicator.parameters:addGroup("Override")
+
+	indicator.parameters:addString("Method", "Override Method", "Method", "Chart Instrument")
+	indicator.parameters:addStringAlternative("Method", "Independent", "Independent", "Independent")
+	indicator.parameters:addStringAlternative("Method", "Chart Time Frame", "Chart Time Frame", "Chart Time Frame")
+	indicator.parameters:addStringAlternative("Method", "Chart Instrument", "Chart Instrument", "Chart Instrument")
+
+	indicator.parameters:addInteger("os", "Oversold level", "", 25);
+	indicator.parameters:addColor("os_color", "Oversold color", "", core.rgb(255, 0, 255));
+	indicator.parameters:addInteger("ob", "Overbought level", "", 75);
+	indicator.parameters:addColor("ob_color", "Overbought color", "", core.rgb(0, 64, 0));
+
+	Add(1, "m1", "Off", "EUR/USD")
+	Add(2, "m5", "Off", "USD/JPY")
+	Add(3, "m15", "Off", "GBP/USD")
+	Add(4, "m30", "Off", "USD/CHF")
+	Add(5, "H1", "Off", "EUR/CHF")
+	Add(6, "H2", "View", "AUD/USD")
+	Add(7, "H3", "Off", "USD/CAD")
+	Add(8, "H4", "View", "NZD/USD")
+	Add(9, "H6", "Off", "NZD/USD")
+	Add(10, "H8", "View", "EUR/JPY")
+	Add(11, "D1", "Off", "GBP/JPY")
+	Add(12, "W1", "Off", "CHF/JPY")
+	Add(13, "M1", "Off", "GBP/CHF")
+
+	indicator.parameters:addGroup("Style")
+	indicator.parameters:addColor("Color", "Label Color", "", core.COLOR_LABEL)
+	indicator.parameters:addColor("UpUp", "Up in Up Trend Color", "", core.rgb(0, 255, 0))
+	indicator.parameters:addColor("UpDown", "Down in Up Trend Color", "", core.rgb(0, 200, 0))
+	indicator.parameters:addColor("DownUp", "Up in Down Trend Color", "", core.rgb(200, 0, 0))
+	indicator.parameters:addColor("DownDown", "Down in Down Trend Color", "", core.rgb(255, 0, 0))
+
+	indicator.parameters:addDouble("VSpace", "Vertical Spacing (%)", "", 5, 0, 50)
+	indicator.parameters:addDouble("HSpace", "Horizontal Spacing (%)", "", 5, 0, 50)
+	indicator.parameters:addDouble("Size", "Font Size (%)", "", 90, 50, 200)
+end
+local On = {}
+local Method
+local source
+local day_offset, week_offset
+local Label = {"First", "Second", "Third", "Fourth"}
+
+local VSpace, HSpace
+local Color
+local Size
+local SourceData = {}
+local TF = {}
+local loading = {}
+local Number
+local host
+local RSI = {}
+local UpUp, DownDown
+local UpDown, DownUp
+local Instrument = {}
+local ob, os, ob_color, os_color;
+
+local MA = {}
+local Indicator = {}
+
+function Prepare(nameOnly)
+	source = instance.source
+	VSpace = (instance.parameters.VSpace / 100)
+	HSpace = (instance.parameters.HSpace / 100)
+	Method = instance.parameters.Method
+
+	UpUp = instance.parameters.UpUp
+	DownDown = instance.parameters.DownDown
+	UpDown = instance.parameters.UpDown
+	DownUp = instance.parameters.DownUp
+
+	host = core.host
+	Size = instance.parameters.Size
+	Color = instance.parameters.Color
+	ob = instance.parameters.ob;
+	os = instance.parameters.os;
+	ob_color = instance.parameters.ob_color;
+	os_color = instance.parameters.os_color;
+
+	day_offset = host:execute("getTradingDayOffset")
+	week_offset = host:execute("getTradingWeekOffset")
+	local Id = 0
+	Number = 0
+	local name = profile:id() .. " " .. source:name() .. " : " .. source:barSize()
+	instance:name(name)
+
+	local ifirst
+	local s1, e1, s2, e2
+	s1, e1 = core.getcandle(source:barSize(), 0, 0, 0)
+
+	local iTF = {}
+	for i = 1, 13, 1 do
+		if Method == "Chart Time Frame" then
+			iTF[i] = source:barSize()
+		else
+			iTF[i] = instance.parameters:getString("TF" .. i)
+		end
+	end
+
+	if (nameOnly) then
+		return
+	end
+
+	assert(core.indicators:findIndicator("INSYNC") ~= nil, "Please, download and install INSYNC.LUA indicator")
+
+	AlertNumber = 0
+	for i = 1, 13, 1 do
+		s2, e2 = core.getcandle(iTF[i], 0, 0, 0)
+
+		if instance.parameters:getBoolean("On" .. i) and (e1 - s1) <= (e2 - s2) then
+			Number = Number + 1
+
+			Label[Number] = ""
+
+			if Method == "Chart Instrument" then
+				Instrument[Number] = source:instrument()
+				Label[Number] = ""
+			else
+				Instrument[Number] = instance.parameters:getString("Instrument" .. i)
+				Label[Number] = Instrument[Number]
+			end
+
+			if Method == "Chart Time Frame" then
+				TF[Number] = iTF[i]
+			else
+				TF[Number] = iTF[i]
+				Label[Number] = Label[Number] .. " - " .. TF[Number]
+			end
+
+			Id = Id + 1
+			SourceData[Number] =
+				core.host:execute("getSyncHistory", Instrument[Number], TF[Number], source:isBid(), 300, 2000 + Id, 1000 + Id)
+			loading[Number] = true
+			Indicator[Number] =
+				core.indicators:create(
+				"INSYNC",
+				SourceData[Number],
+				instance.parameters.B1,
+				instance.parameters.B2,
+				instance.parameters.MFI1,
+				instance.parameters.C1,
+				instance.parameters.R1,
+				instance.parameters.S1,
+				instance.parameters.S2,
+				instance.parameters.S3,
+				instance.parameters.E1,
+				instance.parameters.M1,
+				instance.parameters.M2,
+				instance.parameters.M3,
+				instance.parameters.M4,
+				instance.parameters.ROC1,
+				instance.parameters.ROC2
+			)
+			MA[Number] =
+				core.indicators:create(instance.parameters.MA_Method, Indicator[Number].DATA, instance.parameters.MA_Period)
+		end
+	end
+
+	instance:setLabelColor(Color)
+	instance:ownerDrawn(true)
+	core.host:execute("setTimer", 1, 5)
+end
+
+function ReleaseInstance()
+	core.host:execute("killTimer", 1)
+end
+
+function Initialization(period, id)
+	local Candle
+	Candle = core.getcandle(source:barSize(), source:date(period), day_offset, week_offset)
+
+	if loading[id] or SourceData[id]:size() == 0 then
+		return false
+	end
+
+	if period < source:first() then
+		return false
+	end
+
+	local P = core.findDate(SourceData[id], Candle, false)
+
+	-- candle is not found
+	if P < 0 then
+		return false
+	else
+		return P
+	end
+end
+
+-- the function is called when the async operation is finished
+function AsyncOperationFinished(cookie)
+	local j
+	local FLAG = false
+	local Num = 0
+	local Id = 0
+	for j = 1, Number, 1 do
+		Id = Id + 1
+		if cookie == (1000 + Id) then
+			loading[j] = true
+		elseif cookie == (2000 + Id) then
+			loading[j] = false
+		end
+
+		if loading[j] then
+			FLAG = true
+			Num = Num + 1
+		end
+	end
+
+	if not FLAG and cookie == 1 then
+		for i = 1, Number, 1 do
+			Indicator[i]:update(core.UpdateLast)
+			MA[i]:update(core.UpdateLast)
+		end
+	end
+
+	if FLAG then
+		core.host:execute("setStatus", "  Loading " .. ((Number) - Num) .. " / " .. (Number))
+	else
+		core.host:execute("setStatus", "Loaded")
+		instance:updateFrom(0)
+	end
+
+	return core.ASYNC_REDRAW
+end
+
+function Update(period)
+end
+
+local init = false
+local UPUP_PEN = 11;
+local UPUP_BRUSH = 12;
+local UPDOWN_PEN = 21;
+local UPDOWN_BRUSH = 22;
+local DOWNUP_PEN = 31;
+local DOWNUP_BRUSH = 32;
+local DOWNDOWN_PEN = 41;
+local DOWNDOWN_BRUSH = 42;
+local OS_PEN = 51;
+local OS_BRUSH = 52;
+local OB_PEN = 61;
+local OB_BRUSH = 62;
+
+function GetDrawingIds(j, p)
+	if p == false then
+		return 2, 1;
+	end
+	if Indicator[j].DATA:hasData(p) and Indicator[j].DATA:hasData(p - 1) and MA[j].DATA:hasData(p) and
+		MA[j].DATA:hasData(p - 1)
+	then
+		if Indicator[j].DATA[p] <= os then
+			return OS_BRUSH, OS_PEN;
+		end
+		if Indicator[j].DATA[p] >= ob then
+			return OB_BRUSH, OB_PEN;
+		end
+		if Indicator[j].DATA[p] > MA[j].DATA[p] then
+			if Indicator[j].DATA[p] > Indicator[j].DATA[p - 1] then
+				return UPUP_BRUSH, UPUP_PEN;
+			end
+			return UPDOWN_BRUSH, UPDOWN_PEN;
+		end
+		if Indicator[j].DATA[p] > Indicator[j].DATA[p - 1] then
+			return DOWNUP_BRUSH, DOWNUP_PEN;
+		end
+		return DOWNDOWN_BRUSH, DOWNDOWN_PEN;
+	end
+	return 2, 1;
+end
+
+function Draw(stage, context)
+	if stage ~= 0 then
+		return
+	end
+
+	local FLAG = false
+
+	for j = 1, Number, 1 do
+		if loading[j] then
+			FLAG = true
+		end
+	end
+
+	if FLAG then
+		return
+	end
+
+	local style = context.SINGLELINE + context.CENTER + context.VCENTER
+
+	context:setClipRectangle(context:left(), context:top(), context:right(), context:bottom())
+
+	if not init then
+		context:createPen(1, context.SOLID, 3, Color)
+		context:createSolidBrush(2, Color)
+
+		context:createPen(UPUP_PEN, context.SOLID, 3, UpUp)
+		context:createSolidBrush(UPUP_BRUSH, UpUp)
+
+		context:createPen(UPDOWN_PEN, context.SOLID, 3, UpDown)
+		context:createSolidBrush(UPDOWN_BRUSH, UpDown)
+
+		context:createPen(DOWNUP_PEN, context.SOLID, 3, DownUp)
+		context:createSolidBrush(DOWNUP_BRUSH, DownUp)
+
+		context:createPen(DOWNDOWN_PEN, context.SOLID, 3, DownDown)
+		context:createSolidBrush(DOWNDOWN_BRUSH, DownDown)
+
+		context:createPen(OS_PEN, context.SOLID, 3, os_color)
+		context:createSolidBrush(OS_BRUSH, os_color)
+
+		context:createPen(OB_PEN, context.SOLID, 3, ob_color)
+		context:createSolidBrush(OB_BRUSH, ob_color)
+
+		init = true
+	end
+
+	local first = math.max(source:first(), context:firstBar())
+	local last = math.min(context:lastBar(), source:size() - 1)
+
+	X0, X1, X2 = context:positionOfBar(source:size() - 1)
+	HCellSize = (X2 - X1) * HSpace
+	VCellSize = ((context:bottom() - context:top()) / (Number + 1))
+
+	for i = first, last, 1 do
+		x0, x1, x2 = context:positionOfBar(i)
+
+		for j = 1, Number, 1 do
+			p = Initialization(i, j)
+
+			C2, C1 = GetDrawingIds(j, p);
+			context:drawRectangle(
+				C1,
+				C2,
+				x1 + HCellSize,
+				context:top() + VCellSize / 2 + VCellSize * (j - 1) + VCellSize * VSpace,
+				x2 - HCellSize,
+				context:top() + VCellSize / 2 + VCellSize * (j) - VCellSize * VSpace
+			)
+
+			if i == first then
+				local width, height
+				context:createFont(3, "Arial", ((X2 - X1) / 100) * Size, (VCellSize / 100) * Size, context.NORMAL)
+				Value = tostring(Label[j])
+				width, height = context:measureText(3, Value, style)
+				context:drawText(
+					3,
+					Value,
+					Color,
+					-1,
+					X2 + (X2 - X1),
+					context:top() + VCellSize / 2 + VCellSize * (j - 1) + VCellSize * VSpace,
+					X2 + (X2 - X1) + width,
+					context:top() + VCellSize / 2 + VCellSize * (j) - VCellSize * VSpace,
+					style
+				)
+			end
+		end
+	end
+end
+--+------------------------------------------------------------------------------------------------+
+--|                                                                    We appreciate your support. | 
+--+------------------------------------------------------------------------------------------------+
+--|                                                               Paypal: https://goo.gl/9Rj74e    |
+--|                                                             Patreon :  https://goo.gl/GdXWeN   |  
+--+------------------------------------------------------------------------------------------------+
+--|                                                                   Developed by : Mario Jemic   |                    
+--|                                                                       mario.jemic@gmail.com    |
+--|                                                        https://AppliedMachineLearning.systems  |
+--|                                                                       https://mario-jemic.com/ |
+--+------------------------------------------------------------------------------------------------+
+
+--+------------------------------------------------------------------------------------------------+
+--|BitCoin                    : 15VCJTLaz12Amr7adHSBtL9v8XomURo9RF                                 |  
+--|Ethereum                   : 0x8C110cD61538fb6d7A2B47858F0c0AaBd663068D                         |  
+--|SOL Address                : 4tJXw7JfwF3KUPSzrTm1CoVq6Xu4hYd1vLk3VF2mjMYh                       |
+--|Cardano/ADA                : addr1v868jza77crzdc87khzpppecmhmrg224qyumud6utqf6f4s99fvqv         |  
+--|Dogecoin Address           : DBGXP1Nc18ZusSRNsj49oMEYFQgAvgBVA8                                 |
+--|SHIB Address               : 0x1817D9ebb000025609Bf5D61E269C64DC84DA735                         |              
+--|Binance(ERC20 & BSC only)  : 0xe84751063de8ade7c5fbff5e73f6502f02af4e2c                         | 
+--|BitCoin Cash               : 1BEtS465S3Su438Kc58h2sqvVvHK9Mijtg                                 | 
+--|LiteCoin                   : LLU8PSY2vsq7B9kRELLZQcKf5nJQrdeqwD                                 |  
+--+------------------------------------------------------------------------------------------------+

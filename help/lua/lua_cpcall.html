@@ -1,0 +1,25 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - lua_cpcall</title>
+</head>
+<body>
+<h3><a name="lua_cpcall"><code>lua_cpcall</code></a></h3>
+<pre>int lua_cpcall (lua_State *L, lua_CFunction func, void *ud);</pre>
+
+<p>
+Calls the C&nbsp;function <code>func</code> in protected mode.
+<code>func</code> starts with only one element in its stack,
+a light userdata containing <code>ud</code>.
+In case of errors,
+<a href="lua_cpcall.html"><code>lua_cpcall</code></a> returns the same error codes as <a href="lua_pcall.html"><code>lua_pcall</code></a>,
+plus the error object on the top of the stack;
+otherwise, it returns zero, and does not change the stack.
+All values returned by <code>func</code> are discarded.
+
+
+
+
+
+<hr>
+</body>
+</html>

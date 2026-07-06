@@ -1,0 +1,143 @@
+function Init()
+{
+    indicator.name("Smoothed Stochastic of Smoothed Stochastic of MACD");
+    indicator.description("Smoothed Stochastic of Smoothed Stochastic of MACD");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");	
+    indicator.parameters.addInteger("StochasticLength", "StochasticLength", "StochasticLength", 32);
+    indicator.parameters.addInteger("SmoothEMA", "SmoothEMA", "SmoothEMA", 9);
+    indicator.parameters.addInteger("SignalEMA", "SignalEMA", "SignalEMA", 5);
+    indicator.parameters.addInteger("MacdFast", "MacdFast", "MacdFast", 12);
+    indicator.parameters.addInteger("MacdSlow", "MacdSlow", "MacdSlow", 26);
+	indicator.parameters.addGroup("Style");	
+    indicator.parameters.addColor("DSS_color_Up", "Color of DSS Up", "Color of DSS", core.rgb(0, 255, 0));
+	 indicator.parameters.addColor("DSS_color_Down", "Color of DSS Down", "Color of DSS", core.rgb(0, 200, 0));
+	indicator.parameters.addInteger("width1", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style1", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style1", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("SIGNAL_color_Up", "Color of SIGNAL Up", "Color of SIGNAL", core.rgb(255, 0, 0));
+	 indicator.parameters.addColor("SIGNAL_color_Down", "Color of SIGNAL Down", "Color of SIGNAL", core.rgb(200, 0, 0));
+	indicator.parameters.addInteger("width2", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style2", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style2", core.FLAG_LINE_STYLE);
+}
+
+var StochasticLength;
+var SmoothEMA;
+var SignalEMA;
+var MacdFast;
+var MacdSlow;
+
+var first;
+var source = null;
+
+var DSS = null;
+var SIGNAL = null;
+var alpha,beta;
+var MACD;
+var DDS1,DDS2,DDS3;
+
+function Prepare(nameOnly)
+{
+    StochasticLength = instance.parameters.StochasticLength;
+    SmoothEMA = instance.parameters.SmoothEMA;
+    SignalEMA = instance.parameters.SignalEMA;
+    MacdFast = instance.parameters.MacdFast;
+    MacdSlow = instance.parameters.MacdSlow;
+    source = instance.source;
+	
+	alpha = 2.0 / (1.0+SignalEMA);
+	beta = 2.0 / (1.0+SmoothEMA);
+	
+	DDS1= instance.addInternalStream(0, 0);
+	DDS2= instance.addInternalStream(0, 0);
+	DDS3= instance.addInternalStream(0, 0);
+	MACD= instance.addInternalStream(0, 0); 
+	Fast = core.indicators.create("EMA", source, MacdFast);
+	Slow = core.indicators.create("EMA", source,  MacdSlow );
+    first = Math.max(Slow.DATA.first(),Fast.DATA.first());
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(StochasticLength) + ", " + tostring(SmoothEMA) + ", " + tostring(SignalEMA) + ", " + tostring(MacdFast) + ", " + tostring(MacdSlow) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        DSS = instance.addStream("DSS", core.Line, name + ".DSS", "DSS", instance.parameters.DSS_color_Up, first+StochasticLength*2);
+		DSS.setWidth(instance.parameters.width1);
+        DSS.setStyle(instance.parameters.style1);
+        SIGNAL = instance.addStream("SIGNAL", core.Line, name + ".SIGNAL", "SIGNAL", instance.parameters.SIGNAL_color_Up, first+StochasticLength*2);
+		SIGNAL.setWidth(instance.parameters.width2);
+        SIGNAL.setStyle(instance.parameters.style2);
+    }
+}
+
+function Update(period, mode)
+{
+    Slow.update(mode);
+	Fast.update(mode);
+	
+    if (period < first || !source.hasData(period)) 
+    {
+	return;
+	}
+	
+	MACD[period]= Fast.DATA[period]-Slow.DATA[period];
+	
+		
+	
+        Calculate(period);
+        SIGNAL[period] =   SIGNAL[period-1]+alpha*(DSS[period]- SIGNAL[period-1]); 
+		if (SIGNAL[period] >  SIGNAL[period-1]) 
+    {
+		 SIGNAL.setColor(period, instance.parameters.SIGNAL_color_Up);
+    }
+		else
+    {
+		 SIGNAL.setColor(period, instance.parameters.SIGNAL_color_Down);
+		}
+    
+}
+
+function Calculate (period)
+{ 
+  var min,max;
+  var tmp=Math.minmax(MACD, period-StochasticLength+1, period);
+  min=tmp[0];
+  max=tmp[1];
+  
+  if (min!= max) 
+  {
+   DDS1[period]= 100*(MACD[period]-min)/(max-min);
+  }
+  else
+  {
+   DDS1[period]=0;
+  }
+  
+  DDS2[period] = DDS2[period-1]+beta*( DDS1[period]- DDS2[period-1]);
+  tmp=Math.minmax(DDS2, period-StochasticLength+1, period);  
+  min=tmp[0];  
+  max=tmp[1];
+  
+  if (min!= max) 
+  {
+   DDS3[period]=(100*(DDS2[period]-min)/(max-min));  
+  }
+  else
+  {
+   DDS3[period]=0;
+  }
+  
+  DSS[period]=DSS[period-1]+beta*( DDS3[period]- DSS[period-1]);
+  
+  
+        if  (DSS[period] >  DSS[period-1]) 
+        {
+		DSS.setColor(period, instance.parameters.DSS_color_Up);
+  }
+		else
+    {
+		DSS.setColor(period, instance.parameters.DSS_color_Down);
+		}
+}

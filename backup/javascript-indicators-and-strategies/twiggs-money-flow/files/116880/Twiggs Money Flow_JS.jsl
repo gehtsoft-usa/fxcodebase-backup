@@ -1,0 +1,68 @@
+function Init()
+{
+    indicator.name("Twiggs Money Flow");
+    indicator.description("Twiggs Money Flow");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addInteger("PERIOD", "Period", "Period", 21);
+    indicator.parameters.addColor("TMF_color", "Color of TMF", "Color of TMF", core.rgb(255, 0, 0));
+}
+
+var PERIOD;
+
+var first;
+var source = null;
+
+var TMF = null;
+var EMA={};
+
+var ADV;
+
+function Prepare()
+{
+    PERIOD = instance.parameters.PERIOD;
+    source = instance.source;	
+	
+	ADV= instance.addInternalStream (0, 0);
+	   
+    EMA["VOLUME"] = core.indicators.create("WMA", source.volume, PERIOD);	
+	 EMA["ADV"] = core.indicators.create("WMA", ADV, PERIOD);	
+    first = Math.max( EMA["VOLUME"].DATA.first(), EMA["ADV"].DATA.first());
+
+    var name = profile.id() + "(" + source.name() + ", " + PERIOD + ")";
+    instance.name(name);
+    TMF = instance.addStream("TMF", core.Line, name, "TMF", instance.parameters.TMF_color, first);
+}
+
+function Update(period, mode)
+{
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+	var TRH = Math.max(source.high[period], source.close[period-1]);
+    var TRL  = Math.min(source.low[period],  source.close[period-1]);
+	var TR=TRH-TRL;
+	
+	ADV[period]=((source.close[period]-TRL)-(TRH-source.close[period]))/ TR*source.volume[period];
+	
+	if (period < EMA["ADV"].DATA.first()) 
+	{
+	 return;
+	}
+	
+	 EMA["ADV"].update(mode);
+	EMA["VOLUME"].update(mode);
+	
+	if (EMA["VOLUME"].DATA[period]==0) 
+	{ 
+	 TMF[period]=0;
+	} 
+	else
+	{
+	 TMF[period] =  EMA["ADV"].DATA[period]/EMA["VOLUME"].DATA[period];
+	}    
+}
+

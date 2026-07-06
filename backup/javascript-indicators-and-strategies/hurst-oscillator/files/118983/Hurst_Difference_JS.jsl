@@ -1,0 +1,109 @@
+function Init()
+{
+    indicator.name("Hurst Difference");
+    indicator.description("Hurst Difference");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    
+    indicator.parameters.addInteger("Period", "Period", "Period", 30);
+    indicator.parameters.addString("app_price", "app_price", "", "close");
+    indicator.parameters.addStringAlternative("app_price", "close", "", "close");
+    indicator.parameters.addStringAlternative("app_price", "open", "", "open");
+    indicator.parameters.addStringAlternative("app_price", "high", "", "high");
+    indicator.parameters.addStringAlternative("app_price", "low", "", "low");
+    indicator.parameters.addStringAlternative("app_price", "median", "", "median");
+    indicator.parameters.addStringAlternative("app_price", "typical", "", "typical");
+    indicator.parameters.addStringAlternative("app_price", "weighted", "", "weighted");
+
+    indicator.parameters.addColor("clr_Line", "Color of Line", "Color of Line", core.rgb(255, 255, 0));
+}
+
+var first;
+var source = null;
+var Period;
+var app_price;
+var Price;
+var fdi;
+var HurstBuff=null;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    app_price=instance.parameters.app_price;
+    first = source.first()+2;
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.Period + ", " + instance.parameters.app_price + ")";
+    instance.name(name);
+    Price = instance.addInternalStream(0, 0);
+    fdi = instance.addInternalStream(0, 0);
+    HurstBuff = instance.addStream("HurstBuff", core.Line, name + ".HurstBuff", "HurstBuff", instance.parameters.clr_Line, first);
+    HurstBuff.addLevel(0);
+}
+
+function Update(period, mode)
+{
+    if (app_price=="close") 
+    {
+     Price[period]=source.close[period];
+    }
+    else if (app_price=="open") 
+    {
+     Price[period]=source.open[period];
+    } 
+    else if (app_price=="high") 
+    {
+     Price[period]=source.high[period];
+    } 
+    else if (app_price=="low") 
+    {
+     Price[period]=source.low[period];
+    } 
+    else if (app_price=="median") 
+    {
+     Price[period]=(source.high[period]+source.low[period])/2.;
+    } 
+    else if (app_price=="typical") 
+    {
+     Price[period]=(source.high[period]+source.low[period]+source.close[period])/3.;
+    } 
+    else
+    {
+     Price[period]=(source.high[period]+source.low[period]+2.*source.close[period])/4.;
+    }
+     
+    if (period>first+Period) 
+    {
+     var tmp=Math.minmax(Price, period-Period+1, period);
+     var priceMax=tmp[1];
+     var priceMin=tmp[0];
+     var length=0.;
+     var priorDiff=0.;
+     var sum=0.;
+     
+     for (i=period-Period+1; i<=period; i++) 
+     {
+      if (priceMax-priceMin>0) 
+      {
+       diff=(Price[i]-priceMin)/(priceMax-priceMin);
+       if (i>period-Period+1) 
+       {
+        length=length+Math.sqrt(Math.pow(diff-priorDiff,2)+(1./Math.pow(Period,2)));
+       }
+       priorDiff=diff;
+      }
+     }
+     
+     if (length>0) 
+     {
+      fdi[period]=1.+(Math.log(length)+Math.log(2.))/Math.log(2.*(Period-1))
+     } 
+     else
+     {
+      fdi[period]=0.;
+     }
+     
+     HurstBuff[period]=fdi[period-1]-fdi[period];
+
+    } 
+}
+

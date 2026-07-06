@@ -1,0 +1,90 @@
+function Init()
+{
+    indicator.name("MA Count Oscillator");
+    indicator.description("MA Count Oscillator");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period", "Period", "", 10);
+    
+    indicator.parameters.addString("Method" , "Type of Moving Average", "", "EMA");
+    indicator.parameters.addStringAlternative("Method" , "Exponential Moving Average", "", "EMA");
+    indicator.parameters.addStringAlternative("Method" , "Simple Moving Average", "", "MVA");
+    indicator.parameters.addStringAlternative("Method", "Smoothed Moving Average", "", "SMMA");
+    indicator.parameters.addStringAlternative("Method" , "Linear Weighted Moving Average", "", "LWMA");
+
+    
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Up Color", "Up Color", core.rgb(60, 121, 196));
+    indicator.parameters.addColor("clr1", "Down Color", "Down Color", core.rgb(202, 242, 13));
+}
+
+var first;
+var source = null;
+var Period;
+var Buff;
+var Ind;
+var Method;
+var clr, clr1;
+
+function Prepare()
+{
+    source = instance.source;
+    Period=instance.parameters.Period;
+    first = source.first();
+    Method=instance.parameters.Method;
+    clr=instance.parameters.clr;
+    clr1=instance.parameters.clr1;
+
+
+    var name = profile.id() + "(" + source.name()+ ")";
+    instance.name(name);
+
+    Buff = instance.addStream("buff", core.Bar, name + ".buff", "buff", instance.parameters.clr, first);
+    
+
+    Ind=core.indicators.create(Method, source, Period);
+     
+}
+
+function Update(period, mode)
+{
+     Ind.update(mode);
+    if (period==source.size()-1) 
+    {
+    
+    var i;
+
+        for (i=Period+first+1; i<=period; i++) 
+        { 
+            
+           
+            if (source[i]>Ind.DATA[i]) 
+            {
+            Buff[i]=Buff[i-1]+1; 
+            
+                if (source[i-1]<Ind.DATA[i-1]) 
+                {
+                 Buff[i]=1; 
+                } 
+            }
+
+            if (source[i]<Ind.DATA[i]) 
+            {
+             Buff.setColor(i,clr1);    
+             Buff[i]=Buff[i-1]-1; 
+            
+            
+                if (source[i-1]>Ind.DATA[i-1]) 
+                {
+                 Buff[i]=-1; 
+                } 
+            }
+        } 
+
+    }
+  
+ 
+}
+

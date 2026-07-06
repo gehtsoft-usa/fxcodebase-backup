@@ -1,0 +1,31 @@
+<html>
+<head>
+<title>Lua 5.1 Reference Manual - 5.4 - String Manipulation</title>
+</head>
+<body>
+<h2>5.4 - <a name="5.4">String Manipulation</a></h2>
+
+<p>
+This library provides generic functions for string manipulation,
+such as finding and extracting substrings, and pattern matching.
+When indexing a string in Lua, the first character is at position&nbsp;1
+(not at&nbsp;0, as in C).
+Indices are allowed to be negative and are interpreted as indexing backwards,
+from the end of the string.
+Thus, the last character is at position -1, and so on.
+
+
+<p>
+The string library provides all its functions inside the table
+<a name="pdf-string"><code>string</code></a>.
+It also sets a metatable for strings
+where the <code>__index</code> field points to the <code>string</code> table.
+Therefore, you can use the string functions in object-oriented style.
+For instance, <code>string.byte(s, i)</code>
+can be written as <code>s:byte(i)</code>.
+
+
+<p>
+<hr>
+</body>
+</html>

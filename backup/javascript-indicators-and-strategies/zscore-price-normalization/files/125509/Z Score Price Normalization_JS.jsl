@@ -1,0 +1,91 @@
+function Init()
+{
+    indicator.name("Z Score Price Normalization");
+    indicator.description("Z Score Price Normalization");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("PERIOD", "Period", "Period", 20);
+	 indicator.parameters.addDouble("Dev", "Number of standard deviations", "Number of standard deviations", 2);
+	
+	
+	indicator.parameters.addGroup("Levels");
+
+    indicator.parameters.addDouble("overbought", "Overbought Level","", 100);
+    indicator.parameters.addDouble("oversold", "Oversold Level", "", 0 );
+    indicator.parameters.addInteger("level_overboughtsold_width", "Over Bought / Over Sold Line Width", "", 1, 1, 5);
+    indicator.parameters.addInteger("level_overboughtsold_style", "Over Bought / Over Sold Line Style", "", core.LINE_SOLID);
+    indicator.parameters.addColor("level_overboughtsold_color", "Over Bought / Over Sold  Line Color", "", core.rgb(255, 255, 0));
+    indicator.parameters.setFlag("level_overboughtsold_style", core.FLAG_LEVEL_STYLE);
+}
+
+var PERIOD;
+
+var first;
+var source = null;
+
+var ZScore = null;
+var TL, BL, AL;
+var D;
+
+var open=null;
+var close=null;
+var high=null;
+var low=null;
+
+function Prepare(nameOnly)
+{
+    PERIOD = instance.parameters.PERIOD;
+    source = instance.source;
+	 D = instance.parameters.Dev;
+	
+    first =  source.first()+ PERIOD-1;
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(PERIOD) + ", " + tostring(D)+ ")";
+    instance.name(name);
+	
+	TL = instance.addInternalStream(0,0);
+    BL = instance.addInternalStream(0,0);
+    AL = instance.addInternalStream(0,0);
+	
+    if (!(nameOnly)) 
+    {	
+	 open = instance.addStream("open", core.Line, name, "open", core.rgb(0, 0, 0), first)
+     high = instance.addStream("high", core.Line, name, "high", core.rgb(0, 0, 0), first)
+     low = instance.addStream("low", core.Line, name, "low", core.rgb(0, 0, 0), first)
+     close = instance.addStream("close", core.Line, name, "close", core.rgb(0, 0, 0), first)
+     instance.createCandleGroup("ZONE", "", open, high, low, close);
+	
+	 open.addLevel(instance.parameters.oversold, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);
+     open.addLevel(instance.parameters.overbought, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);
+       
+    }
+}
+
+function Update(period)
+{
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+    }	
+
+      
+        var ml = Math.avg(source.close,  period -PERIOD+1, period);
+        var d = Math.stdev (source.close, period -PERIOD+1 , period);
+
+        TL[period] = ml + D * d;
+        BL[period] = ml - D * d;
+        AL[period] = ml;
+	 var Base=  (TL[period] - BL[period]) ;
+	 
+	
+	
+	 open[period]=(source.open[period]- BL[period]) / Base* 100;
+	close[period]=(source.close[period]- BL[period]) / Base* 100;
+	high[period]=(source.high[period]- BL[period]) / Base* 100;
+	low[period]=(source.low[period]- BL[period]) / Base* 100;
+
+    
+	
+}
+

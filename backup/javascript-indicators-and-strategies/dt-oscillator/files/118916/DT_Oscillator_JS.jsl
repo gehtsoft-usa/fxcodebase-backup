@@ -1,0 +1,101 @@
+function Init()
+{
+    indicator.name("DT Oscillator");
+    indicator.description("DT Oscillator");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("RSI_Period", "Period of RSI", "", 13);
+    indicator.parameters.addInteger("Stoch_Period", "Period of Stoch", "", 8);
+    indicator.parameters.addInteger("SK_Period", "SK_Period", "", 5);
+    indicator.parameters.addInteger("SD_Period", "SD_Period", "", 3);
+    indicator.parameters.addString("MA_Method", "MA_Method", "", "MVA");
+    indicator.parameters.addStringAlternative("MA_Method", "MVA", "", "MVA");
+    indicator.parameters.addStringAlternative("MA_Method", "EMA", "", "EMA");
+    indicator.parameters.addStringAlternative("MA_Method", "Wilder", "", "Wilder");
+    indicator.parameters.addStringAlternative("MA_Method", "LWMA", "", "LWMA");
+    indicator.parameters.addStringAlternative("MA_Method", "SineWMA", "", "SineWMA");
+    indicator.parameters.addStringAlternative("MA_Method", "TriMA", "", "TriMA");
+    indicator.parameters.addStringAlternative("MA_Method", "LSMA", "", "LSMA");
+    indicator.parameters.addStringAlternative("MA_Method", "SMMA", "", "SMMA");
+    indicator.parameters.addStringAlternative("MA_Method", "HMA", "", "HMA");
+    indicator.parameters.addStringAlternative("MA_Method", "ZeroLagEMA", "", "ZeroLagEMA");
+    indicator.parameters.addStringAlternative("MA_Method", "DEMA", "", "DEMA");
+    indicator.parameters.addStringAlternative("MA_Method", "T3", "", "T3");
+    indicator.parameters.addStringAlternative("MA_Method", "ITrend", "", "ITrend");
+    indicator.parameters.addStringAlternative("MA_Method", "Median", "", "Median");
+    indicator.parameters.addStringAlternative("MA_Method", "GeoMean", "", "GeoMean");
+    indicator.parameters.addStringAlternative("MA_Method", "REMA", "", "REMA");
+    indicator.parameters.addStringAlternative("MA_Method", "ILRS", "", "ILRS");
+    indicator.parameters.addStringAlternative("MA_Method", "IE/2", "", "IE/2");
+    indicator.parameters.addStringAlternative("MA_Method", "TriMAgen", "", "TriMAgen");
+    indicator.parameters.addStringAlternative("MA_Method", "JSmooth", "", "JSmooth");
+
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("SKclr", "SK Color", "SK Color", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("SDclr", "SD Color", "SD Color", core.rgb(0, 0, 255));
+}
+
+var first;
+var source = null;
+var RSI_Period;
+var Stoch_Period;
+var SK_Period;
+var SD_Period;
+var MA_Method;
+var StoRSI_Array;
+var SK_Array;
+var SK_Buff=null;
+var SD_Buff=null;
+var RSI;
+var MA1;
+var MA2;
+
+function Prepare()
+{
+    source = instance.source;
+    RSI_Period=instance.parameters.RSI_Period;
+    Stoch_Period=instance.parameters.Stoch_Period;
+    SK_Period=instance.parameters.SK_Period;
+    SD_Period=instance.parameters.SD_Period;
+    MA_Method=instance.parameters.MA_Method;
+    RSI = core.indicators.create("RSI", source.close, RSI_Period);
+    first = RSI.DATA.first()+2;
+    StoRSI_Array = instance.addInternalStream(first, 0);
+    SK_Array = instance.addInternalStream(first, 0);
+    MA1 = core.indicators.create("AVERAGES", StoRSI_Array, MA_Method, SK_Period, false);
+    MA2 = core.indicators.create("AVERAGES", MA1.DATA, MA_Method, SD_Period, false);
+    var name = profile.id() + "(" + source.name() + ", " + instance.parameters.RSI_Period + ", " + instance.parameters.Stoch_Period + ", " + instance.parameters.SK_Period + ", " + instance.parameters.SD_Period + ", " + instance.parameters.MA_Method + ")";
+    instance.name(name);
+    SK_Buff = instance.addStream("SK_Buff", core.Line, name + ".SK", "SK", instance.parameters.SKclr, first);
+    SD_Buff = instance.addStream("SD_Buff", core.Line, name + ".SD", "SD", instance.parameters.SDclr, first);
+    SK_Buff.addLevel(0);    
+    SK_Buff.addLevel(30);    
+    SK_Buff.addLevel(70);    
+    SK_Buff.addLevel(100);    
+}
+
+function Update(period, mode)
+{
+   if (period>first+Stoch_Period) 
+   {
+    RSI.update(mode);
+    var tmp=Math.minmax(RSI.DATA, period-Stoch_Period+1, period);
+    var LLV=tmp[0];
+    var HHV=tmp[1];
+    if (HHV-LLV!=0) 
+    {
+     StoRSI_Array[period]=100.*(RSI.DATA[period]-LLV)/(HHV-LLV);
+    }
+    else
+    {
+     StoRSI_Array[period]=0; 
+    }
+    MA1.update(mode);
+    MA2.update(mode);
+    SK_Buff[period]=MA1.DATA[period];
+    SD_Buff[period]=MA2.DATA[period];
+   } 
+}
+

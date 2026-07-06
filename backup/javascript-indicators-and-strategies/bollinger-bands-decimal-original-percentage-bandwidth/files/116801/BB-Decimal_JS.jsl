@@ -1,0 +1,55 @@
+function Init()
+{
+    indicator.name("Bollinger Bands Decimal - Original");
+    indicator.description("Original Bollinger Bands with Decimal Support");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+
+    indicator.parameters.addDouble("N", "Number of periods", "Number of periods", 20.0);
+    indicator.parameters.addDouble("Dev", "Number of standard deviations", "Number of standard deviations", 2.0);
+    indicator.parameters.addColor("clrBBP", "clrBBP", "clrBBP", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("clrBBM", "clrBBM", "clrBBM", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("clrBBA", "clrBBA", "clrBBA", core.rgb(0, 0, 255));
+}
+
+var N;
+var D;
+
+var firstPeriod;
+var source = null;
+
+var TL = null;
+var BL = null;
+
+function Prepare()
+{
+    N = instance.parameters.N;
+    D = instance.parameters.Dev;
+    source = instance.source;
+    firstPeriod = source.first() + N - 1;
+
+    var name = "Bollinger Bands in Decimal (" + N + ", " + D + ")";
+    instance.name(name);
+    
+    TL = instance.addStream("TL", core.Line, name + ".TL", "TL", instance.parameters.clrBBP, firstPeriod)
+    BL = instance.addStream("BL", core.Line, name + ".BL", "BL", instance.parameters.clrBBM, firstPeriod)
+    AL = instance.addStream("AL", core.Line, name + ".AL", "AL", instance.parameters.clrBBA, firstPeriod)
+}
+
+function Update(period)
+{
+    if (period >= firstPeriod) 
+    {
+        var ml = Math.avg(source, period-N+1, period);
+        var d = Math.stdev(source, period-N+1, period);
+
+        TL[period] = ml + D * d;
+        BL[period] = ml - D * d;
+        AL[period] = ml;
+    }
+}
+
+
+
+
+

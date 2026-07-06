@@ -1,0 +1,144 @@
+-- Id: 17788
+-- More information about this indicator can be found at:
+-- http://fxcodebase.com/code/viewtopic.php?f=17&t=64518
+
+--+------------------------------------------------------------------+
+--|                               Copyright © 2018, Gehtsoft USA LLC |
+--|                                            http://fxcodebase.com |
+--+------------------------------------------------------------------+
+--|                                      Developed by : Mario Jemic  |
+--|                                          mario.jemic@gmail.com   |
+--+------------------------------------------------------------------+
+--|                                 Support our efforts by donating  |
+--|                                    Paypal: https://goo.gl/9Rj74e |
+--|                    BitCoin : 15VCJTLaz12Amr7adHSBtL9v8XomURo9RF  |
+--|                BitCoin Cash: 1BEtS465S3Su438Kc58h2sqvVvHK9Mijtg  |
+--|           Ethereum : 0x8C110cD61538fb6d7A2B47858F0c0AaBd663068D  |
+--|                   LiteCoin : LLU8PSY2vsq7B9kRELLZQcKf5nJQrdeqwD  |
+--+------------------------------------------------------------------+
+
+function Init()
+    indicator:name("Know Sure Thing Oscillator");
+    indicator:description("Martin Pring's KST indicator combines the Rate Of Change Oscillator (ROC) for four different time periods into one smoothed indicator.");
+    indicator:requiredSource(core.Tick);
+    indicator:type(core.Oscillator);
+
+    indicator.parameters:addGroup("Calculation");
+    AddParam(1, "First", 9, 6);
+    AddParam(2, "Second", 12, 6);
+    AddParam(3, "Third", 18, 6);
+    AddParam(4, "Fourth", 24, 9);
+    AddParam("S", "Signal", nil, 9);
+
+    indicator.parameters:addGroup("Style");
+    indicator.parameters:addColor("clrKST", "Oscillator Line Color", "", core.rgb(255, 0, 0));
+    indicator.parameters:addInteger("widthKST", "Oscillator Line Width", "", 1, 1, 5);
+    indicator.parameters:addInteger("styleKST", "Oscillator Line Style", "", core.LINE_SOLID);
+    indicator.parameters:setFlag("styleKST", core.FLAG_LINE_STYLE);
+    indicator.parameters:addColor("clrSIG", "Signal Line Color", "", core.rgb(0, 255, 0));
+    indicator.parameters:addInteger("widthSIG", "Signal Line Width", "", 1, 1, 5);
+    indicator.parameters:addInteger("styleSIG", "Signal Line Style", "", core.LINE_SOLID);
+    indicator.parameters:setFlag("styleSIG", core.FLAG_LINE_STYLE);
+    indicator.parameters:addColor("clrLEV", "Level Line Color", "", core.rgb(96, 96, 138));
+    indicator.parameters:addInteger("widthLEV", "Level Line Width", "", 1, 1, 5);
+    indicator.parameters:addInteger("styleLEV", "Level Line Style", "", core.LINE_DOT);
+    indicator.parameters:setFlag("styleLEV", core.FLAG_LINE_STYLE);
+
+end
+
+function AddParam(id, name, defROC, defMA)
+    if defROC ~= nil then
+        indicator.parameters:addInteger("ROC" .. id, name .. " ROC Periods", "", defROC, 2, 300);
+    end
+    indicator.parameters:addInteger("MA" .. id, name .. " MA Periods", "The methods marked with (*) must be downloaded and installed", defMA, 1, 300);
+    indicator.parameters:addString("MET" .. id, name .. " Method", "", "MVA");
+    indicator.parameters:addStringAlternative("MET" .. id, "MVA", "", "MVA");
+    indicator.parameters:addStringAlternative("MET" .. id, "EMA", "", "EMA");
+    indicator.parameters:addStringAlternative("MET" .. id, "LWMA", "", "LWMA");
+    indicator.parameters:addStringAlternative("MET" .. id, "TMA", "", "TMA");
+    indicator.parameters:addStringAlternative("MET" .. id, "SMMA(*)", "", "SMMA");
+    indicator.parameters:addStringAlternative("MET" .. id, "Vidya (1995)*", "", "VIDYA");
+    indicator.parameters:addStringAlternative("MET" .. id, "Vidya (1992)*", "", "VIDYA92");
+    indicator.parameters:addStringAlternative("MET" .. id, "Wilders*", "", "WMA");
+end
+
+
+local source;
+local roc = {};
+local k = {};
+local mva = {};
+local kst, signal;
+local firstkst, firstsignal;
+
+function Prepare(nameOnly)
+    source = instance.source;
+
+
+    local i, name, total;
+    local _roc, _ma, _met;
+    firstkst = 0;
+    total = 0;
+    name = profile:id() .. "(";
+    for i = 1, 4, 1 do
+        _roc = instance.parameters:getInteger("ROC" .. i);
+        _ma = instance.parameters:getInteger("MA" .. i);
+        _met = instance.parameters:getString("MET" .. i);
+
+        if not nameOnly then
+            roc[i] = core.indicators:create("ROC", source, _roc);
+    assert(core.indicators:findIndicator(_met) ~= nil, _met .. " indicator must be installed");
+            mva[i] = core.indicators:create(_met, roc[i].DATA, _ma);
+            firstkst = math.max(firstkst, mva[i].DATA:first());
+        end
+        total = total + _roc;
+
+        if i ~= 1 then
+            name = name .. ",";
+        end
+        name = name .. _met .. "(ROC(" .. _roc .. ")," .. _ma .. ")";
+    end
+    k[1] = instance.parameters.ROC1 / total;
+    k[2] = instance.parameters.ROC2 / total;
+    k[3] = instance.parameters.ROC3 / total;
+    k[4] = instance.parameters.ROC4 / total;
+    _ma = instance.parameters.MAS;
+    _met = instance.parameters.METS;
+    name = name .. "," .. _met .. "(" .. _ma .. "))";
+    instance:name(name);
+    if nameOnly then
+        return;
+    end
+    kst = instance:addStream("KST", core.Line, name .. ".KST", "KST", instance.parameters.clrKST, firstkst);
+    kst:setPrecision(4);
+    kst:addLevel(0, instance.parameters.styleLEV, instance.parameters.widthLEV, instance.parameters.clrLEV);
+    kst:setWidth(instance.parameters.widthKST);
+    kst:setStyle(instance.parameters.styleKST);
+
+    mva[5] = core.indicators:create(_met, kst, _ma);
+    firstsignal = mva[5].DATA:first();
+    signal = instance:addStream("SIG", core.Line, name .. ".SIG", "SIG", instance.parameters.clrSIG, firstsignal);
+    signal:setPrecision(math.max(2, instance.source:getPrecision()));
+    signal:setWidth(instance.parameters.widthSIG);
+    signal:setStyle(instance.parameters.styleSIG);
+end
+
+function Update(period, mode)
+    local i;
+    for i = 1, 4, 1 do
+        roc[i]:update(mode);
+        mva[i]:update(mode);
+    end
+    if period >= firstkst then
+        kst[period] = mva[1].DATA[period] * k[1] + mva[2].DATA[period] * k[2] +
+                      mva[3].DATA[period] * k[3] + mva[4].DATA[period] * k[4];
+    end
+    mva[5]:update(mode);
+    if period >= firstsignal then
+        signal[period] = mva[5].DATA[period];
+    end
+end
+
+
+
+
+

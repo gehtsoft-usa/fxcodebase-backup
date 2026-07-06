@@ -1,0 +1,89 @@
+function Init()
+{
+    indicator.name("Money Flow Index");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+    indicator.setTag("group", "Volume Indicators");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("N", "Periods", "", 14, 1, 1000);
+    indicator.parameters.addInteger("Center", "Center line position", "", 50, 0, 100);
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clrMFI", "Indicator Line Color", "", core.rgb(255, 255, 0));
+    indicator.parameters.addInteger("widthMFI", "Indicator Line Width", "", 1, 1, 5);
+    indicator.parameters.addInteger("styleMFI", "Indicator Line Style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleMFI", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("clrCenter", "Center Line Color", "", core.rgb(0, 255, 0));
+    indicator.parameters.addInteger("widthCenter", "Center Line Width", "", 1, 1, 5);
+    indicator.parameters.addInteger("styleCenter", "Center Line Style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("styleCenter", core.FLAG_LINE_STYLE);
+}
+
+var source;
+var N;
+var first;
+var first1;
+var MFI;
+var Prev;
+var POS, NEG;
+
+function Prepare()
+{
+    source = instance.source;
+    N = instance.parameters.N;
+    first = source.first() + N + 1;
+    first1 = source.first() + 1;
+    Prev = instance.parameters.Prev;
+
+    assert(source.supportsVolume(), "The source must have volume");
+
+    name = profile.id() + "(" + source.name() + "," + N + ")";
+    instance.name(name);
+
+    POS = instance.addInternalStream(0, 0);
+    NEG = instance.addInternalStream(0, 0);
+    MFI = instance.addStream("MFI", core.Line, name, "MFI", instance.parameters.clrMFI, first);
+    MFI.setPrecision(2);
+    MFI.setWidth(instance.parameters.widthMFI);
+    MFI.setStyle(instance.parameters.styleMFI);
+    MFI.addLevel(100);
+    MFI.addLevel(80);
+    MFI.addLevel(20);
+    MFI.addLevel(0);
+    MFI.addLevel(instance.parameters.Center,instance.parameters.styleCenter,instance.parameters.widthCenter,instance.parameters.clrCenter);
+}
+
+function Update(period, mode)
+{
+    POS[period] = 0;
+    NEG[period] = 0;
+
+    if (period >= first1) 
+    {
+        if (source.typical[period] > source.typical[period - 1]) 
+        {
+            POS[period] = source.typical[period] * source.volume[period];
+        }    
+        else if (source.typical[period] < source.typical[period - 1]) 
+        {
+            NEG[period] = source.typical[period] * source.volume[period];
+        }
+    }
+
+    if (period >= first) 
+    {
+        var range, a, b, r;
+        a = Math.sum(POS, period-N+1, period);
+        b = Math.sum(NEG, period-N+1, period);
+        if (b != 0) 
+        {
+            r = a / b;
+        }
+        else
+        {
+            r = 0;
+        }
+        MFI[period] = 100 - (100 / (1 + r));
+    }
+}

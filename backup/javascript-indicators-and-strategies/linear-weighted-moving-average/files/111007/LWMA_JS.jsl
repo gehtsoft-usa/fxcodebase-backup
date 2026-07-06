@@ -1,0 +1,49 @@
+//initializes the indicator
+function Init()
+{
+    indicator.name("Linear Weighted Moving Average");
+    indicator.description("Linear Weighted Moving Average");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Indicator);
+    indicator.setTag("group", "Moving Averages");
+
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("N", "Number of periods", "The number of periods.", 14, 1, 10000);
+    indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("clr", "Line color", "The color of line", core.rgb(0, 183, 183));
+    indicator.parameters.addInteger("width", "Line width", "The width of line", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "The style of line", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LEVEL_STYLE);
+}
+
+var firstPeriod = 0;
+var N = 0;
+var source = null;
+var LWMA;
+
+//initializes the instance of the indicator
+function Prepare(onlyName)
+{
+    source = instance.source;
+    N = instance.parameters.N;
+    var name = profile.id() + "(" + instance.source.name() + "," + N + ")";
+    instance.name(name);
+  
+    if (onlyName == true)
+        return ;
+    firstPeriod = source.first() + N - 1;
+
+    LWMA = instance.addStream("LWMA", core.Line, name, "LWMA", instance.parameters.clr,  firstPeriod)
+    LWMA.setWidth(instance.parameters.width);
+    LWMA.setStyle(instance.parameters.style);
+}
+
+// calculate the value
+function Update(period, mode)
+{
+    if (period >= firstPeriod)
+    {
+        LWMA[period] = Math.lwma(source, period - N + 1, period);
+    }
+    
+}

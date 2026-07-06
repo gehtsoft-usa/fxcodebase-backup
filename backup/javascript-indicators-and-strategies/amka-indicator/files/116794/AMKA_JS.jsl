@@ -1,0 +1,187 @@
+function Init()
+{
+    indicator.name("AMKA indicator");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    
+    indicator.parameters.addInteger("periodAMA", "periodAMA", "No description", 9);
+    indicator.parameters.addDouble("nfast", "nfast", "No description", 2);
+    indicator.parameters.addDouble("nslow", "nslow", "No description", 30);
+    indicator.parameters.addDouble("Pow", "Pow", "No description", 2);
+    indicator.parameters.addDouble("dK", "dK", "No description", 1);
+    indicator.parameters.addString("use_stdev", "use_stdev", "", "true");
+    indicator.parameters.addStringAlternative("use_stdev", "true", "", "true");
+    indicator.parameters.addStringAlternative("use_stdev", "false", "", "false");
+    indicator.parameters.addString("app_price", "app_price", "", "close");
+    indicator.parameters.addStringAlternative("app_price", "close", "", "close");
+    indicator.parameters.addStringAlternative("app_price", "open", "", "open");
+    indicator.parameters.addStringAlternative("app_price", "high", "", "high");
+    indicator.parameters.addStringAlternative("app_price", "low", "", "low");
+    indicator.parameters.addStringAlternative("app_price", "median", "", "median");
+    indicator.parameters.addStringAlternative("app_price", "typical", "", "typical");
+    indicator.parameters.addStringAlternative("app_price", "weighted", "", "weighted");
+
+
+    indicator.parameters.addColor("Line_color", "Color of line", "Color of line", core.rgb(0, 255, 0));
+    indicator.parameters.addColor("UP_color", "Color of UP", "Color of UP", core.rgb(255, 0, 0));
+    indicator.parameters.addColor("DN_color", "Color of DN", "Color of DN", core.rgb(0, 0, 255));
+}
+
+var periodAMA;
+var nfast;
+var nslow;
+var Pow;
+var dK;
+var use_stdev;
+var app_price;
+var Price;
+
+var first;
+var source = null;
+var buffLine=null;
+var buffUp=null;
+var buffDn=null;
+
+var slowSC;
+var fastSC;
+
+var ddAMA=0.;
+
+function Prepare()
+{
+    periodAMA = instance.parameters.periodAMA;
+    nfast = instance.parameters.nfast;
+    nslow = instance.parameters.nslow;
+    Pow = instance.parameters.Pow;
+    dK = instance.parameters.dK;
+    use_stdev = instance.parameters.use_stdev;
+    app_price = instance.parameters.app_price;
+    source = instance.source;
+    Price = instance.addInternalStream(0, 0);
+    first = source.first();
+    var name = profile.id() + "(" + source.name() + ", " + periodAMA + ", " + nfast + ", " + nslow + ", " + Pow + ", " + app_price + ")";
+    instance.name(name);
+    buffLine = instance.addStream("Line", core.Line, name + ".Line", "Line", instance.parameters.Line_color, first);
+    buffUp = instance.createTextOutput ("Up", "Up", "Wingdings", 10, core.H_Center, core.V_Center, instance.parameters.UP_color, first);
+    buffDn = instance.createTextOutput ("Dn", "Dn", "Wingdings", 10, core.H_Center, core.V_Center, instance.parameters.DN_color, first);
+    slowSC = (2./(nslow+1.));
+    fastSC = (2./(nfast+1.));
+    ddAMA=core.makeArray(periodAMA);
+}
+
+function Update(period, mode)
+{
+    if (period>first+periodAMA) 
+    {
+     if (app_price=="close") 
+     {
+      Price[period]=source.close[period];
+     } 
+     else if (app_price=="open") 
+     {
+      Price[period]=source.open[period];
+     } 
+     else if (app_price=="high") 
+     {
+      Price[period]=source.high[period];
+     }  
+     else if (app_price=="low") 
+     {
+      Price[period]=source.low[period];
+     } 
+     else if (app_price=="median") 
+     {
+      Price[period]=(source.high[period]+source.low[period])/2.;
+     } 
+     else if (app_price=="typical") 
+     {
+      Price[period]=(source.high[period]+source.low[period]+source.close[period])/3.;
+     } 
+     else
+     {
+      Price[period]=(source.high[period]+source.low[period]+2.*source.close[period])/4.;
+     }
+     
+     var AMA0=Price[period-1];
+     if (buffLine[period-1]>0) 
+     {
+      AMA0=buffLine[period-1];
+     }
+     
+     var Filter;
+     
+     var signal=Math.abs(Price[period]-Price[period-periodAMA]);
+     var noise=0.000000001;
+     for (i=0; i<=periodAMA-1; i++) 
+     {
+      noise=noise+Math.abs(Price[period-i]-Price[period-i-1]);
+     }
+     var ER=signal/noise;
+     var SSC=ER*(fastSC-slowSC)+slowSC;
+     var AMA=AMA0+Math.pow(SSC,Pow)*(Price[period]-AMA0);
+     buffLine[period]=AMA;
+     
+     var ddK=(AMA-AMA0)/source.pipSize();
+     if (use_stdev=="true") 
+     {
+      InsertDif(ddK);
+      if (period-first>2*periodAMA) 
+      {
+       var SMAdif=0.;
+       for (i=0; i<=periodAMA-1; i++) 
+       {
+        SMAdif=SMAdif+ddAMA[i];
+       }
+       SMAdif=SMAdif/periodAMA;
+       var StDev=0.;
+       for (i=0; i<=periodAMA-1; i++) 
+       {
+        StDev=StDev+Math.pow(ddAMA[i]-SMAdif,2);
+       }
+       StDev=Math.sqrt(StDev)/periodAMA;
+       Filter=dK*StDev;
+      } 
+      else
+      {
+       Filter=100000;
+      }
+     } 
+     else
+     {
+      Filter=dK;
+     }
+     
+     var var1=0.;
+     var var2=0.;
+     if (ddK>Filter) 
+     {
+      var1=AMA;
+      buffUp.set(period, AMA, "\159", "");
+     }
+     if (ddK<-Filter) 
+     {
+      var2=AMA;
+      buffDn.set(period, AMA, "\159", "");
+     }
+     AMA0=AMA;
+
+    }
+}
+
+function InsertDif(a)
+{
+ for (i=0; i<=periodAMA-1;i++) 
+ {
+  if (ddAMA[i]==0.) 
+  {
+   ddAMA[i]=a;
+  }
+  for (i=0; i<=periodAMA-2; i++) 
+  {
+   ddAMA[i]=ddAMA[i+1];
+  }
+  ddAMA[periodAMA-1]=a;
+ }
+}
+

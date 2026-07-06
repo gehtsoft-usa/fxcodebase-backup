@@ -1,0 +1,49 @@
+function Init()
+{
+    indicator.name("Effort-Result");
+    indicator.description("Effort-Result");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Oscillator);
+
+    indicator.parameters.addInteger("Period", "Period", "Period", 14);
+    indicator.parameters.addColor("EffortResult_color", "Color of EffortResult", "Color of EffortResult", core.rgb(255, 0, 0));
+}
+
+var Period;
+
+var first;
+var source = null;
+
+var EffortResult = null;
+var ROC;
+
+function Prepare(nameOnly)
+{
+    Period = instance.parameters.Period;
+    source = instance.source;
+	ROC = core.indicators.create("ROC", source.close, Period);
+    first = ROC.DATA.first();
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period) + ")";
+    instance.name(name);
+
+    if (!(nameOnly)) 
+    {
+        EffortResult = instance.addStream("EffortResult", core.Line, name, "EffortResult", instance.parameters.EffortResult_color, first);
+    }
+}
+
+function Update(period, mode)
+{
+    ROC.update(mode);
+	
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+
+   var tmp=Math.minmax(source.volume, period-Period+1, period);
+   EffortResult[period] = ROC.DATA[period]/tmp[1];
+    
+}
+

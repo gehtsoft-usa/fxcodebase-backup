@@ -1,0 +1,158 @@
+function Init()
+{
+    indicator.name(" Reversal  /  Continuation Indicator");
+    indicator.description("");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+	
+	indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("M1", "Fast Moving Average Period", "Period", 3);
+    indicator.parameters.addInteger("M2", "Middle Moving Average Period" , "", 7);
+    indicator.parameters.addInteger("M3", "Slow Moving Average Period", "", 50);
+	
+	indicator.parameters.addString("Method", " Moving Average Method", "Method" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "MVA", "MVA" , "MVA");
+    indicator.parameters.addStringAlternative("Method", "EMA", "EMA" , "EMA");
+    indicator.parameters.addStringAlternative("Method", "LWMA", "LWMA" , "LWMA");
+    indicator.parameters.addStringAlternative("Method", "TMA", "TMA" , "TMA");
+    indicator.parameters.addStringAlternative("Method", "SMMA", "SMMA" , "SMMA");
+    indicator.parameters.addStringAlternative("Method", "KAMA", "KAMA" , "KAMA");
+    indicator.parameters.addStringAlternative("Method", "VIDYA", "VIDYA" , "VIDYA");
+    indicator.parameters.addStringAlternative("Method", "WMA", "WMA" , "WMA");
+
+	
+	indicator.parameters.addGroup("Selector");
+	indicator.parameters.addBoolean("On1", "Fast / Middle Moving Average Filter ", "", true);
+	indicator.parameters.addBoolean("On2", "Middle / Slow Moving Average Filter ", "", true);
+    indicator.parameters.addBoolean("On3", "Price Filter ", "", true);
+	
+    indicator.parameters.addString("Type", " Price Type", "Type" , "Reversal");
+    indicator.parameters.addStringAlternative("Type", "Continuation", "Continuation" , "Continuation");
+    indicator.parameters.addStringAlternative("Type", "Reversal", "Reversal" , "Reversal");
+    indicator.parameters.addStringAlternative("Type", "Any", "Any" , "Any");
+	
+	indicator.parameters.addGroup("Style");
+	indicator.parameters.addColor("Up", "Up Trend Color","Up Trend Color", core.rgb(0,255,255));
+	indicator.parameters.addColor("Down", "Down Trend Color","Down Trend Color", core.rgb(255,0,255));
+    indicator.parameters.addInteger("Size", "Font Size","Font Size", 10);
+	
+}
+
+var Method, M1,M2,M3;
+
+var Method=null;
+
+var m1, m2, m3;
+
+var first;
+var source = null;
+
+var open=null;
+var close=null;
+var high=null;
+var low=null;
+var Up, Down;
+var up, down,Size; 
+var On={};
+var Type;
+
+function Prepare()
+{
+    M1 = instance.parameters.M1;
+    M2 = instance.parameters.M2;
+    M3 = instance.parameters.M3;
+	Size = instance.parameters.Size;
+	Method= instance.parameters.Method;
+	Up = instance.parameters.Up;
+	Down = instance.parameters.Down;
+    On[1] = instance.parameters.On1;
+	On[2] = instance.parameters.On2;	
+	On[3] = instance.parameters.On3;
+	Type = instance.parameters.Type;
+	
+    source = instance.source;
+   
+	
+    m1 = core.indicators.create(Method, source.close, M1);
+    m2 = core.indicators.create(Method, source.close, M2);
+	m3 = core.indicators.create(Method, source.close, M3);
+    first = Math.max( m1.DATA.first(), m2.DATA.first(), m3.DATA.first());	
+	
+	up = instance.createTextOutput ("Up", "Up", "Wingdings", Size, core.H_Center, core.V_Top, Up, first);
+    down = instance.createTextOutput ("Dn", "Dn", "Wingdings", Size, core.H_Center, core.V_Bottom, Down, first);
+
+    var name = profile.id() + "(" + source.name() + ", "  + M1 + ", " + M2 + ", " + M3+ ", " + Method + ")";
+    instance.name(name);
+   
+   }
+
+function Update(period, mode)
+{
+
+    m1.update(mode);
+    m2.update(mode);
+	m3.update(mode);
+	
+	 up.setNoData(period );
+     down.setNoData(period );      
+	 
+	 
+	if (!On[1] && !On[2]) 
+	{
+     return;
+    }	
+	 
+	if (period < first  || !source.hasData(period)) 
+	{		
+     return;
+    } 
+	
+			if ((m1.DATA[period] > m2.DATA[period] || !On[1]) && ( m2.DATA[period] > m3.DATA[period] || !On[2]))
+			{
+			
+		  
+				 
+			   if (On[3]) 
+			   { 
+			   
+			      
+				   if (source.close[period]> source.open[period] && Type !=  "Reversal") 
+				   {
+				    up.set(period, source.high[period], "\217");				  
+				   }
+				   
+				    if (source.close[period]< source.open[period]  && Type != "Continuation") 
+				    {
+					 down.set(period, source.low[period], "\218");
+				   }
+				}
+			   else
+			   {
+				up.set(period, source.high[period], "\217");
+			   }
+		   }
+		   
+       if ((m1.DATA[period] < m2.DATA[period] || !On[1]) && ( m2.DATA[period] < m3.DATA[period] || !On[2]))
+       {    
+			   if (On[3]) 
+			   {
+				    if (source.close[period]< source.open[period] && Type !=  "Reversal") 
+				    {					
+				    down.set(period, source.low[period], "\218");
+				   }
+				   
+				    if (source.close[period]> source.open[period]  && Type != "Continuation") 
+				    {
+					up.set(period, source.high[period], "\217");
+				   }
+				}
+			   else
+			   {
+				 down.set(period, source.low[period], "\218")
+			   }
+  
+       }
+   
+   
+}
+

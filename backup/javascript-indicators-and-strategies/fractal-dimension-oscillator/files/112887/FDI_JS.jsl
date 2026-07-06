@@ -1,0 +1,107 @@
+function Init()
+{
+    indicator.name("FRACTAL DIMENSION INDICATOR");
+    indicator.description("FRACTAL DIMENSION INDICATOR");
+    indicator.requiredSource(core.Tick);
+    indicator.type(core.Oscillator);
+	
+    indicator.parameters.addGroup("Calculation");	
+    indicator.parameters.addInteger("N", "Period", "Period", 30);	
+    indicator.parameters.addInteger("P", "Average Period", "Average Period", 20);
+	 indicator.parameters.addGroup("Line Style");	
+    indicator.parameters.addColor("FDI_color", "Color of FDI", "Color of FDI", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style", core.FLAG_LINE_STYLE);
+	
+	indicator.parameters.addGroup("Levels Style");	
+    indicator.parameters.addDouble("overbought", "Overbought Level","", 1.6);
+    indicator.parameters.addDouble("oversold","Oversold Level","", 1.4);
+	indicator.parameters.addColor("level_overboughtsold_color", "Line Color","", core.rgb(128, 128, 128));
+    indicator.parameters.addInteger("level_overboughtsold_width","Line width","", 1, 1, 5);
+    indicator.parameters.addInteger("level_overboughtsold_style", "Line Style","", core.LINE_SOLID);
+    indicator.parameters.setFlag("level_overboughtsold_style", core.FLAG_LEVEL_STYLE);
+}
+
+var N;
+var P;
+
+var first;
+var Price = null;
+
+// Streams block
+var Dimen = null;
+var Smooth,Ratio,MA;
+// Routine
+function Prepare(nameOnly)
+{
+    N = instance.parameters.N;
+    P = instance.parameters.P;
+    Price = instance.source;
+    first = Price.first()+N+3;
+
+    var name = profile.id() + "(" + Price.name() + ", " + tostring(N) + ", " + tostring(P) + ")";
+    instance.name(name);
+
+    if (not (nameOnly)) 
+    {
+	    Smooth = instance.addInternalStream(first, 0);
+		Ratio  = instance.addInternalStream(first, 0);
+		MA = core.indicators.create("MVA", Ratio, P);		
+        Dimen = instance.addStream("FDI", core.Line, name, "FDI", instance.parameters.FDI_color, MA.DATA.first());
+		Dimen.setWidth(instance.parameters.width);
+        Dimen.setStyle(instance.parameters.style);
+		Dimen.addLevel(instance.parameters.oversold, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);
+		Dimen.addLevel(instance.parameters.overbought, instance.parameters.level_overboughtsold_style, instance.parameters.level_overboughtsold_width, instance.parameters.level_overboughtsold_color);    
+    }
+}
+
+function Update(period, mode)
+{
+    
+	
+	if (period <   Price.first() +3) 
+	{
+	 return;
+	}
+		
+	Smooth[period] = (Price[period] + 2*Price[period-1] + 2*Price[period-2] + Price[period-3]) / 6;
+	
+	if (period < first +N)  
+	{
+	 return;
+	}
+	
+	var min,max;
+	var tmp=Math.minmax	(Smooth, period-N+1, period);
+	min=tmp[0];
+	max=tmp[1];
+	
+	N3 = (max - min ) / N;
+
+	tmp = Math.minmax(Smooth, period-N/2+1, period);
+	min=tmp[0];
+	max=tmp[1];
+	
+	N1 = (max - min) / (N / 2);
+	
+	tmp = Math.minmax(Smooth, period-N+1 , period-N/2+1);
+	min=tmp[0];
+	max=tmp[1];
+
+	N2 = (max - min)/(N / 2);
+  
+  
+    Ratio[period] = 0.5*((Math.log(N1 + N2) - Math.log(N3)) / Math.log(2) + Dimen[period-1])
+	
+	
+	if (period < MA.DATA.first()) 
+	{
+	 return;	
+	}
+	
+	MA.update(mode);
+	
+	Dimen[period] = MA.DATA[period];
+	
+}

@@ -1,0 +1,116 @@
+function Init()
+{
+    indicator.name("Volatility Band");
+    indicator.description("Volatility Band");
+    indicator.requiredSource(core.Bar);
+    indicator.type(core.Indicator);
+    indicator.parameters.addGroup("Calculation");
+    indicator.parameters.addInteger("Period_VolaBands", "Period_VolaBands", "Period_VolaBands", 8);
+    indicator.parameters.addInteger("Period_Vola", "Period_Vola", "Period_Vola", 13);
+    indicator.parameters.addDouble("Dev_Factor", "Dev_Factor", "Dev_Factor", 3.55);
+    indicator.parameters.addDouble("Low_Band_Adjust", "Low_Band_Adjust", "Low_Band_Adjust", 0.9);
+	
+	indicator.parameters.addGroup("Style");
+    indicator.parameters.addColor("midLine_color", "Color of midLine", "Color of midLine", core.rgb(0, 0, 255));
+	indicator.parameters.addInteger("width1", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style1", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style1", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("lowerBand_color", "Color of lowerBand", "Color of lowerBand", core.rgb(0, 255, 0));
+	indicator.parameters.addInteger("width2", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style2", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style2", core.FLAG_LINE_STYLE);
+    indicator.parameters.addColor("upperBAnd_color", "Color of upperBAnd", "Color of upperBAnd", core.rgb(255, 0, 0));
+	indicator.parameters.addInteger("width3", "Line width", "", 1, 1, 5);
+    indicator.parameters.addInteger("style3", "Line style", "", core.LINE_SOLID);
+    indicator.parameters.setFlag("style3", core.FLAG_LINE_STYLE);
+}
+
+var Period_VolaBands;
+var Period_Vola;
+var Dev_Factor;
+var Low_Band_Adjust;
+
+var first;
+var source = null;
+
+var midLine = null;
+var lowerBand = null;
+var upperBAnd = null;
+var tpSeries;
+var   AVG2, AVG1,volaValue;
+
+function Prepare(nameOnly)
+{
+    Period_VolaBands = instance.parameters.Period_VolaBands;
+    Period_Vola = instance.parameters.Period_Vola;
+    Dev_Factor = instance.parameters.Dev_Factor;
+    Low_Band_Adjust = instance.parameters.Low_Band_Adjust;
+    source = instance.source;
+    first = source.first()+1;
+
+    var name = profile.id() + "(" + source.name() + ", " + tostring(Period_VolaBands) + ", " + tostring(Period_Vola) + ", " + tostring(Dev_Factor) + ", " + tostring(Low_Band_Adjust) + ")";
+    instance.name(name);
+ 
+	tpSeries = instance.addInternalStream(0, 0);
+	volaValue= instance.addInternalStream(0, 0);
+	AVG1 = core.indicators.create("EMA", volaValue, Period_VolaBands);
+	AVG2 = core.indicators.create("EMA", source.typical, Period_VolaBands);
+	 
+	
+    if (!(nameOnly)) 
+    {
+        midLine = instance.addStream("midLine", core.Line, name + ".midLine", "midLine", instance.parameters.midLine_color, AVG1.DATA.first());
+		midLine.setWidth(instance.parameters.width1);
+        midLine.setStyle(instance.parameters.style1);
+        lowerBand = instance.addStream("lowerBand", core.Line, name + ".lowerBand", "lowerBand", instance.parameters.lowerBand_color, AVG1.DATA.first());
+		lowerBand.setWidth(instance.parameters.width2);
+        lowerBand.setStyle(instance.parameters.style2);
+        upperBAnd = instance.addStream("upperBAnd", core.Line, name + ".upperBAnd", "upperBAnd", instance.parameters.upperBAnd_color, AVG1.DATA.first());
+		upperBAnd.setWidth(instance.parameters.width3);
+        upperBAnd.setStyle(instance.parameters.style3);
+    }
+}
+
+function Update(period, mode)
+{
+    if (period < first || !source.hasData(period)) 
+    {
+	 return;
+	}
+	
+	if (source.typical[period] >= source.typical[period-1]) 
+    {		
+	 tpSeries[period] = source.typical[period] - source.low[period-1]
+    } 
+	else
+    {
+	 tpSeries[period] =source.typical[period-1] - source.low[period] ;
+	}
+	
+	
+	if (period < first + Period_Vola) 
+    {
+	 return;
+    }
+	volaValue[period] = Math.sum( tpSeries, period-Period_Vola+1, period ) / ( Period_Vola * Dev_Factor );
+	
+ 
+       AVG1.update(mode);	 
+       AVG2.update(mode);
+	   
+	   
+	   
+	   var devHigh = AVG1.DATA[period]; 
+	   var devLow = devHigh* Low_Band_Adjust;
+	   
+	   if (AVG2.DATA.first()> period) 
+       {
+	    return;
+	   }
+	
+        midLine[period] = AVG2.DATA[period];
+        lowerBand[period] =  midLine[period] -devLow;
+        upperBAnd[period] = midLine[period] + devHigh;
+    
+}
+
