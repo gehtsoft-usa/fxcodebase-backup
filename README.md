@@ -65,13 +65,20 @@ For a large forum a good combination is e.g. `--workers 8 --delay 0.15`.
   custom-indicators/                 forum folder = clean forum title
     .forum-id                        marker (which forum id lives here)
     forum.md                         index of every topic (links to folders)
-    gann-hilo-activator/             topic folder = clean topic title
-      index.md                       the whole thread as Markdown
-      files/<post-id>/GHLA.lua       indicators/attachments, grouped per post
-      images/<post-id>/ghla.png      screenshots, grouped per post
-    how-to-download-and-install-custom-indicator/
-      ...
+    g/                               first-letter bucket (keeps folders small)
+      gann-hilo-activator/           topic folder = clean topic title
+        index.md                     the whole thread as Markdown
+        files/<post-id>/GHLA.lua     indicators/attachments, grouped per post
+        images/<post-id>/ghla.png    screenshots, grouped per post
+    h/
+      how-to-download-and-install-custom-indicator/
+        ...
 ```
+
+Topic folders are grouped into a single-character bucket taken from the first
+letter of the folder name (`a`–`z`; digits go into `0-9`). This keeps any one
+directory well under GitHub's ~1000-entries-per-folder limit — some of these
+forums have 3000+ topics.
 
 - **Folders are named after the (slugified) title**, kept clean. An id is
   appended at the *end* only to break a collision: if two topics share a title,

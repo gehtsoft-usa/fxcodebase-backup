@@ -120,6 +120,18 @@ def slugify(text, maxlen=60):
     return text or "untitled"
 
 
+def bucket_of(name):
+    """First-character bucket for a topic folder, keeping any single forum
+    directory well under GitHub's ~1000-entries-per-folder comfort zone:
+    'a'-'z' by first letter, digits into '0-9', anything else into '_'."""
+    c = name[:1].lower()
+    if "a" <= c <= "z":
+        return c
+    if c.isdigit():
+        return "0-9"
+    return "_"
+
+
 def assign_topic_folders(topics):
     """Map topic-id -> folder name. Clean slug when unique; on collision the
     lowest topic-id keeps the clean slug and the rest get a '-t<id>' suffix.
@@ -718,7 +730,8 @@ class Backup:
                        f"> Source: {strip_sid(self.forum_url)}  ",
                        f"> Topics: {len(topics)}\n"]
         for tid, title, _ in topics:
-            index_lines.append(f"- [{title}]({names[tid]}/index.md)")
+            name = names[tid]
+            index_lines.append(f"- [{title}]({bucket_of(name)}/{name}/index.md)")
         with open(os.path.join(forum_dir, "forum.md"), "w", encoding="utf-8") as fh:
             fh.write("\n".join(index_lines).rstrip() + "\n")
 
@@ -728,7 +741,8 @@ class Backup:
 
         def handle(item):
             tid, title, href = item
-            topic_dir = os.path.join(forum_dir, names[tid])
+            name = names[tid]
+            topic_dir = os.path.join(forum_dir, bucket_of(name), name)
             with counter_lock:
                 counter[0] += 1
                 n = counter[0]
