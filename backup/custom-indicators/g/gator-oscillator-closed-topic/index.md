@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=27  
 > Forum: 17 · Topic 27 · 4 post(s)
 
-
 ---
 
 ## "Gator" Oscillator (closed topic)
@@ -33,14 +32,11 @@ Bottom Graph = - | Alligator Teeth – Alligator Lips |
 
 *Gator Screenshot. (Note that "Gator" is the oscillator below. Over the chart lines is the Alligator Indicator, with which "Gator" is usually used.)*
 
-
-
  [gator.lua](files/28/gator.lua)
 
 Tags: Gator, indicator, Marketscope, oscillator, Trading Station, FXCM, dbFX
 
 The indicator was revised and updated
-
 
 ---
 
@@ -56,8 +52,8 @@ Here is the modified version of the gator oscillator:
 
 Source code:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- initializes the indicator
+```lua
+-- initializes the indicator
 function Init()
     indicator:name("Gator1");
     indicator:description("Median and SMMA-based version of the gator")
@@ -178,8 +174,8 @@ function Update(period, mode)
             end
         end
     end
-end`
-
+end
+```
 
 ---
 
@@ -194,7 +190,6 @@ gator explain the difference between alligator lines
 if divergence : green for two histos
 if convergence : red...
 do you understand my bad english and poor french !
-
 
 ---
 

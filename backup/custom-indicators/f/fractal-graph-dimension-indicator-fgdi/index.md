@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=1250  
 > Forum: 17 · Topic 1250 · 3 post(s)
 
-
 ---
 
 ## Fractal Graph Dimension Indicator (FGDI)
@@ -18,10 +17,8 @@ The indicator is described in Technical Analysis of Stocks and Commodities, in a
 
 ![FGDI.png](images/2373/FGDI.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Fractal_Graph_Dimension");
     indicator:description("Fractal_Graph_Dimension");
     indicator:requiredSource(core.Bar);
@@ -167,10 +164,11 @@ function Update(period, mode)
      end
 
     end
-end`
+end
+```
+
 MT4 / MQ4 version is available here.
 [viewtopic.php?f=38&t=63912](https://fxcodebase.com/code/viewtopic.php?f=38&t=63912)
-
 
 ---
 
@@ -179,7 +177,6 @@ MT4 / MQ4 version is available here.
 **Apprentice** · Thu Jan 12, 2017 8:49 am
 
 Indicator was revised and updated.
-
 
 ---
 

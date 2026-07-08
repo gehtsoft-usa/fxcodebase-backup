@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=29&t=1045  
 > Forum: 29 · Topic 1045 · 17 post(s)
 
-
 ---
 
 ## SAR Signal [Upd Oct, 18]
@@ -21,14 +20,12 @@ The simple signals which shows alert when the SAR indicator changes it's directi
 
 ![sar_signal.png](images/1966/sar_signal.png)
 
-
-
 Download:
 
  [SAR_signal_1.lua](files/1966/SAR_signal_1.lua)
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- Indicator profile initialization routine
+```lua
+-- Indicator profile initialization routine
 -- Defines indicator profile properties and indicator parameters
 function Init()
     strategy:name("Simple SAR signal");
@@ -136,8 +133,8 @@ function ExtUpdate(id, source, period)
     end
 end
 
-dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");`
-
+dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");
+```
 
 ---
 
@@ -146,7 +143,6 @@ dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");`
 **maani1972** · Mon May 17, 2010 5:28 pm
 
 Thanks
-
 
 ---
 
@@ -159,7 +155,6 @@ Hi,
 Do I need to reset the sar signal after it produced an alert? because it doesn't give me anymore alerts after the first one. is there a way to make it "fix" so I don't need to reset it after an alert?
 
 Thank you very much
-
 
 ---
 
@@ -179,10 +174,7 @@ p.s. Below it is how it looks on my TS:
 
 ![sar.PNG](images/1977/sar.PNG)
 
-
-
 However, I found how to simplify the signal a bit. I updated the code, it will consume a bit less of the processor time.
-
 
 ---
 
@@ -195,7 +187,6 @@ Hi,
 Your right is does work well, sorry for that because at one point it didn't but for today every thing worked fine. Thanks. I'm using it on the 15m chart. I look to your update.
 Thanks
 
-
 ---
 
 ## Re: SAR Signal
@@ -203,7 +194,6 @@ Thanks
 **wizardpro** · Wed Oct 13, 2010 12:26 pm
 
 Any update on the result? Do you think it work better with higher time frames such as 1 hours and above?
-
 
 ---
 
@@ -215,7 +205,6 @@ Right now you can easily check it by yourself. Just install an autotrading patch
 
 BTW, there is a good article about SAR strategies on dailyfx.com:
 [http://www.dailyfx.com/forex/technical/ ... ategy.html](http://www.dailyfx.com/forex/technical/article/forex_strategy_corner/2010/09/27/Forex_Strategy_Corner_Using_Parabolic_SAR_as_Trading_Strategy.html)
-
 
 ---
 
@@ -229,7 +218,6 @@ I would really appreciate anybody's help.
 
 alan
 
-
 ---
 
 ## Re: SAR Signal
@@ -237,7 +225,6 @@ alan
 **Nikolay.Gekht** · Mon Oct 18, 2010 8:24 pm
 
 When this signal was developed there is no such function as email notification in for the signals in Marketscope. I updated the signal in the first post of this topic. Please use the new version to get notifications.
-
 
 ---
 
@@ -247,7 +234,6 @@ When this signal was developed there is no such function as email notification i
 
 Awesome indicator. I've been bugging fxcm for months to get this one. So they can thank you for making this so I get off their back. lol. One request, any chance of getting it to work on the change of the sar instead of the close of the bar? I trade mostly on 5 or 15 min chart and find sometimes by the close of the bar I miss opportunities. Just a suggestion, either way I love the indicator, ty
 
-
 ---
 
 ## Re: SAR Signal [Upd Oct, 18]
@@ -256,7 +242,6 @@ Awesome indicator. I've been bugging fxcm for months to get this one. So they ca
 
 Yes, it can be done. Please give me a couple of days to finish all urgent things and I'll do it.
 
-
 ---
 
 ## Re: SAR Signal [Upd Oct, 18]
@@ -264,7 +249,6 @@ Yes, it can be done. Please give me a couple of days to finish all urgent things
 **fxjunkie** · Fri Nov 12, 2010 9:29 am
 
 Awesome Nikolay. Very much appreciated. Best of luck trading. Good things will come to people like you
-
 
 ---
 
@@ -276,7 +260,6 @@ Awesome Nikolay. Very much appreciated. Best of luck trading. Good things will c
 > Awesome indicator. I've been bugging fxcm for months to get this one. So they can thank you for making this so I get off their back. lol. One request, any chance of getting it to work on the change of the sar instead of the close of the bar? I trade mostly on 5 or 15 min chart and find sometimes by the close of the bar I miss opportunities. Just a suggestion, either way I love the indicator, ty
 
 I second this request as I also scalp on those timeframes and experience the same missed opportunities. Great signal by the way!
-
 
 ---
 
@@ -292,8 +275,8 @@ Basically for the signal to alert the user as soon as the direction changes, it 
 
 Could someone please give me an idea on how to reflect that in the code below?
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function ExtUpdate(id, source, period)
+```lua
+function ExtUpdate(id, source, period)
     if id == 1 then
         SAR:update(core.UpdateLast);
         if period >= SAR.DATA:first() + 1 then
@@ -303,10 +286,10 @@ Code: [Select all](https://fxcodebase.com/code/)
                 message = "SAR switched down";
             elseif not(SAR.UP:hasData(period - 1)) and SAR.UP:hasData(period) then
                 message = "SAR switched up";
-            end`
+            end
+```
 
 Thank you!
-
 
 ---
 
@@ -315,7 +298,6 @@ Thank you!
 **Apprentice** · Tue Nov 22, 2011 5:56 pm
 
 Can you post the entire code for this strategy.
-
 
 ---
 
@@ -328,8 +310,8 @@ Can you post the entire code for this strategy.
 
 This is the default code
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- Indicator profile initialization routine
+```lua
+-- Indicator profile initialization routine
 -- Defines indicator profile properties and indicator parameters
 function Init()
     strategy:name("Simple SAR signal");
@@ -437,11 +419,13 @@ function ExtUpdate(id, source, period)
     end
 end
 
-dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");`
+dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");
+```
+
 This my recent (and unsuccessful) editing of the code but it still changes the code on the second dot instead of the first. I'm also no programmer in any sense of the word.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- Indicator profile initialization routine
+```lua
+-- Indicator profile initialization routine
 -- Defines indicator profile properties and indicator parameters
 function Init()
     strategy:name("Simple SAR signal");
@@ -548,8 +532,8 @@ function ExtUpdate(id, source, period)
     end
 end
 
-dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");`
-
+dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");
+```
 
 ---
 

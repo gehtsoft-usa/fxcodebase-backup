@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=19  
 > Forum: 17 · Topic 19 · 14 post(s)
 
-
 ---
 
 ## Awesome Oscillator (AO) (Last upd: Apr, 13 2010)
@@ -29,8 +28,6 @@ AO = MVA(MEDIAN, 5) - MVA(MEDIAN, 34)
 
 ![AO.png](images/20/AO.png)
 
-
-
 Download indicator (New version):
 
  [AO.lua](files/20/AO.lua)
@@ -42,8 +39,8 @@ in another indicator).
 
 2) In case the bar has the same size as the previous bar, the bar will have the same color (in the previous version the equal bar was always green).
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Awesome Oscillator");
     indicator:description("");
     indicator:requiredSource(core.Bar);
@@ -123,12 +120,12 @@ function Update(period, mode)
             RO[period] = CL[period];
         end
     end
-end`
+end
+```
 
 Old version:
 
 Tags: Awesome, indicator, Marketscope, Trading Station, FXCM, dbFX
-
 
 ---
 
@@ -137,7 +134,6 @@ Tags: Awesome, indicator, Marketscope, Trading Station, FXCM, dbFX
 **Nikolay.Gekht** · Tue Apr 13, 2010 4:48 pm
 
 Updated.
-
 
 ---
 
@@ -149,7 +145,6 @@ Can this be made into a signal? Personally, I'm interested in zero-line crossing
 
 Thanks!
 
-
 ---
 
 ## Re: Awesome Oscillator (AO) (Last upd: Apr, 13 2010)
@@ -157,7 +152,6 @@ Thanks!
 **Foothills Trader** · Mon May 31, 2010 11:08 am
 
 I, too, would be very interested in either this indicator or the Elliott Wave Oscillator (EWO) as a signal, with the zero line cross (i.e., red to green or vice versa).
-
 
 ---
 
@@ -167,7 +161,6 @@ I, too, would be very interested in either this indicator or the Elliott Wave Os
 
 AO signal can be found
 [http://fxcodebase.com/code/viewtopic.php?f=29&t=1224#p2320](https://fxcodebase.com/code/viewtopic.php?f=29&t=1224#p2320)
-
 
 ---
 
@@ -181,10 +174,8 @@ AO multi-timeframe heat map.
 
 ![AO_Heat_Map.png](images/4270/AO_Heat_Map.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`-- Adds AO parameter
+```lua
+-- Adds AO parameter
 function AddMvaParam(id, frame, FM, SM, level)
     indicator.parameters:addString("B" .. id, "Time frame for avegage " .. id, "", frame);
     indicator.parameters:setFlag("B" .. id, core.FLAG_PERIODS);
@@ -457,10 +448,10 @@ function findDateFast(stream, date, precise)
             end
         end
     end
-end`
+end
+```
 
  [AO_Heat_Map.lua](files/4270/AO_Heat_Map.lua)
-
 
 ---
 
@@ -470,7 +461,6 @@ end`
 
 How to read/use the heat map?
 
-
 ---
 
 ## Re: Awesome Oscillator (AO) (Last upd: Apr, 13 2010)
@@ -479,7 +469,6 @@ How to read/use the heat map?
 
 heat map doesn't work correctly in all indicators because it doesn't update each tick, only at the beginning of the candle, so if during this candle price dramatically, heat map stays the same. Even bigger problem is for higher time frames because output has to be updated for the highest time frame number of periods on your chart. I pointed out this problem before but so far it wasn't resolved.
 
-
 ---
 
 ## Re: Awesome Oscillator (AO) (Last upd: Apr, 13 2010)
@@ -487,7 +476,6 @@ heat map doesn't work correctly in all indicators because it doesn't update each
 **virgilio** · Wed Sep 22, 2010 7:31 am
 
 Is it possible to have the "custom signals" automatically generate and execute buy/sell orders? Or, like in the case of the AO signal, a signal is just to show on the chart how the strategy would have worked?
-
 
 ---
 
@@ -498,7 +486,6 @@ Is it possible to have the "custom signals" automatically generate and execute b
 AO multi-timeframe heat map is updated,
 in order it could work with the new version of platform.
 
-
 ---
 
 ## Re: Awesome Oscillator (AO) (Last upd: Apr, 13 2010)
@@ -508,7 +495,6 @@ in order it could work with the new version of platform.
 New version "AO_Heat_Map2.lua" with improved performance was added.
 Indicator uses different visualization method, so I add it as a separate indicator.
 Please use it with newer versions of platform.
-
 
 ---
 
@@ -536,7 +522,6 @@ Thanks!
 
 sjc
 
-
 ---
 
 ## Re: Awesome Oscillator (AO) (Last upd: Apr, 13 2010)
@@ -546,7 +531,6 @@ sjc
 Requested can be found here.
 [viewtopic.php?f=17&t=61196](https://fxcodebase.com/code/viewtopic.php?f=17&t=61196)
 (First Part)
-
 
 ---
 

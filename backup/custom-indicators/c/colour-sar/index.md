@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=295  
 > Forum: 17 · Topic 295 · 17 post(s)
 
-
 ---
 
 ## Colour SAR
@@ -18,10 +17,8 @@ This is a slightly modified version of the standard TS/Marketscope SAR indicator
 
 ![csar.PNG](images/515/csar.PNG)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`-- The indicator corresponds to the Parabolic indicator in MetaTrader.
+```lua
+-- The indicator corresponds to the Parabolic indicator in MetaTrader.
 -- The formula is described in the Kaufman "Trading Systems and Methods" chapter 5 "Trend Systems" (page 98-99)
 
 -- Indicator profile initialization routine
@@ -186,12 +183,12 @@ function Update(period)
             UP[period] = SAR[period];
         end
     end
-end`
+end
+```
 
 Download indicator:
 
  [CSAR.lua](files/515/CSAR.lua)
-
 
 ---
 
@@ -202,7 +199,6 @@ Download indicator:
 Hi Nikolay,
 
 You added a great feature to the SAR, congratulation. Do you think it would be possible to add a way to make the dots bigger, more visible? And when the SAR changes from up to down and the opposite, it can generate at the first dot, a bigger dot than the others or an arrow? And do you think having a sound alert of our choice and e-mail alerts can be done? If so do you think with your skills you can do that? If so let me know. Have a great day.
-
 
 ---
 
@@ -220,7 +216,6 @@ Thank you & kindly regards,
 
 chriz2110
 
-
 ---
 
 ## Re: Colour SAR
@@ -228,7 +223,6 @@ chriz2110
 **Apprentice** · Sat Jan 08, 2011 12:44 pm
 
 Added to the development cue.
-
 
 ---
 
@@ -238,7 +232,6 @@ Added to the development cue.
 
 Requested can be found here.
 [viewtopic.php?f=31&t=15391](https://fxcodebase.com/code/viewtopic.php?f=31&t=15391)
-
 
 ---
 
@@ -250,7 +243,6 @@ I am trying to Load the SAR indicator with sound and bigger color dots but it ke
 
 Any thoughts?
 
-
 ---
 
 ## Re: Colour SAR
@@ -258,7 +250,6 @@ Any thoughts?
 **Apprentice** · Thu May 24, 2012 5:58 am
 
 Can you post, or send this code to my privat email.
-
 
 ---
 
@@ -273,7 +264,6 @@ could you code a version of Color SAR with the step until 0.0000001 ?
 Best regards
 Daniel
 
-
 ---
 
 ## Re: Colour SAR
@@ -282,7 +272,6 @@ Daniel
 
 Try it now.
 
-
 ---
 
 ## Re: Colour SAR
@@ -290,7 +279,6 @@ Try it now.
 **DanPhi74** · Wed Jul 13, 2016 10:08 am
 
 Many Thanks to you !
-
 
 ---
 
@@ -305,7 +293,6 @@ could you improve the CSAR indi by enabling bigger size of dots ?
 Best regards
 Dan
 
-
 ---
 
 ## Re: Colour SAR
@@ -313,7 +300,6 @@ Dan
 **Apprentice** · Sun Jul 24, 2016 7:35 am
 
 Width option added.
-
 
 ---
 
@@ -323,7 +309,6 @@ Width option added.
 
 Many thanks again !
 
-
 ---
 
 ## Re: Colour SAR
@@ -331,7 +316,6 @@ Many thanks again !
 **Apprentice** · Tue Sep 04, 2018 9:59 am
 
 The indicator was revised and updated.
-
 
 ---
 
@@ -347,15 +331,12 @@ I want to add Moving average on SAR. I can do that perfectly on MT4 software lik
 
 ![ma on sar.png](images/129790/ma%20on%20sar.png)
 
-
-
 But when I do that on Tradestation II, it shows two SAR values. Like Up and down. Under the data source tab.
 
 Is there any way I can place Moving average on SAR just like I did on MT4? Without the up and down values separately.
 
 Thanks,
 Xpertize
-
 
 ---
 
@@ -365,7 +346,6 @@ Xpertize
 
 Try this version.
 [viewtopic.php?f=17&t=29613](https://fxcodebase.com/code/viewtopic.php?f=17&t=29613)
-
 
 ---
 

@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=1102  
 > Forum: 17 · Topic 1102 · 17 post(s)
 
-
 ---
 
 ## Fans of variable number of MA, CCI, RSI, RLW, Momentum
@@ -16,10 +15,8 @@ Fan of EMA.
 
 ![Fan_EMA.png](images/2114/Fan_EMA.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("FAN of EMA");
     indicator:description("");
     indicator:requiredSource(core.Tick);
@@ -87,13 +84,13 @@ function Update(period, mode)
   end
  
  end
-end`
+end
+```
 
  [Fan_MA.lua](files/2114/Fan_MA.lua)
 
 MT4/Mq4 veersion is available here.
 [viewtopic.php?f=38&t=63780](https://fxcodebase.com/code/viewtopic.php?f=38&t=63780)
-
 
 ---
 
@@ -107,10 +104,8 @@ Fan of CCI.
 
 ![Fan_CCI.png](images/2115/Fan_CCI.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("FAN of CCI");
     indicator:description("");
     indicator:requiredSource(core.Bar);
@@ -178,13 +173,13 @@ function Update(period, mode)
   end
  
  end
-end`
+end
+```
 
  [Fan_CCI.lua](files/2115/Fan_CCI.lua)
 
 MT4/Mq4 veersion is available here.
 [viewtopic.php?f=38&t=63791](https://fxcodebase.com/code/viewtopic.php?f=38&t=63791)
-
 
 ---
 
@@ -198,10 +193,8 @@ Fan of RSI.
 
 ![Fan_RSI.png](images/2116/Fan_RSI.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("FAN of RSI");
     indicator:description("");
     indicator:requiredSource(core.Tick);
@@ -269,13 +262,13 @@ function Update(period, mode)
   end
  
  end
-end`
+end
+```
 
  [Fan_RSI.lua](files/2116/Fan_RSI.lua)
 
 MT4/Mq4 veersion is available here.
 [viewtopic.php?f=38&t=63789](https://fxcodebase.com/code/viewtopic.php?f=38&t=63789)
-
 
 ---
 
@@ -287,7 +280,6 @@ Would it be possible to show only two moving averages, and shade the areas in be
 
 [http://www.forex-tsd.com/indicators-met ... bon-3.html](http://www.forex-tsd.com/indicators-metatrader-4/15783-moving-average-ribbon-3.html)
 
-
 ---
 
 ## Re: Fans of variable number of MA, CCI, RSI
@@ -297,7 +289,6 @@ Would it be possible to show only two moving averages, and shade the areas in be
 Try my MVA/EMA Cloud
 [viewtopic.php?f=17&t=1589&hilit=cloud](https://fxcodebase.com/code/viewtopic.php?f=17&t=1589&hilit=cloud)
 
-
 ---
 
 ## Re: Fans of variable number of MA, CCI, RSI
@@ -306,7 +297,6 @@ Try my MVA/EMA Cloud
 
 exactly what i was looking. Thank you!
 
-
 ---
 
 ## Re: Fans of variable number of MA, CCI, RSI
@@ -314,7 +304,6 @@ exactly what i was looking. Thank you!
 **Hailkayy** · Sat Feb 04, 2012 10:20 pm
 
 Funny Apprentice, you make too good indicators, which one am i supposed to use now ?
-
 
 ---
 
@@ -327,7 +316,6 @@ I only write them, do not use them in my trading.
 I can explain some theoretical basis,
  However forum is not appropriate medium.
 
-
 ---
 
 ## Re: Fans of variable number of MA, CCI, RSI
@@ -338,7 +326,6 @@ O.K tell me where i can write you so that, i can ask you some questions, and dis
 Just reply when ur off work or when u have time. Exchanging ideas really appreciated.
 Thank you.
 
-
 ---
 
 ## Re: Fans of variable number of MA, CCI, RSI
@@ -346,7 +333,6 @@ Thank you.
 **Apprentice** · Mon Feb 06, 2012 2:44 am
 
 Use my Private Email.
-
 
 ---
 
@@ -373,7 +359,6 @@ buy: buff 1>buff 10 and price cross over buff 1
 
 sell: buff1< buff10 and price crossunder buff1
 
-
 ---
 
 ## Re: Fans of variable number of MA, CCI, RSI
@@ -381,7 +366,6 @@ sell: buff1< buff10 and price crossunder buff1
 **Apprentice** · Thu Dec 20, 2012 3:57 pm
 
 Your request is added to the development list.
-
 
 ---
 
@@ -398,7 +382,6 @@ Please help me.
 and
 **Happy****New****Year!**
 
-
 ---
 
 ## Re: Fans of variable number of MA, CCI, RSI
@@ -406,7 +389,6 @@ and
 **Apprentice** · Mon Dec 24, 2012 4:25 am
 
 I update both, CCI and RSI Fans.
-
 
 ---
 
@@ -416,7 +398,6 @@ I update both, CCI and RSI Fans.
 
 FAN of EMA Strategy can be found here.
 [viewtopic.php?f=31&t=27944](https://fxcodebase.com/code/viewtopic.php?f=31&t=27944)
-
 
 ---
 
@@ -429,8 +410,6 @@ FAN of EMA Strategy can be found here.
  
 
 ![Fan_RLW.PNG](images/91094/Fan_RLW.PNG)
-
-
 
 Download:
 
@@ -445,15 +424,12 @@ MT4/Mq4 veersion is available here.
 
 ![Fan_Momentum.PNG](images/91094/Fan_Momentum.PNG)
 
-
-
 Download:
 
  [Fan_Momentum.lua](files/91094/Fan_Momentum.lua)
 
 MT4/Mq4 veersion is available here.
 [viewtopic.php?f=38&t=63788](https://fxcodebase.com/code/viewtopic.php?f=38&t=63788)
-
 
 ---
 

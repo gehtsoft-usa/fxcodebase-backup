@@ -1,7 +1,68 @@
 # Mean indicator (new version)
 
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=2526  
-> Forum: 17 · Topic 2526 · 9 post(s)
+> Forum: 17 · Topic 2526 · 11 post(s)
+
+
+---
+
+## Mean indicator (new version)
+
+**Nikolay.Gekht** · Tue Oct 26, 2010 4:49 pm
+
+Mean indicator was proposed by **posurf** here [viewtopic.php?f=27&t=2369](https://fxcodebase.com/code/viewtopic.php?f=27&t=2369) and was initially developed and presented here: [viewtopic.php?f=17&t=2378](https://fxcodebase.com/code/viewtopic.php?f=17&t=2378)
+
+The indicator is another version of trend detecting routine with day-wide stop levels.
+
+The indicator shows an average price of all the bars of the current day (the day is since midnight by New York time).
+
+Comparing the previous version, this indicator:
+
+1) The display style is changed from lines to dots, so now the indicator does not "hide" 1-bar switches between red and green as it was in the previous version.
+
+2) The indicator now works correctly on "alive" data, not on historical data only.
+
+3) The indicator code is significantly optimized.
+
+4) "Prev" stream now is the regular price stream, so it can be used in the strategies among Up and Down streams.
+
+Note! Please pay attention that the indicator calculates the average value from the beginning of the day! In case the first candle of the day is not loaded yet, the value of the indicator can change in case more data is loaded. Moreover, that means that the indicator is almost useless for on the default data set (300 bars) for m1 and m5 timeframes.
+
+ 
+
+![mean.png](images/5584/mean.png)
+
+
+
+Download:
+
+ [Mean_dot.lua](files/5584/Mean_dot.lua)
+
+MT4/MQ4 version
+[viewtopic.php?f=38&t=64140](https://fxcodebase.com/code/viewtopic.php?f=38&t=64140)
+
+The indicator was revised and updated
+
+
+---
+
+## Chosen TF version
+
+**Nikolay.Gekht** · Tue Oct 26, 2010 5:07 pm
+
+The advanced version of the indicator. You can choose timeframe from start of which you want to calculate the average value. For example, you can calculate "1-hour" instead of "since midnight" averages.
+
+Another things is that 1-day is not since midnight by New York time, but since 17:00 EST (when a new trading day begins).
+
+ 
+
+![mean_tf.png](images/5586/mean_tf.png)
+
+
+
+download:
+
+ [MeanTF_dot.lua](files/5586/MeanTF_dot.lua)
 
 
 ---

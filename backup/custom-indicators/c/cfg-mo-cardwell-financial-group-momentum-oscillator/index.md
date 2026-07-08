@@ -1,7 +1,67 @@
 # CFG MO (Cardwell Financial Group Momentum Oscillator)
 
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=3007  
-> Forum: 17 · Topic 3007 · 54 post(s)
+> Forum: 17 · Topic 3007 · 55 post(s)
+
+
+---
+
+## CFG MO (Cardwell Financial Group Momentum Oscillator)
+
+**Nikolay.Gekht** · Wed Dec 22, 2010 7:02 pm
+
+The copyright owner and creator of CFG MO (Cardwell Financial Group Momentum Oscillator) is Cardwell Finacial Group and Andrew Cardwell. The indicator is copyrighted at the United States Copyright Office as "Relative Strength Index : advanced/by Andrew E. Cardwell, Jr." with registration/date number TX0003375191 / 1992-07-22.
+
+For more details about this indicator and other indicators and methods developed my Mr. Andrew Cardwell, please visit [http://cardwellrsiedge.com](http://cardwellrsiedge.com) or contact Mr. Andrew Cardwell at cardwellrsi(at)hotmail(dot)com.
+
+This implementation is done by the fxcodebase team upon Mr. Andrew E. Cardwell's permission.
+
+If you would like to publish the indicator on your website, please do not forget to include the copyright notice and the entire description of the indicator too. Think of this as of the part of the license agreement. Any reverse engineering or reproducing of this indicator without Andrew Cardwell's permission is a violation of the United States Copyright law.
+
+Please note that this indicator is sometimes wrongfully referred to as Constance M. Brown's composite index indicator. If you come across this indicator on the Internet, please help us all to right a wrong and provide people with a reference to the CFG MO indicator.
+
+The description of the indicator below is provided by Lars Kjoes.
+
+Simply put formula for warning when RSI is failing to detect market reversals. I have added a picture with points and descriptions below. Note the differences highlighted with pink lines in the picture:
+
+ 
+
+![snapshot.png](images/6941/snapshot.png)
+
+
+
+- Point A: The CFG MO shows a positive reversal when RSI is not. Also note that the MO turns about on the slower moving average which signifies support. The averages are also showing positive spread. Both the latter clarifies the reversal signal. Also note that IF support had been at a point where the averages had crossed and the faster on the way up, this would be a strong continuation signal.
+
+- Point B: The CFG MO shows divergence when RSI does not. Again note the turning point in CFG MO with the fast moving average as resistance.
+
+- Point C: As in point B the turning point is with resistance of the faster moving average.
+
+- Note that this is in a 60min chart and these relatively clear signals would not necessarily show up in other time frames. For example at a reversal in the 60min chart the MO would not show any MA signals, but in 4hours it could give a strong reversal or divergence signal straight on a MA-crossing.
+
+Downloads:
+
+ [cfg_mo.bin](files/6941/cfg_mo.bin)
+
+ [CFGMO.ex4](files/6941/CFGMO.ex4)
+
+ [CFG_MO.fxd](files/6941/CFG_MO.fxd)
+
+ [CFGMomentumOscillator.vtscr](files/6941/CFGMomentumOscillator.vtscr)
+
+ 
+
+![Alert.png](images/6941/Alert.png)
+
+
+
+This indicator provides Audio / Email Alerts if and when CFG MO cross over/under defined Overbought/Oversold levels.
+
+ [CFG_MO with Alert.bin](files/6941/CFG_MO%20with%20Alert.bin)
+
+Compatibility issue Fix. _Alert helper is not longer needed.
+
+If you want to use updated version of this indicator,
+please make sure to use TS Version 01.14.101415. or higher.
 
 
 ---

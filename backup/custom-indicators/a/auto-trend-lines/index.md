@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=647  
 > Forum: 17 · Topic 647 · 85 post(s)
 
-
 ---
 
 ## Auto Trend Lines
@@ -14,8 +13,6 @@
 
 *Auto Tend Lines*
 
-
-
 I give you, Auto Trend Lines Indicator.
 
  
@@ -23,8 +20,6 @@ I give you, Auto Trend Lines Indicator.
 ![Auto Tend Lines options.PNG](images/1159/Auto%20Tend%20Lines%20options.PNG)
 
 *Auto Tend Lines options*
-
-
 
 The indicator has several options.
 
@@ -50,7 +45,6 @@ Suggestions are welcome, bugs, are possible.
 Please try out the options, share with us the settings that give you the best results,
 so i could make a lite version, auto version.
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -58,7 +52,6 @@ so i could make a lite version, auto version.
 **Apprentice** · Fri Apr 16, 2010 3:11 am
 
 [Auto Trend Lines.lua](files/1198/Auto%20Trend%20Lines.lua)
-
 
 ---
 
@@ -71,7 +64,6 @@ Thank you, Nikolay, on your help with code optimization, I would not succeed wit
 Especially for your help with the Update segment, probably would not have thought of that.
 In Draw function, I have more or less adapted to your code or I thought to make something like that.
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -82,8 +74,6 @@ In Draw function, I have more or less adapted to your code or I thought to make 
 
 *Oscilator*
 
-
-
 Michael, as you requested, I have prepared Auto trend indicator which can be applied to oscillators, indicators.
 
  [Auto Trend Lines Oscilator.lua](files/1202/Auto%20Trend%20Lines%20Oscilator.lua)
@@ -92,7 +82,6 @@ I did not have time to fully adapt the code, yet.
 
 The next task is obvious, Linking these two indicator in one, in order to obtain an indicator,
  which shows the convergence and divergence between the indicators and the closing price.
-
 
 ---
 
@@ -103,7 +92,6 @@ The next task is obvious, Linking these two indicator in one, in order to obtain
 Is it possible to extend the lines into past and future?
 Thank you
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -111,7 +99,6 @@ Thank you
 **Apprentice** · Wed Oct 20, 2010 3:40 am
 
 Added to developmental cue.
-
 
 ---
 
@@ -129,7 +116,6 @@ Thank you in advance.
 Kind regards,
 DS0167
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -139,7 +125,6 @@ DS0167
 The indicator is in the developmental cue.
 A colleague took this job.
 Hopefully soon.
-
 
 ---
 
@@ -156,7 +141,6 @@ Thank you for all the hard work you are doing for us
 Kind regards
 DS0167
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -169,7 +153,6 @@ My trading time frame is 4h / 30min ..how to set the best default "frame size" ?
 
 thanks
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -178,7 +161,6 @@ thanks
 
 can you create strategy based on trend line break.
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -186,7 +168,6 @@ can you create strategy based on trend line break.
 **Apprentice** · Wed Jan 04, 2012 7:09 am
 
 Probably, can you define an algorithm that would be use by such strategy.
-
 
 ---
 
@@ -224,7 +205,6 @@ price cross over ema 34
 
 thank you sir.
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -237,7 +217,6 @@ thank you sir.
 when the trendline is above price and price rises to touch it, then enter short
 
 when the trendline is lower than price and price falls to touch it, then enter long
-
 
 ---
 
@@ -254,7 +233,6 @@ thanks
 by
 arindam roy
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -264,7 +242,6 @@ arindam roy
 Could you please add the ability to highlight lines that are close to 45 degree angles?
 
 Even better would be if the closer they are to 45 degrees the darker red the line is and the further out the line is from 45 degrees, the lighter the color would be, thanks.
-
 
 ---
 
@@ -277,7 +254,6 @@ How to determine the 45 degrees on chart?
 This may vary for different X / Y axis ratios.
 Per period slope, Pips per period would be feasible.
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -285,7 +261,6 @@ Per period slope, Pips per period would be feasible.
 **speakinmymind** · Wed Jul 03, 2013 6:59 am
 
 You make a good point. I didn't think about that. I would be happy to use the method you came up with.
-
 
 ---
 
@@ -315,7 +290,6 @@ You make a good point. I didn't think about that. I would be happy to use the me
 
 Is there any chance this code could be developed further for speed and/or performance? It seems this indicator is the only cause of TS freezing on me, unfortunately I rely very heavily on this indicator.
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -325,7 +299,6 @@ Is there any chance this code could be developed further for speed and/or perfor
 Try Updated Version.
 Will ask the development team to try to make TS integrated tool.
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -333,7 +306,6 @@ Will ask the development team to try to make TS integrated tool.
 **Apprentice** · Fri Oct 04, 2013 2:41 pm
 
 About 75% of the performance bust.
-
 
 ---
 
@@ -349,7 +321,6 @@ It should automatically lookback the number of bars displayed to give the same e
 
 Thanks.
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -360,7 +331,6 @@ Thanks.
 > About 75% of the performance bust.
 
 Was this performance boost applied to the oscillator version as well??
-
 
 ---
 
@@ -373,7 +343,6 @@ In fact it is.
 Unfortunately i have dropped Fractal option in process.
 Fractal algorithm is less demanding on your processor.
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -383,7 +352,6 @@ Fractal algorithm is less demanding on your processor.
 Could you create an alert based off timeframe chosen and line touch? Both for price and oscillator versions?
 
 Thanks!
-
 
 ---
 
@@ -395,7 +363,6 @@ Can this indicator be updated to work with ask prices as well?
 
 Thanks!
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -406,7 +373,6 @@ Can you elaborate.
 To add Bid / Ask selector within indicator.
 Or to have different Line, Ask for resistance, Bid for support.
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -414,7 +380,6 @@ Or to have different Line, Ask for resistance, Bid for support.
 **speakinmymind** · Mon Nov 04, 2013 10:47 am
 
 I'm sorry to be so vague, I mean the Bid /Ask selector, Thanks.
-
 
 ---
 
@@ -426,7 +391,6 @@ hi programmers,
 
 can you add line width changing option and line style changing option to auto trendline
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -434,7 +398,6 @@ can you add line width changing option and line style changing option to auto tr
 **Apprentice** · Sat Jan 25, 2014 3:58 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -444,7 +407,6 @@ Your request is added to the development list.
 
 Style Options Added.
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -453,7 +415,6 @@ Style Options Added.
 
 Is it possible to have the angles of the top and bottom trend line noted on the chart screen? Or better yet, on the trend line itself?
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -461,7 +422,6 @@ Is it possible to have the angles of the top and bottom trend line noted on the 
 **Apprentice** · Thu Feb 06, 2014 3:37 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -475,7 +435,6 @@ Can you please,develope a way to select which auto trend lines to keep on chart 
 
 your help is much appreciated.
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -483,7 +442,6 @@ your help is much appreciated.
 **Apprentice** · Sun Jan 25, 2015 6:38 am
 
 Unfortunately indicators do NOT allow line objects interaction / manipulation.
-
 
 ---
 
@@ -496,7 +454,6 @@ can the start point of a trend line be respect to ZIG trough or ZIG peaks ?
 thanks ,
 santosh
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -505,12 +462,9 @@ santosh
 
 ![Test.png](images/100464/Test.png)
 
-
-
 This can be achieved via Auto Trend Lines Oscilator.lua
 While for Auto Trend Lines Oscilator.lua any indicator can be the source.
 Regular indicator requests whole bar of data.
-
 
 ---
 
@@ -527,7 +481,6 @@ also looking forward for the NEW ATL !!
 thanks ,
 SANTOSH .
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -537,7 +490,6 @@ SANTOSH .
 where are the possible settings menu , to select the source as zig??
 
 i didnt find any settings inside the menu to select the zig as source !
-
 
 ---
 
@@ -556,7 +508,6 @@ zig peak- where the zig high is higher than its previous zig high and its next z
 thanks ,
 santosh
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -564,7 +515,6 @@ santosh
 **Thumper** · Sat May 16, 2015 11:28 pm
 
 Is it possible for Auto Trend Lines to keep the old historical trend lines?
-
 
 ---
 
@@ -579,7 +529,6 @@ As it is Indicator is not designed to provide historical data.
 
 A completely different algorithm should be written.
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -593,7 +542,6 @@ any recent work for my previous post for zig troughs and peaks for auto trend li
 thanks ,
 santosh
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -602,7 +550,6 @@ santosh
 
 Not at this time.
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -610,7 +557,6 @@ Not at this time.
 **Apprentice** · Mon Jul 03, 2017 7:41 am
 
 The indicator was revised and updated.
-
 
 ---
 
@@ -630,7 +576,6 @@ I have posted in that thread before describing what the problem is, the lines ar
 
 And also add an option to extend the lines x periods to the right? Currently they end before the most recent candle
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -639,7 +584,6 @@ And also add an option to extend the lines x periods to the right? Currently the
 
 Your request is added to the development list, Under Id Number 3819
  If someone is interested to do this task, please contact me.
-
 
 ---
 
@@ -650,8 +594,8 @@ Your request is added to the development list, Under Id Number 3819
 Nevermind that request, I got it working after some more study
 Here's the code:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`for key, value in pairs(lines) do
+```lua
+for key, value in pairs(lines) do
       local index_1 = core.findDate(source, value.date_1, true);
       local index_2 = core.findDate(source, value.date_2, true);
       x_1 = context:positionOfBar(index_1);
@@ -663,8 +607,8 @@ Code: [Select all](https://fxcodebase.com/code/)
         Y1= GetYofABCLine(size, a1, c1);
        
         core.drawLine(out, core.range(index_1, index_2), value.rate_1, index_1 , value.rate_2, index_2,core.rgb(255, 0, 0));   
-        core.drawLine(out, core.range(index_2, size), value.rate_2, index_2, Y1, size,core.rgb(0, 144, 0));`
-
+        core.drawLine(out, core.range(index_2, size), value.rate_2, index_2, Y1, size,core.rgb(0, 144, 0));
+```
 
 ---
 
@@ -676,7 +620,6 @@ Try this version.
 
  [CSV Lines Helper Tool.lua](files/113483/CSV%20Lines%20Helper%20Tool.lua)
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -686,8 +629,8 @@ Try this version.
 I receive error
 With this data
 
-Code: [Select all](https://fxcodebase.com/code/)
-`06/30/2017 00:42,84.3165,06/29/2017 21:29,86.1305,
+```
+06/30/2017 00:42,84.3165,06/29/2017 21:29,86.1305,
 06/30/2017 00:42,84.3165,06/29/2017 22:10,86.0405,
 06/30/2017 00:42,84.3165,06/29/2017 22:55,86.0725,
 06/30/2017 00:42,84.3165,06/29/2017 23:20,86.0605,
@@ -725,7 +668,8 @@ Code: [Select all](https://fxcodebase.com/code/)
 06/30/2017 01:06,84.325,06/30/2017 01:45,84.3325,
 06/30/2017 01:06,84.325,06/30/2017 02:00,84.3305,
 06/30/2017 01:06,84.325,06/30/2017 02:11,84.318,
-06/30/2017 01:06,84.325,06/30/2017 02:35,84.3675,`
+06/30/2017 01:06,84.325,06/30/2017 02:35,84.3675,
+```
 
 Code: [Select all](https://fxcodebase.com/code/)
 `Symbol Strategy/Indicator Message Time AUD/JPY CSV LINES HELPER TOOL APPRENTICE VERSION(AUD/JPY) An error occurred during the calculation of the indicator 'CSV LINES HELPER TOOL APPRENTICE VERSION(AUD/JPY)'. The error details: C:/Program Files (x86)/Candleworks/FXTS2/Indicators/Custom/CSV Lines Helper Tool APPRENTICE VERSION.lua:104: The second parameter must be a number. 11/07/2017 08:36:29`
@@ -735,7 +679,6 @@ I switched months with weeks in my timeframe thats why the data has month first
 
 Code: [Select all](https://fxcodebase.com/code/)
 `local _month,_day , _year, _hour, _minute = string.match(str, '(%d+)/(%d+)/(%d+)`
-
 
 ---
 
@@ -747,7 +690,6 @@ Affirmative.
 We've detected the bug.
 Will fix it as soon as possible.
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -755,7 +697,6 @@ Will fix it as soon as possible.
 **Apprentice** · Mon Aug 07, 2017 12:38 pm
 
 Try it now.
-
 
 ---
 
@@ -773,7 +714,6 @@ Is it doable to create a sample strategy, with user choice .csv file input. To d
 Then for example "sell" when (price[1] < stream and price[0] >= stream)
 in brackets[] is period
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -781,7 +721,6 @@ in brackets[] is period
 **Apprentice** · Tue Aug 08, 2017 2:36 am
 
 Strategy that will trade if price cross line defined by .csv file?
-
 
 ---
 
@@ -809,7 +748,6 @@ Hope this make sense.
 
 For this they would need to be extended infinitely not just maximum 100 bars
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -817,7 +755,6 @@ For this they would need to be extended infinitely not just maximum 100 bars
 **Apprentice** · Wed Aug 09, 2017 3:08 am
 
 Will we define the lines from one or several files?
-
 
 ---
 
@@ -868,17 +805,18 @@ Etc, etc... I hope this make sense so far
 
 If this is a good solution, great. But if adding so many files in one strategy creates a performance issue, perhaps a additional parameter could be added at end of line, to specify if the line is treated as DOWN or UP (this is decided by user, don't worry about slope or line starting position points). This way you can define both up and down lines in same file, but their output streams will be respected according to the up or down flag. And also a "priority" [OPTIONAL] number at the very end to account for the different output stream user wants for example to count the strength of the lines according where they from. So inside file would look like this:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`06/30/2017 00:42,84.3165,06/30/2017 05:24,85.8775,UP,"3"
+```
+06/30/2017 00:42,84.3165,06/30/2017 05:24,85.8775,UP,"3"
 06/30/2017 00:42,84.3165,06/30/2017 06:15,86.0485,DOWN,"1"
 06/30/2017 00:42,84.3165,06/30/2017 06:48,86.0225,UP,"1"
-06/30/2017 00:42,84.3165,06/30/2017 07:31,86.0525,DOWN,"2"`
+06/30/2017 00:42,84.3165,06/30/2017 07:31,86.0525,DOWN,"2"
+```
+
 The "UP" and "DOWN" will be used to draw the lines differently (red or green). But in an actual strategy you wouldn't see the lines since it is not an indicator so color makes no sense of course. Just different output streams names.
 
 So what I mean is, the goal is to have individual output streams for the lines to not treat them all the same, that's the idea, if this can be defined in one file with additional parameters like "UP/DOWN" and priority number that's great, if it is better done with many files that is good too.
 
 If my long post is unclear I will be happy to explain this further and contribute with code development myself
-
 
 ---
 
@@ -888,7 +826,6 @@ If my long post is unclear I will be happy to explain this further and contribut
 
 Your request is added to the development list, Under Id Number 3847
  If someone is interested to do this task, please contact me.
-
 
 ---
 
@@ -902,7 +839,6 @@ Try this version.
 
  [1.csv](files/114696/1.csv)
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -914,39 +850,41 @@ Consider this data:
 
 CSV 1
 
-Code: [Select all](https://fxcodebase.com/code/)
-`06/26/2017 22:28,84.818,06/26/2017 23:33,84.944,
+```
+06/26/2017 22:28,84.818,06/26/2017 23:33,84.944,
 06/27/2017 00:30,85.001,06/27/2017 00:38,84.9765,
 06/27/2017 01:00,84.9325,06/27/2017 01:21,84.9355,
 06/27/2017 01:40,84.9495,06/27/2017 02:09,84.846,
 06/27/2017 03:01,84.9025,06/27/2017 03:14,84.932,
 06/27/2017 03:31,84.9715,06/27/2017 04:02,84.942,
 06/27/2017 04:26,84.853,06/27/2017 04:47,84.879,
-06/27/2017 06:19,84.9355,06/27/2017 06:49,84.9745,`
+06/27/2017 06:19,84.9355,06/27/2017 06:49,84.9745,
+```
 
 CSV 2
 
-Code: [Select all](https://fxcodebase.com/code/)
-`06/27/2017 21:33,85.2355,06/27/2017 21:45,85.236,
+```
+06/27/2017 21:33,85.2355,06/27/2017 21:45,85.236,
 06/27/2017 22:34,85.241,06/27/2017 23:00,85.1985,
 06/27/2017 23:36,85.2235,06/27/2017 23:57,85.2235,
 06/28/2017 00:29,85.229,06/28/2017 00:53,85.2125,
 06/28/2017 01:43,85.3005,06/28/2017 01:59,85.3385,
 06/28/2017 02:32,85.4015,06/28/2017 03:12,85.2465,
-06/28/2017 03:49,85.1185,06/28/2017 04:12,84.911,`
+06/28/2017 03:49,85.1185,06/28/2017 04:12,84.911,
+```
 
 Then go to AUD/JPY historical m1 timeframe data from 06/26/2017 22:28 to 06/28/2017 04:12 (My chart is set to New York timezone) Nothing is drawn on chart, and indicator gives no error. But this is not big deal. I notice it is because this is historical data. With more recent data it works and draws the lines, and I hope it will continue to
 
 For example, this data works:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`09/04/2017 21:33,85.2355,09/04/2017 21:45,85.236,
+```
+09/04/2017 21:33,85.2355,09/04/2017 21:45,85.236,
 09/04/2017 22:34,85.241,09/04/2017 23:00,85.1985,
 09/04/2017 23:36,85.2235,09/04/2017 23:57,85.2235,
-09/05/2017 00:29,85.229,09/05/2017 00:53,85.2125,`
+09/05/2017 00:29,85.229,09/05/2017 00:53,85.2125,
+```
 
 Thank you. I will probably not make any more requests for the time being and will try to put a system together in the coming weeks. When something fruitful comes out of it I will share it on this forum as you all have been tremendous help
-
 
 ---
 
@@ -955,7 +893,6 @@ Thank you. I will probably not make any more requests for the time being and wil
 **Cactus** · Tue Sep 05, 2017 4:27 pm
 
 Can I ask you to provide a simple sample strategy showing how to access and use those output streams in a strategy? Just a simple "if m1 candle price open above up_1 stream and close below up_1 stream, sell" or something?
-
 
 ---
 
@@ -968,7 +905,6 @@ Can I ask you to provide a simple sample strategy showing how to access and use 
 
 Where can I find the updated version? Thanks
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -976,7 +912,6 @@ Where can I find the updated version? Thanks
 **Apprentice** · Tue Oct 03, 2017 6:02 am
 
 On first post in this topic.
-
 
 ---
 
@@ -989,7 +924,6 @@ On first post in this topic.
 
 The version on the first post of the topic dated 2010 so 7 years ago. Do you mean there is no revision since that version or the link has been uptated? Thanks
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -997,7 +931,6 @@ The version on the first post of the topic dated 2010 so 7 years ago. Do you mea
 **Apprentice** · Tue Oct 03, 2017 12:32 pm
 
 While the post is from 2010, the file is from 2017.
-
 
 ---
 
@@ -1018,7 +951,6 @@ Just wanting an example strategy to show how to enter positions using output str
 
 I would love to have just a simple sample strategy to go with it or just a code snippet to demonstrate how to use its output_stream instance:getStream (index) or public property instance.DATA in the strategy. The logic can be (close_price[1] < line_stream_1[0] and close_price[0] >= line_stream_1[0]) which just means close price has crossed the most recent stream of some line. Thanks in advance
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -1026,7 +958,6 @@ I would love to have just a simple sample strategy to go with it or just a code 
 **Apprentice** · Mon Oct 23, 2017 4:43 am
 
 Your request is added to the development list under Id Number 3926
-
 
 ---
 
@@ -1041,7 +972,6 @@ Your request is added to the development list under Id Number 3926
 
 Auto Trend Lines is a fantastic tool. The only issue is that you have to constantly watch your chart on the screen to see if new lines are appearing and that's almost not possible and that's so frustrating. Multi-Line alert enables alerts on multiple lines. Does that possible to get as well a sound alert when a Fractal price is creating a new support or resistance? Thanks
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -1049,7 +979,6 @@ Auto Trend Lines is a fantastic tool. The only issue is that you have to constan
 **Apprentice** · Thu Nov 09, 2017 7:11 am
 
 Your request is added to the development list under Id Number 3945
-
 
 ---
 
@@ -1062,7 +991,6 @@ Your request is added to the development list under Id Number 3945
  [Auto Trend Lines Oscilator.lua](files/116040/Auto%20Trend%20Lines%20Oscilator.lua)
 
 Try this version.
-
 
 ---
 
@@ -1085,7 +1013,6 @@ Try this version.
 
 New Auto trend Lines Oscillator works fine. However, Auto Trend Lines new version got an error on line 178. It corresponds to the new Sound section added that makes an error after Then. Anyway thank you for your update it will be very helpful
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -1093,7 +1020,6 @@ New Auto trend Lines Oscillator works fine. However, Auto Trend Lines new versio
 **Apprentice** · Sat Nov 18, 2017 8:38 am
 
 Try it now.
-
 
 ---
 
@@ -1107,7 +1033,6 @@ Try it now.
 Hello Apprentice,
 Following your last quote, I downloaded again the new version Auto Trend Lines from the last link and I got the same error message. When I opened the code on Line 178 I can't see any change. The previously downloaded file and that file are identical in size. Can you check it? Thanks
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -1120,7 +1045,6 @@ Cactus this one is for you.
 I wrote simple strategy but CSV Lines Helper Tool_streams Indicator
 return all outputStreams with tick values == 0, maybe need to investigate it?
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -1128,7 +1052,6 @@ return all outputStreams with tick values == 0, maybe need to investigate it?
 **Apprentice** · Mon Feb 05, 2018 10:58 am
 
 The Indicator was revised and updated.
-
 
 ---
 
@@ -1139,7 +1062,6 @@ The Indicator was revised and updated.
 Hello bro,
 there were a couple errors in the sound activation part, it was solved, here is the indicator ok.
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -1148,7 +1070,6 @@ there were a couple errors in the sound activation part, it was solved, here is 
 
 Can you specify them?
 So we can fix them for the rest.
-
 
 ---
 
@@ -1168,7 +1089,6 @@ I usually use the line chart to draw my trendline.
 Fine thanks,
 See you soon :) !
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -1177,7 +1097,6 @@ See you soon :) !
 
 Can you provide a link to the TrendLine Breakout indicator with Alert?
 Or TrendLine Breakout indicator with Alert description.
-
 
 ---
 
@@ -1191,7 +1110,6 @@ It seems efficient.
 Can you code it, please ?
 [https://www.prorealcode.com/prorealtime ... -breakout/](https://www.prorealcode.com/prorealtime-trading-strategies/trend-breakout/)
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -1201,7 +1119,6 @@ Can you code it, please ?
 Your request is added to the development list.
 Development reference 971.
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -1210,7 +1127,6 @@ Development reference 971.
 
 Indicator based strategy.
 [viewtopic.php?f=31&t=69611](https://fxcodebase.com/code/viewtopic.php?f=31&t=69611)
-
 
 ---
 
@@ -1224,7 +1140,6 @@ why this Auto Trend Line indicator is showing too many line in one time frame in
 thanks
 john
 
-
 ---
 
 ## Re: Auto Trend Lines
@@ -1233,7 +1148,6 @@ john
 
 We use a primitive algorithm.
 Won't recognize a major from minor.
-
 
 ---
 

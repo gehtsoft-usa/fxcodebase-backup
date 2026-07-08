@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=1606  
 > Forum: 17 · Topic 1606 · 6 post(s)
 
-
 ---
 
 ## BWLIC indicator
@@ -20,10 +19,8 @@ Line4=medium price for Line3 and Line5.
 
 ![BWLIC.png](images/3170/BWLIC.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("BWLIC indicator");
     indicator:description("");
     indicator:requiredSource(core.Bar);
@@ -83,10 +80,10 @@ function Update(period, mode)
       buff5[i]=PriceMax;
      end
     end
-end`
+end
+```
 
 The indicator was revised and updated
-
 
 ---
 
@@ -97,7 +94,6 @@ The indicator was revised and updated
 can it be modified to use at low time frame. like m5, m30, h1..etc ?
 Thanks in advance.
 
-
 ---
 
 ## Re: BWLIC indicator
@@ -106,10 +102,7 @@ Thanks in advance.
 
 ![Untitled.png](images/65081/Untitled.png)
 
-
-
 Have you try to use Data Source Period Selector
-
 
 ---
 
@@ -118,7 +111,6 @@ Have you try to use Data Source Period Selector
 **fxcyberman** · Sun Jun 09, 2013 1:35 pm
 
 Sorry, already tried. It doesn't work for lower time frame.
-
 
 ---
 
@@ -132,7 +124,6 @@ For example ...
 If u use H1 Chart Time Frame.
 For every line You'll will have two lines on m30,
 four lines on m15 and so on ....
-
 
 ---
 

@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=60133  
 > Forum: 17 · Topic 60133 · 7 post(s)
 
-
 ---
 
 ## HA Difference
@@ -11,8 +10,6 @@
 **Apprentice** · Thu Dec 19, 2013 3:04 pm
 
 ![ha.png](images/91620/ha.png)
-
-
 
 As described in Dan Valcu’s article “Using The Heikin-Ashi
 Technique” published in S & C magazine.
@@ -25,8 +22,6 @@ Technique” published in S & C magazine.
 
 ![MTF MCP HaOpen.png](images/91620/MTF%20MCP%20HaOpen.png)
 
-
-
 First Indication
 Up Arrow - Close Line Up
 Down Arrow - Close Line Down
@@ -37,7 +32,6 @@ Down Arrow - Close < Open
 
  [MTF MCP HaOpen.lua](files/91620/MTF%20MCP%20HaOpen.lua)
 
-
 ---
 
 ## Re: HA Difference
@@ -45,7 +39,6 @@ Down Arrow - Close < Open
 **Alexander.Gettinger** · Mon Aug 18, 2014 2:15 pm
 
 MQL4 version of oscillators: [viewtopic.php?f=38&t=61052](https://fxcodebase.com/code/viewtopic.php?f=38&t=61052).
-
 
 ---
 
@@ -63,7 +56,6 @@ ONE HAOPEN FOR D1
 WHEN I SEE CHART H6 I SEE ALL W1 AND D1 WITH AL TIMES CAN MAKE ON OR OFF
 I HOPE YOU ASISTENT ME
 
-
 ---
 
 ## Re: HA Difference
@@ -71,7 +63,6 @@ I HOPE YOU ASISTENT ME
 **JOKER83** · Sun Sep 07, 2014 6:02 pm
 
 AND E-MAIL ALERT
-
 
 ---
 
@@ -81,7 +72,6 @@ AND E-MAIL ALERT
 
 MTF MCP HaOpen (without Alert) Added.
 
-
 ---
 
 ## Re: HA Difference
@@ -90,19 +80,19 @@ MTF MCP HaOpen (without Alert) Added.
 
 In the haDiff.lua-file (post of Dec 19, 2013) I fixed a bug calculating the Heikin Ashi open value. From the very beginning the open value is calculated based on the previous Heikin Ashi open value, which doesn't exists in the first period. Comparing the source code of FXCM Trading Station's built-in Heikin Ashi indicator I added an if-survey in the update-function:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`if period == first then
+```lua
+if period == first then
     open[period] = ( source.open[period-1] + source.close[period-1] ) / 2;
 else
     open[period] = ( open[period-1] + close[period-1] ) / 2;
-end`
+end
+```
 
 The revised version can be downloaded here:
 
  [haDiff.lua](files/99901/haDiff.lua)
 
 Chris
-
 
 ---
 

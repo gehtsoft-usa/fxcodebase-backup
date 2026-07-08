@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=29&t=995  
 > Forum: 29 · Topic 995 · 13 post(s)
 
-
 ---
 
 ## Elder Impulse System Signal
@@ -16,16 +15,14 @@ The signal shows when the Elder Impulse System changes to Up, Down or Neutral.
 
 ![elder.png](images/1850/elder.png)
 
-
-
 Download the signal:
 
  [Elder_Impulse_System_Signal.lua](files/1850/Elder_Impulse_System_Signal.lua)
 
 The [Elder Impulse System indicator](https://fxcodebase.com/code/viewtopic.php?f=17&t=993) must be also installed!
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     strategy:name("Elder Impulse System Signal");
     strategy:description("");
 
@@ -105,8 +102,8 @@ function ExtUpdate(id, source, period)
     end
 end
 
-dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");`
-
+dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");
+```
 
 ---
 
@@ -115,7 +112,6 @@ dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");`
 **twitjaksono** · Mon Jun 21, 2010 4:32 pm
 
 Hi. I had downloaded the Impulse System and had successfully installed it. However when I had downloaded the Impulse System Signal and tried to install it, I received this message as shown on the image. Could you inform what I should do? Thanks so much.
-
 
 ---
 
@@ -127,7 +123,6 @@ Please read and follow the instruction on how to install the signal:
 [viewtopic.php?f=29&t=602](https://fxcodebase.com/code/viewtopic.php?f=29&t=602)
 You are just trying to add the signal using the "add the indicator" command.
 
-
 ---
 
 ## Re: Elder Impulse System Signal
@@ -135,7 +130,6 @@ You are just trying to add the signal using the "add the indicator" command.
 **Pride80** · Tue Sep 14, 2010 7:05 am
 
 I agree. I would really like to have the bigger timeframe version of this wonderful indicator .
-
 
 ---
 
@@ -145,7 +139,6 @@ I agree. I would really like to have the bigger timeframe version of this wonder
 
 Added to development cue.
 
-
 ---
 
 ## Re: Elder Impulse System Signal
@@ -153,7 +146,6 @@ Added to development cue.
 **Pride80** · Tue Sep 14, 2010 1:39 pm
 
 I posted in the wrong topic , i need the higher timeframe version of elder impulse indicator, not signal... i'm sorry if this will cause problems to you
-
 
 ---
 
@@ -163,7 +155,6 @@ I posted in the wrong topic , i need the higher timeframe version of elder impul
 
 I assumed it.
 
-
 ---
 
 ## Re: Elder Impulse System Signal
@@ -171,7 +162,6 @@ I assumed it.
 **Alexander.Gettinger** · Tue Sep 28, 2010 2:33 am
 
 Please, see this topic: [viewtopic.php?f=17&t=993&p=4846#p4846](https://fxcodebase.com/code/viewtopic.php?f=17&t=993&p=4846#p4846)
-
 
 ---
 
@@ -183,7 +173,6 @@ Good work!
 can you add some variant, the idea is: blue candle, green or red candle.(2 candles) is the signal to up or down. and stop when same color candles appears..
 thanks.
 
-
 ---
 
 ## Re: Elder Impulse System Signal
@@ -191,7 +180,6 @@ thanks.
 **Apprentice** · Fri Jul 05, 2013 5:10 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -202,7 +190,6 @@ Your request is added to the development list.
 thanks a lot!! and good work!
 i need a strategy for this signal, can you develop that?? or where i can found the procedure or tutorial to do that??
 thank you again!
-
 
 ---
 
@@ -215,7 +202,6 @@ All necessary resources are available on this forum.
 [http://fxcodebase.com/documentation.php](https://fxcodebase.com/documentation.php)
 My recommendation is to install SDK first.
 Within the will find all the educational material needed.
-
 
 ---
 

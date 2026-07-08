@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=29&t=1515  
 > Forum: 29 · Topic 1515 · 5 post(s)
 
-
 ---
 
 ## Slope direction line Signal
@@ -12,14 +11,11 @@
 
 ![SDL.png](images/2965/SDL.png)
 
-
-
  [SDL Signal.lua](files/2965/SDL%20Signal.lua)
 
 To use this signal you need to download the updated slope direction line indicator.
 
 [http://fxcodebase.com/code/viewtopic.php?f=17&t=949&start=0](https://fxcodebase.com/code/viewtopic.php?f=17&t=949&start=0)
-
 
 ---
 
@@ -32,12 +28,12 @@ Hello Apprentice,
 When adding this signal, I've get the error "The indicator with id SMA is not found."
 It seems there is an error in these strings in the code:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`strategy.parameters:addString("Method", "Method", "", "SMA");
-    strategy.parameters:addStringAlternative("Method", "SMA", "", "SMA");`
+```
+strategy.parameters:addString("Method", "Method", "", "SMA");
+    strategy.parameters:addStringAlternative("Method", "SMA", "", "SMA");
+```
 
 I suppose, "SMA" should be replaced with "MVA". Could you please update the signal in the first post?
-
 
 ---
 
@@ -49,7 +45,6 @@ This is the question of compatibility.
 I changed the indicator, but I forgot to changed signal.
 
 It should work now.
-
 
 ---
 
@@ -68,7 +63,6 @@ I would suggest the following to enhance the signal, and therefore producing a S
 Thanks!
 
 sjc
-
 
 ---
 

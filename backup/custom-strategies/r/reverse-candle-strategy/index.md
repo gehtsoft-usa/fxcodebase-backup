@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=63223  
 > Forum: 31 · Topic 63223 · 10 post(s)
 
-
 ---
 
 ## Reverse Candle Strategy
@@ -11,8 +10,6 @@
 **Apprentice** · Sun Mar 06, 2016 9:24 am
 
 ![EURUSD H1 (03-06-2016 1449).png](images/105155/EURUSD%20H1%20%2803-06-2016%201449%29.png)
-
-
 
 Based on request.
 [viewtopic.php?f=27&t=61730](https://fxcodebase.com/code/viewtopic.php?f=27&t=61730)
@@ -29,7 +26,6 @@ Stop loss should be set to the pipsize of the reverse candle (so distance betwee
 Long reverse candles are the opposite.
 
  [Reverse Candle Strategy.lua](files/105155/Reverse%20Candle%20Strategy.lua)
-
 
 ---
 
@@ -51,7 +47,6 @@ I really appreciate your help.
 Thank you
 
 Martin
-
 
 ---
 
@@ -76,7 +71,6 @@ Long reverse candle
 Thank you very much
 Haveforexfun
 
-
 ---
 
 ## Re: Reverse Candle Strategy
@@ -85,7 +79,6 @@ Haveforexfun
 
 Requested can be found here.
 [viewtopic.php?f=17&t=63267](https://fxcodebase.com/code/viewtopic.php?f=17&t=63267)
-
 
 ---
 
@@ -105,7 +98,6 @@ let's say I want to trade a short reverse candle, not if the price is crossing u
 Thanks in advance
 Martin
 
-
 ---
 
 ## Re: Reverse Candle Strategy
@@ -120,15 +112,14 @@ Thanks in advance
 
 Martin
 
-
 ---
 
 ## Re: Reverse Candle Strategy
 
 **Apprentice** · Wed Apr 06, 2016 11:35 am
 
-Code: [Select all](https://fxcodebase.com/code/)
-`if   Source.low[period]< Source.low[period-1]
+```lua
+if   Source.low[period]< Source.low[period-1]
    and Source.close[period]> Source.open[period]
    and Source.close[period-1]< Source.open[period-1]
    and Source.close[period+1]> (Source.high[period]+2*Source:pipSize())
@@ -140,8 +131,8 @@ Code: [Select all](https://fxcodebase.com/code/)
    and (Source.close[period+1]< Source.low[period]-2*Source:pipSize())
    then
        --Short
-         end`
-
+         end
+```
 
 ---
 
@@ -162,7 +153,6 @@ Again many many thanks
 
 Martin
 
-
 ---
 
 ## Re: Reverse Candle Strategy
@@ -170,7 +160,6 @@ Martin
 **Apprentice** · Wed Apr 20, 2016 4:38 am
 
 Your request is added to the development list.
-
 
 ---
 

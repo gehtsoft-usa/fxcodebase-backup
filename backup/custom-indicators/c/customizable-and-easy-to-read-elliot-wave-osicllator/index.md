@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=307  
 > Forum: 17 · Topic 307 · 25 post(s)
 
-
 ---
 
 ## Customizable and Easy-to-Read Elliot Wave Osicllator.
@@ -28,10 +27,8 @@ Below is an example how EWO based on MVA and SMMA looks:
 
 ![ewo.PNG](images/534/ewo.PNG)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`-- The formula is described in the Kaufman "Trading Systems and Methods" chapter 14 "Behavioral techniques" (page 358-361)
+```lua
+-- The formula is described in the Kaufman "Trading Systems and Methods" chapter 14 "Behavioral techniques" (page 358-361)
 
 -- Indicator profile initialization routine
 -- Defines indicator profile properties and indicator parameters
@@ -169,7 +166,8 @@ function Update(period, mode)
             end
         end
     end
-end`
+end
+```
 
 Download:
 
@@ -178,7 +176,6 @@ Download:
 Note: To use [SMMA](https://fxcodebase.com/code/viewtopic.php?f=17&t=195), [VIDYA](https://fxcodebase.com/code/viewtopic.php?f=17&t=301), [VIDYA92](https://fxcodebase.com/code/viewtopic.php?f=17&t=301#p525) and [WILDERS](https://fxcodebase.com/code/viewtopic.php?f=17&t=248) indicators as a smoothing method please download and install these indicators too.
 
 The indicator was revised and updated
-
 
 ---
 
@@ -189,7 +186,6 @@ The indicator was revised and updated
 i dont understood this indicator....where's elliott in this model ?
 i take EMA 5 and 35..... 5 cross over 35 green and red for cross under....all simply !
 
-
 ---
 
 ## Re: Customizable and Easy-to-Read Elliot Wave Osicllator.
@@ -198,7 +194,6 @@ i take EMA 5 and 35..... 5 cross over 35 green and red for cross under....all si
 
 I'll prepare the detailed description for our site soon.
 You can also read more about usage of this oscillator on trading related sites, for example [here](http://www.tradingfives.com/articles/elliott_oscillator.htm)
-
 
 ---
 
@@ -216,7 +211,6 @@ I have no clue where to even begin, maybe you do.
 
 Thank you greatly, I so appreciate your hard work...!
 
-
 ---
 
 ## Re: Customizable and Easy-to-Read Elliot Wave Osicllator.
@@ -232,7 +226,6 @@ but we can not seem to find time for its implementation.
 I therefore invite you to help us in developing this indicator,
 especially if you already have such algorithm or the code for this indicator.
 
-
 ---
 
 ## Re: Customizable and Easy-to-Read Elliot Wave Osicllator.
@@ -241,7 +234,6 @@ especially if you already have such algorithm or the code for this indicator.
 
 To make it official.
 I added it to the developmental cue.
-
 
 ---
 
@@ -254,7 +246,6 @@ I added it to the developmental cue.
 
 I have been searching for an indicator that matches this description. It was mentioned that such a custom indicator was added to the development queue. Has there been any progress on it since then?
 
-
 ---
 
 ## Re: Customizable and Easy-to-Read Elliot Wave Osicllator.
@@ -265,7 +256,6 @@ This is one of the few tools that we have not been able to accomplish.
 There have been several attempts.
 I have a few ideas, but I lack the time and knowledge.
 If anyone has an algorithm that could help us, help is appreciated.
-
 
 ---
 
@@ -291,7 +281,6 @@ If I'm way off the mark, to the indicator you had in mind, go ahead and nuke thi
 
 let me know
 
-
 ---
 
 ## Re: Customizable and Easy-to-Read Elliot Wave Osicllator.
@@ -304,7 +293,6 @@ Links to already made solutions or sample code you can send to my private email.
 
 Which indicator andsettings you are using on chart that you have submitted.
 I can not decipher from this chart.
-
 
 ---
 
@@ -319,7 +307,6 @@ As for the image, I grabbed it from the NinjaTrader forum.
 I do remember that the indicator had a TD Wave UP setting and a TD Wave DOWN setting.
 
 I used Notepad to open the indicator file. I'll send it to you, it may help.
-
 
 ---
 
@@ -337,7 +324,6 @@ Let me know if you want the code, and how the best way to send it may be. I ask 
 
 rob
 
-
 ---
 
 ## Re: Customizable and Easy-to-Read Elliot Wave Osicllator.
@@ -347,7 +333,6 @@ rob
 You can send it to my private email.
 Look for it here.
 [memberlist.php?mode=viewprofile&u=437](https://fxcodebase.com/code/memberlist.php?mode=viewprofile&u=437)
-
 
 ---
 
@@ -370,7 +355,6 @@ Ooooh... I have been looking for the code for "A,B,C" indicator ([viewtopic.php?
 
 Thanks heaps
 
-
 ---
 
 ## Re: Customizable and Easy-to-Read Elliot Wave Osicllator.
@@ -391,8 +375,8 @@ I have seen a TD Wave indicator for Worden's Stockcharts application....i was ve
 
 rob
 
-Code: [Select all](https://fxcodebase.com/code/)
-`#region Using declarations
+```
+#region Using declarations
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -1269,10 +1253,10 @@ namespace NinjaTrader.Strategy
         }
     }
 }
-#endregion`
+#endregion
+```
 
 I drew these TD Wave lines by hand of course....but it would be so BAD ASS to have candles painted the color for whatever wave it was in. Until then....i guess I'll count.
-
 
 ---
 
@@ -1283,7 +1267,6 @@ I drew these TD Wave lines by hand of course....but it would be so BAD ASS to ha
 gonna be interesting to see if TD Wave 5 develops.
 
 Wave 4 is done though
-
 
 ---
 
@@ -1299,7 +1282,6 @@ Anyway, I made some pips off this DeMark Wave....hope some of you guys jumped on
 
 rob
 
-
 ---
 
 ## Re: Customizable and Easy-to-Read Elliot Wave Osicllator.
@@ -1307,7 +1289,6 @@ rob
 **rretch** · Wed Jun 29, 2011 4:38 am
 
 Oh yes....sorry for hijacking the post from Elliot waves into DeMark waves.....
-
 
 ---
 
@@ -1321,7 +1302,6 @@ Is there anyway to have this indicator's default period be a lower time frame th
 
 for example 1 hour chart but indicator Default period set to 30min or 15min.
 
-
 ---
 
 ## Re: Customizable and Easy-to-Read Elliot Wave Osicllator.
@@ -1333,7 +1313,6 @@ There is a problem of presentation of such data.
 For example, one hour, have 4 data points of 15 minutes.
 I will try to offer a solution.
 
-
 ---
 
 ## Re: Customizable and Easy-to-Read Elliot Wave Osicllator.
@@ -1341,7 +1320,6 @@ I will try to offer a solution.
 **Nikolay.Gekht** · Fri Feb 03, 2012 10:03 am
 
 Heh. We discussed how to implement that. BTW, skipper wants this mode too. The possible ways is to show a cloud b/w high and low value of the indicator or a candle. The main show stopper is that now this mode requires loading of 2x (e.g. 30 min on 1 hour) to 1000x (1 min on day) data for the indicator. It may be too much for the chart server. Now (in the next version) we are going to use quotes (as for backtester) for the charts, that must significantly improve performance and reduce the amount of the data loaded.
-
 
 ---
 
@@ -1351,7 +1329,6 @@ Heh. We discussed how to implement that. BTW, skipper wants this mode too. The p
 
 Is it possible to create a MTF version as a heat map?
 
-
 ---
 
 ## Re: Customizable and Easy-to-Read Elliot Wave Osicllator.
@@ -1359,7 +1336,6 @@ Is it possible to create a MTF version as a heat map?
 **Apprentice** · Fri Apr 13, 2012 1:42 am
 
 Your request have been added to the development list.
-
 
 ---
 
@@ -1369,7 +1345,6 @@ Your request have been added to the development list.
 
 Requested can be found here.
 [viewtopic.php?f=17&t=15935&p=29889#p29889](https://fxcodebase.com/code/viewtopic.php?f=17&t=15935&p=29889#p29889)
-
 
 ---
 

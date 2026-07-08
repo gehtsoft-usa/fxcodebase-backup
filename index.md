@@ -18,6 +18,14 @@ indicator, strategy, and screenshot saved alongside the discussion.
 The full SDK guide and API reference for writing FXCM/Trading Station
 indicators and strategies in Lua (and JavaScript).
 
+## Indicore SDK Binaries
+
+💾 **[Indicore SDK 3.4.0 installer (Windows)](bin/IndicoreSDK3-3.4.0.exe)**
+
+The SDK binaries are archived under [`bin/`](bin/) alongside the documentation
+above — the installer bundles the Indicore runtime and tooling for building and
+testing indicators and strategies offline.
+
 ## Porting Indicators & Strategies — the Indicore Reader Skill
 
 🛠️ **[Indicore Reader — a Claude skill for understanding fxcodebase Lua](skill/README.md)**
@@ -40,10 +48,11 @@ and screenshots are downloaded next to it.
 
 | Forum | Topics | Browse |
 |-------|-------:|--------|
-| **Custom Indicators** | 3541 | [index](backup/custom-indicators/forum.md) |
-| **Custom Strategies** | 1203 | [index](backup/custom-strategies/forum.md) |
+| **Custom Indicators (Lua)** | 3541 | [index](backup/custom-indicators/forum.md) |
+| **Custom Signals (Lua)** | 105 | [index](backup/custom-signals/forum.md) |
+| **Custom Strategies (Lua)** | 1203 | [index](backup/custom-strategies/forum.md) |
 | **JavaScript Indicators and Strategies** | 842 | [index](backup/javascript-indicators-and-strategies/forum.md) |
-| **Custom Signals** | 105 | [index](backup/custom-signals/forum.md) |
+| **MT4 Expert Advisors** | 3251 | [index](backup/mt4-expert-advisors/forum.md) |
 
 Each forum's `forum.md` links to every topic in that forum.
 

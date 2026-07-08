@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=19945  
 > Forum: 31 · Topic 19945 · 9 post(s)
 
-
 ---
 
 ## Limit level trailing
@@ -20,7 +19,6 @@ Download:
 
  [Trailing_Limit_All.lua](files/35124/Trailing_Limit_All.lua)
 
-
 ---
 
 ## Re: Limit level trailing
@@ -35,7 +33,6 @@ I think that I' m gonna be rich!!!
 
 Best Regards
 
-
 ---
 
 ## Re: Limit level trailing
@@ -48,8 +45,8 @@ Then there is no reason to have this whole strategy to do this simple task.
 
 So this would work for LIMITS ........
 
-Code: [Select all](https://fxcodebase.com/code/)
-`strategy.parameters:addBoolean("SetLimit", "Set Limit Orders", "", true);
+```lua
+strategy.parameters:addBoolean("SetLimit", "Set Limit Orders", "", true);
     strategy.parameters:addInteger("Limit", "Limit Order in pips", "", 1000, 1, 10000);
     strategy.parameters:addBoolean("TrailingLimit", "Trailing Limit order", "", false);
     strategy.parameters:addInteger("TrailingLimitStep", "Trailing Limit step", "", 1, 1, 500);
@@ -70,12 +67,13 @@ Code: [Select all](https://fxcodebase.com/code/)
       if TrailingLimit then
          valuemap.TrailStepLimit = TrailingLimitStep;
       end
-   end`
+   end
+```
 
 Just as this does for STOPS .....
 
-Code: [Select all](https://fxcodebase.com/code/)
-`strategy.parameters:addBoolean("SetStop", "Set Stop Orders", "", true);
+```lua
+strategy.parameters:addBoolean("SetStop", "Set Stop Orders", "", true);
     strategy.parameters:addInteger("Stop", "Stop Order in pips", "", 100, 1, 10000);
     strategy.parameters:addBoolean("TrailingStop", "Trailing stop order", "", false);
     strategy.parameters:addInteger("TrailingStopStep", "Trailing stop step", "", 1, 1, 500);
@@ -97,11 +95,11 @@ Code: [Select all](https://fxcodebase.com/code/)
       if TrailingStop then
          valuemap.TrailStepStop = TrailingStopStep;
       end
-   end`
+   end
+```
 
 So as long as they added to the LUA CODE BASE they are easy to implement...... in the same way as are the Stops.
 Please implement this.....
-
 
 ---
 
@@ -110,7 +108,6 @@ Please implement this.....
 **LordTwig** · Sun May 04, 2014 1:04 am
 
 Has this been implemented into lua codebase yet?
-
 
 ---
 
@@ -126,7 +123,6 @@ Aren't we after simpler rather than complicated?
 Cheers
 Lordtwig
 
-
 ---
 
 ## Re: Limit level trailing
@@ -134,7 +130,6 @@ Lordtwig
 **Apprentice** · Sun Dec 11, 2016 6:24 am
 
 Strategy was revised and updated.
-
 
 ---
 
@@ -149,7 +144,6 @@ for every new trade that opens?
 and trail as it does?
 even if i move the limit manual after position has opened?
 
-
 ---
 
 ## Re: Limit level trailing
@@ -157,7 +151,6 @@ even if i move the limit manual after position has opened?
 **Apprentice** · Sat Aug 04, 2018 6:52 am
 
 Your request is added to the development list under Id Number 4211
-
 
 ---
 

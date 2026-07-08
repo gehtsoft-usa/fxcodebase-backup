@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=366  
 > Forum: 17 · Topic 366 · 17 post(s)
 
-
 ---
 
 ## Center Of Gravity Oscillator by John Ehlers (Upd: Jun 08)
@@ -23,14 +22,12 @@ The COG oscillator is a John Ehler's FIR filer applied on the price. Center of G
 
 ![jecog.png](images/605/jecog.png)
 
-
-
 Download:
 
  [JECOG.lua](files/605/JECOG.lua)
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- Indicator profile initialization routine
+```lua
+-- Indicator profile initialization routine
 function Init()
     indicator:name("John Ehlers' Center Of Gravity Indicator");
     indicator:description("");
@@ -106,8 +103,8 @@ function Update(period)
     if period >= firstSIG then
         SIG[period] = core.avg(CG, core.rangeTo(period, S_N));
     end
-end`
-
+end
+```
 
 ---
 
@@ -119,7 +116,6 @@ A crossover signal for this indicator would be wonderful!
 
 Thank you!
 
-
 ---
 
 ## Re: Center Of Gravity Oscillator by John Ehlers (Upd: Feb, 22)
@@ -130,7 +126,6 @@ Yeah, I would also LOVE a signal to this Oscillator when Buff 1 and Buff 2 cross
 
 Any chance, please?
 
-
 ---
 
 ## Re: Center Of Gravity Oscillator by John Ehlers (Upd: Feb, 22)
@@ -139,7 +134,6 @@ Any chance, please?
 
 Yes please me too!!!
 
-
 ---
 
 ## Re: Center Of Gravity Oscillator by John Ehlers (Upd: Feb, 22)
@@ -147,7 +141,6 @@ Yes please me too!!!
 **one2share** · Mon Jun 07, 2010 6:39 am
 
 I agree a crossover signal would be great
-
 
 ---
 
@@ -159,7 +152,6 @@ Updated.
 See also for the signal:
 [viewtopic.php?f=29&t=1283](https://fxcodebase.com/code/viewtopic.php?f=29&t=1283)
 
-
 ---
 
 ## Re: Center Of Gravity Oscillator by John Ehlers (Upd: Jun 08)
@@ -167,7 +159,6 @@ See also for the signal:
 **zekelogan** · Wed Jun 09, 2010 7:27 pm
 
 Who rocks? Fxcodebase does
-
 
 ---
 
@@ -177,7 +168,6 @@ Who rocks? Fxcodebase does
 
 Thank you.
 
-
 ---
 
 ## Re: Center Of Gravity Oscillator by John Ehlers (Upd: Jun 08)
@@ -185,7 +175,6 @@ Thank you.
 **briansummy** · Thu Mar 22, 2012 10:23 pm
 
 Very cool indicator!
-
 
 ---
 
@@ -195,7 +184,6 @@ Very cool indicator!
 
 will appreciate if u can add over bought n over sold levels on this indi.. thanks....
 
-
 ---
 
 ## Re: Center Of Gravity Oscillator by John Ehlers (Upd: Jun 08)
@@ -203,7 +191,6 @@ will appreciate if u can add over bought n over sold levels on this indi.. thank
 **Apprentice** · Sat Mar 31, 2012 3:48 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -214,7 +201,6 @@ Your request is added to the development list.
 I agree: overbought/oversold levels would make this indicator perfect! As it already is.
 Great work guys!
 Thanks.
-
 
 ---
 
@@ -228,7 +214,6 @@ Guys, where does the value of this ocillator come from? -5.5 as center line is v
 
 Thanks, you guys are freakin amazing at what you do - we appreciate it!
 
-
 ---
 
 ## Re: Center Of Gravity Oscillator by John Ehlers (Upd: Jun 08
@@ -241,7 +226,6 @@ is it possible to show an arrow on the bars with direction and color maching the
 
 your help is much appreciated as always.
 
-
 ---
 
 ## Re: Center Of Gravity Oscillator by John Ehlers (Upd: Jun 08
@@ -251,7 +235,6 @@ your help is much appreciated as always.
 Can you confirm.
 Up If we have CrossOver and Candle is Up
 Down If there are CrossUnder and Candle is Down
-
 
 ---
 
@@ -264,7 +247,6 @@ Down if we have CrossUnder and 2 candles Down,arrow will be at the second confir
 in this way we can eliminate the false crossing signal.
 
 many thanks in advance as always.
-
 
 ---
 

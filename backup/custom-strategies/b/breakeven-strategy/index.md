@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=13498  
 > Forum: 31 · Topic 13498 · 68 post(s)
 
-
 ---
 
 ## Breakeven Strategy
@@ -16,7 +15,6 @@
 
 This strategy set stop to breakeven when the position reaches a set amount of pips in profit.
 
-
 ---
 
 ## Re: Breakeven Strategy
@@ -27,7 +25,6 @@ Dear Apprentice,
 
 Apart from setting stop breakeven, does it lock in profit by resuming its trailing stop?
 
-
 ---
 
 ## Re: Breakeven Strategy
@@ -35,7 +32,6 @@ Apart from setting stop breakeven, does it lock in profit by resuming its traili
 **Apprentice** · Sat Feb 18, 2012 4:23 am
 
 Not for now.
-
 
 ---
 
@@ -46,7 +42,6 @@ Not for now.
 Seem to get an error when I use this strategy on more than one position on the same pair -- despite ensure that the correct ticket no. is picked for each Strategy.
 
 I'll try again and copy Error report, if that helps.
-
 
 ---
 
@@ -60,7 +55,6 @@ I enter two positions with 45pip stop, then open Breakeven Strategy, and set pro
 
 "Failed create/change stop Cannot place more than one order of this type for each trade."
 
-
 ---
 
 ## Re: Breakeven Strategy
@@ -73,7 +67,6 @@ Thanks for making this new breakeven strategy, as the previous version of this s
 
 Would it be possible if it can automatically update the ticket number of a newly open trade? Because along the way, the open trade is either closed by other strategies or hits limit/stops. It's tedious closing and reopening this breakeven strategy every time a new trade is opened.
 
-
 ---
 
 ## Re: Breakeven Strategy
@@ -82,7 +75,6 @@ Would it be possible if it can automatically update the ticket number of a newly
 
 In theory, yes.
 I hope I will find time soon.
-
 
 ---
 
@@ -96,7 +88,6 @@ i run the strategy on one chart.what is the reason i get this message.
 Best Regards
 eyal
 
-
 ---
 
 ## Re: Breakeven Strategy
@@ -109,7 +100,6 @@ Still can't get it to work. Following error:
 
 Seems to not work if there is more than one position in any pair -- this is despite making sure different orders are picked in Breakeven Strategy.
 
-
 ---
 
 ## Re: Breakeven Strategy
@@ -117,7 +107,6 @@ Seems to not work if there is more than one position in any pair -- this is desp
 **SJB944** · Thu Feb 23, 2012 11:20 pm
 
 Still can't get it to work even if only have one position open on a chart at a time. Same error.
-
 
 ---
 
@@ -130,7 +119,6 @@ OK, I can get it to work only if the position doesn't already have a stop loss!
 Is it possible to update so that an initial stop loss is moved to Break Even after a set profit target is reached.
 
 Cheers
-
 
 ---
 
@@ -147,7 +135,6 @@ Maybe you should stop the strategy and open it again with a new opened trade by 
 
 And occasionally you'll get those errors you've mentioned. Just have to open and close again...no choice.
 
-
 ---
 
 ## Re: Breakeven Strategy
@@ -155,7 +142,6 @@ And occasionally you'll get those errors you've mentioned. Just have to open and
 **SJB944** · Sun Feb 26, 2012 5:21 pm
 
 Nope, was opening Break Even Strategy new for each trade.
-
 
 ---
 
@@ -182,7 +168,6 @@ Lead gap: 5.0
 
 In this case the first stop move will occur when a 5 minute bar closes at open price + 15 pips and it will be set at open price + 10 pips with a 5 pip cushion. When another 5 minute bar closes at Stop price + 15 pips, the stop will move to open price + 20 pips with a minimum of 5 pips cushion. Thus this setup protects profits in 10 pip increments.
 
-
 ---
 
 ## Re: Breakeven Strategy
@@ -207,7 +192,6 @@ Price goes to 1.3115 and automatically 5 lots are closed and my stop is moved to
 
 Then from there the stop is moved according to fractals and lets say i'm stopped at 100 pips then the remaining 5 lots are closed.
 
-
 ---
 
 ## Re: Breakeven Strategy
@@ -220,7 +204,6 @@ This strategy only works for one position of one pair at anytime. If you open mu
 
 Please help fix this issue. Thanks.
 
-
 ---
 
 ## Re: Breakeven Strategy
@@ -228,7 +211,6 @@ Please help fix this issue. Thanks.
 **PipGrabber** · Wed Aug 08, 2012 9:02 am
 
 Hope somebody can update this strategy that it can automatically detect new open trades. So no need to manually choose a new ticket every time a the open position is closed and a new open ticket is issued.
-
 
 ---
 
@@ -239,7 +221,6 @@ Hope somebody can update this strategy that it can automatically detect new open
 Hi Apprentice,
 
 Still waiting for the update on this strategy to automatically detect new opened positions by other strategies, rather than manually choosing the ticket number each time a new position is opened. (Very tedious if in 1min time frame). Looking forward to it soon.. Thanks!
-
 
 ---
 
@@ -253,7 +234,6 @@ Still waiting for the update on this strategy to automatically detect new opened
 
 Still looking forward when you'll have time to automatically update the trade ticket. So that this strategy would continuously run and function on every new trade is being opened.
 
-
 ---
 
 ## Re: Breakeven Strategy
@@ -262,7 +242,6 @@ Still looking forward when you'll have time to automatically update the trade ti
 
 Does this work on trades that are opened by other strategies?
 
-
 ---
 
 ## Re: Breakeven Strategy
@@ -270,7 +249,6 @@ Does this work on trades that are opened by other strategies?
 **Apprentice** · Fri Feb 07, 2014 3:08 am
 
 It should work on all open positions.
-
 
 ---
 
@@ -290,7 +268,6 @@ that brings back to my request. that this strategy automatically detect opened p
 and i think Silvethorn has the same sentiments with me..
 
 unless your doing manually run this strategy everytime..
-
 
 ---
 
@@ -316,7 +293,6 @@ The Highly adaptable RSI and Advanced Fractal strategies are well thought out an
 
 I'd personally like to see the break even strategy working with the Advanced Fractal. If it works with anything reasonable then it would be great.
 
-
 ---
 
 ## Re: Breakeven Strategy
@@ -324,7 +300,6 @@ I'd personally like to see the break even strategy working with the Advanced Fra
 **Silverthorn** · Fri Feb 07, 2014 7:29 pm
 
 It needs to be able to be set so that when applied to a pair it monitors ALL open positions reguardless of how they were opened.
-
 
 ---
 
@@ -337,7 +312,6 @@ It needs to be able to be set so that when applied to a pair it monitors ALL ope
 
 an option like that is desirable for some but you may not want it to close some positions for that symbol. e.g. long term positions with an intentionaly big stop or positions generated by a different strategy.
 both is best.
-
 
 ---
 
@@ -365,7 +339,6 @@ I don't have a FIFO account so I haven't tested except in the debugger. On my No
 
 Cheers,
 MooMooFX
-
 
 ---
 
@@ -404,7 +377,6 @@ Thanks a lot!
 
 Vantages
 
-
 ---
 
 ## Re: Breakeven Strategy
@@ -430,7 +402,6 @@ If I can reproduce the problem, then I can fix it. Although, I am travelling so 
 
 Cheers,
 MooMooFX
-
 
 ---
 
@@ -462,7 +433,6 @@ Thank you for your time. Looking forward for your response. Have a safe & nice d
 
 Vantages
 
-
 ---
 
 ## Re: Breakeven Strategy
@@ -482,7 +452,6 @@ Hope you could give clarity to my case. Thank you and have a nice day.
 
 Vantages
 
-
 ---
 
 ## Re: Breakeven Strategy
@@ -499,7 +468,6 @@ Please let me know your thoughts on the idea. Thank you and have a nice day!
 
 Vantages
 
-
 ---
 
 ## Re: Breakeven Strategy
@@ -507,7 +475,6 @@ Vantages
 **Apprentice** · Fri Jun 27, 2014 3:59 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -527,7 +494,6 @@ Two things concern me:
 
 Thanks,
 MooMooFX
-
 
 ---
 
@@ -555,7 +521,6 @@ The said modifications if granted will be beneficial to those who accumulate a l
 Thank you very much for your time.
 
 Vantages
-
 
 ---
 
@@ -588,7 +553,6 @@ I hope this helps. Remember, I'm on holiday so do not expect fast responses from
 Cheers,
 MooMooFX
 
-
 ---
 
 ## Re: Breakeven Strategy
@@ -616,7 +580,6 @@ Thank so much for your time. I appreciate all your responses.
 
 Vantages
 
-
 ---
 
 ## Re: Breakeven Strategy
@@ -627,7 +590,6 @@ This strategy works very well , there is only one problem...sometimes the strate
 
 some consideration?
 
-
 ---
 
 ## Re: Breakeven Strategy
@@ -636,7 +598,6 @@ some consideration?
 
 This is buildin functionality.
 It will close underlying strategy if associated position no longer exists.
-
 
 ---
 
@@ -656,7 +617,6 @@ Great script, really, am lovin' it! I have tried it on a demo and am using it on
 
 Thanks a bunch!
 
-
 ---
 
 ## Re: Breakeven Strategy
@@ -667,7 +627,6 @@ Thanks a bunch!
 
 Cheers,
 MooMooForex
-
 
 ---
 
@@ -683,7 +642,6 @@ MooMooForex
 
 Terrific, thanks so much!
 
-
 ---
 
 ## Re: Breakeven Strategy
@@ -692,7 +650,6 @@ Terrific, thanks so much!
 
 BreakEvenAll.LUA is working fine but i also want to be able to close half my position as soon as break even is set. I heard this was in development. has that completed?
 
-
 ---
 
 ## Re: Breakeven Strategy
@@ -700,7 +657,6 @@ BreakEvenAll.LUA is working fine but i also want to be able to close half my pos
 **Apprentice** · Wed Apr 01, 2015 4:20 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -720,7 +676,6 @@ Thanks
 Regards,
 DK
 
-
 ---
 
 ## Re: Breakeven Strategy
@@ -728,7 +683,6 @@ DK
 **Apprentice** · Sun Apr 12, 2015 10:12 am
 
 Advanced position sizing and risk management is possible.
-
 
 ---
 
@@ -755,7 +709,6 @@ Thanks a lot!
 Best
 4x4
 
-
 ---
 
 ## Re: Breakeven Strategy
@@ -769,7 +722,6 @@ Could you kindly have a look to fix this.
 Basically, it should only set the stop to BreakEven point once, and then let the Trailing Stop go until trade closes out.
 
 Thanks
-
 
 ---
 
@@ -785,17 +737,18 @@ If anyone wants the code, I've pasted it below.
 
 Basically replace these 5 lines:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`if (tradeRow.IsBuy) then
+```lua
+if (tradeRow.IsBuy) then
                 stopValue = openPrice + (gap * instance.bid:pipSize());
             elseif (not tradeRow.IsBuy) then
                 stopValue = openPrice - (gap * instance.bid:pipSize());
-            end`
+            end
+```
 
 With the below, which adds the additional check:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`if (tradeRow.IsBuy) then
+```lua
+if (tradeRow.IsBuy) then
                 stopValue = openPrice + (gap * instance.bid:pipSize());
 
             -- check if the stop is better than the BreakEven level, if so, do nothing and exit
@@ -810,8 +763,8 @@ Code: [Select all](https://fxcodebase.com/code/)
                     if stopValue > tradeRow.Stop then
                         return;
                     end
-            end`
-
+            end
+```
 
 ---
 
@@ -828,7 +781,6 @@ Thanks so much for posting this! This is exactly what I'm looking for. I do have
 2. Should I not set a TP with these orders? Will setting a TP mess up the strategy?
 
 Again thanks so much!
-
 
 ---
 
@@ -849,7 +801,6 @@ Again, I'm not the author, and have only recently begun testing this strategy, s
 Best
 4x4
 
-
 ---
 
 ## Re: Breakeven Strategy
@@ -861,7 +812,6 @@ Could you check for me the attached why it can give me 'Failed create stop The R
 I wanted to add 5 additinal breakeven level - so running strategies on 9 currency pairs, I dont have to set up 54 strategies with 'BreakevenAll' (6 for each) just 9.
 My intention is setting breakeven levels not with the trailing function but with my levels keeping the same 'Gap'
 thanks in advance!
-
 
 ---
 
@@ -877,7 +827,6 @@ My needs aren’t as complex as some of the posters on the board. I do not open 
 
 Is it even possible to move an existing stop on a FIFO account? It is not a hedging account.
 
-
 ---
 
 ## Re: Breakeven Strategy
@@ -886,7 +835,6 @@ Is it even possible to move an existing stop on a FIFO account? It is not a hedg
 
 Would the breakeven strategy work for FIFO accounts if the strategy ...
 Sure. As it is it is not currency sensitive.
-
 
 ---
 
@@ -951,7 +899,6 @@ can someone please help me?
 best regards
 lux
 
-
 ---
 
 ## Re: Breakeven Strategy
@@ -969,7 +916,6 @@ the whole strategy will stop. (breakevenall).
 
 so its nice but not perfect.
 
-
 ---
 
 ## Re: Breakeven Strategy
@@ -977,7 +923,6 @@ so its nice but not perfect.
 **Apprentice** · Sun Dec 18, 2016 9:32 am
 
 Strategy was revised and updated.
-
 
 ---
 
@@ -994,7 +939,6 @@ Strategy was revised and updated.
 Has this ever been developed?
 A "BreakevenALL" but for net positions (average of all positions for breakeven)
 
-
 ---
 
 ## Re: Breakeven Strategy
@@ -1002,7 +946,6 @@ A "BreakevenALL" but for net positions (average of all positions for breakeven)
 **Reymondpolanco** · Thu Mar 22, 2018 10:16 pm
 
 Im getting this error
-
 
 ---
 
@@ -1014,7 +957,6 @@ Try this version.
 
  [Breakeven Strategy.lua](files/118398/Breakeven%20Strategy.lua)
 
-
 ---
 
 ## Re: Breakeven Strategy
@@ -1023,7 +965,6 @@ Try this version.
 
 Can you put the option to put an specific price level and pips too
 
-
 ---
 
 ## Re: Breakeven Strategy
@@ -1031,7 +972,6 @@ Can you put the option to put an specific price level and pips too
 **Apprentice** · Fri May 18, 2018 6:05 am
 
 Your request is added to the development list under Id Number 4145
-
 
 ---
 
@@ -1042,7 +982,6 @@ Your request is added to the development list under Id Number 4145
 Try it now.
 
  [Breakeven Strategy.lua](files/119375/Breakeven%20Strategy.lua)
-
 
 ---
 
@@ -1058,7 +997,6 @@ Try it now.
 
 The profit selector works perfect but when i use the price selector i'm gettin this error.
 
-
 ---
 
 ## Re: Breakeven Strategy
@@ -1073,7 +1011,6 @@ The profit selector works perfect but when i use the price selector i'm gettin t
 
 The profit selector works perfect but when i use the price selector i'm gettin this error.
 
-
 ---
 
 ## Re: Breakeven Strategy
@@ -1083,7 +1020,6 @@ The profit selector works perfect but when i use the price selector i'm gettin t
 Try this version.
 
  [Breakeven Strategy_3.lua](files/119763/Breakeven%20Strategy_3.lua)
-
 
 ---
 
@@ -1099,7 +1035,6 @@ Try this version.
 
 The profit selector works great but when i chose price and the price reach the level i put, the stop move to the price i put in the strategy not to the breakeven point.
 
-
 ---
 
 ## Re: Breakeven Strategy
@@ -1107,7 +1042,6 @@ The profit selector works great but when i chose price and the price reach the l
 **Apprentice** · Mon Aug 06, 2018 9:12 am
 
 Try updated Breakeven Strategy_3.lua
-
 
 ---
 

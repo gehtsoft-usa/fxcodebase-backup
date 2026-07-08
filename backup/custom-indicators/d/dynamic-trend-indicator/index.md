@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=1839  
 > Forum: 17 · Topic 1839 · 8 post(s)
 
-
 ---
 
 ## Dynamic Trend Indicator
@@ -16,10 +15,8 @@
 
 ![DynamicTrend.png](images/3662/DynamicTrend.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Dynamic Trend Indicator");
     indicator:description("Dynamic Trend Indicator");
     indicator:requiredSource(core.Bar);
@@ -64,10 +61,10 @@ function Update(period, mode)
       buffDn:set(period, source.high[period]-10*source:pipSize(), "\226", "");
      end
     end
-end`
+end
+```
 
  [DynamicTrend.lua](files/3662/DynamicTrend.lua)
-
 
 ---
 
@@ -81,7 +78,6 @@ Quick question:
 
 Is this version a translation of the code I provided in my request, or the link to the trade-profit website?
 
-
 ---
 
 ## Re: Dynamic Trend Indicator
@@ -89,7 +85,6 @@ Is this version a translation of the code I provided in my request, or the link 
 **Alexander.Gettinger** · Wed Aug 18, 2010 8:33 pm
 
 This is a translation of the MT4 code.
-
 
 ---
 
@@ -104,7 +99,6 @@ Is it possible to get a MTF version, so we can choose to have the indi show tren
 Thanks in advance,
 bonnevie
 
-
 ---
 
 ## Re: Dynamic Trend Indicator
@@ -112,7 +106,6 @@ bonnevie
 **Apprentice** · Mon Sep 20, 2010 1:26 am
 
 Added to development cue.
-
 
 ---
 
@@ -123,7 +116,6 @@ Added to development cue.
 Requested and the indicator can be found here.
 [viewtopic.php?f=17&t=2223](https://fxcodebase.com/code/viewtopic.php?f=17&t=2223)
 
-
 ---
 
 ## Re: Dynamic Trend Indicator
@@ -131,7 +123,6 @@ Requested and the indicator can be found here.
 **Apprentice** · Fri Jan 20, 2017 6:53 am
 
 Indicator was revised and updated.
-
 
 ---
 

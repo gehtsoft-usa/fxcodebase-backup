@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=1418  
 > Forum: 17 · Topic 1418 · 4 post(s)
 
-
 ---
 
 ## Kaufman RSI,CCI and Stochastic
@@ -27,12 +26,10 @@ Caufman_Ind=AMA;
 
 ![Kaufman.png](images/2768/Kaufman.png)
 
-
-
 Kaufman CCI:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Kaufman CCI");
     indicator:description("Kaufman CCI");
     indicator:requiredSource(core.Bar);
@@ -112,12 +109,13 @@ function Update(period, mode)
     else
      AMA0=CCI_Ind.DATA[period-1];
     end
-end`
+end
+```
 
 Kaufman RSI:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Kaufman RSI");
     indicator:description("Kaufman RSI");
     indicator:requiredSource(core.Tick);
@@ -197,10 +195,11 @@ function Update(period, mode)
     else
      AMA0=RSI_Ind.DATA[period-1];
     end
-end`
+end
+```
+
 MT4/Mq4 version.
 [viewtopic.php?f=38&t=63899](https://fxcodebase.com/code/viewtopic.php?f=38&t=63899)
-
 
 ---
 
@@ -210,8 +209,8 @@ MT4/Mq4 version.
 
 KAufman Stochastic:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Kaufman Stochastic");
     indicator:description("Kaufman Stochastic");
     indicator:requiredSource(core.Bar);
@@ -294,8 +293,8 @@ function Update(period, mode)
     else
      AMA0=Stochastic_Ind.DATA[period-1];
     end
-end`
-
+end
+```
 
 ---
 
@@ -307,7 +306,6 @@ for me kaufman sto give a black screen...., cci and rsi are good...
 a bug for france ?
 
 edit : i understand the problem...data !!! it's ok now !
-
 
 ---
 

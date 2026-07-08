@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=2430  
 > Forum: 17 · Topic 2430 · 101 post(s)
 
-
 ---
 
 ## Moving Average Indicator: 20 in 1
@@ -113,10 +112,8 @@ Alpha=0.45*N/(0.45*(N-1)+2).
 
 ![Averages.png](images/5268/Averages.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Averages indicator");
     indicator:description("Averages indicator");
     indicator:requiredSource(core.Tick);
@@ -739,7 +736,8 @@ function JSmoothUpdate(params, period, mode)
         params.a4[period]     = (params.a3[period] - params.buffer[period - 1]) * params.alpha1_2 + params.alpha_2 * params.a4[period - 1];
         params.buffer[period] = params.buffer[period - 1] + params.a4[period];
     end
-end`
+end
+```
 
  [Averages.lua](files/5268/Averages.lua)
 
@@ -758,8 +756,6 @@ please make sure to use TS Version 01.14.101415. or higher.
 
 ![avg.png](images/5268/avg.png)
 
-
-
  [Averages Overlay.lua](files/5268/Averages%20Overlay.lua)
 
 Averages Update.
@@ -774,15 +770,11 @@ Please note that some of methods are faster than another. To compare please use 
 
 ![optimize2.png](images/5268/optimize2.png)
 
-
-
 Just to reference here is the comparison of performance of old and new version of the indicator. The higher bar means better performance improvements:
 
  
 
 ![opt1.png](images/5268/opt1.png)
-
-
 
 To read how such improvements was made please refer this article:
 [viewtopic.php?f=28&t=3785&start=0](https://fxcodebase.com/code/viewtopic.php?f=28&t=3785&start=0)
@@ -798,15 +790,12 @@ Old version. For the new version see above.
 
 ![CADJPY m1 (05-02-2017 1506).png](images/5268/CADJPY%20m1%20%2805-02-2017%201506%29.png)
 
-
-
  [Averages Arrows.lua](files/5268/Averages%20Arrows.lua)
 
  [AveragesNonStandardTimeframe.lua](files/5268/AveragesNonStandardTimeframe.lua)
 
 MT4/MQ4 version.
 [viewtopic.php?f=38&t=66535](https://fxcodebase.com/code/viewtopic.php?f=38&t=66535)
-
 
 ---
 
@@ -818,7 +807,6 @@ Hi Alexander,
 
 Thank you for your great indi...
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -827,7 +815,6 @@ Thank you for your great indi...
 
 great idea!
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -835,7 +822,6 @@ great idea!
 **Alexander.Gettinger** · Sun Oct 24, 2010 10:19 am
 
 Thank you!
-
 
 ---
 
@@ -849,7 +835,6 @@ If it is possible could be made MACD, which has options of choice of those 20 di
 
 Thank you again!
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -858,7 +843,6 @@ Thank you again!
 
 Requested can be found here.
 [viewtopic.php?f=17&t=2564&p=5712#p5712](https://fxcodebase.com/code/viewtopic.php?f=17&t=2564&p=5712#p5712)
-
 
 ---
 
@@ -872,12 +856,9 @@ Bigger timeframe version of Averages indicator.
 
 ![BF_Averages.png](images/6662/BF_Averages.png)
 
-
-
 Download:
 
  [BF_Averages.lua](files/6662/BF_Averages.lua)
-
 
 ---
 
@@ -893,14 +874,11 @@ For example MA for USD/SEK H4 on EUR/USD H1 chart:
 
 ![BF_OI_Averages.png](images/6686/BF_OI_Averages.png)
 
-
-
 Download:
 
  [BF_OI_Averages.lua](files/6686/BF_OI_Averages.lua)
 
 For this indicator must be installed Averages indicator from top of this topic.
-
 
 ---
 
@@ -913,7 +891,6 @@ Is it possible to trace a second plot above or below an MA off set by a variable
 What I am trying to achieve is a plot to show how a trailing stop would perform so the offset would be the trailing stop and the Fast MA tracks the price.
 
 Thanks, Ross
-
 
 ---
 
@@ -929,7 +906,6 @@ But instead of percentage or ATR, that you can set a specific value in the PIPS.
 Otherwise a better place to give requests of this type is Indicator and Signal Requests section.
 [viewforum.php?f=27](https://fxcodebase.com/code/viewforum.php?f=27)
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -941,7 +917,6 @@ Hope this makes sense.
 p.s. Wasn't sure what ATR is.
 
 Ross
-
 
 ---
 
@@ -956,7 +931,6 @@ You can try TickTS.lua, you can find it here.
 
 As a source for TickTS choose moving average which you want to use.
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -970,7 +944,6 @@ Some algorithms are changed, or corrected.
 
 Fully compatible with the old version was held.
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -979,7 +952,6 @@ Fully compatible with the old version was held.
 
 Updated: Please read the first post for details.
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -987,7 +959,6 @@ Updated: Please read the first post for details.
 **abrown8703** · Wed Mar 30, 2011 3:41 pm
 
 Thanks for this excellent indicator! Personally, my trading has improved significantly with this indicator as part my core strategy. Thanks Again!
-
 
 ---
 
@@ -1002,7 +973,6 @@ The image below shows how lag has been reduced compared with the initial curve:
 
 ![shot1.PNG](images/9966/shot1.PNG)
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1010,7 +980,6 @@ The image below shows how lag has been reduced compared with the initial curve:
 **station0524** · Sat Jun 11, 2011 11:08 pm
 
 Is it possible to add "KAMA" average to the AVERAGES and Bigger time frame AVERAGES indicators?
-
 
 ---
 
@@ -1024,7 +993,6 @@ Second.
 BF Version Averages of indicators, has already been written.
 It is Posted within this topic.
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1033,7 +1001,6 @@ It is Posted within this topic.
 
 Can you add "KAMA" to the indicator when possible? Thank you in advance
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1041,7 +1008,6 @@ Can you add "KAMA" to the indicator when possible? Thank you in advance
 **Apprentice** · Thu Jun 16, 2011 1:59 pm
 
 Alexis already committed to this task.
-
 
 ---
 
@@ -1054,7 +1020,6 @@ KAMA is added to the indicator.
 Download:
 
  [Averages.lua](files/13125/Averages.lua)
-
 
 ---
 
@@ -1069,14 +1034,11 @@ Open of candle is a MA for open price and etc.
 
 ![Averages_Candle.png](images/13210/Averages_Candle.png)
 
-
-
 Download:
 
  [Averages_Candle.lua](files/13210/Averages_Candle.lua)
 
 For this indicator must be installed AVERAGES indicator from first post of this topic.
-
 
 ---
 
@@ -1087,7 +1049,6 @@ For this indicator must be installed AVERAGES indicator from first post of this 
 The T3 moving average is incorrect. In the old version of the 20 in 1 indicator the T3 is correct but not in the new version. Don't know why they changed it when they wrote the new version. You can compare it with any charting package and you will see that the T3 in the old 20 in 1 version is similar to all other charting packages but the T3 in the new version is totally different.
 
 Is it possible to change the T3 back to the correct version?
-
 
 ---
 
@@ -1100,7 +1061,6 @@ it's one of the most useful indicators I ever tried.
 and not to forget the original developer,
 GREAT WORK!
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1112,7 +1072,6 @@ i need in the same indicator other indicators options like DXMA, Laguerre Filter
 
 Thanks!!
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1121,7 +1080,6 @@ Thanks!!
 
 Your request is added to the developmental cue.
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1129,7 +1087,6 @@ Your request is added to the developmental cue.
 **Trader1** · Thu Sep 15, 2011 5:51 pm
 
 could you please add alert when the MA is changing color
-
 
 ---
 
@@ -1145,7 +1102,6 @@ could you please add alert when the MA is changing color
 
 Do you want to see these indicators in the form of candles?
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1153,7 +1109,6 @@ Do you want to see these indicators in the form of candles?
 **thetruth** · Fri Sep 16, 2011 12:24 pm
 
 just the same of averages 20 in 1 concept, like kama modification, thanks.
-
 
 ---
 
@@ -1165,7 +1120,6 @@ Hi folks, thanks for all the work that is good job from you, I agree, if that's 
 
 Muchos gracias like we say!
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1174,7 +1128,6 @@ Muchos gracias like we say!
 
 This strategy might help.
 [viewtopic.php?f=31&t=3859](https://fxcodebase.com/code/viewtopic.php?f=31&t=3859)
-
 
 ---
 
@@ -1188,7 +1141,6 @@ Download:
 
  [Averages_With_Shift.lua](files/24123/Averages_With_Shift.lua)
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1196,7 +1148,6 @@ Download:
 **Hailkayy** · Sat Feb 04, 2012 10:24 pm
 
 No backward shift possible
-
 
 ---
 
@@ -1206,10 +1157,7 @@ No backward shift possible
 
 ![untitled.PNG](images/25209/untitled.PNG)
 
-
-
 Try to use standard buildin Shift_I and Shift_O indicators.
-
 
 ---
 
@@ -1222,7 +1170,6 @@ Could you possibly add VAMA to this excellent indicator?
 
 Thanks a million
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1230,7 +1177,6 @@ Thanks a million
 **Apprentice** · Fri Feb 10, 2012 4:40 am
 
 Your request is added to the list for development.
-
 
 ---
 
@@ -1245,7 +1191,6 @@ Your request is added to the list for development.
 It's impossible in the current version of indicator.
 Indicator use tick data and don't have access to volume data.
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1257,7 +1202,6 @@ Would you be able to develop an MTF Averages_Candle.lua strategy where a short t
 Also allow the same time frame like H4/H4 and length is difference like a MA crossover?
 Please let me know if this is possible and time frame. I can offer some funds for faster development. Thanks!
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1265,7 +1209,6 @@ Please let me know if this is possible and time frame. I can offer some funds fo
 **Apprentice** · Mon Mar 19, 2012 1:00 am
 
 Your request is added to the list of developers.
-
 
 ---
 
@@ -1275,7 +1218,6 @@ Your request is added to the list of developers.
 
 Requested can be found here.
 [viewtopic.php?f=31&t=14928&p=28285#p28285](https://fxcodebase.com/code/viewtopic.php?f=31&t=14928&p=28285#p28285)
-
 
 ---
 
@@ -1287,7 +1229,6 @@ This indicator would also be great in another strategy that just came to mind.
 
 Using Heikin-Ashi Charting and a MVA of about 5. When candles agree buy/sell after n+1 close to prevent a false signal. This looks great on AUDCAD Daily chart. Trade exits when only MVA changes color and reenters when they agree again.
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1298,7 +1239,6 @@ Hi, I downloaded the BF_Averages.lua on page one twice.
 The file size is 8.7 KiB not 9.51KiB; and there is only one color option not two.
 Thanks
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1307,10 +1247,7 @@ Thanks
 
 ![Untitled.png](images/34913/Untitled.png)
 
-
-
 You can use the standard indicator, And then change Source time frame.
-
 
 ---
 
@@ -1322,7 +1259,6 @@ There is a problem with the standard indicator on the tick chart.
 When I change source time frame to anything other than default,
 it disappears.
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1332,7 +1268,6 @@ it disappears.
 If you use tick, and then change a source to H1.
 Moving average chart will be on, but you will not see it.
 Because you are using too much magnification.
-
 
 ---
 
@@ -1346,7 +1281,6 @@ If you are able to use, then there is a problem on my end.
 I am having great success using standard with default , and BF Indie with M1 and M5.
 Would it be possible to make the BF Indie two color? Thanks.
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1358,7 +1292,6 @@ I called FXCM support and they had the same problem. The BF_Averages is the only
 that will work on a tick chart with a higher time frame designation.
 Thanks for all your work.
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1369,7 +1302,6 @@ I would like to again request a two color BF_averages.lua.
 The averages.lua still disappears when the data source is changed from default to M1 or M5 on a tick
 chart. Please see my previous posts.
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1378,13 +1310,10 @@ chart. Please see my previous posts.
 
 ![TS2.png](images/41745/TS2.png)
 
-
-
 I have no such problems.
 True, i have the Beta version of TS,
 this could make a difference.
 As for the disappearance of MA, you must bear in mind, that you use a very large magnifying glass, your MA is possible just outside of your chart area.
-
 
 ---
 
@@ -1399,7 +1328,6 @@ Now, regarding the averages.lua , I just used a MVA 5 with a M1 data source. It 
 Your beta version is the only reason it works . Please see previous post, I talked with FXCM support. They had the same problem: it DOES NOT work. PLEASE forgive my emphasis, but I am exasperated.
 I have waited four months.
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1410,7 +1338,6 @@ U can try to use the Beta version.
 Downlaod link can be found here.
 [viewtopic.php?f=30&t=20383](https://fxcodebase.com/code/viewtopic.php?f=30&t=20383)
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1420,7 +1347,6 @@ Downlaod link can be found here.
 Apprentice, the beta version works. Thanks, I like the averages.lua better than the BF_averages.
 Other indies work as well. Any estimate of when Trading Station/Marketscope will be updated?
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1429,7 +1355,6 @@ Other indies work as well. Any estimate of when Trading Station/Marketscope will
 
 The next version is expected in prod by the end of year.
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1437,7 +1362,6 @@ The next version is expected in prod by the end of year.
 **Apprentice** · Tue Nov 20, 2012 6:46 am
 
 KAMA moving average added.
-
 
 ---
 
@@ -1450,7 +1374,6 @@ I would like to be able to use the high, low choices under the "data source" tab
 I apply this indicator to the Tick chart those options are not available.
 Would it be to much trouble to make those available? I would like to apply it to M1 and M5 periods. Thanks again!
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1460,7 +1383,6 @@ Would it be to much trouble to make those available? I would like to apply it to
 This is not possible,
 Averages indicator need Bar, not Tick as a source...
 The reason ... some moving averages ... require Bar as a source ...
-
 
 ---
 
@@ -1474,7 +1396,6 @@ If you put on a 9 period ILRS moving average of the typical price on a chart you
 
 I tried using strategy builder in TS2 to see if I could do this myself but it said the indicator was not supported. As a side note I'd love to see the strategy builder become more robust. I'd have a ball building strategies all day.
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1482,7 +1403,6 @@ I tried using strategy builder in TS2 to see if I could do this myself but it sa
 **Apprentice** · Fri Oct 11, 2013 2:15 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -1493,7 +1413,6 @@ Your request is added to the development list.
 Apprentice, the strategy request above on 10/10-10/11would be great. I hope under the basic parameters that it would have the option to set up trade times. 1. start time 2. stop time 3. use mandatory closing yes/no 4. mandatory closing time, and the ability to set up to 3 separate ones in a 24 hour time frame. A cycle-identifer as a direction filter on/off with the option 1. to trade only major cycles 2. all cycles in the same direction as the major,3. all cycles major and minor. or something close to it to keep the lower time frames scalping in the right direction.
 
 Thank you
-
 
 ---
 
@@ -1508,7 +1427,6 @@ Disregard. I found the Averages strategy. It is what I was looking for.
 
 [viewtopic.php?f=31&t=3859&hilit=averages](https://fxcodebase.com/code/viewtopic.php?f=31&t=3859&hilit=averages)
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1516,7 +1434,6 @@ Disregard. I found the Averages strategy. It is what I was looking for.
 **volnmar** · Tue Jun 17, 2014 1:58 am
 
 Can you please make an alert which send email when colour of the average changes?
-
 
 ---
 
@@ -1526,7 +1443,6 @@ Can you please make an alert which send email when colour of the average changes
 
 Averages with Alert added.
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1534,7 +1450,6 @@ Averages with Alert added.
 **volnmar** · Thu Jun 19, 2014 2:37 am
 
 Thats great! thank you very much, last thing which would be usefull is send alert when price cross the average, and if is it possible to may change sound no to be same as alert when colour change
-
 
 ---
 
@@ -1545,7 +1460,6 @@ Thats great! thank you very much, last thing which would be usefull is send aler
 For Price/MA cross use Price Averages Cross Alert.lua
 [viewtopic.php?f=17&t=59311&p=88941#p88941](https://fxcodebase.com/code/viewtopic.php?f=17&t=59311&p=88941#p88941)
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1553,7 +1467,6 @@ For Price/MA cross use Price Averages Cross Alert.lua
 **volnmar** · Fri Jul 04, 2014 1:41 am
 
 Is it possible to show angle of moving average? Lets say 10 last points of moving average against price and time axys?
-
 
 ---
 
@@ -1564,7 +1477,6 @@ Is it possible to show angle of moving average? Lets say 10 last points of movin
 Try Slope in Degrees Indicator.
 [viewtopic.php?f=17&t=60870&p=94756#p94756](https://fxcodebase.com/code/viewtopic.php?f=17&t=60870&p=94756#p94756)
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1572,7 +1484,6 @@ Try Slope in Degrees Indicator.
 **volnmar** · Fri Jul 04, 2014 6:09 am
 
 Thank you
-
 
 ---
 
@@ -1585,7 +1496,6 @@ hello Apprentice,
 is it posible to add HPF to the Averages 20 in 1 please?
 thank you.
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1593,7 +1503,6 @@ thank you.
 **Apprentice** · Tue Feb 17, 2015 3:33 pm
 
 Your request is added to the development list.
-
 
 ---
 
@@ -1609,7 +1518,6 @@ Your request is added to the development list.
 
 and also allow me to add slope direction line -the colored version- to the Averages 20 in 1 please, with much appreciation as always.
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1622,7 +1530,6 @@ I was wondering if you could add Arsi (Adaptive rsi) and Vidya to the indicators
 
 thanks in advance
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1630,7 +1537,6 @@ thanks in advance
 **Apprentice** · Tue Mar 10, 2015 3:37 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -1647,7 +1553,6 @@ Your request is added to the development list.
 
 Implemented.
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1657,7 +1562,6 @@ Implemented.
 Averages Overlay.lua Added
 (First, Topmost post)
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1665,7 +1569,6 @@ Averages Overlay.lua Added
 **Victor.Tereschenko** · Tue May 12, 2015 11:40 pm
 
 Two new methods added: HPF and VAMA
-
 
 ---
 
@@ -1675,7 +1578,6 @@ Two new methods added: HPF and VAMA
 
 Installed the new Averages with HPF and VAMA. With HPF I get the following, Averages.lua:66:Bar source should be selected for HPF. When VAMA is selected, the line simply does not show up on the chart.
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1684,10 +1586,7 @@ Installed the new Averages with HPF and VAMA. With HPF I get the following, Aver
 
 ![Capture.PNG](images/100465/Capture.PNG)
 
-
-
 Please click on history for the moving averages that require full bar.
-
 
 ---
 
@@ -1705,7 +1604,6 @@ Sell: Average colour changes to DOWN
 Regards,
 Xpertize Trading
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1714,7 +1612,6 @@ Xpertize Trading
 
 Try Averages Strategy.
 [viewtopic.php?f=31&t=3859&p=9454&hilit=Averages.lua#p9454](https://fxcodebase.com/code/viewtopic.php?f=31&t=3859&p=9454&hilit=Averages.lua#p9454)
-
 
 ---
 
@@ -1728,7 +1625,6 @@ And also make a Filter option (for all the type of average), I mean a filter to 
 
 Thanks
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1736,7 +1632,6 @@ Thanks
 **Apprentice** · Thu Oct 15, 2015 3:15 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -1752,7 +1647,6 @@ Is it possible to make the legend show the full decimal place of the current MVA
 
 Thanks a lot for the help.
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1761,7 +1655,6 @@ Thanks a lot for the help.
 
 Try it now.
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1769,7 +1662,6 @@ Try it now.
 **mrlnb2016** · Thu Mar 03, 2016 8:39 am
 
 It's working now, thanks a lot.
-
 
 ---
 
@@ -1789,7 +1681,6 @@ It's working now, thanks a lot.
 kindly Apprentice,
 could you please, provide us the price overlay of (two Averages crossing) from the last version of this indicator that was provided by Victor ? many thanks in advance.
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1797,7 +1688,6 @@ could you please, provide us the price overlay of (two Averages crossing) from t
 **Apprentice** · Fri Aug 12, 2016 11:51 am
 
 1. MA / 2. MA & MA /Price filters added to Averages Overlay.lua
-
 
 ---
 
@@ -1807,7 +1697,6 @@ could you please, provide us the price overlay of (two Averages crossing) from t
 
 It will be great Apprentice if you add HPF & VAMA that are already existing in Victor's version of this indicator to the MA methods for crossing 2 MA Overlay please ?? with many thanks .
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1816,7 +1705,6 @@ It will be great Apprentice if you add HPF & VAMA that are already existing in V
 
 Can you provide a link,
 The exact filename?
-
 
 ---
 
@@ -1838,7 +1726,6 @@ Averages.lua
 New methods: HPF and VAMA
 (25.53 KiB) Downloaded 395 times
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1846,7 +1733,6 @@ New methods: HPF and VAMA
 **Apprentice** · Mon Aug 15, 2016 2:09 am
 
 Have overwrite Averages.lua from first page with victors work.
-
 
 ---
 
@@ -1856,7 +1742,6 @@ Have overwrite Averages.lua from first page with victors work.
 
 if you please Apprentice , could you add them (HPF & VAMA) also TO Averages Overlay.lua by adding History option in price source (cause they need whole bar) ? many thanks in advance.
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1865,7 +1750,6 @@ if you please Apprentice , could you add them (HPF & VAMA) also TO Averages Over
 
 Overlay need whole bar.
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1873,7 +1757,6 @@ Overlay need whole bar.
 **Panther** · Sun Aug 21, 2016 10:16 pm
 
 When I use the averages.lua on a Tick chart the only history choice is tick. Would it be possible to include all the choices ( open, close, high, low, tick volume, typical, median, weighted)? Thanks.
-
 
 ---
 
@@ -1885,7 +1768,6 @@ These choices are not available on tick time frame chart.
 We can write indicator, which will load higher time frames sources.
 To have this choice.
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1895,7 +1777,6 @@ To have this choice.
 If it too time consuming to include all the choices, maybe just the high, low history.
 For example, when you choose a period(m1, m5, etc.), then the tick and the high, low choices for the period appear under history.
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1903,7 +1784,6 @@ For example, when you choose a period(m1, m5, etc.), then the tick and the high,
 **Apprentice** · Tue Aug 23, 2016 2:17 pm
 
 Please use "End of Turn" mode.
-
 
 ---
 
@@ -1917,7 +1797,6 @@ Is it possible to add the arrow option for this indicator ?
 
 Thank you
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1925,7 +1804,6 @@ Thank you
 **Apprentice** · Tue May 02, 2017 10:01 am
 
 Averages Arrows.lua added.
-
 
 ---
 
@@ -1935,7 +1813,6 @@ Averages Arrows.lua added.
 
 Thanks apprentice
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
@@ -1943,7 +1820,6 @@ Thanks apprentice
 **dell123** · Wed Jan 02, 2019 10:44 pm
 
 Were can I fined MT4 of this indicator. Thank you
-
 
 ---
 

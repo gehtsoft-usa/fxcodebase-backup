@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=29&t=31337  
 > Forum: 29 · Topic 31337 · 15 post(s)
 
-
 ---
 
 ## Renko3 Alert
@@ -16,10 +15,8 @@ Signals when [Renko](https://fxcodebase.com/code/viewtopic.php?f=17&t=2360) indi
 
 ![Renko3_Alert.png](images/53435/Renko3_Alert.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     strategy:name("Indicator alert");
     strategy:description("Alerts when a Renko3 indicator/oscillator crosses a certain level");
 
@@ -106,8 +103,8 @@ function ExtUpdate(id, source, period)
     end
 end
 
-dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");`
-
+dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");
+```
 
 ---
 
@@ -121,7 +118,6 @@ the following thread has not been updated since September and the renko chart st
 [http://fxcodebase.com/code/viewtopic.ph ... 0&start=20](https://fxcodebase.com/code/viewtopic.php?f=17&t=2360&start=20)
 
 Alert look nice. Good work!
-
 
 ---
 
@@ -138,7 +134,6 @@ Can anyone help??
 
 Thanks
 
-
 ---
 
 ## Re: Renko3 Alert
@@ -147,7 +142,6 @@ Thanks
 
 Please Download and Install This Indicator.
 [download/file.php?id=3130](https://fxcodebase.com/code/download/file.php?id=3130)
-
 
 ---
 
@@ -172,7 +166,6 @@ GBPUSD: 5:40 5:42
 USDJPY 5:06 5:48
 USDCAD 7:44 7:44
 
-
 ---
 
 ## Re: Renko3 Alert
@@ -180,7 +173,6 @@ USDCAD 7:44 7:44
 **SenseClash** · Fri Feb 26, 2016 1:00 pm
 
 Is this tab why I only got a signal for the Euro? The label for this tab makes it sound like it is only about Euro signals.
-
 
 ---
 
@@ -192,7 +184,6 @@ Can we add one MA to this alert that's based on the Renko3 bars? It should alert
 
 Thanks in advance!
 
-
 ---
 
 ## Re: Renko3 Alert
@@ -202,7 +193,6 @@ Thanks in advance!
 I'm willing to pay $25 US Dollars via Paypal to whoever gets this done and it works after I test it.
 
 Thanks in advance!
-
 
 ---
 
@@ -217,7 +207,6 @@ Thanks in advance!
 
 I like this idea, too!
 
-
 ---
 
 ## Re: Renko3 Alert
@@ -228,7 +217,6 @@ Why can't we get this simple change done? Is it possible? If so, it seems like i
 
 Thanks in advance.
 
-
 ---
 
 ## Re: Renko3 Alert
@@ -236,7 +224,6 @@ Thanks in advance.
 **Apprentice** · Mon Mar 21, 2016 4:55 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -248,7 +235,6 @@ Would anyone be willing to modify this Renko so that I can have the option of si
 
 The Renkos are enormously useful in detecting when there is market activity in general, not just a change in trend.
 
-
 ---
 
 ## Re: Renko3 Alert
@@ -256,7 +242,6 @@ The Renkos are enormously useful in detecting when there is market activity in g
 **SenseClash** · Wed Apr 20, 2016 1:59 am
 
 I forgot to mention another benefit of having the Renko signal me at every candle, no matter what the color. Let's say I'm long. When I get a signal that's a continuation of a trend that I'm in, I can adjust my stop using a method other than Renkos. Otherwise, I'm waiting until the Renko changes color, and that can force me to give up a big chunk of profits--depending on how big my bricks are.
-
 
 ---
 
@@ -269,7 +254,6 @@ I get this error message when I install this alert:
 C:/Program Files (x86)/CandleWorks/FXTS2/Strategies/Custom/Renko3_Alert.lua:74: attempt to index global 'I' (a nil value)
 
 I'm using Marketscape 2.0.
-
 
 ---
 

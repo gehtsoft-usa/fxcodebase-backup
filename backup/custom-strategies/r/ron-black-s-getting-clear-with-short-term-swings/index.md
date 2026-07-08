@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=5753  
 > Forum: 31 · Topic 5753 · 5 post(s)
 
-
 ---
 
 ## Ron Black's 'Getting Clear With Short-Term Swings'
@@ -27,14 +26,12 @@ Please, do not forget to download and install the [Ron Black's Clear Method indi
 
 ![rb_clear_strategy.png](images/13627/rb_clear_strategy.png)
 
-
-
 Download strategy:
 
  [rb_clear_strategy.lua](files/13627/rb_clear_strategy.lua)
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     strategy:name("Clear Method Strategy");
     strategy:description("Signals when Ron Black's clear method indicator changes direction");
 
@@ -374,10 +371,10 @@ function AsyncOperationFinished(cookie, successful, message)
   end
 end
 
-dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");`
+dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");
+```
 
 The Strategy was revised and updated on December 09, 2018.
-
 
 ---
 
@@ -388,7 +385,6 @@ The Strategy was revised and updated on December 09, 2018.
 Nice work on this strategy, is there a way to lime time frames and possibly optimize them. Interested in trading just the London/NY overlap or maybe the London open.
 Thank you for all your hard work.
 
-
 ---
 
 ## Re: Ron Black's 'Getting Clear With Short-Term Swings'
@@ -396,7 +392,6 @@ Thank you for all your hard work.
 **Apprentice** · Thu Sep 20, 2012 1:01 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -406,7 +401,6 @@ Your request is added to the development list.
 
 Thank you, I have this strategy loaded and active on 4 pairs (EURUSD, GBPUSD, USDCHF, USDCAD and the USdollar). Last night I paused the strategies and this morning I unpaused them. Only one pair (USDCHF) had trades executed. All settings are the same with the exception of the pair in the drop down menu. A couple of question, how does the trailing stop work. It is either on or off. What are the parameters? Is it fixed and if so how many pips or is it dynamic? Also, with trading time parameters will the strategy allow an open trade to continue with out opening a new position or will it close all positions at the stop time, say 11:30 EST?
 Thank you again for your assistance.
-
 
 ---
 

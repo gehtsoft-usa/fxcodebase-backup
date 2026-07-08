@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=4037  
 > Forum: 17 · Topic 4037 · 39 post(s)
 
-
 ---
 
 ## Better Volume Indicator
@@ -22,22 +21,17 @@ Short describtion:
 
 ![BetterVolume.png](images/10083/BetterVolume.png)
 
-
-
 Chart:
 
  
 
 ![BetterVolumeChart.png](images/10083/BetterVolumeChart.png)
 
-
-
 Code:
 
  [BetVol_V2.lua](files/10083/BetVol_V2.lua)
 
  [BetVol with Level Alert.lua](files/10083/BetVol%20with%20Level%20Alert.lua)
-
 
 ---
 
@@ -49,8 +43,8 @@ I see that the original version is highlighting the bars as well. You can do the
 
 1) Create four streams, one indicator's stream and three internals for open, high, low and close prices:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`local O, H, L, C;
+```lua
+local O, H, L, C;
 
 function Prepare()
     ...
@@ -58,7 +52,8 @@ function Prepare()
     H = instance:addInternalStream(first, 0);
     L = instance:addInternalStream(first, 0);
     C = instance:addInternalStream(first, 0);
-end`
+end
+```
 
 2) Because your indicator is oscillator and is drawn in separate area - put your open price stream into main chart area:
 
@@ -72,8 +67,8 @@ Code: [Select all](https://fxcodebase.com/code/)
 
 4) In update method, for the bars you need to highlight, fill O, H, L and C streams with candle data and set O stream color to the color you need to highlight the candle with
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Update(period, mode)
+```lua
+function Update(period, mode)
     ...
     if needHighlight then
         O[period] = instance.source.open[period];
@@ -83,8 +78,8 @@ Code: [Select all](https://fxcodebase.com/code/)
         O:setColor(period, highlighColor);
     end
     ...
-end`
-
+end
+```
 
 ---
 
@@ -93,7 +88,6 @@ end`
 **alpha_bravo** · Thu Apr 28, 2011 10:42 am
 
 Too many signals(99.9% of them false), this is a crazy indicator.
-
 
 ---
 
@@ -110,7 +104,6 @@ Can be New UP Trend, cont. Down Trend or a new TOP. This are three complete diff
 The other problem is, that we only have Tickvolumes on FXCM(i think all Forex Brokers) , we don't know anything about the money in the market., we only know how offen Price is updated.
 
 This indicator don't give Buy or Sell signals, but possible can help the trader to make a decision.
-
 
 ---
 
@@ -131,7 +124,6 @@ If you cant, could you even edit BETVOL so that it paints a new colour for new h
 Cheers
 AB
 
-
 ---
 
 ## Re: Better Volume Indicator
@@ -142,7 +134,6 @@ Many thanks for the BV indicator Gidien. I am also wondering if you would care s
 
 Thanks,
 Laurus
-
 
 ---
 
@@ -155,7 +146,6 @@ No problem,
 here is the HLC HIGH-LOW-CLOSE-BAR Chart indicator.
 
  [HLC.lua](files/18067/HLC.lua)
-
 
 ---
 
@@ -170,7 +160,6 @@ Just some thoughts here. Would it be possible to make it as an option to have th
 Thanks,
 Laurus
 
-
 ---
 
 ## Re: Better Volume Indicator
@@ -178,7 +167,6 @@ Laurus
 **Apprentice** · Thu Nov 17, 2011 6:08 pm
 
 Unfortunately not. This option does not exist.
-
 
 ---
 
@@ -189,7 +177,6 @@ Unfortunately not. This option does not exist.
 Ok. Good to know. Thank you Apprentice
 
 Laurus
-
 
 ---
 
@@ -202,7 +189,6 @@ I've noticed something disconcerting about this indicator which I hope others ca
 After you place the indi on a chart and allow it to run for awhile, the indicator repaints if you change time-frames or simply open the Properties window and click 'OK' without changing anything. By switching to a different time frame, then switching back, many Climax Up or Down bars instead become a different color. The same is true when you open the Properties dialog box, the click OK - many Climax bars switch colors to become non-climax bars.
 
 Can anyone explain why this is? It would seem to make the indicator almost entirely unreliable.
-
 
 ---
 
@@ -219,7 +205,6 @@ This indicator isn't properly used on the TSII ...
 Problem at FXCM - display tick volume.
 On the Metatrader there is no problem.
 
-
 ---
 
 ## Re: Better Volume Indicator
@@ -227,7 +212,6 @@ On the Metatrader there is no problem.
 **Merchantprince** · Thu May 10, 2012 6:53 am
 
 Is this true for all the custom indicators posted on FX Codebase that deal with tick volume?
-
 
 ---
 
@@ -264,14 +248,12 @@ Here's a chart showing the issue.
 
 ![bet_vol.png](images/40015/bet_vol.png)
 
-
-
 I modified the indicator, which is now V3. It is attached. Also the code is posted here.
 
  [BetVol_V3.lua](files/40015/BetVol_V3.lua)
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- Indicator profile initialization routine
+```lua
+-- Indicator profile initialization routine
 -- Defines indicator profile properties and indicator parameters
 -- TODO: Add minimal and maximal value of numeric parameters and default color of the streams
 function Init()
@@ -507,7 +489,8 @@ function Update(period)
             end
         end
     end
-end`
+end
+```
 
 I did not code this indicator and take no credit for it. All I did was the following fix.
 
@@ -515,7 +498,6 @@ Code: [Select all](https://fxcodebase.com/code/)
 `VolumeBar:setColor(period, instance.parameters.VolumeBar_color); -- Fix to ensure default bar colour is correct`
 
 EDIT: I also added the "decimal place / precision" change which is mentioned a few posts down.
-
 
 ---
 
@@ -527,7 +509,6 @@ EDIT: I also added the "decimal place / precision" change which is mentioned a f
 > Is this true for all the custom indicators posted on FX Codebase that deal with tick volume?
 
 Please see my previous post. Whilst the tick data can be different from the live and historic data, especially over the weekend, in general it seems adequate. However, tick volume is only an approximation to real volume, and so you have to be very careful when using it.
-
 
 ---
 
@@ -543,18 +524,13 @@ I made another minor modification to this indicator. I set the "precision" of th
 
 ![Better Volume Overlay.png](images/40062/Better%20Volume%20Overlay.png)
 
-
-
  [Better Volume Overlay.lua](files/40062/Better%20Volume%20Overlay.lua)
 
  
 
 ![Better Volume Bar.png](images/40062/Better%20Volume%20Bar.png)
 
-
-
  [Better Volume Bar.lua](files/40062/Better%20Volume%20Bar.lua)
-
 
 ---
 
@@ -563,7 +539,6 @@ I made another minor modification to this indicator. I set the "precision" of th
 **Pavlovsdog** · Thu Oct 04, 2012 9:29 pm
 
 Can you explain what the different color candles represent?
-
 
 ---
 
@@ -578,7 +553,6 @@ Please refer to the [inventor](http://emini-watch.com/free-stuff/volume-indicato
 
 (I don't use it myself, I just fixed a bug in it).
 
-
 ---
 
 ## Re: Better Volume Indicator
@@ -592,7 +566,6 @@ Would it be possible to base this indicator upon the "Real Volume indicator" ins
 Many Thanks
 
 P.S. Awesome site BTW
-
 
 ---
 
@@ -615,7 +588,6 @@ Question to FXCodeBase guys: was Real Volume developed by you, or by FXCM direct
 
 By the way, I did a study of Tick Volume vs Real Volume, on my [blog](http://robocod.blogspot.co.uk/2014/06/real-volume-vs-tick-volume-study.html). The results suggest that that Tick Volume is a reasonable proxy for Real Volume. However, it would always be better to use the proper volume if available.
 
-
 ---
 
 ## Re: Better Volume Indicator
@@ -623,7 +595,6 @@ By the way, I did a study of Tick Volume vs Real Volume, on my [blog](http://rob
 **Apprentice** · Tue Jul 01, 2014 1:46 pm
 
 As far as I know it is FXCM baby.
-
 
 ---
 
@@ -634,7 +605,6 @@ As far as I know it is FXCM baby.
 Thanks.
 
 It seems logical to overlay an indicator over an indicator, like i.e. overlay a moving average over a MACD, so you overlay the Better Volume algorithm on top of the Real Volume indicator to produce the changes in colour.
-
 
 ---
 
@@ -647,7 +617,6 @@ Hi,
 is there any possibility to use this indicator in charts?
 
 Thank you
-
 
 ---
 
@@ -668,7 +637,6 @@ In theory, it should be possible to create an indicator that aggregates the pric
 
 The simplest way would be for FXCM to improve this indicator. It is only a kind of Beta just now. Maybe they will add it, or provide better access for developers.
 
-
 ---
 
 ## Re: Better Volume Indicator
@@ -679,7 +647,6 @@ I can do this task.
 Can someone please send the Real Volume Indicator to me.
 mario(.)jemic(@)gmail(.)com
 Looks like FxcmApp site is unavailable.
-
 
 ---
 
@@ -695,7 +662,6 @@ Looks like FxcmApp site is unavailable.
 
 Done
 
-
 ---
 
 ## Re: Better Volume Indicator
@@ -710,7 +676,6 @@ Done
 
 Did you make any progress with this? I had a go, but I could not get the indicator to function properly when used inside another indicator.
 
-
 ---
 
 ## Re: Better Volume Indicator
@@ -720,7 +685,6 @@ Did you make any progress with this? I had a go, but I could not get the indicat
 Same problem here.
 Tried, was not satisfied with the result, left further development, for now.
 Ask FXCM to provide this data via regular source / Price Server stream.
-
 
 ---
 
@@ -734,7 +698,6 @@ Is it be possible to get this indicator for Real Volumes ?
 
 Thank you
 
-
 ---
 
 ## Re: Better Volume Indicator
@@ -742,7 +705,6 @@ Thank you
 **Apprentice** · Fri Apr 17, 2015 6:07 am
 
 Better Volume Overlay added.
-
 
 ---
 
@@ -760,7 +722,6 @@ CAN YOU ADD BETTER VOLUME BAR INDICATOR LIKE BWMFI BAR AND PVA BAR
 
 THANK YOU.
 
-
 ---
 
 ## Re: Better Volume Indicator
@@ -768,7 +729,6 @@ THANK YOU.
 **Apprentice** · Mon Apr 20, 2015 6:26 am
 
 Better Volume Bar added.
-
 
 ---
 
@@ -778,7 +738,6 @@ Better Volume Bar added.
 
 Hello, here is bettervolume v3 for ninjatrader. The code has been modified and provides more signals. Could be intersting to have it on marketscope if it is possible. thanks
 
-
 ---
 
 ## Re: Better Volume Indicator
@@ -787,7 +746,6 @@ Hello, here is bettervolume v3 for ninjatrader. The code has been modified and p
 
 Your request is added to the development list.
 
-
 ---
 
 ## Re: Better Volume Indicator
@@ -795,7 +753,6 @@ Your request is added to the development list.
 **Apprentice** · Sat Aug 05, 2017 4:37 am
 
 The indicator was revised and updated.
-
 
 ---
 
@@ -809,7 +766,6 @@ Please create alert for this indicator when volume is over "500" level
 
 ![bettervolume.png](images/116081/bettervolume.png)
 
-
 ---
 
 ## Re: Better Volume Indicator
@@ -818,7 +774,6 @@ Please create alert for this indicator when volume is over "500" level
 
 BetVol with Level Alert.lua added.
 
-
 ---
 
 ## Re: Better Volume Indicator
@@ -826,7 +781,6 @@ BetVol with Level Alert.lua added.
 **Apprentice** · Sat Apr 21, 2018 9:58 am
 
 The indicator was revised and updated.
-
 
 ---
 

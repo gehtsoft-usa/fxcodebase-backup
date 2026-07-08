@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=59291  
 > Forum: 31 · Topic 59291 · 15 post(s)
 
-
 ---
 
 ## NR Super Trend Strategy
@@ -11,8 +10,6 @@
 **Apprentice** · Sat Aug 24, 2013 4:44 am
 
 ![NR_Super_Trend Strategy.png](images/88879/NR_Super_Trend%20Strategy.png)
-
-
 
 Open Long
 Super Trend / Price CrossUnder
@@ -25,7 +22,6 @@ Super Trend / Price CrossOver
 For this strategy you need to install Non Repainting Supertrend Indicator.
 [viewtopic.php?f=17&t=41453](https://fxcodebase.com/code/viewtopic.php?f=17&t=41453)
 
-
 ---
 
 ## Re: NR Super Trend Strategy
@@ -34,7 +30,6 @@ For this strategy you need to install Non Repainting Supertrend Indicator.
 
 Thanks so much for the strategy. It looks like the "show alert" is reversed. That is, it reads up trend when it is actually down and down trend when up.
 
-
 ---
 
 ## Re: NR Super Trend Strategy
@@ -42,7 +37,6 @@ Thanks so much for the strategy. It looks like the "show alert" is reversed. Tha
 **Apprentice** · Mon Aug 26, 2013 12:26 pm
 
 Indeed, fixed.
-
 
 ---
 
@@ -62,7 +56,6 @@ Thanks a lot.
 
 Raygeek
 
-
 ---
 
 ## Re: NR Super Trend Strategy
@@ -80,7 +73,6 @@ Do you have a LuaLib file to recommend ?
 Thanks
 
 Raygeek
-
 
 ---
 
@@ -102,7 +94,6 @@ Thanks a lot and sorry for loosing time and energy on other requests.
 
 Best Regards
 
-
 ---
 
 ## Re: NR Super Trend Strategy
@@ -111,7 +102,6 @@ Best Regards
 
 Requested can be found here.
 [viewtopic.php?f=31&t=62377](https://fxcodebase.com/code/viewtopic.php?f=31&t=62377)
-
 
 ---
 
@@ -124,7 +114,6 @@ Gonna test it.
 Best Regards
 
 Raygeek
-
 
 ---
 
@@ -149,7 +138,6 @@ Best RegardS
 
 Raygeek
 
-
 ---
 
 ## Re: NR Super Trend Strategy
@@ -164,29 +152,31 @@ Where exactly and how shall I put this code in this strategy
 
 for Buy trades
 
-Code: [Select all](https://fxcodebase.com/code/)
-`if haveTrades("B") or haveTrades("S") then
+```
+if haveTrades("B") or haveTrades("S") then
            return;   
        else
           enter("B", Stop1, Limit1);
           enter("B", Stop2, Limit2);
           enter("B", Stop3, Limit3);
-              if ShowAlert then`
+              if ShowAlert then
+```
 
 and Short trades
 
-Code: [Select all](https://fxcodebase.com/code/)
-`if haveTrades("B") or haveTrades("S") then
+```
+if haveTrades("B") or haveTrades("S") then
            return;   
        else
           enter("S", Stop1, Limit1);
           enter("S", Stop2, Limit2);
-          enter("S", Stop3, Limit3);`
+          enter("S", Stop3, Limit3);
+```
 
 Nr_Supertrend Strategy
 
-Code: [Select all](https://fxcodebase.com/code/)
-`local BAR = true;
+```lua
+local BAR = true;
 
 function Init() --The strategy profile initialization
     strategy:name("NR Super Trend Strategy");
@@ -704,12 +694,12 @@ function exit(BuySell)
     return false;
 end
 
-dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");`
+dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");
+```
 
 Thanks in advance
 
 MC.Trend Trader
-
 
 ---
 
@@ -730,7 +720,6 @@ enter(BuySell,Instrument,Amount, Limit , SetStop ,Stop , TrailingStop)
 [viewtopic.php?f=28&t=2712](https://fxcodebase.com/code/viewtopic.php?f=28&t=2712)
 Some modifications will be required.
 
-
 ---
 
 ## Re: NR Super Trend Strategy
@@ -745,8 +734,8 @@ Here is a example Ordermanagement strategy that works, but I can not get to rewr
 
 Can you Help?
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init() --The strategy profile initialization
+```lua
+function Init() --The strategy profile initialization
     strategy:name("Order Management");
     strategy:description("");
     strategy:setTag("NonOptimizableParameters", "ShowAlert,PlaySound,SoundFile,RecurrentSound,SendMail,Email");
@@ -1049,12 +1038,12 @@ function enter(BuySell, Stop, Limit)
     return true;
 end
 
-dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");`
+dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");
+```
 
 Regards
 
 MC. Trend Trader
-
 
 ---
 
@@ -1063,7 +1052,6 @@ MC. Trend Trader
 **Apprentice** · Mon Jul 13, 2015 4:49 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -1074,7 +1062,6 @@ Your request is added to the development list.
 Would it be possible to add Relative Currency Strength ( [viewtopic.php?f=17&t=59518&hilit=currency+strength](https://fxcodebase.com/code/viewtopic.php?f=17&t=59518&hilit=currency+strength) ) to this strategy so that it would only take a trade if it matches the currency strength?
 
 ie go long on AUDUSD only if AUD is stronger than USD.
-
 
 ---
 

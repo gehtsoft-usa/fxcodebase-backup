@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=3614  
 > Forum: 17 · Topic 3614 · 57 post(s)
 
-
 ---
 
 ## Range bars (RB)
@@ -18,8 +17,6 @@ For example, chart with range 75 pips:
 
 ![RB.png](images/8681/RB.png)
 
-
-
 Download:
 
  [RB.lua](files/8681/RB.lua)
@@ -27,7 +24,6 @@ Download:
 Download indicator for other chart:
 
  [RB2.lua](files/8681/RB2.lua)
-
 
 ---
 
@@ -46,7 +42,6 @@ Download indicator for other chart:
 
  [RB2_TF.lua](files/8682/RB2_TF.lua)
 
-
 ---
 
 ## Re: Range bars (RB)
@@ -61,7 +56,6 @@ but this isn't range bars chart because only one shadow (or none) can be on the 
 and is independent of time.
 
 and again in my opinion we must use tick source data, but i don't know if it wil be too heavy for TSII and how many days we can go back ...
-
 
 ---
 
@@ -82,10 +76,7 @@ For example:
 
 ![RB2.png](images/8692/RB2.png)
 
-
-
 But if use not tick data there are pseudo-range bars, which may have two shadows.
-
 
 ---
 
@@ -107,15 +98,11 @@ Please compare these 2 images:
 
 *GU from Trading Station*
 
-
-
  
 
 ![GU from MT4.jpg](images/9773/GU%20from%20MT4.jpg)
 
 *GU from Metatrader 4*
-
-
 
 They depict range bars differently. Those shown by Metatrader are consistantly 10 pips. Those shown by Trading Station vary significantly. I exported the values to excel and found the minimum to be 10 pips & the maximum to be 31.7 pips, with the average of 11.8 pips.
 
@@ -127,7 +114,6 @@ Thanks for your time.
 Cheers,
 Mick
 
-
 ---
 
 ## Re: Range bars (RB)
@@ -135,8 +121,6 @@ Mick
 **Apprentice** · Mon Jun 06, 2011 3:09 pm
 
 ![Range_Bar.png](images/11423/Range_Bar.png)
-
-
 
 To Madpipa
 I tried to implement according to definitions of this indicator.
@@ -147,7 +131,6 @@ If someone has a sample code of this indicator would ask him to tell me and send
 Or post it here.
 
  [Range_Bar.lua](files/11423/Range_Bar.lua)
-
 
 ---
 
@@ -166,7 +149,6 @@ Also, when I draw a 10 pip range bar using a 1 minute timeframe I get about 35-4
 I think this version seems to follow all the rules.
 Thanks again for your efforts.
 
-
 ---
 
 ## Re: Range bars (RB)
@@ -180,7 +162,6 @@ As regards the application of other indicators of nonlinear price data
 I have not seen it anywhere in theory or practice.
 Maybe it makes sense, I do not know.
 
-
 ---
 
 ## Re: Range bars (RB)
@@ -191,7 +172,6 @@ Even better.
 If someone has a sample code of this indicator would ask him to tell me and send it by mail.
 Or post it here.
 
-
 ---
 
 ## Re: Range bars (RB)
@@ -199,7 +179,6 @@ Or post it here.
 **debra453** · Thu Oct 20, 2011 1:51 pm
 
 I'd rather prefer him to post it here in order to make it publcy viewable
-
 
 ---
 
@@ -209,7 +188,6 @@ I'd rather prefer him to post it here in order to make it publcy viewable
 
 Why is the range bars still time dependent? I thought it was designed to cut out 'noise' as most articles I have read suggest that it is ime independent.
 
-
 ---
 
 ## Re: Range bars (RB)
@@ -218,7 +196,6 @@ Why is the range bars still time dependent? I thought it was designed to cut out
 
 Why are these range bars time dependent? From my understanding its the number of bars hence the pips that defines when the bars move up or down.
 
-
 ---
 
 ## Re: Range bars (RB)
@@ -226,7 +203,6 @@ Why are these range bars time dependent? From my understanding its the number of
 **sergesp** · Thu Mar 01, 2012 8:47 pm
 
 The way I understand it all bars in a range bar chart are to be the same size and a new bar is only plotted when price moves out of the range of the current bar and therefore starts one tick above or below the high or the low respectively of the current bar and its extent is again the same size as the current bar i.e. no new bars are plotted while the price is within the range of the current bar. So I don't understand why in one of the range bar chart above there are many sideways bars at the same level. Also I don't understand where the wicks come in to in this picture - if some one can please clarify. Thanks.
-
 
 ---
 
@@ -242,7 +218,6 @@ Range bar varies from Renko Chart.
 
 Sideways bars? i have to backtest this one.
 
-
 ---
 
 ## Re: Range bars (RB)
@@ -256,7 +231,6 @@ I'm trying to find a fix.
 
  [Range_Bar.lua](files/27432/Range_Bar.lua)
 
-
 ---
 
 ## Re: Range bars (RB)
@@ -264,7 +238,6 @@ I'm trying to find a fix.
 **Matteo Zucchini** · Wed Apr 18, 2012 4:57 am
 
 Would be grateful to fix the limit of range bar loaded on the chart.Thanks.
-
 
 ---
 
@@ -276,7 +249,6 @@ It would certainly be awesome if you could fix the 'size' of range and memory er
 I really am in need of range bars.
 
 Thanks for your help!
-
 
 ---
 
@@ -294,8 +266,8 @@ Code: [Select all](https://fxcodebase.com/code/)
 Would it be possible to draw rangebars also on tick-base, meaning to replace "(core.Bar)" with "(core.Tick)"?
 What would be the impact on the calculation-part of that indicator, since the ticksource doesnt provide h, l, o, c?
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function TEST(i)      
+```lua
+function TEST(i)      
          
        
       local FLAG= true;   
@@ -340,11 +312,11 @@ Code: [Select all](https://fxcodebase.com/code/)
                          
                      
                end   
-end`
+end
+```
 
 best regads,
 S
-
 
 ---
 
@@ -367,7 +339,6 @@ kind regards
 
 PS: for some reason the spamfilter of the board if blocking the word tXrXoXuXgXh (remove X's)
 
-
 ---
 
 ## Re: Range bars (RB)
@@ -376,7 +347,6 @@ PS: for some reason the spamfilter of the board if blocking the word tXrXoXuXgXh
 
 We are planing to introduce new version of this indicator, along with the new version of TS.
 Also I have ask, forum support team to investigate the spam filter problem.
-
 
 ---
 
@@ -395,7 +365,6 @@ do you have any clue why that shift is happening? i am stuck there atm. a strate
 
 kind regads
 
-
 ---
 
 ## Re: Range bars (RB)
@@ -407,7 +376,6 @@ New TS? When is that about to happen?
 
 Cheers, SvenStp.
 
-
 ---
 
 ## Re: Range bars (RB)
@@ -416,7 +384,6 @@ Cheers, SvenStp.
 
 Final Release candidate is in pipeline.
 It will be out, as soon FXCM OK it.
-
 
 ---
 
@@ -428,7 +395,6 @@ Will the Range Bar chart be available as a "chart view"? If so, can you tell whe
 
 Thanks
 
-
 ---
 
 ## Re: Range bars (RB)
@@ -437,7 +403,6 @@ Thanks
 
 Will add this to my list of development.
 Unfortunately I can not give you a time frame.
-
 
 ---
 
@@ -453,7 +418,6 @@ Range Bars reduce the float that is inherent in Renko Bars, as even a 1 point Re
 
 A whole lot more development needs to be done on the tick charting for Trading Station to be taken seriously.
 
-
 ---
 
 ## Re: Range bars (RB)
@@ -462,7 +426,6 @@ A whole lot more development needs to be done on the tick charting for Trading S
 
 I have been using a MT4 based constant range bar script running as an EA that I got from MQL services. It also works with the new MQL4 file of the newer MT4's. I am using it now with MT4 version 4.00 Build 825. I paid about 85 Euros for it and you get 3 downloads of the script in case you lose version you downloaded or it gets corrupted for some reason. I keep my download in my download file on my computer in case something happens to it. I have been successfully using this script since 2011. Michael is trustworthy and very helpful if you need help. Presently I am look for a constant range bar script the will work with Market Scope, as I feel MT4 is somewhat clunky to use. What is latest information you have on that?
 
-
 ---
 
 ## Re: Range bars (RB)
@@ -470,7 +433,6 @@ I have been using a MT4 based constant range bar script running as an EA that I 
 **scjohn2013** · Mon Jun 08, 2015 7:13 pm
 
 Interesting what TX Christopher had to say. My MT4 range bars are all 8 pips. I have had them at 10 pips when I first got the script, but I like the 8 pip better. It comes with a default of 25 pips, which can be changed. I have checked my pips and they are all the same size and they they look like regular candlesticks on the chart ie. many have wicks with smaller bodies, but they are all 8 pips long. It is interesting what Christopher said as I run the script on a 1 minute chart, but the bars are not constrained by time, though I can get a time for each new range bar. On a 5 minute MT4 chart you would get 1 candlestick of various lengths. On my M2 offline chart showing contant range bars I get various numbers of 8 pip candlesticks, depending on the momentum of the price changes of the currency pairs I am following. During the Asia session, 1 candlestick could cover several hours in time if the momentum is very low. The reason I like constant range bars is that it is easier to see trends, especially since I am an inter-day trader. I was able to pick up over 300 pips in good back and forth trades on two currency pairs today. It may be better to try to tweek the one click trading on MT4 to my liking if I can not find a constant range bar script for Market Scope.
-
 
 ---
 
@@ -482,7 +444,6 @@ Something like this one.
 [viewtopic.php?f=17&t=3347&hilit=constant+range](https://fxcodebase.com/code/viewtopic.php?f=17&t=3347&hilit=constant+range)
 I'm not sure about logic,
 indicator uses the same name.
-
 
 ---
 
@@ -503,7 +464,6 @@ Please advise what the plan for TS is.
 
 Many thanks.
 
-
 ---
 
 ## Re: Range bars (RB)
@@ -511,7 +471,6 @@ Many thanks.
 **Apprentice** · Fri Jun 10, 2016 2:47 am
 
 Can you provide mentioned code?
-
 
 ---
 
@@ -521,7 +480,6 @@ Can you provide mentioned code?
 
 Attached - let us know how you go with it...
 
-
 ---
 
 ## Re: Range bars (RB)
@@ -530,7 +488,6 @@ Attached - let us know how you go with it...
 
 Your request is added to the development list,
 Under Bugzilla Id Number 3546
-
 
 ---
 
@@ -544,7 +501,6 @@ Under Bugzilla Id Number 3546
 please , Apprentice i have been waiting with all other traders more than 3 years to see Range bar view to be one of the trading station's views as it is in most of other trading platforms. is it possible from the programmers in trading station platform to include it in 2017 version ,please ?
 with many many thanks.
 
-
 ---
 
 ## Re: Range bars (RB)
@@ -554,7 +510,6 @@ with many many thanks.
 Development team ;
 is it possible from the programmers in trading station platform to include Range Bar View in 2017 version ,please ?
 
-
 ---
 
 ## Re: Range bars (RB)
@@ -562,7 +517,6 @@ is it possible from the programmers in trading station platform to include Range
 **Apprentice** · Tue Dec 27, 2016 5:09 am
 
 I forwarded your request for the development team.
-
 
 ---
 
@@ -573,7 +527,6 @@ I forwarded your request for the development team.
 Hello Apprentice,
 is it possible to develop Tick_Range_Bars please ? with many appreciation .
 
-
 ---
 
 ## Re: Range bars (RB)
@@ -582,7 +535,6 @@ is it possible to develop Tick_Range_Bars please ? with many appreciation .
 
 Your request is added to the development list, Under Id Number 3714
  If someone is interested to do this task, please contact me.
-
 
 ---
 
@@ -602,7 +554,6 @@ Download:
 
  [Tick_RB.lua](files/115173/Tick_RB.lua)
 
-
 ---
 
 ## Re: Range bars (RB)
@@ -616,7 +567,6 @@ is it possible to develop another version of Rang bar that is time independent a
 2) no shadows.
 3) no side bars with each other,(i,e) a new bar will plot only when the price exceed the presetting bar size either above or below the last bar exactly the same way that Renko Bars plot on chart but with no time effect . with many appreciation for the excellent work you all doing .
 
-
 ---
 
 ## Re: Range bars (RB)
@@ -624,7 +574,6 @@ is it possible to develop another version of Rang bar that is time independent a
 **Apprentice** · Thu Dec 21, 2017 11:22 am
 
 Your request is added to the development list under Id Number 3984
-
 
 ---
 
@@ -636,7 +585,6 @@ Your request is added to the development list under Id Number 3984
 
 Something like this?
 
-
 ---
 
 ## Re: Range bars (RB)
@@ -644,7 +592,6 @@ Something like this?
 **easytrading** · Wed Dec 27, 2017 4:56 am
 
 Yes , Apprentice but it still time dependent while what i request to get rid off time effect and keep only price effect to control plotting the candles on chart while meeting the 3 condition mentioned please .
-
 
 ---
 
@@ -654,7 +601,6 @@ Yes , Apprentice but it still time dependent while what i request to get rid off
 
 The Indicator was revised and updated.
 
-
 ---
 
 ## Re: Range bars (RB)
@@ -662,7 +608,6 @@ The Indicator was revised and updated.
 **easytrading** · Thu May 10, 2018 6:31 pm
 
 Is it possible Apprentice, to develop another version of RB_View .lua that is compatible with sub-minute partitions like 10 seconds ,5 or even 1 second .with my appreciation in advance.
-
 
 ---
 
@@ -673,7 +618,6 @@ Is it possible Apprentice, to develop another version of RB_View .lua that is co
 Something like this?
 [viewtopic.php?f=17&t=64929](https://fxcodebase.com/code/viewtopic.php?f=17&t=64929)
 
-
 ---
 
 ## Re: Range bars (RB)
@@ -681,7 +625,6 @@ Something like this?
 **easytrading** · Tue May 15, 2018 5:28 pm
 
 Yes, Apprentice but i want to use this custom time in seconds with Range bar candles View that i am plotting it on my chart through out your View indicator RB_View.lua which is the last one in this post please, your help is highly appreciated .
-
 
 ---
 
@@ -692,7 +635,6 @@ Yes, Apprentice but i want to use this custom time in seconds with Range bar can
 If we define the Range bars in seconds,
 it will not have a constant range,
 so we will not be able to call it the range bar.
-
 
 ---
 
@@ -714,7 +656,6 @@ With Range Bars chart we can eliminate much of the noise and they are very usefu
 
 Thank you :)
 
-
 ---
 
 ## Re: Range bars (RB)
@@ -723,7 +664,6 @@ Thank you :)
 
 Can you provide a description of it?
 We have a great number of similar implementation like Range bars, Renko and others.
-
 
 ---
 
@@ -737,7 +677,6 @@ The link to the youtube video explains well how the range bars graph works, hopi
 
 Thank you :) !
 
-
 ---
 
 ## Re: Range bars (RB)
@@ -745,7 +684,6 @@ Thank you :) !
 **Apprentice** · Wed Apr 08, 2020 4:15 am
 
 Can you write down the rule s from the video?
-
 
 ---
 
@@ -758,7 +696,6 @@ Thank you very much Apprentice.
 Following your response, I deepened my research and what I needed works like Renko2.lua. So my request is no longer valid, I managed with the tools already made.
 
 See you soon :)
-
 
 ---
 
@@ -791,7 +728,6 @@ end
 Thank you very much !
 Enjoy it !
 
-
 ---
 
 ## Re: Range bars (RB)
@@ -804,7 +740,6 @@ Would it be possible to convert RB_View.lua to a single RB_indicator.lua.
 
 Thank you very much :) !
 
-
 ---
 
 ## Re: Range bars (RB)
@@ -813,7 +748,6 @@ Thank you very much :) !
 
 We have added your request to the development list.
 Development reference 728.
-
 
 ---
 

@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=2275  
 > Forum: 17 · Topic 2275 · 10 post(s)
 
-
 ---
 
 ## Darvas Box
@@ -17,10 +16,8 @@ For what is Darvas Box please see:
 
 ![Darvas_Box.png](images/4811/Darvas_Box.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Darvas Box");
     indicator:description("Darvas Box");
     indicator:requiredSource(core.Bar);
@@ -90,8 +87,8 @@ function Update(period, mode)
     state=state+1;
    end
   end
-end`
-
+end
+```
 
 ---
 
@@ -100,7 +97,6 @@ end`
 **armandvon** · Mon Sep 27, 2010 4:02 am
 
 Thank you!
-
 
 ---
 
@@ -111,7 +107,6 @@ Thank you!
 Hello,
 Please possible modify for have the true darvas indicator (3 bars) as this ? :
 
-
 ---
 
 ## Re: Darvas Box
@@ -120,7 +115,6 @@ Please possible modify for have the true darvas indicator (3 bars) as this ? :
 
 Your request is added to the development list, Under Id Number 3696
  If someone is interested to do this task, please contact me.
-
 
 ---
 
@@ -138,12 +132,9 @@ Please, try this version of the indicator.
 
 ![darvas_box2.PNG](images/115898/darvas_box2.PNG)
 
-
-
 Download:
 
  [Darvas_Box2.lua](files/115898/Darvas_Box2.lua)
-
 
 ---
 
@@ -159,7 +150,6 @@ I want to apply the indicator several times (different styles and colors) with d
 
 Thank you.
 
-
 ---
 
 ## Re: Darvas Box
@@ -167,7 +157,6 @@ Thank you.
 **Apprentice** · Fri Mar 23, 2018 5:56 am
 
 Try it now.
-
 
 ---
 
@@ -180,7 +169,6 @@ I was talking about the DARVAS_box2.lua for modifications.
 
 thank you for everything.
 
-
 ---
 
 ## Re: Darvas Box
@@ -189,7 +177,6 @@ thank you for everything.
 
 Style option was added to both.
 Please refresh and re-download.
-
 
 ---
 

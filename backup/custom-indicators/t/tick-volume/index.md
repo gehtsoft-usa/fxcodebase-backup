@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=61127  
 > Forum: 17 · Topic 61127 · 17 post(s)
 
-
 ---
 
 ## Tick Volume
@@ -11,8 +10,6 @@
 **Apprentice** · Fri Sep 12, 2014 12:19 pm
 
 ![Tick Volume.png](images/95834/Tick%20Volume.png)
-
-
 
 This is my attempt to rethink the buildin tick volume.
 
@@ -34,15 +31,12 @@ Lobby for availability of Up & Down Tick data on FXCM servers.
 
 ![Tick Volume Divergence.png](images/95834/Tick%20Volume%20Divergence.png)
 
-
-
 Tick ​​Volume Divergence will only sort out the candles for which Candle & Tick Volume direction is different.
 
  [Tick Volume Divergence.lua](files/95834/Tick%20Volume%20Divergence.lua)
 
 MT4/MQ4 version.
 [viewtopic.php?f=38&t=69019](https://fxcodebase.com/code/viewtopic.php?f=38&t=69019)
-
 
 ---
 
@@ -54,8 +48,6 @@ MT4/MQ4 version.
 
 *Real live example from my Trading Station.*
 
-
-
 While Buildin Tick volume for the last candle is growing,
 Indicating that the down move, is supported by increasing the Tick Volume,
 suggesting a reversal.
@@ -63,7 +55,6 @@ Cumulative Tick Volume indicates that down move does not have real strength,
 suggesting a trend continuation.
 Increase in Tick volume is the result of increased volatility.
 However for for the time being, neither side has the upper hand.
-
 
 ---
 
@@ -126,8 +117,8 @@ video about delta divergence so its perfectly clear.
 Delta Divergence indicator
 [http://youtu.be/m2K5w7ha-RI](https://youtu.be/m2K5w7ha-RI) (6min)
 
-Code: [Select all](https://fxcodebase.com/code/)
-`CODE for NT7
+```
+CODE for NT7
 
 // Condition set 1: Delta Divergence Down
 if (Close[0] < Open[0]
@@ -140,11 +131,11 @@ if (Close[0] > Open[0]
 && GomDeltaVol_UpDown().DownVolume[0] > 0)
 {
 DrawTriangleUp("My triangle up" + CurrentBar, true, 0, Low[0] + -2 * TickSize, Color.Gold);
-}`
+}
+```
 
 Thanks so much !!
 David
-
 
 ---
 
@@ -154,7 +145,6 @@ David
 
 Tick Volume Divergence Added.
 Tick Volume minor bug Fix.
-
 
 ---
 
@@ -170,7 +160,6 @@ There appears to be no flaw whatsoever with past data, so I would suggest retain
 
 P.S. The colors are different but pay no attention to it. It's the same indicator, as the label suggests.
 
-
 ---
 
 ## Re: Tick Volume
@@ -180,7 +169,6 @@ P.S. The colors are different but pay no attention to it. It's the same indicato
 Actually, it would appear my first observations weren't entire accurate. The greatest drawback to this indicator is the disparity between tick volume displayed, as per the indicator, and actual tick volume. It is most noticeable when volume prior to the indicator being loaded is greater than volume after it is loaded. Additionally, and for whatever reason, it seems that the last 30m-1hr of data is almost always, if not always, reduced in magnitude. My best guess is that the data mining occurs right to left and not left to right. In either case, my suggestion would be to make tick volume (indicator) always equal to actual tick volume for the specified period, then utilize whatever calculation is used to determine up/down volume and apply it proportionally to create the indicator.
 
 The image below, as before, is a screenshot of the same indicator having been loaded twice, taken when it was last loaded.
-
 
 ---
 
@@ -192,7 +180,6 @@ Write to your congressman, FXCM, representative ...
 Lobby for availability of Up & Down Tick data on FXCM servers.
 Internal availability of Tick & Real Volume, not that real volume indicator ...
 
-
 ---
 
 ## Re: Tick Volume
@@ -201,7 +188,6 @@ Internal availability of Tick & Real Volume, not that real volume indicator ...
 
 Fair enough.
 
-
 ---
 
 ## Re: Tick Volume
@@ -209,7 +195,6 @@ Fair enough.
 **Apprentice** · Mon Feb 05, 2018 10:03 am
 
 The indicator was revised and updated.
-
 
 ---
 
@@ -236,7 +221,6 @@ Also add line chart option, line[0] = line[1]+current data
 
 Thank you
 
-
 ---
 
 ## Re: Tick Volume
@@ -246,7 +230,6 @@ Thank you
 Your request is added to the development list.
 Development reference 143.
 
-
 ---
 
 ## Re: Tick Volume
@@ -255,7 +238,6 @@ Development reference 143.
 
 Try this version.
 [viewtopic.php?f=17&t=68993](https://fxcodebase.com/code/viewtopic.php?f=17&t=68993)
-
 
 ---
 
@@ -302,7 +284,6 @@ Try this version.
 
 May I request these indicators as well to be converted to MQ4 as well? Thanks.
 
-
 ---
 
 ## Re: Tick Volume
@@ -311,7 +292,6 @@ May I request these indicators as well to be converted to MQ4 as well? Thanks.
 
 Your request is added to the development list.
 Development reference 189.
-
 
 ---
 
@@ -325,7 +305,6 @@ Development reference 189.
 
 Thank you Apprentice.
 
-
 ---
 
 ## Re: Tick Volume
@@ -334,7 +313,6 @@ Thank you Apprentice.
 
 MT4/MQ4 version.
 [viewtopic.php?f=38&t=69019](https://fxcodebase.com/code/viewtopic.php?f=38&t=69019)
-
 
 ---
 

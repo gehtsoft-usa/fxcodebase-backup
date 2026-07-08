@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=23181  
 > Forum: 31 · Topic 23181 · 13 post(s)
 
-
 ---
 
 ## MTF TrendStop Strategy
@@ -11,8 +10,6 @@
 **Apprentice** · Sat Sep 08, 2012 1:41 pm
 
 ![MTF TrendStop Strategy.png](images/39921/MTF%20TrendStop%20Strategy.png)
-
-
 
 Long
 D1 Trendstop < Price
@@ -34,7 +31,6 @@ You can find it here.
 
 The Strategy was revised and updated on January 21, 2019.
 
-
 ---
 
 ## Re: MTF TrendStop Strategy
@@ -42,7 +38,6 @@ The Strategy was revised and updated on January 21, 2019.
 **JOKER83** · Sun Apr 19, 2015 3:38 am
 
 EXIT option at all timeframe
-
 
 ---
 
@@ -54,7 +49,6 @@ Once again.
 Can you explain this.
 in this form.
 If {condition is met} then {do something}.
-
 
 ---
 
@@ -70,7 +64,6 @@ I WANT CLOSE TRADE TO BIGGER TIMEFRAME
 SAME EXIT OPTION WITH
 MTF MA PRICE STRATEGY
 
-
 ---
 
 ## Re: MTF TrendStop Strategy
@@ -79,20 +72,19 @@ MTF MA PRICE STRATEGY
 
 Strategy was revised and updated.
 
-
 ---
 
 ## Re: MTF TrendStop Strategy
 
 **albertparis** · Tue Dec 13, 2016 5:36 am
 
-Code: [Select all](https://fxcodebase.com/code/)
-`Hello
+```
+Hello
 Sorry for my English I'm French
 Can you add: Custom identifier
 
-thank you very much`
-
+thank you very much
+```
 
 ---
 
@@ -106,7 +98,6 @@ In the update there is no addition of Custom identifier
 
 I thank you very much for your work
 
-
 ---
 
 ## Re: MTF TrendStop Strategy
@@ -116,7 +107,6 @@ I thank you very much for your work
 Here is the file for your request I can not send it to you PV
 
 thanks
-
 
 ---
 
@@ -136,7 +126,6 @@ If you have the code I can put it myself. Which will make it possible to put it 
 
 Thank you for your work
 
-
 ---
 
 ## Re: MTF TrendStop Strategy
@@ -149,7 +138,6 @@ Can you add: Custom identifier
 
 thank you very much
 
-
 ---
 
 ## Re: MTF TrendStop Strategy
@@ -157,7 +145,6 @@ thank you very much
 **Apprentice** · Fri Sep 29, 2017 7:41 am
 
 Your request is added to the development list under Id Number 3908
-
 
 ---
 
@@ -169,7 +156,6 @@ Your request is added to the development list under Id Number 3908
 > Your request is added to the development list under Id Number 3908
 
 Thank you for your future work
-
 
 ---
 

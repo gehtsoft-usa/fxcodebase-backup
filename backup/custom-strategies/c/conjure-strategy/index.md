@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=65680  
 > Forum: 31 · Topic 65680 · 9 post(s)
 
-
 ---
 
 ## Conjure strategy
@@ -11,8 +10,6 @@
 **Apprentice** · Sun Jan 28, 2018 9:04 am
 
 ![EURUSD m1 (01-28-2018 1315).png](images/117318/EURUSD%20m1%20%2801-28-2018%201315%29.png)
-
-
 
 Lets say EUR/USD is on 1.23350
 if the price goes up for 50 pips open a BUY position.
@@ -29,7 +26,6 @@ or when no more positions are able to open because of used margin.
 
  [conjure strategy.lua](files/117318/conjure%20strategy.lua)
 
-
 ---
 
 ## Re: Conjure strategy
@@ -38,7 +34,6 @@ or when no more positions are able to open because of used margin.
 
 Apprentice Is it possible to add an option , to close all positions when profit is above a specific percentage of balance? Like this strategy bellow?
 [http://fxcodebase.com/code/viewtopic.php?f=31&t=2901&start=80#p114560](https://fxcodebase.com/code/viewtopic.php?f=31&t=2901&start=80#p114560)
-
 
 ---
 
@@ -49,7 +44,6 @@ Apprentice Is it possible to add an option , to close all positions when profit 
 [conjure strategy.lua](files/117736/conjure%20strategy.lua)
 
 Try this version.
-
 
 ---
 
@@ -68,10 +62,10 @@ so i don't have to load it twice for every pair?
 
 something like that
 
-Code: [Select all](https://fxcodebase.com/code/)
-`strategy.parameters:addBoolean("is_sell", "Is Sell", "", true);
-    strategy.parameters:addBoolean("is_buy", "Is Buy", "", true);`
-
+```
+strategy.parameters:addBoolean("is_sell", "Is Sell", "", true);
+    strategy.parameters:addBoolean("is_buy", "Is Buy", "", true);
+```
 
 ---
 
@@ -90,10 +84,10 @@ so i don't have to load it twice for every pair?
 
 something like that
 
-Code: [Select all](https://fxcodebase.com/code/)
-`strategy.parameters:addBoolean("is_sell", "Is Sell", "", true);
-    strategy.parameters:addBoolean("is_buy", "Is Buy", "", true);`
-
+```
+strategy.parameters:addBoolean("is_sell", "Is Sell", "", true);
+    strategy.parameters:addBoolean("is_buy", "Is Buy", "", true);
+```
 
 ---
 
@@ -121,7 +115,6 @@ The account must support hedging.
 
 Close all positions when profit is above a specific percentage of balance.
 
-
 ---
 
 ## Re: Conjure strategy
@@ -131,8 +124,8 @@ Close all positions when profit is above a specific percentage of balance.
 Apprentice i messed with the code and i made it do what i want.
 My only problem i dont know how to fix is how can i reset the parameters every time that positions are closed so it can start from current price? Can you help me on that ?
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- More information about this indicator can be found at:
+```lua
+-- More information about this indicator can be found at:
 -- http://fxcodebase.com/code/viewtopic.php?f=31&t=65680
 
 --+------------------------------------------------------------------+
@@ -367,8 +360,8 @@ function MarketOrder(BuySell)
     return true;
 end
 
-dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");`
-
+dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");
+```
 
 ---
 
@@ -377,7 +370,6 @@ dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");`
 **Apprentice** · Mon Mar 05, 2018 11:27 am
 
 Your request is added to the development list under Id Number 4064
-
 
 ---
 

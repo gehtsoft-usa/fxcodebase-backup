@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=38&t=70093  
 > Forum: 38 · Topic 70093 · 16 post(s)
 
-
 ---
 
 ## Trade Profit Info
@@ -15,7 +14,6 @@ Based on request.
 
  [Trade Profit Info.mq4](files/135405/Trade%20Profit%20Info.mq4)
 
-
 ---
 
 ## Re: Trade Profit Info
@@ -24,7 +22,6 @@ Based on request.
 
 Thanks! But am I missing something? There's errors throughout and I think I need a file called Ordersiterator, but where can I find that? I've googled it and everything.
 Also I'm only after a few lines of code to incorporate into my own that will show the result I'm after. What is the most needed lines of code for this result? From line 82 to end?
-
 
 ---
 
@@ -35,7 +32,6 @@ Also I'm only after a few lines of code to incorporate into my own that will sho
 Your request is added to the development list.
 Development reference 1591.
 
-
 ---
 
 ## Re: Trade Profit Info
@@ -43,7 +39,6 @@ Development reference 1591.
 **Apprentice** · Tue Jun 30, 2020 7:21 am
 
 Try it now.
-
 
 ---
 
@@ -55,7 +50,6 @@ Thankyou!
 But how can I get it to be 0 until an order is sent? And can it show buy/sell as positive numbers unless the trade has gone in the opposite direction?
 Thanks heaps
 
-
 ---
 
 ## Re: Trade Profit Info
@@ -63,7 +57,6 @@ Thanks heaps
 **Apprentice** · Thu Jul 02, 2020 4:51 am
 
 Try it now.
-
 
 ---
 
@@ -74,8 +67,8 @@ Try it now.
 I had rewritten some of the code and it works for the Buy. But I can't get it to work in reverse properly for the Sell. I incorporated some of your new code but still couldn't get the desired result.
 For the Sell, I want profit to show as a positive number and include brokerage (7 * lots) eg. .70c for .1 lots
 
-Code: [Select all](https://fxcodebase.com/code/)
-`{
+```mql4
+{
    datetime last = 0;
    double price = 0;
    double lots = 0;
@@ -119,8 +112,8 @@ Code: [Select all](https://fxcodebase.com/code/)
    }
    
    return 0;
-}`
-
+}
+```
 
 ---
 
@@ -131,7 +124,6 @@ Code: [Select all](https://fxcodebase.com/code/)
 Your request is added to the development list.
 Development reference 1625.
 
-
 ---
 
 ## Re: Trade Profit Info
@@ -139,7 +131,6 @@ Development reference 1625.
 **Apprentice** · Mon Jul 06, 2020 1:45 pm
 
 I don't understand what needs to be done. It works fine.
-
 
 ---
 
@@ -149,7 +140,6 @@ I don't understand what needs to be done. It works fine.
 
 Sell order profits are showing as negative numbers. How can this be changed so that it shows positive profit?
 
-
 ---
 
 ## Re: Trade Profit Info
@@ -157,7 +147,6 @@ Sell order profits are showing as negative numbers. How can this be changed so t
 **BTS0301** · Thu Jul 09, 2020 3:17 am
 
 Solved that problem. But the profit lags by .20c for some unknown reason
-
 
 ---
 
@@ -168,8 +157,8 @@ Solved that problem. But the profit lags by .20c for some unknown reason
 A portion of the code I have now...
 Can't figure out why the calculations for profit for a sell entry is different for a buy... Please help
 
-Code: [Select all](https://fxcodebase.com/code/)
-`int OnCalculate(const int rates_total,
+```mql4
+int OnCalculate(const int rates_total,
                 const int prev_calculated,
                 const datetime &time[],
                 const double &open[],
@@ -223,8 +212,8 @@ Code: [Select all](https://fxcodebase.com/code/)
    }
    
    return 0;
-}`
-
+}
+```
 
 ---
 
@@ -235,7 +224,6 @@ Code: [Select all](https://fxcodebase.com/code/)
 Your request is added to the development list.
 Development reference 1689.
 
-
 ---
 
 ## Re: Trade Profit Info
@@ -244,7 +232,6 @@ Development reference 1689.
 
 Because the price needs to move into a different direction to get the profit. The current price is higher than the open price means profit for buy and loss for sell.
 
-
 ---
 
 ## Re: Trade Profit Info
@@ -252,7 +239,6 @@ Because the price needs to move into a different direction to get the profit. Th
 **BTS0301** · Thu Jul 23, 2020 9:29 am
 
 But my point is how do I show a winning sell order as a profit... not a negative?
-
 
 ---
 

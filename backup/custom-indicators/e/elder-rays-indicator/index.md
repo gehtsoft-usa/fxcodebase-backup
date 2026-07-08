@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=23  
 > Forum: 17 · Topic 23 · 7 post(s)
 
-
 ---
 
 ## Elder-Rays Indicator
@@ -28,8 +27,6 @@ The Elder Ray is a very precise and effective means of highlighting discrepancie
 ![Elder-Rays.jpg](images/24/Elder-Rays.jpg)
 
 *Screenshot on MarketScope 2.0*
-
-
 
 **HOW TO USE:**
 
@@ -57,8 +54,8 @@ It's better to open a buy position in following conditions:
 BULL = HIGH – EMA(close, N)
 BEAR = LOW – EMA(close, N)
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- Description from the http://www.investopedia.com/articles/trading/03/022603.asp
+```lua
+-- Description from the http://www.investopedia.com/articles/trading/03/022603.asp
 
 -- initializes the indicator
 function Init()
@@ -96,14 +93,14 @@ function Update(period, mode)
         Bull[period] = source.high[period] - EMA.DATA[period];
         Bear[period] = source.low[period] - EMA.DATA[period];
     end
-end`
+end
+```
 
  [elray.lua](files/24/elray.lua)
 
  [Adaptable Elray.lua](files/24/Adaptable%20Elray.lua)
 
 The indicator was revised and updated
-
 
 ---
 
@@ -114,7 +111,6 @@ The indicator was revised and updated
 Revision
 Performance update.
 Style options added.
-
 
 ---
 
@@ -127,7 +123,6 @@ can you please show the elder rays indicator as histogramms? it is better to stu
 Thank you
 France
 
-
 ---
 
 ## Re: Elder-Rays Indicator
@@ -136,7 +131,6 @@ France
 
 Bar option added to Adaptable Elray
 Also, now u can select other types of moving averages.
-
 
 ---
 
@@ -152,7 +146,6 @@ I've hopefully attached a picture illustrating the scenario.
 
 Regards,
 
-
 ---
 
 ## Re: Elder-Rays Indicator
@@ -162,7 +155,6 @@ Regards,
 Unfortunately there is no way to get around this problem.
 If both are used, one bar will always be overwritten.
 My advice, use only one Bar Style.
-
 
 ---
 

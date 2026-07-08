@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=3703  
 > Forum: 31 · Topic 3703 · 59 post(s)
 
-
 ---
 
 ## ZigZag Strategy
@@ -24,8 +23,6 @@ Note: You need to install ZZ_Semafor indicator for correct strategy work.
 
 ![ZZ_Strategy.png](images/8964/ZZ_Strategy.png)
 
-
-
 Indicator:
 
  [ZZ_Semafor.lua](files/8964/ZZ_Semafor.lua)
@@ -33,7 +30,6 @@ Indicator:
 Strategy:
 
  [ZZ_Strategy.lua](files/8964/ZZ_Strategy.lua)
-
 
 ---
 
@@ -47,7 +43,6 @@ I tried to test it and i got an error [see attachment]
 
 question: what is the ZZ semafor ? and what exactly do you use it for ? can it be add to the bottoms of the zigzag too ?
 
-
 ---
 
 ## Re: ZigZag Strategy
@@ -60,7 +55,6 @@ Regarding the reported errors.
 I believe that it is the cause of the known bug.
 Restart of the platform should fix things
 
-
 ---
 
 ## Re: ZigZag Strategy
@@ -68,7 +62,6 @@ Restart of the platform should fix things
 **R3boot** · Tue Mar 22, 2011 7:01 pm
 
 it worked,,, Thanks
-
 
 ---
 
@@ -87,7 +80,6 @@ it worked,,, Thanks
 
 I've been testing it, but I really didn't get the idea about going long or short. what do you mean by the upper line and the lower line?
 
-
 ---
 
 ## Re: ZigZag Strategy
@@ -102,7 +94,6 @@ i guess, I'm getting only the indication when we reach the higher (brow part on 
 
 Is it normal or could you modify it to get the both indication.
 
-
 ---
 
 ## Re: ZigZag Strategy
@@ -111,12 +102,9 @@ Is it normal or could you modify it to get the both indication.
 
 ![zig.png](images/17552/zig.png)
 
-
-
 This indicator is intended only to be a support for the strategy.
 If you add it to chart as oscillator, you will see that it has both signals.
 The signal for lows is in negative territory.
-
 
 ---
 
@@ -131,7 +119,6 @@ Problem solve
 best regards
 
 Nico
-
 
 ---
 
@@ -156,7 +143,6 @@ thanks
 by
 arindam
 
-
 ---
 
 ## Re: ZigZag Strategy
@@ -177,7 +163,6 @@ hi
 i have a question
 does this strategy open a new position if any position is already open by the strategy itself
 by
-
 
 ---
 
@@ -220,7 +205,6 @@ but i have an issue
 plesae look into the matter seriously
 by
 
-
 ---
 
 ## Re: ZigZag Strategy
@@ -237,7 +221,6 @@ exit sell :price cross over ema 34 or zz signal to buy
 
 thank you
 
-
 ---
 
 ## Re: ZigZag Strategy
@@ -245,7 +228,6 @@ thank you
 **Apprentice** · Mon Dec 26, 2011 4:57 am
 
 Your request is added to the developmental cue.
-
 
 ---
 
@@ -257,7 +239,6 @@ This is a great strategy. Can you add a condition that the signals do not go aga
 
 When Zig Zag line is Bearish then sell opens position from the Semafor signal and buy closes net positioning but does not go long. Wait for another sell signal agreement and then enter a new trade short which is again in agreement. Vice versa for Bullish. Thanks!!!
 
-
 ---
 
 ## Re: ZigZag Strategy
@@ -265,7 +246,6 @@ When Zig Zag line is Bearish then sell opens position from the Semafor signal an
 **Apprentice** · Thu Feb 09, 2012 6:20 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -275,7 +255,6 @@ Your request is added to the development list.
 
 I tried backtesting this on the GBPUSD Weekly Frequency. I added the ZZ_Semafor to the bottom as an oscillator. Visually it looks excellent for buys and sells but when I back test it the system does not execute accordingly. Where am I wrong here? Shouldn't it flip the position once new signal is set? Thanks! I am very glad to have found this website!
 
-
 ---
 
 ## Re: ZigZag Strategy
@@ -283,7 +262,6 @@ I tried backtesting this on the GBPUSD Weekly Frequency. I added the ZZ_Semafor 
 **briansummy** · Wed Mar 21, 2012 12:55 pm
 
 Any luck with this coding? Thanks!!!
-
 
 ---
 
@@ -293,7 +271,6 @@ Any luck with this coding? Thanks!!!
 
 Your request is added to the development list.
 
-
 ---
 
 ## Re: ZigZag Strategy
@@ -301,7 +278,6 @@ Your request is added to the development list.
 **Alexander.Gettinger** · Wed Jun 13, 2012 9:03 am
 
 Zig&Zag indicator: [viewtopic.php?f=17&t=20167](https://fxcodebase.com/code/viewtopic.php?f=17&t=20167)
-
 
 ---
 
@@ -320,7 +296,6 @@ Thank you for a great site with invaluable resources!
 Best regards
 Mikael
 
-
 ---
 
 ## Re: ZigZag Strategy
@@ -335,7 +310,6 @@ Best Regards
 
 Kankatrader
 
-
 ---
 
 ## Re: ZigZag Strategy
@@ -343,7 +317,6 @@ Kankatrader
 **Apprentice** · Sun Oct 28, 2012 4:23 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -359,22 +332,17 @@ For those traders who like (as me) see all details on charts, to avoid click and
 
 ![ZZ_StrategyDetails.png](images/60006/ZZ_StrategyDetails.png)
 
-
-
 and the result if you have set "true" in the group Notification :
 
  
 
 ![ZZ_StrategyChart.png](images/60006/ZZ_StrategyChart.png)
 
-
-
 My next work will be to print in Red color in the name, if we have setted "true" for some printed details, as at this current time, I don't know how to do. If someone has an idea ...
 
 Also, the next work will have an added .lua.rc file (if I have time).
 
  [ZZ_Strategy_02.lua](files/60006/ZZ_Strategy_02.lua)
-
 
 ---
 
@@ -387,17 +355,20 @@ Hi to all who use this strategy,
 I've observed a mismatch in the source code :
 in the original source of ZZ_Strategy.lua, at line 171, the code is :
 
-Code: [Select all](https://fxcodebase.com/code/)
-`if up1 ~= nil and up2 ~= nil and u3 ~= nil then
+```lua
+if up1 ~= nil and up2 ~= nil and u3 ~= nil then
             break;
-        end`
+        end
+```
 
 as the variable u3 doesn't exist, I think that the command break is never executed, so the correction would be ?
 
-Code: [Select all](https://fxcodebase.com/code/)
-`if up1 ~= nil and up2 ~= nil and up3 ~= nil then
+```lua
+if up1 ~= nil and up2 ~= nil and up3 ~= nil then
             break;
-        end`
+        end
+```
+
 oddly, when the strategy is loaded in TS2, we receive no errors, same with the Indicore SDK in the strategy debugger.
 
 Moreover, is someone can explain why Buy or Sell orders do not follow the displaying of the signals given by the indicator ZZ_Semafor (even with the same parameters)?
@@ -405,7 +376,6 @@ Moreover, is someone can explain why Buy or Sell orders do not follow the displa
 Thanks for replying,
 
 Regards.
-
 
 ---
 
@@ -419,7 +389,6 @@ Regards.
 Apprentice , why i cannot access the above Zig&Zag indicator link provided by Alexander? could u fix it or provide another link ,please?
 with many thanks.
 
-
 ---
 
 ## Re: ZigZag Strategy
@@ -429,7 +398,6 @@ with many thanks.
 Try this one.
 [viewtopic.php?f=17&t=20167](https://fxcodebase.com/code/viewtopic.php?f=17&t=20167)
 
-
 ---
 
 ## Re: ZigZag Strategy
@@ -437,7 +405,6 @@ Try this one.
 **easytrading** · Fri Jun 05, 2015 2:15 pm
 
 still the same problem.first the link requirs me to log in to my forum account and then this message appears to me after log in ,"You are not authorised to read this forum".for that link ???
-
 
 ---
 
@@ -448,7 +415,6 @@ still the same problem.first the link requirs me to log in to my forum account a
 Oh now I see.
 This one is on private section of the forum.
 For now will not be available to the public.
-
 
 ---
 
@@ -465,7 +431,6 @@ Thank you,
 
 jenni
 
-
 ---
 
 ## Re: ZigZag Strategy
@@ -474,10 +439,7 @@ jenni
 
 ![Capture.PNG](images/102516/Capture.PNG)
 
-
-
 You can do it already.
-
 
 ---
 
@@ -493,7 +455,6 @@ Thank you,
 
 jenni
 
-
 ---
 
 ## Re: ZigZag Strategy
@@ -502,7 +463,6 @@ jenni
 
 Can this strategy be modified so the user can select whether to buy or sell instead of the strategy doing that and the user having the choice of selecting close on reverse and also user determine how many open position in each direction instead of the strategy closing out the position on reversing.Also I think there is a bug where if you run this on 2 different timeframes or 2 different instruments when the canclose() function is called it close all positions in both instuments
 
-
 ---
 
 ## Re: ZigZag Strategy
@@ -510,7 +470,6 @@ Can this strategy be modified so the user can select whether to buy or sell inst
 **Apprentice** · Mon Dec 28, 2015 5:57 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -561,7 +520,6 @@ The code seems correct :
  end
  end
 
-
 ---
 
 ## Re: ZigZag Strategy
@@ -573,7 +531,6 @@ Hello Apprentice,
 A member requests some monthes ago, if this ZZ strategy could be mixed with ema 34, does this strategy is done ?
 
 BST Rgds
-
 
 ---
 
@@ -591,7 +548,6 @@ BUY
 SELL
 BOTH
 
-
 ---
 
 ## Re: ZigZag Strategy
@@ -599,7 +555,6 @@ BOTH
 **Apprentice** · Mon Aug 15, 2016 2:18 am
 
 Can you define EXIT OPTION?
-
 
 ---
 
@@ -626,7 +581,6 @@ Highly adaptable zig zag strategy
 
  3 Indicator buy , Sell , close , Alert
 
-
 ---
 
 ## Re: ZigZag Strategy
@@ -635,7 +589,6 @@ Highly adaptable zig zag strategy
 
 Your request is added to the development list, Under Id Number 3609
  If someone is interested to do this task, please contact me.
-
 
 ---
 
@@ -647,7 +600,6 @@ can you make Highly adaptable zig zag strategy
 
  PLEASE
 
-
 ---
 
 ## Re: ZigZag Strategy
@@ -655,7 +607,6 @@ can you make Highly adaptable zig zag strategy
 **dogxyz** · Sun Oct 16, 2016 11:39 am
 
 Hi, as I know the original ZigZag indicator is repainted. Whether is this ZZ_semaFor is no repaint?
-
 
 ---
 
@@ -669,7 +620,6 @@ Am i right?
 
 Thanks a lot for your great job.
 
-
 ---
 
 ## Re: ZigZag Strategy
@@ -677,7 +627,6 @@ Thanks a lot for your great job.
 **Apprentice** · Sun Dec 18, 2016 8:18 am
 
 Strategy was revised and updated.
-
 
 ---
 
@@ -691,7 +640,6 @@ do I make a mistake ?
 
 bst rgds
 
-
 ---
 
 ## Re: ZigZag Strategy
@@ -700,7 +648,6 @@ bst rgds
 
 following my previous post : the unaccessed topic is viewtopic.php?f=17&t=20167
 
-
 ---
 
 ## Re: ZigZag Strategy
@@ -708,7 +655,6 @@ following my previous post : the unaccessed topic is viewtopic.php?f=17&t=20167
 **Apprentice** · Mon Dec 19, 2016 4:27 pm
 
 Topic has been moved to the private section.
-
 
 ---
 
@@ -721,7 +667,6 @@ hi mario,
 How I can see the new code of this strategy ?
 LeTigre30
 
-
 ---
 
 ## Re: ZigZag Strategy
@@ -729,7 +674,6 @@ LeTigre30
 **Apprentice** · Thu Dec 22, 2016 1:36 pm
 
 Unfortunately will be inaccessible until further notice.
-
 
 ---
 
@@ -745,7 +689,6 @@ I have noted some inconsistencies in the code and have therefore participated in
 
 bst rgds
 
-
 ---
 
 ## Re: ZigZag Strategy
@@ -753,7 +696,6 @@ bst rgds
 **Apprentice** · Sat Dec 24, 2016 5:56 am
 
 I believe we received copyright violation complaint.
-
 
 ---
 
@@ -766,7 +708,6 @@ There is a problem with strategy alerts, it open trades and does not send emails
 
 Thank you
 
-
 ---
 
 ## Re: ZigZag Strategy
@@ -777,7 +718,6 @@ Can you please send version used to my email.
 mario(.)jemic(@)gmail(.)com
 With reference/link to this post.
 
-
 ---
 
 ## Re: ZigZag Strategy
@@ -785,7 +725,6 @@ With reference/link to this post.
 **Apprentice** · Thu Nov 22, 2018 6:42 am
 
 Show Alert and SendEmail are set to yes?
-
 
 ---
 
@@ -796,7 +735,6 @@ Show Alert and SendEmail are set to yes?
 Hi apprentice,
 I registered again the strategy and now I receive notifications normally.
 Thank you
-
 
 ---
 
@@ -817,7 +755,6 @@ Posts: 59
 Joined: Tue Jul 06, 2010 8:31 pm
 Private messageE-mail
 
-
 ---
 
 ## Re: ZigZag Strategy
@@ -825,7 +762,6 @@ Private messageE-mail
 **Apprentice** · Sun Nov 25, 2018 5:35 am
 
 Your request is added to the development list under Id Number 4328
-
 
 ---
 
@@ -837,7 +773,6 @@ Try this version.
 
  [ZZ_Strategy.lua](files/122355/ZZ_Strategy.lua)
 
-
 ---
 
 ## Re: ZigZag Strategy
@@ -845,7 +780,6 @@ Try this version.
 **AEKARAOLE** · Tue Nov 27, 2018 7:30 am
 
 Thank you apprentice
-
 
 ---
 

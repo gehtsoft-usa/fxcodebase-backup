@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=2579  
 > Forum: 17 · Topic 2579 · 23 post(s)
 
-
 ---
 
 ## WPR Smoothed
@@ -19,10 +18,8 @@ If Slow MA of Williams Percent Range (WPR)<Fast MA of Williams Percent Range (WP
 
 ![WPR_Smoothed.png](images/5759/WPR_Smoothed.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("WPR Smoothed indicator");
     indicator:description("WPR Smoothed indicator");
     indicator:requiredSource(core.Bar);
@@ -163,12 +160,12 @@ function Update(period, mode)
     end
    end
    
-end`
+end
+```
 
 For successful work must be installed two indicators:
 1. Williams Percent Range (WPR): [viewtopic.php?f=17&t=898](https://fxcodebase.com/code/viewtopic.php?f=17&t=898)
 2. Moving Average Indicator: 20 in 1: [viewtopic.php?f=17&t=2430](https://fxcodebase.com/code/viewtopic.php?f=17&t=2430)
-
 
 ---
 
@@ -184,7 +181,6 @@ Slow MA = 10
 Fast EMA = 25
 Transparency 85
 
-
 ---
 
 ## Re: WPR Smoothed
@@ -197,7 +193,6 @@ is a strategy avalaible in nex future for this Indicator?
 best regards
 cminvest
 
-
 ---
 
 ## Re: WPR Smoothed
@@ -205,7 +200,6 @@ cminvest
 **Apprentice** · Wed Nov 03, 2010 5:35 am
 
 Added to developmental cue.
-
 
 ---
 
@@ -225,7 +219,6 @@ Moving Average of Williams % R (50) Versus > or < Moving Average of Williams % R
 
 With this version of the indicator, I don't think you would need to show the Williams % R Value. It would simply be a comparison of 2 Moving Averages.
 
-
 ---
 
 ## Re: WPR Smoothed
@@ -234,8 +227,8 @@ With this version of the indicator, I don't think you would need to show the Wil
 
 Added second WPR indicator.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("WPR Smoothed2 indicator");
     indicator:description("WPR Smoothed2 indicator");
     indicator:requiredSource(core.Bar);
@@ -388,8 +381,8 @@ function Update(period, mode)
     end
    end
    
-end`
-
+end
+```
 
 ---
 
@@ -398,7 +391,6 @@ end`
 **Alexander.Gettinger** · Mon Nov 08, 2010 2:36 am
 
 Strategy on this indicator may be find here: [viewtopic.php?f=31&t=2618](https://fxcodebase.com/code/viewtopic.php?f=31&t=2618)
-
 
 ---
 
@@ -410,7 +402,6 @@ Great indicator! I would like to suggest to any trader to consider using the "Ze
 
 sjc
 
-
 ---
 
 ## Re: WPR Smoothed
@@ -421,7 +412,6 @@ Great work by Alexander and DWetherell !!!
 
 sjc
 
-
 ---
 
 ## Re: WPR Smoothed
@@ -430,7 +420,6 @@ sjc
 
 can u add strategy for wprsmoothed not wprsmoothed2 ?
 
-
 ---
 
 ## Re: WPR Smoothed
@@ -438,7 +427,6 @@ can u add strategy for wprsmoothed not wprsmoothed2 ?
 **Apprentice** · Thu Dec 01, 2011 9:27 am
 
 Your request is added to the developmental cue.
-
 
 ---
 
@@ -454,7 +442,6 @@ Download:
 
  [WPR_Smoothed_Strategy.lua](files/21393/WPR_Smoothed_Strategy.lua)
 
-
 ---
 
 ## Re: WPR Smoothed
@@ -462,7 +449,6 @@ Download:
 **Apprentice** · Thu Dec 22, 2011 8:34 am
 
 Your request is added to the developmental cue.
-
 
 ---
 
@@ -477,7 +463,6 @@ already ma10 >ma50 then background is green ..at this point +condition wpr > 50 
 
 same conditions for red zone..
 
-
 ---
 
 ## Re: WPR Smoothed
@@ -485,7 +470,6 @@ same conditions for red zone..
 **Apprentice** · Sat Jul 27, 2013 3:25 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -495,7 +479,6 @@ Your request is added to the development list.
 
 Topmost version is updated accordingly.
 
-
 ---
 
 ## Re: WPR Smoothed
@@ -503,7 +486,6 @@ Topmost version is updated accordingly.
 **cersoz** · Fri Feb 21, 2014 9:29 am
 
 anyone can add overbought and oversold levels?
-
 
 ---
 
@@ -513,7 +495,6 @@ anyone can add overbought and oversold levels?
 
 OB/OS Levels Added.
 
-
 ---
 
 ## Re: WPR Smoothed
@@ -521,7 +502,6 @@ OB/OS Levels Added.
 **Apprentice** · Fri Jun 02, 2017 6:13 am
 
 Indicator was revised and updated.
-
 
 ---
 
@@ -531,7 +511,6 @@ Indicator was revised and updated.
 
 This concerns the WPR Smoothed Strategy, not WPR Smoothed2 strategy. I'm getting the error message -1:nil and the strategy pauses. Thanks for any help.
 
-
 ---
 
 ## Re: WPR Smoothed
@@ -540,7 +519,6 @@ This concerns the WPR Smoothed Strategy, not WPR Smoothed2 strategy. I'm getting
 
 Try it now.
 
-
 ---
 
 ## Re: WPR Smoothed Strategy
@@ -548,7 +526,6 @@ Try it now.
 **mulligan** · Wed Apr 04, 2018 10:30 am
 
 I removed the old strategy and downloaded the new (WPR_Smoothed_Strategy.lua). Still getting the -1:nil code. Thanks for your help.
-
 
 ---
 

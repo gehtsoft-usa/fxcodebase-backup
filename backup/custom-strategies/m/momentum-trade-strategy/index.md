@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=2771  
 > Forum: 31 · Topic 2771 · 18 post(s)
 
-
 ---
 
 ## Momentum trade strategy
@@ -26,16 +25,11 @@ For this strategy must be installed indicator Averages ([viewtopic.php?f=17&t=24
 
 ![2018-11-19_11-48-49.png](images/6306/2018-11-19_11-48-49.png)
 
-
-
  
 
 ![2018-11-19_11-49-22.png](images/6306/2018-11-19_11-49-22.png)
 
-
-
  [MomentumTradeStrategy v2.lua](files/6306/MomentumTradeStrategy%20v2.lua)
-
 
 ---
 
@@ -49,7 +43,6 @@ Marketscope 2.0
 
 Can anyone help me with this?
 
-
 ---
 
 ## Re: Momentum trade strategy
@@ -58,7 +51,6 @@ Can anyone help me with this?
 
 I have te same problem as Virgilio, is there a way to fix it? Looks like many core functins return null.
 
-
 ---
 
 ## Re: Momentum trade strategy
@@ -66,7 +58,6 @@ I have te same problem as Virgilio, is there a way to fix it? Looks like many co
 **a0007002** · Sun Jan 30, 2011 1:57 pm
 
 I too got this same error. Needs something to be fixed. The Averages indicator is installed and works on other strategies requiring it.
-
 
 ---
 
@@ -81,7 +72,6 @@ The problem you describe appears in the current version, and our team will do ev
 
 If you restart your Trading Station, the error shouldn't appear.
 
-
 ---
 
 ## Re: Momentum trade strategy
@@ -93,7 +83,6 @@ thanks
 
 P.S. - what I did notice tho was that the stop and limit functions didn't seem to work. Not sure if they were supposed to.
 
-
 ---
 
 ## Re: Momentum trade strategy
@@ -101,7 +90,6 @@ P.S. - what I did notice tho was that the stop and limit functions didn't seem t
 **TMos1124** · Thu Apr 28, 2011 5:37 pm
 
 If I change the code at the stop and limit (default is 1) to 5 that would change the order amount correct? If so, can I just save and run? Is there any way I can edit the trailing stop parameters? Again, your help is invaluable.
-
 
 ---
 
@@ -112,19 +100,19 @@ If I change the code at the stop and limit (default is 1) to 5 that would change
 If you open an indicator using Notpad.
 You can edit the line 57-62 according to your preferences.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`strategy.parameters:addInteger("Amount", "Trade Amount in Lots", "", 1, 1, 100);
+```
+strategy.parameters:addInteger("Amount", "Trade Amount in Lots", "", 1, 1, 100);
     strategy.parameters:addBoolean("SetLimit", "Set Limit Orders", "", false);
     strategy.parameters:addInteger("Limit", "Limit Order in pips", "", 30, 1, 10000);
     strategy.parameters:addBoolean("SetStop", "Set Stop Orders", "", false);
     strategy.parameters:addInteger("Stop", "Stop Order in pips", "", 30, 1, 10000);
-    strategy.parameters:addBoolean("TrailingStop", "Trailing stop order", "", false);`
+    strategy.parameters:addBoolean("TrailingStop", "Trailing stop order", "", false);
+```
 
 If wants to increase Trade Amount in Lots to 5 Edit line 57 to
 
 Code: [Select all](https://fxcodebase.com/code/)
 `strategy.parameters:addInteger("Amount", "Trade Amount in Lots", "", 5, 1, 100);`
-
 
 ---
 
@@ -137,7 +125,6 @@ Can anyone recommend parameters for 15M and 1H TF?
 Thanks..
 BC
 
-
 ---
 
 ## Re: Momentum trade strategy
@@ -146,7 +133,6 @@ BC
 
 Thank you very much, I would also like to know how to edit line 59. I want the limit to be .5 to the total trade amount. If I were to buy 20 for example, I wish for the limit order to be 10 lots.
 
-
 ---
 
 ## Re: Momentum trade strategy
@@ -154,7 +140,6 @@ Thank you very much, I would also like to know how to edit line 59. I want the l
 **Apprentice** · Wed Nov 30, 2016 5:30 am
 
 Bump up.
-
 
 ---
 
@@ -168,7 +153,6 @@ Is it possible to add to this strategy position cap, trading lots as risk % of e
 
 Thank you
 
-
 ---
 
 ## Re: Momentum trade strategy
@@ -178,7 +162,6 @@ Thank you
 Your request is added to the development list.
 Development reference 1698.
 
-
 ---
 
 ## Re: Momentum trade strategy
@@ -186,7 +169,6 @@ Development reference 1698.
 **Apprentice** · Thu Jul 16, 2020 5:43 am
 
 Try MomentumTradeStrategy v2.lua
-
 
 ---
 
@@ -201,7 +183,6 @@ when the macd is at positive area , every time the price cross down the ma20 , t
 thanks a lot
 gongrats for the nice work.
 
-
 ---
 
 ## Re: Momentum trade strategy
@@ -214,7 +195,6 @@ when then macd is at positive positions, every time the price crosses down the m
 the same for the oposite.
 thanks a lot
 
-
 ---
 
 ## Re: Momentum trade strategy
@@ -223,7 +203,6 @@ thanks a lot
 
 Your request is added to the development list.
 Development reference 377.
-
 
 ---
 

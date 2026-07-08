@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=367  
 > Forum: 17 · Topic 367 · 24 post(s)
 
-
 ---
 
 ## Fractal-based Support/Resistance Lines
@@ -16,8 +15,6 @@ The simple indicator which starts a new support/resistance line every time when 
 
 ![fbrs.png](images/606/fbrs.png)
 
-
-
 Download:
 
  [FBSR.lua](files/606/FBSR.lua)
@@ -28,12 +25,9 @@ FBSR with Fibonacci levels
 
 ![FBSR_With_Fib.lua.png](images/606/FBSR_With_Fib.lua.png)
 
-
-
  [FBSR_With_Fib.lua](files/606/FBSR_With_Fib.lua)
 
 The indicator was revised and updated
-
 
 ---
 
@@ -51,7 +45,6 @@ R/S line form "....." to "____"?
 
 Very thanks
 
-
 ---
 
 ## Re: Fractal-based Support/Resistance Lines
@@ -61,8 +54,8 @@ Very thanks
 if you need lines only have to change core.Dot for core.Line in function prepare in lines
 R= and S=.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Prepare()
+```lua
+function Prepare()
     source = instance.source;
     first = source:first() + 4;
 
@@ -71,8 +64,8 @@ Code: [Select all](https://fxcodebase.com/code/)
     --core.Dot=core.Line
    R = instance:addStream("R", core.Line, name .. ".R", "R", instance.parameters.R_color, first);
     S = instance:addStream("S", core.Line, name .. ".S", "S", instance.parameters.S_color, first);
-end`
-
+end
+```
 
 ---
 
@@ -86,7 +79,6 @@ but I have a request
 can i change the resistance and support to fiboncci retracement level of previous day
 Thanks a lot
 
-
 ---
 
 ## Re: Fractal-based Support/Resistance Lines
@@ -94,7 +86,6 @@ Thanks a lot
 **Apprentice** · Sun Dec 19, 2010 10:59 am
 
 It is possible, but then it will be quite a different indicator.
-
 
 ---
 
@@ -111,7 +102,6 @@ It is possible, but then it will be quite a different indicator.
 
 Hm... As far as I see, this can be done just using PIVOT indicator. Choose "Fibonacci Retarement" in the mode, choose the levels you need and switch the historical mode "on" if you need to see historical levels.
 
-
 ---
 
 ## Re: Fractal-based Support/Resistance Lines
@@ -121,7 +111,6 @@ Hm... As far as I see, this can be done just using PIVOT indicator. Choose "Fibo
 How do we change this indicator to lines instead of dots? I see it posted that we have to change core.dot from dot to lines but I don't even know where that would be done. Can someone please assist or change the indicator please. Thanks!
 
 TradeKing
-
 
 ---
 
@@ -133,7 +122,6 @@ Something like this.
 
  [FBSR.lua](files/8455/FBSR.lua)
 
-
 ---
 
 ## Re: Fractal-based Support/Resistance Lines
@@ -141,7 +129,6 @@ Something like this.
 **TradeKing** · Wed Mar 02, 2011 2:43 pm
 
 Perfect! Thank you very much!
-
 
 ---
 
@@ -151,7 +138,6 @@ Perfect! Thank you very much!
 
 I have downloaded and transfered FBSR.Lua to my tradestation platform however it does not have this appearance as there are also vertical lines connecting to the horizonal lines which are very distracting and make the chart very busy. Is there a way for the code to be changed so that only the horizonal lines appear? The example would fit my eye very nicely for support and resistance only. THANK YOU in advance. Gene Dollar
  [[email protected]](https://fxcodebase.com/cdn-cgi/l/email-protection#f793989b9b9685c4c2c4ceb78e969f9898d994989a)
-
 
 ---
 
@@ -164,7 +150,6 @@ Probably you have installed the version upon request.
 User have requested this functionality.
 With First Post (Top Most) version you should be satisfied.
 
-
 ---
 
 ## Re: Fractal-based Support/Resistance Lines
@@ -173,7 +158,6 @@ With First Post (Top Most) version you should be satisfied.
 
 Is it possible to add options for bigger time frames and filter how many times the price has to touch the line before it is drawn? ex: only draws a line after 2 fractals on the same line. Thanks
 
-
 ---
 
 ## Re: Fractal-based Support/Resistance Lines
@@ -181,7 +165,6 @@ Is it possible to add options for bigger time frames and filter how many times t
 **gimmegimme** · Tue May 24, 2011 9:39 am
 
 Oh, and an option to extend such lines whether it is broken or not. Thanks
-
 
 ---
 
@@ -198,7 +181,6 @@ As for the multiple, confirmation.
 The lines are almost never on the Level.
 Defining a belt or tolerance would be a better solution
 
-
 ---
 
 ## Re: Fractal-based Support/Resistance Lines
@@ -206,7 +188,6 @@ Defining a belt or tolerance would be a better solution
 **gimmegimme** · Tue May 24, 2011 9:41 pm
 
 Even the time frame select would be very useful. I like to trade breakouts of horizontal trend lines more than diagonal ones. There are already many auto trend lines that are diagonal but I don't see any horizontals, other than pivots but that's not really the same as what I look for.
-
 
 ---
 
@@ -218,7 +199,6 @@ Other or biger time frame version of advanced fractal You can find here.
 [viewtopic.php?f=17&t=724&hilit=fractal](https://fxcodebase.com/code/viewtopic.php?f=17&t=724&hilit=fractal)
 
 As for the horizontal trend line, give me time to come up with such an indicator.
-
 
 ---
 
@@ -237,7 +217,6 @@ Here the screenshot before and after the switch to a new bar:
 
 *A few seconds before creating the new bar*
 
-
 ---
 
 ## Re: Fractal-based Support/Resistance Lines
@@ -252,10 +231,7 @@ Hi,
 
 ![FBSR_Risiko_05-b_neues Bar.png](images/12899/FBSR_Risiko_05-b_neues%20Bar.png)
 
-
-
 M y Question: is this behaviour intended or a fault?
-
 
 ---
 
@@ -264,7 +240,6 @@ M y Question: is this behaviour intended or a fault?
 **Apprentice** · Sun Nov 20, 2011 4:45 am
 
 FBSR with Fibonacci levels added.
-
 
 ---
 
@@ -278,7 +253,6 @@ Is it possible to add option price or to select history on data source ?
 
 Thanks.
 
-
 ---
 
 ## Re: Fractal-based Support/Resistance Lines
@@ -287,12 +261,9 @@ Thanks.
 
 ![FBSR.png](images/100647/FBSR.png)
 
-
-
 Make sure to download FBSR.lua from first post in this topic.
 Also you could appreciate Support Resistance indicator.
 [viewtopic.php?f=17&t=59367&hilit=support](https://fxcodebase.com/code/viewtopic.php?f=17&t=59367&hilit=support)
-
 
 ---
 
@@ -308,7 +279,6 @@ Thanks,
 
 jennifer
 
-
 ---
 
 ## Re: Fractal-based Support/Resistance Lines
@@ -321,12 +291,9 @@ Please, see this version.
 
 ![FBSR.PNG](images/102231/FBSR.PNG)
 
-
-
 Download:
 
  [FBSR_With_Fib.lua](files/102231/FBSR_With_Fib.lua)
-
 
 ---
 

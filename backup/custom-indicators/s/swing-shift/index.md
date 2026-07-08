@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=16214  
 > Forum: 17 · Topic 16214 · 6 post(s)
 
-
 ---
 
 ## Swing Shift
@@ -12,15 +11,12 @@
 
 ![SS.png](images/30254/SS.png)
 
-
-
 This indicator shows the percentage change from Swing, High / Low.
 There are two modes.
 Cumulative-sum of all percentage changes.
 Absolute - Change from last Swong Low / High.
 
  [SS.lua](files/30254/SS.lua)
-
 
 ---
 
@@ -30,7 +26,6 @@ Absolute - Change from last Swong Low / High.
 
 MQL4 version of Swing Shift oscillator: [viewtopic.php?f=38&t=61471](https://fxcodebase.com/code/viewtopic.php?f=38&t=61471).
 
-
 ---
 
 ## Re: Swing Shift
@@ -38,7 +33,6 @@ MQL4 version of Swing Shift oscillator: [viewtopic.php?f=38&t=61471](https://fxc
 **Apprentice** · Wed Jun 28, 2017 5:28 am
 
 The indicator was revised and updated.
-
 
 ---
 
@@ -51,7 +45,6 @@ Can you make this indicator compatible for tick charts? You can apply it to tick
 I see it repaints if you refresh the indicator (F5 or double click label and click ok)
 And throws an error ocassionally causing it to crash (error on line 102 if absolute calculation or line 104 if cumulative)
 
-
 ---
 
 ## Re: Swing Shift
@@ -61,7 +54,6 @@ And throws an error ocassionally causing it to crash (error on line 102 if absol
 Fixed.
 Additional checks should prevent error messages.
 
-
 ---
 
 ## Re: Swing Shift
@@ -70,12 +62,14 @@ Additional checks should prevent error messages.
 
 Thanks but I am still getting
 
-Code: [Select all](https://fxcodebase.com/code/)
-`Symbol   Strategy/Indicator   Message   Time
-USD/JPY   SS(USD/JPY.Close, MVA, 100, 0.01, Absolute)   An error occurred during the calculation of the indicator 'SS(USD/JPY.Close, MVA, 100, 0.01, Absolute)'. The error details: C:/Program Files (x86)/Candleworks/FXTS2/Indicators/Custom/SS.lua:128:  Specified index is out of range.   02/03/2018 03:45:06`
+```
+Symbol   Strategy/Indicator   Message   Time
+USD/JPY   SS(USD/JPY.Close, MVA, 100, 0.01, Absolute)   An error occurred during the calculation of the indicator 'SS(USD/JPY.Close, MVA, 100, 0.01, Absolute)'. The error details: C:/Program Files (x86)/Candleworks/FXTS2/Indicators/Custom/SS.lua:128:  Specified index is out of range.   02/03/2018 03:45:06
+```
 
 **@Edit:** I think that might have been because I was still using the old version of the indicator... I see the new one has these lines in it:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`or not MA.DATA:hasData(period)
-   or not MA.DATA:hasData(Anchor)`
+```
+or not MA.DATA:hasData(period)
+   or not MA.DATA:hasData(Anchor)
+```

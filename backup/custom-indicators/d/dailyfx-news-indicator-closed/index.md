@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=603  
 > Forum: 17 · Topic 603 · 19 post(s)
 
-
 ---
 
 ## dailyFX news indicator (closed)
@@ -34,14 +33,12 @@ c) Actual and Forecast values are also shown in the tooltip.
 
 ![news.PNG](images/1071/news.PNG)
 
-
-
 Download the indicator:
 
  [news.lua](files/1071/news.lua)
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("DailyFX News");
     indicator:description("")
     indicator:requiredSource(core.Bar);
@@ -316,8 +313,8 @@ function Update(period, mode)
             ProcessCandle(period + i, ccandle);
         end
     end
-end`
-
+end
+```
 
 ---
 
@@ -329,7 +326,6 @@ Excellent work... as usual. You have been busy lately with all these updates; ju
 
 I wish there was tip/donate button on this website so we could actually get a little extra $ in your hands.
 
-
 ---
 
 ## Re: dailyFX news indicator
@@ -340,7 +336,6 @@ I wish there was tip/donate button on this website so we could actually get a li
 
 Thank you very much for your generous proposal. Our team is really happy to make trader's life easier. Hopefully, money earned on the development and support of the Trading Station, Marketscope applications, the reporting system and Order2Go API (yeah, we are those "bastards" who developed all these client-related things) is enough to support this site. The expression of your satisfaction with these products (and, probably, not only at this site) is the most valuable result of our work. So, if you like it - just do not hesitate to tell about it. It will be the best support of our work.
 
-
 ---
 
 ## Re: dailyFX news indicator
@@ -350,7 +345,6 @@ Thank you very much for your generous proposal. Our team is really happy to make
 Fantastic! I just want to say that I totally agree with Patick Nikolay. You should know that we do not take this for granted. I now have indicators for Marketscope that I for not too long ago could only dream about. By the way, thank you for the Value Charts indicator. I did not know about it at all until you posted it. I have noticed that besides of the basics the Value Charts indicator has some not immediately obvious properties that is very interesting and worth looking into I think.
 
 Thank you very much
-
 
 ---
 
@@ -368,7 +362,6 @@ Any ideas?
 
 thanks
 
-
 ---
 
 ## Re: dailyFX news indicator
@@ -379,7 +372,6 @@ Thank for the report. It looks like the timezone-based request on dailyFX site i
 
 .... and already updated.
 
-
 ---
 
 ## Re: dailyFX news indicator [updated Apr, 21]
@@ -388,7 +380,6 @@ Thank for the report. It looks like the timezone-based request on dailyFX site i
 
 excellant work dear, i will also try this in order to earn money, please tell me that in how much time you reached this stage ?
 
-
 ---
 
 ## Re: dailyFX news indicator [updated Apr, 21]
@@ -396,7 +387,6 @@ excellant work dear, i will also try this in order to earn money, please tell me
 **barbs666** · Thu Apr 29, 2010 12:32 am
 
 Thanks very much for your work, look forward to testing!
-
 
 ---
 
@@ -408,7 +398,6 @@ exelent work!!!
 can you put some diferent color or something for low, medium and high importance,
 thanks!!
 
-
 ---
 
 ## Re: dailyFX news indicator [updated Apr, 21]
@@ -419,7 +408,6 @@ This in our plans...
 
 I apologize that preparing the new release takes so much my time, so I'm just not able to care about fxcodebase as before. I hope that I'll finish and will be completely back in a couple of week.
 
-
 ---
 
 ## Re: dailyFX news indicator [updated Apr, 21]
@@ -427,7 +415,6 @@ I apologize that preparing the new release takes so much my time, so I'm just no
 **a135711** · Wed Jun 30, 2010 10:57 pm
 
 is printing the actual numerical values of economic releases possible? i
-
 
 ---
 
@@ -442,7 +429,6 @@ c) Actual and Forecast values are also shown in the tooltip.
 
 Please download the updated indicator from the top post of this topic ([viewtopic.php?f=17&t=603](https://fxcodebase.com/code/viewtopic.php?f=17&t=603))
 
-
 ---
 
 ## Re: dailyFX news indicator [updated Aug, 02]
@@ -454,7 +440,6 @@ the USD Federal Open Market Committee Rate Decision (AUG 10) is displayed in
 other time.
 if i can fix it, tell me how.
 
-
 ---
 
 ## Re: dailyFX news indicator [updated Aug, 02]
@@ -463,7 +448,6 @@ if i can fix it, tell me how.
 
 Hm... dailyfx displays it at 18:15UTC on the site, but, when csv calendar is requested, it sends it at 14:15. I'll ask dailyfx team why. There is no problem in indicator, rather the problem in the data sent by dailyfx. Anyway, thank for the reporting. This will help dailyfx team to improve their new version of the site.
 
-
 ---
 
 ## Re: dailyFX news indicator [updated Aug, 02]
@@ -471,7 +455,6 @@ Hm... dailyfx displays it at 18:15UTC on the site, but, when csv calendar is req
 **berliner-panda** · Tue Aug 17, 2010 12:14 pm
 
 ...there are no news in the indicator since a couple of days. Is the link to dailyFX again updated? Could anybody help, please!
-
 
 ---
 
@@ -483,7 +466,6 @@ And now they have changed format of the file. They gotta make us all crazy. I'm 
 
 upd: It looked much easier than I expected. They just changed the time format. Fixed. Please reinstall the indicator.
 
-
 ---
 
 ## Re: dailyFX news indicator [updated Aug, 17] (closed)
@@ -492,7 +474,6 @@ upd: It looked much easier than I expected. They just changed the time format. F
 
 Indicator was revised and updated.
 
-
 ---
 
 ## Re: dailyFX news indicator (closed)
@@ -500,7 +481,6 @@ Indicator was revised and updated.
 **LordTwig** · Tue Jul 11, 2017 12:41 am
 
 This is probably one of the best and most important indicators here...Thanks for keeping it alive and updated @ all the team here doing a fabulous job
-
 
 ---
 

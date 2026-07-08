@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=948  
 > Forum: 17 · Topic 948 · 2 post(s)
 
-
 ---
 
 ## Bigger timeframe RSI trend color indicator
@@ -16,10 +15,8 @@ This indicator applies the RSI trend coor ([viewtopic.php?f=17&t=947](https://fx
 
 ![RSI_Trend_Color_MF.png](images/1734/RSI_Trend_Color_MF.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`-- todo: support week offset
+```lua
+-- todo: support week offset
 
 function Init()
     indicator:name("Bigger timeframe RSI");
@@ -266,8 +263,8 @@ function findDateFast(stream, date, precise)
             end
         end
     end
-end`
-
+end
+```
 
 ---
 

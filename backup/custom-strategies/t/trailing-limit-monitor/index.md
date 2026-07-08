@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=66272  
 > Forum: 31 · Topic 66272 · 5 post(s)
 
-
 ---
 
 ## Trailing_Limit_monitor
@@ -14,7 +13,6 @@ Based on request.
 [viewtopic.php?f=27&t=66259](https://fxcodebase.com/code/viewtopic.php?f=27&t=66259)
 
  [Trailing_Limit_monitor.lua](files/119959/Trailing_Limit_monitor.lua)
-
 
 ---
 
@@ -31,7 +29,6 @@ I m uploading a screenshot of settings.
 
 ![Capture.JPG](images/119961/Capture.JPG)
 
-
 ---
 
 ## Re: Trailing_Limit_monitor
@@ -42,7 +39,6 @@ I have the same problem with this similar strategy and no body solve it I wrote 
 
 [viewtopic.php?f=31&t=65947&start=10](https://fxcodebase.com/code/viewtopic.php?f=31&t=65947&start=10)
 
-
 ---
 
 ## Re: Trailing_Limit_monitor
@@ -52,8 +48,8 @@ I have the same problem with this similar strategy and no body solve it I wrote 
 I tried to write to text the trade.Open and trade.Limit
 and trade.Limit gives me result of 0
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function CreateController(trade)
+```lua
+function CreateController(trade)
     local offer = core.host:findTable("offers"):find("Instrument", trade.Instrument);
     local controller = {};
     controller.TradeID = trade.TradeID;
@@ -66,8 +62,8 @@ file:close()
 file:write(trade.Limit)
 file:close()
     return controller;
-end`
-
+end
+```
 
 ---
 

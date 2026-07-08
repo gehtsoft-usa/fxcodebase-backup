@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=10136  
 > Forum: 17 · Topic 10136 · 30 post(s)
 
-
 ---
 
 ## Kalman filter
@@ -25,8 +24,6 @@ if Velocity>0, Kalman have a UP color and if Velocity<0, Kalman have a DN color.
 
 ![Kalman_Filter.png](images/21234/Kalman_Filter.png)
 
-
-
 Download:
 
  [Kalman_Filter.lua](files/21234/Kalman_Filter.lua)
@@ -41,14 +38,11 @@ This indicator will provide Audio / Email Alert Kalman filter Lines color change
 
 ![Kalman_FilterCross Alert.png](images/21234/Kalman_FilterCross%20Alert.png)
 
-
-
 This indicator will provide Audio / Email Alert on Cross of Two Kalman filter Lines.
 
  [Kalman_FilterCross Alert.lua](files/21234/Kalman_FilterCross%20Alert.lua)
 
 Dec 25, 2015: Compatibility issue Fix. _Alert helper is not longer needed.
-
 
 ---
 
@@ -66,7 +60,6 @@ thanks,
 
 sjc
 
-
 ---
 
 ## Re: Kalman filter
@@ -75,7 +68,6 @@ sjc
 
 Your request is added to the development list.
 
-
 ---
 
 ## Re: Kalman filter
@@ -83,7 +75,6 @@ Your request is added to the development list.
 **Apprentice** · Sat Oct 12, 2013 6:36 am
 
 Kalman_FilterCross Alert Added.
-
 
 ---
 
@@ -99,8 +90,8 @@ Below is code from Kalman filter.
 
 Is 'K' updated with each new period close, or is 'K' held constant to the value we input at the start of the indie? Sorry I cannot tell. I add the code here so you do not have to look it up. Thank you!
 
-Code: [Select all](https://fxcodebase.com/code/)
-`local first;
+```lua
+local first;
 local source = nil;
 local K;
 local Sharpness;
@@ -141,8 +132,8 @@ function Update(period, mode)
     Velocity[period]=0;
     KalmanFilter[period]=source[period];
    end
-end`
-
+end
+```
 
 ---
 
@@ -151,7 +142,6 @@ end`
 **Apprentice** · Thu Nov 14, 2013 5:00 am
 
 'K' is held constant to the value we input at the start of the indicator.
-
 
 ---
 
@@ -176,20 +166,20 @@ This below is what I read recently about KAMA..................Whihc may have co
 Basically, we start out estimating our guess of the the average and covariance of the hidden series based upon measurements of the observable series, which in this case are simply the normal parameters N(mean, std) used to generate the random walk. From there, the linear matrix equations are used to estimate the values of cov x and x, using linear matrix operations. The key is that once an estimate is made, the value of the covariance of x is then checked against the actual observable time series value, y, and a parameter called K is adjusted to update the prior estimates. Each time K is updated, the value of the estimate of x is updated via:
 xt_new_est=xt_est + K*(zt - H*x_est). The value of K generally converges to a stable value, when the underlying series is truly gaussian (as seen in fig 1. during the start of the series, it learns). After a few iterations, the optimal value of K is pretty stable, so the model has learned or adapted to the underlying series.
 
-
 ---
 
 ## Re: Kalman filter
 
 **Apprentice** · Fri Nov 15, 2013 3:14 am
 
-Code: [Select all](https://fxcodebase.com/code/)
-`local Distance=source[period]-KalmanFilter[period-1];
+```lua
+local Distance=source[period]-KalmanFilter[period-1];
     local Error=KalmanFilter[period-1]+Distance*ShK;
     Velocity[period]=Velocity[period-1]+Distance*K/100;
-    KalmanFilter[period]=Error+Velocity[period];`
-Adjustment is based on the difference between the closing price and the previous values ​​of KalmanFilter.
+    KalmanFilter[period]=Error+Velocity[period];
+```
 
+Adjustment is based on the difference between the closing price and the previous values ​​of KalmanFilter.
 
 ---
 
@@ -231,7 +221,6 @@ But are we not missing the true 'adaptiveness' of Kalman?
 
 The Kalman filter can be written as a single equation, however it is most often conceptualized as two distinct phases: "Predict" and "Update". The predict phase uses the state estimate from the previous timestep to produce an estimate of the state at the current timestep. This predicted state estimate is also known as the a priori state estimate because, although it is an estimate of the state at the current timestep, it does not include observation information from the current timestep. In the update phase, the current a priori prediction is combined with current observation information to refine the state estimate. This improved estimate is termed the a posteriori state estimate
 
-
 ---
 
 ## Re: Kalman filter
@@ -242,7 +231,6 @@ its entirety possible to have multiple versions ot this indicator.
 As stated, this is a translation of MQ4 template.
 If u have implementation, formula or description you want to use on MarketScope.
 Please post it below.
-
 
 ---
 
@@ -255,7 +243,6 @@ Here is one that purports to be correct. I have no idea how much work it is to c
 
 Can you try it?
 
-
 ---
 
 ## Re: Kalman filter
@@ -264,7 +251,6 @@ Can you try it?
 
 It have very different code, it is also much more complex.
 Added to the development list.
-
 
 ---
 
@@ -278,7 +264,6 @@ I am pretty certain others who understand adaptiveness will immediately put it t
 I hold my breath hoping you get the time to add this valuable indicator to all or our toolboxes!
 Keep up the great work!
 P
-
 
 ---
 
@@ -296,7 +281,6 @@ P
 
 +1
 
-
 ---
 
 ## Re: Kalman filter
@@ -311,7 +295,6 @@ sjc
 
 +1
 
-
 ---
 
 ## Re: Kalman filter
@@ -320,7 +303,6 @@ sjc
 
 I want an alert every time the filter changes colors. Thank You.
 
-
 ---
 
 ## Re: Kalman filter
@@ -328,7 +310,6 @@ I want an alert every time the filter changes colors. Thank You.
 **Apprentice** · Tue Dec 31, 2013 4:57 am
 
 Kalman_Filter with Alert Added
-
 
 ---
 
@@ -343,7 +324,6 @@ Have great holidays!
 All the very best to all!
 Patrick
 
-
 ---
 
 ## Re: Kalman filter
@@ -351,7 +331,6 @@ Patrick
 **Apprentice** · Wed Jan 01, 2014 3:09 am
 
 Please explain, I do not understand your request.
-
 
 ---
 
@@ -362,7 +341,6 @@ Please explain, I do not understand your request.
 Happy New Year!
 8 posts above this one I attached an MT4 alternative implementation of the Kalman Filter that I think actually has an adaptive 'K' as opposed to the current MScope Kalman implementation that only adapts by looking back (instead of using an adaptive K). YOu enthusiastically added it to the development que and I am hoping that its translation to lua could be done soon? When I requested an 'adaptive K'- based Kalman you had kindly asked me to provide some code....which is what is attached above (8 posts above). Again, happy new year and I hope all goes well! The adaptive K in the Kalman Filter is what really makes Kalman different than other MAs....in that it adjusts the *K* itself.
 Patrick
-
 
 ---
 
@@ -380,7 +358,6 @@ I hope so!
 
 All the best! Patrick
 
-
 ---
 
 ## Re: Kalman filter
@@ -392,7 +369,6 @@ I have been using the Kalman indicator for a few months know . what I would like
  Thank you in advance
  Mark
 
-
 ---
 
 ## Re: Kalman filter
@@ -400,7 +376,6 @@ I have been using the Kalman indicator for a few months know . what I would like
 **Apprentice** · Sat May 31, 2014 7:47 am
 
 Can you describe such a strategy.
-
 
 ---
 
@@ -410,7 +385,6 @@ Can you describe such a strategy.
 
 Apprentice ,I am adding a picture of how the strategy will work .In the pic when the color changes from red to green it will take a long trade and when it goes green to red it takes a short trade .there will be no stops or limits it will just follow the market all week . I hope this picture helps . Mark
 
-
 ---
 
 ## Re: Kalman filter
@@ -419,7 +393,6 @@ Apprentice ,I am adding a picture of how the strategy will work .In the pic when
 
 Requested can be found here.
 [viewtopic.php?f=31&t=60754](https://fxcodebase.com/code/viewtopic.php?f=31&t=60754)
-
 
 ---
 
@@ -433,7 +406,6 @@ Apprentice,
  New Member
  Mark
 
-
 ---
 
 ## Re: Kalman filter
@@ -441,7 +413,6 @@ Apprentice,
 **Apprentice** · Tue Jul 18, 2017 6:48 am
 
 The indicator was revised and updated.
-
 
 ---
 
@@ -453,7 +424,6 @@ Hello Apprentice,
 
 could we please , have price overlay for Kalman_Filter with Alert.lua based on every time line change his color with my appreciation. (and if you please, to add this kind of price overlay to Generic Overlay Indicator filter types of overlay .that will be great help to us with many many thanks) .
 
-
 ---
 
 ## Re: Kalman filter
@@ -461,7 +431,6 @@ could we please , have price overlay for Kalman_Filter with Alert.lua based on e
 **Apprentice** · Wed Aug 15, 2018 5:55 am
 
 Kalman_Filter Overlay.lua added.
-
 
 ---
 

@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=29&t=2358  
 > Forum: 29 · Topic 2358 · 2 post(s)
 
-
 ---
 
 ## SHI Channel signal
@@ -18,10 +17,8 @@ Strategy can work with direct or reverse signals.
 
 ![SHI_Channel_Signal.png](images/5074/SHI_Channel_Signal.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     strategy:name("SHI Channel Signal");
     strategy:description("SHI Channel Signal");
 
@@ -171,8 +168,8 @@ function ExtUpdate(id, source, period)
     end
 end
 
-dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");`
-
+dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");
+```
 
 ---
 

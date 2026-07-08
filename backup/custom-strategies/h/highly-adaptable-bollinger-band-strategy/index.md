@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=63644  
 > Forum: 31 · Topic 63644 · 31 post(s)
 
-
 ---
 
 ## Highly adaptable Bollinger Band Strategy
@@ -11,8 +10,6 @@
 **Apprentice** · Tue Jul 05, 2016 3:07 pm
 
 ![EURUSD m5 (07-05-2016 2135).png](images/107009/EURUSD%20m5%20%2807-05-2016%202135%29.png)
-
-
 
 You can decide which action strategy will take if we have Top/Bottom/Centaral line cross over/under.
 
@@ -28,7 +25,6 @@ TrendStop is available here.
 
 MT4/MQ4 version is available here
 [viewtopic.php?f=38&t=64536](https://fxcodebase.com/code/viewtopic.php?f=38&t=64536)
-
 
 ---
 
@@ -50,7 +46,6 @@ Selector
 
  Thank you
 
-
 ---
 
 ## Re: Highly adaptable Bollinger Band Strategy
@@ -60,7 +55,6 @@ Selector
 Major update.
  End of turn/live added.
 
-
 ---
 
 ## Re: Highly adaptable Bollinger Band Strategy
@@ -68,7 +62,6 @@ Major update.
 **Apprentice** · Sat Dec 17, 2016 9:32 am
 
 Strategy was revised and updated.
-
 
 ---
 
@@ -79,16 +72,16 @@ Strategy was revised and updated.
 > **Apprentice wrote:**
 > Strategy was revised and updated.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`Bonjour
+```
+Bonjour
 Serait-il possible d’ajouter un filtre
 TRENDSTOP avec différents périodes
 Exemple  pour le filtre
 TRENDSTOP
 Time frame : 40
 Période : 20
-Merci de votre futur travaille`
-
+Merci de votre futur travaille
+```
 
 ---
 
@@ -105,7 +98,6 @@ Time frame: 40
 Period: 20
 Thank you for your future work
 
-
 ---
 
 ## Re: Highly adaptable Bollinger Band Strategy
@@ -114,7 +106,6 @@ Thank you for your future work
 
 Your request is added to the development list, Under Id Number 3741
  If someone is interested to do this task, please contact me.
-
 
 ---
 
@@ -132,7 +123,6 @@ I loved how you could change the buy/sell depending on cross above or below each
 
 It would be greatly appreciated!!!!
 
-
 ---
 
 ## Re: Highly adaptable Bollinger Band Strategy
@@ -140,7 +130,6 @@ It would be greatly appreciated!!!!
 **Apprentice** · Thu Feb 16, 2017 3:54 am
 
 Highly adaptable Bollinger Band Strategy with Trend Stop Filter Added.
-
 
 ---
 
@@ -158,7 +147,6 @@ Highly adaptable BB_ANALYSER
 [viewtopic.php?f=31&t=64447](https://fxcodebase.com/code/viewtopic.php?f=31&t=64447)
 
 Merci de votre futur travail
-
 
 ---
 
@@ -182,7 +170,6 @@ If possible can you make the same filter for this strategy?
 
 Thank you for your future work
 
-
 ---
 
 ## Re: Highly adaptable Bollinger Band Strategy
@@ -192,7 +179,6 @@ Thank you for your future work
 Your request is added to the development list, Under Id Number 3768
  If someone is interested to do this task, please contact me.
 
-
 ---
 
 ## Re: Highly adaptable Bollinger Band Strategy
@@ -200,7 +186,6 @@ Your request is added to the development list, Under Id Number 3768
 **Apprentice** · Fri Mar 17, 2017 5:51 am
 
 Try it now.
-
 
 ---
 
@@ -210,7 +195,6 @@ Try it now.
 
 MT4/MQ4 version is available here
 [viewtopic.php?f=38&t=64536](https://fxcodebase.com/code/viewtopic.php?f=38&t=64536)
-
 
 ---
 
@@ -224,7 +208,6 @@ Based on the request.
  [Highly adaptable Bollinger Band Strategy with Trend Stop Filter.lua](files/115774/Highly%20adaptable%20Bollinger%20Band%20Strategy%20with%20Trend%20Stop%20Filter.lua)
 
  [Highly adaptable Bollinger Band Strategy.lua](files/115774/Highly%20adaptable%20Bollinger%20Band%20Strategy.lua)
-
 
 ---
 
@@ -283,7 +266,6 @@ lower cross: buy – upper cross: sell
 
 Use general order settings.
 
-
 ---
 
 ## Re: Highly adaptable Bollinger Band Strategy
@@ -291,7 +273,6 @@ Use general order settings.
 **Apprentice** · Tue Apr 24, 2018 8:32 am
 
 Your request is added to the development list under Id Number 4122
-
 
 ---
 
@@ -303,7 +284,6 @@ hi there can you please add adx filter to this strategy
 
 trade only if the adx is above a specific level thanks
 
-
 ---
 
 ## Re: Highly adaptable Bollinger Band Strategy
@@ -312,7 +292,6 @@ trade only if the adx is above a specific level thanks
 
 Your request is added to the development list.
 Development reference 67.
-
 
 ---
 
@@ -323,7 +302,6 @@ Development reference 67.
 [Highly adaptable BB ADX Filter Strategy.lua](files/140172/Highly%20adaptable%20BB%20ADX%20Filter%20Strategy.lua)
 
 Version with ADX filter.
-
 
 ---
 
@@ -337,7 +315,6 @@ if the equity reach a certain % or $ profit or loss the strategy will pause who 
 
 thanks
 
-
 ---
 
 ## Re: Highly adaptable Bollinger Band Strategy
@@ -346,7 +323,6 @@ thanks
 
 Your request is added to the development list.
 Development reference 228.
-
 
 ---
 
@@ -358,7 +334,6 @@ Development reference 228.
 
 Try this version.
 
-
 ---
 
 ## Re: Highly adaptable Bollinger Band Strategy
@@ -369,7 +344,6 @@ hi there the can you please edit the last strategy and close all open position w
 
 thanks
 
-
 ---
 
 ## Re: Highly adaptable Bollinger Band Strategy
@@ -378,7 +352,6 @@ thanks
 
 Your request is added to the development list.
 Development reference 238.
-
 
 ---
 
@@ -389,7 +362,6 @@ Development reference 238.
 [Highly adaptable BB ADX Filter Strategy.lua](files/140985/Highly%20adaptable%20BB%20ADX%20Filter%20Strategy.lua)
 
 Try this version.
-
 
 ---
 
@@ -402,7 +374,6 @@ so instead of buy or sell MO action, parameters would be SE/LE - Buy or sell x p
 
 Thanks
 
-
 ---
 
 ## Re: Highly adaptable Bollinger Band Strategy
@@ -411,7 +382,6 @@ Thanks
 
 Your request is added to the development list.
 Development reference 51.
-
 
 ---
 
@@ -427,7 +397,6 @@ And if possible add a trend stop with: supertrend.lua
 
 Thank you for your future work
 
-
 ---
 
 ## Re: Highly adaptable Bollinger Band Strategy
@@ -436,7 +405,6 @@ Thank you for your future work
 
 We have added your request to the development list.
 Development reference 596
-
 
 ---
 

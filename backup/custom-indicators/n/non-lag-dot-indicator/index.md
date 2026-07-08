@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=1721  
 > Forum: 17 · Topic 1721 · 29 post(s)
 
-
 ---
 
 ## Non lag Dot indicator
@@ -16,10 +15,8 @@
 
 ![NonLagDot.png](images/3438/NonLagDot.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("NonLagDot indicator");
     indicator:description("NonLagDot indicator");
     indicator:requiredSource(core.Tick);
@@ -115,7 +112,8 @@ function Update(period, mode)
      end
 
     end
-end`
+end
+```
 
  [NonLagDot.lua](files/3438/NonLagDot.lua)
 
@@ -128,7 +126,6 @@ New Versions By Apprentice
 MT4/MQ4 version.
 [viewtopic.php?f=38&t=69002](https://fxcodebase.com/code/viewtopic.php?f=38&t=69002)
 
-
 ---
 
 ## Re: Non lag Dot indicator
@@ -136,7 +133,6 @@ MT4/MQ4 version.
 **patick** · Wed Aug 11, 2010 5:56 am
 
 Perhaps this was a design flaw in the orig indicator, but looks like there might be a repainting issue:
-
 
 ---
 
@@ -146,7 +142,6 @@ Perhaps this was a design flaw in the orig indicator, but looks like there might
 
 From your pic I see what you mean however trading an H1 or longer after the close of the candle I do not see this repainting. You will notice that when looking at the dots color there are breaks by a few candles and then the trend may continue. I use this as the signal in my system compared to a condition with a trend indicator. Maybe compare a short term and long term nonlagdot system? That would be an interesting EA.
 
-
 ---
 
 ## Re: Non lag Dot indicator
@@ -154,7 +149,6 @@ From your pic I see what you mean however trading an H1 or longer after the clos
 **briansummy** · Thu Mar 08, 2012 9:52 am
 
 I just realized, an MTF Nonlagdot would be amazing. Is this possible?
-
 
 ---
 
@@ -166,7 +160,6 @@ Is there any way to make a strategy based on this indicator?
 
 Buy after first blue dot and sell after first red dot.
 
-
 ---
 
 ## Re: Non lag Dot indicator
@@ -177,7 +170,6 @@ aricanderson:
 Can you define the Entry, Exit conditions.
 briansummy :
 Your request is added to the development list.
-
 
 ---
 
@@ -194,7 +186,6 @@ Use parameter "Period" for other TF:
 
 ![Period.PNG](images/27944/Period.PNG)
 
-
 ---
 
 ## Re: Non lag Dot indicator
@@ -202,7 +193,6 @@ Use parameter "Period" for other TF:
 **briansummy** · Tue Mar 13, 2012 9:52 pm
 
 Perfect! Thanks!
-
 
 ---
 
@@ -212,7 +202,6 @@ Perfect! Thanks!
 
 Can you do a strategy with NonLagDot in agreement with Parabolic SAR where the dot is the signal and SAR sets trend agreement?
 
-
 ---
 
 ## Re: Non lag Dot indicator
@@ -221,7 +210,6 @@ Can you do a strategy with NonLagDot in agreement with Parabolic SAR where the d
 
 Your request is added to the list of developers.
 
-
 ---
 
 ## Re: Non lag Dot indicator
@@ -229,7 +217,6 @@ Your request is added to the list of developers.
 **briansummy** · Tue Mar 20, 2012 8:52 pm
 
 I have been watching this on a m1 chart and yes it does repaint. Is there anything to prevent this? It looks similar to Fractals with a 3 bar count to calculate.
-
 
 ---
 
@@ -240,7 +227,6 @@ I have been watching this on a m1 chart and yes it does repaint. Is there anythi
 New Version Added.
 Old Version Updated.
 
-
 ---
 
 ## Re: Non lag Dot indicator
@@ -250,7 +236,6 @@ Old Version Updated.
 MTF version can b found here.
 [viewtopic.php?f=17&t=15574&p=29351#p29351](https://fxcodebase.com/code/viewtopic.php?f=17&t=15574&p=29351#p29351)
 
-
 ---
 
 ## Re: Non lag Dot indicator
@@ -259,7 +244,6 @@ MTF version can b found here.
 
 NLD SAR strategy can be found here.
 [viewtopic.php?f=31&t=15659](https://fxcodebase.com/code/viewtopic.php?f=31&t=15659)
-
 
 ---
 
@@ -275,7 +259,6 @@ sjc
 
 [http://www.mql5.com/en/code/1296](http://www.mql5.com/en/code/1296)
 
-
 ---
 
 ## Re: Non lag Dot indicator
@@ -283,7 +266,6 @@ sjc
 **Apprentice** · Sun Jun 02, 2013 12:09 pm
 
 Your request is added to the development list.
-
 
 ---
 
@@ -297,14 +279,11 @@ Version of Non Lag Dot with Averages indicator:
 
 ![NonLagDot_Averages.PNG](images/67058/NonLagDot_Averages.PNG)
 
-
-
 Download:
 
  [Nonlagdot_Averages.lua](files/67058/Nonlagdot_Averages.lua)
 
 For this indicator must be installed Averages indicator ([viewtopic.php?f=17&t=2430](https://fxcodebase.com/code/viewtopic.php?f=17&t=2430)).
-
 
 ---
 
@@ -320,14 +299,11 @@ For this indicator must be installed Averages indicator ([viewtopic.php?f=17&t=2
 
 ![NonLagDot_MACD.PNG](images/67059/NonLagDot_MACD.PNG)
 
-
-
 Download:
 
  [Non_Lag_Dot_MACD.lua](files/67059/Non_Lag_Dot_MACD.lua)
 
 For this indicator must be installed Averages indicator ([viewtopic.php?f=17&t=2430](https://fxcodebase.com/code/viewtopic.php?f=17&t=2430)) and Nonlagdot_Averages indicator.
-
 
 ---
 
@@ -337,7 +313,6 @@ For this indicator must be installed Averages indicator ([viewtopic.php?f=17&t=2
 
 MQL4 version of this indicators: [viewtopic.php?f=38&t=40966](https://fxcodebase.com/code/viewtopic.php?f=38&t=40966)
 
-
 ---
 
 ## Re: Non lag Dot indicator
@@ -345,7 +320,6 @@ MQL4 version of this indicators: [viewtopic.php?f=38&t=40966](https://fxcodebase
 **Apprentice** · Tue May 23, 2017 6:03 am
 
 Indicator was revised and updated.
-
 
 ---
 
@@ -359,7 +333,6 @@ I want the 'Non Lag Dot' indicator to repaint maximum one candle behind. What pa
 
 Regards,
 
-
 ---
 
 ## Re: Non lag Dot indicator
@@ -368,7 +341,6 @@ Regards,
 
 Your request is added to the development list, Under Id Number 3889
  If someone is interested to do this task, please contact me.
-
 
 ---
 
@@ -387,7 +359,6 @@ Colorback=1 for 1 candle behind
 or
 Colorback=0 for no repainting.
 
-
 ---
 
 ## Re: Non lag Dot indicator
@@ -400,7 +371,6 @@ Got it!
 
 Regards
 
-
 ---
 
 ## Re: Non lag Dot indicator
@@ -408,7 +378,6 @@ Regards
 **Apprentice** · Sun Sep 23, 2018 7:04 am
 
 The Indicator was revised and updated.
-
 
 ---
 
@@ -421,7 +390,6 @@ The Indicator was revised and updated.
 
 Can this Non lag Dot indicator be made fro MT4, with NoRepaint Version?
 
-
 ---
 
 ## Re: Non lag Dot indicator
@@ -430,7 +398,6 @@ Can this Non lag Dot indicator be made fro MT4, with NoRepaint Version?
 
 Your request is added to the development list.
 Development reference 159.
-
 
 ---
 
@@ -442,7 +409,6 @@ Development reference 159.
 > Your request is added to the list of developers.
 
 Thanks!
-
 
 ---
 

@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=2901  
 > Forum: 31 · Topic 2901 · 103 post(s)
 
-
 ---
 
 ## Close strategy
@@ -16,7 +15,6 @@ Download:
 
  [LevelCloseStrategy.lua](files/6627/LevelCloseStrategy.lua)
 
-
 ---
 
 ## Re: Close strategy
@@ -26,7 +24,6 @@ Download:
 That's PERFECT. It is exactly what I want!!!
 
 Thanx a lot for your services
-
 
 ---
 
@@ -46,7 +43,6 @@ Thank You for taking the time.
 Regards
 Ancient
 
-
 ---
 
 ## Re: Close strategy
@@ -59,7 +55,6 @@ Can someone explain what this Strategy is meant to do?
 
 Regards
 
-
 ---
 
 ## Re: Close strategy
@@ -67,7 +62,6 @@ Regards
 **Jason Rogers** · Wed Dec 08, 2010 4:41 pm
 
 I tested the strategy and it's sending the order to "Close All Positions for Symbol" rather than "Close All Positions". So if I have multiple currency pairs open, it will only close the trades which I have the strategy attached to. And if I attach the strategy to both currency pairs and set the profit target to say $100, it will close all trades in 1 currency pair when total profit reaches $100 but remaining trades stay open. The remaining trades will only close when the profit on remaining trades goes back up to $100.
-
 
 ---
 
@@ -81,7 +75,6 @@ I tested the strategy and it's sending the order to "Close All Positions for Sym
 Xmmm.... I suppose I m wrong. I thought that strategy close ALL pairs, but it's close only a pair.
 Dear Alexander.Gettinger, can you fix it? I have a similar strategy for MT4 and I can send it to you if it 's help you to translate it.
 
-
 ---
 
 ## Re: Close strategy
@@ -91,7 +84,6 @@ Dear Alexander.Gettinger, can you fix it? I have a similar strategy for MT4 and 
 The name of this Strategy requires to be worded such that it more correctly describes its purpose.
 
 If this is not possible, a brief explanation of the Strategy's Logical application would be useful. If this is also not possible, then possibly this Strategy should only exist on the Members pc that requested its development.
-
 
 ---
 
@@ -116,7 +108,6 @@ Private messageE-mail
 
 This Strategy does anything else other than the initial request! For the life of me I cannot understand how Alepan came back so happy and content, thanking for the development of the Strategy he requested???
 
-
 ---
 
 ## Re: Close strategy
@@ -138,7 +129,6 @@ This Strategy does anything else other than the initial request! For the life of
 
 Gross P/L
 
-
 ---
 
 ## Re: Close strategy
@@ -158,7 +148,6 @@ For [LevelType]=BELOW. If profit/loss less than [ProfitLevel] strategy close all
 
 This strategy is a Stop/Limit level for all account, not for one order.
 
-
 ---
 
 ## Re: Close strategy
@@ -171,7 +160,6 @@ This strategy is a Stop/Limit level for all account, not for one order.
 OK.
 I shall do this.
 
-
 ---
 
 ## Re: Close strategy
@@ -180,7 +168,6 @@ I shall do this.
 
 Strategy updated.
 Added possibility to choice symbol for checking profit and closing.
-
 
 ---
 
@@ -192,7 +179,6 @@ That 's it!!! I test it and work properly
 Thanx all of you!
 Kisses from Greece!
 
-
 ---
 
 ## Re: Close strategy
@@ -202,7 +188,6 @@ Kisses from Greece!
 It's working great now on my account with FXCM UK.
 
 I tested it on an FXCM US demo from FXCM.com, but it's giving error message "EUR/USD	LEVELCLOSESTRATEGY (1)(EUR/USD)	Open order failedThe command is disabled.	12/09/2010 15:34:50	1.32330" .
-
 
 ---
 
@@ -219,7 +204,6 @@ PM me if you want more. I m glad to "EXCHANGE" oppinions.
 
 ![levelclose.png](images/6680/levelclose.png)
 
-
 ---
 
 ## Re: Close strategy
@@ -229,7 +213,6 @@ PM me if you want more. I m glad to "EXCHANGE" oppinions.
 Tested the revision, it is now working.
 
 Nice Example of SDK's potential!
-
 
 ---
 
@@ -266,7 +249,6 @@ Just my 2 cents.
 Regards
 Ancient
 
-
 ---
 
 ## Re: Close strategy
@@ -284,7 +266,6 @@ Hopefully Alexander will find the time to make the necessary additions.
 Regards
 Ancient
 
-
 ---
 
 ## Re: Close strategy
@@ -295,7 +276,6 @@ Ancient
 > Hopefully Alexander will find the time to make the necessary additions.
 
 Yes, I shall find time.
-
 
 ---
 
@@ -308,7 +288,6 @@ Yes, I shall find time.
 
 Please, see this indicator: [viewtopic.php?f=17&t=2948](https://fxcodebase.com/code/viewtopic.php?f=17&t=2948)
 
-
 ---
 
 ## Re: Close strategy
@@ -320,7 +299,6 @@ Does exists the probability I select who from the pairs will manage the strategy
 For example: Now I can select "all" or a specific pair. I would want to be possible to choose the three of the six open currencies (I have an open position of eurusd, eurjpy, gbpusd, oil, fra40. I would want to setup the strategy to manage ONLY eurusd, fra40 and oil).
 Is it possible?
 Thanx a lot and sorry for my english....
-
 
 ---
 
@@ -344,7 +322,6 @@ What is missing from The Strategy is the ability to Select Instruments **"Ctrl S
 
 Presently the Options are ALL or ONE, requires Ctrl Select Instruments.
 
-
 ---
 
 ## Re: Close strategy
@@ -359,8 +336,6 @@ Could you please add the following Options to this Strategy as per Image below:
 
 ![Account Select.jpg](images/6773/Account%20Select.jpg)
 
-
-
 1) The Ability to Select Multiple Symbols
  Presently the Option is ALL or ONE
 2) the Ability to Select Multiple or All Accounts
@@ -368,7 +343,6 @@ Could you please add the following Options to this Strategy as per Image below:
 
 Thank You
 Ancient
-
 
 ---
 
@@ -385,7 +359,6 @@ Is there a way you can make this into an ALERT? No need to close out the positio
 Thank you!
 4xtr8r
 
-
 ---
 
 ## Re: Close strategy
@@ -401,7 +374,6 @@ Lets hope Alexander finds the desire to entertain the whole list of requests her
 
 Regards
 Ancient
-
 
 ---
 
@@ -421,7 +393,6 @@ Ancient
 
 Have you tested to see whether this as is, is already working for US accounts? I viewed the code and from what I see it should.
 
-
 ---
 
 ## Re: Close strategy
@@ -438,7 +409,6 @@ couple of comments/questions
 
 thanks,
 4xtr8r
-
 
 ---
 
@@ -465,7 +435,6 @@ thanks,
 
 I asked Jason from FXCM and he said it does not work for US clients. Anyways, he said it should work as an alert... so i'm testing it now.
 
-
 ---
 
 ## Re: Close strategy
@@ -477,7 +446,6 @@ i've tried testing it and doesnt seem to work. not even the alert.
 can you explain what the parameters should be? what each field means?
 
 thanks.
-
 
 ---
 
@@ -495,7 +463,6 @@ thanks.
 Goodmorning friend.
 Do you have install the patch below? Many strategies does n't work without it.
 [http://fxcodebase.com/code/viewtopic.php?f=31&t=2337](https://fxcodebase.com/code/viewtopic.php?f=31&t=2337)
-
 
 ---
 
@@ -533,7 +500,6 @@ You may want to view my suggestions in previous posts pertaining to what still n
 Regards
 Ancient
 
-
 ---
 
 ## Re: Close strategy
@@ -558,7 +524,6 @@ Ancient
 
 Thank you! Installed new version. Will try again.
 
-
 ---
 
 ## Re: Close strategy
@@ -566,7 +531,6 @@ Thank you! Installed new version. Will try again.
 **4xtr8r** · Tue Dec 21, 2010 10:44 am
 
 @Ancient --> Thank you.
-
 
 ---
 
@@ -590,7 +554,6 @@ Regards
 Ancient
 
 **PS: I have made reference pertaining to commenting the code such that User is given the ability to Select any number of pairs according to preference many times. If this for some reason cannot be done please inform as such!**
-
 
 ---
 
@@ -623,7 +586,6 @@ Finally, I am requesting from Alexander to either please comment the code such t
 Regards
 Ancient
 
-
 ---
 
 ## Re: Close strategy
@@ -640,7 +602,6 @@ Please advise. Thanks.
 
 4xtr8r
 
-
 ---
 
 ## Re: Close strategy
@@ -648,7 +609,6 @@ Please advise. Thanks.
 **Ancient** · Thu Dec 30, 2010 2:17 am
 
 Have you tried entering the path to the sound file?
-
 
 ---
 
@@ -671,7 +631,6 @@ Kindest Regards,
 
 JJ
 
-
 ---
 
 ## Re: Close strategy
@@ -693,7 +652,6 @@ Facing the same problem. The currency selection is disabled once the strategy cl
 
 *Currency list shows first time*
 
-
 ---
 
 ## Re: Close strategy
@@ -706,7 +664,6 @@ Menu is Strategies --> Manage Strategies.
 
  Select the strategy and start it again. When it goes green you can change the settings.
 
-
 ---
 
 ## Re: Close strategy
@@ -716,24 +673,25 @@ Menu is Strategies --> Manage Strategies.
 Probably found the solution as well. Maybe OP can update in the next version.
 Original code
 
-Code: [Select all](https://fxcodebase.com/code/)
-`while true do
+```lua
+while true do
      local row = enum:next();
      if row == nil then break end
      strategy.parameters:addStringAlternative("Symbol", row.Instrument, "", row.Instrument);
-    end`
+    end
+```
 
 New code . Only change is the addition of code line enum:reset(); immediately after end
 
-Code: [Select all](https://fxcodebase.com/code/)
-`while true do
+```lua
+while true do
      local row = enum:next();
      if row == nil then break end
      strategy.parameters:addStringAlternative("Symbol", row.Instrument, "", row.Instrument);
     end
 -- addition 
- enum:reset();`
-
+ enum:reset();
+```
 
 ---
 
@@ -749,7 +707,6 @@ Regards,
 
 Alex
 
-
 ---
 
 ## Re: Close strategy
@@ -757,7 +714,6 @@ Alex
 **Apprentice** · Mon Jan 17, 2011 1:06 pm
 
 If you are using Trade Station II (Marketskop) you can use this strategy.
-
 
 ---
 
@@ -768,7 +724,6 @@ If you are using Trade Station II (Marketskop) you can use this strategy.
 This strategy is EXACTLY what I need, which is why this is so frustrating! Why will this not work on US accounts? Applied it yesterday to a US practice account and, as has been noted in this thread, I just got a series of error notifications. I assume that the problem has something to do with our lovely FIFO handicap here in the States, but is there NO WAY around this? I just want ALL of my positions to close when I get to a certain Total Gain / Loss. Is there anything that can be done for us poor souls under the CFTC's thumb, er, protection?
 
 Any help you can give would be greatly appreciated.
-
 
 ---
 
@@ -788,7 +743,6 @@ Many thanks
 
 Nid007
 
-
 ---
 
 ## Re: Close strategy
@@ -802,7 +756,6 @@ There is a problem with the sound file with this stratagy, it will not allow me 
 Much love guys. XX
 lisa_baby_xx
 
-
 ---
 
 ## Re: Close strategy
@@ -810,7 +763,6 @@ lisa_baby_xx
 **Apprentice** · Fri Jun 03, 2011 11:27 am
 
 Sound bug fixed.
-
 
 ---
 
@@ -823,7 +775,6 @@ Hi,
 Is there a way you can set how many lots you would like to sell instead of it selling everything?
 
 Thank you!
-
 
 ---
 
@@ -884,7 +835,6 @@ Thank you!
 
 -------------------------------------
 
-
 ---
 
 ## Re: Close strategy
@@ -895,7 +845,6 @@ Hi everybody,
 I tried to test the level close strategy, but it appear the following error: string 90 unsopported! What does it means? What I have to do?
 Thank you
 
-
 ---
 
 ## Re: Close strategy
@@ -903,7 +852,6 @@ Thank you
 **sunshine** · Fri Feb 10, 2012 6:54 am
 
 The version of the strategy which supports US accounts is attached.
-
 
 ---
 
@@ -914,7 +862,6 @@ The version of the strategy which supports US accounts is attached.
 Thank you for developing this. For some reason every time the strategy activates and closes the open positions it turns itself off. I am using FXCM Trade Station II. Can you advise on this?
 
 Thank you
-
 
 ---
 
@@ -930,7 +877,6 @@ Thank you
 That's suppose to happen to prevent unwanted action after it has done what it's suppose to. After securing your profit it will stop. It's possible to make it not stop though, I can make an option for it if you really have considered the consequences and want it.
 
 I think the purpose of this strategy is to close with a Daily profit, or what ever time period you are at. Then you are suppose to enter your trades and so on again, and start this strategy afterwards, and let it close at profit again. Then you repeat this. Maybe you don't want to close at same profit every time too, then you gotta restart strategy anyway. So I think it's good that it stops.
-
 
 ---
 
@@ -953,7 +899,6 @@ Trading Parameters would be the same although I don't see the need for Symbol Al
 
 Is this possible?
 
-
 ---
 
 ## Re: Close strategy
@@ -961,7 +906,6 @@ Is this possible?
 **Apprentice** · Thu Apr 26, 2012 2:28 am
 
 Thank you for the suggestions, I see no reason why this would not be possible.
-
 
 ---
 
@@ -976,7 +920,6 @@ the BUY positions of a certain currency or only all the SELL positions ?
 
 Thanks Julio.
 
-
 ---
 
 ## Re: Close strategy
@@ -984,7 +927,6 @@ Thanks Julio.
 **Apprentice** · Mon May 14, 2012 1:59 pm
 
 This option can b addded.
-
 
 ---
 
@@ -996,7 +938,6 @@ So, we still do not have strategy that the automatically close position with sel
 
 Thanks for your help.
 
-
 ---
 
 ## Re: Close strategy
@@ -1007,7 +948,6 @@ Hi,
 Can anybody help me to explain how to write a simple code to close a specific open trade? For example, if I have three open trade open from my startegy, during opening of each trade how I can store the Trade.ID and later I can call-up this Trade.ID to close it (close one trade out of three open trades)
 
 Thanks
-
 
 ---
 
@@ -1024,7 +964,6 @@ Close 2 tickets simultaneously when hit combined profit
 To close 2 tickets (any symbol, e.g. 'buy' EUR/USD with 'sell' EUR/JPY) at the same time, when the aggregate profit (of the 2 tickets) hits a targeted profit.
 
 Well, my idea is the program should allow user to manually key in the 2 tickets number, and set the targeted profit. Ideally, user should be able to have multiple sets of this program running at the same time e.g. 1st set - 'buy' EUR/USD with 'sell' EUR/JPY; 2nd set - 'buy' EUR/JPY with 'sell' EUR/USD; 3rd set - 'buy' CHF/JPY with 'sell' USD/JPY; 4th set - 'buy' GBP/USD with 'sell' EUR/JPY and so on.
-
 
 ---
 
@@ -1050,7 +989,6 @@ thank you Alex ,,,^^
 
 -willie-
 
-
 ---
 
 ## Re: Close strategy
@@ -1064,7 +1002,6 @@ Open new position, not to close, existing one.
 Or offer a choice, Close Existing or Open New One.
 
 Can you confirm that.
-
 
 ---
 
@@ -1094,7 +1031,6 @@ thank you n have a nice day ,,,^^
 
 -willie-
 
-
 ---
 
 ## Re: Close strategy
@@ -1102,7 +1038,6 @@ thank you n have a nice day ,,,^^
 **luigipg** · Thu Oct 31, 2013 9:40 am
 
 Hi apprentice, can You add to this strategy the ability to close all opened positions (all currencies) when the "Equity" reaches a specified ammount? Thanks a lot for ever. Luigi!!!
-
 
 ---
 
@@ -1112,7 +1047,6 @@ Hi apprentice, can You add to this strategy the ability to close all opened posi
 
 Your request is added to the development list.
 
-
 ---
 
 ## Re: Close strategy
@@ -1120,7 +1054,6 @@ Your request is added to the development list.
 **mfoster** · Wed Oct 15, 2014 12:33 pm
 
 I am getting two errors when I load this strategy. Could someone please correct this? Thanks
-
 
 ---
 
@@ -1134,7 +1067,6 @@ This strategy is quite cool and thanks for it however I would have an idea to ma
 
 The S/L part is OK with me but I would change the T/P logic adding a [TrailingProfit].
 For example the [ProfitLevel] is set to $500 and the [TrailingProfit] to $100 -> if the Gross P/L reaches the $500 the strategy doesn't close any deals but set the S/L to $400. If the P/L goes up to $600 ( [ProfitLevel] + [TrailingProfit] ) then it sets the S/L to $500 which is then trailing by the [TrailingProfit]
-
 
 ---
 
@@ -1150,7 +1082,6 @@ Thank you
 
 Gabriel Martinez
 
-
 ---
 
 ## Re: Close strategy
@@ -1161,7 +1092,6 @@ Have fixed the strategy, it should work now.
 Please re-download and re-install.
 Evidently, the strategy worked once.
 The question of compatibility.
-
 
 ---
 
@@ -1177,7 +1107,6 @@ The question of compatibility.
 
 Thank you. It works.
 
-
 ---
 
 ## Re: Close strategy
@@ -1186,7 +1115,6 @@ Thank you. It works.
 
 This strategy levelcosestrategy.lua[http://fxcodebase.com/code/viewtopic.php?f=31&t=2901&hilit=close](https://fxcodebase.com/code/viewtopic.php?f=31&t=2901&hilit=close), instead close all symbol close only symbol where you get it on, please can you fix it so all orders are closed when rich above or belove closing level. Thank you all.
 
-
 ---
 
 ## Re: Close strategy
@@ -1194,7 +1122,6 @@ This strategy levelcosestrategy.lua[http://fxcodebase.com/code/viewtopic.php?f=3
 **Apprentice** · Thu Feb 04, 2016 3:52 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -1213,7 +1140,6 @@ I have uploaded a Metatrade EA which does it perfectly.
 Thanks!
 Masoud
 
-
 ---
 
 ## Re: Close strategy
@@ -1225,7 +1151,6 @@ Under Bugzilla Id Number 3558
 
 Bugzilla is developer internal requests database.
 If someone is interested to do any task from this list please contact me.
-
 
 ---
 
@@ -1240,7 +1165,6 @@ Strategy works great, can we make it not stop after it closes positions. it'd be
 Best,
 Ramirez
 
-
 ---
 
 ## Re: Close strategy
@@ -1249,7 +1173,6 @@ Ramirez
 
 "Terminate after execution " On/Off option added.
 
-
 ---
 
 ## Re: Close strategy
@@ -1257,7 +1180,6 @@ Ramirez
 **Apprentice** · Sat Dec 17, 2016 10:30 am
 
 Strategy was revised and updated.
-
 
 ---
 
@@ -1275,7 +1197,6 @@ This avoids that a possible pullback of the market touches and opens the pending
 
 Thanks for your work !
 
-
 ---
 
 ## Re: Close strategy
@@ -1284,7 +1205,6 @@ Thanks for your work !
 
 Your request is added to the development list, Under Id Number 3852
  If someone is interested to do this task, please contact me.
-
 
 ---
 
@@ -1296,7 +1216,6 @@ Try this version.
 
  [LevelCloseStrategy.lua](files/114290/LevelCloseStrategy.lua)
 
-
 ---
 
 ## Re: Close strategy
@@ -1304,7 +1223,6 @@ Try this version.
 **moneyman** · Sun Aug 20, 2017 2:04 pm
 
 Is it possible to get mt4 version. cheers
-
 
 ---
 
@@ -1316,7 +1234,6 @@ WOW !! This is Perfect !!!
 
 Thank You !!!!
 
-
 ---
 
 ## Re: Close strategy
@@ -1326,7 +1243,6 @@ Thank You !!!!
 Your request is added to the development list, Under Id Number 3864
  If someone is interested to do this task, please contact me.
 
-
 ---
 
 ## Re: Close strategy
@@ -1335,7 +1251,6 @@ Your request is added to the development list, Under Id Number 3864
 
 Is it possible to close all positions when profit is above a specific percentage of balance instead of fixed $ ?
 
-
 ---
 
 ## Re: Close strategy
@@ -1343,7 +1258,6 @@ Is it possible to close all positions when profit is above a specific percentage
 **Apprentice** · Wed Aug 23, 2017 4:05 am
 
 sure.
-
 
 ---
 
@@ -1356,7 +1270,6 @@ sure.
 
 How?
 
-
 ---
 
 ## Re: Close strategy
@@ -1365,7 +1278,6 @@ How?
 
 Have this task added to the development order.
 Hopefully, one of my colleagues will find time for it.
-
 
 ---
 
@@ -1377,7 +1289,6 @@ Try this version.
 
  [LevelCloseStrategy.lua](files/114560/LevelCloseStrategy.lua)
 
-
 ---
 
 ## Re: Close strategy
@@ -1385,7 +1296,6 @@ Try this version.
 **conjure** · Wed Aug 30, 2017 7:26 am
 
 Thank you Apprentice
-
 
 ---
 
@@ -1398,7 +1308,6 @@ Thank you Apprentice
 
 Please, try this MT4 strategy: [viewtopic.php?f=38&t=65044](https://fxcodebase.com/code/viewtopic.php?f=38&t=65044)
 
-
 ---
 
 ## Re: Close strategy
@@ -1407,7 +1316,6 @@ Please, try this MT4 strategy: [viewtopic.php?f=38&t=65044](https://fxcodebase.c
 
 Is it possible to close all positions when Loss is above a specific percentage of balance instead of fixed $ ? because when i setup -4% for exemple thats give me an error
 
-
 ---
 
 ## Re: Close strategy
@@ -1415,7 +1323,6 @@ Is it possible to close all positions when Loss is above a specific percentage o
 **CARBON** · Fri Nov 03, 2017 12:01 pm
 
 Is it possible to close all positions when "**Loss**" is above a specific percentage of balance instead of fixed $ ? for exemple when i setup -1% thats give me a error and don't work
-
 
 ---
 
@@ -1427,7 +1334,6 @@ Hi,
 
 Is it possible to add the parameter option to select between "Gross or Net" P/L ?
 
-
 ---
 
 ## Re: Close strategy
@@ -1435,7 +1341,6 @@ Is it possible to add the parameter option to select between "Gross or Net" P/L 
 **Apprentice** · Tue Nov 21, 2017 7:11 am
 
 Sent to development team.
-
 
 ---
 
@@ -1458,7 +1363,6 @@ I tested the strategy and it's sending the order to "Close All Positions for Sym
 Can it be fixed?
 Thank you
 
-
 ---
 
 ## Re: Close strategy
@@ -1467,7 +1371,6 @@ Thank you
 
 Your request is added to the development list under Id Number 4024
 
-
 ---
 
 ## Re: Close strategy
@@ -1475,7 +1378,6 @@ Your request is added to the development list under Id Number 4024
 **Apprentice** · Sun Jan 28, 2018 9:08 am
 
 Please "Use on All Symbols" parameter.
-
 
 ---
 
@@ -1491,7 +1393,6 @@ Try this version.
 
  [LevelCloseStrategy.luigipg.lua](files/117809/LevelCloseStrategy.luigipg.lua)
 
-
 ---
 
 ## Re: Close strategy
@@ -1499,7 +1400,6 @@ Try this version.
 **luigipg** · Fri Feb 23, 2018 7:13 am
 
 Thanks so much and best wishes for your birthday. Luigi!!!
-
 
 ---
 
@@ -1509,7 +1409,6 @@ Thanks so much and best wishes for your birthday. Luigi!!!
 
 In all cases you can add the option to also close pending orders? Thank you. Luigi!!!
 
-
 ---
 
 ## Re: Close strategy
@@ -1517,7 +1416,6 @@ In all cases you can add the option to also close pending orders? Thank you. Lui
 **Apprentice** · Mon Mar 05, 2018 11:25 am
 
 Your request is added to the development list under Id Number 4063
-
 
 ---
 
@@ -1528,7 +1426,6 @@ Your request is added to the development list under Id Number 4063
 [LevelCloseStrategy.luigipg.lua](files/118037/LevelCloseStrategy.luigipg.lua)
 
 Try this version.
-
 
 ---
 

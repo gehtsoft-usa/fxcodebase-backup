@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=69151  
 > Forum: 17 · Topic 69151 · 14 post(s)
 
-
 ---
 
 ## averages_histogram
@@ -12,13 +11,10 @@
 
 ![EURUSD m1 (11-22-2019 0854).png](images/129878/EURUSD%20m1%20%2811-22-2019%200854%29.png)
 
-
-
 Based on request.
 [viewtopic.php?f=17&t=1589&start=50](https://fxcodebase.com/code/viewtopic.php?f=17&t=1589&start=50)
 
  [averages_histogram.lua](files/129878/averages_histogram.lua)
-
 
 ---
 
@@ -30,7 +26,6 @@ Hello and thank you
 is it possible to color the histogram with the 4 colors of the MA / EMA cloud
 thank you
 
-
 ---
 
 ## Re: averages_histogram
@@ -39,7 +34,6 @@ thank you
 
 Try it now.
 
-
 ---
 
 ## Re: averages_histogram
@@ -47,7 +41,6 @@ Try it now.
 **bruno2017** · Fri Nov 22, 2019 9:50 am
 
 sorry that did not change anything
-
 
 ---
 
@@ -59,8 +52,8 @@ hello
 
 it's a tradingview indicator that's how I'd like it to be
 
-Code: [Select all](https://fxcodebase.com/code/)
-`@ version = 3
+```
+@ version = 3
 // Add 3x the indicator on the TradingView chart. (Maximum indicator allowed for a free account)
 // The indicator is displayed correctly only in 1 minute time unit.
 // Two entries in the parameter menu:
@@ -97,8 +90,8 @@ delta1 = security (tickerid, "D", (src * display1))
 colorCond1 = mtfema1-mtfema2> 0? lime: red // Green display when EMA 3> EMA 9, red otherwise
 
 // Outputs display
-plot (disp1-delta1, color = colorCond1, style = columns, transp = 0, editable = true) // Result - Output trimming as a graph`
-
+plot (disp1-delta1, color = colorCond1, style = columns, transp = 0, editable = true) // Result - Output trimming as a graph
+```
 
 ---
 
@@ -108,11 +101,8 @@ plot (disp1-delta1, color = colorCond1, style = columns, transp = 0, editable = 
 
 ![EURUSD m1 (11-24-2019 1224).png](images/129909/EURUSD%20m1%20%2811-24-2019%201224%29.png)
 
-
-
 Try to use a different browser/computer during download.
 It seems you have a previous version of the indicator in your buffer.
-
 
 ---
 
@@ -125,7 +115,6 @@ here is the real code, can you turn it into lua.
 thank you
 [https://textuploader.com/1o0q3](https://textuploader.com/1o0q3)
 
-
 ---
 
 ## Re: averages_histogram
@@ -135,7 +124,6 @@ thank you
 Your request is added to the development list.
 Development reference 355.
 
-
 ---
 
 ## Re: averages_histogram
@@ -144,7 +132,6 @@ Development reference 355.
 
 Your url redirects to the Lua code.
 
-
 ---
 
 ## Re: averages_histogram
@@ -152,7 +139,6 @@ Your url redirects to the Lua code.
 **bruno2017** · Tue Nov 26, 2019 5:49 am
 
 yes, how can I install it on the TS?
-
 
 ---
 
@@ -165,7 +151,6 @@ You can download from this topic.
 Installation instruction.
 [viewtopic.php?f=17&t=59681](https://fxcodebase.com/code/viewtopic.php?f=17&t=59681)
 
-
 ---
 
 ## Re: averages_histogram
@@ -173,7 +158,6 @@ Installation instruction.
 **bruno2017** · Tue Nov 26, 2019 11:59 am
 
 the lua code that is related, that I have provided or can I download?
-
 
 ---
 
@@ -183,7 +167,6 @@ the lua code that is related, that I have provided or can I download?
 
 The code you have provided is available for download here.
 [viewtopic.php?f=17&t=1589](https://fxcodebase.com/code/viewtopic.php?f=17&t=1589)
-
 
 ---
 

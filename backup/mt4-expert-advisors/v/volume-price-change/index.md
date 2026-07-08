@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=38&t=68550  
 > Forum: 38 · Topic 68550 · 2 post(s)
 
-
 ---
 
 ## Volume Price Change
@@ -12,13 +11,10 @@
 
 ![eurusd-h1-leverate.png](images/126787/eurusd-h1-leverate.png)
 
-
-
 Based on TS2/Lua
 [viewtopic.php?f=17&t=65729&start=10](https://fxcodebase.com/code/viewtopic.php?f=17&t=65729&start=10)
 
  [Volume Price Change.mq4](files/126787/Volume%20Price%20Change.mq4)
-
 
 ---
 
@@ -30,8 +26,9 @@ it's very good, thank you.
 
 I added symbol in my version to be more understandable if you run it on many charts
 
-Code: [Select all](https://fxcodebase.com/code/)
-`{
+```mql4
+{
          signaler.SendNotifications(_Symbol + " - Line/Overbought. Cross Under");
          last_signal = Time[0];
-      }`
+      }
+```

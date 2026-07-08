@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=947  
 > Forum: 17 · Topic 947 · 10 post(s)
 
-
 ---
 
 ## RSI trend color indicator
@@ -19,10 +18,8 @@
 
 ![RSI_Trend_Color.png](images/1732/RSI_Trend_Color.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("RSI trend color indicator");
     indicator:description("");
     indicator:requiredSource(core.Bar);
@@ -116,8 +113,8 @@ function Update(period, mode)
       end
      end
     end
-end`
-
+end
+```
 
 ---
 
@@ -127,7 +124,6 @@ end`
 
 can you make signal please? thanks
 
-
 ---
 
 ## Re: RSI trend color indicator
@@ -136,10 +132,8 @@ can you make signal please? thanks
 
 ![Rsi_Trend_Color_Signal.png](images/2108/Rsi_Trend_Color_Signal.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     strategy:name("Rsi trend color signal");
     strategy:description("");
 
@@ -265,8 +259,8 @@ function ExtSignal(source, period, message, soundFile)
     if soundFile ~= nil then
         terminal:alertSound(soundFile, false);
     end
-end`
-
+end
+```
 
 ---
 
@@ -275,7 +269,6 @@ end`
 **moh2001** · Tue May 25, 2010 8:30 pm
 
 a signal should be according to the color, not bellow or above the moving avg
-
 
 ---
 
@@ -291,7 +284,6 @@ Thannks,
 
 jennifer
 
-
 ---
 
 ## Re: RSI trend color indicator
@@ -300,7 +292,6 @@ jennifer
 
 Style Option Added.
 
-
 ---
 
 ## Re: RSI trend color indicator
@@ -308,7 +299,6 @@ Style Option Added.
 **Apprentice** · Fri Feb 13, 2015 6:18 am
 
 Bump Up.
-
 
 ---
 
@@ -323,20 +313,15 @@ Hello Apprentice,
 
 ![RSI - EMA.JPG](images/99972/RSI%20-%20EMA.JPG)
 
-
-
 2) I do not arrive has to install the indicator Rsi_Trend_color_signal. I have an error, to see following image
 
  
 
 ![RSI - EMA Signal erreur.JPG](images/99972/RSI%20-%20EMA%20Signal%20erreur.JPG)
 
-
-
 Sorry for my English
 Thank you in advance
 RCH
-
 
 ---
 
@@ -346,7 +331,6 @@ RCH
 
 Fixed.
 Make sure to re-download Rsi_Trend_Color.lua & Rsi_Trend_Color_Signal.lua alike.
-
 
 ---
 

@@ -1,7 +1,60 @@
 # Trading Session Hours
 
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=1974  
-> Forum: 17 · Topic 1974 · 84 post(s)
+> Forum: 17 · Topic 1974 · 85 post(s)
+
+
+---
+
+## Trading Session Hours
+
+**Nikolay.Gekht** · Sat Aug 28, 2010 10:00 pm
+
+The indicator is the new version of the [Trading Session Hours Highlight](https://fxcodebase.com/code/viewtopic.php?f=17&t=940) indicator.
+
+The indicator highlights the trading sessions for the New York, London and Tokyo
+
+Sidney Trading Session: 5:00 PM - 2:00 AM (EDT/EST)
+Tokyo Trading Session: 7:00 PM - 4:00 AM (EDT/EST)
+London Trading Session: 3:00 AM - 12:00 PM (EDT/EST)
+New York Trading Session: 8:00 AM - 5:00 PM (EDT/EST)
+
+See more about the trading session here: [http://www.fxwords.com/f/fx-market-hours.html](http://www.fxwords.com/f/fx-market-hours.html) and here: [http://www.forexmarkethours.com/](http://www.forexmarkethours.com/)
+
+You can choose any combination of these three sessions to show. The session also highlights the highest and the lowest price during the session.
+
+Because N-hours candles are always aligned against the FXCM's trading day (17:00EDT/EST), the indicator cannot highlight the trading sessions on the time frames higher than 1 hour.
+
+The indicator shows open, close, high, low values of the session and the distance from open to high, low and close in pips. This information can be shown as on the chart as well as on the tooltip which appears when the mouse cursor is positioned over the session label. The user can choose as the data to show as well as the way how the data is shown.
+
+The indicator can draw midline, open-to-close line and triangulation lines for the session. The user can turn any of these lines on or off and can choose the style for any of these lines.
+
+ 
+
+![TRADESESSIONS.png](images/3998/TRADESESSIONS.png)
+
+
+
+Download:
+
+ [TRADESESSIONS.lua](files/3998/TRADESESSIONS.lua)
+
+Further plans:
+1) Add quarter lines ((H + M) / 2, (L + M) / 2))
+2) Add line extension for N sessions ahead.
+3) Add extended sessions set:
+enhanced session options(server times)
+Sydney 17:00-19:00
+Sydney-Tokyo cross 19:00 to 01:00
+Tokyo 01:00 to 03:00
+Tokyo-London cross 03:00 to 04:00
+London 04:00 to 08:00
+London-NY cross 08:00 to 12:00
+NY 12:00 to 17:00
+So, please, stay tuned for updates.
+
+MT4/MQ4 version
+[viewtopic.php?f=38&t=65457&p=116506#p116506](https://fxcodebase.com/code/viewtopic.php?f=38&t=65457&p=116506#p116506)
 
 
 ---

@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=646  
 > Forum: 17 · Topic 646 · 27 post(s)
 
-
 ---
 
 ## DeMark Sequential (work in progress)
@@ -29,8 +28,8 @@ Okay, that's it. The code is shown below.
 Enjoy.
 Tortoise.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- This indicator is a work in progress.
+```lua
+-- This indicator is a work in progress.
 -- It is being written by the user 'Tortoise' on the FXCodebase.com forum.
 
 -- All users are welcome to use and modify the code, but please would you be kind enough
@@ -158,11 +157,11 @@ function Update(period)
     core.drawLine(TDSTRes, core.range(period - 1, period), TDSTResVal, period - 1, TDSTResVal, period);       
     core.drawLine(TDSTSup, core.range(period - 1, period), TDSTSupVal, period - 1, TDSTSupVal, period);       
     end
-end`
+end
+```
 
 MT4 / MQ4 version
 [viewtopic.php?f=38&t=64473&p=111135#p111135](https://fxcodebase.com/code/viewtopic.php?f=38&t=64473&p=111135#p111135)
-
 
 ---
 
@@ -175,7 +174,6 @@ Hi Tortoise,
 i add the perfect Setup to your indicator. Please verify, if this my correct understanding of the perfect setup.
 
  [DEMARK.lua](files/1194/DEMARK.lua)
-
 
 ---
 
@@ -192,7 +190,6 @@ A buy Countdown stops, if a new perfect sell setup occur and reverse for sell co
 please check the code and let me know.
 
  [DEMARK_V1.lua](files/1200/DEMARK_V1.lua)
-
 
 ---
 
@@ -220,8 +217,8 @@ I had a quick look at your countdown too. It looks great! Thanks for that. I'll 
 
 Best Regards.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`--[[
+```lua
+--[[
    This indicator is a work in progress.
    It is a collaborative effort being written by users on the FXCodebase.com forum,
    based on chapter 1 of Jason Perl's book 'DeMark Indicators' (Bloomberg 2008).
@@ -391,8 +388,8 @@ function Update(period)
     core.drawLine(TrendRes, core.range(period - 1, period), TrendResVal, period - 1, TrendResVal, period);       
     core.drawLine(TrendSup, core.range(period - 1, period), TrendSupVal, period - 1, TrendSupVal, period);       
     end
-end`
-
+end
+```
 
 ---
 
@@ -420,8 +417,8 @@ Enjoy using it, and please post your experiences in this forum for us all to sha
 Regards,
 Tortoise.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`--[[
+```lua
+--[[
    This indicator is a work in progress.
    It is a collaborative effort being written by users on the FXCodebase.com forum,
    based on chapter 1 of Jason Perl's book 'DeMark Indicators' (Bloomberg 2008).
@@ -676,8 +673,8 @@ function Update(period)
     core.drawLine(TrendRes, core.range(period - 1, period), TrendResVal, period - 1, TrendResVal, period);       
     core.drawLine(TrendSup, core.range(period - 1, period), TrendSupVal, period - 1, TrendSupVal, period);       
     end
-end`
-
+end
+```
 
 ---
 
@@ -688,7 +685,6 @@ end`
 Good work. Not being able to code, I was hoping that somebody would write some of the Demark indicators for this platform.
 Thankyou.
 
-
 ---
 
 ## Re: DeMark Sequential (work in progress)
@@ -698,7 +694,6 @@ Thankyou.
 > Not being able to code,
 
 Even if you cannot code you can help us to develop. Approximately half of the time is usually spent to find the formula and rules of usage, examples, explanations and so on. So, if you exactly know what you wanna to have - please feel free to describe it here. It will dramatically simplify work to prepare new indicators. So, any ideas are welcome.
-
 
 ---
 
@@ -712,7 +707,6 @@ Since the tdst line is very important to the setup counts, is it possible to ame
 Also, is it possible to add code to define the risk level once either a 9 bar setup or 13 bar countdown finishes - eg in the case of a sell setup (9)- the risk level is the true range of highest bar in the 1 - 9 count added to it's high and in the case of sell countdown (13) the true range of the highest bar in the 1 to 13 count (the bar needn't have a number above it) added to it's high.
 
 One of the best free 'versions' of the sequential I've seen is for ninjatrader - it combines the setup, tdst, sequential and combo in one code.
-
 
 ---
 
@@ -731,7 +725,6 @@ I had a look through the code but wasn't confident enough to find the relevant s
 
 Best wishes.
 
-
 ---
 
 ## Re: DeMark Sequential (work in progress)
@@ -744,7 +737,6 @@ I put the last version on my chart and it is obvious it is not yet good even if 
 
 Kind regards,
 DS0167
-
 
 ---
 
@@ -759,7 +751,6 @@ If this can help as it is very simply explained.
 Kind regards
 DS0167
 
-
 ---
 
 ## Re: DeMark Sequential (work in progress)
@@ -767,7 +758,6 @@ DS0167
 **mddhfx** · Wed Nov 23, 2011 5:47 pm
 
 Is it possible for someone to fix this indicator (demark.lua) to function properly with the new TSII platform update? It does not stay up to date with current time. Any of the versions would be great, please! Thank you in advance.
-
 
 ---
 
@@ -781,7 +771,6 @@ if your were interested, you could also check my first post
 [viewtopic.php?f=17&t=3126](https://fxcodebase.com/code/viewtopic.php?f=17&t=3126)
 for your reference.
 
-
 ---
 
 ## Re: DeMark Sequential (work in progress)
@@ -791,7 +780,6 @@ for your reference.
 With regards to recycling, I believe the requirement is that a completed set up inside the countdown goes on to form a clear run of 18 successive closes which all exceed the close 4 bars ago - in other words, two setups, back to back, in the same direction, which start inside the countdown. I think the countdown then starts from bar 9 of the first of these setups. Hope this is of some use to you coding guys.
 
 With regards to Combo, I wouldn't worry about it here as it is an indicator in its own right, and will probably confuse things. Also it doesn't use the recycle, which would further complicate any attempt to create a unified indicator from these two distinct ones.
-
 
 ---
 
@@ -1086,7 +1074,6 @@ With regards to Combo, I wouldn't worry about it here as it is an indicator in i
 Excellent works. Without it my eyes sored because of counting crazily.
 Thanks
 
-
 ---
 
 ## TD combo
@@ -1094,7 +1081,6 @@ Thanks
 **Jeffreyvnlk** · Mon Sep 08, 2014 12:53 pm
 
 Appreciated if TD Combo will be release sooner
-
 
 ---
 
@@ -1109,7 +1095,6 @@ After finish reading both books by him and Tom Demark as well, I realize that th
 
 Hope someone notice that and code accordingly.Thanks
 
-
 ---
 
 ## Re: DeMark Sequential (work in progress)
@@ -1117,7 +1102,6 @@ Hope someone notice that and code accordingly.Thanks
 **blackrhino** · Mon Feb 13, 2017 1:12 pm
 
 Great work on this so far, I was wondering if we could get a mt4 version of DEMARK_V1.lua it would be greatly appreciated. I am very interested in the tdst lines as they appear in trading station
-
 
 ---
 
@@ -1127,7 +1111,6 @@ Great work on this so far, I was wondering if we could get a mt4 version of DEMA
 
 Your request is added to the development list, Under Id Number 3743
  If someone is interested to do this task, please contact me.
-
 
 ---
 
@@ -1144,7 +1127,6 @@ best regards
 
 lus
 
-
 ---
 
 ## Please add FORCE REFRESH
@@ -1157,7 +1139,6 @@ This version 1.4 is excellent, but if someone knows a line of code which could b
 
 Thank you..
 
-
 ---
 
 ## Re: DeMark Sequential (work in progress)
@@ -1165,7 +1146,6 @@ Thank you..
 **Apprentice** · Mon Oct 02, 2017 4:54 am
 
 Your request is added to the development list under Id Number 3911
-
 
 ---
 
@@ -1185,7 +1165,6 @@ I added the parameter "Refresh time" for automatic refresh.
 
  [DEMARK_V4.lua](files/115216/DEMARK_V4.lua)
 
-
 ---
 
 ## Re: Please add FORCE REFRESH
@@ -1196,7 +1175,6 @@ Works!
 Thank you.
 Much appreciated..
 
-
 ---
 
 ## Re: DeMark Sequential (work in progress)
@@ -1204,7 +1182,6 @@ Much appreciated..
 **Apprentice** · Mon Sep 24, 2018 10:01 am
 
 The Indicator was revised and updated.
-
 
 ---
 
@@ -1225,8 +1202,6 @@ I'd like to get an alternative version with a few updates please
 
 ![2019-01-07_09h31_02.png](images/123235/2019-01-07_09h31_02.png)
 
-
-
 Would it be possible to make a version respecting this criteria ?
 
 2) I see that the indicator is drawing lines.
@@ -1236,15 +1211,12 @@ As per the link above, could we add also for visibility the high/low diagonal tr
 
 ![2019-01-07_09h26_11.png](images/123235/2019-01-07_09h26_11.png)
 
-
-
 3) Could be the same as my point 1) but worth raising just in case. Some large sequences of candles are not numbered at all. Not sure to understand why
 
 4/ By default, the counting will go until 13 and then reset. Could we add the option to change this via indicator input (i.e. if I set "9", the counting will go from 1 to 9 and then reset) ?
 
 Thanks for reading and answering
 Daveatt
-
 
 ---
 

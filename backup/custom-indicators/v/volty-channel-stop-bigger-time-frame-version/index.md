@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=893  
 > Forum: 17 · Topic 893 · 20 post(s)
 
-
 ---
 
 ## Volty Channel Stop + bigger time frame version
@@ -23,8 +22,6 @@ Sell when VoltyChannel_Stop short signal appears under SMA.
 
 ![voltystop.png](images/1634/voltystop.png)
 
-
-
 Download:
 
  [VoltyChannel_Stop.lua](files/1634/VoltyChannel_Stop.lua)
@@ -37,8 +34,8 @@ Bigger time frame version:
 
  [Bf_VoltyChannel_Stop.lua](files/1634/Bf_VoltyChannel_Stop.lua)
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- The original indicator VoltyChannel_Stop_v2.1.mq4
+```lua
+-- The original indicator VoltyChannel_Stop_v2.1.mq4
 --  Copyright © 2007, TrendLaboratory
 --  http://finance.groups.yahoo.com/group/TrendLaboratory
 --  E-mail: [[email protected]](https://fxcodebase.com/cdn-cgi/l/email-protection)
@@ -225,11 +222,11 @@ function Update(period, mode)
     else
         Trend[period] = 0;
     end
-end`
+end
+```
 
 MT4/MQ4 version.
 [viewtopic.php?f=38&t=68347](https://fxcodebase.com/code/viewtopic.php?f=38&t=68347)
-
 
 ---
 
@@ -245,7 +242,6 @@ Anyone has any experience to share using this system?
 
 Thanks!
 
-
 ---
 
 ## Re: Volty Channel Stop
@@ -258,7 +254,6 @@ thanks nikolay....
 I think that the indicators of this style are the right tools ...
 when we have candles in range, or Renko ... we will have a certain advantage Stats!
 
-
 ---
 
 ## Re: Volty Channel Stop + bigger time frame version
@@ -266,7 +261,6 @@ when we have candles in range, or Renko ... we will have a certain advantage Sta
 **Nikolay.Gekht** · Wed Sep 22, 2010 4:24 pm
 
 bigger time frame version is added. See the first post.
-
 
 ---
 
@@ -286,7 +280,6 @@ best regards
 
 PS:my English is not good, hoping you are able to understand what I am writing down.
 
-
 ---
 
 ## Re: Volty Channel Stop + bigger time frame version
@@ -294,7 +287,6 @@ PS:my English is not good, hoping you are able to understand what I am writing d
 **christhesquid** · Mon Jan 30, 2012 10:05 pm
 
 Is it possible to make a version of this that shows different time frames and what direction the trend is in? It'd be nice to have the arrows in the top right hand corner similar to the multi time frame stochastic indicator.
-
 
 ---
 
@@ -304,7 +296,6 @@ Is it possible to make a version of this that shows different time frames and wh
 
 I'll arrange something similar soon.
 
-
 ---
 
 ## Re: Volty Channel Stop + bigger time frame version
@@ -313,7 +304,6 @@ I'll arrange something similar soon.
 
 Requested can be found here.
 [viewtopic.php?f=17&t=12521](https://fxcodebase.com/code/viewtopic.php?f=17&t=12521)
-
 
 ---
 
@@ -327,7 +317,6 @@ Thank you,
 
 RJH
 
-
 ---
 
 ## Re: Volty Channel Stop + bigger time frame version
@@ -339,7 +328,6 @@ hello Apprentice,
 is it possible to add line style option for volty channel stop indicator, please?
 my appreciation in advance.
 
-
 ---
 
 ## Re: Volty Channel Stop + bigger time frame version
@@ -347,7 +335,6 @@ my appreciation in advance.
 **Apprentice** · Thu Apr 23, 2015 4:37 am
 
 Style option added to Volty Channel Stop Indicator.lua
-
 
 ---
 
@@ -362,7 +349,6 @@ my appreciation in advance.
 note:
 is there any chance to code a general indicator that produce the price overlay for any input indicator of our choice??
 
-
 ---
 
 ## Re: Volty Channel Stop + bigger time frame version
@@ -370,7 +356,6 @@ is there any chance to code a general indicator that produce the price overlay f
 **Apprentice** · Tue May 12, 2015 2:54 am
 
 Volty Channel Stop Indicator Overlay.lua Added.
-
 
 ---
 
@@ -381,7 +366,6 @@ Volty Channel Stop Indicator Overlay.lua Added.
 Generic Overlay can be found here.
 [viewtopic.php?f=17&t=62211](https://fxcodebase.com/code/viewtopic.php?f=17&t=62211)
 
-
 ---
 
 ## Re: Volty Channel Stop + bigger time frame version
@@ -389,7 +373,6 @@ Generic Overlay can be found here.
 **Apprentice** · Wed Aug 01, 2018 9:55 am
 
 The Indicator was revised and updated.
-
 
 ---
 
@@ -404,7 +387,6 @@ I really love this indicator but could you please allow the line width to be alt
 Many thanks
 TMT
 
-
 ---
 
 ## Re: Volty Channel Stop + bigger time frame version
@@ -412,7 +394,6 @@ TMT
 **Apprentice** · Mon Apr 01, 2019 5:07 am
 
 Try it now.
-
 
 ---
 
@@ -422,7 +403,6 @@ Try it now.
 
 is there a mt4 version?
 
-
 ---
 
 ## Re: Volty Channel Stop + bigger time frame version
@@ -430,7 +410,6 @@ is there a mt4 version?
 **Apprentice** · Wed Apr 03, 2019 5:06 am
 
 Your request is added to the development list under Id Number 4582
-
 
 ---
 

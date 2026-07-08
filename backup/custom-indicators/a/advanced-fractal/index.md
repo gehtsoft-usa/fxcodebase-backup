@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=724  
 > Forum: 17 · Topic 724 · 155 post(s)
 
-
 ---
 
 ## Advanced Fractal
@@ -14,8 +13,6 @@
 
 *Advanced Fractal*
 
-
-
 Advanced, Fractal indicator allows you to change, length of time frame that is checked. The algorithm allows only odd numbers.
 
  [Advanced Fractal.lua](files/1319/Advanced%20Fractal.lua)
@@ -23,8 +20,6 @@ Advanced, Fractal indicator allows you to change, length of time frame that is c
  
 
 ![Advanced Fractal Trend Overlay.lua.png](images/1319/Advanced%20Fractal%20Trend%20Overlay.lua.png)
-
-
 
 Changes in trend are registered as follows.
 
@@ -47,8 +42,6 @@ MT4/MQ4 version.
 
 ![Advanced  Fractal Label.png](images/1319/Advanced%20Fractal%20Label.png)
 
-
-
 Advanced fractal Labeling Tool will show you all the fractals, from 1 onwards,
 and their weight.
 
@@ -66,15 +59,11 @@ and so on.
 
 ![AFBSR.png](images/1319/AFBSR.png)
 
-
-
  [AFBSR.lua](files/1319/AFBSR.lua)
 
  
 
 ![Adv_Fractal_support_ resistance.png](images/1319/Adv_Fractal_support_%20resistance.png)
-
-
 
  [Adv_Fractal_support_ resistance .lua](files/1319/Adv_Fractal_support_%20resistance%20.lua)
 
@@ -84,15 +73,11 @@ and so on.
 
 ![EURUSD m5 (05-11-2021 1529).png](images/1319/EURUSD%20m5%20%2805-11-2021%201529%29.png)
 
-
-
  [Advanced Fractal Support Resistance lines.lua](files/1319/Advanced%20Fractal%20Support%20Resistance%20lines.lua)
 
  
 
 ![EURUSD D1 (12-23-2022 0945).png](images/1319/EURUSD%20D1%20%2812-23-2022%200945%29.png)
-
-
 
  [MTF MCP Advanced Fractal Multimeter.lua](files/1319/MTF%20MCP%20Advanced%20Fractal%20Multimeter.lua)
 
@@ -100,10 +85,7 @@ and so on.
 
 ![EURUSD m1 (11-28-2023 1850).png](images/1319/EURUSD%20m1%20%2811-28-2023%201850%29.png)
 
-
-
  [Unsymmetrical_Fractal_support_ resistance.lua](files/1319/Unsymmetrical_Fractal_support_%20resistance.lua)
-
 
 ---
 
@@ -113,7 +95,6 @@ and so on.
 
 what exactly does the number of fractals (odd) mean? Thanks a lot!
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -121,7 +102,6 @@ what exactly does the number of fractals (odd) mean? Thanks a lot!
 **bjmerkel** · Wed Apr 21, 2010 3:23 pm
 
 is the length of time minutes or how does that work?
-
 
 ---
 
@@ -133,7 +113,6 @@ can you put a other time frame option??
 example, if you are in a 5 min time frame, calculate the fractal in 15 min? and put this in
 same graph?
 thanks!! and good work!!
-
 
 ---
 
@@ -147,10 +126,8 @@ Other timeframe version of advanced fractal.
 
 ![BF_AdvancedFractal.png](images/4237/BF_AdvancedFractal.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Bigger timeframe advanced fractal");
     indicator:description("");
     indicator:requiredSource(core.Bar);
@@ -375,8 +352,8 @@ function findDateFast(stream, date, precise)
             end
         end
     end
-end`
-
+end
+```
 
 ---
 
@@ -395,7 +372,6 @@ Can you, please, help me with the following problems:
 I'll be much obliged for you help on those issues.
 Cheers
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -406,7 +382,6 @@ Thank you for your report.
 It is probably a bug in the indicators,
 which platform previously have not detected.
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -415,7 +390,6 @@ which platform previously have not detected.
 
 I cann't to repeat error.
 Try to load indicator once again.
-
 
 ---
 
@@ -431,7 +405,6 @@ I guess there must be something wrong with this patch then.
 What about those "misleading arrows" business?
 Why do they point in the opposite directions (both in the standard Marketscope indicator and in yours BF_Advanced)?
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -440,7 +413,6 @@ Why do they point in the opposite directions (both in the standard Marketscope i
 
 Bug fixed.
 Please, download indicator again.
-
 
 ---
 
@@ -455,7 +427,6 @@ I was going to test this using a lower TF but the higher TF refused to set to lo
 Thanks
 BC
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -463,7 +434,6 @@ BC
 **skarlaken** · Wed Nov 03, 2010 4:09 am
 
 Apprentice? Is there a way to get the Advanced Fractal to auto-update on the charts, or am I doing something wrong?
-
 
 ---
 
@@ -477,7 +447,6 @@ Regular or BF variant.
 I just tested regular and works as expected.
 
 I tested with default parameters, which parameters you are using.
-
 
 ---
 
@@ -506,7 +475,6 @@ The main problem I have is that in order to get the BF variant to update I have 
 What am I doing wrong?
 Thanks for the help!
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -515,7 +483,6 @@ Thanks for the help!
 
 great indicator!! thanks a lot!.
 the indicator do not refresh automatic, can you put some instruction to refresh every candle?
-
 
 ---
 
@@ -526,7 +493,6 @@ the indicator do not refresh automatic, can you put some instruction to refresh 
 Please add an instruction in BF_Advanced Fractal, is a Very Good indicator but don´t refresh for display new buy/sell signals.
 
 Thank you
-
 
 ---
 
@@ -542,7 +508,6 @@ Thanks,
 
 Suraj
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -553,7 +518,6 @@ I'm not sure what you want to achieve.
 If I understand well, you would like fractal indication before it is confirmed.
 For the last fractal.
 Am I hit the meaning of your request
-
 
 ---
 
@@ -575,7 +539,6 @@ Thanks in advance,
 
 Surajs
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -585,7 +548,6 @@ Surajs
 Would it be possible to make a 100 tick chart and apply this indicator to it. (Or any other # of ticks eg 133 500 etc.)
 
 Thanks
-
 
 ---
 
@@ -600,12 +562,9 @@ Indicator show difference (in pips) between current fractal and previous fractal
 
 ![FractalsWithLabels.png](images/8865/FractalsWithLabels.png)
 
-
-
 Download:
 
  [Advanced_Fractal_withLabels.lua](files/8865/Advanced_Fractal_withLabels.lua)
-
 
 ---
 
@@ -614,7 +573,6 @@ Download:
 **jeisenm** · Fri Mar 18, 2011 9:10 am
 
 i just installed the bf_fractal and it works for me. not sure what caused the error. seems like a nice indicator to show levels.
-
 
 ---
 
@@ -632,12 +590,9 @@ Added:
 
 ![AF2.png](images/10355/AF2.png)
 
-
-
 Download:
 
  [Advanced_Fractal_withLabels2.lua](files/10355/Advanced_Fractal_withLabels2.lua)
-
 
 ---
 
@@ -652,7 +607,6 @@ This is a great indicator, I have looked on this site for an ADVANCED FRACTAL st
 Many thanks and much love to everyone.
 lisa_baby_xx
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -660,7 +614,6 @@ lisa_baby_xx
 **Apprentice** · Fri May 06, 2011 10:13 am
 
 Your request has been added to developmental cue.
-
 
 ---
 
@@ -677,7 +630,6 @@ If you are going to create a stratagy based upon this indicator, could you code 
 Many thanks and much love sweetie. XX
 lisa_baby_xx
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -686,7 +638,6 @@ lisa_baby_xx
 
 I add this option in all my strategies, as standard.
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -694,7 +645,6 @@ I add this option in all my strategies, as standard.
 **Alexander.Gettinger** · Wed May 11, 2011 3:28 am
 
 Please, see this strategy: [viewtopic.php?f=31&t=4196](https://fxcodebase.com/code/viewtopic.php?f=31&t=4196)
-
 
 ---
 
@@ -713,7 +663,6 @@ Does it really behave differently on shorter TFs? And if so, why?
 Many thanks and much love. XX
 lisa_baby_xx
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -728,7 +677,6 @@ Thanks
 
 Dorjoo
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -738,7 +686,6 @@ Dorjoo
 Thanks for the report.
 We will test this problem.
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -746,7 +693,6 @@ We will test this problem.
 **Alexander.Gettinger** · Fri Jul 01, 2011 12:03 pm
 
 BF_Advanced Fractal updated.
-
 
 ---
 
@@ -760,7 +706,6 @@ So that if there are any signals within any ccy pairs an email would be sent out
 
 Thanks for your help
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -769,7 +714,6 @@ Thanks for your help
 
 Indicator as such can not provide this type of signal.
 However, we can write the signal.
-
 
 ---
 
@@ -780,7 +724,6 @@ However, we can write the signal.
 hi;
 I have a little request.Could you add arrow size option please? it must be easy for you
 thanks
-
 
 ---
 
@@ -795,7 +738,6 @@ when prices break a downfractal down (close lower than nearest downfractal) , ba
 
 this option will make easier to understand fractals and break points..
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -803,7 +745,6 @@ this option will make easier to understand fractals and break points..
 **Apprentice** · Sun Nov 20, 2011 6:04 pm
 
 Your request is added to the developmental cue.
-
 
 ---
 
@@ -813,7 +754,6 @@ Your request is added to the developmental cue.
 
 Font Size Added.
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -822,7 +762,6 @@ Font Size Added.
 
 Advanced Fractal Trend Overlay Added
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -830,7 +769,6 @@ Advanced Fractal Trend Overlay Added
 **ndx100** · Mon Nov 21, 2011 7:42 am
 
 thank you very much..
-
 
 ---
 
@@ -845,7 +783,6 @@ Can you develop a strategy for this indicator? When nearest fractal broken up/do
 
 thanks again..
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -854,7 +791,6 @@ thanks again..
 
 I'm one step ahead of you.
 [viewtopic.php?f=31&t=8283](https://fxcodebase.com/code/viewtopic.php?f=31&t=8283)
-
 
 ---
 
@@ -867,7 +803,6 @@ I'm one step ahead of you.
 > [viewtopic.php?f=31&t=8283](https://fxcodebase.com/code/viewtopic.php?f=31&t=8283)
 
 wow
-
 
 ---
 
@@ -884,7 +819,6 @@ also, the version on page 1, is that the most updated version?
 thanks in advance.
 nazaar
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -899,7 +833,6 @@ Is Overlay for the simple strategy that uses advanced fractal.
 
  bf_advanced fractal
 Shows the position of fractals from other (higher) time frames.
-
 
 ---
 
@@ -926,7 +859,6 @@ Nazaar
 
 p.s. I can't believe I am studying fractals at 10pm EST on a Friday night and excited about it.
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -935,7 +867,6 @@ p.s. I can't believe I am studying fractals at 10pm EST on a Friday night and ex
 
 Your request is added to the developmental cue.
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -943,7 +874,6 @@ Your request is added to the developmental cue.
 **Apprentice** · Tue Dec 06, 2011 9:56 am
 
 Requested can be found on the top most post.
-
 
 ---
 
@@ -955,7 +885,6 @@ I would like to use this only as a stoploss, could you add this as option or wou
 
 Also add an option to add a few pips beyond the actual wick high or low.
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -966,7 +895,6 @@ First, this is, indicator, not a strategy.
 However, you can use it, as an independent strategy,
 or build in the algorithm. Both, however, must be programmed.
 This is especially true for the build in version.
-
 
 ---
 
@@ -980,12 +908,9 @@ The indicator draws two lines on the High and Low prices.
 
 ![AdvancedFractalLines.png](images/25183/AdvancedFractalLines.png)
 
-
-
 Download:
 
  [Advanced Fractal lines.lua](files/25183/Advanced%20Fractal%20lines.lua)
-
 
 ---
 
@@ -1002,7 +927,6 @@ Thanks please
 
 Great work.
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -1010,7 +934,6 @@ Great work.
 **Apprentice** · Sun Feb 05, 2012 2:57 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -1024,7 +947,6 @@ Can these options be added?
 2. If price closes beyond the line, change color (users choice of color), this support or resistance has been broken but is still relevant.
 3. If price closes beyond the line the other direction, auto delete line, this support or resistance has no relevance at this point.
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -1037,12 +959,9 @@ Advanced fractal lines with horizontal lines.
 
 ![AdvancedFractalLines2.png](images/25475/AdvancedFractalLines2.png)
 
-
-
 Download:
 
  [Advanced Fractal lines2.lua](files/25475/Advanced%20Fractal%20lines2.lua)
-
 
 ---
 
@@ -1052,14 +971,11 @@ Download:
 
 ![Adv_Fractal_support_ resistance.png](images/26005/Adv_Fractal_support_%20resistance.png)
 
-
-
 Requested can be found here.
 I did not have time to test this one.
 Performance improvements are needed.
 
  [Adv_Fractal_support_ resistance .lua](files/26005/Adv_Fractal_support_%20resistance%20.lua)
-
 
 ---
 
@@ -1068,7 +984,6 @@ Performance improvements are needed.
 **sho-me-pips** · Tue Feb 14, 2012 10:34 pm
 
 AWESOME
-
 
 ---
 
@@ -1085,7 +1000,6 @@ Can this indicator be written? Should I post this on the indicator requests page
 Hope you can help.
 flem_wad
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -1093,7 +1007,6 @@ flem_wad
 **Apprentice** · Sat Feb 18, 2012 4:13 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -1103,7 +1016,6 @@ Your request is added to the development list.
 
 Requested can be found here.
 [viewtopic.php?f=17&t=13608](https://fxcodebase.com/code/viewtopic.php?f=17&t=13608)
-
 
 ---
 
@@ -1127,7 +1039,6 @@ Requested can be found here.
 
 **Works GREAT during the time I can allow it to run!**
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -1135,7 +1046,6 @@ Requested can be found here.
 **subliminal** · Wed Mar 14, 2012 9:49 pm
 
 Hey guys amazing indi as always! Is it possible to have an option to have 3 fractals? To go with the fractal stop loss
-
 
 ---
 
@@ -1147,7 +1057,6 @@ Try this.
 
  [AFBSR.lua](files/28133/AFBSR.lua)
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -1156,7 +1065,6 @@ Try this.
 
 MQL4 version of Advanced Fractals: [viewtopic.php?f=38&t=17244](https://fxcodebase.com/code/viewtopic.php?f=38&t=17244)
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -1164,7 +1072,6 @@ MQL4 version of Advanced Fractals: [viewtopic.php?f=38&t=17244](https://fxcodeba
 **amazon1a** · Sun Jun 10, 2012 10:53 am
 
 Hi Alexander, Would it be possible to add an option to: BF_AdvancedFractal.lua in order to change the font size. This function, present on many indicators, would make it easier to spot the arrows particularly if the fractal indicator with labels is also on the screen. I use this combo eg on a H4 layout by overlaying the D1 fractal arrows on the H4 chart. Many thanks.
-
 
 ---
 
@@ -1176,7 +1083,6 @@ Try to use standard Advanced Fractal Indicator.
 It has this option.
 And then change the source time frame.
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -1184,7 +1090,6 @@ And then change the source time frame.
 **tastefullvenom** · Wed Nov 07, 2012 3:46 pm
 
 Is there any chance to have the AFBSR.lua indi have just a dot on top/below the 3 day fractal pattern instead of a line please?
-
 
 ---
 
@@ -1195,7 +1100,6 @@ Is there any chance to have the AFBSR.lua indi have just a dot on top/below the 
 What's wrong with the arrows.
 (Advanced Fractal.lua)
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -1203,7 +1107,6 @@ What's wrong with the arrows.
 **trdheat** · Mon Apr 28, 2014 10:18 am
 
 Is it possible historical display for AFBSR?
-
 
 ---
 
@@ -1213,7 +1116,6 @@ Is it possible historical display for AFBSR?
 
 Can you elaborate on your request, provide more details.
 I'm not sure whether I understand that the manner of presentation will be used.
-
 
 ---
 
@@ -1226,7 +1128,6 @@ Apprentice,
 I'm little confused about historical view and i don't have a suggestion. Let's ignore it.
 
 I have a question about AFBSR.lua. If number of fractals is n then for non-repaint edition of AFBSR is sufficient n periods shift? How many periods shift required?
-
 
 ---
 
@@ -1241,7 +1142,6 @@ thanx 06/19/2014
 
 Adv_Fractal_support_ resistance.lua
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -1252,7 +1152,6 @@ I failed to reproduce.
 Can you share bit more, settings you're using, time frame, currency pair.
 I admit this can prove resource demanding indicator.
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -1261,7 +1160,6 @@ I admit this can prove resource demanding indicator.
 
 Please Re-Dowload Adv_Fractal_support_ resistance.lua
 Major performance update.
-
 
 ---
 
@@ -1279,7 +1177,6 @@ I hope you can manage this as I think this will answer a lot of my needs.
 
 Many thanks.
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -1287,7 +1184,6 @@ Many thanks.
 **Apprentice** · Mon Jan 05, 2015 2:51 am
 
 Bump Up.
-
 
 ---
 
@@ -1301,7 +1197,6 @@ Can you make an Advanced Fractal version that doesn't draw the last fractal unti
 
 Thanks!!
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -1309,7 +1204,6 @@ Thanks!!
 **Apprentice** · Tue Jan 06, 2015 2:40 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -1319,7 +1213,6 @@ Your request is added to the development list.
 
 guys is it possible to add an alert and an arrow when price break resistance or support (after candle close) to AFBSR.lua indicator
 thanks
-
 
 ---
 
@@ -1345,7 +1238,6 @@ I modified this indicator to show Supply & Demand levels more clearly at the clo
 Best Regards,
 Todd
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -1357,7 +1249,6 @@ Dec 14, 2015: Compatibility issue Fixed. _Alert helper is not longer needed.
 If you want to use updated version of this indicator,
 please make sure to use TS Version 01.14.101415. or higher.
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -1365,7 +1256,6 @@ please make sure to use TS Version 01.14.101415. or higher.
 **Apprentice** · Wed Feb 22, 2017 4:16 am
 
 Indicator was revised and updated.
-
 
 ---
 
@@ -1383,7 +1273,6 @@ Thanks in advance,
 
 Best regards.
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -1392,7 +1281,6 @@ Best regards.
 
 Your request is added to the development list, Under Id Number 3754
  If someone is interested to do this task, please contact me.
-
 
 ---
 
@@ -1436,7 +1324,6 @@ end
 
 But more elegant solution would be insert a session to permit the non programer user to choose the external files to up and down situations. I don't know LUA enough to do this task and I'm very sick to learn.
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -1446,7 +1333,6 @@ But more elegant solution would be insert a session to permit the non programer 
 P.S: If possible make this indicator compatible with Strategy Builder.
 
 Thanks in advance.
-
 
 ---
 
@@ -1462,7 +1348,6 @@ But there is downside of the users request: TS freezes during execution of the u
 
 Perhaps you can run .bat execute .exe from .bat?
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -1475,14 +1360,11 @@ Little bug. I think the signal is done at the highest / lowest instead of the fe
 
 ![Capture 1.png](images/111991/Capture%201.png)
 
-
-
 After refrech.
 
  
 
 ![Capture 2.png](images/111991/Capture%202.png)
-
 
 ---
 
@@ -1491,7 +1373,6 @@ After refrech.
 **Stonyheart** · Wed Apr 19, 2017 4:02 am
 
 Hi, it's possible to make Advanced Trend Fractal Overlay in MQL4, please ?
-
 
 ---
 
@@ -1502,7 +1383,6 @@ Hi, it's possible to make Advanced Trend Fractal Overlay in MQL4, please ?
 Your request is added to the development list, Under Id Number 3785
  If someone is interested to do this task, please contact me.
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -1511,7 +1391,6 @@ Your request is added to the development list, Under Id Number 3785
 
 guys is it possible to add an alert and an arrow when price break resistance or support (after candle close) to AFBSR.lua indicator
 thanks
-
 
 ---
 
@@ -1523,7 +1402,6 @@ Apprentice,
 could you please answer me, is it possible to add fractal breakout alert ?
 thank you sir.
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -1532,7 +1410,6 @@ thank you sir.
 
 Your request is added to the development list, Under Id Number 3839
  If someone is interested to do this task, please contact me.
-
 
 ---
 
@@ -1545,7 +1422,6 @@ Thank you very much for your answer
 please do you know any other similar breakout indicator that i can use?
 thanks
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -1553,7 +1429,6 @@ thanks
 **Apprentice** · Tue Aug 08, 2017 2:38 am
 
 Not at this moment.
-
 
 ---
 
@@ -1564,7 +1439,6 @@ Not at this moment.
 Try this version.
 [viewtopic.php?f=17&t=64970&p=114057#p114057](https://fxcodebase.com/code/viewtopic.php?f=17&t=64970&p=114057#p114057)
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -1573,7 +1447,6 @@ Try this version.
 
 Thank you thank you very much kind Sir.
 it is exactly what i wanted
-
 
 ---
 
@@ -1587,7 +1460,6 @@ Could I please have a version of AFBSR.lua that uses High ask and low bid for it
 
 Thanks heaps as always!!
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -1595,7 +1467,6 @@ Thanks heaps as always!!
 **Apprentice** · Sun Jul 22, 2018 6:49 am
 
 Your request is added to the development list under Id Number 4192
-
 
 ---
 
@@ -1607,7 +1478,6 @@ Your request is added to the development list under Id Number 4192
 
 Try this version.
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -1617,7 +1487,6 @@ Try this version.
 can you add alert for this Advanced Fractal Trend Overlay.lua
 
 thanks
-
 
 ---
 
@@ -1642,7 +1511,6 @@ thanks
 
 this happens to the indicator
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -1651,7 +1519,6 @@ this happens to the indicator
 
 Your request is added to the development list.
 Development reference 1826.
-
 
 ---
 
@@ -1662,7 +1529,6 @@ Development reference 1826.
 [Advanced Fractal Trend Overlay with Alert.lua](files/136748/Advanced%20Fractal%20Trend%20Overlay%20with%20Alert.lua)
 
 Try this version.
-
 
 ---
 
@@ -1676,7 +1542,6 @@ Can help convert this for MT4 usage?
 
 Thank you for your help.
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -1685,7 +1550,6 @@ Thank you for your help.
 
 MT4 version
 [viewtopic.php?f=38&t=17244](https://fxcodebase.com/code/viewtopic.php?f=38&t=17244)
-
 
 ---
 
@@ -1699,10 +1563,7 @@ On [Advanced Fractal Trend Overlay](https://fxcodebase.com/code/download/file.ph
 
 ![Capture.png](images/141974/Capture.png)
 
-
-
 Thank you.
-
 
 ---
 
@@ -1713,7 +1574,6 @@ Thank you.
 Your request is added to the development list.
 Development reference 462.
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -1721,7 +1581,6 @@ Development reference 462.
 **Apprentice** · Tue May 11, 2021 8:30 am
 
 Advanced Fractal Support Resistance lines.lua added.
-
 
 ---
 
@@ -1733,7 +1592,6 @@ Great!
 
 Thank you Apprentice.
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -1741,7 +1599,6 @@ Thank you Apprentice.
 **Avignon** · Wed May 12, 2021 2:09 am
 
 ![good.png](images/142025/good.png)
-
 
 ---
 
@@ -1757,14 +1614,11 @@ That's what I wanted, but there's a little bug to fix.
 
 *good*
 
-
-
  
 
 ![no good.png](images/142026/no%20good.png)
 
 *no good*
-
 
 ---
 
@@ -1773,7 +1627,6 @@ That's what I wanted, but there's a little bug to fix.
 **Apprentice** · Wed May 12, 2021 5:05 am
 
 Try it now.
-
 
 ---
 
@@ -1784,7 +1637,6 @@ Try it now.
 It's good now.
 
 Thank you again.
-
 
 ---
 
@@ -1896,7 +1748,6 @@ Thank you again.
 
 Is it possible to convert the "Advanced Fractal Trend Overlay.lua" in MT4?
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -1906,7 +1757,6 @@ Is it possible to convert the "Advanced Fractal Trend Overlay.lua" in MT4?
 Your request is added to the development list.
 Development reference 886.
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -1915,7 +1765,6 @@ Development reference 886.
 
 MT4 version.
 [https://fxcodebase.com/code/viewtopic.p ... 59#p143959](https://fxcodebase.com/code/viewtopic.php?f=38&t=71576&p=143959#p143959)
-
 
 ---
 
@@ -1929,7 +1778,6 @@ thanks in advance
 
 regards
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -1939,7 +1787,6 @@ regards
 We have added your request to the development list.
 Development reference 846.
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -1948,14 +1795,11 @@ Development reference 846.
 
 ![Bez naslova.png](images/148785/Bez%20naslova.png)
 
-
-
 Please use these parameters to get a higher time frame version.
 
  
 
 ![EURUSD D1 (12-23-2022 0936).png](images/148785/EURUSD%20D1%20%2812-23-2022%200936%29.png)
-
 
 ---
 
@@ -1965,7 +1809,6 @@ Please use these parameters to get a higher time frame version.
 
 MTF MCP Advanced Fractal Multimeter.lua added.
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -1973,7 +1816,6 @@ MTF MCP Advanced Fractal Multimeter.lua added.
 **Apprentice** · Fri Jan 27, 2023 9:17 am
 
 Advanced Fractal Trend Overlay with Alert and Advanced Fractal Trend Overlay ware updated.
-
 
 ---
 
@@ -1989,7 +1831,6 @@ But do you think that adding the 1 candle shift to indicator will prevent the sm
 
 Thanks in advance
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -1997,7 +1838,6 @@ Thanks in advance
 **Apprentice** · Thu Jul 20, 2023 2:19 pm
 
 Can you please repost the image?
-
 
 ---
 
@@ -2007,7 +1847,6 @@ Can you please repost the image?
 
 hello,
 picture attached
-
 
 ---
 
@@ -2019,7 +1858,6 @@ picture attached
 
 Something like this?
 One candle shift on a higher time frame may cause a significant delay.
-
 
 ---
 
@@ -2039,7 +1877,6 @@ trend
 
 thanks in advance
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -2049,7 +1886,6 @@ thanks in advance
 We have added your request to the development list.
 Development reference 669.
 
-
 ---
 
 ## Advanced Fractal Trend Chart Background
@@ -2058,12 +1894,9 @@ Development reference 669.
 
 ![EURUSD H4 (08-02-2023 1242).png](images/151893/EURUSD%20H4%20%2808-02-2023%201242%29.png)
 
-
-
 Implementation using Draw functionality.
 
  [Advanced Fractal Trend Chart Background.lua](files/151893/Advanced%20Fractal%20Trend%20Chart%20Background.lua)
-
 
 ---
 
@@ -2072,7 +1905,6 @@ Implementation using Draw functionality.
 **ahmedalhosenyy** · Thu Aug 03, 2023 10:40 am
 
 Many thankx
-
 
 ---
 
@@ -2086,7 +1918,6 @@ May you add the option of Levels " In Yellow "
 
 Thanks in advance
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -2095,7 +1926,6 @@ Thanks in advance
 
 We have added your request to the development list.
 Development reference 733.
-
 
 ---
 
@@ -2107,7 +1937,6 @@ Hello ,
 just checking
 
 thanks in advance
-
 
 ---
 
@@ -2146,7 +1975,6 @@ Any help to fix this issue
 
 regards
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -2158,7 +1986,6 @@ regards
 Try this version.
 Lookback was introduced.
 Also draw line was used.
-
 
 ---
 
@@ -2172,7 +1999,6 @@ and please add a channel that to connect the fractals
 
 thank you very much
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -2182,7 +2008,6 @@ thank you very much
 We have added your request to the development list.
 Development reference 1056
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -2191,12 +2016,9 @@ Development reference 1056
 
 ![EURUSD m1 (11-28-2023 1850).png](images/153470/EURUSD%20m1%20%2811-28-2023%201850%29.png)
 
-
-
 Something like this?
 
  [Unsymmetrical_Fractal_support_ resistance.lua](files/153470/Unsymmetrical_Fractal_support_%20resistance.lua)
-
 
 ---
 
@@ -2205,7 +2027,6 @@ Something like this?
 **adloule** · Fri Dec 01, 2023 4:18 pm
 
 Thank you sir
-
 
 ---
 
@@ -2220,7 +2041,6 @@ look at the picture below please on the left is how it should be with 5 Bars at 
 
 thank you
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -2229,7 +2049,6 @@ thank you
 
 We have added your request to the development list.
 Development reference 1071
-
 
 ---
 
@@ -2240,7 +2059,6 @@ Development reference 1071
 [Unsymmetrical_Fractal_support_ resistance.lua](files/153577/Unsymmetrical_Fractal_support_%20resistance.lua)
 
 Fixed.
-
 
 ---
 
@@ -2256,7 +2074,6 @@ and the lookback limit is 1000 could you please modify it to 5000 or more for ba
 
 thank you very much
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -2265,7 +2082,6 @@ thank you very much
 
 We have added your request to the development list.
 Development reference 57
-
 
 ---
 
@@ -2277,7 +2093,6 @@ Development reference 57
 
 Try this version.
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -2287,7 +2102,6 @@ Try this version.
 thank you Apprentice
 could you please if it's possible to add a zigzag option
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -2295,7 +2109,6 @@ could you please if it's possible to add a zigzag option
 **Apprentice** · Sat Jan 20, 2024 4:42 am
 
 Can you clarify?
-
 
 ---
 
@@ -2307,7 +2120,6 @@ a zigzag that follows the number of fractals chosen
 like the purple zigzag i drew
 thank you
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -2316,7 +2128,6 @@ thank you
 
 We have added your request to the development list.
 Development reference 100
-
 
 ---
 
@@ -2337,7 +2148,6 @@ Any news about this request
 
 Many thanks in advance
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -2352,7 +2162,6 @@ i found this indicator it can help you with the indicator of a zigzag that follo
 
 thank you very much
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -2361,7 +2170,6 @@ thank you very much
 
 We have added your request to the development list.
 Development reference 690
-
 
 ---
 
@@ -2372,7 +2180,6 @@ Development reference 690
 Try this version.
 [https://fxcodebase.com/code/viewtopic.p ... 10#p157110](https://fxcodebase.com/code/viewtopic.php?f=38&t=75327&p=157110#p157110)
 
-
 ---
 
 ## Re: Advanced Fractal
@@ -2382,7 +2189,6 @@ Try this version.
 May we have the fractal trend overlay as a heatmap
 
 thanks
-
 
 ---
 

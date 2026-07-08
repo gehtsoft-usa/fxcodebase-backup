@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=18031  
 > Forum: 17 · Topic 18031 · 21 post(s)
 
-
 ---
 
 ## Level Stop Reverse
@@ -12,15 +11,11 @@
 
 ![LSR.png](images/32602/LSR.png)
 
-
-
  [LSR.lua](files/32602/LSR.lua)
 
  
 
 ![LRS Strategy.png](images/32602/LRS%20Strategy.png)
-
-
 
 This indicator version provides Audio / Email Alerts for Close/LSR Line Cross.
 Early Warning System, provides alarm, X number of pips up and down from the LSR line.
@@ -34,10 +29,7 @@ _Alert Helper is not longer needed.
 
 ![EURUSD m1 (07-12-2016 1405).png](images/32602/EURUSD%20m1%20%2807-12-2016%201405%29.png)
 
-
-
  [Level Stop Reverse Overlay.lua](files/32602/Level%20Stop%20Reverse%20Overlay.lua)
-
 
 ---
 
@@ -49,7 +41,6 @@ Thank you Apprentice. Appreciate you doing this. For those that would like to us
 Example of a trade. Get a long signal, candle must close above 50sma, 200/250 ema must be bullish trend, qqe must also be bullish. Opposite for short signal. Stops and take profits up to the trader.
 For the active trader 5min chart maybe more suited for you. I do not recommend 1 minute charts or 1hr or above.
 
-
 ---
 
 ## Re: Level Stop Reverse
@@ -57,7 +48,6 @@ For the active trader 5min chart maybe more suited for you. I do not recommend 1
 **gainskeeper** · Wed May 09, 2012 7:50 am
 
 Only change I made was changing the ATR period from 14 to 9, left everything else to default.Some great trades this morning. Any questions just message me. Good luck
-
 
 ---
 
@@ -70,7 +60,6 @@ Is it possible to add sound alert when price gets close (10 pips) to the LSR lin
 
 Thanks!
 
-
 ---
 
 ## Re: Level Stop Reverse
@@ -80,7 +69,6 @@ Thanks!
 I did make a change on some indicators I was using to take trades. I got rid of the 50sma, got rid of the ema trend indicators (200/250). Instead I have gone with unique Bollinger Bands settings. BB settings 62 periods, .20 deviation and hide the middle or average line. You should now have 2 lines running parallel with each other.
 Rules of engagment, get a signal, the whole candle including the wick must be completely outside the Bollinger Bands, whether its a buy or sell signal. Place the trade, stop is the opposite side of the Bollinger Band. I like to make the pip difference between my open and stop loss a multiple of five. For
 instance, if the other side of the Bollinger Band is 23 pips away, I will add an additional two pips on to that number to make it 25 pips. I use a 1/1 risk reward for first target and I move the rest to break even plus spread or use a trailing stop.
-
 
 ---
 
@@ -94,7 +82,6 @@ Thanks for your advices.
 However with your settings BB. The bollinger bands are seable. Too far away from eachother. and not parallel. Eurusd. anytimeframe.
 I think you have to check settings. 60+ and 20+ seems way too big.
 
-
 ---
 
 ## Re: Level Stop Reverse
@@ -103,7 +90,6 @@ I think you have to check settings. 60+ and 20+ seems way too big.
 
 I think gainskeeper's settings are 62 periods and 0.20 deviation.
 
-
 ---
 
 ## Re: Level Stop Reverse
@@ -111,7 +97,6 @@ I think gainskeeper's settings are 62 periods and 0.20 deviation.
 **gainskeeper** · Wed Aug 29, 2012 8:04 am
 
 Yes its 0.20 setting. You can also use the bands indicator with same settings as I posted.
-
 
 ---
 
@@ -130,7 +115,6 @@ Thx.
 
 ![Capture.PNG](images/39407/Capture.PNG)
 
-
 ---
 
 ## Re: Level Stop Reverse
@@ -140,7 +124,6 @@ Thx.
 Requested strategy can be found here.
 [viewtopic.php?f=31&t=22850](https://fxcodebase.com/code/viewtopic.php?f=31&t=22850)
 
-
 ---
 
 ## Re: Level Stop Reverse
@@ -148,7 +131,6 @@ Requested strategy can be found here.
 **Apprentice** · Fri Aug 31, 2012 5:26 am
 
 Indicator Alert Option Added to Topmost post.
-
 
 ---
 
@@ -162,7 +144,6 @@ Regards,
 
 RJH
 
-
 ---
 
 ## Re: Level Stop Reverse
@@ -171,7 +152,6 @@ RJH
 
 Bug Fixed.
 
-
 ---
 
 ## Re: Level Stop Reverse
@@ -179,7 +159,6 @@ Bug Fixed.
 **Hailkayy** · Fri Aug 31, 2012 1:41 pm
 
 Thank you much.
-
 
 ---
 
@@ -204,7 +183,6 @@ TSL:= if(BarCount()>(atrperiods+atrsmperiods),
 __________________________________________________________________
 Thanks.
 
-
 ---
 
 ## Re: Level Stop Reverse
@@ -213,13 +191,13 @@ Thanks.
 
 I believe it is.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`if source.close[period-1] <= LSR[period-1]  and  source.close[period] < LSR[period-1] then
+```lua
+if source.close[period-1] <= LSR[period-1]  and  source.close[period] < LSR[period-1] then
 LSR[period] = math.min(source.close[period]+ Delta, LSR[period-1] );
 elseif source.close[period-1] >= LSR[period-1] and  source.close[period] >LSR[period-1] then
 LSR[period] = math.max(source.close[period]- Delta, LSR[period-1]);
-else`
-
+else
+```
 
 ---
 
@@ -287,7 +265,6 @@ TSL:= if(BarCount()>(atrperiods+atrsmperiods),
  if(Cross(PREV(0),price),price+DeltaStop,
  if(price=PREV(0),PREV(0),PREV(0)))))),
 
-
 ---
 
 ## Re: Level Stop Reverse
@@ -296,7 +273,6 @@ TSL:= if(BarCount()>(atrperiods+atrsmperiods),
 
 Compatibility issue fixed.
 _Alert Helper is not longer needed.
-
 
 ---
 
@@ -307,7 +283,6 @@ _Alert Helper is not longer needed.
 kindly Apprentice,
 could we have overlay for LSR.lua please? with many thanks.
 
-
 ---
 
 ## Re: Level Stop Reverse
@@ -315,7 +290,6 @@ could we have overlay for LSR.lua please? with many thanks.
 **Apprentice** · Tue Jul 12, 2016 7:38 am
 
 Level Stop Reverse Overlay.lua Added.
-
 
 ---
 

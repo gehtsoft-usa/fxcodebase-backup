@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=20388  
 > Forum: 17 · Topic 20388 · 15 post(s)
 
-
 ---
 
 ## High/Low Range [Upd Jun 2012]
@@ -20,16 +19,14 @@ The new version allows you manage the line parameters (width, style) and put tim
 
 ![hl1.png](images/35753/hl1.png)
 
-
-
 Download:
 
  [hl1.lua](files/35753/hl1.lua)
 
 Source:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("High/Low Bands (Advanced)");
     indicator:description("");
     indicator:requiredSource(core.Bar);
@@ -265,10 +262,10 @@ function AsyncOperationFinished(cookie)
     elseif cookie == 101 then
         loading = true;
     end
-end`
+end
+```
 
 The indicator was revised and updated
-
 
 ---
 
@@ -280,7 +277,6 @@ Thanks very much for this indicator. It is really helpful and informative as it 
 
 Thanks.
 
-
 ---
 
 ## Re: High/Low Range [Upd Jun 2012]
@@ -288,7 +284,6 @@ Thanks.
 **sunshine** · Fri Aug 24, 2012 9:53 am
 
 Unfortunately, there is no schedule for the official release yet. Please watch for the updated on the site.
-
 
 ---
 
@@ -298,7 +293,6 @@ Unfortunately, there is no schedule for the official release yet. Please watch f
 
 Bump Up
 
-
 ---
 
 ## Re: High/Low Range [Upd Jun 2012]
@@ -307,7 +301,6 @@ Bump Up
 
 hi,
 I would like to know if you can enter option flag bid/ask thank you....
-
 
 ---
 
@@ -323,7 +316,6 @@ Expiratory: Present hl1 close.
 
 Thanks
 
-
 ---
 
 ## Re: High/Low Range [Upd Jun 2012]
@@ -331,7 +323,6 @@ Thanks
 **Apprentice** · Thu Jan 30, 2014 4:20 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -345,7 +336,6 @@ The strategy requested has been implemented here: [viewtopic.php?f=31&t=60526](h
 
 Cheers,
 MooMooFX
-
 
 ---
 
@@ -370,7 +360,6 @@ That would give us the possibility to show i.e.
 Kindly Regards
 fxfox
 
-
 ---
 
 ## Re: High/Low Range [Upd Jun 2012]
@@ -382,7 +371,6 @@ If I compare it with a new indicator development.
 
 An alternative could be the Higher Time Frame Support Resistance.
 [viewtopic.php?f=17&t=39802&p=65322&hilit=High%2FLow#p65322](https://fxcodebase.com/code/viewtopic.php?f=17&t=39802&p=65322&hilit=High%2FLow#p65322)
-
 
 ---
 
@@ -401,7 +389,6 @@ that's exaclty what I've looked for.
 
 Regards fxFox
 
-
 ---
 
 ## Re: High/Low Range [Upd Jun 2012]
@@ -418,7 +405,6 @@ Thanks a lot in advance for your action
 
 Have a nice end of week
 
-
 ---
 
 ## Re: High/Low Range [Upd Jun 2012]
@@ -426,7 +412,6 @@ Have a nice end of week
 **Apprentice** · Fri May 22, 2015 4:00 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -437,7 +422,6 @@ Your request is added to the development list.
 Very good new. I'm looking forward to be able to installing it on my trading platform.
 Is it possible to have an estimated date of availability ?
 Thanks a lot
-
 
 ---
 

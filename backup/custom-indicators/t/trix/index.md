@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=1022  
 > Forum: 17 · Topic 1022 · 18 post(s)
 
-
 ---
 
 ## Trix
@@ -32,14 +31,12 @@ Sell when TRIX is above zero and crosses its Signal Line from above.
 
 ![trix.png](images/1926/trix.png)
 
-
-
 Download the indicator:
 
  [trix.lua](files/1926/trix.lua)
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- TRIX index indicator
+```lua
+-- TRIX index indicator
 function Init()
     indicator:name("TRIX Index");
     indicator:description("The indicator eliminates cycles shorter than the selected indicator period. ");
@@ -122,8 +119,8 @@ function Update(period, mode)
     if period >= SIGNAL:first() then
         SIGNAL[period] = MA4.DATA[period];
     end
-end`
-
+end
+```
 
 ---
 
@@ -145,7 +142,6 @@ If required I will supply more details of the above indicators.
 
 rorieu
 
-
 ---
 
 ## Re: Trix
@@ -159,7 +155,6 @@ can u give me the strategy of trix for trading station 2
 thnaks a lot by
 arindam
 
-
 ---
 
 ## Re: Trix
@@ -171,7 +166,6 @@ can u give me a trix strategy that works on trading station 2 i.e, .lau
 file
 thanks by
 
-
 ---
 
 ## Re: Trix
@@ -180,7 +174,6 @@ thanks by
 
 Histogram Stream Added.
 
-
 ---
 
 ## Re: Trix
@@ -188,7 +181,6 @@ Histogram Stream Added.
 **jeisenm** · Mon Dec 12, 2011 12:50 pm
 
 this is a very interesting indicator. can you explain how to use the histogram display that was just added?
-
 
 ---
 
@@ -200,7 +192,6 @@ The histogram is calculated similarly to its MACD Kontrapart.
 Can be used in the same way.
 It is designed as early detection tool for Trix/Sigal line crossover.
 Use the divergence.
-
 
 ---
 
@@ -217,7 +208,6 @@ CAN YOU PLEASE GIVE ME THE TRIX STRATEGY FOR TRADING STATION 2 ALSO I REALLY NEE
 BY
 ARINDAM
 
-
 ---
 
 ## Re: Trix
@@ -226,7 +216,6 @@ ARINDAM
 
 Requested can be found here.
 [viewtopic.php?f=31&t=9558](https://fxcodebase.com/code/viewtopic.php?f=31&t=9558)
-
 
 ---
 
@@ -247,7 +236,6 @@ sorry to disturb you again and again but i really need it
 thanks by
 arindam
 
-
 ---
 
 ## Re: Trix
@@ -255,7 +243,6 @@ arindam
 **Apprentice** · Thu Dec 15, 2011 5:34 pm
 
 Your request is added to the developmental cue.
-
 
 ---
 
@@ -268,8 +255,6 @@ For arindam89
  
 
 ![Trix Strategy.png](images/29153/Trix%20Strategy.png)
-
-
 
 Long
 Trix Line Signal Line CrossOver
@@ -297,7 +282,6 @@ Signal Line > 0
 Install Trix Indicator, in order to use this strategy.
 [viewtopic.php?f=17&t=1022&hilit=trix](https://fxcodebase.com/code/viewtopic.php?f=17&t=1022&hilit=trix)
 
-
 ---
 
 ## Re: Trix
@@ -305,7 +289,6 @@ Install Trix Indicator, in order to use this strategy.
 **Alexander.Gettinger** · Tue Jun 19, 2012 5:33 pm
 
 MQL4 version of Trix indicator: [viewtopic.php?f=38&t=20395](https://fxcodebase.com/code/viewtopic.php?f=38&t=20395)
-
 
 ---
 
@@ -315,7 +298,6 @@ MQL4 version of Trix indicator: [viewtopic.php?f=38&t=20395](https://fxcodebase.
 
 Anyone can add to histogram color option? ..like as "http://fxcodebase.com/code/viewtopic.php?f=17&t=229&hilit=histogram"
 
-
 ---
 
 ## Re: Trix
@@ -323,7 +305,6 @@ Anyone can add to histogram color option? ..like as "http://fxcodebase.com/code/
 **Apprentice** · Sun Apr 21, 2013 6:09 am
 
 histogram color option added
-
 
 ---
 
@@ -337,7 +318,6 @@ Is this trix indi the same as the Triple Smooth Exponential oscillator that is p
 
 Thank you
 
-
 ---
 
 ## Re: Trix
@@ -346,7 +326,6 @@ Thank you
 
 I have checked the numbers.
 They are identical.
-
 
 ---
 

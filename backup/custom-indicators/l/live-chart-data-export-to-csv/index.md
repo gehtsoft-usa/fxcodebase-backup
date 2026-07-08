@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=4685  
 > Forum: 17 · Topic 4685 · 128 post(s)
 
-
 ---
 
 ## Live chart data export to CSV
@@ -30,7 +29,6 @@ UPDATE:
 DOWNLOAD THE LATEST VERSION HERE
 [viewtopic.php?f=17&t=4685&start=100#p105245](http://www.fxcodebase.com/code/viewtopic.php?f=17&t=4685&start=100#p105245)
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -39,7 +37,6 @@ DOWNLOAD THE LATEST VERSION HERE
 
 sorry, here are the files mentioned above, attached
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -47,7 +44,6 @@ sorry, here are the files mentioned above, attached
 **chimpy** · Mon Jun 13, 2011 12:44 pm
 
 the ELD Tradestation addon attached
-
 
 ---
 
@@ -58,7 +54,6 @@ the ELD Tradestation addon attached
 If I understand you correctly, you have an indicator on EasyLanguage for TradeStation. And you would like to use it with FXCM .
 1) you can post request on this forum for fxcodebase developers and ask them to convert your indicator from EasyLanguage to Lua. And they develop the indicator for free in the order of a queue. You will be able to use the indi in Marketsope.
 2) if you really need live chart data from FXCM, you should use our trading API to develop your own application which receives prices.
-
 
 ---
 
@@ -76,7 +71,6 @@ If you can tell me how to achieve this kind of functionality from the API then a
 
 Thanks
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -84,7 +78,6 @@ Thanks
 **chimpy** · Thu Jun 23, 2011 3:57 pm
 
 I have two 3rd party apps which both check the file with timeouts. I usually set the timeout to be slightly less that the timeout of the indicator output file just to make sure I get updated with the latest version. Seems like my apps just skip an update if they ever clash or perhaps the OS (vista in my case) just queues requests to that file...?
-
 
 ---
 
@@ -96,7 +89,6 @@ does anyone have a rough idea how long the request will take to resolve. I know 
 
 Chimpy
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -107,8 +99,8 @@ Hi! Here is an application which would load required price histories with predef
 You have to create a file `Configuration.xml` to provide arguments (password is provided via command line).
 This is a sample of configuration file.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`<?xml version="1.0" encoding="utf-8" ?>
+```
+<?xml version="1.0" encoding="utf-8" ?>
 <configuration>
   <Settings>
 
@@ -148,7 +140,9 @@ Code: [Select all](https://fxcodebase.com/code/)
     </History>
    
   </Settings>
-</configuration>`
+</configuration>
+```
+
 You always have to provide `UserID`, `URL`, `Connection`, and `Password`. You may need to provide `SessionID` and `Pin`.
  You can provide `TradingDayOffset` (default=-7) and `TradingWeekOffset` (default=0).
  You have to provide `Delimeter` for you .csv file (usually ',' or ';').
@@ -173,8 +167,6 @@ These are main classes used by application:
 
 ![ProgramMain.png](images/12812/ProgramMain.png)
 
-
-
 The main class `Program` reads configuration XML file and validates input. `Program` creates a session, creates an instance of session status listener, and subscribes it to the session. Then it creates `ResponseQueue` (for storing a queue of `O2GResponses`) and an instance of response listener. The instance of response listener is subscribed to the session. Then application logs in. `EventListener` catches asynchronous events (вЂњconnectedвЂќ, "reconnecting", вЂњstatus changedвЂќ, вЂњgot a responseвЂќ) and calls `HistoryMgr` for action.
 
 Please see the class `HistoryMgr` and supporting classes:
@@ -182,8 +174,6 @@ Please see the class `HistoryMgr` and supporting classes:
  
 
 ![Candles.png](images/12812/Candles.png)
-
-
 
 Class `HistoryMgr` is a heart of the application. It keeps a list of `CandleHistories`. `CandleHistory` keeps a price history required by configuration XML file. It contains input parameters (instrument, timeframe, initial number of candles, name of the output file) as well as a list of `Candles` ready to be written to output file and new `Ticks` to be added to the candles. It also contains last request ID for getting `MarketDataSnapshot`. Each `CandleHistory` contains `BinaryWriter` for writing output file and `Timer` for firing writing event (initially timer is disabled). It also contains the start position of the last line of the output file. `Candle` contains information about one candle (time, OHLC bid and ask prices, and volume) while `Tick` contains information about one tick (time, bid and ask prices, and volume of current minute). Helper class `Timeframe` is used to find a candle incoming tick belongs to.
 When `onConnected` event occurs, function `StartGettingData` of `HistoryMgr` is called. `HistoryMgr` gets all available instruments and subscriptions. Price histories would be gathered for valid and subscribed instruments only. Function `SendMarketDataSnapshotForHistory` fills and sends request for `MarketdataSnapshot`. This function can be called several times until the required number of initial candles would be received. So when using using [createMarketDataSnapshotRequestInstrument](http://www.fxcodebase.com/documents/ForexConnectAPI/web-content.html?key=fxcore2.O2GRequestFactory.createMarketDataSnapshotRequestInstrument.0.html)
@@ -207,12 +197,9 @@ The attachment **ProgramMain.png** is no longer available
 
 ![1.png](images/12812/1.png)
 
-
-
  
 
 ![2.png](images/12812/2.png)
-
 
 ---
 
@@ -228,7 +215,6 @@ Thanks again
 
 Chimpy
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -241,7 +227,6 @@ Also what is the default file location where the CSV files are updated to?
 
 Thanks
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -252,7 +237,6 @@ Please use this zipped executable in case you do not want to compile code by you
 
 LiveChartDataExportToCSVexe.zip
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -261,7 +245,6 @@ LiveChartDataExportToCSVexe.zip
 
 ForexConnect API could be dowloaded from here: [http://www.fxcodebase.com/wiki/index.php/June_2011_Release_(0.3.x)](http://www.fxcodebase.com/wiki/index.php/June_2011_Release_(0.3.x))
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -269,7 +252,6 @@ ForexConnect API could be dowloaded from here: [http://www.fxcodebase.com/wiki/i
 **chimpy** · Sun Jul 31, 2011 1:28 am
 
 allpin I have attached my 3rd question as a text file.
-
 
 ---
 
@@ -293,7 +275,6 @@ Thanks again
 
 chimpy
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -312,7 +293,6 @@ Changes made:
 - DateTime can be written in 2 fields ("Date" and "Time"). You have to provide `<SeparateDateAndTime>Y</SeparateDateAndTime>` in configuration file (default is one field for DateTime)
 - Prices can be written formatted with fixed number of decimal places (using `Digits` value from `Offers` table). You have to provide `<FormatDecimalPlaces>Y</FormatDecimalPlaces>` in configuration file (default is 'N' - do not format prices)
 - You can choose output directory for the .csv files. You have to provide something like `<OutputDir>c:\fxcmdata</OutputDir>` in configuration file (default is current directory)
-
 
 ---
 
@@ -335,7 +315,6 @@ What does the tradingweekoffset do? I assume the trading day offset is related t
 Thanks
 Chimpy
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -350,7 +329,6 @@ Also, the data is set to EST but in the marketscope the time appears to be GMT+1
 for consistancy can the CSV have the same time and date a whats in market scope or some way or setting the time.
 
 thanks
-
 
 ---
 
@@ -368,7 +346,6 @@ Trading week offset is an offset of the week day against the Sunday's midnight, 
 
 “Digits” value from “Offers” table is the number of digits after the decimal point to which the price of the instrument is rounded in calculations (5 for EUR/USD and GBP/USD, and 3 for USD/JPY). Application uses this value to get the number of decimal places. It would depend on the instrument used, and it does not always equal 5.
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -382,7 +359,6 @@ An additional problem I found last night was that the M1 timeframe does not work
 Thanks again
 
 Chimpy
-
 
 ---
 
@@ -399,7 +375,6 @@ The m1, m5, m15, m30 and H1 timeframes seem to be downloading correctly. the H1 
 
 Thanks
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -410,7 +385,6 @@ Hello Chimpy,
 I suspect that the issue with M1 timeframe is not a problem. If the configuration file asks, for example, for 1000 monthly candles, it is likely that history was not gathered for that long (almost 20 years). Try to decrease the "NumBars" value.
 Hope it helps!
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -419,7 +393,6 @@ Hope it helps!
 
 Hello Chimpy,
 Could you please verify the issue with “big” timeframes like “W1”, “D1”, “H6”, “H4”, and “H3”? The last line (last candle) should be updated on timeout. Let’s look on the most likely situation when the last candle is not closed yet (for example, we have timeout every 60 seconds and we are looking for “D1” (daily) bars). After timeout the open price would be the same, the high and low price could be the same, but the close price most likely to be changed, and the volume should be increased.
-
 
 ---
 
@@ -446,7 +419,6 @@ I noted the last line by reading the CSV file manually, copied the values down t
 Thanks
 Chimpy
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -462,7 +434,6 @@ so I was thinking, can a variable for the temporary file directory be added so t
 
 Otherwise I was amazed how lean and mean this little application is.. It uses less than 1% of CPU time even when you set it to update every 1 second.
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -474,8 +445,8 @@ timeframe "M1" (one month). Is it possible that you have program
 writing file for time frame "m1" (one minute) at the same time?
 So if you have something like this in your configuration file:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`<History>
+```
+<History>
       <Instrument>USD/JPY</Instrument>
       <TimeFrame>m1</TimeFrame>
       <File>USD_JPY_m1</File>
@@ -486,7 +457,9 @@ Code: [Select all](https://fxcodebase.com/code/)
       <TimeFrame>M1</TimeFrame>
       <File>USD_JPY_M1</File>
       <NumBars>10</NumBars>
-    </History>`
+    </History>
+```
+
 That could be a problem because for Windows "USD_JPY_m1.csv" and
 "USD_JPY_M1.csv" is the same file.
 Anyway I can see possible solutions here:
@@ -498,7 +471,6 @@ or point to the directory where file "USD_JPY_M1.csv" does not exist
 yet).
 3 - try to delete existing file "USD_JPY_M1.csv" (you would not be
 able to do it if the file is really in use)
-
 
 ---
 
@@ -512,7 +484,6 @@ Something I have noticed on the H4 history. From about May 2011 going back to 20
 
 This problem is probably nothing to do with the application but, someone handling the data should look into it so, I thought I should mention the problem. strangly though, the H4 candles in marketscope look correct?
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -520,7 +491,6 @@ This problem is probably nothing to do with the application but, someone handlin
 **chimpy** · Thu Aug 04, 2011 11:32 am
 
 In reference to the back to front Open and Closes above, I have just had a look at the USDCHF H4 and the same thing is happening before May 2011 approximately.
-
 
 ---
 
@@ -537,7 +507,6 @@ Your approach to check the updates is right: open the files (as read
 only), write down values, close the files, wait (at least for timout),
 and then repeat the sequence several times.
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -553,7 +522,6 @@ In any even they do not change the timezones either. Still stays as eastern stan
 
 Did you see my pic with the upside down candles? whats causing that? does fxcm know their data is like this?
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -565,7 +533,6 @@ Would you like to have an option to change output time to EST, UTC, or Local tim
 Offsets are used to calculate the beginning of the candle, and weekly offset is used only to calculate the beginning of weekly candle (W1).
 Could you give me more information about candles not being updated for bigger time intervals? You mentioned that smaller timeframe are OK (m1 ... H3). Could you verify that timeframes H4, D1, W1, M1 are not updated? Could you note “modified” time of the output file(s) several time. Is it changing? Do you have any error messages like “Cannot update file ...”?
 Sorry, I haven’t look into the problem of “upside down candles” yet.
-
 
 ---
 
@@ -605,7 +572,6 @@ I fixed this one entirely, by installing a RAMdisk application and pointing the 
 
 Thanks
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -624,14 +590,11 @@ Please see the two charts attached below of the SPX500 and JPN225 D1 markets bot
 
 *S&P Normal Daily OHLC chart*
 
-
-
  
 
 ![JPN225.jpg](images/13930/JPN225.jpg)
 
 *JPN225 Candlestick Daily chart*
-
 
 ---
 
@@ -644,7 +607,6 @@ I have updated project and zipped executable. Changes made:
 1 - fixing issue with bigger candles not being updated
 2 - do not show same offer more than once on the screen (case with same instrument and different timeframes)
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -653,8 +615,8 @@ I have updated project and zipped executable. Changes made:
 
 Hi, I am getting the following error message when I use the updated app:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`Status: Connecting
+```
+Status: Connecting
 Status: Connected
 Exception System.MissingMethodException: Method not found: 'fxcore2.O2GResponse fxcor
 e2.O2GLoginRules.getTableRefeshResponse(fxcore2.O2GTableType)'.
@@ -663,10 +625,10 @@ entsSubscriptions)
    at fxcore2.Samples.HistoryMgr.StartGettingData()
    at fxcore2.Samples.EventListener.WaitNextEvent()
    at fxcore2.Samples.Program.Login(LoginInfo loginInfo)
-   at fxcore2.Samples.Program.Main(String[] args) occured`
+   at fxcore2.Samples.Program.Main(String[] args) occured
+```
 
 Thanks C
-
 
 ---
 
@@ -676,7 +638,6 @@ Thanks C
 
 Chimpy, sorry for inconvenience. I have updated the executable and the project again. Please let me know whether it would run successfully and whether "big" timeframes would be updated.
 The second bug fix relates to cosmetic issue I noticed myself (showing same offer more than once on the screen if, for example, configuration file asks for "m1" candles for EUR/USD and "H1" candles for EUR/USD).
-
 
 ---
 
@@ -694,7 +655,6 @@ Do you have any idea whats causing the mangled candles, is it an API problem?
 
 chimpy
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -704,7 +664,6 @@ chimpy
 Hi Chimpy,
 Please use `<TradingWeekOffset>0</TradingWeekOffset>` in configuration file. That should fix the issue with updating of weekly candles.
 I have yet to look at the case with upside down candles. Thank you for your patience.
-
 
 ---
 
@@ -716,7 +675,6 @@ I have updated project file and executable. Changes made:
 1 - Use 0 as a default for `TradingWeekOffset`
 2 - Added option `NeedLastCompletedCandle` in configuration file.
  If the value is 'y' or 'Y', the last completed candle will be shown on the screen, and offers would not be shown. Default is 'N' ('User needs forming candles as well'). This option can be used for those users who need only completed candle.
-
 
 ---
 
@@ -731,7 +689,6 @@ speak to you next week.
 
 Chimpy
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -740,7 +697,6 @@ Chimpy
 
 I have updated project and executable. Changes made: workaround for possible problem with Open and Close prices.
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -748,7 +704,6 @@ I have updated project and executable. Changes made: workaround for possible pro
 **allpin** · Thu Sep 08, 2011 10:33 am
 
 Another update for zipped project file and executable. Changes made: removing commas as thousand separators.
-
 
 ---
 
@@ -760,7 +715,6 @@ Thanks allpin. Its looking good. I can use a demo account for testing as thats i
 Let me know when the TimeZone shift thing has been updated and I will give it a go.
 
 Thanks again
-
 
 ---
 
@@ -775,7 +729,6 @@ Changes made:
 Ability to get the results in different time zones (see entry like this:
 “<TimeZone>EST</TimeZone>” in configuration file). Valid values are “EST” (default), “UTC”, and “Local”.
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -783,7 +736,6 @@ Ability to get the results in different time zones (see entry like this:
 **haris123** · Thu Apr 05, 2012 4:53 pm
 
 its nice and cool
-
 
 ---
 
@@ -799,7 +751,6 @@ I am using vista. Its been about 1.5 years since I have used the program so I am
 Can someone please hae a look for me
 
 Thanks Chimpy
-
 
 ---
 
@@ -840,7 +791,6 @@ at about 5am UTC morning of 22nd
 Thanks
 Chimpy
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -859,7 +809,6 @@ Thanks so much!
 
 Chimpy
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -872,7 +821,6 @@ Please find the updated source code and .exe (x86 and x64) in the attachment.
 For now it should work with the latest version of API.
 
 Unfortunately I do not completely understand the issue with time zones. Could you clarify it, please?
-
 
 ---
 
@@ -894,7 +842,6 @@ I have installed the latest forexconnect API onto a new build of windows 7.
 --
 I will check for the timezone problem once the code is running
 Thanks
-
 
 ---
 
@@ -924,7 +871,6 @@ pdas.dll
 
 and your Configuration.xml
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -933,7 +879,6 @@ and your Configuration.xml
 
 The fxcore2.dll file is not in the bin directory by default, but there are two copies in the bin\net\dotnet20 and dotnet40 directories. should I copy fxcore2.dll up to the bin directory from one of these, if so which one? I can try both but I wated to make sure I got the right one for this release of FXconnect api
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -941,7 +886,6 @@ The fxcore2.dll file is not in the bin directory by default, but there are two c
 **chimpy** · Wed Dec 11, 2013 2:16 am
 
 I am running the LiveChartDataExportToCSV_x86.exe from the bin directory as last time round it worked fine.
-
 
 ---
 
@@ -959,7 +903,6 @@ You should copy fxcore2.dll from bin\net\dotnet20.
 
 I am glad to hear it.
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -971,8 +914,8 @@ Gennadiy,
 The application is up and running again thanks.
 An example of the timezone problem is below for GBPUSD . Along with the settings I am using.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`<?xml version="1.0" encoding="utf-8" ?>
+```
+<?xml version="1.0" encoding="utf-8" ?>
 <configuration>
   <Settings>
     <UserID>0000000000</UserID>
@@ -988,7 +931,8 @@ Code: [Select all](https://fxcodebase.com/code/)
     <SeparateDateAndTime>Y</SeparateDateAndTime>   
     <FormatDecimalPlaces>Y</FormatDecimalPlaces>   
     <OutputDir>H:\fxcmdata</OutputDir>   
-    <Timeout>60</Timeout>`
+    <Timeout>60</Timeout>
+```
 
 Around the time that daylight saving is introduced in the UK, The 4 Hour candle times switch from 0200,0600,1000,1400,1800,2200 to 0100,0500,0900,1300,1700,2100
 The timezone in the configuration.xml is set to UTC. UTC is set by some atomic clock and does not change. It should not change for daylight saving. When the timezone is set to EST you do not get this problem.
@@ -998,8 +942,8 @@ I am just guessing but maybe the script is communicating the [Local] flag, which
 See here:
 [http://fxcodebase.com/wiki/index.php/Changing_Time_Zone](https://fxcodebase.com/wiki/index.php/Changing_Time_Zone)
 
-Code: [Select all](https://fxcodebase.com/code/)
-`06/03/2013,02:00,1.51452,1.51478,1.51325,1.51402,1.51476,1.51503,1.51349,1.51429,5631
+```
+06/03/2013,02:00,1.51452,1.51478,1.51325,1.51402,1.51476,1.51503,1.51349,1.51429,5631
 06/03/2013,06:00,1.51402,1.51457,1.50679,1.50756,1.51429,1.51484,1.50710,1.50777,14600
 06/03/2013,10:00,1.50756,1.51046,1.50591,1.50819,1.50777,1.51067,1.50614,1.50840,16372
 06/03/2013,14:00,1.50819,1.50819,1.50155,1.50191,1.50840,1.50840,1.50177,1.50217,18836
@@ -1028,7 +972,8 @@ Code: [Select all](https://fxcodebase.com/code/)
 12/03/2013,09:00,1.49018,1.49146,1.48304,1.48888,1.49043,1.49170,1.48330,1.48902,23773
 12/03/2013,13:00,1.48888,1.49026,1.48547,1.48994,1.48902,1.49047,1.48571,1.49022,21976
 12/03/2013,17:00,1.48994,1.49129,1.48883,1.48997,1.49022,1.49147,1.48905,1.49030,10274
-12/03/2013,21:00,1.48997,1.49093,1.48918,1.49036,1.49030,1.49123,1.48942,1.49063,6104`
+12/03/2013,21:00,1.48997,1.49093,1.48918,1.49036,1.49030,1.49123,1.48942,1.49063,6104
+```
 
 Also on the 4 Hour you get an extra bar every now and again. Unlike the anomaly above, this does not appear in marketscope:
 
@@ -1036,7 +981,6 @@ Also on the 4 Hour you get an extra bar every now and again. Unlike the anomaly 
 22/05/2013,21:00,1.50475,1.50499,1.50165,1.50224,1.50509,1.50574,1.50191,1.50251,7121
 
 Chimpy
-
 
 ---
 
@@ -1061,7 +1005,6 @@ We will check it. I will let you know about results.
 
 Hope this helps.
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -1079,7 +1022,6 @@ I could not find the FXCM daylight trading statement but here is the one from an
 [http://www.saxobank.com/market-insight/ ... ding-hours](http://www.saxobank.com/market-insight/news/daylight-saving-time-trading-hours)
 [/url]
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -1094,7 +1036,6 @@ Hello chimpy,
 I am sorry, but I don't clearly understand your question. Could you please clarify it?
 
 Market opening and closing time may be different depending on server. But for Europe and America this time is 17:00 EST. It is independent of the daylight time.
-
 
 ---
 
@@ -1119,7 +1060,6 @@ Could you please provide us your Configuration.xml ? It would be helpful for us.
 Send it to support(at) gehtsoftusa(dot) com or place it here.
 Thank you.
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -1140,7 +1080,6 @@ Although, I guess someone will come along and ask for 9 Hour bars in the future.
 
 C
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -1156,7 +1095,6 @@ Hello chimpy,
 > Although, I guess someone will come along and ask for 9 Hour bars in the future... would this cause a large script overhead adding up 540 minutes?
 
 Unfortunately, the ForexConnect API does not allow to implement this function.
-
 
 ---
 
@@ -1184,8 +1122,8 @@ Thanks
  <SeparateDateAndTime>Y</SeparateDateAndTime>
  <FormatDecimalPlaces>Y</FormatDecimalPlaces>
 
-Code: [Select all](https://fxcodebase.com/code/)
-`31/10/2013,21:00,1.60359,1.60453,1.59076,1.59189,1.60387,1.60478,1.59102,1.59286,66594
+```
+31/10/2013,21:00,1.60359,1.60453,1.59076,1.59189,1.60387,1.60478,1.59102,1.59286,66594
 03/11/2013,22:00,1.59243,1.59773,1.59025,1.59669,1.59282,1.59794,1.59048,1.59702,46844
 04/11/2013,22:00,1.59669,1.60616,1.59473,1.60415,1.59702,1.60639,1.59498,1.60447,63592
 05/11/2013,22:00,1.60415,1.61168,1.60408,1.60779,1.60447,1.61191,1.60430,1.60807,54797
@@ -1222,8 +1160,8 @@ Code: [Select all](https://fxcodebase.com/code/)
 18/12/2013,22:00,1.63879,1.63959,1.63346,1.63713,1.63932,1.63997,1.63366,1.63750,110981
 19/12/2013,22:00,1.63713,1.63938,1.63145,1.63259,1.63750,1.63963,1.63171,1.63409,108665
 22/12/2013,22:00,1.63346,1.63741,1.63200,1.63515,1.63442,1.63762,1.63257,1.63615,82600
-23/12/2013,22:00,1.63515,1.63806,1.63211,1.63671,1.63615,1.63825,1.63242,1.63709,61296`
-
+23/12/2013,22:00,1.63515,1.63806,1.63211,1.63671,1.63615,1.63825,1.63242,1.63709,61296
+```
 
 ---
 
@@ -1238,7 +1176,6 @@ I will let you know about results.
 
 Thank you.
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -1250,7 +1187,6 @@ Gennadiy,
 I dont know if its really going to help you observing it real time on thursday and friday, considering all the historical data is the same going back decades... The application did not produce results this before the API caused the app to break, as I remember using it for live trading. I am not sure if the problem is related to the tradingdayoffset, tradingweekoffset flags, i never really understood why they are in the config file or how they work?
 
 I am sure the data from teh fxcm server is correct, its how the app is pulling it down and dating it up thats the problem
-
 
 ---
 
@@ -1272,7 +1208,6 @@ We will check it on Friday. I will let you know about results.
 
 Unfortunately allpin did not leave any documentation according these parameters. I have tried to understand what do they mean from the sourcecode, but without success. Our developers do not know too.
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -1289,7 +1224,6 @@ The bars are not correct. Because firstly they are not consistant with Marketsco
 
 I was using this app as my main data source before it died when the API changed and there was always a friday bar, exactly the same as marketscope.
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -1302,7 +1236,6 @@ I have wrote an email to allpin with the question about config parameters. I wil
 Please take a look at attached image.
 Compare the data from the Marketscope and CSV file created by allpin's program.
 Marketscope shows the candle on 01/**17**/2014, but the program shows the same candle on 01/**16**/2014 5:00:00 PM. So all works well, because of Marketscope draws candle on the day when it's closed. But the program writes the date and time when the candle opened.
-
 
 ---
 
@@ -1326,7 +1259,6 @@ Release Notes:
 
 Thank you.
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -1342,21 +1274,21 @@ I havent been able to look at this for a few months, apologies.
 Below is some data form GBPUSD. You can see that on the 17th Thursday the market is closing for the weekend whereas marketscopes same candle shows its the 18th a Friday. This is the same problem we had before.
 (marketscope and the script are both set flags as UTC)
 
-Code: [Select all](https://fxcodebase.com/code/)
-`15/07/2014,21:00,1.71404,1.71498,1.71114,1.71338,1.71464,1.71524,1.71151,1.71411,119200
+```
+15/07/2014,21:00,1.71404,1.71498,1.71114,1.71338,1.71464,1.71524,1.71151,1.71411,119200
 16/07/2014,21:00,1.71338,1.71426,1.70843,1.70987,1.71411,1.71450,1.70866,1.71040,205346
 17/07/2014,21:00,1.70987,1.71167,1.70352,1.70789,1.71040,1.71190,1.70378,1.70909,131131
 20/07/2014,21:00,1.70805,1.70984,1.70547,1.70736,1.70950,1.71009,1.70571,1.70777,91928
 21/07/2014,21:00,1.70736,1.70822,1.70404,1.70626,1.70777,1.70847,1.70426,1.70667,93473
 22/07/2014,21:00,1.70626,1.70942,1.70229,1.70415,1.70667,1.70967,1.70257,1.70459,105142
-23/07/2014,21:00,1.70415,1.70416,1.70303,1.70308,1.70459,1.70465,1.70328,1.70335,10292`
+23/07/2014,21:00,1.70415,1.70416,1.70303,1.70308,1.70459,1.70465,1.70328,1.70335,10292
+```
 
 >>4) CSV updates with each new tick (not a timer as in the previous version).
 
 I see all the time frames under 1 day are updating in real time. The D1 W1 and M1 are not updating in realtime. They only update when you restart the script. I vaguely remember this problem happening before on this timeframe.
 
 I'd you could have a look I'd appreciate it. Thanks again
-
 
 ---
 
@@ -1373,7 +1305,6 @@ Press any key to exit
 
 so it still wants the <Timeout>1</Timeout> tag?
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -1384,19 +1315,20 @@ Hello chimpy,
 It looks like you are using the old version of the application.
 Here is the output example of the new application:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`07.16.2014 1,71404 1,71498 1,71114 1,71338 1,71464 1,71524 1,71151 1,71411 119200
+```
+07.16.2014 1,71404 1,71498 1,71114 1,71338 1,71464 1,71524 1,71151 1,71411 119200
 07.17.2014 1,71338 1,71426 1,70843 1,70987 1,71411 1,7145 1,70866 1,7104 205346
 07.18.2014 1,70987 1,71167 1,70352 1,70789 1,7104 1,7119 1,70378 1,70909 131131
 07.21.2014 1,70805 1,70984 1,70547 1,70736 1,7095 1,71009 1,70571 1,70777 91887
 07.22.2014 1,70736 1,70822 1,70404 1,70626 1,70777 1,70847 1,70426 1,70667 92956
 07.23.2014 1,70626 1,70942 1,70229 1,70415 1,70667 1,70967 1,70257 1,70459 104943
-07.24.2014 1,70415 1,70458 1,7021 1,70429 1,70459 1,70483 1,70238 1,70456 16820`
+07.24.2014 1,70415 1,70458 1,7021 1,70429 1,70459 1,70483 1,70238 1,70456 16820
+```
+
 Also the structure of the config file was changed in the latest version of the application.
 Please, download the latest version one more time, extract it in the new folder, fill the new config file and try to use the application again (new config does not contain <Timeout>1</Timeout> parameter). Please let me know about the result.
 
 Thank you.
-
 
 ---
 
@@ -1425,7 +1357,6 @@ Mine is set to Real as I am using it on a real account. Here is my config file b
 The TimeZone; and SeperateDateAndTime options are needed by some people because, of the way their third party applications process data
 I am not sure about the FormatDecimalPlaces. Allpin put it in to fix some problem but I cant remember what it does and cant test it without all the old functionality of the old FXconnect version.
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -1444,7 +1375,6 @@ Chimpy"
 
 Its important for compatibility. Can you confirm if this still works as designed?
 Thanks
-
 
 ---
 
@@ -1468,8 +1398,8 @@ We will return/add them in the version 2 of the application.
 
 The following parameters are included in the new config (config sample may be found in the archive with new version of the application as well):
 
-Code: [Select all](https://fxcodebase.com/code/)
-`<Login></Login>
+```
+<Login></Login>
 <Url>www.fxcorporate.com/Hosts.jsp</Url>
 <Connection>demo</Connection>
 <SessionID></SessionID>
@@ -1482,8 +1412,8 @@ Code: [Select all](https://fxcodebase.com/code/)
       <Timeframe>m1</Timeframe>
       <Filename>USD_JPY_m1</Filename>
       <NumBars>400</NumBars>
-    </History>`
-
+    </History>
+```
 
 ---
 
@@ -1526,7 +1456,6 @@ If you can get the FormatDecimalPlaces working, Date delimiting fixed and timezo
 Thanks
 C
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -1543,7 +1472,6 @@ Could you please clarify if this happens with the old application? Could you ple
 
 Thank you.
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -1555,7 +1483,6 @@ Gennadiy,
 No this is a new thing with the latest application update you posted earlier this year.
 I am passing the password on the command line as parameter, just like all the previous versions.
 Crash pic attached
-
 
 ---
 
@@ -1577,7 +1504,6 @@ Release Notes:
 3) TImezone parameter is added.
 
 Please note that the new configuration file shall be used (template is contained in archives above).
-
 
 ---
 
@@ -1601,7 +1527,6 @@ Can the date and time be delimited in their own cells or the SeparateDateAndTime
 
 Thanks
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -1610,7 +1535,6 @@ Thanks
 
 Hello chimpy,
 We will work on it. I will let you know about the result later. Thank you.
-
 
 ---
 
@@ -1634,7 +1558,6 @@ example: you could add
 <DateTimeSeparator> </DateTimeSeparator> to separate date and time by space;
 <DateTimeSeparator></DateTimeSeparator> to do not separate date and time (delete DateTimeSeparator from config file to get the same result);
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -1652,7 +1575,6 @@ In the old app before it was rewritten the time column was always either 21:00 o
 
 Can you please have a look. Thanks
 Chimpy
-
 
 ---
 
@@ -1675,7 +1597,6 @@ We are currently working on the specified issue and will be able to provide you 
 
 Thank you.
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -1685,7 +1606,6 @@ Thank you.
 Hello chimpy,
 
 The new version is attached. The issues from your post have been fixed
-
 
 ---
 
@@ -1703,7 +1623,6 @@ Once you have another look at the weekly, I will give it an extensive test.
 Thanks
 C
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -1713,10 +1632,10 @@ C
 As well as the above, see the code here for SPX500 CFD symbol. Because the price is up in the thousands, the system is putting in a comma producing "2,102.88000" instead of "2102,88000"
 The comma causes a formatting problem for most 3rd party packages. This appears on all timeframes and in all the high priced CFDs like nasdaq, Dow, gold etc and the various European bourses
 
-Code: [Select all](https://fxcodebase.com/code/)
-`17/08/2015 21:00 2,093.88000 2,104.13000 2,078.38000 2,102.38000 2,094.38000 2,104.63000 2,078.88000 2,102.88000 14772
-18/08/2015 21:00 2,102.38000 2,107.38000 2,096.13000 2,097.40000 2,102.88000 2,107.88000 2,096.63000 2,097.90000 11646`
-
+```
+17/08/2015 21:00 2,093.88000 2,104.13000 2,078.38000 2,102.38000 2,094.38000 2,104.63000 2,078.88000 2,102.88000 14772
+18/08/2015 21:00 2,102.38000 2,107.38000 2,096.13000 2,097.40000 2,102.88000 2,107.88000 2,096.63000 2,097.90000 11646
+```
 
 ---
 
@@ -1729,7 +1648,6 @@ Hello chimpy,
 Thank you for reporting the problem.
 A new build will be prepared in the nearest time.
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -1739,7 +1657,6 @@ A new build will be prepared in the nearest time.
 Hello chimpy,
 
 The new version is attached. The issues from your post have been fixed.
-
 
 ---
 
@@ -1753,7 +1670,6 @@ I saw this article but if I understand correctly, this is converting live data i
 Is there a way that live chart data can be transferred onto the website page? And how is it done?
 Thank you, I hope I am not ruining this topic.
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -1762,7 +1678,6 @@ Thank you, I hope I am not ruining this topic.
 
 Hi Free2readme,
 Please install and use the ForexConnect API version on Java. Therefore, using this version you will be able to receive and display data on your site as you wish.
-
 
 ---
 
@@ -1777,7 +1692,6 @@ I am not a developer so I have no clue how to do this, is there already a premad
 by the way, I use Trading Station 2 from FXCM.
 Thank you very much for responding.
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -1787,7 +1701,6 @@ Thank you very much for responding.
 Hi Free2readme,
 
 As far as I know, FXCM has a separate service that allows you to display prices on a site. I need to find this information and learn about this service in more details. I will answer in the coming days.
-
 
 ---
 
@@ -1800,7 +1713,6 @@ Hi Free2readme,
 Please use Forex Rates Widgets to display prices:
 [http://www.fxcm.com/resources/web-tools ... rates-feed](http://www.fxcm.com/resources/web-tools/widgets/forex-rates-feed)
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -1810,7 +1722,6 @@ Please use Forex Rates Widgets to display prices:
 Thank you Julia but this is not what I want.
 I want the actual candlestick chart on the webpage and that it is able to load a template for a particular chart(currency pair) on a blank webpage.
 I know it is possible, I just dont know how to do it. :/ If anyone knows, I will greatly appreciate.
-
 
 ---
 
@@ -1835,7 +1746,6 @@ If you want a simple CSV file of EUR/USD in a directory on your actual computer 
 
 Hope this helps
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -1844,8 +1754,8 @@ Hope this helps
 
 okiryanova / Georgiy
 
-Code: [Select all](https://fxcodebase.com/code/)
-`12/10/2015 21:00 1.53054 1.53726 1.53054 1.53462 1.53212 1.5373999999999999 1.5315699999999999 1.535 205615
+```
+12/10/2015 21:00 1.53054 1.53726 1.53054 1.53462 1.53212 1.5373999999999999 1.5315699999999999 1.535 205615
 13/10/2015 21:00 1.53462 1.5387300000000002 1.51998 1.52461 1.535 1.5388499999999998 1.5200999999999998 1.52504 263802
 14/10/2015 21:00 1.52461 1.5494 1.52455 1.54753 1.52504 1.54955 1.52491 1.5479399999999999 255186
 15/10/2015 21:00 1.54753 1.55084 1.54149 1.54492 1.5479399999999999 1.55097 1.54158 1.5465 546368
@@ -1853,17 +1763,18 @@ Code: [Select all](https://fxcodebase.com/code/)
 19/10/2015 21:00 1.5433700000000001 1.5481 1.5427000000000002 1.54611 1.54466 1.54826 1.54287 1.5462699999999998 96761
 999 96664
 
-82099999999999 74511`
+82099999999999 74511
+```
 
-Code: [Select all](https://fxcodebase.com/code/)
-`19/10/2015 08:00 119.33999999999999 119.435 119.264 119.375 119.352 119.44800000000001 119.275 119.387 10918
+```
+19/10/2015 08:00 119.33999999999999 119.435 119.264 119.375 119.352 119.44800000000001 119.275 119.387 10918
 19/10/2015 09:00 119.375 119.422 119.341 119.408 119.387 119.433 119.35300000000001 119.421 8600
 .42200000000001 8598
-.42800000000001 8436`
+.42800000000001 8436
+```
 
 when you log into with the application using a demo account you get a bunch of decimals tacked onto the end of the prices sometimes. Othertimes you get the correct 5 decimal places as with GBPUSD and 3 decimal places with USDJPY. See the examples above.
 I usually use live account to log in but this time I was using a demo, I don't know if that is relevant or is just something has changed with the fcxm backend in the last couple of weeks that has caused this problem.
-
 
 ---
 
@@ -1876,7 +1787,6 @@ Hello chimpy,
 We are trying to reproduce your issue at the moment.
 Could you please tell which ForexConnect version do you use?
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -1886,7 +1796,6 @@ Could you please tell which ForexConnect version do you use?
 1.3.1 07/2014 from the daily fx update forum.
 [http://www.dailyfx.com/forex_forum/fore ... tes-3.html](http://www.dailyfx.com/forex_forum/forexconnect/392705-forexconnect-api-subscribe-updates-3.html)
 or is this a defunct thread?
-
 
 ---
 
@@ -1900,7 +1809,6 @@ I would strongly recommend you to use the latest version. It is ForexConnect 1.3
 All stable versions and beta versions are available here:
 [http://fxcodebase.com/wiki/index.php/Download](https://fxcodebase.com/wiki/index.php/Download)
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -1912,7 +1820,6 @@ Hello chimpy,
 Thank you very much for finding the issue with extra decimals. We will prepare a new version of the application with the issue fixed and post it here at the beginning of the next week.
 
 If I can be of assistance, please do not hesitate to contact me.
-
 
 ---
 
@@ -1927,7 +1834,6 @@ Please check and let me know about the result.
 
 Thanks.
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -1937,7 +1843,6 @@ Thanks.
 I tested for a few weeks , none of the extra decimals appeared again thanks but the W1, D1 and H6 timeframes have stopped updating in real time, you can see this in the file by opening up, observing the last lines volume count, closing and opening again 10 seconds later (assuming a liquid time of day)
 
 The other timeframes appear to be working ok
-
 
 ---
 
@@ -1949,7 +1854,6 @@ Hello Chimpy,
 
 We investigate this. I will answer you in the nearest time.
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -1957,7 +1861,6 @@ We investigate this. I will answer you in the nearest time.
 **sriganesh** · Wed Mar 02, 2016 6:06 pm
 
 Hi , I am fXCM Custmer, i am trying to use your Live Chart Data Export to CSV app. Please provide instructions on how to setup so i can use it download the historical data. Do you provide source codes for furture development ?
-
 
 ---
 
@@ -1982,7 +1885,6 @@ Then extract either the x86 or x64 code from the zip to your " :\Program Files\C
 There is an example of the configuration.xml file earlier in the thread.
 I suggest you read through the whole thread to get a feel of the development and how things have progressed. There might be some code available at some point once the problems listed earlier in the thread have been ironed out. PM me if you have a question
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -1995,7 +1897,6 @@ Can the latest version with source code be re-posted?
 
 Thanks in advance!
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -2005,7 +1906,6 @@ Thanks in advance!
 A new version will be posted in due course, otherwise roll back and find the last two zip files. 7zip or otherwise.
 if you dont know what 7zip is see here
 [http://www.7-zip.org/](http://www.7-zip.org/)
-
 
 ---
 
@@ -2033,7 +1933,6 @@ Release notes:
 Please let me know if you have any questions.
 Thank you.
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -2048,7 +1947,6 @@ Below is part of configuration.xml file, where do i enter the username and passw
  <SessionID>D1022</SessionID>
  <Pin>6477</Pin>
  <OutputDir>d:\fxcmdata</OutputDir>
-
 
 ---
 
@@ -2069,7 +1967,6 @@ you can reset <SessionID></SessionID> and <Pin></Pin> to nothing. I think these 
 
 make sure you double check the syntax of the config file etc.
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -2077,7 +1974,6 @@ make sure you double check the syntax of the config file etc.
 **Kyle.Gilbertson** · Mon Aug 29, 2016 11:36 am
 
 Is the source for this project available anywhere?
-
 
 ---
 
@@ -2089,7 +1985,6 @@ Hi Kyle,
 
 Please write your e-mail where we can send you the source.
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -2097,7 +1992,6 @@ Please write your e-mail where we can send you the source.
 **Apprentice** · Thu Sep 21, 2017 5:02 am
 
 Bump up.
-
 
 ---
 
@@ -2107,7 +2001,6 @@ Bump up.
 
 Would this work with new ForexConnect 1.5.0 version or does it need updating?
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -2115,7 +2008,6 @@ Would this work with new ForexConnect 1.5.0 version or does it need updating?
 **Apprentice** · Tue May 08, 2018 4:54 am
 
 Bump up.
-
 
 ---
 
@@ -2156,7 +2048,6 @@ Some 3rd party programs require a header in each data file so this would be very
 Thanks alot
 Chimpy
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -2164,7 +2055,6 @@ Chimpy
 **Konstantin.Toporov** · Fri Oct 19, 2018 1:24 pm
 
 Hello, we will update this software soon.
-
 
 ---
 
@@ -2179,7 +2069,6 @@ To note: it has not crashed again since last week so, it is happening only occas
 
 > **Konstantin.Toporov wrote:**
 > Hello, we will update this software soon.
-
 
 ---
 
@@ -2196,7 +2085,6 @@ You can download a build for Win64:
 Or build everything from sources:
 [https://github.com/gehtsoft/LiveChartDa ... ter/source](https://github.com/gehtsoft/LiveChartDataExportToCSV/tree/master/source)
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -2205,7 +2093,6 @@ Or build everything from sources:
 
 Prebuilt version for Win32 is also available:
 [https://github.com/gehtsoft/LiveChartDa ... _1.6.0.zip](https://github.com/gehtsoft/LiveChartDataExportToCSV/blob/master/release/LiveChartDataExportToCSV_v2.1.0_x86_1.6.0.zip)
-
 
 ---
 
@@ -2218,7 +2105,6 @@ Prebuilt version for Win32 is also available:
 
 thanks,
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -2226,7 +2112,6 @@ thanks,
 **Apprentice** · Mon Aug 09, 2021 7:32 am
 
 DT is?
-
 
 ---
 
@@ -2239,7 +2124,6 @@ DT is?
 
 it is short for dynamic trader
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -2247,7 +2131,6 @@ it is short for dynamic trader
 **Apprentice** · Sun Aug 15, 2021 4:43 am
 
 Do not know the platform.
-
 
 ---
 
@@ -2319,7 +2202,6 @@ Hello,
  </Settings>
 </configuration>
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -2335,7 +2217,6 @@ Code: [Select all](https://fxcodebase.com/code/)
 
 Thanks,
 Noyp
-
 
 ---
 
@@ -2370,7 +2251,6 @@ Status: disconnecting" is there any possibility that it can be done.
 Thanks,
 noyp
 
-
 ---
 
 ## Re: Live chart data export to CSV
@@ -2380,7 +2260,6 @@ noyp
 LiveChartDataExportToCSV_v2.1.0_x64 with FC 1.6.2 x64 no longer updates csv file realtime higher timeframe D1 and W1 while M1,H4, H1,15m are working fine.
 
 Please advsie
-
 
 ---
 

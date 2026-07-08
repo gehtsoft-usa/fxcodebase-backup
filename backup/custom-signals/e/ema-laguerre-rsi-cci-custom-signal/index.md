@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=29&t=601  
 > Forum: 29 · Topic 601 · 11 post(s)
 
-
 ---
 
 ## EMA/Laguerre RSI/CCI custom signal
@@ -36,8 +35,6 @@ The backtest example:
 
 ![EMA_LAG_CCI.png](images/1068/EMA_LAG_CCI.png)
 
-
-
 Download the signal:
 
  [EMA_LAG_CCI.lua](files/1068/EMA_LAG_CCI.lua)
@@ -47,8 +44,8 @@ The signal requires the custom indicator Laguerre RSI. Please do not forget to d
 
 The signal source code:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     strategy:name("EMA/Laguerre RSI/CCI signal");
     strategy:description("Signals BUY when EMA grows and Lag_RSI = 1 and CCI < -5. Signals SELL when EMA falls, Lag_RSI = -1 and  ");
 
@@ -213,8 +210,8 @@ function ExtSignal(source, period, message, soundFile)
     if soundFile ~= nil then
         terminal:alertSound(soundFile, false);
     end
-end`
-
+end
+```
 
 ---
 
@@ -224,7 +221,6 @@ end`
 
 I want install this signal, but it is error by installing
 
-
 ---
 
 ## Re: EMA/Laguerre RSI/CCI custom signal
@@ -232,7 +228,6 @@ I want install this signal, but it is error by installing
 **Nikolay.Gekht** · Tue Apr 13, 2010 9:17 am
 
 Please check whether you used Chart/Manage custom indicator instead of Signals/Manage custom signals command. The first is for indicators only, the second is for signals only.
-
 
 ---
 
@@ -253,7 +248,6 @@ Your response will be greatly appreciated
 Till then
 Ian
 
-
 ---
 
 ## Re: EMA/Laguerre RSI/CCI custom signal
@@ -261,7 +255,6 @@ Ian
 **ancient-school** · Tue Apr 13, 2010 3:14 pm
 
 Sorry my mistake... Signal Indicator loads fine. I guess I misread that the signal must be loaded from Manage Custom Signals. Mow am waiting to see whether it works
-
 
 ---
 
@@ -275,7 +268,6 @@ I did everything, restarted, only ... EURUSD signal on the timeframe ...
 nothing ..
 serious doctor?
 
-
 ---
 
 ## Re: EMA/Laguerre RSI/CCI custom signal
@@ -287,7 +279,6 @@ This signals is not signaling often. As you can see on the backtest chart, the s
 BTW, the signal when it works do **not** show anything on the chart. It shows alerts/plays sound instead (as the price alerts do).
 
 The snapshot above is the result of the indicator backtesting done using SHOWSIGNAL indicator, which executes the signal using the currently open chart as a historical data and shows the result on the chart. I'm going to prepare an article how to backtest the signals.
-
 
 ---
 
@@ -326,7 +317,6 @@ Possibly this is asking way too much, but I thought to post this request anyway 
 Regards
 Ancient School
 
-
 ---
 
 ## Re: EMA/Laguerre RSI/CCI custom signal
@@ -335,7 +325,6 @@ Ancient School
 
 Added into the development cue.
 
-
 ---
 
 ## Re: EMA/Laguerre RSI/CCI custom signal
@@ -343,7 +332,6 @@ Added into the development cue.
 **ak_nomiss** · Tue Feb 15, 2011 9:52 pm
 
 can someone tell me why the signal only work once per day ? if it only give out one signal per day then what is the point for the timeframe.
-
 
 ---
 

@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=15508  
 > Forum: 17 · Topic 15508 · 6 post(s)
 
-
 ---
 
 ## VSA indicator
@@ -27,12 +26,9 @@ D=(High-Low)/K.
 
 ![VSA.PNG](images/29213/VSA.PNG)
 
-
-
 Download:
 
  [VSA.lua](files/29213/VSA.lua)
-
 
 ---
 
@@ -52,7 +48,6 @@ Are you able to look at any of the coded programs (exe) I have a small problem w
 Is this your area of skill?
 
 chimpy
-
 
 ---
 
@@ -88,7 +83,6 @@ chimpy
 May I ask what is K for ? May I understand that Up bar is a bar which got the close higher than that of a previous bar. It was appreciated if you could explain why using Middle Price in this formula
 Thank you
 
-
 ---
 
 ## Re: VSA indicator
@@ -97,8 +91,8 @@ Thank you
 
 K is a constant set by the user.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`local D=(source.high[period-1]-source.low[period-1])/K;
+```lua
+local D=(source.high[period-1]-source.low[period-1])/K;
 Middle=(source.high[period-1]+source.low[period-1])/2;
     local Up=Middle+D;
     local Dn=Middle-D;
@@ -106,11 +100,12 @@ Middle=(source.high[period-1]+source.low[period-1])/2;
 or simplified
 
 Up = source.median[period-1] + (source.high[period-1]-source.low[period-1])/K;
-Dn = sourcemedian[period-1] - (source.high[period-1]-source.low[period-1])/K;`
+Dn = sourcemedian[period-1] - (source.high[period-1]-source.low[period-1])/K;
+```
+
 If price is greater then Up then we will have Up Bar
 If price is less then Dn then we will have Bar
 otherwise we will have Middle Bar
-
 
 ---
 
@@ -119,7 +114,6 @@ otherwise we will have Middle Bar
 **angelalzate** · Thu Mar 12, 2015 3:38 pm
 
 Good afternoon. Could anyone explain me what is the indicator , what is its function ?. Thank you very much and happy evening .
-
 
 ---
 

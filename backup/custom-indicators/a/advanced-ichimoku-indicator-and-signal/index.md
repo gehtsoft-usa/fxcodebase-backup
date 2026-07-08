@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=1970  
 > Forum: 17 · Topic 1970 · 26 post(s)
 
-
 ---
 
 ## Advanced Ichimoku Indicator and Signal
@@ -24,8 +23,6 @@ The signal lets you show alert or play sound when close price crosses the span l
 
 ![ichimoku1.png](images/3994/ichimoku1.png)
 
-
-
 Download indicator:
 
  [ichimoku1.lua](files/3994/ichimoku1.lua)
@@ -37,7 +34,6 @@ Download singal:
 If you want to use the signal only, the indicator must be installed anyway. The signal will not work without the indicator.
 
 The indicator was revised and updated
-
 
 ---
 
@@ -51,7 +47,6 @@ I think it's better when "ichimoku1" is used together with "cloud".
 Cloud.lua URL
 [http://fxcodebase.com/code/viewtopic.php?f=17&t=1589#p4007](https://fxcodebase.com/code/viewtopic.php?f=17&t=1589#p4007)
 
-
 ---
 
 ## Re: Advanced Ichimoku Indicator and Signal
@@ -59,7 +54,6 @@ Cloud.lua URL
 **luigipg** · Fri Sep 03, 2010 4:08 pm
 
 what is the cloud settage to use it with ichimoku? thanks. Luigi!!!
-
 
 ---
 
@@ -75,7 +69,6 @@ however, when trying to load the signal, i get the following error message (pls 
 
 thanks!
 
-
 ---
 
 ## Re: Advanced Ichimoku Indicator and Signal
@@ -88,7 +81,6 @@ Signal works as expected.
 
  [ICH1.lua](files/6643/ICH1.lua)
 
-
 ---
 
 ## Re: Advanced Ichimoku Indicator and Signal
@@ -96,7 +88,6 @@ Signal works as expected.
 **Blackcat2** · Thu Dec 09, 2010 6:28 pm
 
 Is it possible to generate Buy/Sell signal instead or maybe bull/bear/ranging?
-
 
 ---
 
@@ -106,7 +97,6 @@ Is it possible to generate Buy/Sell signal instead or maybe bull/bear/ranging?
 
 How to interpret buy or sell?
 
-
 ---
 
 ## Re: Advanced Ichimoku Indicator and Signal
@@ -114,7 +104,6 @@ How to interpret buy or sell?
 **TradeKing** · Fri Jun 03, 2011 12:38 pm
 
 Can we get the lines on the Ichimoku thicker because you can barely see these lines. Thanks!
-
 
 ---
 
@@ -124,7 +113,6 @@ Can we get the lines on the Ichimoku thicker because you can barely see these li
 
 Forgot to ask previously but can we also get the cross signal of the Tekan-Sen and Kijun-Sen which is really the main signal. Thanks!
 
-
 ---
 
 ## Re: Advanced Ichimoku Indicator and Signal
@@ -133,7 +121,6 @@ Forgot to ask previously but can we also get the cross signal of the Tekan-Sen a
 
 I believe that this version has this functionality.
 [viewtopic.php?f=29&t=861&p=11236&hilit=ichimoku#p11236](https://fxcodebase.com/code/viewtopic.php?f=29&t=861&p=11236&hilit=ichimoku#p11236)
-
 
 ---
 
@@ -147,7 +134,6 @@ Can you just add one more feature please? The ability to shift Kijun and Tenkan 
 
 Thank you very much!
 
-
 ---
 
 ## Re: Advanced Ichimoku Indicator and Signal
@@ -156,7 +142,6 @@ Thank you very much!
 
 Your request is added to the development list.
 
-
 ---
 
 ## Re: Advanced Ichimoku Indicator and Signal
@@ -164,7 +149,6 @@ Your request is added to the development list.
 **cyanidez** · Sun May 06, 2012 5:48 am
 
 GREAT, can't wait thanks!
-
 
 ---
 
@@ -180,7 +164,6 @@ Looking for a tool to mark the 9th, 26th and 52nd bars back, ideally a small sym
 
 Thanks in advance.
 
-
 ---
 
 ## Re: Advanced Ichimoku Indicator and Signal
@@ -188,7 +171,6 @@ Thanks in advance.
 **Apprentice** · Thu Jun 07, 2012 3:12 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -200,8 +182,8 @@ i woudlika ask for map-cloud
 
 thx a lot of code
 
-Code: [Select all](https://fxcodebase.com/code/)
-`*/
+```
+*/
 #property copyright ""
 #property link      ""
 
@@ -486,8 +468,8 @@ int Get_KumoPrice_Breakout(int ai_0, int ai_4, int ai_8, int ai_12) {
       return (li_ret_96);
    }
    return (li_ret_96);
-}`
-
+}
+```
 
 ---
 
@@ -497,7 +479,6 @@ int Get_KumoPrice_Breakout(int ai_0, int ai_4, int ai_8, int ai_12) {
 
 Your request is added to the development list.
 
-
 ---
 
 ## Re: Advanced Ichimoku Indicator and Signal
@@ -506,7 +487,6 @@ Your request is added to the development list.
 
 thx
 
-
 ---
 
 ## Re: Advanced Ichimoku Indicator and Signal
@@ -514,7 +494,6 @@ thx
 **Alexander.Gettinger** · Fri Jun 22, 2012 4:47 pm
 
 This program is decompiled and may violate copyright.
-
 
 ---
 
@@ -528,7 +507,6 @@ Can we have the email option and recurrent sound for the Advanced Ichimoku Indic
 
 Thank you
 
-
 ---
 
 ## Re: Advanced Ichimoku Indicator and Signal
@@ -536,7 +514,6 @@ Thank you
 **Apprentice** · Fri Aug 10, 2012 2:01 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -550,7 +527,6 @@ Thank you!
 
 Jo
 
-
 ---
 
 ## Re: Advanced Ichimoku Indicator and Signal
@@ -558,7 +534,6 @@ Jo
 **Apprentice** · Mon Aug 27, 2012 6:45 am
 
 Such a thing is possible.
-
 
 ---
 
@@ -568,7 +543,6 @@ Such a thing is possible.
 
 Is it possible to get a signal in real time and or closing of candle when price touches or crosses the Kijun in either direction? I only trade using the kijun so therefore I miss signals if I am not constantly checking. I would appreciate this. Thanks!
 
-
 ---
 
 ## Re: Advanced Ichimoku Indicator and Signal
@@ -576,7 +550,6 @@ Is it possible to get a signal in real time and or closing of candle when price 
 **Apprentice** · Wed Sep 19, 2012 2:41 am
 
 Your request is added to the development list.
-
 
 ---
 

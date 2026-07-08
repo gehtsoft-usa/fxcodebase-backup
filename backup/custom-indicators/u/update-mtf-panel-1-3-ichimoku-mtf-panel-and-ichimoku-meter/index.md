@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=3890  
 > Forum: 17 · Topic 3890 · 53 post(s)
 
-
 ---
 
 ## (Update MTF Panel 1.3) Ichimoku MTF Panel and Ichimoku Meter
@@ -28,8 +27,6 @@ BottomLeft
 
 ![ICH_MTF_Final.png](images/9589/ICH_MTF_Final.png)
 
-
-
 file:
 
  [ICHM.lua](files/9589/ICHM.lua)
@@ -48,14 +45,11 @@ Disable Timeframes will remove the complete row of that TF from the Panel will r
 
 ![ICH_MTF_1_3.png](images/9589/ICH_MTF_1_3.png)
 
-
-
 Code:
 
  [Ichimoku_MTF_V1_3.lua](files/9589/Ichimoku_MTF_V1_3.lua)
 
 The indicator was revised and updated
-
 
 ---
 
@@ -65,7 +59,6 @@ The indicator was revised and updated
 
 Update 1.1 removed see new Ich MTF Panel 1.2
 
-
 ---
 
 ## Re: Ichimoku MTF Panel
@@ -73,7 +66,6 @@ Update 1.1 removed see new Ich MTF Panel 1.2
 **Blackcat2** · Tue Apr 12, 2011 5:06 pm
 
 Wow... it looks very nice
-
 
 ---
 
@@ -86,7 +78,6 @@ In the first picture it shows up or down arrow, is that a buy/sell signal? How c
 
 Cheers..
 BC
-
 
 ---
 
@@ -117,12 +108,9 @@ here a picture
 
 ![ichmeter.png](images/9618/ichmeter.png)
 
-
-
 code:
 
  [ICHMeter.lua](files/9618/ICHMeter.lua)
-
 
 ---
 
@@ -133,7 +121,6 @@ code:
 Very nice indicator !
 
 I am eager to see it finish
-
 
 ---
 
@@ -150,7 +137,6 @@ I think this should be an example on how indicator based on complex rules should
 Cheers..
 BC
 
-
 ---
 
 ## Re: Ichimoku MTF Panel and Ichimoku Meter
@@ -163,7 +149,6 @@ I don't know whether this is caused by the Ichimoku rules or the calculation to 
 
 Cheers..
 BC
-
 
 ---
 
@@ -217,7 +202,6 @@ Weak with 1 lots and the strategy loos, so there are many thinks to do
 Good site about the Ichimoku Signals is
 [http://www.kumotrader.com/ichimoku_wiki/index.php?title=Main_Page](http://www.kumotrader.com/ichimoku_wiki/index.php?title=Main_Page)
 
-
 ---
 
 ## Re: (Update MTF Panel 1.2) Ichimoku MTF Panel and Ichimoku Meter
@@ -226,7 +210,6 @@ Good site about the Ichimoku Signals is
 
 very nice indicator, thanks!
 can you add some yes/no parameter to see or erase the lines of ichimoku?
-
 
 ---
 
@@ -239,7 +222,6 @@ enable or disable Ichimoku line included
 
  [ICHMeter.lua](files/9725/ICHMeter.lua)
 
-
 ---
 
 ## Re: (Update MTF Panel 1.2) Ichimoku MTF Panel and Ichimoku Meter
@@ -247,7 +229,6 @@ enable or disable Ichimoku line included
 **ak_nomiss** · Sat Apr 16, 2011 6:27 pm
 
 can you tell me how did you put the indicator and price in same window ? when I insert the indicator it just create one more window below the price window
-
 
 ---
 
@@ -263,7 +244,6 @@ By selection chart, as the location of the display.
 
 ![Capture.PNG](images/9757/Capture.PNG)
 
-
 ---
 
 ## Re: (Update MTF Panel 1.2) Ichimoku MTF Panel and Ichimoku Meter
@@ -277,7 +257,6 @@ core.Indicator
 and it should open in the same window as the price, like moving average.
 
 I'm not sure for the moment why it is so , i think it has something to do with the background. As it is not possible to draw rectangle on the chart from inside an indicator , i use instead two big wingdings letter "n". Because the size is 300 for this fonts, the letter overlaps with the border of the chart.
-
 
 ---
 
@@ -310,7 +289,6 @@ Thank You !
 
 Regds / Kumaresan.
 
-
 ---
 
 ## Re: (Update MTF Panel 1.2) Ichimoku MTF Panel and Ichimoku Meter
@@ -322,7 +300,6 @@ How i can use the volume to classify the signals?
 
 The other part, i hope i understand correctly. you want to change the indicator to a multi currency indicator. Show the (strong) signals over more then one pair in one panel.
 
-
 ---
 
 ## Re: (Update MTF Panel 1.2) Ichimoku MTF Panel and Ichimoku Meter
@@ -331,7 +308,6 @@ The other part, i hope i understand correctly. you want to change the indicator 
 
 can you add alert / sound and email too ? that would be perfect , Thank you very this indicator. Also, I notice that the pips earned is calculate by lots ? for example: long 2 lots, pips earned = 100
 it actually only profit 50 pips ( 2 lots * 50 pips = 100 pips earned )
-
 
 ---
 
@@ -358,7 +334,6 @@ The table which is used to get access to the trading terminal functions.
 
 **Details**
 The terminal table is always available at the moment of the preparing or updating of the instance of your strategy.
-
 
 ---
 
@@ -399,7 +374,6 @@ Thank You!
 
 Regds / Kumaresan.
 
-
 ---
 
 ## Re: (Update MTF Panel 1.2) Ichimoku MTF Panel and Ichimoku Meter
@@ -414,7 +388,6 @@ Kindly check and confirm the feasibility.
 
 Rgds / Kumaresan
 
-
 ---
 
 ## Re: (Update MTF Panel 1.2) Ichimoku MTF Panel and Ichimoku Meter
@@ -427,8 +400,8 @@ we had "Easter" in Germany, time for my family. Searching eggs with my little da
 
 I start to code the volume into to indicator. but i m not sure if increasing the tickvolume could says us if the singal good or not. So i read something about VSA Volume Spread Analyse and i take the following rule to filter out signals, not only increasing the volume.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`local Range1 = source.high[p-1] - source.low[p-1];
+```lua
+local Range1 = source.high[p-1] - source.low[p-1];
         local Range2 = source.high[p-2] - source.low[p-2];
         local Vol1   = source.volume[p-1];
         local Vol2   = source.volume[p-2];
@@ -441,7 +414,8 @@ Code: [Select all](https://fxcodebase.com/code/)
                 end
                
             end
-        end`
+        end
+```
 
 i also take attention to the spread(H-L) and the tickvolume.
 
@@ -453,7 +427,6 @@ If the close is **closer to the low**, then we have more selling pressure.
 Please check the Ichimoku Meter with Volume if it is better.
 
  [ICHMeter_V1_5_Volume.lua](files/10032/ICHMeter_V1_5_Volume.lua)
-
 
 ---
 
@@ -475,7 +448,6 @@ Awaiting for updated version.
 
 Regds / Kumaresan.
 
-
 ---
 
 ## Re: (Update MTF Panel 1.3) Ichimoku MTF Panel and Ichimoku Meter
@@ -484,7 +456,6 @@ Regds / Kumaresan.
 
 Add Ichimoku MTF Panel Version 1.3 see post 1
 
-
 ---
 
 ## Re: (Update MTF Panel 1.3) Ichimoku MTF Panel and Ichimoku Meter
@@ -492,7 +463,6 @@ Add Ichimoku MTF Panel Version 1.3 see post 1
 **ak_nomiss** · Mon May 02, 2011 8:05 pm
 
 can you make a strategy base on this indicator ? give out alert/signal when 2 lines cross and how many lots to trade ? Thank you
-
 
 ---
 
@@ -508,7 +478,6 @@ I wondering if it is possible pragram a strategy with ICHMETER.lua. It could be 
 Thank you
 Kind regards
 
-
 ---
 
 ## Re: (Update MTF Panel 1.3) Ichimoku MTF Panel and Ichimoku Meter
@@ -516,7 +485,6 @@ Kind regards
 **Apprentice** · Wed Jul 20, 2011 1:43 pm
 
 Your request is added to the developmental cue.
-
 
 ---
 
@@ -529,7 +497,6 @@ Would you please add Span Cross signals to this indicator.
 Thank you,
 
 RJH
-
 
 ---
 
@@ -544,7 +511,6 @@ Would it be possible to add the possibility of an alert **when** the H1 Chikou s
 It would be great if we could change H1 by 15mns and daily by H1or whatever we want...
 
 Hope I don't ask too much.Thanks in advance Mikl
-
 
 ---
 
@@ -595,7 +561,6 @@ hi gidian
 see if this volume indicator can be of some help [viewtopic.php?f=17&t=23459&p=40381&hilit=buy+sell#p40381](https://fxcodebase.com/code/viewtopic.php?f=17&t=23459&p=40381&hilit=buy+sell#p40381)
 thanks buy
 
-
 ---
 
 ## Re: (Update MTF Panel 1.3) Ichimoku MTF Panel and Ichimoku M
@@ -605,7 +570,6 @@ thanks buy
 Thank you for ICHMeter_V1_5_Volume.lua
 Impressive !
 
-
 ---
 
 ## Re: (Update MTF Panel 1.3) Ichimoku MTF Panel and Ichimoku M
@@ -614,7 +578,6 @@ Impressive !
 
 wicked indicator !
 
-
 ---
 
 ## Re: (Update MTF Panel 1.3) Ichimoku MTF Panel and Ichimoku M
@@ -622,7 +585,6 @@ wicked indicator !
 **johnjacob** · Wed Dec 11, 2013 12:37 pm
 
 So , how can i get this indicator?
-
 
 ---
 
@@ -641,7 +603,6 @@ MTF V1.3 without volume Post 1 page 1.
 
 ICH Meter post 5 page one.
 
-
 ---
 
 ## Re: (Update MTF Panel 1.3) Ichimoku MTF Panel and Ichimoku M
@@ -650,7 +611,6 @@ ICH Meter post 5 page one.
 
 I tried downloading on mt4 it wont work.
 
-
 ---
 
 ## Re: (Update MTF Panel 1.3) Ichimoku MTF Panel and Ichimoku M
@@ -658,7 +618,6 @@ I tried downloading on mt4 it wont work.
 **johnjacob** · Thu Dec 12, 2013 2:35 pm
 
 so, is this indicator for mt4? i load it up the same way i download all other indicator i got .. nothing . Is there another way to load it up beside the original way.
-
 
 ---
 
@@ -673,7 +632,6 @@ This indicators are not for mt4 , they are for FXCM trading station II.
 
 Check forexfactory forum. [http://www.forexfactory.com/showthread.php?p=6750877](http://www.forexfactory.com/showthread.php?p=6750877)
 
-
 ---
 
 ## Re: (Update MTF Panel 1.3) Ichimoku MTF Panel and Ichimoku M
@@ -685,7 +643,6 @@ ie I want the indicator to only show strong signals
 
 thanks
 
-
 ---
 
 ## Re: (Update MTF Panel 1.3) Ichimoku MTF Panel and Ichimoku M
@@ -695,7 +652,6 @@ thanks
 Can you define what is strong signals.
 And if we have one, that action should be taken.
 
-
 ---
 
 ## Ichimoku MTF Panel V1_3
@@ -703,7 +659,6 @@ And if we have one, that action should be taken.
 **MrRiversideDude** · Wed Mar 11, 2015 7:29 am
 
 Is it possible to add the weekly timeframe? Can I just modify the code?
-
 
 ---
 
@@ -722,7 +677,6 @@ etc
 
 Thanks in advance.
 
-
 ---
 
 ## Re: (Update MTF Panel 1.3) Ichimoku MTF Panel and Ichimoku M
@@ -730,7 +684,6 @@ Thanks in advance.
 **Apprentice** · Fri Apr 17, 2015 4:27 am
 
 Which version do you want to modify.
-
 
 ---
 
@@ -741,7 +694,6 @@ Which version do you want to modify.
 The latest version of the MTF Panel. Thanks in advance.
 
 Ed
-
 
 ---
 
@@ -755,7 +707,6 @@ Note. Technology used in this indicator is obsolete.
 And as it is, this indicator is not a good basis for future updates.
 Deserves a new version, written for from scratch.
 
-
 ---
 
 ## Re: (Update MTF Panel 1.3) Ichimoku MTF Panel and Ichimoku M
@@ -763,7 +714,6 @@ Deserves a new version, written for from scratch.
 **MrRiversideDude** · Mon Apr 20, 2015 8:40 am
 
 Thank you very much!!!
-
 
 ---
 
@@ -775,7 +725,6 @@ EXTREMLY URGENT
 
 pls add parameter to this indicator "price against tenkan sen"
 
-
 ---
 
 ## Re: (Update MTF Panel 1.3) Ichimoku MTF Panel and Ichimoku M
@@ -783,7 +732,6 @@ pls add parameter to this indicator "price against tenkan sen"
 **Apprentice** · Fri Feb 26, 2016 4:02 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -800,7 +748,6 @@ it is possible to create "ICHMeter_V1_5_Volume.lua" in strategy with:
 
 Cordially BigFOX.
 
-
 ---
 
 ## Re: (Update MTF Panel 1.3) Ichimoku MTF Panel and Ichimoku M
@@ -808,7 +755,6 @@ Cordially BigFOX.
 **Apprentice** · Sun Mar 06, 2016 5:29 am
 
 Which entry / exit algorithm will be use by such strategy.
-
 
 ---
 
@@ -819,7 +765,6 @@ Which entry / exit algorithm will be use by such strategy.
 Entry position when there is a closing signal and the next signal, followed by a purchase for the new signal. As "close on opposite" for future signals.
 
 Cordialy BigFOX
-
 
 ---
 
@@ -832,7 +777,6 @@ i.e. PA, PK, etc.
 
 Thank You
 
-
 ---
 
 ## Re: (Update MTF Panel 1.3) Ichimoku MTF Panel and Ichimoku M
@@ -844,7 +788,6 @@ Is it ossible to add an alert in ICHmeter when an entry is detected?
 
 Thanks in advance.
 
-
 ---
 
 ## Re: (Update MTF Panel 1.3) Ichimoku MTF Panel and Ichimoku M
@@ -853,7 +796,6 @@ Thanks in advance.
 
 Your request is added to the development list.
  Internal developer reference 20.
-
 
 ---
 

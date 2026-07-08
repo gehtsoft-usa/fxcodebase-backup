@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=973  
 > Forum: 17 · Topic 973 · 12 post(s)
 
-
 ---
 
 ## Super Trend Oscillator
@@ -12,10 +11,8 @@
 
 ![Super_Trend_Oscillator.png](images/1803/Super_Trend_Oscillator.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Super Trend oscillator");
     indicator:description("");
     indicator:requiredSource(core.Bar);
@@ -106,7 +103,8 @@ function Update(period, mode)
      bufferDn[period]=0.; 
          
     end
-end`
+end
+```
 
  [Super_Trend_Oscillator.lua](files/1803/Super_Trend_Oscillator.lua)
 
@@ -115,7 +113,6 @@ end`
 Single Output Stream Version
 
 The indicator was revised and updated
-
 
 ---
 
@@ -129,7 +126,6 @@ Thank you for this Oscillator.
 
 Can a bigger time frame version be done ?
 
-
 ---
 
 ## Re: Super Trend Oscillator
@@ -137,7 +133,6 @@ Can a bigger time frame version be done ?
 **WWMMACAU** · Fri May 07, 2010 7:27 pm
 
 Thanks a lot Alexander.Gettinger.
-
 
 ---
 
@@ -156,10 +151,8 @@ Thanks a lot Alexander.Gettinger.
 
 ![BF_Super_Trend_Oscillator.png](images/1839/BF_Super_Trend_Oscillator.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`-- todo: support week offset
+```lua
+-- todo: support week offset
 
 function Init()
     indicator:name("Bigger timeframe Bollinger Bands");
@@ -390,8 +383,8 @@ function findDateFast(stream, date, precise)
             end
         end
     end
-end`
-
+end
+```
 
 ---
 
@@ -401,7 +394,6 @@ end`
 
 Thank you very much, Alexander!
 
-
 ---
 
 ## Re: Super Trend Oscillator
@@ -409,7 +401,6 @@ Thank you very much, Alexander!
 **one2share** · Fri Jun 11, 2010 11:49 am
 
 can I simply get a signal that sound when the supertrend changes colors from red to green and vice versa?
-
 
 ---
 
@@ -425,7 +416,6 @@ Hello,
 
  fxhokie
 
-
 ---
 
 ## Re: Super Trend Oscillator
@@ -433,7 +423,6 @@ Hello,
 **Apprentice** · Wed Jan 04, 2012 7:11 am
 
 It appears that the request was never entered.
-
 
 ---
 
@@ -444,7 +433,6 @@ It appears that the request was never entered.
 Requested can be found here.
 [viewtopic.php?f=31&t=10946&p=22412#p22412](https://fxcodebase.com/code/viewtopic.php?f=31&t=10946&p=22412#p22412)
 
-
 ---
 
 ## Re: Super Trend Oscillator
@@ -453,7 +441,6 @@ Requested can be found here.
 
 Does the BF Supertrend ever repaint? Great work!
 
-
 ---
 
 ## Re: Super Trend Oscillator
@@ -461,7 +448,6 @@ Does the BF Supertrend ever repaint? Great work!
 **Apprentice** · Thu Mar 08, 2012 6:26 am
 
 For last period this is possible.
-
 
 ---
 

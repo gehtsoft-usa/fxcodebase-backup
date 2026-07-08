@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=2449  
 > Forum: 31 · Topic 2449 · 24 post(s)
 
-
 ---
 
 ## SAR trailing stop
@@ -20,14 +19,11 @@ Note: SAR sometimes generates a stop value which is very close to the price. So,
 
 ![sarstop.png](images/5318/sarstop.png)
 
-
-
 download:
 
  [sarstop.lua](files/5318/sarstop.lua)
 
 The Strategy was revised and updated on December 11, 2018.
-
 
 ---
 
@@ -36,7 +32,6 @@ The Strategy was revised and updated on December 11, 2018.
 **ronald3rg** · Sun Jan 29, 2012 5:44 pm
 
 Strategy does not work
-
 
 ---
 
@@ -47,7 +42,6 @@ Strategy does not work
 Please tell me the error message you are getting. You can see it in the Events window.
 The strategy works for me. Please note that the strategy is not intended to be used on US based accounts.
 
-
 ---
 
 ## Re: SAR trailing stop
@@ -55,7 +49,6 @@ The strategy works for me. Please note that the strategy is not intended to be u
 **ronald3rg** · Mon Jan 30, 2012 3:59 pm
 
 Ok that might be the problem Im in the US.
-
 
 ---
 
@@ -73,7 +66,6 @@ I am trying to add this strategy to the NEW PIVOT STRATEGY to make pivot stratge
 
 Please help me, I can do some coding I just need help with where to start.
 
-
 ---
 
 ## Re: SAR trailing stop
@@ -87,8 +79,8 @@ The strategy uses only down part of SAR for "B" (long) trades and up part of SAR
 
 Here is a part of the logic which is in charge for this:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`if trade.BS == "B" then
+```lua
+if trade.BS == "B" then
                 if sar.DN:hasData(period) then
                     stopValue = sar.DN[period];
                 else
@@ -108,8 +100,8 @@ Code: [Select all](https://fxcodebase.com/code/)
                 if stopValue <= instance.ask[NOW] then
                     return ;
                 end
-            end`
-
+            end
+```
 
 ---
 
@@ -119,7 +111,6 @@ Code: [Select all](https://fxcodebase.com/code/)
 
 okay perfect. Thanks for pointing that bit out there.
 
-
 ---
 
 ## Re: SAR trailing stop
@@ -127,7 +118,6 @@ okay perfect. Thanks for pointing that bit out there.
 **tradaplaya** · Wed Nov 14, 2012 7:44 pm
 
 is there a way to change the order id to accept pending orders not just existing trades? That way once is order is filled the strategy kicks in and places the sar stop automatically.
-
 
 ---
 
@@ -139,7 +129,6 @@ Yes, it is possible to change trade selector to order selector (by using core.FL
 
 The the strategy should watch changes in the orders table (until order disappears) and trades table (until a trade created by the order appears) and then implement the existing logic. I hope that Alex Gettinger or Apprentice can easily do this.
 
-
 ---
 
 ## Re: SAR trailing stop
@@ -148,7 +137,6 @@ The the strategy should watch changes in the orders table (until order disappear
 
 Is there a sar stop strategy strategy for US based accounts and if not, can this one be modified to work? Thank you for your help.
 
-
 ---
 
 ## Re: SAR trailing stop
@@ -156,7 +144,6 @@ Is there a sar stop strategy strategy for US based accounts and if not, can this
 **Apprentice** · Fri Apr 12, 2013 4:35 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -167,7 +154,6 @@ Your request is added to the development list.
 Can someone advise what to change to make this strategy work on a currency pair in general, without selecting the trade or the order?
 thanks
 
-
 ---
 
 ## Re: SAR trailing stop
@@ -176,7 +162,6 @@ thanks
 
 Can you explain your request.
 I do not understand it.
-
 
 ---
 
@@ -187,7 +172,6 @@ I do not understand it.
 The strategy works well, the only point that every time i have an open deal I need to start the strategy and select the deal.
 I would need a strategy which just closes the deals if the SAR signal changes without selecting a certain deal, all short deals for a currency pair would be closed if Sar changes.
 
-
 ---
 
 ## Re: SAR trailing stop
@@ -195,7 +179,6 @@ I would need a strategy which just closes the deals if the SAR signal changes wi
 **Apprentice** · Sun Sep 28, 2014 1:03 pm
 
 Your request is added to the development list.
-
 
 ---
 
@@ -206,7 +189,6 @@ Your request is added to the development list.
 Hi,
 posted back in 4/2013 just checking in to see if there is a sar stop strategy for US based accounts available on CodeBase or anywhere else that you may know of. Thanks
 
-
 ---
 
 ## Re: SAR trailing stop
@@ -214,7 +196,6 @@ posted back in 4/2013 just checking in to see if there is a sar stop strategy fo
 **Apprentice** · Tue Feb 03, 2015 9:36 am
 
 No update was made.
-
 
 ---
 
@@ -230,7 +211,6 @@ But in fact the strategy sets my Stop to the first SAR-period instead of the cur
 
 Why is that?
 
-
 ---
 
 ## Re: SAR trailing stop
@@ -244,7 +224,6 @@ The indicator itself looks nice but it won't get into play by strategy.
 
 It may be a matter of taste but I am interested in strategies that deal with Exit points rather than Entries. It occurs to me that all input of writing codes get sucked into Entry-Strategies. What I need is reliable automation in order to close open positions. Can't find any.
 
-
 ---
 
 ## Re: SAR trailing stop
@@ -252,7 +231,6 @@ It may be a matter of taste but I am interested in strategies that deal with Exi
 **losingstreak** · Sun Feb 22, 2015 3:11 pm
 
 I must apologize. Instead of standard SAR indicator I used the custom Tick SAR - the SARSTOP strategy matches standard SAR perfectly.
-
 
 ---
 
@@ -264,7 +242,6 @@ Hi, Is it at possible to use MVA STOP 4 four FIFO logic to create this SAR for U
 
 Thanks
 
-
 ---
 
 ## Re: SAR trailing stop
@@ -272,7 +249,6 @@ Thanks
 **Apprentice** · Wed Apr 29, 2015 4:34 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -292,7 +268,6 @@ I am hoping somebody that understands LUA code can fix it.
 RVK
 
 [viewtopic.php?f=31&t=2449](https://fxcodebase.com/code/viewtopic.php?f=31&t=2449)
-
 
 ---
 

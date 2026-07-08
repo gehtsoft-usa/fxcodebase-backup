@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=67034  
 > Forum: 17 · Topic 67034 · 4 post(s)
 
-
 ---
 
 ## BSTrend
@@ -12,8 +11,6 @@
 
 ![EURUSD D1 (04-02-2018 0355).png](images/122447/EURUSD%20D1%20%2804-02-2018%200355%29.png)
 
-
-
 Based on post.
 [https://www.prorealcode.com/prorealtime ... s/bstrend/](https://www.prorealcode.com/prorealtime-indicators/bstrend/)
 
@@ -21,7 +18,6 @@ Based on post.
 
 BSTrend.lua based strategy.
 [viewtopic.php?f=31&t=67041](https://fxcodebase.com/code/viewtopic.php?f=31&t=67041)
-
 
 ---
 
@@ -37,7 +33,6 @@ Could you please develop a strategy for it ?
 Thanks in advance
 David
 
-
 ---
 
 ## Re: BSTrend
@@ -46,7 +41,6 @@ David
 
 BSTrend.lua based strategy.
 [viewtopic.php?f=31&t=67041](https://fxcodebase.com/code/viewtopic.php?f=31&t=67041)
-
 
 ---
 
@@ -63,8 +57,8 @@ I creating an external stream in the BStrend indicator and tried to access it vi
 
 In the indicator
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Prepare(name)
+```lua
+function Prepare(name)
 ...
  BST_Stream = instance:addStream("BST_Stream" , core.Bar, " BST_Stream"," BST_Stream",Neutral, first);
 
@@ -83,12 +77,13 @@ function Update(period)
     BST_Stream = 0;
     end
 ..
-end`
+end
+```
 
 In the strategy
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Update(period)
+```lua
+function Update(period)
   if   BST.BST_Stream[period] == 1
    then
       BUY();
@@ -98,7 +93,8 @@ Code: [Select all](https://fxcodebase.com/code/)
    else
       T1_BST_Trend = "";
    end
-end`
+end
+```
 
 Anyway your solution is working so I'm happy with it. I'll remember that if I can't access a data stream from a strategy for some reason, that I can always access the colors
 

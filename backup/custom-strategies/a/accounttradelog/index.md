@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=64933  
 > Forum: 31 · Topic 64933 · 3 post(s)
 
-
 ---
 
 ## AccountTradeLog
@@ -17,7 +16,6 @@ Based on the request.
 MT4/MQ4 version.
 [viewtopic.php?f=38&t=66948](https://fxcodebase.com/code/viewtopic.php?f=38&t=66948)
 
-
 ---
 
 ## Re: AccountTradeLog
@@ -25,7 +23,6 @@ MT4/MQ4 version.
 **conjure** · Thu Aug 23, 2018 5:00 pm
 
 Is it possible to also export the DISTANCE, of STOP and LIMIT, from current market rate , in pips?
-
 
 ---
 
@@ -35,8 +32,8 @@ Is it possible to also export the DISTANCE, of STOP and LIMIT, from current mark
 
 i found a way... i think its right
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function logTable(fileHandle, tableName, tableColumns)
+```lua
+function logTable(fileHandle, tableName, tableColumns)
 
     local enum, row,value;
     enum = core.host:findTable(tableName):enumerator();
@@ -73,4 +70,5 @@ stop=math.floor(stop)
     ---fileHandle:flush(MergeFileHandle);
          fileHandle:close()
 
-end`
+end
+```

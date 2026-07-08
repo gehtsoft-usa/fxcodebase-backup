@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=29&t=1254  
 > Forum: 29 · Topic 1254 · 11 post(s)
 
-
 ---
 
 ## Advanced moving average cross signal
@@ -21,8 +20,8 @@ download:
 
  [MAEX.lua](files/2383/MAEX.lua)
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     strategy:name("Advanced Moving Average Strategy");
     strategy:description("");
 
@@ -139,8 +138,8 @@ function ExtUpdate(id, source, period)
     end
 end
 
-dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");`
-
+dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");
+```
 
 ---
 
@@ -149,7 +148,6 @@ dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");`
 **soridaijin** · Wed Jun 09, 2010 1:17 pm
 
 Many thanks for coding this Nikolay. It's very helpful to be able to incorporate different moving averages in the same signal - one can get much finer sensitivity.
-
 
 ---
 
@@ -164,7 +162,6 @@ Can a "SHIFT_MA" signal be done ?
 
 I hope to add "ARSI".
 
-
 ---
 
 ## Re: Advanced moving average cross signal
@@ -172,7 +169,6 @@ I hope to add "ARSI".
 **Nikolay.Gekht** · Tue Jun 22, 2010 10:36 am
 
 SHIFT_MA as it is a bit complexer in the configuration, because it requires to choose another choice of the indicator... Probably, it's simplier to add parameters to shift the chosen MA right in this signal. I'll think about, ok?
-
 
 ---
 
@@ -182,7 +178,6 @@ SHIFT_MA as it is a bit complexer in the configuration, because it requires to c
 
 I think it is in the image file. Is it feasible
 
-
 ---
 
 ## Re: Advanced moving average cross signal
@@ -190,7 +185,6 @@ I think it is in the image file. Is it feasible
 **Nikolay.Gekht** · Wed Jun 23, 2010 9:42 am
 
 Yes, It's exactly as I think. Will do it asap.
-
 
 ---
 
@@ -208,8 +202,6 @@ b) The time shift can be only positive (i.e. in future). If shift is into the pa
 
 ![MAEXS.png](images/2755/MAEXS.png)
 
-
-
 Download:
 
  [MAEXS.lua](files/2755/MAEXS.lua)
@@ -218,7 +210,6 @@ To make this signal working, please also download and install SHIFT_MA indicator
 [viewtopic.php?f=17&t=1044](https://fxcodebase.com/code/viewtopic.php?f=17&t=1044)
 
 I also fixed the parameter names and introduced groups for the parameters for easier navigation.
-
 
 ---
 
@@ -229,7 +220,6 @@ I also fixed the parameter names and introduced groups for the parameters for ea
 Thank you. I'd really appreciate it
 This signal is enough.
 
-
 ---
 
 ## Re: Advanced moving average cross signal
@@ -238,7 +228,6 @@ This signal is enough.
 
 thank you for the signal.
 very helpfull
-
 
 ---
 
@@ -254,7 +243,6 @@ Allowed Side: Buy/Sell/Both
 
 Regards,
 xpertizetrading
-
 
 ---
 

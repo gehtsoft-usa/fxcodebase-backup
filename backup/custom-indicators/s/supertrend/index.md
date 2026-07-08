@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=27663  
 > Forum: 17 · Topic 27663 · 15 post(s)
 
-
 ---
 
 ## SuperTrend
@@ -11,8 +10,6 @@
 **Apprentice** · Wed Dec 12, 2012 2:01 pm
 
 ![TS.png](images/48377/TS.png)
-
-
 
 CCI will trigger SuperTrend switch.
 The user can specifies the distance from High / Low (in pips) after switch.
@@ -34,7 +31,6 @@ based on Chart Time Frame length in minutes.
 
  [ST.lua](files/48377/ST.lua)
 
-
 ---
 
 ## Re: SuperTrend
@@ -45,7 +41,6 @@ I'm a little confused since there's so many "SuperTrend" indicators on this site
 [http://fxcodebase.com/code/viewtopic.php?f=17&t=3102&hilit=supertrend](https://fxcodebase.com/code/viewtopic.php?f=17&t=3102&hilit=supertrend)
 
 Is it fundamentally that this new one is based on CCI while the older was based on ATR? Or is there other crucial differences?
-
 
 ---
 
@@ -62,7 +57,6 @@ Line is higher / lower from High / Low, for X Pips set by user.
 Your (the second) example.
 The trend is determined, by Midian + / - ATR
 
-
 ---
 
 ## Re: SuperTrend
@@ -71,8 +65,8 @@ The trend is determined, by Midian + / - ATR
 
 is the st.lua file posted above in the response the same code as the following mt4 code that i seek a conversion for?
 
-Code: [Select all](https://fxcodebase.com/code/)
-`#property indicator_chart_window
+```
+#property indicator_chart_window
 #property indicator_buffers 2
 #property indicator_color1 MediumSpringGreen
 #property indicator_color2 Red
@@ -221,8 +215,8 @@ int start()
 //----
    return(0);
   }
-//+------------------------------------------------------------------+`
-
+//+------------------------------------------------------------------+
+```
 
 ---
 
@@ -232,7 +226,6 @@ int start()
 
 Would it be possible to create an alert for the ST indicator - ie audio, visual, email alert when colour changes?
 
-
 ---
 
 ## Re: SuperTrend
@@ -241,7 +234,6 @@ Would it be possible to create an alert for the ST indicator - ie audio, visual,
 
 Your request is added to the development list.
 
-
 ---
 
 ## Re: SuperTrend
@@ -249,7 +241,6 @@ Your request is added to the development list.
 **elliotwave5** · Mon Dec 17, 2012 8:22 am
 
 thank you
-
 
 ---
 
@@ -260,7 +251,6 @@ thank you
 required can be found here.
 [viewtopic.php?f=31&t=27809](https://fxcodebase.com/code/viewtopic.php?f=31&t=27809)
 
-
 ---
 
 ## Re: SuperTrend
@@ -268,7 +258,6 @@ required can be found here.
 **Apprentice** · Fri Sep 16, 2016 5:25 am
 
 Minor Update.
-
 
 ---
 
@@ -278,7 +267,6 @@ Minor Update.
 
 The indicator was revised and updated.
 
-
 ---
 
 ## Re: SuperTrend
@@ -286,7 +274,6 @@ The indicator was revised and updated.
 **Apprentice** · Mon Sep 24, 2018 10:28 am
 
 The indicator was revised and updated.
-
 
 ---
 
@@ -296,7 +283,6 @@ The indicator was revised and updated.
 
 Can you make the ST.lua working on FXCM metatrader4 platform?
 
-
 ---
 
 ## Re: SuperTrend
@@ -304,7 +290,6 @@ Can you make the ST.lua working on FXCM metatrader4 platform?
 **Apprentice** · Tue Oct 30, 2018 4:21 pm
 
 Your request is added to the development list under Id Number 4289
-
 
 ---
 
@@ -314,7 +299,6 @@ Your request is added to the development list under Id Number 4289
 
 Already converted
  [viewtopic.php?f=38&t=63520&p=106451](https://fxcodebase.com/code/viewtopic.php?f=38&t=63520&p=106451)
-
 
 ---
 

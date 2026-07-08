@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=62766  
 > Forum: 17 · Topic 62766 · 7 post(s)
 
-
 ---
 
 ## Speed of Trade
@@ -11,8 +10,6 @@
 **Apprentice** · Sun Oct 11, 2015 5:33 am
 
 ![xxx.png](images/102765/xxx.png)
-
-
 
 Based on request.
 [viewtopic.php?f=27&t=25492](https://fxcodebase.com/code/viewtopic.php?f=27&t=25492)
@@ -22,7 +19,6 @@ Based on request.
 MT5 version
 [viewtopic.php?f=38&t=70032](https://fxcodebase.com/code/viewtopic.php?f=38&t=70032)
 
-
 ---
 
 ## Re: Speed of Trade
@@ -31,8 +27,8 @@ MT5 version
 
 I've managed to create a strategy for this indicator.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init() --The strategy profile initialization
+```lua
+function Init() --The strategy profile initialization
     strategy:name("SoT strategy");
     strategy:description("");
    
@@ -575,8 +571,8 @@ function exitTrade(tradeRow)
     return true;
 end
 
-dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");`
-
+dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");
+```
 
 ---
 
@@ -589,7 +585,6 @@ Requested can be found here.
 
 Please download above-indicator, due to detected bug fix.
 
-
 ---
 
 ## Re: Speed of Trade
@@ -597,7 +592,6 @@ Please download above-indicator, due to detected bug fix.
 **juju1024** · Mon Oct 12, 2015 12:01 pm
 
 Can you convert this file to mq4 please ? with arrows and MA period setup
-
 
 ---
 
@@ -608,7 +602,6 @@ Can you convert this file to mq4 please ? with arrows and MA period setup
 Requested can be found here.
 [viewtopic.php?f=38&t=62785](https://fxcodebase.com/code/viewtopic.php?f=38&t=62785)
 
-
 ---
 
 ## Re: Speed of Trade
@@ -617,7 +610,6 @@ Requested can be found here.
 
 Thanks for link,
 can you see it, this mq4 file display a black windows on most charts
-
 
 ---
 

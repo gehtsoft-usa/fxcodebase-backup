@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=2069  
 > Forum: 17 · Topic 2069 · 33 post(s)
 
-
 ---
 
 ## Traders dynamic index [NG: upd, May, 05]
@@ -17,8 +16,6 @@ The indicator has been developed for MT4 by Dean Malone in 2006
  
 
 ![TrendDynamicIndex.png](images/4235/TrendDynamicIndex.png)
-
-
 
 Here is the original description of the indicator:
 
@@ -85,8 +82,8 @@ Compatibility issue Fix. _Alert helper is not longer needed.
 
 See also: [Traders dynamic index interpreter indicator](https://fxcodebase.com/code/viewtopic.php?f=17&t=4133), [Traders dynamic index demo strategy](https://fxcodebase.com/code/viewtopic.php?f=31&t=4134)
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- original indicator:
+```lua
+-- original indicator:
 -- Traders Dynamic Index.mq4
 -- Copyright © 2006, Dean Malone
 -- www.compassfx.com
@@ -233,7 +230,8 @@ function Update(period, mode)
         VBD[period] = ma - VB_W * stdev;
         MB[period] = ma;
     end
-end`
+end
+```
 
  [Non-standard Time Frame TradersDynamicIndex.lua](files/4235/Non-standard%20Time%20Frame%20TradersDynamicIndex.lua)
 
@@ -242,7 +240,6 @@ end`
  [Non-standard Time Frame TradersDynamicIndex with Alert.lua](files/4235/Non-standard%20Time%20Frame%20TradersDynamicIndex%20with%20Alert.lua)
 
  [Other Time Frame TradersDynamicIndex with Alert.lua](files/4235/Other%20Time%20Frame%20TradersDynamicIndex%20with%20Alert.lua)
-
 
 ---
 
@@ -253,7 +250,6 @@ end`
 Hello,
 
 Is it possible to get this version of the Traders Dynamic Index converted to Marketcope?
-
 
 ---
 
@@ -268,7 +264,6 @@ Can it be converted to LUA based programming for use with Marketscope?
 Thanks,
 
 Jim S.
-
 
 ---
 
@@ -285,7 +280,6 @@ May, 05 2011 update:
 
 Please see the top post ([viewtopic.php?f=17&t=2069#p4235](https://fxcodebase.com/code/viewtopic.php?f=17&t=2069#p4235)) for details.
 
-
 ---
 
 ## Re: Traders dynamic index [NG: upd, May, 05]
@@ -297,7 +291,6 @@ Cool, backtesting looks good. If we can get arrow on the chart for buy, sell, an
 Thanks...
 BC
 
-
 ---
 
 ## Re: Traders dynamic index [NG: upd, May, 05]
@@ -306,7 +299,6 @@ BC
 
 I'm going to publish the interpreting indicator (as requested above) and a strategy soon.
 
-
 ---
 
 ## Re: Traders dynamic index [NG: upd, May, 05]
@@ -314,7 +306,6 @@ I'm going to publish the interpreting indicator (as requested above) and a strat
 **Nikolay.Gekht** · Fri May 06, 2011 2:12 pm
 
 See also: [Traders dynamic index interpreter indicator](https://fxcodebase.com/code/viewtopic.php?f=17&t=4133), [Traders dynamic index demo strategy](https://fxcodebase.com/code/viewtopic.php?f=31&t=4134)
-
 
 ---
 
@@ -330,7 +321,6 @@ I'm currently testing this system..
 Cheers..
 BC
 
-
 ---
 
 ## Re: Traders dynamic index [NG: upd, May, 05]
@@ -338,7 +328,6 @@ BC
 **BabyDragonFX** · Sun Apr 05, 2015 2:40 pm
 
 Very good indicator! One of the best I have seen yet! Thank you for this!
-
 
 ---
 
@@ -354,7 +343,6 @@ Error: attempt to index global 'indicator' (a nil value)
 Please advise if the code can be updated.
 Thanks
 
-
 ---
 
 ## Re: Traders dynamic index [NG: upd, May, 05]
@@ -364,7 +352,6 @@ Thanks
 Thank you for the information.
 Will investigate this.
 
-
 ---
 
 ## Re: Traders dynamic index [NG: upd, May, 05]
@@ -372,7 +359,6 @@ Will investigate this.
 **Apprentice** · Mon Nov 16, 2015 5:10 am
 
 Fixed.
-
 
 ---
 
@@ -382,7 +368,6 @@ Fixed.
 
 TDI loads and executes okay with new Marketscope build.
 Thanks for the quick fix
-
 
 ---
 
@@ -398,7 +383,6 @@ Thanks!
 
 sjc
 
-
 ---
 
 ## Re: Traders dynamic index [NG: upd, May, 05]
@@ -407,7 +391,6 @@ sjc
 
 Compatibility issue Fix. _Alert helper is not longer needed.
 Additional alert levels added.
-
 
 ---
 
@@ -421,7 +404,6 @@ Can you please add the "Vidya MA" to the RSI Price Line Smoothing Method options
 
 This way it will be possible to match the parameters with the strategy .
 
-
 ---
 
 ## Re: Traders dynamic index [NG: upd, May, 05]
@@ -430,7 +412,6 @@ This way it will be possible to match the parameters with the strategy .
 
 can you reply please
 
-
 ---
 
 ## Re: Traders dynamic index [NG: upd, May, 05]
@@ -438,7 +419,6 @@ can you reply please
 **Apprentice** · Fri Dec 16, 2016 4:50 am
 
 Additional options added.
-
 
 ---
 
@@ -456,7 +436,6 @@ Appreciate your reply.
 
 Thanks
 
-
 ---
 
 ## Re: Traders dynamic index [NG: upd, May, 05]
@@ -471,7 +450,6 @@ Yes
 
 Yes, BB of RSI with 1.6185 deviation
 
-
 ---
 
 ## Re: Traders dynamic index [NG: upd, May, 05]
@@ -485,7 +463,6 @@ This indicator performed very well for traders on forexfactory and babypips who 
 Thanks and Regards,
 XpertizeTrading
 
-
 ---
 
 ## Re: Traders dynamic index [NG: upd, May, 05]
@@ -494,7 +471,6 @@ XpertizeTrading
 
 Did you try TradersDynamicIndex With Alert.lua ?
 Or is your goal some specific presentation.
-
 
 ---
 
@@ -505,7 +481,6 @@ Or is your goal some specific presentation.
 Thanks Apprentice. Didnt notice TDI with Alert. The Alert works very good.
 Regards,
 
-
 ---
 
 ## Re: Traders dynamic index [NG: upd, May, 05]
@@ -514,7 +489,6 @@ Regards,
 
 I recently updated Trading station and I cannot load-insert Traders dynamic index. Does anyone have the same problem?
 What can I do to load the indicator properly?
-
 
 ---
 
@@ -525,7 +499,6 @@ What can I do to load the indicator properly?
 No problem with TradersDynamicIndex.lua
 Can you please try deinstall, make a clean install?
 
-
 ---
 
 ## Re: Traders dynamic index [NG: upd, May, 05]
@@ -534,7 +507,6 @@ Can you please try deinstall, make a clean install?
 
 You mean to uninstall the trading station and reinstall it?
 
-
 ---
 
 ## Re: Traders dynamic index [NG: upd, May, 05]
@@ -542,7 +514,6 @@ You mean to uninstall the trading station and reinstall it?
 **Apprentice** · Fri Oct 06, 2017 12:21 pm
 
 Yes.
-
 
 ---
 
@@ -553,7 +524,6 @@ Yes.
 I ve just reinstalled it but nothing changed so far. I cannot install Traders dynamic index...
 Can anyone help me on this?
 
-
 ---
 
 ## Re: Traders dynamic index [NG: upd, May, 05]
@@ -563,7 +533,6 @@ Can anyone help me on this?
 I just installed it succesfully this time... it seems I had an old version of the indicator. I downloaded and installed the new one.
 Thank you
 
-
 ---
 
 ## Re: Traders dynamic index [NG: upd, May, 05]
@@ -571,7 +540,6 @@ Thank you
 **Apprentice** · Fri Jun 08, 2018 7:50 am
 
 The Indicator was revised and updated.
-
 
 ---
 
@@ -581,7 +549,6 @@ The Indicator was revised and updated.
 
 Non-standard Time Frame TradersDynamicIndex and Other Time Frame TradersDynamicIndex added.
 
-
 ---
 
 ## Re: Traders dynamic index [NG: upd, May, 05]
@@ -589,7 +556,6 @@ Non-standard Time Frame TradersDynamicIndex and Other Time Frame TradersDynamicI
 **mulligan** · Wed Jun 13, 2018 10:47 am
 
 Adding the alert function (same as the one on standard TDI with alert) to the new non standard time frame TDI would be much appreciated.
-
 
 ---
 

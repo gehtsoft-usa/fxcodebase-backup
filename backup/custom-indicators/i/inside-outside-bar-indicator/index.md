@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=1838  
 > Forum: 17 · Topic 1838 · 24 post(s)
 
-
 ---
 
 ## Inside/Outside bar indicator
@@ -16,10 +15,8 @@ Indicator mark inside and outside bars.
 
 ![InsideOutsideBar.png](images/3660/InsideOutsideBar.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Inside/outside bar Indicator");
     indicator:description("Inside/outside bar Indicator");
     indicator:requiredSource(core.Bar);
@@ -54,8 +51,8 @@ function Update(period, mode)
       buffIn:set(period, source.low[period], "\159", "");
      end
     end
-end`
-
+end
+```
 
 ---
 
@@ -70,14 +67,11 @@ Indicator paints bars in different colors.
 
 ![InsideOutsideBar2.png](images/9153/InsideOutsideBar2.png)
 
-
-
 Download:
 
  [InsideOutsideBar2.lua](files/9153/InsideOutsideBar2.lua)
 
  [InsideOutsideBar2 with Alert.lua](files/9153/InsideOutsideBar2%20with%20Alert.lua)
-
 
 ---
 
@@ -91,7 +85,6 @@ Thank a lot.
 
 conejobum
 
-
 ---
 
 ## Re: Inside/Outside bar indicator
@@ -101,7 +94,6 @@ conejobum
 thx..
 about this indicator, can make it more variable? as sometime I would just require inside bar only in my chart.
 
-
 ---
 
 ## Re: Inside/Outside bar indicator
@@ -109,7 +101,6 @@ about this indicator, can make it more variable? as sometime I would just requir
 **Apprentice** · Mon Aug 29, 2011 3:44 pm
 
 Your request I added to our database.
-
 
 ---
 
@@ -125,7 +116,6 @@ Please, see this indicator:
 
  [InsideOutsideBar.lua](files/14536/InsideOutsideBar.lua)
 
-
 ---
 
 ## Re: Inside/Outside bar indicator
@@ -134,7 +124,6 @@ Please, see this indicator:
 
 I've fixed small defect with real time candles.
 Updated 'InsideOutsideBar.lua' above and in first post.
-
 
 ---
 
@@ -149,7 +138,6 @@ this sounds like an excellent indicator tool. What are the criterias for an insi
 thanks,
 nazaar
 
-
 ---
 
 ## Re: Inside/Outside bar indicator
@@ -162,7 +150,6 @@ if source.high[period]>source.high[period-1] and source.low[period]<source.low[p
 
 InSide
  if source.high[period]<source.high[period-1] and source.low[period]>source.low[period-1]
-
 
 ---
 
@@ -177,7 +164,6 @@ Because I was trading several years on MT4 and now I have change it ti TS2 and G
 
 thx
 
-
 ---
 
 ## Re: Inside/Outside bar indicator
@@ -185,7 +171,6 @@ thx
 **Apprentice** · Tue Sep 11, 2012 3:55 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -205,7 +190,6 @@ Please, see this version of indicator:
 
  [InsideOutsideBar3.lua](files/40104/InsideOutsideBar3.lua)
 
-
 ---
 
 ## Re: Inside/Outside bar indicator
@@ -218,13 +202,10 @@ This is a great indicator, however with the new version of 01.13.092613 of the F
 
 ![InsideOutsideBar2.png](images/90340/InsideOutsideBar2.png)
 
-
-
 By pressing 'Bid' or 'Ask' the effect disappears.
 It worked fine with the previous version of TS. Can this be fixed?
 
 Thanks in advance.
-
 
 ---
 
@@ -235,7 +216,6 @@ Thanks in advance.
 Which version you use.
 1, 2 or 3rd
 Try to show this with only Inside / Outside added to chart.
-
 
 ---
 
@@ -251,7 +231,6 @@ I use Insideoutsidebar2. After some research I found the following:
 
 Is there any way to get rid of the problem besides creating all layouts from scratch?
 
-
 ---
 
 ## Re: Inside/Outside bar indicator
@@ -259,7 +238,6 @@ Is there any way to get rid of the problem besides creating all layouts from scr
 **Apprentice** · Mon Oct 28, 2013 2:15 am
 
 Unfortunately not. As far as I know.
-
 
 ---
 
@@ -287,7 +265,6 @@ else color candle red
 
 Please, asap, thank you.
 
-
 ---
 
 ## Re: Inside/Outside bar indicator
@@ -298,7 +275,6 @@ Try this version.
 
  [InsideOutsideBar Mod 4.lua](files/103725/InsideOutsideBar%20Mod%204.lua)
 
-
 ---
 
 ## Re: Inside/Outside bar indicator
@@ -306,7 +282,6 @@ Try this version.
 **pakoromeu** · Mon Jun 27, 2016 2:31 am
 
 Is it possible to add a sound and a dialog box alert to InsideOutsideBar2.lua. It would be a great help. Blessing
-
 
 ---
 
@@ -316,7 +291,6 @@ Is it possible to add a sound and a dialog box alert to InsideOutsideBar2.lua. I
 
 The indicator was revised and updated.
 
-
 ---
 
 ## Re: Inside/Outside bar indicator
@@ -325,7 +299,6 @@ The indicator was revised and updated.
 
 InsideOutsideBar2 with Alert.lua added.
 
-
 ---
 
 ## Re: Inside/Outside bar indicator
@@ -333,7 +306,6 @@ InsideOutsideBar2 with Alert.lua added.
 **Apprentice** · Fri May 18, 2018 3:37 am
 
 The Indicator was revised and updated.
-
 
 ---
 
@@ -346,7 +318,6 @@ I love this indicator and I’m hoping there is either one I’ve not yet found 
 I recognise this would be outside the definition of this indicator, therefore maybe a divergent version might be more appropriate, but either way it would be extremely useful to me.
 
 Many thanks for a great indicator.
-
 
 ---
 

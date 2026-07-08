@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=34071  
 > Forum: 17 · Topic 34071 · 45 post(s)
 
-
 ---
 
 ## CCI dots indicator
@@ -16,8 +15,6 @@ The indicator shows the points of intersection CCI and zero line on the main cha
 
 ![CCI_Dots.PNG](images/57911/CCI_Dots.PNG)
 
-
-
 Download:
 
  [CCI_Dots.lua](files/57911/CCI_Dots.lua)
@@ -28,7 +25,6 @@ This indicator provides Audio / Email Alertson CCI / (Zero/OB/OS) line cross.
 
 Compatibility issue fixed.
 _Alert Helper is not longer needed.
-
 
 ---
 
@@ -44,7 +40,6 @@ Regards.
 
 P.S : you're doing a great job
 
-
 ---
 
 ## Re: CCI dots indicator
@@ -53,7 +48,6 @@ P.S : you're doing a great job
 
 Your request is added to the development list.
 
-
 ---
 
 ## Re: CCI dots indicator
@@ -61,7 +55,6 @@ Your request is added to the development list.
 **Alexander.Gettinger** · Wed Apr 10, 2013 4:21 pm
 
 MQL4 version of this indicator: [viewtopic.php?f=38&t=34367](https://fxcodebase.com/code/viewtopic.php?f=38&t=34367)
-
 
 ---
 
@@ -73,7 +66,6 @@ Hello Apprentice,
 Is it possible to put an alert/signal on this indicator?
 Thank you in advance
 
-
 ---
 
 ## Re: CCI dots indicator
@@ -83,7 +75,6 @@ Thank you in advance
 CCI_Dots with Alert.lua Added.
 OB / OS Level Alert is now supported.
 
-
 ---
 
 ## Re: CCI dots indicator
@@ -91,7 +82,6 @@ OB / OS Level Alert is now supported.
 **rch05000** · Thu Mar 20, 2014 7:20 am
 
 Thank you apprentice
-
 
 ---
 
@@ -102,7 +92,6 @@ Thank you apprentice
 quick question:
 
 we have 'CCI period' and 'period' in the indicators settings. whats the difference between the two?
-
 
 ---
 
@@ -117,8 +106,8 @@ Code: [Select all](https://fxcodebase.com/code/)
 `local Range=(mathex.avg(source.high, period-Period+1, period)-mathex.avg(source.low, period-Period+1, period))/2;`
 Range is used in indication (circles) placement.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`if CCI.DATA[period-1]>=0 and CCI.DATA[period]<0 then
+```lua
+if CCI.DATA[period-1]>=0 and CCI.DATA[period]<0 then
      UP[period]=source.high[period]+Range;
      DN[period]=nil;
     elseif CCI.DATA[period-1]<=0 and CCI.DATA[period]>0 then
@@ -127,8 +116,8 @@ Code: [Select all](https://fxcodebase.com/code/)
     else
      UP[period]=nil;
      DN[period]=nil;
-    end`
-
+    end
+```
 
 ---
 
@@ -140,7 +129,6 @@ quick question:
 
 we have 'CCI period' and 'period' in the indicators settings. whats the difference between the two?
 
-
 ---
 
 ## Re: CCI dots indicator
@@ -150,7 +138,6 @@ we have 'CCI period' and 'period' in the indicators settings. whats the differen
 Hello!
 I am really sorry for boring you with a "stupid" question: what'a the difference among zero, OB and OS? and also, is it possible to apply the alert just for the zero line on the main chart?
 many thanks for your great job and support! have a nice day!
-
 
 ---
 
@@ -166,7 +153,6 @@ N.B. I would also like to see each OB/OS/Zero option to be independently turn on
 
 In the meantime as a workaround i set any dots that i dont want to see as the same colour as my chart back ground, then set the indicator to 'background'. Its not ideal but works OK.
 
-
 ---
 
 ## Re: CCI dots indicator
@@ -174,7 +160,6 @@ In the meantime as a workaround i set any dots that i dont want to see as the sa
 **Apprentice** · Tue Oct 07, 2014 8:38 am
 
 For which indicator you want this option.
-
 
 ---
 
@@ -184,7 +169,6 @@ For which indicator you want this option.
 
 CCI_Dots with Alert.lua
 
-
 ---
 
 ## Re: CCI dots indicator
@@ -192,7 +176,6 @@ CCI_Dots with Alert.lua
 **7510109079** · Tue Mar 03, 2015 6:43 am
 
 Just revisiting this one- do you think there will be any time to do the above option
-
 
 ---
 
@@ -202,7 +185,6 @@ Just revisiting this one- do you think there will be any time to do the above op
 
 Will try to find the time in next few days.
 
-
 ---
 
 ## Re: CCI dots indicator
@@ -210,7 +192,6 @@ Will try to find the time in next few days.
 **7510109079** · Thu Mar 05, 2015 6:08 am
 
 excellent, many thx for the update
-
 
 ---
 
@@ -225,7 +206,6 @@ e.g. if we decide to only show symbols & colour for, let's say, an OB line CROSS
 i.e. alerts should only correspond with what styles are set to 'visible' by the user
 TIA
 
-
 ---
 
 ## Re: CCI dots indicator
@@ -234,7 +214,6 @@ TIA
 
 Please Test Updated Version.
 
-
 ---
 
 ## Re: CCI dots indicator
@@ -242,7 +221,6 @@ Please Test Updated Version.
 **7510109079** · Tue Mar 10, 2015 5:07 am
 
 Elegant solution. works like a dream. Many thanks indeed!
-
 
 ---
 
@@ -260,7 +238,6 @@ This would allow for a better estimate of P/L at a glance
 
 TIA
 
-
 ---
 
 ## Re: CCI dots indicator
@@ -273,7 +250,6 @@ If i could be able to choose to plot the marker on the actual close of the candl
 
 many TIA
 
-
 ---
 
 ## Re: CCI dots indicator
@@ -284,7 +260,6 @@ Try This Version.
 
  [CCI_Dots with Alert.lua](files/99856/CCI_Dots%20with%20Alert.lua)
 
-
 ---
 
 ## Re: CCI dots indicator
@@ -292,7 +267,6 @@ Try This Version.
 **7510109079** · Fri Apr 17, 2015 4:15 am
 
 That is perfect! MAny thx
-
 
 ---
 
@@ -303,7 +277,6 @@ That is perfect! MAny thx
 Compatibility issue fixed.
 _Alert Helper is not longer needed.
 
-
 ---
 
 ## Re: CCI dots indicator
@@ -311,7 +284,6 @@ _Alert Helper is not longer needed.
 **7510109079** · Fri Dec 11, 2015 8:07 am
 
 still using this. Great indicator on price!
-
 
 ---
 
@@ -321,7 +293,6 @@ still using this. Great indicator on price!
 
 This works fine without sound alert but whenever i select the Alerts Sound and Alerts email to yes...it gives error...i think there is problem with sound alert or email alert, can you fix it?
 
-
 ---
 
 ## Re: CCI dots indicator
@@ -329,7 +300,6 @@ This works fine without sound alert but whenever i select the Alerts Sound and A
 **Apprentice** · Tue Dec 22, 2015 3:31 am
 
 Try it now.
-
 
 ---
 
@@ -339,7 +309,6 @@ Try it now.
 
 i tried again...still having problem with sound alert and email alert when i select yes for sound alert and email alert
 
-
 ---
 
 ## Re: CCI dots indicator
@@ -347,7 +316,6 @@ i tried again...still having problem with sound alert and email alert when i sel
 **vesanthosh** · Mon Dec 28, 2015 3:08 am
 
 I am using FXCM TS2, the email and sound alert gives error whenever the line is triggered...please check it and fix it.
-
 
 ---
 
@@ -361,10 +329,7 @@ Which version of TS you use.
 
 ![Capture.PNG](images/104015/Capture.PNG)
 
-
-
  Should be.
-
 
 ---
 
@@ -373,7 +338,6 @@ Which version of TS you use.
 **vesanthosh** · Mon Dec 28, 2015 11:35 am
 
 Now it's working, thanks for your responses...thanks a lot
-
 
 ---
 
@@ -386,7 +350,6 @@ can you filter the cci dots indicator with simple moving average.
 BUY - if PRICE above MVA and CCI CROSS OVER -100
 SELL - if PRICE below MVA and CCI CROSS UNDER +100
 
-
 ---
 
 ## Re: CCI dots indicator
@@ -395,7 +358,6 @@ SELL - if PRICE below MVA and CCI CROSS UNDER +100
 
 Filter Option Added.
 
-
 ---
 
 ## Re: CCI dots indicator
@@ -403,7 +365,6 @@ Filter Option Added.
 **vesanthosh** · Mon Feb 22, 2016 6:11 am
 
 Thanks It's working fine thanks a lot
-
 
 ---
 
@@ -419,7 +380,6 @@ Can you modify it so that the user can specify 4 different independent CCI value
 
 Thx
 
-
 ---
 
 ## Re: CCI dots indicator
@@ -427,7 +387,6 @@ Thx
 **Apprentice** · Thu May 19, 2016 3:52 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -445,7 +404,6 @@ FYI: My last request for the 4 independent values CCI indicator was for the one 
 
 Any chance to implement this yet? thx
 
-
 ---
 
 ## Re: CCI dots indicator
@@ -454,7 +412,6 @@ Any chance to implement this yet? thx
 
 bump
 
-
 ---
 
 ## Re: CCI dots indicator
@@ -462,7 +419,6 @@ bump
 **7510109079** · Wed Jun 22, 2016 7:15 am
 
 any chance of doing this one? thx
-
 
 ---
 
@@ -474,7 +430,6 @@ Try this version.
 
  [CCI_Dots with Alert.lua](files/106948/CCI_Dots%20with%20Alert.lua)
 
-
 ---
 
 ## Re: CCI dots indicator
@@ -482,7 +437,6 @@ Try this version.
 **Apprentice** · Mon Sep 04, 2017 9:41 am
 
 The indicator was revised and updated.
-
 
 ---
 
@@ -504,7 +458,6 @@ How are the updated versions different?
 
 thx
 
-
 ---
 
 ## Re: CCI dots indicator
@@ -515,7 +468,6 @@ This is the project of my,
 the idea is to test all indicator on the forum,
 with a special interest in bugs, performance issues.
 Fixes if necessary, should keep backward compatibility.
-
 
 ---
 

@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=62156  
 > Forum: 31 · Topic 62156 · 13 post(s)
 
-
 ---
 
 ## Stochastic MA Strategy
@@ -11,8 +10,6 @@
 **Apprentice** · Tue Apr 28, 2015 6:36 am
 
 ![Stochastic MA Strategy.png](images/100104/Stochastic%20MA%20Strategy.png)
-
-
 
 Based on request.
 [viewtopic.php?f=27&t=62151#p100065](https://fxcodebase.com/code/viewtopic.php?f=27&t=62151#p100065)
@@ -28,7 +25,6 @@ Close Sell: cross in oversold.
 
 The Strategy was revised and updated on January 22, 2019.
 
-
 ---
 
 ## Re: Stochastic MA Strategy
@@ -39,7 +35,6 @@ hello prgogrammer
 can you add one ema and macd original mt4 at this strategy
 many thanks
 
-
 ---
 
 ## Re: Stochastic MA Strategy
@@ -48,7 +43,6 @@ many thanks
 
 Can you explain.
 In original, I do not see any MACD anywhere.
-
 
 ---
 
@@ -66,7 +60,6 @@ by cons I seek the origin of macd on the mt4 I have not found in lua
 of origin without modification
 thank you
 
-
 ---
 
 ## Re: Stochastic MA Strategy
@@ -74,7 +67,6 @@ thank you
 **Apprentice** · Sat Oct 15, 2016 3:04 pm
 
 Minor update.
-
 
 ---
 
@@ -89,7 +81,6 @@ i mario
 where can i find the macd original of mt4 here in lua please
 thank
 
-
 ---
 
 ## Re: Stochastic MA Strategy
@@ -98,7 +89,6 @@ thank
 
 Unfortunately, I do not know how iMACD is calculated.
 U can use pre-installed MACD indicator.
-
 
 ---
 
@@ -114,8 +104,8 @@ i mario
 this is the code can you convert it for me please
 thanks
 
-Code: [Select all](https://fxcodebase.com/code/)
-`#property description "Moving Averages Convergence/Divergence"
+```
+#property description "Moving Averages Convergence/Divergence"
 #property strict
 
 #include <MovingAverages.mqh>
@@ -196,8 +186,8 @@ int OnCalculate (const int rates_total,
 //--- done
    return(rates_total);
   }
-//+------------------------------------------------------------------+`
-
+//+------------------------------------------------------------------+
+```
 
 ---
 
@@ -207,11 +197,8 @@ int OnCalculate (const int rates_total,
 
 ![Capture.PNG](images/108707/Capture.PNG)
 
-
-
 I do not see any major difference between this implementation and preinstall MACD.
 Can you point out one?
-
 
 ---
 
@@ -232,7 +219,6 @@ Hello Mario
 you have trouble reading my message or precedent I told you to let my request fell, I just wanted the MACD indicator mt4 converts lua, is found not anywhere on the site.
 thank you
 
-
 ---
 
 ## Re: Stochastic MA Strategy
@@ -240,7 +226,6 @@ thank you
 **Apprentice** · Sun Dec 18, 2016 7:37 am
 
 Strategy was revised and updated.
-
 
 ---
 
@@ -263,7 +248,6 @@ To include an Instrument check like this:
 [/code]
 
 In my case, this was a solution for me as I'm running multiple copies of this strategy on a few currency pairs, however, this wouldn't solve the possible scenario of someone running multiple copies of this strategy on a single pair.
-
 
 ---
 

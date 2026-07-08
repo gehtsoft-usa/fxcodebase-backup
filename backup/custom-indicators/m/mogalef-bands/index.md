@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=4449  
 > Forum: 17 · Topic 4449 · 23 post(s)
 
-
 ---
 
 ## Mogalef Bands
@@ -11,8 +10,6 @@
 **Apprentice** · Mon May 23, 2011 5:00 pm
 
 ![Mogalef.png](images/10972/Mogalef.png)
-
-
 
 Median = LinearReg((Open+High+Low+(2*Close))/5);
 Deviation = StandardDev(Median);
@@ -31,7 +28,6 @@ end
 
 The indicator was revised and updated
 
-
 ---
 
 ## Re: Mogalef Bands
@@ -47,8 +43,8 @@ Look my attachment and you can have informations about this indicator here :
 
 Recall of the code in pro Realtime language :
 
-Code: [Select all](https://fxcodebase.com/code/)
-`CP=(open+high+low+2*close)/5
+```
+CP=(open+high+low+2*close)/5
 F=LinearRegression[3](CP)
 E=std[7](F)
 
@@ -70,8 +66,8 @@ endif
 Mediane =(BandeHaute+BandeBasse)/2
 Endif
 
-return BandeHaute coloured (255,154,51) as"Mogalef Bande Haute", Mediane coloured (102,0,204) as "Mogalef Mediane", BandeBasse coloured (0,204,255) as "Mogalef Bande Basse"`
-
+return BandeHaute coloured (255,154,51) as"Mogalef Bande Haute", Mediane coloured (102,0,204) as "Mogalef Mediane", BandeBasse coloured (0,204,255) as "Mogalef Bande Basse"
+```
 
 ---
 
@@ -81,7 +77,6 @@ return BandeHaute coloured (255,154,51) as"Mogalef Bande Haute", Mediane coloure
 
 Thanks for the warning.
 Corrected.
-
 
 ---
 
@@ -94,7 +89,6 @@ It seems to be near Mogalef bands but without the same reactivity
 the gap of the bands is later in you code than this of prorealtime code
 Look the comparaison of the two graphics EURUSD in Daily
 
-
 ---
 
 ## Re: Mogalef Bands
@@ -103,7 +97,6 @@ Look the comparaison of the two graphics EURUSD in Daily
 
 The problem is that I got Partial and three of four different formulas for this indicator.
 So I'm not sure that it the right one.
-
 
 ---
 
@@ -123,8 +116,8 @@ you
 
 HERE i find the code by the autor (Reference version for free distribution):
 
-Code: [Select all](https://fxcodebase.com/code/)
-`express MOGALEFBands
+```
+express MOGALEFBands
 // Version de référence pour diffusion gratuite
 
 vars
@@ -194,8 +187,8 @@ plot (MogB, cyan,2);
 plot (MogM,blue,1);
 
 plotband (MogH,"Yellow",2,MogM,"blue",1,"lightgreen");
-plotband (MogM,"Blue",1,MogB,"cyan",2,"lightred");`
-
+plotband (MogM,"Blue",1,MogB,"cyan",2,"lightred");
+```
 
 ---
 
@@ -204,7 +197,6 @@ plotband (MogM,"Blue",1,MogB,"cyan",2,"lightred");`
 **Terminus** · Tue May 24, 2011 10:17 am
 
 POST SCRIPTUM : this the code for FutureStation Nano WHSelfinvest
-
 
 ---
 
@@ -221,7 +213,6 @@ Can I please have the option to change line width and style?
 Thanks..
 BC
 
-
 ---
 
 ## Re: Mogalef Bands
@@ -229,7 +220,6 @@ BC
 **Apprentice** · Wed May 25, 2011 3:45 am
 
 Line Style Option Added.
-
 
 ---
 
@@ -244,7 +234,6 @@ Are you understand it .(FutureStation Nano WHSelfinvest language)
 Is it different of the proRealtime version who had problem with a candle delay ?
 Tanks for your answer.
 
-
 ---
 
 ## Re: Mogalef Bands
@@ -256,7 +245,6 @@ Can you please test this version.
 The strange thing, I got this result using a completely different algorithm.
 
  [Mogalef.lua](files/11029/Mogalef.lua)
-
 
 ---
 
@@ -271,8 +259,8 @@ Maby the code in ninja trader station can help you........
 
 Thank you for your work !
 
-Code: [Select all](https://fxcodebase.com/code/)
-`code pour Ninjatrader 7.XX:
+```
+code pour Ninjatrader 7.XX:
 
 #region Using declarations
 using System;
@@ -498,8 +486,8 @@ return _indicator.MogalefBand(input, coeff);
 }
 }
 }
-#endregion`
-
+#endregion
+```
 
 ---
 
@@ -515,7 +503,6 @@ Detail of the error ( image on attachment) : String "Mogalef.lua" : 98')' exepte
 
 (When i charge it on the plaform i forgeted to actualise and in fact i use the old vesion ...)
 
-
 ---
 
 ## Re: Mogalef Bands
@@ -525,7 +512,6 @@ Detail of the error ( image on attachment) : String "Mogalef.lua" : 98')' exepte
 Sorry i try again to put in the station the new indicator and now it's ok.
 we get closer to a clean version but there are still problems
 I noted the differences on the attached image
-
 
 ---
 
@@ -538,7 +524,6 @@ but there is a problem from the 30mn
 Perhaps a story of GAP ....
 
 Many thanks for your work Apprentice
-
 
 ---
 
@@ -553,7 +538,6 @@ It's great
 
 and thanks Terminus
 
-
 ---
 
 ## Re: Mogalef Bands
@@ -561,7 +545,6 @@ and thanks Terminus
 **BlueBloodedTrader** · Tue Aug 09, 2011 3:30 pm
 
 If these Mogalef Bands work on the basis of standard deviations away from the median regression line, what is the difference between these and Bollinger bands?
-
 
 ---
 
@@ -572,7 +555,6 @@ If these Mogalef Bands work on the basis of standard deviations away from the me
 Put the two indicators on one screen and you can see the difference.
 this two different vison of a range.
 
-
 ---
 
 ## Re: Mogalef Bands
@@ -580,7 +562,6 @@ this two different vison of a range.
 **Terminus** · Tue Aug 16, 2011 3:54 pm
 
 More informations ( beacause my english is so bad....) on mogalef.com
-
 
 ---
 
@@ -592,7 +573,6 @@ Hi, I don't know whether this code was already part of the thread, but I found i
 
 [http://www.pro-at.com/forums-bourse/bou ... 33637.html](http://www.pro-at.com/forums-bourse/bourse-Bandes-Mogalef-sur-VISUALCHART5-1-33637.html)
 
-
 ---
 
 ## Re: Mogalef Bands
@@ -601,7 +581,6 @@ Hi, I don't know whether this code was already part of the thread, but I found i
 
 MQL4 version of Mogalef Bands indicator: [viewtopic.php?f=38&t=61512](https://fxcodebase.com/code/viewtopic.php?f=38&t=61512).
 
-
 ---
 
 ## Re: Mogalef Bands
@@ -609,7 +588,6 @@ MQL4 version of Mogalef Bands indicator: [viewtopic.php?f=38&t=61512](https://fx
 **Victor.Tereschenko** · Sun May 03, 2015 6:34 am
 
 I've added a parameter to draw a channels.
-
 
 ---
 

@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=2099  
 > Forum: 17 · Topic 2099 · 5 post(s)
 
-
 ---
 
 ## USD Strength Effect indicator
@@ -16,10 +15,8 @@
 
 ![USD_Strength_Effect_Indicator.png](images/4327/USD_Strength_Effect_Indicator.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("USD Strength Effect indicator");
     indicator:description("USD Strength Effect indicator");
     indicator:requiredSource(core.Bar);
@@ -431,8 +428,8 @@ function findDateFast(stream, date, precise)
             end
         end
     end
-end`
-
+end
+```
 
 ---
 
@@ -441,7 +438,6 @@ end`
 **boursicoton** · Thu Sep 09, 2010 5:00 am
 
 thanks alexander the great !
-
 
 ---
 
@@ -454,7 +450,6 @@ i open parameters
 no change
 but alert : string "USD_strenght.." : 170 name of instrument false ..
 
-
 ---
 
 ## Re: USD Strength Effect indicator
@@ -463,7 +458,6 @@ but alert : string "USD_strenght.." : 170 name of instrument false ..
 
 For work of indicator in rates must be symbols: USD/CHF, USD/JPY, USD/CAD, AUD/USD,
 EUR/USD, GBP/USD, NZD/USD.
-
 
 ---
 

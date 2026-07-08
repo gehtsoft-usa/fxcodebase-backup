@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=3128  
 > Forum: 17 · Topic 3128 · 8 post(s)
 
-
 ---
 
 ## T3Trend Bands
@@ -23,14 +22,11 @@ SmoothRange[0]=High[0]-Low[0].
 
 ![T3TrendBands.png](images/7304/T3TrendBands.png)
 
-
-
 Download:
 
  [T3TrendBands.lua](files/7304/T3TrendBands.lua)
 
 The indicator was revised and updated
-
 
 ---
 
@@ -39,7 +35,6 @@ The indicator was revised and updated
 **aytacasan** · Mon Jan 10, 2011 8:48 pm
 
 Sory but translation is not true. I translate but there is a bug but i don't find it. Can you help me?
-
 
 ---
 
@@ -51,8 +46,8 @@ Sory but translation is not true. I translate but there is a bug and i can't fix
 
 **INDICATOR CODE:**
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- Indicator profile initialization routine
+```lua
+-- Indicator profile initialization routine
 -- Defines indicator profile properties and indicator parameters
 -- TODO: Add minimal and maximal value of numeric parameters and default color of the streams
 function Init()
@@ -209,8 +204,8 @@ param_TrendBandBottom_color_description=Color of TrendBandBottom
 param_TrendBandBottom_width_name=Width of TrendBandBottom
 param_TrendBandBottom_width_description=Width of TrendBandBottom
 param_TrendBandBottom_style_name=Style of TrendBandBottom
-param_TrendBandBottom_style_description=Style of TrendBandBottom`
-
+param_TrendBandBottom_style_description=Style of TrendBandBottom
+```
 
 ---
 
@@ -220,7 +215,6 @@ param_TrendBandBottom_style_description=Style of TrendBandBottom`
 
 I not found error in your indicator. At me it works.
 My indicator corresponds to your now.
-
 
 ---
 
@@ -235,7 +229,6 @@ Alexander i examine your indicator and it is completely wrong. My indicator sour
 **BOB**= Break of Bar (**After cross** which bar compalitly above or below middle band)
 **COB**= Continuation Bar (**After BOB detection**, which bar closed higher or lower BOB high or low)
 
-
 ---
 
 ## Re: T3Trend Bands
@@ -243,7 +236,6 @@ Alexander i examine your indicator and it is completely wrong. My indicator sour
 **briansummy** · Mon Sep 03, 2012 12:36 pm
 
 Neat indicator. Can you add the option to increase dot width? I'll try changing color for now. Thanks!
-
 
 ---
 
@@ -253,12 +245,9 @@ Neat indicator. Can you add the option to increase dot width? I'll try changing 
 
 ![Style.png](images/39581/Style.png)
 
-
-
 Style Option Added.
 
  [T3_Trend_Bands.lua](files/39581/T3_Trend_Bands.lua)
-
 
 ---
 

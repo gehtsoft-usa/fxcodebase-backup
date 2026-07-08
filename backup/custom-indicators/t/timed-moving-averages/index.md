@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=63125  
 > Forum: 17 · Topic 63125 · 43 post(s)
 
-
 ---
 
 ## Timed Moving Averages
@@ -11,8 +10,6 @@
 **Apprentice** · Mon Feb 08, 2016 7:21 am
 
 ![EURUSD t1 (02-08-2016 1245).png](images/104698/EURUSD%20t1%20%2802-08-2016%201245%29.png)
-
-
 
 Instead of candles for timed indicators the period is defined in seconds.
 It can be applied to any time frame, as well as "t1".
@@ -23,8 +20,6 @@ It can be applied to any time frame, as well as "t1".
 
 ![EURUSD m1 (02-08-2016 1244).png](images/104698/EURUSD%20m1%20%2802-08-2016%201244%29.png)
 
-
-
 It can be applied to "m1" time frame or higher.
 
  [Timed Moving Averages.lua](files/104698/Timed%20Moving%20Averages.lua)
@@ -33,21 +28,16 @@ It can be applied to "m1" time frame or higher.
 
 ![EURUSD m1 (02-24-2016 1906).png](images/104698/EURUSD%20m1%20%2802-24-2016%201906%29.png)
 
-
-
  [Tick Timed Moving Averages Envelope.lua](files/104698/Tick%20Timed%20Moving%20Averages%20Envelope.lua)
 
  
 
 ![EURUSD m1 (02-24-2016 1923).png](images/104698/EURUSD%20m1%20%2802-24-2016%201923%29.png)
 
-
-
  [Two Tick Timed Movinges Cross.lua](files/104698/Two%20Tick%20Timed%20Movinges%20Cross.lua)
 
 MT4/MQ4 version
 [viewtopic.php?f=38&t=66829](https://fxcodebase.com/code/viewtopic.php?f=38&t=66829)
-
 
 ---
 
@@ -61,7 +51,6 @@ Could you include TICK TIMED MOVING AVERAGES as an option in TICK TWO AVERAGES C
 
 Thanks
 
-
 ---
 
 ## Re: Timed Moving Averages
@@ -70,7 +59,6 @@ Thanks
 
 Timed Moving Averages.lua Minor Update.
 
-
 ---
 
 ## Re: Timed Moving Averages
@@ -78,7 +66,6 @@ Timed Moving Averages.lua Minor Update.
 **MarkoFX** · Mon Feb 15, 2016 10:45 am
 
 im interested in create a high/Low envelope channel with this MAs, hope sombody can help
-
 
 ---
 
@@ -90,7 +77,6 @@ Thanx for this indicator. Yes it would be nice to have high/low possibility.
 
 Could someone do this please.
 
-
 ---
 
 ## Re: Timed Moving Averages
@@ -98,7 +84,6 @@ Could someone do this please.
 **Apprentice** · Wed Feb 17, 2016 6:09 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -112,7 +97,6 @@ it's a very good scalping indicator
 
 Thanks for looking
 
-
 ---
 
 ## Re: Timed Moving Averages
@@ -120,7 +104,6 @@ Thanks for looking
 **Apprentice** · Wed Feb 24, 2016 1:40 pm
 
 Tick Timed Moving Averages Envelope Added.
-
 
 ---
 
@@ -130,7 +113,6 @@ Tick Timed Moving Averages Envelope Added.
 
 Two Tick Timed Movinges Cross Added
 
-
 ---
 
 ## Re: Timed Moving Averages
@@ -138,7 +120,6 @@ Two Tick Timed Movinges Cross Added
 **Apprentice** · Tue May 24, 2016 1:50 am
 
 Minor update.
-
 
 ---
 
@@ -154,7 +135,6 @@ something I would like to test
 
 thanks
 
-
 ---
 
 ## Re: Timed Moving Averages
@@ -162,7 +142,6 @@ thanks
 **Apprentice** · Tue Jul 12, 2016 7:56 am
 
 MA Duration Type option added for Two-Tick-Timed-MA-Cross.
-
 
 ---
 
@@ -185,7 +164,6 @@ could be a valuable piece to a larger strategy
 
 Many thanks
 
-
 ---
 
 ## Re: Timed Moving Averages
@@ -193,7 +171,6 @@ Many thanks
 **Apprentice** · Sat Sep 02, 2017 7:21 am
 
 The indicator was revised and updated.
-
 
 ---
 
@@ -203,7 +180,6 @@ The indicator was revised and updated.
 
 Is it possible to make the timed Envelopes for metatrader please? Thanks in advance!
 
-
 ---
 
 ## Re: Timed Moving Averages
@@ -212,7 +188,6 @@ Is it possible to make the timed Envelopes for metatrader please? Thanks in adva
 
 Your request is added to the development list, Under Id Number 3886
  If someone is interested to do this task, please contact me.
-
 
 ---
 
@@ -225,7 +200,6 @@ Your request is added to the development list, Under Id Number 3886
 
 Please, try this indicator: [viewtopic.php?f=38&t=65081](https://fxcodebase.com/code/viewtopic.php?f=38&t=65081)
 
-
 ---
 
 ## Re: Timed Moving Averages
@@ -233,7 +207,6 @@ Please, try this indicator: [viewtopic.php?f=38&t=65081](https://fxcodebase.com/
 **ForexGuy** · Wed Sep 13, 2017 6:07 am
 
 Thank you very much. I will test it.
-
 
 ---
 
@@ -253,7 +226,6 @@ Thank you very much. I will test it.
 
 The indicator has a small problem which I wrote about it here [viewtopic.php?f=38&t=65081](https://fxcodebase.com/code/viewtopic.php?f=38&t=65081), thought is a more appropriate thread.
 
-
 ---
 
 ## Re: Timed Moving Averages
@@ -268,7 +240,6 @@ would help visually, to avoid trading against short term probabilities
 
 thanks
 
-
 ---
 
 ## Re: Timed Moving Averages
@@ -277,7 +248,6 @@ thanks
 
 Try it now.
 
-
 ---
 
 ## Re: Timed Moving Averages
@@ -285,7 +255,6 @@ Try it now.
 **Apprentice** · Sun Feb 04, 2018 6:39 am
 
 The Indicator was revised and updated.
-
 
 ---
 
@@ -296,7 +265,6 @@ The Indicator was revised and updated.
 Hello Apprentice, can you make the moving average envelope (Tick Timed Moving Averages Envelope.lua), but with additional filter applied to reduce the lag time (like the influx indicator) for tick time frames,also with possibility to mention type of moving average (MVA, EMA)?
 Thank you for all the great indicators you made so far and hopefully you can help with this.
 
-
 ---
 
 ## Re: Timed Moving Averages
@@ -304,7 +272,6 @@ Thank you for all the great indicators you made so far and hopefully you can hel
 **Apprentice** · Mon May 14, 2018 6:10 am
 
 Your request is added to the development list under Id Number 4138
-
 
 ---
 
@@ -314,7 +281,6 @@ Your request is added to the development list under Id Number 4138
 
 Thank you for adding my request to the the list!
 
-
 ---
 
 ## Re: Timed Moving Averages
@@ -322,7 +288,6 @@ Thank you for adding my request to the the list!
 **ForexGuy** · Fri May 18, 2018 3:01 am
 
 Any news on the indi?
-
 
 ---
 
@@ -332,7 +297,6 @@ Any news on the indi?
 
 Please be patient, we have not forgotten you.
 
-
 ---
 
 ## Re: Timed Moving Averages
@@ -340,7 +304,6 @@ Please be patient, we have not forgotten you.
 **ForexGuy** · Fri May 18, 2018 5:44 am
 
 Thank you very much and sorry for the impatience/disturbance
-
 
 ---
 
@@ -352,7 +315,6 @@ Try this version.
 
  [Tick Timed Moving Averages Envelope.lua](files/119314/Tick%20Timed%20Moving%20Averages%20Envelope.lua)
 
-
 ---
 
 ## Re: Timed Moving Averages
@@ -363,7 +325,6 @@ I have tried it but it does not quite match the influx and I do not quite unders
 The envelopes I need should be like a zerolag MA envelope (or a nonlag MA) if you know what I mean which is almost the same. Do you think it is possible to make it?
 P.S. the type of MA selection should remain in the indi as it is great.
 
-
 ---
 
 ## Re: Timed Moving Averages
@@ -371,7 +332,6 @@ P.S. the type of MA selection should remain in the indi as it is great.
 **Apprentice** · Mon May 21, 2018 5:33 am
 
 Can you provide web reference for zero-lag MA envelope?
-
 
 ---
 
@@ -391,7 +351,6 @@ x = lag = (n - 1) / 2
 
 The attached is a NonLag MACD which I modified to show only a NonLagMA on price chart and which I use in MT4 but I need it for ticks in Marketscope.
 
-
 ---
 
 ## Re: Timed Moving Averages
@@ -399,7 +358,6 @@ The attached is a NonLag MACD which I modified to show only a NonLagMA on price 
 **ForexGuy** · Mon May 21, 2018 6:36 am
 
 P.S. The provided formulas and code are for simple NonLagMA, you need to add the envelopes. Thanks a lot for all your interest and help!
-
 
 ---
 
@@ -409,7 +367,6 @@ P.S. The provided formulas and code are for simple NonLagMA, you need to add the
 
 Your request is added to the development list under Id Number 4150
 
-
 ---
 
 ## Re: Timed Moving Averages
@@ -417,7 +374,6 @@ Your request is added to the development list under Id Number 4150
 **ForexGuy** · Tue May 22, 2018 7:39 am
 
 Thank you very much! You are always very prompt in your replies and work!
-
 
 ---
 
@@ -433,7 +389,6 @@ Try this version.
 Was written by a colleague.
 I'm on vacation.
 
-
 ---
 
 ## Re: Timed Moving Averages
@@ -446,7 +401,6 @@ Normally, the zerolag MA should be faster and follow price closely than the norm
 Maybe after your return you could take a look!
 Thanks again and waiting for your return.
 
-
 ---
 
 ## Re: Timed Moving Averages
@@ -458,7 +412,6 @@ Unfortunately I have tried them but they are not quite in order. My mq4 indicato
 Maybe after coming from your vacation you could take a look at the zero lag MA.
 Thanks and have a nice time on your vacation!
 
-
 ---
 
 ## Re: Timed Moving Averages
@@ -467,13 +420,13 @@ Thanks and have a nice time on your vacation!
 
 Zerolag.lua was written based on your formula.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`EMA = K * ( 2 * PRICE - PRICE.X) + (1 - K) * EMA.1
+```
+EMA = K * ( 2 * PRICE - PRICE.X) + (1 - K) * EMA.1
 where...
 K = 2 / (n + 1)
 n = Period
-x = lag = (n - 1) / 2`
-
+x = lag = (n - 1) / 2
+```
 
 ---
 
@@ -485,7 +438,6 @@ x = lag = (n - 1) / 2`
 
 Tick Timed ZeroLag Envelope.lua was modified.
 
-
 ---
 
 ## Re: Timed Moving Averages
@@ -494,7 +446,6 @@ Tick Timed ZeroLag Envelope.lua was modified.
 
 can you provide mt4 version of tick timen zerolag envelop please?
 
-
 ---
 
 ## Re: Timed Moving Averages
@@ -502,7 +453,6 @@ can you provide mt4 version of tick timen zerolag envelop please?
 **Apprentice** · Wed Oct 03, 2018 3:00 am
 
 Your request is added to the development list under Id Number 4262
-
 
 ---
 

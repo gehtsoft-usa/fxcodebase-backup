@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=2304  
 > Forum: 17 · Topic 2304 · 3 post(s)
 
-
 ---
 
 ## USDX Slope
@@ -19,8 +18,6 @@ and also
 
 ![USDX_Slope.png](images/4893/USDX_Slope.png)
 
-
-
 Slope Direction Line and USDX must be installed.
 
  [USDX_Slope.lua](files/4893/USDX_Slope.lua)
@@ -29,7 +26,6 @@ MQ4/MT4 version
 [viewtopic.php?f=38&t=63997](https://fxcodebase.com/code/viewtopic.php?f=38&t=63997)
 
 The indicator was revised and updated
-
 
 ---
 
@@ -40,8 +36,8 @@ The indicator was revised and updated
 Update indicator.
 Added other moving average methods and other prices for calculation.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("USDX Slope indicator");
     indicator:description("USDX Slope indicator");
     indicator:requiredSource(core.Bar);
@@ -144,8 +140,8 @@ function Update(period, mode)
      end
      end
     end
-end`
-
+end
+```
 
 ---
 

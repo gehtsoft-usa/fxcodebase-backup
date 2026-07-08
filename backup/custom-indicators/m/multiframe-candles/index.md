@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=2364  
 > Forum: 17 · Topic 2364 · 6 post(s)
 
-
 ---
 
 ## Multiframe candles
@@ -16,10 +15,7 @@ Indicator shows OHLC information from other timeframe.
 
 ![Multiframe_Candles.png](images/5089/Multiframe_Candles.png)
 
-
-
 The indicator was revised and updated
-
 
 ---
 
@@ -33,10 +29,8 @@ Update this indicator.
 
 ![Multiframe_Candles2.png](images/5480/Multiframe_Candles2.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Bigger timeframe OHLC");
     indicator:description("");
     indicator:requiredSource(core.Bar);
@@ -258,8 +252,8 @@ function findDateFast(stream, date, precise)
             end
         end
     end
-end`
-
+end
+```
 
 ---
 
@@ -268,7 +262,6 @@ end`
 **Nikolay.Gekht** · Mon Oct 25, 2010 12:33 pm
 
 Wow. The second version is beautiful! Thank you!
-
 
 ---
 
@@ -282,7 +275,6 @@ But could you, possibly, make them look even more like normal candles, i.e. with
 
 Here's what it could look like (and the indi for MT4):
 
-
 ---
 
 ## Re: Multiframe candles
@@ -291,8 +283,8 @@ Here's what it could look like (and the indi for MT4):
 
 MT4 version of the aforementioned Proper Multiple Time Frame Candles:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`#property link      "[[email protected]](https://fxcodebase.com/cdn-cgi/l/email-protection)"
+```
+#property link      "[[email protected]](https://fxcodebase.com/cdn-cgi/l/email-protection)"
 #property copyright "© 2006, mankurt"
 #property indicator_chart_window
 //+------------------------------------------------------------------------------------------------+
@@ -467,8 +459,8 @@ void ColorShadow (double OP, double CP, string NOBJ)
 {if(OP==CP)ObjectSet(NOBJ,OBJPROP_COLOR,DojiColor);
 if(OP<CP)ObjectSet(NOBJ,OBJPROP_COLOR,UpCandle);
 if (OP>CP)ObjectSet(NOBJ,OBJPROP_COLOR,DnCandle);}
-//+----------------------------------------------END-----------------------------------------------+`
-
+//+----------------------------------------------END-----------------------------------------------+
+```
 
 ---
 

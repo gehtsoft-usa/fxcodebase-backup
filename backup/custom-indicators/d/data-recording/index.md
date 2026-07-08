@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=66854  
 > Forum: 17 · Topic 66854 · 2 post(s)
 
-
 ---
 
 ## Data Recording
@@ -16,8 +15,8 @@ Hello to all,
 
 for all those who are followers of excel sheets and who want to record the data of the indicators during the trading, to be able to make a subsequent analysis, I add in my indi's these code :
 
-Code: [Select all](https://fxcodebase.com/code/)
-`Function init()
+```lua
+Function init()
 ...
         indicator.parameters:addGroup("Data Recording");
    indicator.parameters:addBoolean("SetRecording", "Activate Data Recording", "", false);
@@ -70,7 +69,8 @@ if Record then
    end
 ...
 ...
-end`
+end
+```
 
 NB : Here, MaxPrice, MinPrice, Sens are variables for the calculation of the Indicator.
 
@@ -79,7 +79,6 @@ Hope it will help those who want to know the real things
 Rgds,
 
 LeTigre30
-
 
 ---
 

@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=59402  
 > Forum: 17 · Topic 59402 · 31 post(s)
 
-
 ---
 
 ## Prevailing Trend
@@ -11,8 +10,6 @@
 **Apprentice** · Thu Sep 05, 2013 1:49 pm
 
 ![Trend.png](images/89183/Trend.png)
-
-
 
 Up
 moving average of UP candles for n periods
@@ -23,7 +20,6 @@ moving average of DOWN candles for n periods
  [Trend.lua](files/89183/Trend.lua)
 
  [Tick Trend.lua](files/89183/Tick%20Trend.lua)
-
 
 ---
 
@@ -54,7 +50,6 @@ Thanks alot!
 >
 > Trend.lua
 
-
 ---
 
 ## Re: Prevailing Trend
@@ -63,7 +58,6 @@ Thanks alot!
 
 1. Candle Size is used.
 2. Use greater period.
-
 
 ---
 
@@ -77,7 +71,6 @@ Can you please create a strategy that executes upon cross.
 
 Thanks alot!!
 
-
 ---
 
 ## Re: Prevailing Trend
@@ -85,7 +78,6 @@ Thanks alot!!
 **Apprentice** · Sun Sep 08, 2013 1:28 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -96,7 +88,6 @@ Your request is added to the development list.
 Requested can be found here.
 [viewtopic.php?f=31&t=59426&p=89256#p89256](https://fxcodebase.com/code/viewtopic.php?f=31&t=59426&p=89256#p89256)
 
-
 ---
 
 ## Re: Prevailing Trend
@@ -104,7 +95,6 @@ Requested can be found here.
 **Alexander.Gettinger** · Mon Sep 30, 2013 10:05 am
 
 MQL4 version of Prevailing Trend oscillator: [viewtopic.php?f=38&t=59601](https://fxcodebase.com/code/viewtopic.php?f=38&t=59601).
-
 
 ---
 
@@ -120,7 +110,6 @@ What difference with
 [http://fxcodebase.com/code/viewtopic.php?f=17&t=54880&p=89013&hilit=drive#p89013](https://fxcodebase.com/code/viewtopic.php?f=17&t=54880&p=89013&hilit=drive#p89013)
 The Drive has same algoritm,
 
-
 ---
 
 ## Re: Prevailing Trend
@@ -131,7 +120,6 @@ Could you please add the same difference output as you updated in the split movi
 
 [viewtopic.php?f=17&t=59276&start=10](https://fxcodebase.com/code/viewtopic.php?f=17&t=59276&start=10)
 
-
 ---
 
 ## Re: Prevailing Trend
@@ -139,7 +127,6 @@ Could you please add the same difference output as you updated in the split movi
 **Apprentice** · Thu Oct 24, 2013 1:28 am
 
 Show difference option added.
-
 
 ---
 
@@ -153,7 +140,6 @@ Cutting off the data stream instead of choosing "no line" is what I am looking f
 
 Thanks
 
-
 ---
 
 ## Re: Prevailing Trend
@@ -161,7 +147,6 @@ Thanks
 **Apprentice** · Fri Nov 08, 2013 4:22 am
 
 Try updated version.
-
 
 ---
 
@@ -173,7 +158,6 @@ Could you please create a strategy that uses the difference line. Buy / Sell is 
 
 Thanks!
 
-
 ---
 
 ## Re: Prevailing Trend
@@ -184,7 +168,6 @@ I have to say no.
 If you look carefully, you'll notice that the Up / Down Cross coexistence along Histogram / ​​Zero Line crosses.
 Similar to
 [viewtopic.php?f=31&t=59426&p=89256#p89256](https://fxcodebase.com/code/viewtopic.php?f=31&t=59426&p=89256#p89256)
-
 
 ---
 
@@ -200,7 +183,6 @@ Similar to
 
 I do not understand, could you explain it a litte better? If a strategy can't be created, could an alert be created once the difference line crosses zero line?
 
-
 ---
 
 ## Re: Prevailing Trend
@@ -208,7 +190,6 @@ I do not understand, could you explain it a litte better? If a strategy can't be
 **speakinmymind** · Mon Dec 30, 2013 10:05 pm
 
 could you please add two more decimal places to the data output? thank you
-
 
 ---
 
@@ -218,7 +199,6 @@ could you please add two more decimal places to the data output? thank you
 
 An additional two added.
 
-
 ---
 
 ## Re: Prevailing Trend
@@ -226,7 +206,6 @@ An additional two added.
 **speakinmymind** · Fri Jan 03, 2014 5:08 pm
 
 I assume that this uses the high and low to determine candle size. Can you make it optional to make it the open and close that determine candle size instead? Thanks
-
 
 ---
 
@@ -245,7 +224,6 @@ Applicable to Non Candle data sources.
 Trend.lua is also updated.
 I have add H/L and O/C selector.
 
-
 ---
 
 ## Re: Prevailing Trend
@@ -260,7 +238,6 @@ My original request can be found here: [viewtopic.php?f=27&t=59401](https://fxco
 
 Thanks for the clarification and update.
 
-
 ---
 
 ## Re: Prevailing Trend
@@ -273,7 +250,6 @@ Maybe using a formula it can be done. I was thinking multiplying the output of t
 
 Does this seem feasible?
 
-
 ---
 
 ## Re: Prevailing Trend
@@ -281,7 +257,6 @@ Does this seem feasible?
 **Apprentice** · Sat Feb 01, 2014 2:42 pm
 
 Maybe we can use some method of normalization.
-
 
 ---
 
@@ -294,7 +269,6 @@ Something like this.
  [Trend with Normalization.lua](files/92415/Trend%20with%20Normalization.lua)
 
 Without clear guidance, I am not willing to continue this task.
-
 
 ---
 
@@ -323,7 +297,6 @@ The resulting line should in theory basically show convergence/divergence betwee
 I hope that wasn't too confusing!!
 Thanks!
 
-
 ---
 
 ## Re: Prevailing Trend
@@ -336,7 +309,6 @@ Could you just replace the difference line option with a line that is the mid po
 
 Thanks!!
 
-
 ---
 
 ## Re: Prevailing Trend
@@ -344,7 +316,6 @@ Thanks!!
 **Apprentice** · Mon Feb 03, 2014 5:57 am
 
 Try Updated Version.
-
 
 ---
 
@@ -358,7 +329,6 @@ Could you please create a strategy that buys on cross up and sells on cross down
 
 Thanks!
 
-
 ---
 
 ## Re: Prevailing Trend
@@ -369,7 +339,6 @@ Hey this is a great tool!!
 
 Could you please explain the normalization formula or give me a link on the topic to further understand what you did?
 
-
 ---
 
 ## Re: Prevailing Trend
@@ -378,13 +347,13 @@ Could you please explain the normalization formula or give me a link on the topi
 
 This formula was used.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`min1,max1=minmax(close,NormalizationPeriod);
+```
+min1,max1=minmax(close,NormalizationPeriod);
 min2,max2=minmax(UPNormalizationPeriod);
 
 Up=  ((UP - min2)/ (max2-min2))*(max1-min1) +min1  ;
-Down=  ((DOWN- min2)/ (max2-min2))*(max1-min1) +min1  ;`
-
+Down=  ((DOWN- min2)/ (max2-min2))*(max1-min1) +min1  ;
+```
 
 ---
 
@@ -393,7 +362,6 @@ Down=  ((DOWN- min2)/ (max2-min2))*(max1-min1) +min1  ;`
 **Apprentice** · Sat Aug 19, 2017 3:59 pm
 
 The indicator was revised and updated.
-
 
 ---
 

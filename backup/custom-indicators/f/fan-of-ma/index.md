@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=1056  
 > Forum: 17 · Topic 1056 · 11 post(s)
 
-
 ---
 
 ## Fan of MA
@@ -16,10 +15,8 @@ Fan of 7 MA.
 
 ![fan.png](images/1999/fan.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("FAN");
     indicator:description("");
     indicator:requiredSource(core.Tick);
@@ -136,8 +133,8 @@ function Update(period, mode)
   end
   buff5[period]=(DeltaMA1+DeltaMA2+DeltaMA3+DeltaMA4+DeltaMA5+DeltaMA6)/6.;
  end
-end`
-
+end
+```
 
 ---
 
@@ -147,10 +144,8 @@ end`
 
 ![fan2.png](images/2000/fan2.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("FAN");
     indicator:description("");
     indicator:requiredSource(core.Tick);
@@ -246,8 +241,8 @@ function Update(period, mode)
   buff6[period]=MA6.DATA[period];
   buff7[period]=MA7.DATA[period];
  end
-end`
-
+end
+```
 
 ---
 
@@ -257,7 +252,6 @@ end`
 
 Thanks Guys, I love it, Can we get a signal created for this indicator? Thanks
 
-
 ---
 
 ## Re: Fan of MA
@@ -265,7 +259,6 @@ Thanks Guys, I love it, Can we get a signal created for this indicator? Thanks
 **Nikolay.Gekht** · Wed May 19, 2010 8:23 am
 
 Could you specify conditions when the signal must alert?
-
 
 ---
 
@@ -275,7 +268,6 @@ Could you specify conditions when the signal must alert?
 
 If the signal could have dual signals..1st signal would alert when the bars on the bottom fan indicator has crossed up. the bar has begun to form on the top or either the bottom of the zero. The second alert would occurr when the 50, 100, 150 ma's cross the 200. If possible, maybe the properties of the signal could include those options, example, alert when ma's cros (true, false), alert with both occur(true/false) as a matter of choice for the user. The way the user could determine which type of alert to chose from or if they want better confirmation of the trend change but things would need to occur before the alert signals. I hope I have made myself clear
 
-
 ---
 
 ## Re: Fan of MA
@@ -284,7 +276,6 @@ If the signal could have dual signals..1st signal would alert when the bars on t
 
 You may see other fan indicator here: [viewtopic.php?f=17&t=1102](https://fxcodebase.com/code/viewtopic.php?f=17&t=1102)
 
-
 ---
 
 ## Re: Fan of MA
@@ -292,7 +283,6 @@ You may see other fan indicator here: [viewtopic.php?f=17&t=1102](https://fxcode
 **one2share** · Tue May 25, 2010 6:13 am
 
 thanks guys, I love the fans, however if possible, are we able to get signals for these? maybe u can create a signal to alert when all three fans have crossed? or if using one and another indicate for example, heiken ashi we would can a signal when trend change for fan and heiken ashi candle. thanks guys. does anyone know who how I can get the sound to play in the alert? I have tried browsing and placing an audio file in the slot however when the alert pops up, there still is no sound? maybe someone has a file that we can add to upload
-
 
 ---
 
@@ -307,7 +297,6 @@ You can use any wav file to play the sound.
 The trading station sounds are located here: C:\Program Files\Candleworks\FXTS2\Sounds\
 The windows' sounds are located here: C:\Windows\Media\ (Windows is the folder name where windows is set up).
 
-
 ---
 
 ## Re: Fan of MA
@@ -316,7 +305,6 @@ The windows' sounds are located here: C:\Windows\Media\ (Windows is the folder n
 
 thanks guys, will let u know if I have any luck? I am eager to see the signal for the ma fan...thanks guys again
 
-
 ---
 
 ## Re: Fan of MA
@@ -324,7 +312,6 @@ thanks guys, will let u know if I have any luck? I am eager to see the signal fo
 **VictorFX** · Wed May 26, 2010 3:12 pm
 
 Briliant indicator. Thank you so much. one of my favorite.
-
 
 ---
 

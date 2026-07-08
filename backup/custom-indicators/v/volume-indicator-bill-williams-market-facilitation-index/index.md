@@ -1,7 +1,61 @@
 # Volume Indicator : Bill Williams' Market Facilitation Index
 
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=1968  
-> Forum: 17 · Topic 1968 · 29 post(s)
+> Forum: 17 · Topic 1968 · 30 post(s)
+
+
+---
+
+## Volume Indicator : Bill Williams' Market Facilitation Index
+
+**Nikolay.Gekht** · Sat Aug 28, 2010 9:06 pm
+
+> **Bill Williams wrote:**
+> "The MFI is a measure of the market's willingness to move the price. I cannot overemphasize the value of this indicator. It is a more truthful measure of market action than any stochastic, RSI (Relative Strength Index) or other momentum indicator."
+
+The MFI formula is
+
+MFI = (High - Low) / Volume
+
+MFI can be used for all time frames from 5 minutes up to daily and weekly frames.
+
+The indicator highlight four zones:
+
+MFI Up, Volume Up - the market is already on the move.
+MFI Down, Volume Down - appears when market starts to fade – lose interest in advancing further. Often this can be observed at the end of a trend..
+MFI Up, Volume Down - the market makes a progressive move, but this move is not supported by the volume (for any reason), this provides a clue that there are probably no real interest in the move yet, while certain group of market participants is trying to control and manipulate the market to their advantage.
+MFI Down, Volume Up - appears at the end of each trend. Bill Williams calls it "the strongest potential money maker" of the 4 setups. The squat bar is marked by an increasing volume yet temporary stalling price movement.
+
+ 
+
+![bwmfi.png](images/3992/bwmfi.png)
+
+
+
+Download:
+
+ [bwmfi.lua](files/3992/bwmfi.lua)
+
+ [BWMFI with Alert.lua](files/3992/BWMFI%20with%20Alert.lua)
+
+ 
+
+![MTF MCP Market Facilitation Index List.png](images/3992/MTF%20MCP%20Market%20Facilitation%20Index%20List.png)
+
+
+
+The symbols will show the price direction.
+The color is transferred from Market Facilitation Index Indicator.
+
+ [MTF MCP Market Facilitation Index List.lua](files/3992/MTF%20MCP%20Market%20Facilitation%20Index%20List.lua)
+
+ 
+
+![Market Facilitation Index Bar.png](images/3992/Market%20Facilitation%20Index%20Bar.png)
+
+
+
+ [Market Facilitation Index Bar.lua](files/3992/Market%20Facilitation%20Index%20Bar.lua)
 
 
 ---

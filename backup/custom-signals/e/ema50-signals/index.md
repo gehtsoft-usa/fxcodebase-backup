@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=29&t=851  
 > Forum: 29 · Topic 851 · 1 post(s)
 
-
 ---
 
 ## EMA50 signals
@@ -16,10 +15,8 @@ Signal based on indicator EMA50: [viewtopic.php?f=17&t=626](https://fxcodebase.c
 
 ![EMA50_Signal.jpg](images/1525/EMA50_Signal.jpg)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     strategy:name("EMA50 signal");
     strategy:description("");
 
@@ -141,4 +138,5 @@ function ExtSignal(source, period, message, soundFile)
     if soundFile ~= nil then
         terminal:alertSound(soundFile, false);
     end
-end`
+end
+```

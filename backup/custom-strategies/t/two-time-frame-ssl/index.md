@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=67065  
 > Forum: 31 · Topic 67065 · 3 post(s)
 
-
 ---
 
 ## Two Time Frame SSL
@@ -12,19 +11,14 @@
 
 ![1.png](images/122568/1.png)
 
-
-
  
 
 ![2.png](images/122568/2.png)
-
-
 
 Based on SSL.lua
 [viewtopic.php?f=17&t=139](https://fxcodebase.com/code/viewtopic.php?f=17&t=139)
 
  [Two Time Frame SSL.lua](files/122568/Two%20Time%20Frame%20SSL.lua)
-
 
 ---
 
@@ -44,13 +38,14 @@ So I updated the functions **trading_logic:Prepare and trading_logic:Ext_update*
 Seems only the first few candles are loaded with the T1_SSL object though and for the life of mine, I can't figure out what's wrong here
 The code is extremly simple, and I used ExtSubscribe as I always do
 
-Code: [Select all](https://fxcodebase.com/code/)
-`if instance.parameters.T1_Check_SSL then
+```lua
+if instance.parameters.T1_Check_SSL then
       T1_TF_SSL = instance.parameters.T1_TF_SSL;
       self._trading_source_SSL_id = self._ids_start + 4;
       self.Source_SSL = ExtSubscribe(self._trading_source_SSL_id, nil, instance.parameters.T1_TF_SSL, instance.parameters.is_bid, "bar");
       PrepareTrend1_SSL();
-   end`
+   end
+```
 
 I looked for a few days and didn't find why the code A) is not working and B) doesn't take any trade in the backtest
 
@@ -58,7 +53,6 @@ I would really appreciate from an educational perspective, to learn where I'm wr
 
 Thanks so much
 Daveatt
-
 
 ---
 

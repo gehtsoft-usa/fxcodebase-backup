@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=20  
 > Forum: 17 · Topic 20 · 91 post(s)
 
-
 ---
 
 ## Dochian Channel Indicator
@@ -24,8 +23,6 @@ DNC(N) = (UP(N) + DOWN(N)) / 2
 
 *Screenshot of Dochian Channel Indicator*
 
-
-
  [DNC.lua](files/21/DNC.lua)
 
  [Donchian Channel with Alert.lua](files/21/Donchian%20Channel%20with%20Alert.lua)
@@ -45,7 +42,6 @@ Indicator-based strategy.
 MT4/MQ4 version.
 [viewtopic.php?f=38&t=68979](https://fxcodebase.com/code/viewtopic.php?f=38&t=68979)
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -53,7 +49,6 @@ MT4/MQ4 version.
 **gerrysta** · Sat May 08, 2010 11:40 am
 
 Could someone tell me what program I use to open a '.lua file for the Donchian Channel? Thanks
-
 
 ---
 
@@ -65,7 +60,6 @@ It is the FXCM Trading Station (dbFX Trading Station is the same).
 Please read the instruction:
 [viewtopic.php?f=17&t=17](https://fxcodebase.com/code/viewtopic.php?f=17&t=17)
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -76,12 +70,9 @@ Please read the instruction:
 
 *Dochian Channel Indicator*
 
-
-
 This version has the option to choose between High / Low and Close values as a basis for drawing Dochian Channel.
 
  [DNC_V2.lua](files/2270/DNC_V2.lua)
-
 
 ---
 
@@ -97,7 +88,6 @@ It would be great for all trend-followers (scalping the ticks) and in honor to M
 
 Thank you guys in advance. no rush
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -105,7 +95,6 @@ Thank you guys in advance. no rush
 **Apprentice** · Tue Oct 19, 2010 8:38 am
 
 Added to developmental cue.
-
 
 ---
 
@@ -119,10 +108,8 @@ Bigger timeframe DNC.
 
 ![BF_DNC.png](images/5396/BF_DNC.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Bigger timeframe DNC");
     indicator:description("");
     indicator:requiredSource(core.Bar);
@@ -342,10 +329,10 @@ function findDateFast(stream, date, precise)
             end
         end
     end
-end`
+end
+```
 
 For this indicator must be installed DNC indicator.
-
 
 ---
 
@@ -354,8 +341,6 @@ For this indicator must be installed DNC indicator.
 **Apprentice** · Mon Dec 06, 2010 8:56 am
 
 ![DNC.png](images/6574/DNC.png)
-
-
 
 DNC-Bandwidth
 The difference between the highest and lowest prices within the period.
@@ -370,7 +355,6 @@ Filter for possible Entry, Exit orders.
  [DNC-Bandwidth.lua](files/6574/DNC-Bandwidth.lua)
 
  [DNC-Percentage.lua](files/6574/DNC-Percentage.lua)
-
 
 ---
 
@@ -397,7 +381,6 @@ can you help me to get the chance to just use the close price as the data source
 
 Thank you very much
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -407,7 +390,6 @@ Thank you very much
 Data source for this indicator Is always Bar. (All four data points)
 
 You have the choice to select, whether the channel lines are to be drawn on High / Low or Close values.
-
 
 ---
 
@@ -429,7 +411,6 @@ Thanks in advance
 
 *) new line
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -440,7 +421,6 @@ Hello
 
 i'm looking for de same things , its very helpful to analyse mouvements of price
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -448,7 +428,6 @@ i'm looking for de same things , its very helpful to analyse mouvements of price
 **Apprentice** · Sun Feb 06, 2011 5:52 am
 
 The request is in a development order.
-
 
 ---
 
@@ -460,7 +439,6 @@ Great
 
 Thanks a lot
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -468,8 +446,6 @@ Thanks a lot
 **Apprentice** · Wed Feb 09, 2011 3:14 pm
 
 ![v3.png](images/8040/v3.png)
-
-
 
 Version 3 of this indicator has two new functionality.
 Sub Level Lines and Line Style option.
@@ -484,7 +460,6 @@ Sub Level Lines and Line Style option.
 
  [DNC_V3.lua](files/8040/DNC_V3.lua)
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -498,7 +473,6 @@ great job, I'm impressed by your reactivity and eficacity
 Big respect
 
 Look at this indicator with 90 periods, its give very goods reference points, especially the middle line
-
 
 ---
 
@@ -534,7 +508,6 @@ Thanks in advance
 >
 > DNC_V3.lua
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -542,7 +515,6 @@ Thanks in advance
 **Apprentice** · Tue Mar 15, 2011 5:51 am
 
 Your request has been added to developmental cue.
-
 
 ---
 
@@ -552,12 +524,9 @@ Your request has been added to developmental cue.
 
 ![BF_DNC_V3.png](images/8795/BF_DNC_V3.png)
 
-
-
 With Biger Time Frame Indicator version you must install the regular version as well.
 
  [BF_DNC_V3.lua](files/8795/BF_DNC_V3.lua)
-
 
 ---
 
@@ -567,7 +536,6 @@ With Biger Time Frame Indicator version you must install the regular version as 
 
 Amazing work Apprentice, thanks!
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -576,7 +544,6 @@ Amazing work Apprentice, thanks!
 
 Tiny update.
 Parameter "Show High/Low lines" which can be "Both", "High" or "Low" added to DNC_V3.lua.
-
 
 ---
 
@@ -598,7 +565,6 @@ Parameter "Show High/Low lines" which can be "Both", "High" or "Low" added to DN
 Dear Apprentice,
 
 Thanks again for your great indicator.
-
 
 ---
 
@@ -637,7 +603,6 @@ Endif
 return BandeHaute coloured (255,154,51) as"Mogalef Bande Haute", Mediane coloured (102,0,204) as "Mogalef Mediane", BandeBasse coloured (0,204,255) as "Mogalef Bande Basse"
 --------------------------------------------------------
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -646,7 +611,6 @@ return BandeHaute coloured (255,154,51) as"Mogalef Bande Haute", Mediane coloure
 
 Requested can be found here.
 [viewtopic.php?f=17&t=4449&p=10972#p10972](https://fxcodebase.com/code/viewtopic.php?f=17&t=4449&p=10972#p10972)
-
 
 ---
 
@@ -659,7 +623,6 @@ thank you,
 i put an answer to Mogalef bands topic
 Tis is not the same indicator
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -669,7 +632,6 @@ Tis is not the same indicator
 just a suggestion to the friendly programmer ...
 Having the ability to adjust the size of the line of the channels
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -678,7 +640,6 @@ Having the ability to adjust the size of the line of the channels
 
 Time Frame biger version compatibility issue resolved.
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -686,7 +647,6 @@ Time Frame biger version compatibility issue resolved.
 **Terminus** · Tue Jun 07, 2011 1:59 am
 
 thanks a lot Apprentice !
-
 
 ---
 
@@ -735,7 +695,6 @@ thanks
 buy
 arindam roy
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -743,7 +702,6 @@ arindam roy
 **Apprentice** · Mon Jun 04, 2012 1:45 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -753,7 +711,6 @@ Your request is added to the development list.
 
 Requested can be found here.
 [viewtopic.php?f=31&t=19839](https://fxcodebase.com/code/viewtopic.php?f=31&t=19839)
-
 
 ---
 
@@ -772,7 +729,6 @@ Wish I knew how to do it myself .
 
 Cheers
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -780,7 +736,6 @@ Cheers
 **Apprentice** · Sat Dec 01, 2012 5:29 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -790,7 +745,6 @@ Your request is added to the development list.
 
 Dear Apprentice, I have a request, I would like to add a calculation to the original DNC.lua To both calculate and then show the result (the total pip difference from the upper band to the lower band displayed according to the user input) at the end of the "legend" of the DNC indicator? Thank you.
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -798,7 +752,6 @@ Dear Apprentice, I have a request, I would like to add a calculation to the orig
 **Apprentice** · Sun Sep 08, 2013 1:28 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -808,12 +761,9 @@ Your request is added to the development list.
 
 ![DNC.png](images/89254/DNC.png)
 
-
-
 Try This version
 
  [DNC.lua](files/89254/DNC.lua)
-
 
 ---
 
@@ -822,7 +772,6 @@ Try This version
 **TheLight** · Sun Sep 08, 2013 9:04 pm
 
 Thanks Apprentice, it works great, exactly what I was looking for. Your work is exceptional.
-
 
 ---
 
@@ -849,7 +798,6 @@ DNC(EUR/USD,20, 304.9 Pips, 2.3%) - DU 1.31046 DN 1.34095 DM 1.32570
 Thanks again,
 TheLight
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -858,7 +806,6 @@ TheLight
 
 Try Updated Version.
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -866,7 +813,6 @@ Try Updated Version.
 **TheLight** · Wed Sep 18, 2013 3:02 pm
 
 Thanks Apprentice, your upgrade to the DNC is great! TheLight
-
 
 ---
 
@@ -880,7 +826,6 @@ Thanks,
 
 sjc
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -888,7 +833,6 @@ sjc
 **Apprentice** · Sun Nov 24, 2013 2:47 pm
 
 Donchian Channel with Alert.lua Added (See Topmost post)
-
 
 ---
 
@@ -900,7 +844,6 @@ I'm using the DNC_V2. Would it be possible to add the style option to the center
 
 Thanks
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -908,7 +851,6 @@ Thanks
 **Apprentice** · Thu Jan 30, 2014 4:18 am
 
 Style Option Added.
-
 
 ---
 
@@ -920,7 +862,6 @@ Apologies for not being clear on the request. I was looking for color up as the 
 
 Thanks.
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -931,7 +872,6 @@ Try This Version.
 
  [DNC_V2.lua](files/92414/DNC_V2.lua)
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -939,7 +879,6 @@ Try This Version.
 **mulligan** · Sun Feb 16, 2014 6:51 pm
 
 Thanks for the DNC_V2 with the up and down center line color option. With the additional neutral color, the line is predominantly neutral by the nature of the indicator. Is it possible to get a version with only the up and down without the neutral? It would be much clearer to read and follow with only up and down.
-
 
 ---
 
@@ -951,7 +890,6 @@ Try This Version.
 
  [DNC_V2.lua](files/92706/DNC_V2.lua)
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -962,14 +900,15 @@ Since yersterday I use Donchian Channel Indicator Version 3 (filename: DNC_V3.lu
 
 So I added an else-part in the prepare-function as shown below:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`if (sm) then
+```lua
+if (sm) then
     dm = instance:addStream("DM", core.Line, name .. ".DM", "M", instance.parameters.clrDM,  first)
     dm:setWidth(instance.parameters.widthDM);
     dm:setStyle(instance.parameters.styleDM);
 else
     dm = instance:addInternalStream(0);
-end`
+end
+```
 
 According to that change I revised the update-function as well and removed the if-statement:
 
@@ -984,7 +923,6 @@ The revised version can be downloaded here:
 
 Chris
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -993,10 +931,7 @@ Chris
 
 ![DNC.png](images/100247/DNC.png)
 
-
-
 Projection option added to DNC.lua
-
 
 ---
 
@@ -1007,7 +942,6 @@ Projection option added to DNC.lua
 hi,
 Can you convert DNC-Percentage.lua to mq4 ? Thx
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -1016,7 +950,6 @@ Can you convert DNC-Percentage.lua to mq4 ? Thx
 
 Requested can be found here.
 [viewtopic.php?f=38&t=62193&p=100316#p100316](https://fxcodebase.com/code/viewtopic.php?f=38&t=62193&p=100316#p100316)
-
 
 ---
 
@@ -1029,7 +962,6 @@ Dec 14, 2015: Compatibility issue Fixed. _Alert helper is not longer needed.
 If you want to use updated version of this indicator,
 please make sure to use TS Version 01.14.101415. or higher.
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -1039,7 +971,6 @@ please make sure to use TS Version 01.14.101415. or higher.
 Could you make a tick based version of DNC_V2.lua? I tried the Timed Tick DNC. It's not the same.
 Thanks.
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -1048,7 +979,6 @@ Thanks.
 
 Tick DNC.lua added.
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -1056,7 +986,6 @@ Tick DNC.lua added.
 **Apprentice** · Wed Apr 25, 2018 3:09 pm
 
 The indicator was revised and updated.
-
 
 ---
 
@@ -1080,7 +1009,6 @@ Please try this strategy:
 
  [DNC_Str.lua](files/123859/DNC_Str.lua)
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -1093,7 +1021,6 @@ Can you add shift signal option?
 
 Thanks.
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -1101,7 +1028,6 @@ Thanks.
 **Apprentice** · Fri Apr 12, 2019 4:37 am
 
 Can you define "shift signal"?
-
 
 ---
 
@@ -1119,7 +1045,6 @@ Thanks.
 
 PS: Can you fix the bug? When I have the notification window and I scroller, the notification window comes back.
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -1129,7 +1054,6 @@ PS: Can you fix the bug? When I have the notification window and I scroller, the
 I'm not sure I understand you.
 You want to shift the line x periods left or right?
 Can you specify/post indicator/strategy version?
-
 
 ---
 
@@ -1143,12 +1067,9 @@ I want signal here (for example):
 
 ![Capture.png](images/125790/Capture.png)
 
-
-
 I use Donchian channel with alert ([viewtopic.php?f=17&t=20#p21](http://www.fxcodebase.com/code/viewtopic.php?f=17&t=20#p21))
 
 Thanks.
-
 
 ---
 
@@ -1157,7 +1078,6 @@ Thanks.
 **Apprentice** · Thu Apr 18, 2019 5:13 am
 
 Your request is added to the development list under Id Number 4599
-
 
 ---
 
@@ -1168,7 +1088,6 @@ Your request is added to the development list under Id Number 4599
 An indicator, in my name, and it works the way I want it to.
 
 Thanks Apprentice.
-
 
 ---
 
@@ -1184,7 +1103,6 @@ I noticed that the alert messages are either "Lower Outer Line : Cross Over" or 
 
 Regards
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -1193,7 +1111,6 @@ Regards
 
 Your request is added to the development list.
 Development reference 100.
-
 
 ---
 
@@ -1209,7 +1126,6 @@ Would it be possible to place the indicator on one time frame (say H1) whilst mo
 
 Regards
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -1219,7 +1135,6 @@ Regards
 [Donchian_Channel_with_Alert.Avignon.lua](files/128784/Donchian_Channel_with_Alert.Avignon.lua)
 
 Try this version.
-
 
 ---
 
@@ -1235,7 +1150,6 @@ Anyway, I discovered your "TBB with alert" indicator which should serve the same
 
 Regards.
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -1248,7 +1162,6 @@ TBB WITH ALERT works fine. I couldn't find an MT4 version. Could you make an MT4
 
 Regards.
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -1258,7 +1171,6 @@ Regards.
 Your request is added to the development list.
 Development reference 131.
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -1266,7 +1178,6 @@ Development reference 131.
 **lshcube** · Fri Sep 27, 2019 2:15 pm
 
 Thank You !!!
-
 
 ---
 
@@ -1285,7 +1196,6 @@ Thank You !!!
 
  It detects cross over/under only
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -1295,7 +1205,6 @@ Thank You !!!
 MT4/MQ4 version.
 [viewtopic.php?f=38&t=68979](https://fxcodebase.com/code/viewtopic.php?f=38&t=68979)
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -1303,7 +1212,6 @@ MT4/MQ4 version.
 **lshcube** · Thu Oct 03, 2019 5:15 am
 
 Thank you very much !!
-
 
 ---
 
@@ -1316,7 +1224,6 @@ Is it possible to add vertical shift to all the three bands?
 Thanks,
 Xpertize
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -1325,7 +1232,6 @@ Xpertize
 
 Your request is added to the development list.
 Development reference 769.
-
 
 ---
 
@@ -1336,7 +1242,6 @@ Development reference 769.
 [DNC with vertical shift.lua](files/131500/DNC%20with%20vertical%20shift.lua)
 
 Try this version.
-
 
 ---
 
@@ -1352,8 +1257,6 @@ Can you customize Alert Style?
 
 ![Capture.png](images/133138/Capture.png)
 
-
-
 (people might want the opposite?)
 
 add "Allowed side" option (both, sell, buy)
@@ -1361,7 +1264,6 @@ add "Allowed side" option (both, sell, buy)
 And to correct the bug: if you scroll with the scroll wheel, the notification comes back.
 
 Thanks.
-
 
 ---
 
@@ -1371,7 +1273,6 @@ Thanks.
 
 Your request is added to the development list.
 Development reference 1124.
-
 
 ---
 
@@ -1389,7 +1290,6 @@ Development reference 1124.
 
 Thanks Apprentice!
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -1401,7 +1301,6 @@ Hello Apprentice,
 Please add an option for horizontal shift to DNC too. It will be more useful than just vertical shift.
 Thanks,
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -1411,7 +1310,6 @@ Thanks,
 [DNC with shift.lua](files/133226/DNC%20with%20shift.lua)
 
 Try this version.
-
 
 ---
 
@@ -1425,7 +1323,6 @@ Try this version.
 
 I haven't been forgotten?
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -1433,7 +1330,6 @@ I haven't been forgotten?
 **Apprentice** · Thu May 07, 2020 6:47 am
 
 Indicators already has the ability to disable different sides. And it's not a bug. When you scroll the wheel the data has been updated and the old signals become invalid
-
 
 ---
 
@@ -1449,7 +1345,6 @@ With the parameter option "Analyse the current period":
 
 Me I want signal only outside the channel. Thanks.
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -1458,7 +1353,6 @@ Me I want signal only outside the channel. Thanks.
 
 Your request is added to the development list.
 Development reference 1274.
-
 
 ---
 
@@ -1470,7 +1364,6 @@ Development reference 1274.
 
 Try this version.
 
-
 ---
 
 ## Re: Dochian Channel Indicator
@@ -1478,7 +1371,6 @@ Try this version.
 **Avignon** · Thu May 21, 2020 2:38 pm
 
 Either it's not working, or I couldn't make it work, but we can put it on hold.
-
 
 ---
 
@@ -1499,7 +1391,6 @@ Either it's not working, or I couldn't make it work, but we can put it on hold.
 Can you reconsider?
 
 Thanks.
-
 
 ---
 

@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=31328  
 > Forum: 17 · Topic 31328 · 85 post(s)
 
-
 ---
 
 ## Point & Figure (Update 08. Oct 2014) V4.0.2
@@ -115,18 +114,13 @@ Picture square:
 
 ![pf_v4_square.png](images/53405/pf_v4_square.png)
 
-
-
 Picture Font:
 
  
 
 ![pf_v4_Font.png](images/53405/pf_v4_Font.png)
 
-
-
 Gidien
-
 
 ---
 
@@ -135,7 +129,6 @@ Gidien
 **Gidien** · Mon Jan 28, 2013 5:24 am
 
 New Version V 0.9 see post one.
-
 
 ---
 
@@ -153,7 +146,6 @@ changes:
 file:
 
  [PuF_with_Pattern_v_1_1.lua](files/53756/PuF_with_Pattern_v_1_1.lua)
-
 
 ---
 
@@ -177,12 +169,9 @@ screen :
 
 ![puf_v1_5.png](images/54353/puf_v1_5.png)
 
-
-
 file:
 
  [PuF_with_Pattern_v_1_5.lua](files/54353/PuF_with_Pattern_v_1_5.lua)
-
 
 ---
 
@@ -196,7 +185,6 @@ Could you please fix it?
 
 Cheers..
 BC
-
 
 ---
 
@@ -213,7 +201,6 @@ like here at the marks.
  
 
 ![puf.png](images/54529/puf.png)
-
 
 ---
 
@@ -241,7 +228,6 @@ I didn't get the screenshots when it changed but I know it changed because I wen
 Thanks..
 BC
 
-
 ---
 
 ## Re: Point & Figure (5 Pattern added) new V1.5 Trendlines
@@ -260,7 +246,6 @@ Fixed version:
 
  [PuF_with_Pattern_v_1_5_fix.lua](files/54968/PuF_with_Pattern_v_1_5_fix.lua)
 
-
 ---
 
 ## Re: Point & Figure (5 Pattern added) new V1.5 Trendlines
@@ -270,7 +255,6 @@ Fixed version:
 On any version (1.5) of indicator we have the error,
 
 > **PuF_with_Pattern_v_1_5_fix.lua"]:345: invalid option '%-' to 'format'**
-
 
 ---
 
@@ -290,7 +274,6 @@ best
 
 Gidien
 
-
 ---
 
 ## Re: Point & Figure (5 Pattern added) new V1.5 Trendlines
@@ -301,7 +284,6 @@ Which Trading station Version do you use ?
 FXCM v 01.11.011212
 Happen it on every symbol ?
 Yes. After 1-2 second I'm receiving the error.
-
 
 ---
 
@@ -315,7 +297,6 @@ file:
 
  [PuF_with_Pattern_v_1_5_fix.lua](files/55232/PuF_with_Pattern_v_1_5_fix.lua)
 
-
 ---
 
 ## Re: Point & Figure (5 Pattern added) new V1.5 Trendlines
@@ -324,7 +305,6 @@ file:
 
 Is it working now ???
 
-
 ---
 
 ## Re: Point & Figure (5 Pattern added) new V1.5 Trendlines
@@ -332,7 +312,6 @@ Is it working now ???
 **evgeniyn** · Wed Feb 27, 2013 8:15 am
 
 No. Same result only without error. On load I can see the indicator, after that clean screen.
-
 
 ---
 
@@ -346,7 +325,6 @@ no candles could be possible, if not enough history data were available, but tex
 
 I'm realy sorry about this, but i can't see this issue with my plattform.
 
-
 ---
 
 ## Re: Point & Figure V2.1 Pattern and TrendLines (Sync) 13.05.
@@ -355,7 +333,6 @@ I'm realy sorry about this, but i can't see this issue with my plattform.
 
 Update to Version V2.1 Source coming from new version PuF Only.
 [viewtopic.php?f=17&t=35595](http://www.fxcodebase.com/code/viewtopic.php?f=17&t=35595)
-
 
 ---
 
@@ -371,7 +348,6 @@ puf chart.
 
 Thanks
 
-
 ---
 
 ## Re: Point & Figure V2.1 Pattern and TrendLines (Sync) 13.05.
@@ -380,7 +356,6 @@ Thanks
 
 Can you post a little bit of how you use this system in your trading?
 Thank You
-
 
 ---
 
@@ -405,7 +380,6 @@ A view indicator creates a complete new Chart, which can have time independent p
 
 best
 gidien
-
 
 ---
 
@@ -443,7 +417,6 @@ a good book is : "The Definitive Guide to Point and Figure" Autor: Jeremy du Ple
 best
 gidien
 
-
 ---
 
 ## Re: Point & Figure V2.3 Pattern and TrendLines (Sync) 04.06.
@@ -451,7 +424,6 @@ gidien
 **Gidien** · Tue Jun 04, 2013 3:27 am
 
 Update 2.3 see post one [viewtopic.php?f=17&t=31328](http://www.fxcodebase.com/code/viewtopic.php?f=17&t=31328)
-
 
 ---
 
@@ -463,7 +435,6 @@ Have done anything else to your V2.3
 such as Ascending or Descending angles or Triangles
 
 Thanks
-
 
 ---
 
@@ -481,7 +452,6 @@ A view indicator is an special case of the indicator which isn't applied to any 
 
 With this view indicator we are more flexible in developing Point and Figure specific indicators.
 
-
 ---
 
 ## Re: Point & Figure (Update 15. Aug 2013)
@@ -489,7 +459,6 @@ With this view indicator we are more flexible in developing Point and Figure spe
 **Gidien** · Thu Aug 15, 2013 7:56 am
 
 Update see post one [viewtopic.php?f=17&t=31328&p=53405#p53405](https://fxcodebase.com/code/viewtopic.php?f=17&t=31328&p=53405#p53405)
-
 
 ---
 
@@ -504,7 +473,6 @@ or audible alerts.
 Thanks
 
 Terrance
-
 
 ---
 
@@ -545,7 +513,6 @@ best
 
 Gidien
 
-
 ---
 
 ## Re: Point & Figure (Update 14. Oct 2013)
@@ -564,7 +531,6 @@ be drawn after current column starts to display (ie 3 box sizes).
 Thanks
 
 Terrance
-
 
 ---
 
@@ -607,7 +573,6 @@ best
 
 gidien
 
-
 ---
 
 ## Re: Point & Figure (Update 14. Oct 2013)
@@ -642,10 +607,7 @@ gidien
 
 ![paf_view_2.3.png](images/90191/paf_view_2.3.png)
 
-
-
 Gidien
-
 
 ---
 
@@ -654,7 +616,6 @@ Gidien
 **gpatel** · Mon Oct 21, 2013 1:36 pm
 
 Can you apply a strategy to Point & Figure, Kagi, Renko charts? Do you have an example?
-
 
 ---
 
@@ -666,7 +627,6 @@ Paf 2.3 view
 problem, If patternlines enabled
 
 missing row of x and o just above or below patternline.
-
 
 ---
 
@@ -690,7 +650,6 @@ I work on it. But will need more time for it.
 
 gidien
 
-
 ---
 
 ## Re: Point & Figure (Update 21. Oct 2013)
@@ -701,7 +660,6 @@ gidien
 > Can you apply a strategy to Point & Figure, Kagi, Renko charts? Do you have an example?
 
 Any ideas on this? I can't find anything on this forum that shows that.
-
 
 ---
 
@@ -726,7 +684,6 @@ I think there should be two possibillities .
 
 2. Using a pipe between an indicator and a strategy using the interop function. I test it and it works but could be laggy.
 
-
 ---
 
 ## Re: Point & Figure (Update 21. Oct 2013)
@@ -738,7 +695,6 @@ I think there should be two possibillities .
  [renko_indicross.lua.rc](files/90438/renko_indicross.lua.rc)
 
 Example of Strategy for Renko View.
-
 
 ---
 
@@ -760,7 +716,6 @@ Example of Strategy for Renko View.
 > Example of Strategy for Renko View.
 
 This causes a crash. Occasionally I see the input window for couple of seconds, but most of the time it crashes before that.
-
 
 ---
 
@@ -795,7 +750,6 @@ Hi Gidien, do you have an example of how to create the interop function? It seem
 Thanks,
 Gaurav
 
-
 ---
 
 ## Re: Point & Figure (Update 21. Oct 2013)
@@ -803,7 +757,6 @@ Gaurav
 **Gidien** · Thu Nov 07, 2013 2:16 pm
 
 Ich found migration project Naning Bob 10.4 Multi trader, but it is a very big one. It has over 2000 lines. I will pick and choose the part with the interob function and post it tomorrow.
-
 
 ---
 
@@ -824,7 +777,6 @@ Ich found migration project Naning Bob 10.4 Multi trader, but it is a very big o
 > Gidien
 
 Hi, I have installed the Indi PaF_View_V2.3.lua but it is nowhere among the Indicators. When I open the manage extensions window I find it under a separate window named "views". I don't know how to handle this i.e. how can I get this Indi on the chart? Appreciate your help!
-
 
 ---
 
@@ -858,7 +810,6 @@ In TS Check ChartsFile and then select "Create View".
 
 Gidien
 
-
 ---
 
 ## Re: Point & Figure (Update 14. Oct 2013)
@@ -872,7 +823,6 @@ In TS Check ChartsFile and then select "Create View".
 Gidien[/quote]
 
 Thank you Gidien!
-
 
 ---
 
@@ -907,7 +857,6 @@ picture:
 
 ![pipe.png](images/90700/pipe.png)
 
-
 ---
 
 ## Re: Point & Figure (Update 21. Oct 2013)
@@ -917,7 +866,6 @@ picture:
 2.3view. Many double tops btms missing patternlines through out charts.
 
 Any changes to this indicator.
-
 
 ---
 
@@ -951,7 +899,6 @@ best regards
 
 Gidien
 
-
 ---
 
 ## Re: Point & Figure (Update 21. Oct 2013)
@@ -969,7 +916,6 @@ Thanks
 
 A trader
 
-
 ---
 
 ## Re: Point & Figure (Update 21. Oct 2013)
@@ -985,7 +931,6 @@ This will take a while, i think the next 6 month , i will come to coding anythin
 best
 
 Gidien
-
 
 ---
 
@@ -1006,7 +951,6 @@ I've been trying a renko based EMA crossover system in my trading. Was looking f
 
 Off topic, but thanks so much for the help with the renko alert, btw! It's great.
 
-
 ---
 
 ## Re: Point & Figure (Update 21. Oct 2013)
@@ -1019,7 +963,6 @@ Check if this will solve the issue.
 
  [renko_indicross.lua.rc](files/92711/renko_indicross.lua.rc)
 
-
 ---
 
 ## Re: Point & Figure (Update 21. Oct 2013)
@@ -1027,7 +970,6 @@ Check if this will solve the issue.
 **beatrice3** · Tue Feb 18, 2014 9:58 am
 
 Thanks, but unfortunately it still crashed.
-
 
 ---
 
@@ -1046,7 +988,6 @@ best
 
 Gidien
 
-
 ---
 
 ## Re: Point & Figure (Update 21. Oct 2013)
@@ -1056,7 +997,6 @@ Gidien
 Thanks very much for the help and suggestions.
 
 Does anyone know who coded this and how I might contact him or her?
-
 
 ---
 
@@ -1082,12 +1022,9 @@ Picture:
 
 ![pf3.png](images/93100/pf3.png)
 
-
-
 best
 
 Gidien
-
 
 ---
 
@@ -1102,7 +1039,6 @@ if source other then t1 and end of the day is false, then it good be that indica
 
 best
 
-
 ---
 
 ## Re: Point & Figure (Update 18. Mar 2014)
@@ -1113,7 +1049,6 @@ Great job on this Gidien. Anyone who has read "The Definitive Guide To Point and
 
 Again great job,
 Jabez
-
 
 ---
 
@@ -1132,7 +1067,6 @@ Sqares will need some changes in the code. I will think about it.
 best regards
 
 Gidien
-
 
 ---
 
@@ -1165,7 +1099,6 @@ P&f Strategy
 
  [PF_Strategy_Server.lua](files/93451/PF_Strategy_Server.lua)
 
-
 ---
 
 ## Re: Point & Figure (Update 10. Apr 2014) Alerts
@@ -1179,7 +1112,6 @@ I currently set my Box Size at 33% of the Daily ATR. Now if you could add an opt
 Again thank you for the work you have done on this. I feel that it is the most comprehensive P&F charts I have seen.
 
 Jabez
-
 
 ---
 
@@ -1202,7 +1134,6 @@ best
 
 Gidien
 
-
 ---
 
 ## Re: Point & Figure (Update 10. Apr 2014) Alerts
@@ -1212,7 +1143,6 @@ Gidien
 Thanks for pointing out where the box and reversal size are displayed, that works for me. As for a dashboard, I'm not sure that I would use it. Other P&F charts I have used show the the trend and next reversal point, but I never use it. I prefer to interpret the chart myself. But I know some people like that stuff. If it were to have a dashboard it would be great to be able to turn it off it one wanted to. Attached is a picture of another P&F chart I have used and you can see that in the left corner they tell you the trend and next reversal point. But I rarely look at it, my eyes tend to focus on the right edge and only to the as far to the left as my next S/R level. LOL
 
 As for adjusting the box size using a percentage of daily atr, to me it would be perfectly fine if the past boxes changed or just changed on the new ones. It would not make any difference to me, I find that Daily Atr does not vary all that much on a pair. But varies a lot from pair to pair. For example, GbpNzd at this time has a Daily Atr of 158 pips so my box size on this one is 52. But at the same time EurUsd has an Atr of 66 pips and my box size here is 22 pips, less than half the size of GbpNzd. I am currently using the ATR_PIPS_Indicator on a daily chart with a multiplier of 0.33 and change the box size manually on my 5 minute P&F chart.
-
 
 ---
 
@@ -1241,7 +1171,6 @@ ATR percent % -- Percent value in % 33 meens 33% of the ATR value
 
 gidien
 
-
 ---
 
 ## Re: Point & Figure (Update 10. Apr 2014) Alerts
@@ -1253,7 +1182,6 @@ The ATR addition, so far it seems to be working fine. It saves me a lot of time,
 You mentioned that you were looking to add secondary trend lines. Would these be trend lines off what is referred to as a mini-bottom?
 
 (Mini-bottom occurs when the price makes an intermediate low, where the "O" on a uptrend is at least one box below the previous column of "O's". This line is also drawn at 45 degrees, but does not offer as much support as the main 45 degree line.)
-
 
 ---
 
@@ -1276,12 +1204,9 @@ Lets take a look to the screenshot of the next overhauled version.
 
 ![Overhauling.png](images/93598/Overhauling.png)
 
-
-
 The Solid line are the maintrendlines, which you allready know from my other version. The dotted lines are the secondary trendlines.
 
 gidien
-
 
 ---
 
@@ -1297,7 +1222,6 @@ Good job and I look forward to your release of it.
 
 Jabez
 
-
 ---
 
 ## Re: Point & Figure (Update 10. Apr 2014) Alerts
@@ -1310,7 +1234,6 @@ FYI: These Internal Trend Lines and Secondary Trend Lines were both referred to 
 
 Jabez
 
-
 ---
 
 ## Re: Point & Figure (Update 10. Apr 2014) Alerts
@@ -1318,7 +1241,6 @@ Jabez
 **Jabez3** · Tue Apr 22, 2014 4:27 am
 
 At this time the Alert Lines do not display on PAF_View_V3.2 charts. Is it possible to have them display?
-
 
 ---
 
@@ -1330,7 +1252,6 @@ My last post on Alerts, I meant to say "Price Alerts". These are not being displ
 
 Thanks,
 Jabez
-
 
 ---
 
@@ -1387,18 +1308,13 @@ Picture square:
 
 ![pf_v4_square.png](images/93625/pf_v4_square.png)
 
-
-
 Picture Font:
 
  
 
 ![pf_v4_Font.png](images/93625/pf_v4_Font.png)
 
-
-
 Gidien
-
 
 ---
 
@@ -1414,7 +1330,6 @@ Gidien
 
 Seem that "add Price Alert ..." are not supported with every view indicators.
 
-
 ---
 
 ## Re: Point & Figure (Update 24. Apr 2014) V4.0.1
@@ -1425,7 +1340,6 @@ Using PaF_View_V4.0.1.lua I do not get the alerts. I have left the Magic String 
 
 Thanks,
 Jabez
-
 
 ---
 
@@ -1449,8 +1363,6 @@ I checked the uploaded version, but i don't see this issue .
 
 ![alerts.png](images/93803/alerts.png)
 
-
-
 Can you check the event log. Do you see the events?
 To see the events log:
 MarketScope:
@@ -1466,7 +1378,6 @@ If all settings are correct , and you still not see any Alerts , then i will wri
 
 Gidien
 
-
 ---
 
 ## Re: Point & Figure (Update 24. Apr 2014) V4.0.1
@@ -1479,7 +1390,6 @@ Any ideas why we can't use bar indicators on the view in a strategy? The backtes
 
 Cheers,
 MooMooFX
-
 
 ---
 
@@ -1498,7 +1408,6 @@ MooMooFX
 I thought, that I had solved this problem. Did have your code for me, then i can try to debug this issue.
 
 Gidien
-
 
 ---
 
@@ -1527,7 +1436,6 @@ Any ideas? If you have some work-around to this problem I would greatly apprecia
 Cheers,
 MooMooFX
 
-
 ---
 
 ## Re: Point & Figure (Update 24. Apr 2014) V4.0.1
@@ -1548,7 +1456,6 @@ core.host:execute("subscribeTradeEvents", 2000, "offers");
 
 Gidien
 
-
 ---
 
 ## Re: Point & Figure (Update 24. Apr 2014) V4.0.1
@@ -1565,7 +1472,6 @@ Lua Strategy Debugger (stuck in a loop) and Strategy Backtester (crashes) both d
 
 Thanks for taking the time to look at this!
 
-
 ---
 
 ## Re: Point & Figure (Update 24. Apr 2014) V4.0.1
@@ -1576,17 +1482,17 @@ Valeria fixed it for me.
 
 It turns out the candleGroup needs a global reference.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`local candles;
+```lua
+local candles;
 
 function Prepare( nameOnly)
 ....
     candles = RenkoView:getCandleOutput(0);
     ATR = core.indicators:create("ATR", candles, ATR_Period);
-...`
+...
+```
 
 Thanks Valeria!
-
 
 ---
 
@@ -1598,7 +1504,6 @@ When using Method "ATR' I do not get alerts to work. But when using Method "Pip"
 
 Thanks,
 Jabez
-
 
 ---
 
@@ -1630,7 +1535,6 @@ Gidien
 
 ![alters.png](images/95944/alters.png)
 
-
 ---
 
 ## Re: Point & Figure (Update 24. Apr 2014) V4.0.1
@@ -1640,7 +1544,6 @@ Gidien
 Thanks for the update Gidien, I look forward to your new release.
 
 Jabez
-
 
 ---
 
@@ -1654,7 +1557,6 @@ best
 
 Gidien
 
-
 ---
 
 ## Re: Point & Figure (Update 08. Oct 2014) V4.0.2
@@ -1662,7 +1564,6 @@ Gidien
 **Hibachi** · Fri Oct 10, 2014 9:28 pm
 
 Hey Gidien, great job first of all. I'm new to this and I'm using a macbook. is it compatible? sorry for such a basic question. new to this.
-
 
 ---
 
@@ -1684,7 +1585,6 @@ When TS II is runing with Wine on your macbook, then you can install this indica
 
 Gidien
 
-
 ---
 
 ## Re: Point & Figure (Update 08. Oct 2014) V4.0.2
@@ -1697,7 +1597,6 @@ HI How are you?
  Im Suhas from India. I use point and figure chart for my trading. I was searching for pnf chart for mt4 but did not found a good one then i came accross ur indicator for fxcm tradestation. I tried to install it but i it does not show. But I want to know can we convert ur pnf tradestation indicator to mt4 indicator? is it possible? and will it work same sa in trade station? i want to use trend lines..i can not find a good indicator in mt4..can you help me?
 
 Suhas
-
 
 ---
 
@@ -1712,7 +1611,6 @@ sorry , but i don't have any experience with Mt4. Maybe someone in the mt4 Forum
 best regards
 
 Gidien
-
 
 ---
 

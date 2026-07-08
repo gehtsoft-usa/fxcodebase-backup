@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=29&t=845  
 > Forum: 29 · Topic 845 · 3 post(s)
 
-
 ---
 
 ## ADX & MA Signals
@@ -25,10 +24,8 @@ Selling signal: The bar closes below MA, and the ADX line is above 20.
 
 ![ADX_MA.png](images/1512/ADX_MA.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     strategy:name("ADX/MA signal");
     strategy:description("Buying signal: The bar closes above MA, and the ADX line is above 20. Selling signal: The bar closes below MA, and the ADX line is above 20.");
 
@@ -191,8 +188,8 @@ function ExtSignal(source, period, message, soundFile)
     if soundFile ~= nil then
         terminal:alertSound(soundFile, false);
     end
-end`
-
+end
+```
 
 ---
 
@@ -203,7 +200,6 @@ end`
 Hi Avignon,
 
 Is this a strategy or just a signal?
-
 
 ---
 

@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=31550  
 > Forum: 31 · Topic 31550 · 61 post(s)
 
-
 ---
 
 ## Highly adaptable Ichimoku Stategy
@@ -11,8 +10,6 @@
 **Apprentice** · Wed Jan 30, 2013 6:08 am
 
 ![ICH.png](images/53812/ICH.png)
-
-
 
 Trading Events
 SL / TL Cross
@@ -37,7 +34,6 @@ Close Short Position.
 
  [Highly adaptable Ichimoku Stategy.lua](files/53812/Highly%20adaptable%20Ichimoku%20Stategy.lua)
 
-
 ---
 
 ## Re: Highly adaptable Ichimoku Stategy
@@ -46,7 +42,6 @@ Close Short Position.
 
 Chinkou / Cloud Crossover, CA / CB Crossover Added.
 
-
 ---
 
 ## Re: Highly adaptable Ichimoku Stategy
@@ -54,7 +49,6 @@ Chinkou / Cloud Crossover, CA / CB Crossover Added.
 **allisonmagic** · Fri Feb 01, 2013 2:22 pm
 
 wicked, thanks Apprentice ! you da man !
-
 
 ---
 
@@ -65,7 +59,6 @@ wicked, thanks Apprentice ! you da man !
 still alerting when price crosses cloud... after disabling..
 
 not alerting of chinkou span crossing down or up above or below the KUMO in some places
-
 
 ---
 
@@ -81,7 +74,6 @@ and please if u can finish the kejun strategy u start for me , all u need is to 
 and again thanks alot
 benben
 
-
 ---
 
 ## Re: Highly adaptable Ichimoku Stategy
@@ -92,7 +84,6 @@ Use CS / Price Cross Over
 As for the different Stop / Limits, I'm not sure how we can do this.
 You'll have to do this work manually.
 Please elaborate.
-
 
 ---
 
@@ -108,7 +99,6 @@ and add condition for open short position (Tenkan<Kijun<Bottom cloud)
 
 Thx a lot
 
-
 ---
 
 ## Re: Highly adaptable Ichimoku Stategy
@@ -116,7 +106,6 @@ Thx a lot
 **Apprentice** · Sat Apr 06, 2013 4:43 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -127,7 +116,6 @@ Your request is added to the development list.
 I find myself how to change this , I working on a developement of this strategie I develope condition for buy position the result is good some amelioration are possible cf screenshoot on long position during 2 years : +50% on long position only , I'am working for buy ans sell to optimise this.
 
 Uploaded with [ImageShack.us](http://imageshack.us)
-
 
 ---
 
@@ -149,7 +137,6 @@ and an adaptable trade amount lot in function of the actual equity or balance??*
 
 screen of basket attached:
 
-
 ---
 
 ## Re: Highly adaptable Ichimoku Stategy
@@ -163,7 +150,6 @@ Can you add the following condition : Price crossover Kijun and Price croosunder
 
 Thanks a lot.
 
-
 ---
 
 ## Re: Highly adaptable Ichimoku Stategy
@@ -171,7 +157,6 @@ Thanks a lot.
 **Apprentice** · Sat May 11, 2013 2:08 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -182,7 +167,6 @@ Your request is added to the development list.
 Hey Apprentice, thanks for the strategy, looking forward to see if it will work!
 
 what are the best conditions to use for this? cheers
-
 
 ---
 
@@ -196,7 +180,6 @@ Could you please add an alert for when the CS crosses the TL and SL?
 
 Thanks in advance.
 
-
 ---
 
 ## Re: Highly adaptable Ichimoku Stategy
@@ -204,7 +187,6 @@ Thanks in advance.
 **Apprentice** · Mon Sep 09, 2013 2:10 am
 
 SL stands for?
-
 
 ---
 
@@ -214,7 +196,6 @@ SL stands for?
 
 is there a way to allow this to use data from the renko chart view on marketscopes , so it would send alerts based on renko candles ?
 
-
 ---
 
 ## Re: Highly adaptable Ichimoku Stategy
@@ -222,7 +203,6 @@ is there a way to allow this to use data from the renko chart view on marketscop
 **Apprentice** · Sat Nov 23, 2013 5:51 am
 
 Unfortunately this is not possible at this time.
-
 
 ---
 
@@ -245,7 +225,6 @@ SB == >> CloudSpan B
 
 Thanks,
 Aaron
-
 
 ---
 
@@ -271,7 +250,6 @@ Could this be done ?
 
 Thanks a lot for your help..
 
-
 ---
 
 ## Re: Highly adaptable Ichimoku Stategy
@@ -279,7 +257,6 @@ Thanks a lot for your help..
 **Apprentice** · Sat Dec 21, 2013 7:59 am
 
 Price / TL(KL) Cross Added.
-
 
 ---
 
@@ -303,7 +280,6 @@ Thanks for your input,
 Looking forward to hearing from you,
 Happy Holidays!
 
-
 ---
 
 ## Re: Highly adaptable Ichimoku Stategy
@@ -315,14 +291,14 @@ TL is in Fact KL
 Do not ask why.
 Someone who has written original ICH indicator have make this confusion.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`SL = instance:addStream("SL", core.Line, name .. ".TL", "TL", instance.parameters.clrTS, firstPeriod + Tenkan - 1)
+```lua
+SL = instance:addStream("SL", core.Line, name .. ".TL", "TL", instance.parameters.clrTS, firstPeriod + Tenkan - 1)
 
-TL = instance:addStream("TL", core.Line, name .. ".KL", "KL", instance.parameters.clrKS, firstPeriod + Kijun - 1)`
+TL = instance:addStream("TL", core.Line, name .. ".KL", "KL", instance.parameters.clrKS, firstPeriod + Kijun - 1)
+```
 
 Unfortunately, complex conditions can not be achieved with this Strategy.
 Just a simple HA component interactions are supported.
-
 
 ---
 
@@ -331,7 +307,6 @@ Just a simple HA component interactions are supported.
 **panos59** · Mon Dec 23, 2013 12:24 pm
 
 Is it possible to have the exact terminology which is used to this strategy ? I think the strategy works well but its still confusing with the used shortnames ..if somebody can go through the startegy and tell us what TL stands for KS stands for and so on . I'll be thankfull
-
 
 ---
 
@@ -343,7 +318,6 @@ Hi there. Thanks for such awesome strategy, Apprentice.
 
 I'd like to request a Cross Over and Cross Under between CS (Chikou Span) / TL (Kijun-Sen Line) if possible. Seems like they have good timing to cross between each other. Thanks for your attention, Apprentice.
 
-
 ---
 
 ## Re: Highly adaptable Ichimoku Stategy
@@ -351,7 +325,6 @@ I'd like to request a Cross Over and Cross Under between CS (Chikou Span) / TL (
 **Apprentice** · Thu Jan 30, 2014 3:58 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -389,7 +362,6 @@ Because I have changed namings, to avoid confusion I will upload the new version
 Cheers,
 MooMooFX
 
-
 ---
 
 ## Re: Highly adaptable Ichimoku Stategy
@@ -404,7 +376,6 @@ As always, appreciate any help you can give,
 
 Jason
 
-
 ---
 
 ## Re: Highly adaptable Ichimoku Stategy
@@ -416,7 +387,6 @@ I am also seeing problems with this strategy on the SA/SB crosses. No signals (o
 Once again, appreciate any help you can offer.
 
 Jason
-
 
 ---
 
@@ -430,7 +400,6 @@ If anyone could help this, it would be greatly appreciated.
 
 Jason
 
-
 ---
 
 ## Re: Highly adaptable Ichimoku Stategy
@@ -439,7 +408,6 @@ Jason
 
 Major Update.
 First/Topmost Post.
-
 
 ---
 
@@ -453,7 +421,6 @@ in backtest i have the same problem.
 On the TL/KL crosses, when they are equal for a bar or more, and then complete the cross, no signal is generated. Is that fixable ?
 
 thanks.
-
 
 ---
 
@@ -471,7 +438,6 @@ Error Message:
 good day
 Thank
 
-
 ---
 
 ## Re: Highly adaptable Ichimoku Stategy
@@ -482,7 +448,6 @@ can you make strategy
 with ichimoku cloud to confirm
 of other time
 
-
 ---
 
 ## Re: Highly adaptable Ichimoku Stategy
@@ -490,7 +455,6 @@ of other time
 **Apprentice** · Thu Oct 22, 2015 4:46 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -506,7 +470,6 @@ Your request is added to the development list.
 Please
 can you make this
 
-
 ---
 
 ## Re: Highly adaptable Ichimoku Stategy
@@ -514,7 +477,6 @@ can you make this
 **cnikitopoulos94** · Fri Dec 04, 2015 12:22 am
 
 Recieving same Error. For the Ichimoku i will try to fix it when i get the chance
-
 
 ---
 
@@ -525,7 +487,6 @@ Recieving same Error. For the Ichimoku i will try to fix it when i get the chanc
 can you make strategy
 with ichimoku cloud to confirm
 of other time
-
 
 ---
 
@@ -543,7 +504,6 @@ and
 PRICE/TL CROSS OVER
 PRICE/TL CROSS UNDER
 
-
 ---
 
 ## Re: Highly adaptable Ichimoku Stategy
@@ -552,7 +512,6 @@ PRICE/TL CROSS UNDER
 
 "Price / TL Cross Over" is already in the list of available methods.
 Only invert it. CrossOver for CrossUnder.
-
 
 ---
 
@@ -597,7 +556,6 @@ SORRY THIS VERSION FROM moomoofx
 IS ONLY
 PRICE/KL CROSS OVER
 
-
 ---
 
 ## Re: Highly adaptable Ichimoku Stategy
@@ -605,7 +563,6 @@ PRICE/KL CROSS OVER
 **Apprentice** · Mon Dec 21, 2015 6:28 am
 
 Try it now.
-
 
 ---
 
@@ -628,7 +585,6 @@ RIGHT WRONG
 ICHIMOKU CLOUD TO CONFIRM
 TIME
 RIGHT WRONG
-
 
 ---
 
@@ -656,7 +612,6 @@ RIGHT WRONG
 CAN You make this
 I very happich
 
-
 ---
 
 ## Re: Highly adaptable Ichimoku Stategy
@@ -674,7 +629,6 @@ Could you give me a solution to solve these problems ?
 Many thanks,
 Ghendar
 
-
 ---
 
 ## Re: Highly adaptable Ichimoku Stategy
@@ -682,7 +636,6 @@ Ghendar
 **Apprentice** · Wed Feb 10, 2016 5:35 am
 
 Fixed.
-
 
 ---
 
@@ -725,7 +678,6 @@ Fixed.
 
 CAN You make cloud to confirmation
 
-
 ---
 
 ## Re: Highly adaptable Ichimoku Stategy
@@ -739,7 +691,6 @@ under the cloud SELL
 
 AND a cloud to confirm other time
 
-
 ---
 
 ## Re: Highly adaptable Ichimoku Stategy
@@ -750,7 +701,6 @@ Hello, sorry for my English I am French.
 Can we add: "custom identifier"
 thanks in advance
 
-
 ---
 
 ## Re: Highly adaptable Ichimoku Stategy
@@ -760,7 +710,6 @@ thanks in advance
 Your request is added to the development list, Under Id Number 3678
  If someone is interested to do this task, please contact me.
 
-
 ---
 
 ## Re: Highly adaptable Ichimoku Stategy
@@ -768,7 +717,6 @@ Your request is added to the development list, Under Id Number 3678
 **oldporkchops2** · Fri Dec 09, 2016 11:58 am
 
 Could someone please share settings that have been found to be profitable in forward testing? Thanks.
-
 
 ---
 
@@ -780,7 +728,6 @@ Hello,
 Can you do an option when price crosses over or crosses under KijunSen?
 Thank you very much.
 
-
 ---
 
 ## Re: Highly adaptable Ichimoku Stategy
@@ -788,7 +735,6 @@ Thank you very much.
 **Apprentice** · Mon Apr 09, 2018 5:57 am
 
 Your request is added to the development list under Id Number 4105
-
 
 ---
 
@@ -800,7 +746,6 @@ Your request is added to the development list under Id Number 4105
 
 This logic is already present Action 15 and Action 16). I have tested it.
 I added an additional description.
-
 
 ---
 
@@ -819,7 +764,6 @@ Thank you for the help. That would be really great.
 Nice day.
 Gilles
 
-
 ---
 
 ## Re: Highly adaptable Ichimoku Stategy
@@ -830,7 +774,6 @@ Hello
 Can you expect your strategy Highly adaptable Ichimoku Stategy.lua to work Live?
 Thank you very much, see you sonn.
 
-
 ---
 
 ## Re: Highly adaptable Ichimoku Stategy
@@ -838,7 +781,6 @@ Thank you very much, see you sonn.
 **Apprentice** · Sat Aug 04, 2018 6:47 am
 
 Fixed.
-
 
 ---
 
@@ -860,7 +802,6 @@ I ask to you this question here because i don't know where we ask others.
 kind regards
 Gilles.
 
-
 ---
 
 ## Re: Highly adaptable Ichimoku Stategy
@@ -870,7 +811,6 @@ Gilles.
 Sure.
 When and if, if the strategy achieves the default daily profit, close all positions for the strategy.
 We can add above this logic to most of our strategies.
-
 
 ---
 
@@ -884,7 +824,6 @@ We can add above this logic to most of our strategies.[/quote]
 
 Let's go !!
 
-
 ---
 
 ## Re: Highly adaptable Ichimoku Stategy
@@ -892,7 +831,6 @@ Let's go !!
 **Apprentice** · Fri Oct 26, 2018 5:18 am
 
 Your request is added to the development list under Id Number 4283
-
 
 ---
 

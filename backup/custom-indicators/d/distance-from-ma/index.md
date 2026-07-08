@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=62047  
 > Forum: 17 · Topic 62047 · 3 post(s)
 
-
 ---
 
 ## Distance From MA
@@ -12,13 +11,11 @@
 
 ![Distance_From_MA.png](images/99496/Distance_From_MA.png)
 
-
-
 Based on request.
 [viewtopic.php?f=27&t=62043](https://fxcodebase.com/code/viewtopic.php?f=27&t=62043)
 
-Code: [Select all](https://fxcodebase.com/code/)
-`local Dist_Crt_High = math.abs(source.high[period] - ma.DATA[period-1]); 
+```lua
+local Dist_Crt_High = math.abs(source.high[period] - ma.DATA[period-1]); 
 local Dist_Crt_Low  = math.abs(source.low[period]  - ma.DATA[period-1]);   
        
       if (Dist_Crt_High >= Dist_Crt_Low) then
@@ -26,12 +23,12 @@ local Dist_Crt_Low  = math.abs(source.low[period]  - ma.DATA[period-1]);   
       end
        if (Dist_Crt_High < Dist_Crt_Low) then
       Distance[period]  = (source.low[period]  - ma.DATA[period-1])/source:pipSize()
-       end`
+       end
+```
 
  [Distance_From_MA.lua](files/99496/Distance_From_MA.lua)
 
 The indicator was revised and updated
-
 
 ---
 
@@ -41,7 +38,6 @@ The indicator was revised and updated
 
 Thank you!
 Nicolae
-
 
 ---
 

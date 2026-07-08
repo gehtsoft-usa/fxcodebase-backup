@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=6306  
 > Forum: 17 · Topic 6306 · 57 post(s)
 
-
 ---
 
 ## Resistance/Support dinamyc lines.
@@ -16,14 +15,11 @@ The indicator is written at the request: [viewtopic.php?f=27&t=5859](https://fxc
 
 ![RS_Dynamic_Line.png](images/14549/RS_Dynamic_Line.png)
 
-
-
 Download:
 
  [RSdynamic_line.lua](files/14549/RSdynamic_line.lua)
 
 The indicator was revised and updated
-
 
 ---
 
@@ -36,7 +32,6 @@ There is only a problem: is it possible to draw not only Buff1, Buff2, Buff3 and
 Thank you
 
 Lucmat
-
 
 ---
 
@@ -54,7 +49,6 @@ Download:
 
  [RSdynamic_line.lua](files/14682/RSdynamic_line.lua)
 
-
 ---
 
 ## Re: Resistance/Support dinamyc lines.
@@ -65,7 +59,6 @@ Thanks for your help, but there is still a problem. The output should show strea
 Is this possible?
 Thanks
 
-
 ---
 
 ## Re: Resistance/Support dinamyc lines.
@@ -73,7 +66,6 @@ Thanks
 **lucmat** · Thu Sep 08, 2011 10:02 am
 
 The result should be that in the attached picture.
-
 
 ---
 
@@ -84,7 +76,6 @@ The result should be that in the attached picture.
 Anyone can help me?
 Thanks
 
-
 ---
 
 ## Re: Resistance/Support dinamyc lines.
@@ -92,7 +83,6 @@ Thanks
 **Apprentice** · Thu Sep 15, 2011 4:44 am
 
 Your request is added to the developmental cue.
-
 
 ---
 
@@ -111,7 +101,6 @@ Download:
 
  [RSdynamic_line2.lua](files/15035/RSdynamic_line2.lua)
 
-
 ---
 
 ## Re: Resistance/Support dinamyc lines.
@@ -122,7 +111,6 @@ It's simply perfect!!!
 Thanks for your help!!
 
 Lucmat
-
 
 ---
 
@@ -141,7 +129,6 @@ Thanks if you help me!
 
 Lucmat
 
-
 ---
 
 ## Re: Resistance/Support dinamyc lines.
@@ -149,7 +136,6 @@ Lucmat
 **Apprentice** · Sat Oct 22, 2011 4:28 pm
 
 Your request is added to the developmental cue.
-
 
 ---
 
@@ -163,7 +149,6 @@ Try it!
 Thanks
 Lucmat
 
-
 ---
 
 ## Re: Resistance/Support dinamyc lines.
@@ -174,7 +159,6 @@ I use this indicator in conjuncion with macd, stoch and dss bressert.
 It helps me to detect cycles.
 Try it changing period and you may easily find cycles.
  Lucmat
-
 
 ---
 
@@ -188,7 +172,6 @@ If the signals are filtered with macd and dss, they are very good!
 Any way, where I can found a simple and good manual to learn to write a trading system?
 
 Lucmat
-
 
 ---
 
@@ -204,7 +187,6 @@ Read the Wiki and SDK sections.
 Download DSK.
 SDK Includes, Editor, Debuger the SDK documentation
 
-
 ---
 
 ## Re: Resistance/Support dinamyc lines.
@@ -216,7 +198,6 @@ SDK Includes, Editor, Debuger the SDK documentation
 
 Please visit the section [Recommended reading](https://fxcodebase.com/code/viewtopic.php?f=28&t=2026) on this site.
 
-
 ---
 
 ## Re: Resistance/Support dinamyc lines.
@@ -227,7 +208,6 @@ It's not exactly easy, but I'm trying.
 Thanks for your helpful reply.
 
 Lucmat
-
 
 ---
 
@@ -251,7 +231,6 @@ Please, see this strategy:
 
  [RSdynamic_line_Strategy.lua](files/17493/RSdynamic_line_Strategy.lua)
 
-
 ---
 
 ## Re: Resistance/Support dinamyc lines.
@@ -264,7 +243,6 @@ You are great!
 Very thanks!
 
 Lucmat
-
 
 ---
 
@@ -285,7 +263,6 @@ If not no problem, the creator of this has made me a lot of money so thank you.
 
 Thanks
 
-
 ---
 
 ## Re: Resistance/Support dinamyc lines.
@@ -294,7 +271,6 @@ Thanks
 
 Your request is added to the development list.
 
-
 ---
 
 ## Re: Resistance/Support dinamyc lines.
@@ -302,7 +278,6 @@ Your request is added to the development list.
 **Alexander.Gettinger** · Thu Aug 09, 2012 1:33 pm
 
 MQL4 version of this indicator: [viewtopic.php?f=38&t=22223](https://fxcodebase.com/code/viewtopic.php?f=38&t=22223)
-
 
 ---
 
@@ -316,7 +291,6 @@ Sorry to be a pain but I was referring to the RS_Dynamicline2 further down in th
 
 Many thanks in advance
 
-
 ---
 
 ## Re: Resistance/Support dinamyc lines.
@@ -327,7 +301,6 @@ Please can you code an mt4 version of the RS_Dynamicline2 indicator further down
 
 thanks
 
-
 ---
 
 ## Re: Resistance/Support dinamyc lines.
@@ -335,7 +308,6 @@ thanks
 **Apprentice** · Fri Aug 10, 2012 1:58 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -346,7 +318,6 @@ Your request is added to the development list.
 Hi, any idea when rs_dynamiclines2 indicator will be coded for mt4?
 
 thanks
-
 
 ---
 
@@ -386,7 +357,6 @@ Thanks
 
 Lucmat
 
-
 ---
 
 ## Re: Resistance/Support dinamyc lines.
@@ -394,7 +364,6 @@ Lucmat
 **Apprentice** · Mon Sep 03, 2012 3:56 pm
 
 Your request is added to the development list.
-
 
 ---
 
@@ -422,7 +391,6 @@ I also use the MACD to filter the signals.
 If you want to compare the strategies, please do not hesitate to contact me.
 Bye
 
-
 ---
 
 ## Re: Resistance/Support dinamyc lines.
@@ -432,7 +400,6 @@ Bye
 Hi lucmat, yes it would be good to hear your system for using this indicator and I'd be happy to tell you how I use it. I'm not a mechanical system trader completely, I still judge each and every trade with other things even if the indicators are lining up. I use this with MACD on marketscope and Ichi on MT4....and somtimes a Renko script on MT4.
 
 Anyway please feel free to send me a private message on here to discuss further.
-
 
 ---
 
@@ -484,7 +451,6 @@ Thanks
 
 Lucmat
 
-
 ---
 
 ## Re: Resistance/Support dinamyc lines.
@@ -503,7 +469,6 @@ RSDL:update(coreIndicators call..UpdateLast);
 
 Access indicator value ​​for a given period, Stream1 of "RSDYNAMIC_LINE2".
 RSDL.Stream1[period]
-
 
 ---
 
@@ -534,7 +499,6 @@ Is there someone that can hel p me to use FX Strategy Wizard?
 
 Thanks
 
-
 ---
 
 ## Re: Resistance/Support dinamyc lines.
@@ -547,7 +511,6 @@ Just wondering if it will still be possible to code RSDYNAMICLINES2 indicator fo
 
 Many thanks in advance.
 
-
 ---
 
 ## Re: Resistance/Support dinamyc lines.
@@ -556,7 +519,6 @@ Many thanks in advance.
 
 Requested can be found here.
 [viewtopic.php?f=38&t=23440](https://fxcodebase.com/code/viewtopic.php?f=38&t=23440)
-
 
 ---
 
@@ -572,7 +534,6 @@ Is is possible to do it for MT4?
 
 thanks
 
-
 ---
 
 ## Re: Resistance/Support dinamyc lines.
@@ -581,7 +542,6 @@ thanks
 
 Click on the following link.
 [viewtopic.php?f=38&t=23440](https://fxcodebase.com/code/viewtopic.php?f=38&t=23440)
-
 
 ---
 
@@ -593,7 +553,6 @@ Hi, thanks for the reply.
 
 The indicator you're suggesting isn't the same as the one I'm referring to though? There isn't enough buffs/lines...
 
-
 ---
 
 ## Re: Resistance/Support dinamyc lines.
@@ -601,7 +560,6 @@ The indicator you're suggesting isn't the same as the one I'm referring to thoug
 **Apprentice** · Sun Sep 16, 2012 2:10 pm
 
 If you set USE parameter to true, you'll get just that.
-
 
 ---
 
@@ -628,7 +586,6 @@ All the best.
 
 Pitcher
 
-
 ---
 
 ## Re: Resistance/Support dinamyc lines.
@@ -638,7 +595,6 @@ Pitcher
 Definitely not for the screenshot, at least free forum service.
 Can you explain the first request, Did I understand you correctly.
 Send Alert and MACD Indicator Status on Stream / Buff Crosses.
-
 
 ---
 
@@ -650,7 +606,6 @@ can you create a strategy based on rs dynamic line
 
 **buy: price cross over lower line( stream1)
 sell: price cross under upper line (stream2)**
-
 
 ---
 
@@ -675,7 +630,6 @@ Thanks in advance for your support!
 
 Best regards, Pitcher
 
-
 ---
 
 ## Re: Resistance/Support dinamyc lines.
@@ -685,7 +639,6 @@ Best regards, Pitcher
 transformer
 Your request is added to the development list.
 
-
 ---
 
 ## Re: Resistance/Support dinamyc lines.
@@ -693,7 +646,6 @@ Your request is added to the development list.
 **alaaroshdy** · Wed Jan 23, 2013 10:26 am
 
 guys, could you explain how this system works, i am seeing you talking about stream, buff 1and 2, what about 3 and 4??
-
 
 ---
 
@@ -704,7 +656,6 @@ guys, could you explain how this system works, i am seeing you talking about str
 Transformer, Requested can be found here.
 [viewtopic.php?f=31&t=31385](https://fxcodebase.com/code/viewtopic.php?f=31&t=31385)
 
-
 ---
 
 ## Re: Resistance/Support dinamyc lines.
@@ -713,7 +664,6 @@ Transformer, Requested can be found here.
 
 thank you apprentice .
 this must be a leading edge for a trader who is trading in any chart..
-
 
 ---
 
@@ -737,7 +687,6 @@ I would be greatful if you could arrange it for us. in advance thank you very mu
 Best regards
 Pitcher
 
-
 ---
 
 ## Re: Resistance/Support dinamyc lines.
@@ -752,7 +701,6 @@ can you create a simple strategy based on rsdynamic indicator;
 
 sell:buff3<buff4 and and price cross under top line{ buff2)**
 
-
 ---
 
 ## Re: Resistance/Support dinamyc lines.
@@ -760,7 +708,6 @@ sell:buff3<buff4 and and price cross under top line{ buff2)**
 **Apprentice** · Sat Mar 16, 2013 8:48 am
 
 Your requests are added to the development list.
-
 
 ---
 
@@ -770,7 +717,6 @@ Your requests are added to the development list.
 
 Could you please add the option to change the colour of the Streams separately. It's just a visual thing but it helps the eyes. Thank you.
 
-
 ---
 
 ## Re: Resistance/Support dinamyc lines.
@@ -778,7 +724,6 @@ Could you please add the option to change the colour of the Streams separately. 
 **Apprentice** · Mon Apr 29, 2013 5:05 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -792,7 +737,6 @@ I download this strategy and run it on my TS2 platform. I have been waiting for 
 
 Maybe I didn't set it right? Pls anyone can help me to make it work, thanks!!!
 
-
 ---
 
 ## Re: Resistance/Support dinamyc lines.
@@ -803,7 +747,6 @@ Hello Sliova,
 
 Have you set the Trading Parameter : "Allow the Strategy to trade" to True ?
 Obligatory to trigger Orders.
-
 
 ---
 
@@ -817,16 +760,16 @@ As in testing this strategy on my own platform, it does not enter orders Buy nor
 I took a look at the code of it, and have resolved the problem like as follows :
 from line 46 to 49, i put them in comments like that :
 
-Code: [Select all](https://fxcodebase.com/code/)
-`(line 46 :) --   CreateTradingParameters();
+```
+(line 46 :) --   CreateTradingParameters();
 (line 47 :) --end
 (line 48 :)
-(line 49 :) --function CreateTradingParameters()`
+(line 49 :) --function CreateTradingParameters()
+```
 
 Now it enters orders.
 
 Bst Rgds
-
 
 ---
 
@@ -840,7 +783,6 @@ see this please:
 [viewtopic.php?f=31&t=31385&p=61701#p61701](https://fxcodebase.com/code/viewtopic.php?f=31&t=31385&p=61701#p61701)
 
 or if you ask me to set the perfect period for this strategy... 14 period is too fast, 21 the signal is in delay, 50 period is not affidable... please send me a feedback
-
 
 ---
 

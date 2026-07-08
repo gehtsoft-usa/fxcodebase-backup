@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=1376  
 > Forum: 17 · Topic 1376 · 21 post(s)
 
-
 ---
 
 ## Elder-Rays (Bulls & Bears Power)
@@ -13,8 +12,6 @@
 ![Bulls And Bears.png](images/2648/Bulls%20And%20Bears.png)
 
 *Bulls and Bears*
-
-
 
 Developed by Dr. Alexander Elder and described in his book “Trading for a Living”.
 
@@ -45,12 +42,9 @@ In Downtrend, Bull Power is positive, but declining
 
 *Normalization*
 
-
-
  [Bulls With Normalization.lua](files/2648/Bulls%20With%20Normalization.lua)
 
  [Bears With Normalization.lua](files/2648/Bears%20With%20Normalization.lua)
-
 
 ---
 
@@ -60,7 +54,6 @@ In Downtrend, Bull Power is positive, but declining
 
 System that uses this indicator can be found at
 [http://www.forexfactory.com/showthread.php?t=239951](http://www.forexfactory.com/showthread.php?t=239951)
-
 
 ---
 
@@ -84,7 +77,6 @@ Exit rules for long trade;
 
 Many thanks
 
-
 ---
 
 ## Re: Elder-Rays (Bulls & Bears Power)
@@ -92,7 +84,6 @@ Many thanks
 **Apprentice** · Sat Feb 04, 2012 2:46 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -106,7 +97,6 @@ I'm not satisfied.
 Can you test this version, check my algorithm.
 Or change your definition.
 
-
 ---
 
 ## Re: Elder-Rays (Bulls & Bears Power)
@@ -114,7 +104,6 @@ Or change your definition.
 **Apprentice** · Tue Jul 15, 2014 3:17 am
 
 Bump Up.
-
 
 ---
 
@@ -137,14 +126,14 @@ Code: [Select all](https://fxcodebase.com/code/)
 
 Finally I tried to take the average:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`BEMA:update(mode);
-      BEMA[period] = EMA.Bulls[period];`
+```lua
+BEMA:update(mode);
+      BEMA[period] = EMA.Bulls[period];
+```
 
 Obviously this is not working out.
 
 Would you mind spending just a few minutes to add the feature to the oscillator?
-
 
 ---
 
@@ -160,7 +149,6 @@ The point of this is that in a trending environment, the sum will be large posit
 
 However in a ranging environment where prices hover about the MA, the upticks will more or less cancel the downticks, resulting in sum close to 0 and the fisher transformation close to 0. Ranging strategies will prevail here.
 
-
 ---
 
 ## Re: Elder-Rays (Bulls & Bears Power)
@@ -170,7 +158,6 @@ However in a ranging environment where prices hover about the MA, the upticks wi
 Sum / Transformation will be calculated for each component separately?
 or as a whole...
 
-
 ---
 
 ## Re: Elder-Rays (Bulls & Bears Power)
@@ -179,7 +166,6 @@ or as a whole...
 
 First, calculate the sum of bears and bulls for n periods. The integer n is an indicator parameter.
 Second, the sum is transformed to bound it between -1and 1.
-
 
 ---
 
@@ -197,7 +183,6 @@ Try my simple math Bulls with Normalization.lua Bulls & Bears with Normalization
 
 If you provide an adequate formula will implement the Fisher transformation.
 
-
 ---
 
 ## Re: Elder-Rays (Bulls & Bears Power)
@@ -212,7 +197,6 @@ If closes on the moving average, receives 0
 
 Than the average is calculated for the same period as EMA.
 
-
 ---
 
 ## Re: Elder-Rays (Bulls & Bears Power)
@@ -223,7 +207,6 @@ What you will get is in congested areas, the value hovers about 0, in a strong t
 
 I will try add this as a trend filter to some moving average strategies and see if I can reduce the rapid trading around moving average.
 
-
 ---
 
 ## Re: Elder-Rays (Bulls & Bears Power)
@@ -231,7 +214,6 @@ I will try add this as a trend filter to some moving average strategies and see 
 **zmender** · Tue Jul 22, 2014 11:56 pm
 
 I modified the customizable MAE envelope strategy to accept the above filter. Filters out about 75% of the trades. Number of profitable trades is halved while the number of lossing trades is reduced by 70%. Final balance is comparable, with win / loss ratio at about 1:1
-
 
 ---
 
@@ -295,7 +277,6 @@ Thanks!
 
 sjc
 
-
 ---
 
 ## Re: Elder-Rays (Bulls & Bears Power)
@@ -303,7 +284,6 @@ sjc
 **Apprentice** · Fri Jul 25, 2014 4:39 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -315,7 +295,6 @@ Could we please bump up. Thanks!!!
 
 sjc
 
-
 ---
 
 ## Re: Elder-Rays (Bulls & Bears Power)
@@ -324,7 +303,6 @@ sjc
 
 Bump up.
 
-
 ---
 
 ## Re: Elder-Rays (Bulls & Bears Power)
@@ -332,7 +310,6 @@ Bump up.
 **Apprentice** · Wed Feb 21, 2018 6:37 am
 
 The Indicator was revised and updated.
-
 
 ---
 
@@ -345,7 +322,6 @@ The Indicator was revised and updated.
 
 Can you please provide this indicator to me.
 Thanks.
-
 
 ---
 

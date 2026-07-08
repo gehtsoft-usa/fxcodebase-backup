@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=1262  
 > Forum: 17 · Topic 1262 · 16 post(s)
 
-
 ---
 
 ## John Ehler's indicators
@@ -18,12 +17,10 @@ Center of Gravity I see also here: [viewtopic.php?f=17&t=366&p=605&hilit=Ehler#p
 
 ![Ehlers_Indicators.png](images/2398/Ehlers_Indicators.png)
 
-
-
 Center of Gravity indicator:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Ehlers CG Oscillator");
     indicator:description("Ehlers CG Oscillator");
     indicator:requiredSource(core.Bar);
@@ -70,12 +67,13 @@ function Update(period, mode)
      end
      Buff2[period]=Buff1[period-1];
     end
-end`
+end
+```
 
 Cyber cycle indicator:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Ehlers Cyber Cycle");
     indicator:description("Ehlers Cyber Cycle");
     indicator:requiredSource(core.Bar);
@@ -120,7 +118,8 @@ function Update(period, mode)
      Buff2[period]=Buff1[period-1];
    
     end
-end`
+end
+```
 
  [Ehlers_CG.lua](files/2398/Ehlers_CG.lua)
 
@@ -128,7 +127,6 @@ end`
 
 Ehlers_CG.lua based strategy.
 [viewtopic.php?f=31&t=2420](https://fxcodebase.com/code/viewtopic.php?f=31&t=2420)
-
 
 ---
 
@@ -138,8 +136,8 @@ Ehlers_CG.lua based strategy.
 
 TwoPole smoothes oscillator:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Ehlers TwoPole smoothes oscillator");
     indicator:description("Ehlers TwoPole smoothes oscillator");
     indicator:requiredSource(core.Bar);
@@ -195,12 +193,13 @@ function Update(period, mode)
      end
      
     end
-end`
+end
+```
 
 TwoPole smoothes filter:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Ehlers TwoPole smoothes filter");
     indicator:description("Ehlers TwoPole smoothes filter");
     indicator:requiredSource(core.Bar);
@@ -244,8 +243,8 @@ function Update(period, mode)
       BuffLine[period]=Price[period];
      end
     end
-end`
-
+end
+```
 
 ---
 
@@ -261,7 +260,6 @@ Thank you,
 
 Richard
 
-
 ---
 
 ## Re: John Ehler's indicators
@@ -269,7 +267,6 @@ Richard
 **Apprentice** · Mon Aug 22, 2011 12:59 pm
 
 Request is added to our database.
-
 
 ---
 
@@ -288,7 +285,6 @@ Download:
  [Ehlers_Cyber_Cycle.lua](files/14546/Ehlers_Cyber_Cycle.lua)
 
  [Ehlers_TwoPole_Smoothed_Filter.lua](files/14546/Ehlers_TwoPole_Smoothed_Filter.lua)
-
 
 ---
 
@@ -326,7 +322,6 @@ Would this be possible also for the above 4 Ehlers indicators ?
 Current version of the above 4 indicators does not allow us to apply them on other indicators but only on price data.
 Thank you in advance
 
-
 ---
 
 ## Re: John Ehler's indicators
@@ -334,7 +329,6 @@ Thank you in advance
 **Apprentice** · Mon Sep 23, 2013 7:23 am
 
 Possibly, if you do not mind a small change in the original algorithm.
-
 
 ---
 
@@ -350,7 +344,6 @@ I am not familiar with programming.
 Is it possible if you have some time to do this small change ?
 Thank you again
 
-
 ---
 
 ## John Ehler's indicators (Tick based versions)
@@ -358,8 +351,6 @@ Thank you again
 **Apprentice** · Mon Sep 23, 2013 11:31 am
 
 ![Tick Ehlers_CG.png](images/89655/Tick%20Ehlers_CG.png)
-
-
 
 Try this Tick based versions.
 
@@ -380,7 +371,6 @@ This indicator version will provides Audio / Email Alerts on Price/Tick Ehlers T
 Compatibility issue fixed.
 _Alert Helper is not longer needed.
 
-
 ---
 
 ## Re: John Ehler's indicators
@@ -390,7 +380,6 @@ _Alert Helper is not longer needed.
 thank you Apprentice !
 they work fine..
 
-
 ---
 
 ## Re: John Ehler's indicators
@@ -398,7 +387,6 @@ they work fine..
 **Apprentice** · Tue Oct 22, 2013 6:40 am
 
 Tick Ehlers TwoPole smoothes filter with Alert added.
-
 
 ---
 
@@ -412,7 +400,6 @@ would it be possible to have an Alert when Tick Ehlers_TwoPole_Smoothed_Oscillat
 This will help me a lot when following different pairs on Trade Station.
 Thank you in advance
 
-
 ---
 
 ## Re: John Ehler's indicators
@@ -420,7 +407,6 @@ Thank you in advance
 **Apprentice** · Mon Nov 18, 2013 6:12 am
 
 Tick Ehlers_TwoPole_Smoothed_Oscillator with Alert Added.
-
 
 ---
 
@@ -430,7 +416,6 @@ Tick Ehlers_TwoPole_Smoothed_Oscillator with Alert Added.
 
 thank you very much Apprentice
 
-
 ---
 
 ## Re: John Ehler's indicators
@@ -439,7 +424,6 @@ thank you very much Apprentice
 
 Compatibility issue fixed.
 _Alert Helper is not longer needed.
-
 
 ---
 

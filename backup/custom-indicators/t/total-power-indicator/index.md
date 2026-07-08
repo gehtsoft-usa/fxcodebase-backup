@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=6307  
 > Forum: 17 · Topic 6307 · 20 post(s)
 
-
 ---
 
 ## Total Power Indicator
@@ -11,8 +10,6 @@
 **Apprentice** · Mon Sep 05, 2011 11:55 am
 
 ![Total Power Indicator.png](images/14551/Total%20Power%20Indicator.png)
-
-
 
  [Total Power Indicator.lua](files/14551/Total%20Power%20Indicator.lua)
 
@@ -31,7 +28,6 @@ But only if Elder Ray Bull is greater than 0,
 
 The indicator was revised and updated
 
-
 ---
 
 ## Re: Total Power Indicator
@@ -44,7 +40,6 @@ For everyone else, the request and a brief description of this **Trend Following
 
 Happy Analyzing.
 -emjay.
-
 
 ---
 
@@ -60,7 +55,6 @@ Thanks!
 
 sjc
 
-
 ---
 
 ## Re: Total Power Indicator
@@ -73,7 +67,6 @@ Thanks!
 
 sjc
 
-
 ---
 
 ## Re: Total Power Indicator
@@ -82,12 +75,9 @@ sjc
 
 ![MTF_MCP_Total Power Indicator_List.png](images/30937/MTF_MCP_Total%20Power%20Indicator_List.png)
 
-
-
  [MTF_MCP_Total Power Indicator_List.lua](files/30937/MTF_MCP_Total%20Power%20Indicator_List.lua)
 
 As for strategy, can you define entry, exit conditions.
-
 
 ---
 
@@ -109,7 +99,6 @@ Aggressive: open trades when Bull/Bear signal crosses opposite signal. Probably 
 
 To further utilize the Strategy, and this would make it more complex, give the trader the option within the trading parameters to combine different Algo's for entry/exit. Example: Entry Algo: Aggressive and Exit Algo: Moderate
 
-
 ---
 
 ## Re: Total Power Indicator
@@ -118,7 +107,6 @@ To further utilize the Strategy, and this would make it more complex, give the t
 
 Total Power Indicator:Moderate Strategy
 
-
 ---
 
 ## Re: Total Power Indicator
@@ -126,7 +114,6 @@ Total Power Indicator:Moderate Strategy
 **Coondawg71** · Tue Apr 24, 2012 3:36 pm
 
 Total Power Indicator: Conservative Strategy
-
 
 ---
 
@@ -137,7 +124,6 @@ Total Power Indicator: Conservative Strategy
 Try this one
 [viewtopic.php?f=31&t=16962](https://fxcodebase.com/code/viewtopic.php?f=31&t=16962)
 
-
 ---
 
 ## Re: Total Power Indicator
@@ -145,7 +131,6 @@ Try this one
 **Alexander.Gettinger** · Tue May 08, 2012 5:21 pm
 
 MQL4 version of indicator: [viewtopic.php?f=38&t=17980](https://fxcodebase.com/code/viewtopic.php?f=38&t=17980)
-
 
 ---
 
@@ -184,7 +169,6 @@ Humbly,
 
 Patrick
 
-
 ---
 
 ## Re: Total Power Indicator
@@ -196,7 +180,6 @@ and this can not be avoided.
 Changes in the two components are passed to Power.
 Unrelated, I can make a version that use various moving averages.
 With different periods for bulls and bears.
-
 
 ---
 
@@ -222,7 +205,6 @@ I just do not see how changing the Power Period would change Bulls/Bears counts 
 Thanks for listening and your guidance!
 Patrick
 
-
 ---
 
 ## Re: Total Power Indicator
@@ -232,22 +214,23 @@ Patrick
 1. Power Period or EMA Period is used in the calculation od EMA
 and indirectly Bulls and Bears
 
-Code: [Select all](https://fxcodebase.com/code/)
-`Bulls[period] = source.high[period] - EMA.DATA[period];
-Bears[period] = source.low[period] - EMA.DATA[period];`
+```lua
+Bulls[period] = source.high[period] - EMA.DATA[period];
+Bears[period] = source.low[period] - EMA.DATA[period];
+```
 
 2. Change in EMA, will change the Bulls / Bear Levels,
 and indirectly BullCount and BearsCount
 
-Code: [Select all](https://fxcodebase.com/code/)
-`if Bulls[i] > 0 then
+```lua
+if Bulls[i] > 0 then
             BullCount=BullCount+1;
             end
             
             if Bears[i] < 0 then
             BearCount=BearCount+1;
-            end`
-
+            end
+```
 
 ---
 
@@ -258,7 +241,6 @@ Code: [Select all](https://fxcodebase.com/code/)
 Thanks. I understand. I naively thought that Bear/Bull power was the result of simple counting and not comparison to an average and that Power peroid was a separate varialb simply comparing bull/bear. That you take the time to clarify some 'dumb' questions is GREATLY appreciated.
 Patrick
 
-
 ---
 
 ## Re: Total Power Indicator
@@ -267,7 +249,6 @@ Patrick
 
 Anytime.
 
-
 ---
 
 ## Re: Total Power Indicator
@@ -275,7 +256,6 @@ Anytime.
 **Apprentice** · Thu Jun 22, 2017 6:28 am
 
 The indicator was revised and updated.
-
 
 ---
 
@@ -319,7 +299,6 @@ Is it possible to add two adjustable levels to "Adaptable Total Power Indicator"
 
 Thanks!
 
-
 ---
 
 ## Re: Total Power Indicator
@@ -327,7 +306,6 @@ Thanks!
 **Apprentice** · Tue Feb 05, 2019 10:51 am
 
 Added.
-
 
 ---
 

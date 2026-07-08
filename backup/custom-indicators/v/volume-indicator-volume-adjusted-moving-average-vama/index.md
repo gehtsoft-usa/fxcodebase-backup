@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=2349  
 > Forum: 17 · Topic 2349 · 42 post(s)
 
-
 ---
 
 ## Volume Indicator: Volume Adjusted Moving Average (VAMA)
@@ -12,13 +11,10 @@
 
 ![VAMA.png](images/5045/VAMA.png)
 
-
-
 Volume Adjusted Moving Average ( VAMA)
  It is calculated by dividing the value of transactions, by the total volume for the period of interest.
 
  [VAMA.lua](files/5045/VAMA.lua)
-
 
 ---
 
@@ -45,7 +41,6 @@ anyway i think that is better to create a new real VWAP indicator with:
 
 ty
 
-
 ---
 
 ## Re: Volume Indicator: Volume Adjusted Moving Average (VAMA)
@@ -61,7 +56,6 @@ I can write the indicator, indicators, which will have the opportunity for addin
 
 The only thing that can change the current indicator is a choice between the types of streams.
 
-
 ---
 
 ## Re: Volume Indicator: Volume Adjusted Moving Average (VAMA)
@@ -70,14 +64,11 @@ The only thing that can change the current indicator is a choice between the typ
 
 ![VWAP.png](images/5112/VWAP.png)
 
-
-
 Volume Weighted Average Price (VWAP)
 Unlike VAMA, VWAP handled only Intraday timeframe.
 Calculate the VWAP indicator from the beginning of the trading day.
 
  [VWAP.lua](files/5112/VWAP.lua)
-
 
 ---
 
@@ -102,7 +93,6 @@ thank for the fast coding
 i tested the indicator but i found that it restarts at 4.00 GMT (7.00 on your chart example)
 this is not the beginning of trading day in forex market ... in theory the start is at 22 GMT, but can be most useful if you add an option where we can set a start time and an end time so we can trace, for instance, only asian session or only the european session or only 5 hours from a particular chart pattern.
 
-
 ---
 
 ## Re: Volume Indicator: Volume Adjusted Moving Average (VAMA)
@@ -111,14 +101,12 @@ this is not the beginning of trading day in forex market ... in theory the start
 
 ![Vwap v2.jpg](images/5157/Vwap%20v2.jpg)
 
-
-
 If anyone is interested, I added 1 more std dev line to the code. You can see from the picture it is very helpful to have that 3rd deviation.
 
 gg-frx - You actually don't what the indy to start at the beginning of the trade day. It needs a certain amount of prior volume for its calculations. I think Apprentice picked a good time. Try it out and see.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- Indicator profile initialization routine
+```lua
+-- Indicator profile initialization routine
 -- Defines indicator profile properties and indicator parameters
 -- TODO: Add minimal and maximal value of numeric parameters and default color of the streams
 function Init()
@@ -316,10 +304,10 @@ function findDateFast(stream, date, precise)
             end
         end
     end
-end`
+end
+```
 
  [VWAP.lua](files/5157/VWAP.lua)
-
 
 ---
 
@@ -331,7 +319,6 @@ i resumed this old thread to ask if is possible to insert start and end time in 
 
 ty
 
-
 ---
 
 ## Re: Volume Indicator: Volume Adjusted Moving Average (VAMA)
@@ -339,7 +326,6 @@ ty
 **bomberone3** · Tue Oct 25, 2011 3:41 pm
 
 Is it possible add the POC value?
-
 
 ---
 
@@ -350,7 +336,6 @@ Is it possible add the POC value?
 I did not get the impression that this indicator has a POC, value.
 Can you elaborate.
 
-
 ---
 
 ## Re: Volume Indicator: Volume Adjusted Moving Average (VAMA)
@@ -358,7 +343,6 @@ Can you elaborate.
 **bomberone3** · Wed Oct 26, 2011 2:12 am
 
 I read book about market profile, so I ask if is it possible add poc and vpoc.
-
 
 ---
 
@@ -370,7 +354,6 @@ On this indicator, no.
 But I have written Market Profile indicator.
 You can find it here.
 [http://fxcodebase.com/code/viewtopic.ph ... lit=market](https://fxcodebase.com/code/viewtopic.php?f=17&t=2640&hilit=market)
-
 
 ---
 
@@ -386,7 +369,6 @@ Volume Point of Control is pretty much the same since it's the price where the m
 
 POC is usually used if you're trading Market Profile and VPOC is used if you're trading Volume Profile.
 
-
 ---
 
 ## Re: Volume Indicator: Volume Adjusted Moving Average (VAMA)
@@ -394,7 +376,6 @@ POC is usually used if you're trading Market Profile and VPOC is used if you're 
 **bomberone3** · Fri Oct 28, 2011 2:20 am
 
 Is it possible add a multiday vwap without resetting value at a end of a day?.
-
 
 ---
 
@@ -408,7 +389,6 @@ Here there is a very good exaplaination
 [https://www.tradestation.com/en/educati ... rage-price](https://www.tradestation.com/en/education/labs/analysis-concepts/time-weighted-average-price)
 My best.
 
-
 ---
 
 ## Re: Volume Indicator: Volume Adjusted Moving Average (VAMA)
@@ -418,7 +398,6 @@ My best.
 Dear order66 ,
 
 I don't understant the difference between market profile and volume profile, could you explain please and post any image or examples please?
-
 
 ---
 
@@ -430,7 +409,6 @@ Market Profile shows what prices were traded over time.
 
 Volume Profile is how much was traded at what price.
 
-
 ---
 
 ## Re: Volume Indicator: Volume Adjusted Moving Average (VAMA)
@@ -438,7 +416,6 @@ Volume Profile is how much was traded at what price.
 **bomberone3** · Sat Oct 29, 2011 5:42 pm
 
 Why many traders combine this 2 trading analisys?
-
 
 ---
 
@@ -449,7 +426,6 @@ Why many traders combine this 2 trading analisys?
 I'm not sure how to get the data, he realized Tick Volume on some levels.
 I have to think about it.
 
-
 ---
 
 ## Re: Volume Indicator: Volume Adjusted Moving Average (VAMA)
@@ -457,7 +433,6 @@ I have to think about it.
 **Alexander.Gettinger** · Fri Jun 22, 2012 2:22 pm
 
 MQL4 version of VAMA: [viewtopic.php?f=38&t=20488](https://fxcodebase.com/code/viewtopic.php?f=38&t=20488)
-
 
 ---
 
@@ -472,7 +447,6 @@ Can you modify the code?
 
 Thanks.
 
-
 ---
 
 ## Re: Volume Indicator: Volume Adjusted Moving Average (VAMA)
@@ -480,7 +454,6 @@ Thanks.
 **Apprentice** · Thu Nov 01, 2012 3:03 am
 
 this option is for VWAP
-
 
 ---
 
@@ -496,7 +469,6 @@ Thanks,
 
 sjc
 
-
 ---
 
 ## Re: Volume Indicator: Volume Adjusted Moving Average (VAMA)
@@ -504,7 +476,6 @@ sjc
 **Apprentice** · Thu Mar 21, 2013 5:34 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -518,7 +489,6 @@ Thanks,
 
 sjc
 
-
 ---
 
 ## Re: Volume Indicator: Volume Adjusted Moving Average (VAMA)
@@ -526,7 +496,6 @@ sjc
 **Apprentice** · Fri Aug 23, 2013 2:01 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -536,7 +505,6 @@ Your request is added to the development list.
 
 Try this version
 [viewtopic.php?f=17&t=59293](https://fxcodebase.com/code/viewtopic.php?f=17&t=59293)
-
 
 ---
 
@@ -548,14 +516,11 @@ Try this version
 
 *Request for 2 additional deviations added to Vwap indicator*
 
-
-
 Can we please request the ADDITION of two additional deviations to the standard VWAP indicator. I would suggest the default settings of 1, 1.618, 2.618, 3.618, 4.236.
 
 Thanks,
 
 sjc
-
 
 ---
 
@@ -565,7 +530,6 @@ sjc
 
 Indicator has been completely rewritten.
 Two additional lines added.
-
 
 ---
 
@@ -577,7 +541,6 @@ Thanks Apprentice!
 Are there any other changes in formula in the re-write or is it identical?
 Thanks again!
 
-
 ---
 
 ## Re: Volume Indicator: Volume Adjusted Moving Average (VAMA)
@@ -585,7 +548,6 @@ Thanks again!
 **Apprentice** · Tue Oct 08, 2013 2:10 am
 
 We use same formula, improved algorithm.
-
 
 ---
 
@@ -596,7 +558,6 @@ We use same formula, improved algorithm.
 Great!
 Comparing the two, I see differences occassionally (rarely) but when they appear they are indeed better measures as far as I can see. Nice!
 
-
 ---
 
 ## Re: Volume Indicator: Volume Adjusted Moving Average (VAMA)
@@ -604,7 +565,6 @@ Comparing the two, I see differences occassionally (rarely) but when they appear
 **trendwatch** · Mon Feb 09, 2015 2:08 pm
 
 Could you change the VWAP indy so that it uses the new Real Volume, and not the tick volume?
-
 
 ---
 
@@ -615,7 +575,6 @@ Could you change the VWAP indy so that it uses the new Real Volume, and not the 
 For now I do not plan to use the real volume,
 As it is, it is offered through an external server.
 Not by regular FXCM price servers.
-
 
 ---
 
@@ -641,7 +600,6 @@ Thanks!!!
 
 sjc
 
-
 ---
 
 ## Re: Volume Indicator: Volume Adjusted Moving Average (VAMA)
@@ -655,7 +613,6 @@ Would it be possible to convert the VWAP indy into a strategy -- or at the very 
 Thanks a lot
 4x4
 
-
 ---
 
 ## Re: Volume Indicator: Volume Adjusted Moving Average (VAMA)
@@ -664,7 +621,6 @@ Thanks a lot
 
 It is possible.
 Your request is added to the development list.
-
 
 ---
 
@@ -682,7 +638,6 @@ Thanks in advance for your reply.
 Best
 4x4
 
-
 ---
 
 ## Re: Volume Indicator: Volume Adjusted Moving Average (VAMA)
@@ -697,7 +652,6 @@ Indicator.VAMA [period];
 Use, If you are interested in the current period value.
 If you define VWAP call as Indicator.
 
-
 ---
 
 ## Re: Volume Indicator: Volume Adjusted Moving Average (VAMA)
@@ -708,7 +662,6 @@ Can we please have the Vwap indicator with bands updated so that it resets at th
 
 sjc
 
-
 ---
 
 ## Re: Volume Indicator: Volume Adjusted Moving Average (VAMA)
@@ -716,7 +669,6 @@ sjc
 **Apprentice** · Mon Jun 26, 2017 4:40 am
 
 The indicator was revised and updated.
-
 
 ---
 
@@ -726,13 +678,10 @@ The indicator was revised and updated.
 
 ![EURUSD H1 (02-27-2017 0531).png](images/115843/EURUSD%20H1%20%2802-27-2017%200531%29.png)
 
-
-
 Based on the request.
 [viewtopic.php?f=27&t=65317](https://fxcodebase.com/code/viewtopic.php?f=27&t=65317)
 
  [VWAP.lua](files/115843/VWAP.lua)
-
 
 ---
 

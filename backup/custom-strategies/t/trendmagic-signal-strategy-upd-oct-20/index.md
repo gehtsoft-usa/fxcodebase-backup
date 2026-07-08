@@ -1,7 +1,77 @@
 # Trendmagic signal/strategy [Upd Oct, 20]
 
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=2387  
-> Forum: 31 · Topic 2387 · 10 post(s)
+> Forum: 31 · Topic 2387 · 13 post(s)
+
+
+---
+
+## Trendmagic signal/strategy [Upd Oct, 20]
+
+**Nikolay.Gekht** · Tue Oct 12, 2010 2:33 pm
+
+Update Oct, 20. Trend Magic Direction strategy (second post below) is updated. Now the strategy does not create the first position until the signal is switched from opposite direction, i.e. if the current condition are buy it will wait until the first sell after buy appears.
+
+There is a simple basic signal/strategy which works on [Trend Magic indicator](https://fxcodebase.com/code/viewtopic.php?f=17&t=2374).
+
+The strategy enters long which trend magic turns green and enters short when trend magic turns red.
+
+Options:
+
+1) The strategy can show signals (alerts, sounds (including recurrent), emails) as well as can trade. By default trading is disabled. To let the strategy trade please go to the "Trading Parameters" and switch "AllowTrading" parameter to "On".
+
+2) In trading parameters you can also switch on and configure stop and limit orders.
+
+3) You can also configure "auto lot size". In case the previous trade wasn't profitable, the strategy will increase the next lot by the specified amount unless the maximum amount is reached. In case trade was profitable - the strategy will reset the trade size. Important note! In case trade is closed by stop or limit order and more than 30 trades was closed after that moment, the strategy cannot detect whether the trade was closed with profit or not. This is a limitation of the trading platform which shows only 30 last trades.
+
+**Important note! The strategy is very sensitive for flat market! Pay attention on the highlighted areas where the strategy suffers significant loss**
+Personally I don't recommend to use the strategy to trade unless you explicitly understand all pros and contras of trend magic indicator. This is rather useful for testing trend magic indicator and to use it just as signal, without no trading features switched on.
+
+ 
+
+![trendmagic1.png](images/5153/trendmagic1.png)
+
+
+
+Please, do not forget to download and install **new** version of Trend Magic indicator:
+[viewtopic.php?f=17&t=2374](https://fxcodebase.com/code/viewtopic.php?f=17&t=2374)
+
+Download strategy:
+
+ [TrendMagic_Strategy.lua](files/5153/TrendMagic_Strategy.lua)
+
+
+---
+
+## Version 2
+
+**Nikolay.Gekht** · Mon Oct 18, 2010 12:17 pm
+
+Another version of the Trendmagic strategy. Now it trades when the direction of the line is changed rather than when the color is changed. This version is a bit less sensitive to the flats than previous:
+
+ 
+
+![trend_magic_dir.png](images/5300/trend_magic_dir.png)
+
+
+
+download:
+
+ [TrendMagic_Strategy_Dir.lua](files/5300/TrendMagic_Strategy_Dir.lua)
+
+Please, do not forget to download and install **new** version of Trend Magic indicator:
+[viewtopic.php?f=17&t=2374](https://fxcodebase.com/code/viewtopic.php?f=17&t=2374)
+
+p.s. I also fixed alert text in original strategy as well. It tells "short" opening "long" and vise versa.
+
+
+---
+
+## Re: Trendmagic signal/strategy [Upd Oct, 20]
+
+**Nikolay.Gekht** · Wed Oct 20, 2010 4:54 pm
+
+Update Oct, 20. Trend Magic Direction strategy (second post below) is updated. Now the strategy does not create the first position until the signal is switched from opposite direction, i.e. if the current condition are buy it will wait until the first sell after buy appears.
 
 
 ---

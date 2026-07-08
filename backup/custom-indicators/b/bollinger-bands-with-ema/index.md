@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=679  
 > Forum: 17 · Topic 679 · 4 post(s)
 
-
 ---
 
 ## Bollinger Bands with EMA
@@ -21,10 +20,8 @@ D - standard deviations.
 
 ![1.JPG](images/1222/1.JPG)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Bollinger Bands with EMA");
     indicator:description("Original Bollinger Bands with an EMA instead of a simple ma");
     indicator:requiredSource(core.Tick);
@@ -77,8 +74,8 @@ function Update(period,mode)
      BL[period] = ml - D * d;
      AL[period] = ml;
     end
-end`
-
+end
+```
 
 ---
 
@@ -88,7 +85,6 @@ end`
 
 Could you add all the grafic options like the standard bollinger bands, please? Thanks in advance.
 
-
 ---
 
 ## Re: Bollinger Bands with EMA
@@ -96,7 +92,6 @@ Could you add all the grafic options like the standard bollinger bands, please? 
 **Apprentice** · Mon Apr 27, 2015 2:44 am
 
 Style Option Added.
-
 
 ---
 

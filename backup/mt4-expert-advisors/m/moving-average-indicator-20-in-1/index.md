@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=38&t=66535  
 > Forum: 38 · Topic 66535 · 3 post(s)
 
-
 ---
 
 ## Moving Average Indicator: 20 in 1
@@ -11,8 +10,6 @@
 **Apprentice** · Fri Aug 17, 2018 7:03 am
 
 ![eurusd-w1-forex-capital-markets.png](images/120625/eurusd-w1-forex-capital-markets.png)
-
-
 
 Based on lua original.
 [viewtopic.php?f=17&t=2430](https://fxcodebase.com/code/viewtopic.php?f=17&t=2430)
@@ -67,7 +64,6 @@ Alpha=2/(N+1),
 Lag=(N-1)/2.
 
  [averages.mq4](files/120625/averages.mq4)
-
 
 ---
 
@@ -138,16 +134,16 @@ J2[i]=(Price[i]-J1[i])*(1-Alpha)+J2[i-1]*Alpha,
 J1[i]=Price[i]*(1-Alpha)+J1[i-1]*Alpha,
 Alpha=0.45*N/(0.45*(N-1)+2).
 
-
 ---
 
 ## Re: Moving Average Indicator: 20 in 1
 
 **Apprentice** · Mon Jan 07, 2019 5:46 pm
 
-Code: [Select all](https://fxcodebase.com/code/)
-`by Artem.dev » Sat Oct 20, 2018 12:08 pm
+```
+by Artem.dev » Sat Oct 20, 2018 12:08 pm
 
-In this version for MT4, all indicators are called up using iCustom(). Where to get these indicators?`
+In this version for MT4, all indicators are called up using iCustom(). Where to get these indicators?
+```
 
 Please re-download.

@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=29&t=1864  
 > Forum: 29 · Topic 1864 · 54 post(s)
 
-
 ---
 
 ## Stochastic signals
@@ -19,10 +18,8 @@ Buy when the Oscillator %K falls below a specific level (e.g., 20) and then rise
 
 ![Stochastic_Overbought_Oversold_Signal.png](images/3738/Stochastic_Overbought_Oversold_Signal.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     strategy:name("Stochastic Overbought/Oversold signal");
     strategy:description("");
 
@@ -162,8 +159,8 @@ function ExtSignal(source, period, message, soundFile)
     if soundFile ~= nil then
         terminal:alertSound(soundFile, false);
     end
-end`
-
+end
+```
 
 ---
 
@@ -179,10 +176,8 @@ Buy when the %K line rises above the %D line and sell when the %K line falls bel
 
 ![Stochastic_Crossover_Signal.png](images/3739/Stochastic_Crossover_Signal.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     strategy:name("Stochastic Crossover signal");
     strategy:description("");
 
@@ -319,8 +314,8 @@ function ExtSignal(source, period, message, soundFile)
     if soundFile ~= nil then
         terminal:alertSound(soundFile, false);
     end
-end`
-
+end
+```
 
 ---
 
@@ -334,12 +329,10 @@ end`
 
 ![Stochastic_Divergence.png](images/3740/Stochastic_Divergence.png)
 
-
-
 Indicators for find divergence:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- Indicator profile initialization routine
+```lua
+-- Indicator profile initialization routine
 -- Defines indicator profile properties and indicator parameters
 function Init()
     indicator:name("Stochastic Divergence");
@@ -530,11 +523,13 @@ function prevPeak(period)
         end
     end
     return nil;
-end`
+end
+```
+
 and
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- Indicator profile initialization routine
+```lua
+-- Indicator profile initialization routine
 -- Defines indicator profile properties and indicator parameters
 function Init()
     indicator:name("Stochastic Divergence");
@@ -605,10 +600,10 @@ function Update(period, mode)
         line_id = line_id + 1;
         core.host:execute("drawLine", line_id, source:date(prev), source.low[prev], source:date(period - 2), source.low[period - 2], DN_color);
     end
-end`
+end
+```
 
 For work Stochastic_Divergence1.lua must be installed Stochastic_Divergence.lua
-
 
 ---
 
@@ -618,8 +613,8 @@ For work Stochastic_Divergence1.lua must be installed Stochastic_Divergence.lua
 
 Stochastic divergence signal:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     strategy:name("Stochastic Divergence");
     strategy:description("Signals when the Stochastic Divergence detected");
 
@@ -690,10 +685,10 @@ function ExtUpdate(id, source, period)
     end
 end
 
-dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");`
+dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");
+```
 
 For work Stochastic_Divergence_Signal.lua must be installed indicator Stochastic_Divergence.lua
-
 
 ---
 
@@ -704,7 +699,6 @@ For work Stochastic_Divergence_Signal.lua must be installed indicator Stochastic
 can you develop an strategy for this indicator? (stochastic divergence.lua)
 thanks
 
-
 ---
 
 ## Re: Stochastic signals
@@ -713,7 +707,6 @@ thanks
 
 First, it is not indicators it is a signal.
 Can you tell me for which signal you want strategy to be developed.
-
 
 ---
 
@@ -727,7 +720,6 @@ Can you tell me for which signal you want strategy to be developed.
 
 Sorry for mistake, is for signal stochastic_divergence_signal thanks!
 
-
 ---
 
 ## Re: Stochastic signals
@@ -736,7 +728,6 @@ Sorry for mistake, is for signal stochastic_divergence_signal thanks!
 
 OK.
 I shall write the strategy for you.
-
 
 ---
 
@@ -752,7 +743,6 @@ Strategies:
 
  [Stochastic_Divergence_Strategy.lua](files/15954/Stochastic_Divergence_Strategy.lua)
 
-
 ---
 
 ## Re: Stochastic signals
@@ -767,7 +757,6 @@ Why this? Can someone help me?
 
 Thanks
 Germano
-
 
 ---
 
@@ -785,10 +774,7 @@ Could you please provide more details about the issue
 
 ![Manage.PNG](images/15999/Manage.PNG)
 
-
-
 I hope this will help.
-
 
 ---
 
@@ -810,7 +796,6 @@ Germano
 
 Note: Please excuse any errors, but English is not my mother tongue.
 
-
 ---
 
 ## Re: Stochastic signals
@@ -819,7 +804,6 @@ Note: Please excuse any errors, but English is not my mother tongue.
 
 If you use "Menage custom strategy" window then the strategy will not generate on chart display.
 For this you can use ShowSignal Indiktor or test strategy functionality.
-
 
 ---
 
@@ -833,7 +817,6 @@ How do I use "ShowSignal Indicator"?
 Thank you
 Germano
 
-
 ---
 
 ## Re: Stochastic signals
@@ -841,7 +824,6 @@ Germano
 **Apprentice** · Mon Oct 10, 2011 5:42 am
 
 Add ShowSignal Indicator on chart, and then select Strategy or Signal of your choice, within the ShowSignal Indicator.
-
 
 ---
 
@@ -858,7 +840,6 @@ Add ShowSignal Indicator on chart, and then select Strategy or Signal of your ch
 
 Please read this section which describes how to view alerts of a signal on the chart: [Show Signal on Chart](http://www.fxcorporate.com/help/MS/NOTFIFO/web-content.html?key=http://www.fxcorporate.com/help/MS/NOTFIFO/Show_Signal_onChart.html)
 
-
 ---
 
 ## Re: Stochastic signals
@@ -870,7 +851,6 @@ Now everything is very clear
 Thank you
 Germano
 
-
 ---
 
 ## Re: Stochastic signals
@@ -881,7 +861,6 @@ sir,
 can you add following option in this golden strategy.
 stochastic divergence to buy/sell in oversold/overbought region
 
-
 ---
 
 ## Re: Stochastic signals
@@ -889,7 +868,6 @@ stochastic divergence to buy/sell in oversold/overbought region
 **Apprentice** · Tue Oct 11, 2011 4:44 pm
 
 Your request is added to the developmental cue.
-
 
 ---
 
@@ -903,7 +881,6 @@ Your request is added to the developmental cue.
 
 Thanks, and great job!!
 
-
 ---
 
 ## Re: Stochastic signals
@@ -915,7 +892,6 @@ Can you write signal and strategy of a combined Stochastic like this: Buy/Sell w
 Thanks alot,
 Ken
 
-
 ---
 
 ## Re: Stochastic signals
@@ -925,7 +901,6 @@ Ken
 Such a strategy already exists.
 You can find it here.
 [viewtopic.php?f=31&t=2533&hilit=Stochastic](https://fxcodebase.com/code/viewtopic.php?f=31&t=2533&hilit=Stochastic)
-
 
 ---
 
@@ -943,7 +918,6 @@ All the best.
 
 Raaammy
 
-
 ---
 
 ## Re: Stochastic signals
@@ -951,7 +925,6 @@ Raaammy
 **Apprentice** · Sat Nov 19, 2011 3:55 am
 
 Your request is added to the development queue.
-
 
 ---
 
@@ -972,7 +945,6 @@ Sell when the crossover appears in Overbought Area and the candlestick touches t
 Thanks alot,
 Ken
 
-
 ---
 
 ## Re: Stochastic signals
@@ -980,7 +952,6 @@ Ken
 **Apprentice** · Mon Dec 19, 2011 4:56 am
 
 Your request is added to the developmental cue.
-
 
 ---
 
@@ -997,7 +968,6 @@ Your request is added to the developmental cue.
 
 Please, see this strategy: [viewtopic.php?f=31&t=10157](https://fxcodebase.com/code/viewtopic.php?f=31&t=10157)
 
-
 ---
 
 ## Re: Stochastic signals-crossover
@@ -1009,7 +979,6 @@ I understand it is a signal, but you do mention it can be shown on the chart, ho
 Regards
 Peter
 
-
 ---
 
 ## Re: Stochastic signals
@@ -1019,7 +988,6 @@ Peter
 Unfortunately, this functionality is excluded from current version.
 The development team has promised to return in the next update.
 Currently we can only add signal functionality within indicators?
-
 
 ---
 
@@ -1035,7 +1003,6 @@ Currently we can only add signal functionality within indicators?
 What is the "showsignal " then as shown in the chart?
 Peter
 
-
 ---
 
 ## Re: Stochastic signals
@@ -1043,7 +1010,6 @@ Peter
 **Apprentice** · Wed Sep 12, 2012 1:43 pm
 
 Showsignal is indicator helper tool, which has existed in previous versions of Trade station.
-
 
 ---
 
@@ -1054,7 +1020,6 @@ Showsignal is indicator helper tool, which has existed in previous versions of T
 Is it possible then just to show a dot on the candlestick chart when the stochastic K & D lines cross?
 regards
 Peter
-
 
 ---
 
@@ -1068,7 +1033,6 @@ Could you just clarify if the stochastic crossover K & D can be shown on a candl
 Regards
 Peter
 
-
 ---
 
 ## Re: Stochastic signals
@@ -1077,7 +1041,6 @@ Peter
 
 for the time being showsignal not exist as such, anywhere.
 hopefully it will be available in the next version of TS.
-
 
 ---
 
@@ -1102,7 +1065,6 @@ Have a nice day and thank you for all the work you are doing here for us
 
 haveforexfun
 
-
 ---
 
 ## Re: Stochastic signals
@@ -1119,7 +1081,6 @@ All the best.
 
 Simone
 
-
 ---
 
 ## Re: Stochastic signals
@@ -1127,7 +1088,6 @@ Simone
 **SenseClash** · Thu Apr 02, 2015 6:23 am
 
 Would it be possible to modify these (or at least the StochasticCrossover_Signal.lua) so that I could can get an email when the event occurs?
-
 
 ---
 
@@ -1137,7 +1097,6 @@ Would it be possible to modify these (or at least the StochasticCrossover_Signal
 
 Also, would it be possible to modify it so that I can choose to get 1) only buy signals 2) only sell signals or 3) both?
 
-
 ---
 
 ## Re: Stochastic signals
@@ -1145,7 +1104,6 @@ Also, would it be possible to modify it so that I can choose to get 1) only buy 
 **johnnyrocket** · Fri Nov 06, 2015 1:25 pm
 
 I am not seeing the dots on my chart. I dont understand what i could be doing wrong here. It installed the bottom part.
-
 
 ---
 
@@ -1155,7 +1113,6 @@ I am not seeing the dots on my chart. I dont understand what i could be doing wr
 
 Stochastic_Overbought_Oversold_Signal.lua is NOT indicator.
 You can only add it as signal /strategy.
-
 
 ---
 
@@ -1192,7 +1149,6 @@ Many thanks in advanced,
 
 JCR
 
-
 ---
 
 ## Re: Stochastic signals
@@ -1202,7 +1158,6 @@ JCR
 You can not use same period index, for multiple time frame data sources.
 Try to use core.findDate or methods used for MTF strategies.
 [viewtopic.php?f=28&t=2712](https://fxcodebase.com/code/viewtopic.php?f=28&t=2712)
-
 
 ---
 
@@ -1216,7 +1171,6 @@ Best Regards,
 
 JCR
 
-
 ---
 
 ## Re: Stochastic signals
@@ -1229,10 +1183,7 @@ Bug with [Stochastic_Overbought_Oversold_Strategy.lua](http://www.fxcodebase.com
 
 ![Capture.png](images/134164/Capture.png)
 
-
-
 I haven't tested the others.
-
 
 ---
 
@@ -1243,7 +1194,6 @@ I haven't tested the others.
 Your request is added to the development list.
 Development reference 1351.
 
-
 ---
 
 ## Re: Stochastic signals
@@ -1251,7 +1201,6 @@ Development reference 1351.
 **Apprentice** · Tue May 26, 2020 9:17 am
 
 Fixed.
-
 
 ---
 
@@ -1263,7 +1212,6 @@ I keep getting the same error message.
 
 I tried the other 2 indicators, I also have the same error message for each one.
 
-
 ---
 
 ## Re: Stochastic signals
@@ -1273,7 +1221,6 @@ I tried the other 2 indicators, I also have the same error message for each one.
 [Stochastic_Overbought_Oversold_Signal.lua](files/134359/Stochastic_Overbought_Oversold_Signal.lua)
 
 Try this version.
-
 
 ---
 
@@ -1285,7 +1232,6 @@ This one works. Thank you.
 
 Is it possible to have the signal in the input of the oversold/overbought area instead of the output as at present?
 
-
 ---
 
 ## Re: Stochastic signals
@@ -1294,7 +1240,6 @@ Is it possible to have the signal in the input of the oversold/overbought area i
 
 I'm not sure I understand,
 can you elaborate with an example?
-
 
 ---
 
@@ -1308,10 +1253,7 @@ I want signal here (and end of turn).
 
 ![Capture.png](images/134495/Capture.png)
 
-
-
 Thanks.
-
 
 ---
 
@@ -1322,7 +1264,6 @@ Thanks.
 Shifted by one candle back in time?
 Not sure we can do it for signals/strategies.
 We can have this on indicators.
-
 
 ---
 
@@ -1336,14 +1277,11 @@ Right now the signal is there:
 
 ![Capture 1.png](images/134554/Capture%201.png)
 
-
-
 I want him there:
 
  
 
 ![Capture 2.png](images/134554/Capture%202.png)
-
 
 ---
 

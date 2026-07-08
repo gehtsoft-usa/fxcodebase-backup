@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=62913  
 > Forum: 31 · Topic 62913 · 16 post(s)
 
-
 ---
 
 ## Chinkou Span Strategy
@@ -11,8 +10,6 @@
 **Apprentice** · Thu Nov 26, 2015 6:50 am
 
 ![Chinkou Span Strategy.png](images/103515/Chinkou%20Span%20Strategy.png)
-
-
 
 Based on request.
 [viewtopic.php?f=27&t=62908&p=103516#p103516](https://fxcodebase.com/code/viewtopic.php?f=27&t=62908&p=103516#p103516)
@@ -26,7 +23,6 @@ Short reverse logic.
  [Chinkou Span Strategy.lua](files/103515/Chinkou%20Span%20Strategy.lua)
 
 The Strategy was revised and updated on December 18, 2018.
-
 
 ---
 
@@ -60,7 +56,6 @@ The problem is that when the program is run non-stop, for example at five minute
 
 thank you
 
-
 ---
 
 ## Re: Chinkou Span Strategy
@@ -75,15 +70,14 @@ Can you please add it.
 Thanks
 JC
 
-
 ---
 
 ## Re: Chinkou Span Strategy
 
 **Apprentice** · Mon Aug 08, 2016 7:35 am
 
-Code: [Select all](https://fxcodebase.com/code/)
-`if SetStop then
+```lua
+if SetStop then
    local Value;
    local min,max= mathex.minmax(Source, Source,period-Period+1, period);
    local BuyDelta= (Source.close[period]-min)/Source:pipSize();
@@ -96,9 +90,10 @@ Code: [Select all](https://fxcodebase.com/code/)
             valuemap.PegPriceOffsetPipsStop = SellDelta;
         end
       
-    end`
-This is stop logic used.
+    end
+```
 
+This is stop logic used.
 
 ---
 
@@ -107,7 +102,6 @@ This is stop logic used.
 **Apprentice** · Sat Dec 17, 2016 9:35 am
 
 Strategy was revised and updated.
-
 
 ---
 
@@ -124,7 +118,6 @@ Example: I execute the strategy and I set this new parameter to the value 5. Whe
 
 Thanks for your help.
 
-
 ---
 
 ## Re: Chinkou Span Strategy
@@ -133,7 +126,6 @@ Thanks for your help.
 
 We have added your request to the development list.
 Development reference 471.
-
 
 ---
 
@@ -147,7 +139,6 @@ It hasn't been tested myself, so I'd appreciate if you could.
 
  [Chinkou Span Strategy.lua](files/147047/Chinkou%20Span%20Strategy.lua)
 
-
 ---
 
 ## Re: Chinkou Span Strategy
@@ -159,7 +150,6 @@ Hello,
 Thank you fort the new strategy. I will test it.
 
 Can you just explain me what is exactly the parameter "Total number of trades executed by the strategy (Time in Days)" whose format is 'double' ?
-
 
 ---
 
@@ -178,7 +168,6 @@ When I run the strategy, it works well but it keeps opening and closing position
 When you have time, can you see the problem?
 Thanks.
 
-
 ---
 
 ## Re: Chinkou Span Strategy
@@ -186,7 +175,6 @@ Thanks.
 **Apprentice** · Mon Aug 15, 2022 3:07 am
 
 Try it now.
-
 
 ---
 
@@ -200,7 +188,6 @@ I tried the new version and I have exactly the same problem as during the first 
 
 Thank you for your help...
 
-
 ---
 
 ## Re: Chinkou Span Strategy
@@ -211,7 +198,6 @@ With this settings
 "TotalNumberOfPosition" = 3
 "TotalNumberOfPositionTime" = 1.0
 It will open up to 3 positions in 1 day (24 hours)
-
 
 ---
 
@@ -233,7 +219,6 @@ Could someone else test this strategy with these same settings and tell me if it
 
 Thanks
 
-
 ---
 
 ## Re: Chinkou Span Strategy
@@ -241,7 +226,6 @@ Thanks
 **Apprentice** · Fri Aug 19, 2022 2:31 am
 
 Bug Fixed.
-
 
 ---
 

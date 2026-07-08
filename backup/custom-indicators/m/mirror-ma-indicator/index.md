@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=2381  
 > Forum: 17 · Topic 2381 · 4 post(s)
 
-
 ---
 
 ## Mirror MA indicator
@@ -18,10 +17,8 @@ Line2=-Line1.
 
 ![Mirror_MA.png](images/5137/Mirror_MA.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Mirror MA indicator");
     indicator:description("Mirror MA indicator");
     indicator:requiredSource(core.Bar);
@@ -139,8 +136,8 @@ function Update(period, mode)
     Buff2[period]=MA2.DATA[period]-MA1.DATA[period];
    end
    
-end`
-
+end
+```
 
 ---
 
@@ -155,12 +152,10 @@ Added Mirror RSI indicator with signal line.
 
 ![Mirror.png](images/5477/Mirror.png)
 
-
-
 Mirror MA:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Mirror MA indicator");
     indicator:description("Mirror MA indicator");
     indicator:requiredSource(core.Bar);
@@ -298,12 +293,13 @@ function Update(period, mode)
     BuffSig[period]=MASig.DATA[period];
    end
    
-end`
+end
+```
 
 Mirror RSI:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Mirror RSI indicator");
     indicator:description("Mirror RSI indicator");
     indicator:requiredSource(core.Bar);
@@ -425,8 +421,8 @@ function Update(period, mode)
     BuffSig[period]=MASig.DATA[period];
    end
    
-end`
-
+end
+```
 
 ---
 
@@ -436,7 +432,6 @@ end`
 
 Mq4 version is available here.
 [viewtopic.php?f=38&t=63591](https://fxcodebase.com/code/viewtopic.php?f=38&t=63591)
-
 
 ---
 

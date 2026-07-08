@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=38&t=69640  
 > Forum: 38 · Topic 69640 · 22 post(s)
 
-
 ---
 
 ## VWAP_Oscillator_normilized
@@ -12,10 +11,7 @@
 
 ![eurusd-h4-fxcm-australia-pty.png](images/132705/eurusd-h4-fxcm-australia-pty.png)
 
-
-
  [VWAP_Oscillator_normilized.mq4](files/132705/VWAP_Oscillator_normilized.mq4)
-
 
 ---
 
@@ -27,7 +23,6 @@ hi Mr Mario apprentice
 
 why every monday the vwap 2 lines look like that ?
 
-
 ---
 
 ## Re: VWAP_Oscillator_normilized
@@ -35,7 +30,6 @@ why every monday the vwap 2 lines look like that ?
 **Apprentice** · Tue May 26, 2020 8:20 am
 
 VWAP is calculated like this.
-
 
 ---
 
@@ -45,7 +39,6 @@ VWAP is calculated like this.
 
 Can you make Vwap oscillator normalized show and being like that every day not just on Monday ?
 
-
 ---
 
 ## Re: VWAP_Oscillator_normilized
@@ -54,7 +47,6 @@ Can you make Vwap oscillator normalized show and being like that every day not j
 
 Your request is added to the development list.
 Development reference 1370.
-
 
 ---
 
@@ -67,7 +59,6 @@ Any news about the indicator ?
 
 Thank you
 
-
 ---
 
 ## Re: VWAP_Oscillator_normilized
@@ -78,7 +69,6 @@ Unfortunately no,
 we are overwhelmed by task inflow.
 I will post any updates here.
 
-
 ---
 
 ## Re: VWAP_Oscillator_normilized
@@ -87,7 +77,6 @@ I will post any updates here.
 
 How Normalization will be calculated?
 
-
 ---
 
 ## Re: VWAP_Oscillator_normilized
@@ -95,7 +84,6 @@ How Normalization will be calculated?
 **aladdin007** · Thu Jun 11, 2020 6:20 am
 
 I want him in each new day return to zero and star new calculations so I can have this kind of signals he give every Monday
-
 
 ---
 
@@ -112,8 +100,8 @@ Thank you so much
 This is the script
 [https://ctrader.com/algos/indicators/show/2142](https://ctrader.com/algos/indicators/show/2142)
 
-Code: [Select all](https://fxcodebase.com/code/)
-`using System;
+```mql4
+using System;
 using cAlgo.API;
 using cAlgo.API.Internals;
 using cAlgo.API.Indicators;
@@ -206,8 +194,8 @@ namespace cAlgo
             SecondLowerBand[index] = -2;
             SecondUpperBand[index] = 2;
             ThirdLowerBand[index] = -3;
-            ThirdUpperBand[index] = 3`
-
+            ThirdUpperBand[index] = 3
+```
 
 ---
 
@@ -217,7 +205,6 @@ namespace cAlgo
 
 Your request is added to the development list.
 Development reference 1479.
-
 
 ---
 
@@ -229,7 +216,6 @@ I still don't understand.
 That explanation doesn't fit into the current formula
 
 Is it a new unrelated request?
-
 
 ---
 
@@ -243,7 +229,6 @@ I find this formula script better,just add in this indicator the options add oth
 Thank you so much sorry about my English
 God bless you bro
 
-
 ---
 
 ## Re: VWAP_Oscillator_normilized
@@ -254,7 +239,6 @@ GOOd morning Mr Mario apprentice
  Can you check please the indicator it’s freez my platform
 Thank you so much
 
-
 ---
 
 ## Re: VWAP_Oscillator_normilized
@@ -263,7 +247,6 @@ Thank you so much
 
 I did try the indicator in other platform it’s freez when I put XAUAUD its freez the platform
 
-
 ---
 
 ## Re: VWAP_Oscillator_normilized
@@ -271,7 +254,6 @@ I did try the indicator in other platform it’s freez when I put XAUAUD its fre
 **Apprentice** · Wed Jun 17, 2020 3:30 pm
 
 Try to use lower bars_limit.
-
 
 ---
 
@@ -283,7 +265,6 @@ I did use lower bar limit still freez when I put other symbols
 Can you please don’t change nothing from the original vwap oscillator normalized and add just option other symbols and time frame please
 Thank you so much
 
-
 ---
 
 ## Re: VWAP_Oscillator_normilized
@@ -292,7 +273,6 @@ Thank you so much
 
 Your request is added to the development list.
 Development reference 1512.
-
 
 ---
 
@@ -304,7 +284,6 @@ Development reference 1512.
 
 Try this version.
 
-
 ---
 
 ## Re: VWAP_Oscillator_normilized
@@ -314,7 +293,6 @@ Try this version.
 Thank you so much Mr Mario apprentice
 Thank you for the great work
 God bless you
-
 
 ---
 
@@ -335,7 +313,6 @@ God bless you
 hi can you make this indicator vwap normalized base Time Segmented Volume
 
 thank you
-
 
 ---
 

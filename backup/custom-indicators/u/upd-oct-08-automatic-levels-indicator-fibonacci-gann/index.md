@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=659  
 > Forum: 17 · Topic 659 · 53 post(s)
 
-
 ---
 
 ## [Upd Oct, 08] Automatic Levels Indicator (Fibonacci, Gann)
@@ -17,8 +16,6 @@ You can select either fibonacci or gann levels and how much lines to show (varia
  
 
 ![AUTOLEV1.png](images/1188/AUTOLEV1.png)
-
-
 
 Update Oct, 08 2010
 1) New lines set 3 lines (alt) is added. 0/50%/100% levels are used.
@@ -42,7 +39,6 @@ Have Historical option.
 
  [AUTOLEV3.lua](files/1188/AUTOLEV3.lua)
 
-
 ---
 
 ## Re: Automatic Levels Indicator (Fibonacci, Gann)
@@ -55,7 +51,6 @@ is it posible to get fib levels -27 and - 68
 best regards
 bent
 
-
 ---
 
 ## Re: Automatic Levels Indicator (Fibonacci, Gann)
@@ -66,8 +61,8 @@ I'm afraid that complex settings of the indicators will dramatically reduce the 
 
 It is very easy to change the indicator to support these levels as you wish. Below is a part of the indicator which is responsible for the levels. I also added a lot of comment which explain how you can change them. Just find this code in the indicator and make any changes.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function CalcLevels()
+```
+function CalcLevels()
     levels = {};
     index = {};
     if M == "F" then
@@ -105,8 +100,8 @@ Code: [Select all](https://fxcodebase.com/code/)
         index["7"] = {1, 3, 4, 5, 6, 7, 9};
         index["9"] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
     end
-end`
-
+end
+```
 
 ---
 
@@ -118,7 +113,6 @@ Hello,
 
 Is there any way to get this to lock in to a specific time frame instead of it refreshing when new candles open? I would like to have it for 1:00 AM - 4:00 AM EST each day. Thank you.
 
-
 ---
 
 ## Re: Automatic Levels Indicator (Fibonacci, Gann)
@@ -126,7 +120,6 @@ Is there any way to get this to lock in to a specific time frame instead of it r
 **Nikolay.Gekht** · Tue Jul 27, 2010 10:09 am
 
 Yes, it's possible. Added to the development queue.
-
 
 ---
 
@@ -139,7 +132,6 @@ Hi Nikolay,
 Thank you for your great indi, Can you help me to make this indi has a option to display only the High-level (100%), Low (0%) and Middle (50%) as well?
 
 Thank you in advance.
-
 
 ---
 
@@ -156,7 +148,6 @@ Update Oct, 08 2010
 
 See AUTOLEV2.lua in [the first post](https://fxcodebase.com/code/viewtopic.php?f=17&t=659).
 
-
 ---
 
 ## Re: [Upd Oct, 08] Automatic Levels Indicator (Fibonacci, Gann)
@@ -166,7 +157,6 @@ See AUTOLEV2.lua in [the first post](https://fxcodebase.com/code/viewtopic.php?f
 wow, very fast yah...
 
 Thank you Nikolay, great indi and very usefull!
-
 
 ---
 
@@ -189,7 +179,6 @@ this is one of the greatest works mankind has ever made .I have a very very simp
 can you make this a strategy that goes short at 0.382 and long on 0.618 please
 thanks
 by arindam roy
-
 
 ---
 
@@ -230,7 +219,6 @@ india
 9830538277
 [[email protected]](https://fxcodebase.com/cdn-cgi/l/email-protection#81e0f3e8efe5e0ecb9b8c1f8e0e9eeeeafe2eeec)
 
-
 ---
 
 ## Re: [Upd Oct, 08] Automatic Levels Indicator (Fibonacci, Gann)
@@ -245,7 +233,6 @@ To include the other side, can you ad an option to flip the A and B? This way we
 
 Thanks.
 
-
 ---
 
 ## Re: [Upd Oct, 08] Automatic Levels Indicator (Fibonacci, Gan
@@ -255,7 +242,6 @@ Thanks.
 Hello Nikolay,
 I have been using the Strategy Wizard to create strategies. I found this indicator and would like to add it to one of my strategies where buy and sell signals only happen when price occurs between the .382 and .618 lines; however, when I get to expressions and choose this indicator there are no options available under output stream. Is it possible to put the list of fibonacci levels in the output stream so and expression can be created such as "data source < .618 .and. data source > .382"
 Thank You
-
 
 ---
 
@@ -267,7 +253,6 @@ Current Indicator version will NOT provide output values.
 Two directions are possible.
 Calculation within strategy, or, and, indicator redesign.
 
-
 ---
 
 ## Re: [Upd Oct, 08] Automatic Levels Indicator (Fibonacci, Gan
@@ -275,7 +260,6 @@ Calculation within strategy, or, and, indicator redesign.
 **ThemBonez** · Sat Aug 23, 2014 4:59 pm
 
 Thank you Apprentice, I would like to request that indicator so that the output streams are available and to add options for .768, 1.618, and 1.272
-
 
 ---
 
@@ -287,7 +271,6 @@ Please Re-Download AUTOLEV2.lua
 I introduced the Custom method.
 For which you can choose any level.
 
-
 ---
 
 ## Re: [Upd Oct, 08] Automatic Levels Indicator (Fibonacci, Gan
@@ -296,7 +279,6 @@ For which you can choose any level.
 
 That's the one I have, but it doesn't have the output streams....that'swhat I really need. So in the strategy I can access the values of the different levels.
 
-
 ---
 
 ## Re: [Upd Oct, 08] Automatic Levels Indicator (Fibonacci, Gan
@@ -304,7 +286,6 @@ That's the one I have, but it doesn't have the output streams....that'swhat I re
 **Apprentice** · Mon Aug 25, 2014 2:16 am
 
 The best way is to re-calculate this value from within strategy.
-
 
 ---
 
@@ -315,7 +296,6 @@ The best way is to re-calculate this value from within strategy.
 What algorithm is used in this indicator do determine the high and low levels to base these fib calcs on?
 Thx
 
-
 ---
 
 ## Re: [Upd Oct, 08] Automatic Levels Indicator (Fibonacci, Gan
@@ -325,7 +305,6 @@ Thx
 In this indicator we use min/max value of last N periods.
 Number of periods to find H/L in parameter section.
 
-
 ---
 
 ## Re: [Upd Oct, 08] Automatic Levels Indicator (Fibonacci, Gan
@@ -333,7 +312,6 @@ Number of periods to find H/L in parameter section.
 **ThemBonez** · Tue Aug 26, 2014 8:17 am
 
 Is it possible to use this in the Strategy Wizard? How would I do so?
-
 
 ---
 
@@ -343,7 +321,6 @@ Is it possible to use this in the Strategy Wizard? How would I do so?
 
 We need to hard code this.
 Can you describe your strategy.
-
 
 ---
 
@@ -371,7 +348,6 @@ ThemBonez
 
  [StochRSI FIB.lua](files/95628/StochRSI%20FIB.lua)
 
-
 ---
 
 ## Re: [Upd Oct, 08] Automatic Levels Indicator (Fibonacci, Gan
@@ -379,7 +355,6 @@ ThemBonez
 **angelalzate** · Mon Mar 09, 2015 4:54 pm
 
 Good afternoon , hope is well . Thanks for this indicator is great. I wonder if you can make a fibo with standard levels but these, we can change to text, ie where you go write some text 61.8 . Levels also can change their color. Thanks and happy evening
-
 
 ---
 
@@ -389,7 +364,6 @@ Good afternoon , hope is well . Thanks for this indicator is great. I wonder if 
 
 Your request is added to the development list.
 
-
 ---
 
 ## Re: [Upd Oct, 08] Automatic Levels Indicator (Fibonacci, Gan
@@ -398,7 +372,6 @@ Your request is added to the development list.
 
 Hello Apprentice,
 Please can you send me the link to the current updated Automatic Fibonacci levels? thanks
-
 
 ---
 
@@ -410,7 +383,6 @@ would appreciate this also THANX
 
 Please can you send me the link to the current updated Automatic Fibonacci levels?
 
-
 ---
 
 ## Re: [Upd Oct, 08] Automatic Levels Indicator (Fibonacci, Gan
@@ -420,7 +392,6 @@ Please can you send me the link to the current updated Automatic Fibonacci level
 This indicator is extremely good and very much fit to my needs. Thanks for this. Could you please include an option to flip the measurement? means instead of measuring high to low indicator calculate values from low to high. Your efforts will be appreciated.
 Vik
 
-
 ---
 
 ## Re: [Upd Oct, 08] Automatic Levels Indicator (Fibonacci, Gan
@@ -428,7 +399,6 @@ Vik
 **Apprentice** · Sun Aug 16, 2015 4:03 am
 
 ![Capture.PNG](images/101791/Capture.PNG)
-
 
 ---
 
@@ -438,7 +408,6 @@ Vik
 
 Hi there, can this indicator be turned into a strategy where it will open a trade if proce retrace to a user-define level, example if I set the trade level at 50% a position will be open when price retrace to that level and posible to have stop set to 1.05%
 
-
 ---
 
 ## Re: [Upd Oct, 08] Automatic Levels Indicator (Fibonacci, Gan
@@ -446,7 +415,6 @@ Hi there, can this indicator be turned into a strategy where it will open a trad
 **Apprentice** · Mon Nov 09, 2015 4:14 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -458,7 +426,6 @@ Your request is added to the development list.
 > Your request is added to the development list.
 
 Thanks
-
 
 ---
 
@@ -516,7 +483,6 @@ Is there a way toturn this into a strategy where it would open a position on ret
 >     end
 > end`
 
-
 ---
 
 ## Re: [Upd Oct, 08] Automatic Levels Indicator (Fibonacci, Gan
@@ -524,7 +490,6 @@ Is there a way toturn this into a strategy where it would open a position on ret
 **Apprentice** · Thu Dec 10, 2015 6:18 am
 
 Sure.
-
 
 ---
 
@@ -537,7 +502,6 @@ Sure.
 
 Hi there, can you cancel my request to turn this into a strategy, I've just found the highly adaptable pivot strategy which should do what I want it to do (hopefully)
 
-
 ---
 
 ## Re: [Upd Oct, 08] Automatic Levels Indicator (Fibonacci, Gan
@@ -545,7 +509,6 @@ Hi there, can you cancel my request to turn this into a strategy, I've just foun
 **Cactus** · Sat Aug 06, 2016 10:03 am
 
 May you add a version of this where it gives output streams for the levels? For use with strategies. So that each periods has "0.382","0.618" etc levels with a price next to it after clicking the chart.
-
 
 ---
 
@@ -555,7 +518,6 @@ May you add a version of this where it gives output streams for the levels? For 
 
 Your request is added to the development list, Under Id Number 3587
  If someone is interested to do this or any task other from list please contact me.
-
 
 ---
 
@@ -571,7 +533,6 @@ could you include a transparency feature - would like to push indicator into the
 
 thanks
 
-
 ---
 
 ## Re: [Upd Oct, 08] Automatic Levels Indicator (Fibonacci, Gan
@@ -583,7 +544,6 @@ thanks
 
 Bump
 
-
 ---
 
 ## Re: [Upd Oct, 08] Automatic Levels Indicator (Fibonacci, Gan
@@ -591,7 +551,6 @@ Bump
 **Cactus** · Thu May 18, 2017 9:29 am
 
 Ok forget the output streams. Can you make a "period" parameter similar to what is in "ZigZag with output" indicator, which would shift the fibonacci retracement x periods back? So that we can see historical levels too?
-
 
 ---
 
@@ -601,7 +560,6 @@ Ok forget the output streams. Can you make a "period" parameter similar to what 
 
 AUTOLEV3.lua added
 As it is all versions have last candle as reference.
-
 
 ---
 
@@ -618,7 +576,6 @@ And what is the difference between AUTOLEV2 and AUTOLEV3 then? I see they both h
 
 And could you make a modification to AUTOLEV3, to make the lines extend infinitely, at the moment it is capped at "100 bars maximum".
 
-
 ---
 
 ## Re: [Upd Oct, 08] Automatic Levels Indicator (Fibonacci, Gan
@@ -633,7 +590,6 @@ Where 100000000 was 100 before.
 
 However, I notice an issue with the lines, they disappear... Just try moving the chart (scroll or zoom) and you can see they are "flickering". Is there a way to make sure the lines do not behave as such and stay drawn at all times... The extending bit is disappearing as you drag the chart.
 
-
 ---
 
 ## Re: [Upd Oct, 08] Automatic Levels Indicator (Fibonacci, Gan
@@ -644,7 +600,6 @@ Sorry for the double posts, perhaps I jump into conclusions too hasty. I think t
 
 One other thing I noticed is that the "lookback" might not work correctly, sometimes when the specified lookback is too big there are 0 lines drawn... and sometimes there isn't the same number of swings as the lookback (for example I set lookback to 20 but could only see 3 retracements (red dashed lines) on 1m chart where it should be 20?) closing the chart and re-applying indicator helps with this.
 
-
 ---
 
 ## Re: [Upd Oct, 08] Automatic Levels Indicator (Fibonacci, Gan
@@ -652,7 +607,6 @@ One other thing I noticed is that the "lookback" might not work correctly, somet
 **Cactus** · Sat May 20, 2017 11:46 am
 
 Ok one last time, I did not intend to spam this much, just have no way of edit the posts as they need to be approved. I believe there is nothing wrong with the lookback not working correctly, I think it comes down to not enough candles being available. If you choose a big lookback number, make sure to zoom out the chart as much as possible and then the lines should appear. Then you can zoom back in...
-
 
 ---
 
@@ -663,7 +617,6 @@ Ok one last time, I did not intend to spam this much, just have no way of edit t
 Try version 2 now.
 Have update the wrong version.
 
-
 ---
 
 ## Re: [Upd Oct, 08] Automatic Levels Indicator (Fibonacci, Gan
@@ -671,7 +624,6 @@ Have update the wrong version.
 **douvanik** · Fri Aug 11, 2017 4:06 am
 
 Can you extend the lines to the vertical line from right to left like the photo? It's about AUTOLEV3.Thanks.
-
 
 ---
 
@@ -681,7 +633,6 @@ Can you extend the lines to the vertical line from right to left like the photo?
 
 Can you make also AUTOLEV3 N bars back stable? Don't move forward the base of fibo when a new candle prints.Thanks.
 
-
 ---
 
 ## Re: [Upd Oct, 08] Automatic Levels Indicator (Fibonacci, Gan
@@ -690,11 +641,8 @@ Can you make also AUTOLEV3 N bars back stable? Don't move forward the base of fi
 
 ![AUTOLEV3.jpg](images/114125/AUTOLEV3.jpg)
 
-
-
 Your request is added to the development list, Under Id Number 3844
  If someone is interested to do this task, please contact me.
-
 
 ---
 
@@ -706,7 +654,6 @@ Please, try this indicator:
 
  [AUTOLEV3_2.lua](files/115373/AUTOLEV3_2.lua)
 
-
 ---
 
 ## Re: [Upd Oct, 08] Automatic Levels Indicator (Fibonacci, Gan
@@ -714,7 +661,6 @@ Please, try this indicator:
 **Apprentice** · Sun Oct 21, 2018 5:13 am
 
 The Indicator was revised and updated.
-
 
 ---
 
@@ -729,7 +675,6 @@ No action/ sell/ buy/ close / alert
 
 Thank you
 
-
 ---
 
 ## Re: [Upd Oct, 08] Automatic Levels Indicator (Fibonacci, Gan
@@ -737,7 +682,6 @@ Thank you
 **Apprentice** · Sun Apr 14, 2019 6:06 am
 
 Your request is added to the development list under Id Number 4593
-
 
 ---
 

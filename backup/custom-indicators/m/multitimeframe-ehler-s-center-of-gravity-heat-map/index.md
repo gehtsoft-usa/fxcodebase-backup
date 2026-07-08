@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=1617  
 > Forum: 17 · Topic 1617 · 13 post(s)
 
-
 ---
 
 ## Multitimeframe Ehler's Center of Gravity heat map.
@@ -11,8 +10,6 @@
 **Alexander.Gettinger** · Fri Jul 30, 2010 2:31 am
 
 ![EURUSD H1 (01-27-2017 0954).png](images/3201/EURUSD%20H1%20%2801-27-2017%200954%29.png)
-
-
 
  [Ehlers_CG_Heat_Map.lua](files/3201/Ehlers_CG_Heat_Map.lua)
 
@@ -22,7 +19,6 @@ Ehlers_CG.lua is available here.
 MT4/MQ4 version.
 [viewtopic.php?f=38&t=64099](https://fxcodebase.com/code/viewtopic.php?f=38&t=64099)
 
-
 ---
 
 ## Re: Multitimeframe Ehler's Center of Gravity heat map.
@@ -30,7 +26,6 @@ MT4/MQ4 version.
 **zekelogan** · Fri Jul 30, 2010 8:56 am
 
 So very cool Thanks much.
-
 
 ---
 
@@ -40,7 +35,6 @@ So very cool Thanks much.
 
 Not to be too picky , but is it possible to be able to toggle the labels on/off ?
 
-
 ---
 
 ## Re: Multitimeframe Ehler's Center of Gravity heat map.
@@ -48,7 +42,6 @@ Not to be too picky , but is it possible to be able to toggle the labels on/off 
 **Alexander.Gettinger** · Mon Aug 02, 2010 1:52 am
 
 You want on/off top or right labels?
-
 
 ---
 
@@ -58,7 +51,6 @@ You want on/off top or right labels?
 
 Right labels. They cover the most recent 'print.'
 
-
 ---
 
 ## Re: Multitimeframe Ehler's Center of Gravity heat map.
@@ -67,7 +59,6 @@ Right labels. They cover the most recent 'print.'
 
 Thx Alexander!
 
-
 ---
 
 ## Re: Multitimeframe Ehler's Center of Gravity heat map.
@@ -75,7 +66,6 @@ Thx Alexander!
 **one2share** · Tue Aug 17, 2010 5:24 pm
 
 hey guys, i'm trying download, and I did however it tell me the request indicator is not found....so it does not display anything...can you guys help?
-
 
 ---
 
@@ -86,8 +76,8 @@ hey guys, i'm trying download, and I did however it tell me the request indicato
 Sorry.
 For work this indicator must be installed Ehlers_CG.lua ([viewtopic.php?f=17&t=1262&p=2398&hilit=ehler#p2398](http://www.fxcodebase.com/code/viewtopic.php?f=17&t=1262&p=2398&hilit=ehler#p2398)).
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Ehlers CG Oscillator");
     indicator:description("Ehlers CG Oscillator");
     indicator:requiredSource(core.Bar);
@@ -134,8 +124,8 @@ function Update(period, mode)
      end
      Buff2[period]=Buff1[period-1];
     end
-end`
-
+end
+```
 
 ---
 
@@ -145,7 +135,6 @@ end`
 
 thanks it is working now....I do have a signal request...I use this along with the MTF moving average indicator....it is possible to have a signal alert me when both the mtf moving averages indicator and mtf ehler center of gravity heat map are the same color? for example when all are red it indicates a time to sell and green for buy. I still like the option of time frames you have but a signal would be nice, is this possible? i'm thinking adding sound option would be nice
 
-
 ---
 
 ## Re: Multitimeframe Ehler's Center of Gravity heat map.
@@ -154,7 +143,6 @@ thanks it is working now....I do have a signal request...I use this along with t
 
 does any one know when my requested signal will be ready?
 
-
 ---
 
 ## Re: Multitimeframe Ehler's Center of Gravity heat map.
@@ -162,7 +150,6 @@ does any one know when my requested signal will be ready?
 **one2share** · Fri Sep 17, 2010 5:10 pm
 
 Can someone please, please, please, help me with this signal..
-
 
 ---
 
@@ -174,7 +161,6 @@ Sabrina
 Finally, after a long wait, your signal is finished.
 Was written after the close on Friday, so I have not tested it.
 [viewtopic.php?f=31&t=2420&p=5253#p5253](https://fxcodebase.com/code/viewtopic.php?f=31&t=2420&p=5253#p5253)
-
 
 ---
 

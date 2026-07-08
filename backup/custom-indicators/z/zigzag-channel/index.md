@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=60727  
 > Forum: 17 · Topic 60727 · 109 post(s)
 
-
 ---
 
 ## ZigZag Channel
@@ -12,14 +11,11 @@
 
 ![ZigZag Channel.png](images/94145/ZigZag%20Channel.png)
 
-
-
  [ZigZag Channel.lua](files/94145/ZigZag%20Channel.lua)
 
  [ZigZag Channel with Output.lua](files/94145/ZigZag%20Channel%20with%20Output.lua)
 
  [Tick ZigZag Channel with Output.lua](files/94145/Tick%20ZigZag%20Channel%20with%20Output.lua)
-
 
 ---
 
@@ -30,7 +26,6 @@
 Great find. Can you please check why lines disappear sometimes when moving the chart around with many instances of the same indicator applied?
 When zooming in/out or scrolling back, the lines simply disappear, until I go into indicator settings and click apply/ok again.
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -39,7 +34,6 @@ When zooming in/out or scrolling back, the lines simply disappear, until I go in
 
 Objects are drawn via Draw() function.
 I believe this is the reason.
-
 
 ---
 
@@ -53,7 +47,6 @@ I believe this is the reason.
 
 I see. In this case, what is the solution? Is it possible to make this behavior go away? Can you re-write this indicator using same principle as "trend line helper" or something? Can this draw() function be fixed? This would make for a very good channel indicator if lines would not disappear
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -62,7 +55,6 @@ I see. In this case, what is the solution? Is it possible to make this behavior 
 
 We can rewrite, use ouput core.drawLine and two output streams,
 or core.host:execute ("drawLine"...
-
 
 ---
 
@@ -76,7 +68,6 @@ or core.host:execute ("drawLine"...
 
 That's great, can you please provide this indicator with two output streams for the lines as you mention?
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -84,7 +75,6 @@ That's great, can you please provide this indicator with two output streams for 
 **Apprentice** · Sat Feb 25, 2017 4:17 pm
 
 ZigZag Channel with Output added.
-
 
 ---
 
@@ -107,7 +97,6 @@ I am guessing it is to do with no candle history being available in backtester t
 
 Thank you
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -115,7 +104,6 @@ Thank you
 **Apprentice** · Sun Feb 26, 2017 4:58 am
 
 I can not help you without access to underlying strategy.
-
 
 ---
 
@@ -147,7 +135,6 @@ This strategy uses 3 timeframes: tick, m1, m15
 
 Thanks
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -156,7 +143,6 @@ Thanks
 
 Should I create a new thread to seek help getting this strategy fixed to work in backtester with this indicator or is leaving the post here just fine
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -164,7 +150,6 @@ Should I create a new thread to seek help getting this strategy fixed to work in
 **Cactus** · Mon Feb 27, 2017 3:02 pm
 
 Ok I see the "out" / "up" stream is for color, width and style.
-
 
 ---
 
@@ -175,7 +160,6 @@ Ok I see the "out" / "up" stream is for color, width and style.
 I do not use FX Wizard,
 If you write strategy rules, I can write strategy for you.
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -183,7 +167,6 @@ If you write strategy rules, I can write strategy for you.
 **Cactus** · Thu Mar 16, 2017 8:12 pm
 
 Can you also provide a version of ZigZag with Output, with tick as source, so it can be used on tick charts and indicators
-
 
 ---
 
@@ -193,19 +176,18 @@ Can you also provide a version of ZigZag with Output, with tick as source, so it
 
 Tick ZigZag Channel with Output.lua added.
 
-
 ---
 
 ## Re: ZigZag Channel
 
 **Cactus** · Fri Apr 14, 2017 11:30 am
 
-Code: [Select all](https://fxcodebase.com/code/)
-`Symbol   Strategy/Indicator   Message   Time
-EUR/GBP   ZIGZAG CHANNEL WITH OUTPUT(midprice, 45, 1, 1, 44)   An error occurred during the calculation of the indicator 'ZIGZAG CHANNEL WITH OUTPUT(midprice, 45, 1, 1, 44)'. The error details: C:/Program Files (x86)/Candleworks/FXTS2/Indicators/Custom/ZigZag Channel with Output.lua:409:  The first parameter must be a number.   14/04/2017 20:33:31`
+```
+Symbol   Strategy/Indicator   Message   Time
+EUR/GBP   ZIGZAG CHANNEL WITH OUTPUT(midprice, 45, 1, 1, 44)   An error occurred during the calculation of the indicator 'ZIGZAG CHANNEL WITH OUTPUT(midprice, 45, 1, 1, 44)'. The error details: C:/Program Files (x86)/Candleworks/FXTS2/Indicators/Custom/ZigZag Channel with Output.lua:409:  The first parameter must be a number.   14/04/2017 20:33:31
+```
 
 Do you know how to fix this error? I think this happens when there's not enough candles loaded on the chart
-
 
 ---
 
@@ -214,7 +196,6 @@ Do you know how to fix this error? I think this happens when there's not enough 
 **Apprentice** · Sat Apr 15, 2017 1:39 pm
 
 Try it now.
-
 
 ---
 
@@ -227,7 +208,6 @@ Try it now.
 
 Perfect, the error does not happen anymore, at least on the charts, yet to try it in a strategy, and ZigZag channel with output updates itself as more data is beeing seen on the chart (when I scroll back), thank you, this will help me a lot.
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -238,7 +218,6 @@ hi apprendice,
 
 can you add show/hide option for zig zag in this indicator
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -248,7 +227,6 @@ can you add show/hide option for zig zag in this indicator
 I can add it.
 If you re-download, you can already set a line style option to "no line".
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -256,7 +234,6 @@ If you re-download, you can already set a line style option to "no line".
 **Cactus** · Sat May 27, 2017 5:55 am
 
 Can you add a version of the "ZigZag Channel with Output" with a see historical option. The same as it is in "AUTOLEV3" indicator (The Lookback) paramter. So that we can draw many zigzag channels without applying the same indicator many times which slows down marketscope when there's a lot. Currently one zigzag indicator instance = 2 trendlines, but can you add a parameter to see historical also where it is possible to have many trendlines with just one indicator instance applied on chart? Thank you
-
 
 ---
 
@@ -266,7 +243,6 @@ Can you add a version of the "ZigZag Channel with Output" with a see historical 
 
 Your request is added to the development list, Under Id Number 3801
  If someone is interested to do this task, please contact me.
-
 
 ---
 
@@ -280,7 +256,6 @@ Your request is added to the development list, Under Id Number 3801
 Please, try this version of indicator:
 
  [ZigZag Channel with Output_Mult.lua](files/115057/ZigZag%20Channel%20with%20Output_Mult.lua)
-
 
 ---
 
@@ -313,7 +288,6 @@ Also if you got the time, can a Tick ZigZag Channel with Output.lua with same mu
 
 Thanks in advance
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -323,7 +297,6 @@ Thanks in advance
 core.host:execute ("drawLine" product is line as on screen graphic presentation.
 NOT as indicator output, which can be referenced.
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -331,7 +304,6 @@ NOT as indicator output, which can be referenced.
 **Apprentice** · Mon May 07, 2018 12:43 pm
 
 The Indicator was revised and updated.
-
 
 ---
 
@@ -366,7 +338,6 @@ Have been using "Up swing" Line cross on a scalping strategy - works well
 
 Thanks
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -375,7 +346,6 @@ Thanks
 
 Your request is added to the development list.
 Development reference 548.
-
 
 ---
 
@@ -387,7 +357,6 @@ Development reference 548.
 
 Try this version.
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -398,7 +367,6 @@ Tick_ZigZag_Channel_with_Output.lua
 
 loaded, but an output display error occurred
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -406,7 +374,6 @@ loaded, but an output display error occurred
 **Apprentice** · Thu Jan 16, 2020 11:34 am
 
 Can you provide error text?
-
 
 ---
 
@@ -426,7 +393,6 @@ both Bid and Ask line features appear to function correctly
 
 a quick video illustration [https://youtu.be/96Qnt_Hn1Fo](https://youtu.be/96Qnt_Hn1Fo)
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -435,7 +401,6 @@ a quick video illustration [https://youtu.be/96Qnt_Hn1Fo](https://youtu.be/96Qnt
 
 Your request is added to the development list.
 Development reference 555.
-
 
 ---
 
@@ -446,7 +411,6 @@ Development reference 555.
 [Tick_ZigZag_Channel_with_Output.lua](files/130821/Tick_ZigZag_Channel_with_Output.lua)
 
 Try this version.
-
 
 ---
 
@@ -465,7 +429,6 @@ I need to better document - will post as soon as possible
 just wanted to give you a heads-up on my progress - and this reply doesn't need to be posted
 
 thanks
-
 
 ---
 
@@ -493,7 +456,6 @@ getting "Tick ZigZag Channel with Output.lua" to work is a more important fix
 
 many Thx
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -513,7 +475,6 @@ Thankyou in advance Susan
 
 ![zigzag channel.jpeg](images/130967/zigzag%20channel.jpeg)
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -522,7 +483,6 @@ Thankyou in advance Susan
 
 Your request is added to the development list.
 Development reference 608.
-
 
 ---
 
@@ -534,7 +494,6 @@ Development reference 608.
 
 Tyr this version.
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -545,7 +504,6 @@ susan61
 I have a hard time understanding your request.
 Can you provide a bit more structured, a more detailed description?
 Maybe provide some sort of drawing.
-
 
 ---
 
@@ -569,12 +527,9 @@ Current price on that timeframe would need to close against zigzag channel the h
 
 ![Susan ZZ channel 2.jpeg](images/131068/Susan%20ZZ%20channel%202.jpeg)
 
-
-
 Hope this helps you understand with more details to the screen shot
 thanks in advance
 Susan
-
 
 ---
 
@@ -585,7 +540,6 @@ Susan
 Your request is added to the development list.
 Development reference 637.
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -595,7 +549,6 @@ Development reference 637.
 I didn't manage to figure out what "Add pip swing count and high/low and mid of current swing." means.
 
  [ZigZag Channel with Output_Mult.lua](files/131107/ZigZag%20Channel%20with%20Output_Mult.lua)
-
 
 ---
 
@@ -611,7 +564,6 @@ Susan
  
 
 ![ZZ Channel and Historicals.jpeg](images/131112/ZZ%20Channel%20and%20Historicals.jpeg)
-
 
 ---
 
@@ -643,7 +595,6 @@ Alert function not working correctly
 
 Many Thx
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -652,7 +603,6 @@ Many Thx
 
 Your request is added to the development list.
 Development reference 691.
-
 
 ---
 
@@ -663,7 +613,6 @@ Development reference 691.
 [ZigZag Channel with Output_Mult.lua](files/131166/ZigZag%20Channel%20with%20Output_Mult.lua)
 
  [Tick ZigZag Channel with Output.lua](files/131166/Tick%20ZigZag%20Channel%20with%20Output.lua)
-
 
 ---
 
@@ -681,7 +630,6 @@ To have option to show all or last x = amount of long-term trend to show. The ho
 I put the lookback to 1000 and still only printed the last 2, No historical either can you also add colour and line option for long term & historical trend up & down ,If you can also put back the original indicator that shows the last 2 swings as my request was to be added to the ZZ Channel. The current swing created for high /low and mid, what I should have explained the previous swing completed for the high/low and mid and the amount of pips from the high/low or low/ high. And there’s a number on the top don’t know what that is
 thanks for your work on this topic
 Susan
-
 
 ---
 
@@ -701,7 +649,6 @@ this could be a very good indicator - to a composite Strategy
 
 Thx
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -718,7 +665,6 @@ could you error trap - allowing only forward progress of Line(s)
 
 Thx
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -728,7 +674,6 @@ Thx
 [ZigZag Channel with Output_Mult.lua](files/131194/ZigZag%20Channel%20with%20Output_Mult.lua)
 
 Try this version.
-
 
 ---
 
@@ -752,7 +697,6 @@ Susan
 
 ![ZZ Channel 10.2.20.jpeg](images/131200/ZZ%20Channel%2010.2.20.jpeg)
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -762,7 +706,6 @@ Susan
 Your request is added to the development list.
 Development reference 708.
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -770,7 +713,6 @@ Development reference 708.
 **Apprentice** · Tue Feb 11, 2020 6:58 am
 
 I can't repeat that.
-
 
 ---
 
@@ -792,7 +734,6 @@ I appreciate your efforts
 
 Thanks
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -802,7 +743,6 @@ Thanks
 [ZigZag Channel with Output_Mult.lua](files/131245/ZigZag%20Channel%20with%20Output_Mult.lua)
 
 Try this version.
-
 
 ---
 
@@ -819,7 +759,6 @@ Noticed that the data points are taken from are the wrong way round,also need to
 Thanks
 Susan
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -829,7 +768,6 @@ Susan
 [ZigZag Channel with Output_Mult.lua](files/131281/ZigZag%20Channel%20with%20Output_Mult.lua)
 
 Try this version.
-
 
 ---
 
@@ -844,11 +782,8 @@ You have done a perfect job with the bid and ask data point and pip count and th
 
 ![Add original.jpeg](images/131283/Add%20original.jpeg)
 
-
-
 Thank you so much for taking time to do all the adjustments i think this will be the last adjustments
 Susan
-
 
 ---
 
@@ -858,7 +793,6 @@ Susan
 
 Your request is added to the development list.
 Development reference 727.
-
 
 ---
 
@@ -872,7 +806,6 @@ Try this version.
 
 NOTE: it's better to use 3 indicators instead of coding 3 timeframes into the same indicator.
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -885,7 +818,6 @@ Hi Apprentice,
 Have tried putting x3 indicators using different time frames on but seems to slow the platform down when switching to different currency pairs. And the able/disable of the pullback didn’t make a difference, still didn’t print the last 2 high points or last 2 low point zigzag channel as per previous screen shot. Can you add the original version and its calculations for this part of the indicator note no pull back required on this part of the indicator only pullback % only required on the long term trend and historical trends
 Thanks Susan
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -894,7 +826,6 @@ Thanks Susan
 
 Your request is added to the development list.
 Development reference 736.
-
 
 ---
 
@@ -914,7 +845,6 @@ Close position at the middle of the upper and lower swing line
 
 Thank you,
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -924,7 +854,6 @@ Thank you,
 Your request is added to the development list.
 Development reference 749.
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -932,7 +861,6 @@ Development reference 749.
 **Apprentice** · Wed Feb 19, 2020 2:21 pm
 
 When you set "Use poolback" to false the old version of the code is used. Coding 3 timeframes into one indicator will not be any faster. It's likely that it'll be even slower. And I don't understand 2high/low part
-
 
 ---
 
@@ -945,7 +873,6 @@ When disable the pullback it disables on the long term and historical long term 
 Thanks so much
 Susan
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -953,7 +880,6 @@ Susan
 **Apprentice** · Fri Feb 21, 2020 6:09 am
 
 [ZigZag Channel with Output_Mult.lua](files/131404/ZigZag%20Channel%20with%20Output_Mult.lua)
-
 
 ---
 
@@ -966,7 +892,6 @@ Task 749
  [ZigZag Channel with Output_Mult With Arrows.lua](files/131406/ZigZag%20Channel%20with%20Output_Mult%20With%20Arrows.lua)
 
  [ZigZag Channel with Output_Mult Strategy.lua](files/131406/ZigZag%20Channel%20with%20Output_Mult%20Strategy.lua)
-
 
 ---
 
@@ -983,7 +908,6 @@ Hi Apprentice,
 Pip swing count great work, if you can add x3 percentage extensions levels above the high (colour option or default to red), and below the low (colour option or default to blue) from the last zigzag completed swing where we have the high low and mid-point, where the pip count is taken from. Still cannot manage to get the last to swing when I overlay the original version.
 Thanks Susan
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -993,7 +917,6 @@ Thanks Susan
 Your request is added to the development list.
 Development reference 764.
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -1001,7 +924,6 @@ Development reference 764.
 **Apprentice** · Mon Feb 24, 2020 4:02 am
 
 I don't understand the logic required. The screenshot will help.
-
 
 ---
 
@@ -1019,7 +941,6 @@ Susan
 
 ![% extentions.jpeg](images/131460/extentions.jpeg)
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -1029,7 +950,6 @@ Susan
 [ZigZag Channel with Output_Mult.lua](files/131474/ZigZag%20Channel%20with%20Output_Mult.lua)
 
 Try this version.
-
 
 ---
 
@@ -1041,7 +961,6 @@ Hi Apprentice,
 Great work on the line & colour option. With the % extension we need x3 % extensions levels for above the high of the last completed swing eg; 1.272% and 1.50% 1.618% and x3 % extensions levels for below the low of last completed swing -1.272% and -1.50% and -1.618%. As in previous screenshot as when tested this version it put both % extensions at bottom of swing and I used the + & - on the % extensions.
 If you make these adjustments
 Thanks Susan
-
 
 ---
 
@@ -1065,7 +984,6 @@ if you could take a look, and if possible fix - would make the indicator even be
 
 thanks
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -1079,7 +997,6 @@ If you make these adjustments
 never got a development referrence number if you can add the % extension levels and below
 thanks Susan
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -1088,7 +1005,6 @@ thanks Susan
 
 Your request is added to the development list.
 Development reference 816.
-
 
 ---
 
@@ -1099,7 +1015,6 @@ Development reference 816.
 [ZigZag Channel with Output_Mult.lua](files/131701/ZigZag%20Channel%20with%20Output_Mult.lua)
 
 Something like this?
-
 
 ---
 
@@ -1117,7 +1032,6 @@ again, I appreciate your efforts
 
 Thx
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -1129,7 +1043,6 @@ the percentage extensions are there in the parameters setting but not for above 
 Hope u can fix this
 Susan
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -1138,7 +1051,6 @@ Susan
 
 Your request is added to the development list.
 Development reference 823.
-
 
 ---
 
@@ -1149,7 +1061,6 @@ Development reference 823.
 [ZigZag Channel with Output_Mult.lua](files/131725/ZigZag%20Channel%20with%20Output_Mult.lua)
 
 Try this version.
-
 
 ---
 
@@ -1162,7 +1073,6 @@ The extension levels are there. When I put my levels in they have no relevance t
 Thanks in advance
  Susan
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -1171,7 +1081,6 @@ Thanks in advance
 
 Your request is added to the development list.
 Development reference 832.
-
 
 ---
 
@@ -1183,7 +1092,6 @@ Development reference 832.
 
 Try this version.
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -1193,7 +1101,6 @@ Try this version.
 Hi Apprentice
 Perfect looks good thanks so much
 Susan
-
 
 ---
 
@@ -1213,7 +1120,6 @@ appreciate you having a look
 
 Thx
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -1223,7 +1129,6 @@ Thx
 Your request is added to the development list.
 Development reference 1041.
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -1231,7 +1136,6 @@ Development reference 1041.
 **Apprentice** · Wed Apr 15, 2020 1:00 pm
 
 Actually, it's a feature of this indicator. It should do that because the latest leg no longer satisfy for the line to be drawn at that spot. And it jumps at the latest spot where all conditions are satisfied.
-
 
 ---
 
@@ -1252,7 +1156,6 @@ where the "Line" will not jump (backwards), and holds in place until the next (f
 If you could take a look - that would be great
 
 Thanks
-
 
 ---
 
@@ -1288,7 +1191,6 @@ Thanks in advance
 
 ![123.JPG](images/138036/123.JPG)
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -1297,7 +1199,6 @@ Thanks in advance
 
 Your request is added to the development list.
 Development reference 2136.
-
 
 ---
 
@@ -1311,7 +1212,6 @@ Is there any update on this task?
 thanks in advance
 arfs
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -1321,7 +1221,6 @@ arfs
 Hi Apprentice,
  Was given a Development reference 2136 and not seen anything posted on the forum can the task be done
 arfs
-
 
 ---
 
@@ -1339,7 +1238,6 @@ From the Zigzag channel with Output_Mult.lua posted 29.3.20 with fib extensions 
 
 thanks Minifire
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -1348,7 +1246,6 @@ thanks Minifire
 
 Your request is added to the development list.
 Development reference 2364.
-
 
 ---
 
@@ -1361,7 +1258,6 @@ I don't understand what high/low should we replace.
 Can you clarify,
 "open of the 1st sellers candle for down swing and the open of the 1st buyers candle in upswing"
 provide a chart example?
-
 
 ---
 
@@ -1386,7 +1282,6 @@ Minifire
 
 ![candle open zigzag.jpeg](images/139191/candle%20open%20zigzag.jpeg)
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -1396,7 +1291,6 @@ Minifire
 Your request is added to the development list.
 Development reference 2375.
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -1405,7 +1299,6 @@ Development reference 2375.
 
 Any update with this request?
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -1413,7 +1306,6 @@ Any update with this request?
 **Apprentice** · Mon Dec 28, 2020 3:27 pm
 
 I'm not sure that I do understand it correctly, but this version already doing so: [download/file.php?id=27772](https://fxcodebase.com/code/download/file.php?id=27772)
-
 
 ---
 
@@ -1425,7 +1317,6 @@ I'm not sure that I do understand it correctly, but this version already doing s
 
 Try this version.
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -1434,7 +1325,6 @@ Try this version.
 
 thanks works perfectly
 minifire
-
 
 ---
 
@@ -1447,7 +1337,6 @@ Is it possible to only allow to print the new version of indicator only when the
 thanks in advance
 Minifire
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -1455,7 +1344,6 @@ Minifire
 **Apprentice** · Mon Jan 11, 2021 5:12 am
 
 Can you show the example?
-
 
 ---
 
@@ -1475,7 +1363,6 @@ Minifire
 
 ![ZZ swing within swing.jpeg](images/140156/ZZ%20swing%20within%20swing.jpeg)
 
-
 ---
 
 ## Re: ZigZag Channel
@@ -1484,7 +1371,6 @@ Minifire
 
 Your request is added to the development list.
 Development reference 72.
-
 
 ---
 

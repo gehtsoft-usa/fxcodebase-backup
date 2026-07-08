@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=29&t=2072  
 > Forum: 29 · Topic 2072 · 1 post(s)
 
-
 ---
 
 ## NonLagDot signal
@@ -16,10 +15,8 @@
 
 ![NonLagDot_Signal.png](images/4243/NonLagDot_Signal.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     strategy:name("NonLagDot signal");
     strategy:description("");
 
@@ -184,6 +181,7 @@ function ExtSignal(source, period, message, soundFile)
     if soundFile ~= nil then
         terminal:alertSound(soundFile, false);
     end
-end`
+end
+```
 
 For work this signal must be installed NonLagDot indicator: [viewtopic.php?f=17&t=1721](https://fxcodebase.com/code/viewtopic.php?f=17&t=1721)

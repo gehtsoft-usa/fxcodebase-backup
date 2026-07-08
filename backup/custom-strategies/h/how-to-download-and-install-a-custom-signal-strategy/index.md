@@ -1,7 +1,76 @@
 # How to Download and Install a Custom Signal/Strategy
 
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=2310  
-> Forum: 31 · Topic 2310 · 25 post(s)
+> Forum: 31 · Topic 2310 · 27 post(s)
+
+
+---
+
+## How to Download and Install a Custom Signal/Strategy
+
+**Nikolay.Gekht** · Sun Apr 11, 2010 7:41 pm
+
+**The latest version of this article can be found in FXCodebase Wiki:
+[http://fxcodebase.com/wiki/index.php/Cu ... arketscope](https://fxcodebase.com/wiki/index.php/Custom_Strategies:_How_To_Install_in_Marketscope)**
+
+**Download the signal/strategy**
+
+The signal/strategy is usually attached to the post as a file.
+
+Right click on the name of the attached file and then choose "Save Target As" in the context menu.
+
+ 
+
+![howto1.PNG](images/4905/howto1.PNG)
+
+
+
+The "Save As" dialog box appears. Choose any folder, for example c:\ to save the
+signal/strategy. The name of the signal or strategy file (EMA_LAG_CCI.lua in our example) will appear in the dialog box automatically.
+
+ 
+
+![howto2.PNG](images/4905/howto2.PNG)
+
+
+
+Click the "Save" button. That's all, the signal/strategy is saved.
+
+**Note:** Sometimes, the signal/strategy requires the custom indicators. In that case these indicators are listed in the post. Please do not forget to download and install the custom indicators!
+
+**Install the signal/strategy**
+
+Open Marketscope application. Choose the "Alerts and Trading Automation" menu and then choose "Import Extension":
+
+ 
+
+![howto3.PNG](images/4905/howto3.PNG)
+
+
+
+The "Open" dialog box appears. Choose the file you have saved on the previous step (see "Download the signal/strategy"), and then click "Open":
+
+ 
+
+![howto4.PNG](images/4905/howto4.PNG)
+
+
+
+The "Install Extension" dialog box appears. Click "Install":
+
+ 
+
+![howto5.PNG](images/4905/howto5.PNG)
+
+
+
+The "Extension has been installed message box" appears. No errors must be shown. Click "OK" to exit. The strategy is added and you can start using it.
+
+ [9209](files/4905/howto6.PNG)
+
+That's all, the new signal/strategy is in the list which appears when you choose "New Strategy or Alert".
+
+ [9210](files/4905/howto7.PNG)
 
 
 ---
@@ -34,6 +103,25 @@ Then the basics of SDK development package.
 Unfortunately there is a video lecture on the subject.
 
 Contacted me on my private mail, maybe I can help you start.
+
+
+---
+
+## Re: How to Download and Install a Custom Signal/Strategy
+
+**Nikolay.Gekht** · Sat Jan 01, 2011 1:14 pm
+
+> **amgalanbaatar wrote:**
+> I really need a teacher or somebody who has experience. I know you are busy.
+
+We can't promising "teaching", but:
+
+1) Lua is in top 10 development popular languages and is used in many real-time systems, especially in games (for example a lot of World of Warcraft logic is written in lua), so there is a lot of sources on how to write in Lua. However, you are always welcome with any questions on our development forum.
+[viewforum.php?f=28](https://fxcodebase.com/code/viewforum.php?f=28)
+
+If you have problems just with Lua - ask anyway. It would help us to prepare additional articles, now about Lua itself. At least I really need this information. I'm developing for the last 20 year and I just cannot imagine which problem can appear when learning any programming language. My studying on "how to programm" was to long ago, I just don't remember the typical mistakes and problem. So, your question will help me understand what could be unclear and concentrate on certain problems in understanding Lua rather than writing an new "manual" for Lua.
+
+2) There is a number of articles and we do all our best to increase that number on our development forum (see "recommended reading").
 
 
 ---

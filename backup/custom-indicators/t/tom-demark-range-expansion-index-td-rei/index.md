@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=1585  
 > Forum: 17 · Topic 1585 · 13 post(s)
 
-
 ---
 
 ## Tom Demark Range Expansion Index (TD-REI)
@@ -18,8 +17,8 @@ The indicator usually produces values in range of -100/+100. A value +45 or high
 
 Note: As for many other indicators the Internet is filled by dozen variations of the indicator formula. I chosen the VTTrader's implementation of the indicator as a basis for our indicator. The VTTrader formula is:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`HighMom:= H - Ref(H,-2);
+```
+HighMom:= H - Ref(H,-2);
 LowMom:= L - Ref(L,-2);
 TD1:= (H>=Ref(L,-5) OR H>=Ref(L,-6));
 TD2:= (Ref(H,-2)>=Ref(C,-7) OR Ref(H,-2)>=Ref(C,-8));
@@ -28,20 +27,18 @@ TD4:= (Ref(L,-2)<=Ref(C,-7) OR Ref(L,-2)<=Ref(C,-8));
 TD5:= (TD1 OR TD2) AND (TD3 OR TD4);
 TD6:= If(TD5,HighMom + LowMom,0);
 TD7:= Abs(HighMom) + Abs(LowMom);
-TDREI:= 100 * Sum(TD6,Periods) / Sum(TD7,Periods);`
+TDREI:= 100 * Sum(TD6,Periods) / Sum(TD7,Periods);
+```
 
  
 
 ![TS-REI.png](images/3111/TS-REI.png)
-
-
 
 Download:
 
  [TD_REI.lua](files/3111/TD_REI.lua)
 
 The indicator was revised and updated
-
 
 ---
 
@@ -53,7 +50,6 @@ Nice work.
 
 Just the D-wave left then!
 
-
 ---
 
 ## Re: Tom Demark Range Expansion Index (TD-REI)
@@ -62,7 +58,6 @@ Just the D-wave left then!
 
 I'm looking for the description. The book I have ("The New Science of Technical Analysis") describes the D-wave method too vague. At the moment the best description I have found is here:
 [http://short-termcapitalmanagement.blog ... ve_04.html](https://short-termcapitalmanagement.blogspot.com/2009/10/td-d-wave_04.html) and [http://www.mail-archive.com/amibroker@y ... 44063.html](http://www.mail-archive.com/amibroker@yahoogroups.com/msg44063.html) and the following thread, but, probably it's good enough to start.
-
 
 ---
 
@@ -77,7 +72,6 @@ Otherwise, I could either post the code from it here (it's 2500 lines), send you
 
 Best wishes.
 
-
 ---
 
 ## Re: Tom Demark Range Expansion Index (TD-REI)
@@ -85,7 +79,6 @@ Best wishes.
 **Nikolay.Gekht** · Tue Jul 27, 2010 3:29 pm
 
 Got it. Thank you for the link!
-
 
 ---
 
@@ -95,7 +88,6 @@ Got it. Thank you for the link!
 
 I meant to add earlier - Demark's books are quite difficult to read but Jason Perl's book Demark Indicators published by Bloomberg press is much easier.
 
-
 ---
 
 ## Re: Tom Demark Range Expansion Index (TD-REI)
@@ -103,7 +95,6 @@ I meant to add earlier - Demark's books are quite difficult to read but Jason Pe
 **Nikolay.Gekht** · Fri Jul 30, 2010 8:35 am
 
 I also found the book with a pretty good description of D-wave, so I plan to start experimenting on the next week.
-
 
 ---
 
@@ -128,7 +119,6 @@ Thanks in advance for your answer.
 Kind regards.
 Danielle
 
-
 ---
 
 ## Re: Tom Demark Range Expansion Index (TD-REI)
@@ -140,7 +130,6 @@ It is possible, but I would wait for an official announcement of the new platfor
 Currently you are one of the few users who can use all its capabilities.
 
 Apprentice
-
 
 ---
 
@@ -154,7 +143,6 @@ Btw I think his book not difficult to read, just reading slow. Otherwise the boo
 
 Thanks
 
-
 ---
 
 ## Re: Tom Demark Range Expansion Index (TD-REI)
@@ -165,7 +153,6 @@ Whoops, it got option to set 60.My bad again
 Thank anyway, a great indicator
 Have a good day
 
-
 ---
 
 ## Re: Tom Demark Range Expansion Index (TD-REI)
@@ -174,7 +161,6 @@ Have a good day
 
 Hi me again,
 I back with new idea. Could you just coloring the overbought/ oversold level of this indicator just like RSI coloring.Thanks
-
 
 ---
 

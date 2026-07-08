@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=33783  
 > Forum: 17 · Topic 33783 · 8 post(s)
 
-
 ---
 
 ## CMA Targets
@@ -12,15 +11,11 @@
 
 ![cma.png](images/57327/cma.png)
 
-
-
  
 
 ![INDICATORE PT.2.png](images/57327/INDICATORE%20PT.2.png)
 
 *Target Price = Cross Price + (Price Cross - Wave Min / Max)*
-
-
 
  [CMA Targets.lua](files/57327/CMA%20Targets.lua)
 
@@ -30,7 +25,6 @@ You can find it here.
 
 The indicator was revised and updated
 
-
 ---
 
 ## Re: CMA Targets
@@ -38,7 +32,6 @@ The indicator was revised and updated
 **Apprentice** · Tue Mar 26, 2013 7:48 am
 
 Updated.
-
 
 ---
 
@@ -50,28 +43,29 @@ Hi Apprentice, I'm interested in making a strategy using CMA Targets but I came 
 
 In line 145, while period<math.max(Short/2, Long/2) i gets negative values so MA1.DATA[i] is out of range:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`local i;
+```lua
+local i;
       for i=period-math.max(Short/2, Long/2), period , 1 do
       SHORT[i]= MA1.DATA[i];
       LONG[i]= MA2.DATA[i];
       end
-   end`
+   end
+```
 
 In line 199, when i==first, then the rule "Because the function also checks the previous bar, the period indexes must be greater than the first() value of the corresponding stream." gets violated so , again, we have index out of range.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`for i = source:size() - 1, first, -1 do
+```lua
+for i = source:size() - 1, first, -1 do
         if core.crosses(MA1.DATA, MA2.DATA, i) then
             Count = Count + 1;
             Cross[Count] = i;
-        end`
+        end
+```
 
 The result is that the indicator returns nil values to my strategy, can you fix this?
 
 Best regards,
 Alkis
-
 
 ---
 
@@ -81,7 +75,6 @@ Alkis
 
 Can you share the entire code.
 
-
 ---
 
 ## Re: CMA Targets
@@ -89,7 +82,6 @@ Can you share the entire code.
 **boss_hogg** · Tue Jan 21, 2014 2:54 pm
 
 The index out of range issues I'm having are on the indicator itself, CMA Targets.lua; the code is on the first post of this thread.
-
 
 ---
 
@@ -99,7 +91,6 @@ The index out of range issues I'm having are on the indicator itself, CMA Target
 
 In the book "New Concept from TTS" by Welles Wilder provided 4 price action points for the following day
 
-
 ---
 
 ## Re: CMA Targets
@@ -108,7 +99,6 @@ In the book "New Concept from TTS" by Welles Wilder provided 4 price action poin
 
 For us who do not have this book,
 can you share how these price targets are calculated.
-
 
 ---
 

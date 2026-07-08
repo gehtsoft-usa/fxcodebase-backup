@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=15  
 > Forum: 17 · Topic 15 · 5 post(s)
 
-
 ---
 
 ## Alligator Indicator (closed topic)
@@ -22,8 +21,6 @@ Alligator Indicator is the indicator which displays 3 lines which represent thre
 
 ![alligator.png](images/15/alligator.png)
 
-
-
 **HOW TO USE/INTERPRETATION:**
 
 When all of the lines are intertwined in the same place, it shows that the “Alligator” is in sleeping “mode” so to say. Then Alligator wakes up for a hunt, and once again when lines meet together Alligator’s hunt is over. This is the place where you should fix your profit. Close all your position on this instrument and wait till Alligator starts waking up again.
@@ -37,7 +34,6 @@ The indicator was revised and updated
 **See also: The SMMA/median (MT4-like) version of the indicator is [here](https://fxcodebase.com/code/viewtopic.php?f=17&t=15#p263)**
 
 Tags: Allgator, indicator, Marketscope, Trading Station, FXCM, dbFX
-
 
 ---
 
@@ -61,7 +57,6 @@ Can you verify ?
 
 Thank you
 
-
 ---
 
 ## Re: Alligator Indicator
@@ -78,8 +73,6 @@ Here is a modification of the Alligator indicator which uses the same formula as
 
 ![alligator1.jpg](images/263/alligator1.jpg)
 
-
-
 Download the indicator:
 
  [alligator1.lua](files/263/alligator1.lua)
@@ -88,8 +81,8 @@ Note1: This indicator requires SMMA indicator. Please do not forget to [download
 
 Code:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- initializes the indicator
+```lua
+-- initializes the indicator
 function Init()
     indicator:name("Alligator1");
     indicator:description("Median and SMMA-based version of the alligator")
@@ -167,13 +160,13 @@ function Update(period, mode)
     if (period + LipsS >= 0 and period >= LipsSrc.DATA:first()) then
         Lips[period + LipsS] = LipsSrc.DATA[period];
     end
-end`
+end
+```
 
 Changes:
 - this version of the indicator requires bar instead of ticks in order to calculate median (H+L)/2
 - smma choice is added to the MTH (method of smoothing) parameter and this choice is default.
 - all smoothing indicators are applied to internal stream which is filled by median value.
-
 
 ---
 
@@ -187,7 +180,6 @@ I'll try all new indicators!
 yes, correct, his an .MT4 implementation but SMMA is anyway required to calculate alligator and gator, following the guidelines of the bill williams book "new trading dimensions" .
 
 thank you again
-
 
 ---
 

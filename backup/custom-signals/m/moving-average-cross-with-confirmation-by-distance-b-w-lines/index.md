@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=29&t=639  
 > Forum: 29 · Topic 639 · 8 post(s)
 
-
 ---
 
 ## Moving Average cross with confirmation by distance b/w lines
@@ -21,16 +20,14 @@ The signals checks for the cross between two moving average lines and signals if
 
 ![MACROSS1.PNG](images/1138/MACROSS1.PNG)
 
-
-
 Download:
 
  [macross_conf_dist.lua](files/1138/macross_conf_dist.lua)
 
 Source:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     strategy:name("MA Corss with the confirmation by the distance between lines");
     strategy:description("The signal checks for the Moving Average crosses confirmed by the distance between the MA lines");
 
@@ -224,8 +221,8 @@ function ExtUpdate(id, source, period)
     end
 end
 
-dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");`
-
+dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");
+```
 
 ---
 
@@ -237,7 +234,6 @@ Hello,
 I got an error when i import this Custom signals
 can you please have a look
 
-
 ---
 
 ## Re: Moving Average cross with confirmation by distance b/w lines
@@ -245,7 +241,6 @@ can you please have a look
 **Nikolay.Gekht** · Wed Apr 21, 2010 9:08 am
 
 The first thing to check: you must use Signal->Manage Custom Signals, not Chart->Manage Custom Indicators.
-
 
 ---
 
@@ -255,7 +250,6 @@ The first thing to check: you must use Signal->Manage Custom Signals, not Chart-
 
 Hi again, thanks it's working great With your indication
 thanks again
-
 
 ---
 
@@ -267,7 +261,6 @@ Thank you, again, very much.... great signal!
 
 * If I could request one modification by adding TMA as an optional smoothing method?
 
-
 ---
 
 ## Re: Moving Average cross with confirmation by distance b/w lines
@@ -275,7 +268,6 @@ Thank you, again, very much.... great signal!
 **Nikolay.Gekht** · Tue Jun 08, 2010 3:29 pm
 
 Updated.
-
 
 ---
 
@@ -297,7 +289,6 @@ many thanks for your positive work
 rergards
 
 Nid007
-
 
 ---
 

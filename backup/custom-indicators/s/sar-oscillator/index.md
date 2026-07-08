@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=1259  
 > Forum: 17 · Topic 1259 · 6 post(s)
 
-
 ---
 
 ## SAR oscillator
@@ -16,10 +15,8 @@ SAR oscillator=SAR-Close;
 
 ![SAR_Oscillator.png](images/2395/SAR_Oscillator.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("SAR oscillator");
     indicator:description("SAR oscillator");
     indicator:requiredSource(core.Bar);
@@ -80,11 +77,11 @@ function Update(period, mode)
       end
      end
     end
-end`
+end
+```
 
 MT4/Mq4 version
 [viewtopic.php?f=38&t=63980&p=108612#p108612](https://fxcodebase.com/code/viewtopic.php?f=38&t=63980&p=108612#p108612)
-
 
 ---
 
@@ -98,7 +95,6 @@ Unfortunadly I cant see it on the chart.
 Alexander can u check this SAR oscillator again please?
 I want to say that in this forum is an excelent work,thanks much!
 
-
 ---
 
 ## Re: SAR oscillator
@@ -107,7 +103,6 @@ I want to say that in this forum is an excelent work,thanks much!
 
 CAN THIS BE TURNED INTO A MULTI HEAT MAP.IT WOULD BE NICE
 
-
 ---
 
 ## Re: SAR oscillator
@@ -115,7 +110,6 @@ CAN THIS BE TURNED INTO A MULTI HEAT MAP.IT WOULD BE NICE
 **Apprentice** · Sat Sep 11, 2010 7:01 am
 
 Added to development cue.
-
 
 ---
 
@@ -129,10 +123,8 @@ SAR Oscillator Heat Map indicator.
 
 ![SAR_Oscillator_Heat_Map.png](images/4487/SAR_Oscillator_Heat_Map.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`-- Adds SAR parameter
+```lua
+-- Adds SAR parameter
 function AddMvaParam(id, frame, step, max)
     indicator.parameters:addString("B" .. id, "Time frame for avegage " .. id, "", frame);
     indicator.parameters:setFlag("B" .. id, core.FLAG_PERIODS);
@@ -418,8 +410,8 @@ function findDateFast(stream, date, precise)
             end
         end
     end
-end`
-
+end
+```
 
 ---
 

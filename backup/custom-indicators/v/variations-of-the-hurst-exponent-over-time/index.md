@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=1258  
 > Forum: 17 · Topic 1258 · 7 post(s)
 
-
 ---
 
 ## Variations of the Hurst Exponent over time
@@ -18,10 +17,8 @@ It must be noticed however, that this indicator doesn't give any information as 
 
 ![Hurst_Difference.png](images/2391/Hurst_Difference.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Hurst Difference");
     indicator:description("Hurst Difference");
     indicator:requiredSource(core.Bar);
@@ -105,7 +102,8 @@ function Update(period, mode)
      HurstBuff[period]=fdi[period-1]-fdi[period];
 
     end
-end`
+end
+```
 
  [Hurst_Difference.lua](files/2391/Hurst_Difference.lua)
 
@@ -113,7 +111,6 @@ end`
 
 Mq4/MT4 version.
 [viewtopic.php?f=38&t=63898](https://fxcodebase.com/code/viewtopic.php?f=38&t=63898)
-
 
 ---
 
@@ -124,7 +121,6 @@ Mq4/MT4 version.
 hust worked on cycle of price,10,20,40,18-80,200-220 weeks
 possible on marketscope ?
 
-
 ---
 
 ## Re: Variations of the Hurst Exponent over time
@@ -132,7 +128,6 @@ possible on marketscope ?
 **Apprentice** · Mon Feb 05, 2018 8:07 am
 
 The Indicator was revised and updated.
-
 
 ---
 
@@ -148,7 +143,6 @@ Is it possible to use this Fractal Dimension Index to calculate the Hurst Expone
 That indicator shows the changes of the Fractal Dimension differently and this Hurst Exponent does not fit, because it is not based on that calculation.
 M.
 
-
 ---
 
 ## Re: Variations of the Hurst Exponent over time
@@ -158,7 +152,6 @@ M.
 We have added your request to the development list.
 Development reference 836.
 
-
 ---
 
 ## Re: Variations of the Hurst Exponent over time
@@ -167,13 +160,10 @@ Development reference 836.
 
 ![EURUSD m1 (09-11-2023 1629).png](images/152518/EURUSD%20m1%20%2809-11-2023%201629%29.png)
 
-
-
  [Fractal Dimension Index Hurst_Difference.lua](files/152518/Fractal%20Dimension%20Index%20Hurst_Difference.lua)
 
 It is also possible to use Tick Hurst_Difference.lua
 Use the Fractal Dimension Index.lua as a source for it.
-
 
 ---
 

@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=2617  
 > Forum: 17 · Topic 2617 · 6 post(s)
 
-
 ---
 
 ## Advanced fractals on MA
@@ -16,8 +15,6 @@ This version of fractals searches maximums and minimums MA using extended varian
 
 ![AdvancedFractalOnMA.png](images/5891/AdvancedFractalOnMA.png)
 
-
-
  [Advanced_Fractal_On_MA.lua](files/5891/Advanced_Fractal_On_MA.lua)
 
 For this indicator must be installed Averages indicator:
@@ -26,7 +23,6 @@ MT4/Mq4 version.
 [viewtopic.php?f=38&t=64330](https://fxcodebase.com/code/viewtopic.php?f=38&t=64330)
 
 The indicator was revised and updated
-
 
 ---
 
@@ -40,7 +36,6 @@ Great work, awesome indicator for me. Can you make strategy too based on this in
 
 Thank in advance
 
-
 ---
 
 ## Re: Advanced fractals on MA
@@ -48,7 +43,6 @@ Thank in advance
 **Apprentice** · Mon Nov 08, 2010 4:06 am
 
 Added to developmental cue.
-
 
 ---
 
@@ -58,7 +52,6 @@ Added to developmental cue.
 
 Strategy based on this indicator can be find here: [viewtopic.php?f=31&t=2624&p=5908#p5908](https://fxcodebase.com/code/viewtopic.php?f=31&t=2624&p=5908#p5908)
 
-
 ---
 
 ## Re: Advanced fractals on MA
@@ -67,8 +60,8 @@ Strategy based on this indicator can be find here: [viewtopic.php?f=31&t=2624&p=
 
 Indicator updated.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Advanced fractal on MA");
     indicator:description("Advanced fractal on MA");
     indicator:requiredSource(core.Bar);
@@ -203,8 +196,8 @@ function Update(period, mode)
      down:set(period-shift, source.low[period-shift], "\225");
     end
    end
-end`
-
+end
+```
 
 ---
 

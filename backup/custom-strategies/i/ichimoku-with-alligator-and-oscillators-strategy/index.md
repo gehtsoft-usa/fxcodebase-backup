@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=65675  
 > Forum: 31 · Topic 65675 · 4 post(s)
 
-
 ---
 
 ## Ichimoku with Alligator and oscillators Strategy
@@ -11,8 +10,6 @@
 **Apprentice** · Thu Jan 25, 2018 3:12 pm
 
 ![1.png](images/117267/1.png)
-
-
 
 Based on the request.
 [viewtopic.php?f=27&t=65674&p=117266#p117266](https://fxcodebase.com/code/viewtopic.php?f=27&t=65674&p=117266#p117266)
@@ -33,7 +30,6 @@ Vice versa for Short
 
  [Ichimoku with Alligator and oscillators Strategy.lua](files/117267/Ichimoku%20with%20Alligator%20and%20oscillators%20Strategy.lua)
 
-
 ---
 
 ## Re: Ichimoku with Alligator and oscillators Strategy
@@ -48,7 +44,6 @@ Can you update this code please?
 thank you in advance
 cordially
 
-
 ---
 
 ## Re: Ichimoku with Alligator and oscillators Strategy
@@ -57,8 +52,8 @@ cordially
 
 Can you review entry order code?
 
-Code: [Select all](https://fxcodebase.com/code/)
-`if   Alligator1.Lips[period+LipsS1] > Alligator2.Lips[period+LipsS2]
+```lua
+if   Alligator1.Lips[period+LipsS1] > Alligator2.Lips[period+LipsS2]
    and Alligator1.Lips[period+LipsS1-1] <= Alligator2.Lips[period+LipsS2-1]
    and  AC.DATA[period]>0
    and  AO.DATA[period]>0
@@ -74,8 +69,8 @@ Code: [Select all](https://fxcodebase.com/code/)
    and  ICH.SL[period-1]>= ICH.TL[period-1]
       then
        --Open Short   
-    end`
-
+    end
+```
 
 ---
 

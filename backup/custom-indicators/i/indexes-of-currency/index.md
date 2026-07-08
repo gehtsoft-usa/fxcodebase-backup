@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=2379  
 > Forum: 17 · Topic 2379 · 17 post(s)
 
-
 ---
 
 ## Indexes of currency
@@ -18,14 +17,11 @@ Index of CHF calculate as USDX / [USD/CHF].
 
 ![OtherX1.png](images/5133/OtherX1.png)
 
-
-
  [OtherX1.lua](files/5133/OtherX1.lua)
 
  [OtherX1 Bars.lua](files/5133/OtherX1%20Bars.lua)
 
 The indicator was revised and updated
-
 
 ---
 
@@ -40,10 +36,8 @@ Indicator calculate index UP or DOWN currency of current instrument.
 
 ![OtherX2.png](images/5134/OtherX2.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Instrument Index");
     indicator:description("Calculates the instrument index in on the base of (XXX/USD or USD/XXX) and USDX");
     indicator:requiredSource(core.Bar);
@@ -319,12 +313,12 @@ function findDateFast(stream, date, precise)
             end
         end
     end
-end`
+end
+```
 
  [OtherX2.lua](files/5134/OtherX2.lua)
 
  [OtherX2 Bars.lua](files/5134/OtherX2%20Bars.lua)
-
 
 ---
 
@@ -342,7 +336,6 @@ An error occurred during the calculation of the indicator 'OTHERX1'. The error d
 
 Any help is highly apprecaited
 
-
 ---
 
 ## Re: Indexes of currency
@@ -356,7 +349,6 @@ Also try one of these indices.
 [viewtopic.php?f=17&t=609&p=1197&hilit=index#p1197](https://fxcodebase.com/code/viewtopic.php?f=17&t=609&p=1197&hilit=index#p1197)
 [viewtopic.php?f=17&t=970&p=1796&hilit=index#p1796](https://fxcodebase.com/code/viewtopic.php?f=17&t=970&p=1796&hilit=index#p1796)
 
-
 ---
 
 ## Re: Indexes of currency
@@ -364,7 +356,6 @@ Also try one of these indices.
 **upliftingmania** · Thu Jun 28, 2012 7:57 pm
 
 Thanks a lot Apprentice, Its working fine now...
-
 
 ---
 
@@ -378,7 +369,6 @@ I have another query too.Since the above mentioned formula is
 
 Does it make sense to compute/plot a chart just from the FXCM dow jones dollar index and the eur/usd chart?
 
-
 ---
 
 ## Re: Indexes of currency
@@ -388,7 +378,6 @@ Does it make sense to compute/plot a chart just from the FXCM dow jones dollar i
 This would make sense if we only had USD index.
 However, the indicator allows you calculation of the indexes for other currency pairs.
 
-
 ---
 
 ## Re: Indexes of currency
@@ -397,7 +386,6 @@ However, the indicator allows you calculation of the indexes for other currency 
 
 Thanks for clarifying
 
-
 ---
 
 ## Re: Indexes of currency
@@ -405,7 +393,6 @@ Thanks for clarifying
 **Alexander.Gettinger** · Thu Jul 05, 2012 4:51 pm
 
 MQL4 version of this indicator: [viewtopic.php?f=38&t=20874](https://fxcodebase.com/code/viewtopic.php?f=38&t=20874)
-
 
 ---
 
@@ -421,7 +408,6 @@ The line chart that represents the indicator updates only after the formation of
 
 Is it possible to make the right edge of the indicator dynamic or in other words can it adjust/ respond to price changes in real time i.e. while the respective candle is being formed.
 
-
 ---
 
 ## Re: Indexes of currency
@@ -436,7 +422,6 @@ Please can it be modified to display bars?
 
 Thanks
 
-
 ---
 
 ## Re: Indexes of currency
@@ -444,7 +429,6 @@ Thanks
 **Apprentice** · Mon Jul 21, 2014 7:41 am
 
 OtherX1 Bars.lua Added.
-
 
 ---
 
@@ -457,7 +441,6 @@ OtherX1 Bars.lua Added.
 
 Super fast mate, thanks, but it was X2
 
-
 ---
 
 ## Re: Indexes of currency
@@ -465,7 +448,6 @@ Super fast mate, thanks, but it was X2
 **Apprentice** · Tue Jul 22, 2014 2:54 am
 
 OtherX2 Bars.lua Added.
-
 
 ---
 
@@ -477,7 +459,6 @@ OtherX2 Bars.lua Added.
 > OtherX2 Bars.lua Added.
 
 Thanks
-
 
 ---
 
@@ -492,7 +473,6 @@ I get an error.
 P.S. The line X2 indi works fine
 
 Thanks
-
 
 ---
 

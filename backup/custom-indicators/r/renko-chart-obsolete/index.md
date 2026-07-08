@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=2360  
 > Forum: 17 · Topic 2360 · 59 post(s)
 
-
 ---
 
 ## Renko chart (Obsolete)
@@ -11,8 +10,6 @@
 **Alexander.Gettinger** · Thu Oct 07, 2010 3:56 pm
 
 ![Renko.png](images/5080/Renko.png)
-
-
 
  [Renko.lua](files/5080/Renko.lua)
 
@@ -22,10 +19,7 @@ This indicator is obsolete.
 
 ![Renko.png](images/5080/Renko%20%282%29.png)
 
-
-
 I encourage you to Use Renko View instead.
-
 
 ---
 
@@ -34,7 +28,6 @@ I encourage you to Use Renko View instead.
 **Checkz** · Sun Oct 10, 2010 4:27 am
 
 IS THERE A WAY TO REPLACE THE CANDLESTICKS WITH THE RENKO BARS DISPLAYING THEM ON THE ACTUAL CHART INSTEAD OF BELOW IT?
-
 
 ---
 
@@ -49,12 +42,9 @@ Now, Renko bricks are drawn at source chart.
 
 ![Renko.png](images/7909/Renko.png)
 
-
-
 Download:
 
  [Renko2.lua](files/7909/Renko2.lua)
-
 
 ---
 
@@ -65,7 +55,6 @@ Download:
 Very nice... thank you!
 
 For those of us applying other indicators a Renko chart, keep in mind, you'll need to go to the indicators properties and select Renko:
-
 
 ---
 
@@ -82,7 +71,6 @@ If you do not have control of setting the time scale on the chart, I would sugge
 1) Use the tool tip to display the actual Renko brick open and close date/time.
 2) Add an option of drawing period separators on the chart... every 2, 4, 8 hours... etc., to distinguish not only intra-day PA, but also one day from the next.
 
-
 ---
 
 ## Re: Renko chart.
@@ -97,7 +85,6 @@ If you do not have control of setting the time scale on the chart, I would sugge
 
 OK. I work on this.
 
-
 ---
 
 ## Re: Renko chart.
@@ -110,12 +97,9 @@ Renko chart with datetime labels and period separators.
 
 ![Renko.png](images/7984/Renko.png)
 
-
-
 Download:
 
  [Renko3.lua](files/7984/Renko3.lua)
-
 
 ---
 
@@ -129,7 +113,6 @@ Thanks!
 
 Now see something.... I attached a Power Point file to highlight.
 
-
 ---
 
 ## Re: Renko chart.
@@ -139,7 +122,6 @@ Now see something.... I attached a Power Point file to highlight.
 Better Renko for lua
 
 Here is my matlab version for a better renko chart ... perhaps it helps ...
-
 
 ---
 
@@ -151,7 +133,6 @@ Renko3.lua updated.
 Fixed error with multiple separators.
 Please, download this indicator again.
 
-
 ---
 
 ## Re: Renko chart.
@@ -159,7 +140,6 @@ Please, download this indicator again.
 **patick** · Thu Feb 17, 2011 9:48 am
 
 Much appreciated... that fixed the problem.
-
 
 ---
 
@@ -171,7 +151,6 @@ whninja,
 
 Nice work! This is the only way to do it properly to avoid brick lag/missing bricks in Market Scope.
 
-
 ---
 
 ## Re: Renko chart.
@@ -182,7 +161,6 @@ I know, but at this time i have not the time and the skills in lua to do similar
 the good is: lua and matlab are equal in scripting ...
 
 best regards
-
 
 ---
 
@@ -197,7 +175,6 @@ Download:
 
  [Renko2M.lua](files/8292/Renko2M.lua)
 
-
 ---
 
 ## Re: Renko chart.
@@ -208,8 +185,8 @@ can someone help
 
 i had some trouble with the streams and array calc
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("BetterRenko");
     indicator:description("BetterRenko");
     indicator:requiredSource(core.Bar);
@@ -351,8 +328,8 @@ function Update(period, mode)
         end
     end
 end
-end`
-
+end
+```
 
 ---
 
@@ -367,8 +344,8 @@ end`
 
 What king of trouble do you have? "70: Index is out of range."? This peace of code could access the "up" stream with incorrect index ("n"). "N" could become greater that the current period. You shoud add a check for correct index (n <= period).
 
-Code: [Select all](https://fxcodebase.com/code/)
-`while(not_done == 1) do
+```lua
+while(not_done == 1) do
                     up[n] = up[n-1] + Step*source:pipSize();
                     down[n] = up[n-1] - Step*source:pipSize();
 
@@ -379,8 +356,8 @@ Code: [Select all](https://fxcodebase.com/code/)
                     else
                         not_done = 0;
                     end
-                end`
-
+                end
+```
 
 ---
 
@@ -396,7 +373,6 @@ n is the count for the bricks - in this case a higher range of a bar can have mo
 i is a count for period/bar - in this case more bars can have only a brick (sideways)
 
 tomorow i will swith i with (current ) period
-
 
 ---
 
@@ -416,34 +392,38 @@ tomorow i will swith i with (current ) period
 
 You an array instead of internal stream.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`local up = {};
+```
+local up = {};
 local down = {};
 function Prepare()
 ...
-end`
+end
+```
+
 instead of
 
-Code: [Select all](https://fxcodebase.com/code/)
-`local up = nil;
+```lua
+local up = nil;
 local down = nil;
 function Prepare()
 ...
     up = instance:addInternalStream(first, 0);
     down = instance:addInternalStream(first, 0)
 ...
-end`
+end
+```
+
 Internal stream sizes/clears automatically when it is nessesary. With array you're forced to fo it manually.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Update(period, mode)
+```lua
+function Update(period, mode)
     if mode == core.UpdateAll then
         -- clear arrays
         up = {};
         ...
     end
-end`
-
+end
+```
 
 ---
 
@@ -452,7 +432,6 @@ end`
 **Pippin** · Tue May 17, 2011 1:24 pm
 
 Which is the most updated renko indicator? I'm new to trading with tsII as well as this site. Any help in finding the most recent renko tool will be greatly appreciated. Thanks
-
 
 ---
 
@@ -468,7 +447,6 @@ I have a 1hr chart with Renko set at 50pips you'll notice that price is around 2
 
 This needs to be fixed. Also when using these TSII is very slow and often crashes...maybe someone could convince FXCM to have these as a standard feature as they do on Strategy Trader.
 
-
 ---
 
 ## Re: Renko chart.
@@ -483,7 +461,6 @@ As it is now I'm not sure how far back it's getting it's data but the bricks are
 
 This is a feature in Strategy Trader.
 
-
 ---
 
 ## Re: Renko chart.
@@ -491,7 +468,6 @@ This is a feature in Strategy Trader.
 **Apprentice** · Wed Jan 11, 2012 4:41 pm
 
 Your request has been added to the developmental cue.
-
 
 ---
 
@@ -508,7 +484,6 @@ I have tried searching for a proper MT4 renko chart but have had no luck.
 I am looking forward for you guys to crack this!
 Many thanks
 
-
 ---
 
 ## Re: Renko chart.
@@ -519,7 +494,6 @@ Can you provide us with crash report.
 It is located within FXTS2/crash folder.
 It is imperative that you copy its contents,
 prior to the restart of the TS.
-
 
 ---
 
@@ -565,7 +539,6 @@ As a matter of fact if we set the look back period the same 24hrs. we get almost
 
 If you want to use renko bars use Renko2m,
 
-
 ---
 
 ## Re: Renko chart.
@@ -573,7 +546,6 @@ If you want to use renko bars use Renko2m,
 **Apprentice** · Fri Apr 06, 2012 4:04 am
 
 When I find time, I will try to offer a solution.
-
 
 ---
 
@@ -589,7 +561,6 @@ Kind regards
 
 Gideon
 
-
 ---
 
 ## Re: Renko chart.
@@ -601,7 +572,6 @@ Thank you apprentice, I'll hang on for dear life!
 Kind regards
 
 Gideon
-
 
 ---
 
@@ -617,7 +587,6 @@ Hope you find time
 Kind regards
 
 Gideon Hanekom
-
 
 ---
 
@@ -642,7 +611,6 @@ Thanks in Advance,
 
 OnTheEdge
 
-
 ---
 
 ## Re: Renko chart.
@@ -660,7 +628,6 @@ I've reverted to 15 minute time chart for entries. Such a pity as I had really g
 Kind regards
 
 Gideon
-
 
 ---
 
@@ -687,7 +654,6 @@ I am testing Renko on the mt4 platform for the last couple of days and I am much
 
 Best of luck in your trading!
 
-
 ---
 
 ## Re: Renko chart.
@@ -699,7 +665,6 @@ Tx Mate, I'll give it a try and I agree with you Renko charts should be an optio
 Kind regards
 
 Gideon
-
 
 ---
 
@@ -713,7 +678,6 @@ I'm so confused, what I know Renko chart is price dependent and time has no func
 
 Waiting for your valued help.
 
-
 ---
 
 ## Re: Renko chart.
@@ -723,7 +687,6 @@ Waiting for your valued help.
 Renko, Kagi, P & F, Range Bar Indicators dont have time frames.
 They are controlled with parameters, in this case it is "Step".
 "Box" Size for single Renko Chart Element.
-
 
 ---
 
@@ -737,7 +700,6 @@ Renko3 at 15min
 Renko3 at 1min
 Renko3 at 1D >>> platform crash!!
 
-
 ---
 
 ## Re: Renko chart.
@@ -745,7 +707,6 @@ Renko3 at 1D >>> platform crash!!
 **mulligan** · Fri Dec 28, 2012 1:55 pm
 
 I'm having a problem with the Renko3 chart I hope you can help with. I've tried multiple indicators, changing data source to Renko. The indicators work fine, but quickly start shifting out of phase with the bars. To get an accurate indicator reading, I have to click on the indicator, bring up the property box, click OK, basically reset the indicator. Then it starts shifting again. Chart set on 1 min. time frame, Renko3 set on 1 or 2 pips. Some of the indicators tried are LSR, TSI, TARZAN, BB_MACDV6, MACD. Any help is appreciated.
-
 
 ---
 
@@ -763,7 +724,6 @@ I would realy like to test this strategy with 20 or 30 pip brick width, without 
 
 Thanks in advance.
 
-
 ---
 
 ## Re: Renko chart.
@@ -774,7 +734,6 @@ Is it possible to get a alert for renko 2. I've been using Renko for around a we
 
 Can you design it so you have the option for direction change as well please.
 
-
 ---
 
 ## Re: Renko chart.
@@ -783,11 +742,8 @@ Can you design it so you have the option for direction change as well please.
 
 ![Untitled.png](images/90315/Untitled.png)
 
-
-
 This version is obsolete.
 Try new Renko View instead.
-
 
 ---
 
@@ -798,7 +754,6 @@ Try new Renko View instead.
 **EDIT: Removed installation & downloaded and installed again. Solved!**
 
 I tried that but there's nothing to chose from. So no Renko view available. I tried to import the renko2 indy as a view but it gets installed as an indicator and thus doesn't appear in the "view list". Can you tell me from where I can dowload the views?
-
 
 ---
 
@@ -812,7 +767,6 @@ When I asked can we get one that alerts a change of direction I ment when it pri
 As I said ive been using renko for about a week with some great results but its so hard to moniter more than a few currency's waiting for a new brick to print when it can happen at any time due to there being no time involved.
 
 Thank you
-
 
 ---
 
@@ -828,7 +782,6 @@ And thats not all, if price moves 20 pips up in the chart period and moves back 
 
 Just open the same Renko view in a m1 and a m5, you'll see what i mean.
 
-
 ---
 
 ## Re: Renko chart
@@ -841,7 +794,6 @@ Any news on the malfunctioning
 
  option? Any idea on when will this be fixed? The way it's functioning now It's completely useless.
 
-
 ---
 
 ## Re: Renko chart
@@ -850,7 +802,6 @@ Any news on the malfunctioning
 
 Unfortunately, no update about this issue.
 Will be informed of any developments.
-
 
 ---
 
@@ -871,7 +822,6 @@ I like renko but they must work correctly.
 Many Thx for your help...
 Greetz
 
-
 ---
 
 ## Re: Renko chart
@@ -886,7 +836,6 @@ my only problem with this is that it fetch too little history from servers.
 
 i need to leave my TSII open for about 1-2 days to get valuable data for trading
 
-
 ---
 
 ## Re: Renko chart
@@ -896,7 +845,6 @@ i need to leave my TSII open for about 1-2 days to get valuable data for trading
 Hello, is there any progress on the development? As stated above the indicator needs to be independent of time, otherwise it's useless.
 Unfortunately it's a critical indicator for my trading style and I'll be forced to switch to Ninja Trader
 Thanks.
-
 
 ---
 
@@ -915,7 +863,6 @@ So when will i know if the Renkobrick is really finished and the trend goes the 
 Thanks for all answer
 Alex
 
-
 ---
 
 ## Re: Renko chart
@@ -928,10 +875,7 @@ This indicator is obsolete.
 
 ![Renko.png](images/93325/Renko.png)
 
-
-
 I encourage you to use Renko View.
-
 
 ---
 
@@ -944,7 +888,6 @@ An error occurred during the calculation of the indicator 'RENKO_CANDLES'. The e
 In every range configuration
 never mind
 
-
 ---
 
 ## Re: Renko chart (Obsolete)
@@ -952,7 +895,6 @@ never mind
 **nweiss** · Mon Sep 08, 2014 3:56 pm
 
 why the renko chart is not correct showing btw. the indi is not refreshing automatically !
-
 
 ---
 
@@ -970,7 +912,6 @@ As to automatic refreshing, I guess that the cause of the issue is in the Brick 
 
 ![Renko.png](images/95810/Renko.png)
 
-
 ---
 
 ## Re: Renko chart (Obsolete)
@@ -984,7 +925,6 @@ If anyone can share any template on how to use Renko indicator as a source , wou
 
 Thanks
 
-
 ---
 
 ## Re: Renko chart (Obsolete)
@@ -992,7 +932,6 @@ Thanks
 **Apprentice** · Thu Sep 21, 2017 5:07 am
 
 Bump up.
-
 
 ---
 
@@ -1007,7 +946,6 @@ Do you have RENKO chart for MT4?
 Thanks
 Antonis
 
-
 ---
 
 ## Re: Renko chart (Obsolete)
@@ -1015,7 +953,6 @@ Antonis
 **Apprentice** · Mon Sep 25, 2017 3:33 pm
 
 Your request is added to the development list under Id Number 3903
-
 
 ---
 
@@ -1032,7 +969,6 @@ Your request is added to the development list under Id Number 3903
 > Antonis
 
 Please, try this indicator: [viewtopic.php?f=38&t=65126](https://fxcodebase.com/code/viewtopic.php?f=38&t=65126)
-
 
 ---
 

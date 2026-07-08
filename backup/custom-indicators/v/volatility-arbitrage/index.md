@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=61720  
 > Forum: 17 · Topic 61720 · 3 post(s)
 
-
 ---
 
 ## Volatility Arbitrage
@@ -12,18 +11,16 @@
 
 ![Volatility Arbitrage.png](images/98159/Volatility%20Arbitrage.png)
 
-
-
 Based on the request.
 [viewtopic.php?f=27&t=61718](https://fxcodebase.com/code/viewtopic.php?f=27&t=61718)
 
-Code: [Select all](https://fxcodebase.com/code/)
-`Middle = roc(source,1)
+```
+Middle = roc(source,1)
 Upper = stdev(Middle,Period)*NumStdDev
-Lower = Upper*-1`
+Lower = Upper*-1
+```
 
  [Volatility Arbitrage.lua](files/98159/Volatility%20Arbitrage.lua)
-
 
 ---
 
@@ -32,7 +29,6 @@ Lower = Upper*-1`
 **Alexander.Gettinger** · Mon Feb 23, 2015 11:12 am
 
 MQL4 version of Volatility Arbitrage oscillator: [viewtopic.php?f=38&t=61858](https://fxcodebase.com/code/viewtopic.php?f=38&t=61858).
-
 
 ---
 

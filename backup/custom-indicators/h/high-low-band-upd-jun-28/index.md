@@ -1,7 +1,34 @@
 # High/Low band [upd Jun 28]
 
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=607  
-> Forum: 17 · Topic 607 · 60 post(s)
+> Forum: 17 · Topic 607 · 73 post(s)
+
+
+---
+
+## High/Low band [upd Jun 28]
+
+**Nikolay.Gekht** · Sun Apr 11, 2010 8:19 pm
+
+Update, Jun 28, ng: Now it's possible to shift the indicator one period right, so, for example, it will show yesterdays rather than today's high/low.
+
+The very simple indicator, which shows high and low lines of the specified timeframe, a day by default.
+
+Can be used as an example of the indicator which uses the data of other timeframe.
+
+ 
+
+![hl1.png](images/1076/hl1.png)
+
+
+
+Download the indicator:
+
+ [hl1.lua](files/1076/hl1.lua)
+
+The indicator was revised and updated
+
+See also a version which can show O/C prices here: [viewtopic.php?f=17&t=607&p=2933#p2933](https://fxcodebase.com/code/viewtopic.php?f=17&t=607&p=2933#p2933)
 
 
 ---
@@ -33,6 +60,15 @@ So as for the image above you can see that the new week started and the hi/lo ba
 
 ## Re: High/Low band
 
+**Nikolay.Gekht** · Thu Apr 29, 2010 8:13 am
+
+Thank you for the reporting. I'll check the indicator and the server data, probably it's a glitch in the source data.
+
+
+---
+
+## Re: High/Low band
+
 **barbs666** · Thu May 06, 2010 10:34 pm
 
 Hi,
@@ -40,6 +76,15 @@ Hi,
 just wondering if this has been updated/checked for the error?
 
 Thanks
+
+
+---
+
+## Re: High/Low band
+
+**Nikolay.Gekht** · Fri May 07, 2010 9:02 am
+
+There was the source data problem. I reported the problem to the server price team. Unfortunately, I don't manage them, so fixing of the such problems is completely out of my hands.
 
 
 ---
@@ -59,11 +104,30 @@ cheers
 
 ## Re: High/Low band
 
+**Nikolay.Gekht** · Sun May 09, 2010 6:51 pm
+
+I rechecked, so it looks like fixed. Unfortunately, it does not mean that all data is fixed, so, please, do not hesitate to report any other wrong data. I'll do all my best to force server team to fix the data asap.
+
+
+---
+
+## Re: High/Low band
+
 **barbs666** · Sun May 09, 2010 7:26 pm
 
 Ok Thanks Nikolay!
 
 so I assume there is no need to download the indicator again?....... cheers
+
+
+---
+
+## Re: High/Low band
+
+**Nikolay.Gekht** · Sun May 09, 2010 8:48 pm
+
+Yes, you do not need to reload or reinstall the indicator. This was the problem with data.
+The high/low band is just a good tool for finding historical price discrepancies.
 
 
 ---
@@ -90,6 +154,30 @@ When I downloaded HL.lua I got an error, "attempt to index global 'indicator', a
 
 ## Re: High/Low band
 
+**Nikolay.Gekht** · Fri Jun 11, 2010 10:47 am
+
+> **brianrben wrote:**
+> When I downloaded HL.lua I got an error, "attempt to index global 'indicator', a nil value."
+
+I have tried to install is a signal, not as an indicator. Use chart->manage custom indicators command.
+
+
+---
+
+## Re: High/Low band
+
+**Nikolay.Gekht** · Fri Jun 11, 2010 11:08 am
+
+> **kerkoules wrote:**
+> Is it possible to invert somehow the sketched area? I find it better to have the price action clear and the area outside it to be sketched in order to outline band's High/Low
+
+This is impossible in the current version of the Marketscope. I'll discuss with developers whether it could be done in the next release.
+
+
+---
+
+## Re: High/Low band
+
 **Capie1** · Mon Jun 21, 2010 4:45 pm
 
 Hi Nikolay
@@ -99,6 +187,27 @@ Thank you for this great tool.
 How would you modify it to display yesterdays High Low band in today?(shift 1 period to the right)
 
 Regards
+
+
+---
+
+## Re: High/Low band
+
+**Nikolay.Gekht** · Wed Jun 23, 2010 7:18 pm
+
+I'll do, just will finish with the trading sessions and moving average signal.
+
+
+---
+
+## Re: High/Low band
+
+**Nikolay.Gekht** · Mon Jun 28, 2010 5:08 pm
+
+> **Capie1 wrote:**
+> How would you modify it to display yesterdays High Low band in today?(shift 1 period to the right)
+
+I've updated the indicator in the first post of this topic.
 
 
 ---
@@ -118,6 +227,27 @@ A ) Option to show open/close instead of High /Low
 B) Show price label on chart in respect of current bands displayed.
 
 Thank you
+
+
+---
+
+## Re: High/Low band [upd Jun 28]
+
+**Nikolay.Gekht** · Mon Jul 12, 2010 1:15 pm
+
+1) Please find a version with Open/Close price support (see third parameter) below.
+
+2) The current price will be automatically shown in the upcoming version of the Trading Station, so I see no reason to do it right now.
+
+ 
+
+![hl2.png](images/2933/hl2.png)
+
+
+
+Download the indicator.
+
+ [hl2.lua](files/2933/hl2.lua)
 
 
 ---
@@ -172,6 +302,27 @@ Nica
 
 ## Re: High/Low band [upd Jun 28]
 
+**Nikolay.Gekht** · Fri Sep 10, 2010 10:41 am
+
+> **nica33 wrote:**
+> Previous day (only previous day) High and low as horizontal lines (just 2 lines in the chart)
+
+You can get it using the standard PIVOT indicator.
+
+1) Choose Daily in time frame
+2) Choose Fibonacci retracement in Calculation mode
+3) Choose "Today" in Show Mode
+4) Switch off all the lines except S3 and R3
+
+ 
+
+![fib.png](images/4376/fib.png)
+
+
+---
+
+## Re: High/Low band [upd Jun 28]
+
 **nica33** · Sun Sep 12, 2010 6:41 pm
 
 Perfect!!!!!
@@ -205,12 +356,43 @@ Thanks.
 
 ## Re: High/Low band [upd Jun 28]
 
+**Nikolay.Gekht** · Tue Dec 14, 2010 9:56 am
+
+I tried to check, but the data looks correct:
+
+ 
+
+![shot.png](images/6769/shot.png)
+
+
+
+Could you check please that:
+1) You compare bid data with bid data, not with ask data.
+2) You compare with the proper instrument/timeframe
+3) You have chosen Fibonacci retracement, not just Fibonacnni in pivot mode
+
+
+---
+
+## Re: High/Low band [upd Jun 28]
+
 **kelvincha** · Sun Dec 19, 2010 11:03 pm
 
 Hi Nikolay
 I found some problem when using this Indicator
 why the high and low band shift to the open price of today but not previous day
 Is that counting from Monday
+
+
+---
+
+## Re: High/Low band [upd Jun 28]
+
+**Nikolay.Gekht** · Mon Dec 20, 2010 11:57 am
+
+I see. It takes sunday as previous day. You can see a couple of sunday candles formed for this week. These candles "grabbed" Friday's value and these candles formed Monday's channel. I think the best way is to just skip these values.
+
+Well, I plan to rewrite a bit this indicator for new release of TS, I can just ignore sunday candles at all, but it is much easier to make it under new TS. I plan to but the last beta of new TS in a few days and will update the indicator for beta immediately.
 
 
 ---

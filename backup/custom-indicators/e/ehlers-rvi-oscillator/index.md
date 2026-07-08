@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=1735  
 > Forum: 17 · Topic 1735 · 17 post(s)
 
-
 ---
 
 ## Ehlers RVI oscillator
@@ -11,8 +10,6 @@
 **Apprentice** · Tue Aug 10, 2010 9:14 am
 
 ![RVI.png](images/3476/RVI.png)
-
-
 
 Value1 = ((Close - Open) + 2*(Close[1] - Open[1]) + 2*(Close[2] - Open[2]) + (Close[3] - Open[3]))/6;
 Value2 = ((High - Low) + 2*(High[1] - Low[1]) + 2*(High[2] - Low[2]) + (High[3] - Low[3]))/6;
@@ -27,7 +24,6 @@ RVISig = (RVI + 2*RVI[1] + 2*RVI[2] + RVI[3])/6;
 
 The indicator was revised and updated
 
-
 ---
 
 ## Re: Ehlers RVI oscillator
@@ -40,7 +36,6 @@ thanks so much for your support and timeliness.
 
 i appreciate it more than i can say...........
 
-
 ---
 
 ## Re: Ehlers RVI oscillator
@@ -48,7 +43,6 @@ i appreciate it more than i can say...........
 **pipsqueak** · Sun Nov 25, 2012 8:41 pm
 
 Is this perhaps. the "Relative Vigor Index"?
-
 
 ---
 
@@ -58,8 +52,8 @@ Is this perhaps. the "Relative Vigor Index"?
 
 That they are one and the same.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`{****************************************************
+```
+{****************************************************
          Relative Vigor Index (RVI)
          Copyright (c) 2001   MESA Software
 *****************************************************}
@@ -84,14 +78,14 @@ If Denom <> 0 then RVI = Num / Denom;
 RVISig = (RVI + 2*RVI[1] + 2*RVI[2] + RVI[3])/6;
 
 Plot1(RVI, "RVI");
-Plot2(RVISig, "Sig");`
+Plot2(RVISig, "Sig");
+```
 
 Although I have found a different formula.
 Will implement both, for comparison.
 
 RVI = (CLOSE - OPEN) / (HIGH - LOW)
 The Relative Vigor Index (RVI) oscillator is smoothed by the 10-period simple moving average. A signal line is also formed as a 4-period moving average on the oscillator values.
-
 
 ---
 
@@ -101,14 +95,11 @@ The Relative Vigor Index (RVI) oscillator is smoothed by the 10-period simple mo
 
 ![RVI.png](images/46497/RVI.png)
 
-
-
 RVI = (CLOSE - OPEN) / (HIGH - LOW)
 The Relative Vigor Index (RVI) oscillator is smoothed by the 10-period simple moving average. ć
 A signal line is also formed as a 4-period moving average on the oscillator values.
 
  [RVI.lua](files/46497/RVI.lua)
-
 
 ---
 
@@ -126,7 +117,6 @@ sjc
 
 [http://www.mql5.com/en/articles/288](http://www.mql5.com/en/articles/288)
 
-
 ---
 
 ## Re: Ehlers RVI oscillator
@@ -134,7 +124,6 @@ sjc
 **Apprentice** · Fri May 17, 2013 4:58 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -144,8 +133,8 @@ Your request is added to the development list.
 
 can this code be used?
 
-Code: [Select all](https://fxcodebase.com/code/)
-`//+------------------------------------------------------------------+
+```
+//+------------------------------------------------------------------+
 //|                                                 Adaptive RVI.mq5 |
 //|                        Based on RVI by MetaQuotes Software Corp. |
 //|                        Copyright 2009, MetaQuotes Software Corp. |
@@ -283,8 +272,8 @@ int OnCalculate(const int rates_total,const int prev_calculated,
 //--- OnCalculate done. Return new prev_calculated.
    return(rates_total);
   }
-//+------------------------------------------------------------------+`
-
+//+------------------------------------------------------------------+
+```
 
 ---
 
@@ -293,7 +282,6 @@ int OnCalculate(const int rates_total,const int prev_calculated,
 **Apprentice** · Sun Nov 17, 2013 3:19 am
 
 Can you privide required CyclePeriod Indicator?
-
 
 ---
 
@@ -318,7 +306,6 @@ AdaptiveRVIPeriod = int(floor((4*CyclePeriod[0]+3*CyclePeriod[1]+2*CyclePeriod[2
 
 ____________________________________________________________
 
-
 ---
 
 ## Re: Ehlers RVI oscillator
@@ -332,8 +319,8 @@ Expotential moving alpha is related to the length of a simple moving average by 
 
 ________________________
 
-Code: [Select all](https://fxcodebase.com/code/)
-`#property description "Adaptive CyberCycle indicator - described by John F. Ehlers"
+```
+#property description "Adaptive CyberCycle indicator - described by John F. Ehlers"
 #property description "in \"Cybernetic Analysis for Stocks and Futures\""
 #property description "This indicator is available for free download."
 
@@ -450,8 +437,8 @@ int OnCalculate(const int rates_total,
 //--- return value of prev_calculated for next call
    return(rates_total);
   }
-//+------------------------------------------------------------------+`
-
+//+------------------------------------------------------------------+
+```
 
 ---
 
@@ -462,7 +449,6 @@ int OnCalculate(const int rates_total,
 I need CyclePeriod indicator code.
 Its output is the basis for the proper functioning of the "Adaptive CyberCycle indicator
 
-
 ---
 
 ## Re: Ehlers RVI oscillator
@@ -471,15 +457,12 @@ Its output is the basis for the proper functioning of the "Adaptive CyberCycle i
 
 ![Hah.png](images/90898/Hah.png)
 
-
-
 This is what I could find on the internet.
 There are several versions out there.
 
  [Ehlers CyberCycle.lua](files/90898/Ehlers%20CyberCycle.lua)
 
  [Adaptive CyberCycle indicator.lua](files/90898/Adaptive%20CyberCycle%20indicator.lua)
-
 
 ---
 
@@ -494,8 +477,8 @@ Cyber Cycle indicator
 The Cyber Cycle indicator is a high-pass filter taken from "Сybernetic analysis for stocks and futures". This filter leaves only the cycle mode component from timeseries.
 Additionaly two-bar and three-bar cycle components are extracted from the result by smoothing it with a finite impulse response low pass filter.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`#property description "CyberCycle indicator - described by John F. Ehlers"
+```
+#property description "CyberCycle indicator - described by John F. Ehlers"
 #property description "in \"Cybernetic Analysis for Stocks and Futures\""
 #property description "This indicator is available for free download."
 
@@ -592,8 +575,8 @@ int OnCalculate(const int rates_total,
 //--- return value of prev_calculated for next call
    return(rates_total);
   }
-//+------------------------------------------------------------------+`
-
+//+------------------------------------------------------------------+
+```
 
 ---
 
@@ -606,7 +589,6 @@ Much appreciated!!!
 
 P
 
-
 ---
 
 ## Re: Ehlers RVI oscillator
@@ -614,7 +596,6 @@ P
 **Alexander.Gettinger** · Wed Jun 04, 2014 5:29 pm
 
 MQL4 version of Ehlers RVI oscillator: [viewtopic.php?f=38&t=60771](https://fxcodebase.com/code/viewtopic.php?f=38&t=60771).
-
 
 ---
 

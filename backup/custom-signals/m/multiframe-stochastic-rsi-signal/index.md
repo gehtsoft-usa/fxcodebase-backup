@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=29&t=952  
 > Forum: 29 · Topic 952 · 11 post(s)
 
-
 ---
 
 ## Multiframe Stochastic RSI signal
@@ -15,8 +14,6 @@ The signal monitor two Stochastic RSI indicators applied on the different time f
  
 
 ![mf_stoch_rsi.png](images/1746/mf_stoch_rsi.png)
-
-
 
 Download signal
 
@@ -39,8 +36,8 @@ In the SHOWSIGNAL indicator parameters:
 4b) Set the "Set the period of the signal to the chart period" parameter to **false**.
 5) Apply the SHOWSIGNAL indicator.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     strategy:name("Multiframe Stoch RSI signal");
     strategy:description("Signals when two Stoch RSI moves in the same zone");
 
@@ -133,8 +130,8 @@ function ExtUpdate(id, source, period)
     end
 end
 
-dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");`
-
+dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");
+```
 
 ---
 
@@ -143,7 +140,6 @@ dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");`
 **aarons_alive** · Wed May 05, 2010 1:25 pm
 
 This looks interesting, i will give it a go and let you know how much i lose!! lol only kidding.
-
 
 ---
 
@@ -158,7 +154,6 @@ Is is possible to add an email alert option to this signal.
 Thanks
 Satej
 
-
 ---
 
 ## Re: Multiframe Stochastic RSI signal
@@ -167,7 +162,6 @@ Satej
 
 Your request is added to the development list.
 
-
 ---
 
 ## Re: Multiframe Stochastic RSI signal
@@ -175,7 +169,6 @@ Your request is added to the development list.
 **BabyBull** · Sun Aug 26, 2012 7:52 pm
 
 Hello Nikolay, this looks interesting. I have a few questions. I cannot find a SHOWSIGNAL either within Marketscope or FXCodeBase. How do I get that indicator? If I am not mistaken the standard Stochastic and RSI use the close of "a" moving average of some type. Is there a way to program this indicator with the JMA for quicker response and a smoother line? And finally would it be possible to turn this into a strategy so that it can be back tested and/or optimized? Thank you for your time
-
 
 ---
 
@@ -188,7 +181,6 @@ Upon user request, Nikolay has promised to be returned in the future.
 JMA RSI is possible to implement.
 I believe that there are already several RSI strategy.
 
-
 ---
 
 ## Re: Multiframe Stochastic RSI signal
@@ -196,7 +188,6 @@ I believe that there are already several RSI strategy.
 **BabyBull** · Mon Aug 27, 2012 9:47 am
 
 Thank you for your quick response. I don't think i phrased my question correctly. Can the JMA be incorporated into the indicators used with the MTF StochasticRSI indicator? For instance the standard Stochastic has 3 different smoothing choices for %K and %D. The RSI is calculated on the close of the EMA. Is it possible to give the user the ability to modify the parameters withing the MTF StochasticRSI on both the upper and lower time frames? An additional question is where can I find a sound file for the alert? And finally maybe a better question is, would the MTF StochasticRSI respond quicker with a smoother line if the user could adjust the types of MA's? Thank you, Steve
-
 
 ---
 
@@ -213,7 +204,6 @@ we do not write MTF indicators.
  You can change indicator time frame indicator,
 by changing indikator source time frame.
 
-
 ---
 
 ## Re: Multiframe Stochastic RSI signal
@@ -224,7 +214,6 @@ Adaptable Stochastic RSI can be found here.
 [viewtopic.php?f=17&t=22756](https://fxcodebase.com/code/viewtopic.php?f=17&t=22756)
 Unfortunately this version does not support the JMA.
 
-
 ---
 
 ## Re: Multiframe Stochastic RSI signal
@@ -232,7 +221,6 @@ Unfortunately this version does not support the JMA.
 **BabyBull** · Mon Aug 27, 2012 11:28 am
 
 Again, thank you your quick response
-
 
 ---
 

@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=715  
 > Forum: 17 · Topic 715 · 14 post(s)
 
-
 ---
 
 ## Belkhayate's Timing Indicator
@@ -12,14 +11,12 @@
 
 ![BELTIME.png](images/1298/BELTIME.png)
 
-
-
 Download the indicator:
 
  [BELTIME.lua](files/1298/BELTIME.lua)
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- Indicator profile initialization routine
+```lua
+-- Indicator profile initialization routine
 -- Defines indicator profile properties and indicator parameters
 function Init()
     indicator:name("Belkayate timing indicator");
@@ -79,8 +76,8 @@ function Update(period)
         L[period] = (source.low[period] - avg1) / avg2;
         C[period] = (source.close[period] - avg1) / avg2;
     end
-end`
-
+end
+```
 
 ---
 
@@ -90,7 +87,6 @@ end`
 
 Can an alert be made for this indicator? (x > |8|....)
 
-
 ---
 
 ## Re: Belkhayate's Timing Indicator
@@ -99,7 +95,6 @@ Can an alert be made for this indicator? (x > |8|....)
 
 Your request is added to the Development List.
 
-
 ---
 
 ## Re: Belkhayate's Timing Indicator
@@ -107,8 +102,6 @@ Your request is added to the Development List.
 **Apprentice** · Thu Jun 21, 2012 1:52 pm
 
 ![BELTIME with Alert.png](images/35869/BELTIME%20with%20Alert.png)
-
-
 
 I have made ​​the update of original indicator.
 OB / OS levels can now be changed.
@@ -122,7 +115,6 @@ Compatibility issue Fix. _Alert helper is not longer needed.
 If you want to use the updated version,
 please make sure to use latest version of TS.
 
-
 ---
 
 ## Re: Belkhayate's Timing Indicator
@@ -130,7 +122,6 @@ please make sure to use latest version of TS.
 **TMos1124** · Thu Jun 21, 2012 5:39 pm
 
 Is it possible to have this alert at the tick rather than the close of the candle?
-
 
 ---
 
@@ -144,7 +135,6 @@ Could it be possible to add another configurable line/level? I mean: another OB3
 
 Thank you very much in advance
 
-
 ---
 
 ## Re: Belkhayate's Timing Indicator
@@ -152,7 +142,6 @@ Thank you very much in advance
 **Apprentice** · Thu Jun 28, 2012 1:16 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -162,7 +151,6 @@ Your request is added to the development list.
 
 3. OB/OS Level Added.
 
-
 ---
 
 ## Re: Belkhayate's Timing Indicator
@@ -171,7 +159,6 @@ Your request is added to the development list.
 
 That was quick!!! Thank you very much
 
-
 ---
 
 ## Re: Belkhayate's Timing Indicator
@@ -179,7 +166,6 @@ That was quick!!! Thank you very much
 **londonfx** · Mon Jul 02, 2012 3:30 pm
 
 Please add Mt4 version. Thank you,
-
 
 ---
 
@@ -190,7 +176,6 @@ Please add Mt4 version. Thank you,
 Your request is added to the development list.
 (check if there is MT4 indicator)
 
-
 ---
 
 ## Re: Belkhayate's Timing Indicator
@@ -199,7 +184,6 @@ Your request is added to the development list.
 
 MQL4 version of this indicator: [viewtopic.php?f=38&t=21219](https://fxcodebase.com/code/viewtopic.php?f=38&t=21219)
 
-
 ---
 
 ## Re: Belkhayate's Timing Indicator
@@ -207,7 +191,6 @@ MQL4 version of this indicator: [viewtopic.php?f=38&t=21219](https://fxcodebase.
 **Apprentice** · Sun Dec 13, 2015 4:08 pm
 
 Compatibility issue Fix. _Alert helper is not longer needed.
-
 
 ---
 

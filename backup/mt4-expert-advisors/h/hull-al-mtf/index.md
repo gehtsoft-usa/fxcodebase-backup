@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=38&t=70673  
 > Forum: 38 · Topic 70673 · 5 post(s)
 
-
 ---
 
 ## hull_al_mtf
@@ -11,8 +10,6 @@
 **Apprentice** · Tue Dec 01, 2020 5:08 am
 
 ![gbpusd-h1-fxcm-australia-pty.png](images/139229/gbpusd-h1-fxcm-australia-pty.png)
-
-
 
 Based on request.
 [viewtopic.php?f=27&t=70654](https://fxcodebase.com/code/viewtopic.php?f=27&t=70654)
@@ -24,7 +21,6 @@ Based on request.
  [hull_al.mq5](files/139229/hull_al.mq5)
 
  [hull_al_mtf.mq5](files/139229/hull_al_mtf.mq5)
-
 
 ---
 
@@ -40,8 +36,8 @@ I have 2 qustions:
 
 This is the price list :
 
-Code: [Select all](https://fxcodebase.com/code/)
-`enum enPrices
+```mql4
+enum enPrices
 {
    pr_close,      // Close
    pr_open,       // Open
@@ -146,8 +142,8 @@ double getPrice(int tprice, const double& open[], const double& close[], const d
                                      return(close[i]);       
    }
    return(0);
-}`
-
+}
+```
 
 ---
 
@@ -158,7 +154,6 @@ double getPrice(int tprice, const double& open[], const double& close[], const d
 Your request is added to the development list.
 Development reference 2387.
 
-
 ---
 
 ## Re: hull_al_mtf
@@ -167,7 +162,6 @@ Development reference 2387.
 
 Hello apprentice.
 Are you still working on my request please ?
-
 
 ---
 

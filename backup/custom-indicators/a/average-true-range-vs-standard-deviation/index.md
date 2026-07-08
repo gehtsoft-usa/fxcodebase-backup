@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=22965  
 > Forum: 17 · Topic 22965 · 5 post(s)
 
-
 ---
 
 ## Average True Range vs Standard Deviation
@@ -11,8 +10,6 @@
 **Apprentice** · Mon Sep 03, 2012 2:00 pm
 
 ![atr.png](images/39582/atr.png)
-
-
 
 According to the author, web references, we have.
 
@@ -27,7 +24,6 @@ ATR(14) < Standard Deviation(14) it means EUR/USD
  [ATRvsSD Bar.lua](files/39582/ATRvsSD%20Bar.lua)
 
 The indicator was revised and updated
-
 
 ---
 
@@ -45,13 +41,13 @@ The indicator was revised and updated
 
 But in the code looks like other way
 
-Code: [Select all](https://fxcodebase.com/code/)
-`if A.DATA[period] > mathex.stdev(source[Price], period - SP + 1, period) then
+```lua
+if A.DATA[period] > mathex.stdev(source[Price], period - SP + 1, period) then
       Value:setColor(period, instance.parameters.Tranding);    
       else
       Value:setColor(period, instance.parameters.Ranging);   
-      end`
-
+      end
+```
 
 ---
 
@@ -61,7 +57,6 @@ Code: [Select all](https://fxcodebase.com/code/)
 
 Fixed.
 
-
 ---
 
 ## Re: Average True Range vs Standard Deviation
@@ -69,7 +64,6 @@ Fixed.
 **rose123** · Wed Sep 05, 2012 6:05 am
 
 this is very useful indicator.
-
 
 ---
 

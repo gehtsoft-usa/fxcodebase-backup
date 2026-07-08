@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=4134  
 > Forum: 31 · Topic 4134 · 17 post(s)
 
-
 ---
 
 ## Traders Dynamic Index Strategy
@@ -44,8 +43,8 @@ Please download and install the following indicators which are **required** to h
 
 Please read the next topic in this post with analysis of the default parameters and brief optimization!
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     strategy:name("Trades the Traders Dynamic Index Indicator data");
     strategy:description("Implements scalping, active and moderate trading strategies for the Traders Index Indicator");
 
@@ -354,10 +353,10 @@ function AsyncOperationFinished(cookie, success, msg)
             Alert("Close Order Failed:" .. msg, true);
         end
     end
-end`
+end
+```
 
 The Strategy was revised and updated on January 21, 2019.
-
 
 ---
 
@@ -373,8 +372,6 @@ Used on small timeframes (m1-H1) the indicator result is not impressive at all:
 
 ![TDI_test_1.png](images/10379/TDI_test_1.png)
 
-
-
 (1-hour, default parameters, EUR/USD 2010 1-minute price archive)
 
 However, all the examples of the strategies based on that indicator are usually demonstrated on 1-day timeframe:
@@ -383,8 +380,6 @@ However, all the examples of the strategies based on that indicator are usually 
 
 ![TDI_test_2.png](images/10379/TDI_test_2.png)
 
-
-
 (1-day, default parameters, EUR/USD 2010 1-minute price archive)
 
 Of course, this does not mean that the indicator and strategy cannot be used for shorter time frame at all. The first attempt of the optimization shows that the problem is rather in the too short moving average applied to the RSI to get the price line:
@@ -392,8 +387,6 @@ Of course, this does not mean that the indicator and strategy cannot be used for
  
 
 ![TDI_test_3.png](images/10379/TDI_test_3.png)
-
-
 
 (optimization graph for EUR/USD 2010, 1-hour time frame. Map by RSI price line (Y) Signal Line (X) parameters).
 
@@ -408,14 +401,11 @@ We can get the equity curve which is more or less not so bad on EUR/USD 2010:
 
 ![TDI_test_4.png](images/10379/TDI_test_4.png)
 
-
-
 And even more or less works for the first four months of 2011:
 
  
 
 ![TDI_test_5.png](images/10379/TDI_test_5.png)
-
 
 ---
 
@@ -431,7 +421,6 @@ to find out how to backtest and optimize parameters using Strategy Debugger and 
 
 2) Participate in the strategies backtesting and parameters optimizing.
 
-
 ---
 
 ## Re: Traders Dynamic Index Strategy
@@ -443,7 +432,6 @@ I get this error Message: "122: invalid account"
 What is the reason for this and how could I solve this Problem?
 
 Thx
-
 
 ---
 
@@ -462,7 +450,6 @@ BUY EXIT LEVEL
 SELL ENTRY LEVEL
 SELL EXIT LEVEL
 
-
 ---
 
 ## Re: Traders Dynamic Index Strategy
@@ -480,7 +467,6 @@ Hi, I'm also getting this error, any help would be appreciated!
 
 Many Thanks
 
-
 ---
 
 ## Re: Traders Dynamic Index Strategy
@@ -490,7 +476,6 @@ Many Thanks
 Your request is added to the development list, Under Id Number 3672
  If someone is interested to do this task, please contact me.
 
-
 ---
 
 ## Re: Traders Dynamic Index Strategy
@@ -499,7 +484,6 @@ Your request is added to the development list, Under Id Number 3672
 
 Try it now.
 
-
 ---
 
 ## Re: Traders Dynamic Index Strategy
@@ -507,7 +491,6 @@ Try it now.
 **Apprentice** · Sun Dec 18, 2016 8:21 am
 
 Strategy was revised and updated.
-
 
 ---
 
@@ -524,7 +507,6 @@ BUY EXIT LEVEL
 SELL ENTRY LEVEL
 SELL EXIT LEVEL
 
-
 ---
 
 ## Re: Traders Dynamic Index Strategy
@@ -532,7 +514,6 @@ SELL EXIT LEVEL
 **jaricarr** · Tue Dec 20, 2016 11:57 pm
 
 Can you also add Vidya for RSI and Trade Signal Smoothing method please.
-
 
 ---
 
@@ -542,7 +523,6 @@ Can you also add Vidya for RSI and Trade Signal Smoothing method please.
 
 Your request is added to the development list, Under Id Number 3703
  If someone is interested to do this task, please contact me.
-
 
 ---
 
@@ -554,7 +534,6 @@ Hello All,
 Is it possible to forbidden the trading (open order) during some time zone? For example The startegy will not be allowed to trade during a zone from 22h00 to 23h00?
 
 Thanks in advance for your answer
-
 
 ---
 
@@ -569,7 +548,6 @@ Is it also possible to add a period for example from 17h00 to 17h30 where the tr
 
 Thanks in advance
 
-
 ---
 
 ## Re: Traders Dynamic Index Strategy
@@ -577,7 +555,6 @@ Thanks in advance
 **Apprentice** · Sun Dec 03, 2017 5:18 am
 
 Your request is added to the development list under Id Number 3973
-
 
 ---
 
@@ -588,7 +565,6 @@ Your request is added to the development list under Id Number 3973
 Something like this?
 
  [TradersDynamicIndexStrategy.lua](files/116402/TradersDynamicIndexStrategy.lua)
-
 
 ---
 

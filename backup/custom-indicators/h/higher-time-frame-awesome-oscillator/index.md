@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=1593  
 > Forum: 17 · Topic 1593 · 4 post(s)
 
-
 ---
 
 ## higher time frame awesome oscillator
@@ -12,10 +11,8 @@
 
 ![BF_AO.png](images/3136/BF_AO.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`-- todo: support week offset
+```lua
+-- todo: support week offset
 
 function Init()
     indicator:name("Bigger timeframe Awesome Oscillator");
@@ -237,11 +234,11 @@ function findDateFast(stream, date, precise)
             end
         end
     end
-end`
+end
+```
 
 MT4/MQ4 version.
 [viewtopic.php?f=38&t=65677&p=117279#p117279](https://fxcodebase.com/code/viewtopic.php?f=38&t=65677&p=117279#p117279)
-
 
 ---
 
@@ -251,7 +248,6 @@ MT4/MQ4 version.
 
 awesome thanks guys that was quick !!!
 
-
 ---
 
 ## Re: higher time frame awesome oscillator
@@ -260,7 +256,6 @@ awesome thanks guys that was quick !!!
 
 I adapted this oscillator to the new beta version of trading platform.
 * Jan 04, 2011 update: misprint in the oscillator has been fixed.
-
 
 ---
 

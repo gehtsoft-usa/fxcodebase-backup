@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=4562  
 > Forum: 31 · Topic 4562 · 71 post(s)
 
-
 ---
 
 ## Highly adaptable CCI Strategy
@@ -11,8 +10,6 @@
 **Apprentice** · Wed Jun 01, 2011 6:53 am
 
 ![CCI Strategy.png](images/11243/CCI%20Strategy.png)
-
-
 
 You can decide which action strategy will take if you have Zero Line or Overbought / O versold Level Crossover.
 
@@ -27,7 +24,6 @@ The strategy provides CrossOver and CrossUnder the Line signals.
 By default strategy does not take any Action.
 You need to configure it.
 
-
 ---
 
 ## Re: Highly adaptable CCI Strategy
@@ -41,7 +37,6 @@ please check the Assignment. In my opinion is not correct.
 
 Thanks bluepip
 
-
 ---
 
 ## Re: Highly adaptable CCI Strategy
@@ -49,7 +44,6 @@ Thanks bluepip
 **Apprentice** · Wed Jun 08, 2011 2:06 am
 
 Updated.
-
 
 ---
 
@@ -63,7 +57,6 @@ Would it be possible to add the Overbought / Oversold Confirmation levels that a
 
 Thanks you
 
-
 ---
 
 ## Re: Highly adaptable CCI Strategy
@@ -73,7 +66,6 @@ Thanks you
 Hello apprentice
 i like your strategies so much and i like your work...can i know what is the best T-F working good for this strategy
 and thanks so MUCH !
-
 
 ---
 
@@ -88,7 +80,6 @@ Would it be possible to add the use decimal values in the Stop/Limit orders, whi
 Much appreciated,
 Chimpy.
 
-
 ---
 
 ## Re: Highly adaptable CCI Strategy
@@ -96,7 +87,6 @@ Chimpy.
 **7510109079** · Tue Oct 11, 2011 10:38 am
 
 Would it be possible to make a small change which I have seen on other strategies. Namely to have the ability to plot the CCI for one time period on another e.g. be able to shown a m5 CCI plot on a m1 interval chart?
-
 
 ---
 
@@ -106,7 +96,6 @@ Would it be possible to make a small change which I have seen on other strategie
 
 You probably need [Biger Time Frame CCI](https://fxcodebase.com/code/viewtopic.php?f=17&t=3322).
 
-
 ---
 
 ## Re: Highly adaptable CCI Strategy
@@ -115,7 +104,6 @@ You probably need [Biger Time Frame CCI](https://fxcodebase.com/code/viewtopic.p
 
 thank you
 
-
 ---
 
 ## Re: Highly adaptable CCI Strategy
@@ -123,7 +111,6 @@ thank you
 **Rpleandro** · Mon Oct 17, 2011 5:46 am
 
 The stops and limits are not working for me could you please address this, thanks and best regards...
-
 
 ---
 
@@ -167,7 +154,6 @@ Oversold crossunder – Sell
 
 Please share with me your view and whether it is doable, thanks in advance!
 
-
 ---
 
 ## Re: Highly adaptable CCI Strategy
@@ -179,7 +165,6 @@ Your request is added to the developmental cue.
 Regarding the previous complaints that stop and limit orders do not work,
 I made a test and I could not reproduce this problem.
 
-
 ---
 
 ## Re: Highly adaptable CCI Strategy
@@ -187,8 +172,6 @@ I made a test and I could not reproduce this problem.
 **Apprentice** · Fri Oct 21, 2011 12:42 pm
 
 ![ver2.png](images/16620/ver2.png)
-
-
 
 To, Highly adaptable CCI Strategy, I added another filter.
 The filter is based on independent CCI indicator.
@@ -199,7 +182,6 @@ Depending on this choice.
 trades from primary strategy are filtered
 
  [Highly adaptable CCI Strategy with confirmation.lua](files/16620/Highly%20adaptable%20CCI%20Strategy%20with%20confirmation.lua)
-
 
 ---
 
@@ -221,7 +203,6 @@ Permissible trade on overbought:? (do I leave as both or put sell or buy?)
 I know these are basic questions but I do appreciate your time and thank you in advance for your reply.
 Regards
 
-
 ---
 
 ## Re: Highly adaptable CCI Strategy
@@ -231,7 +212,6 @@ Regards
 Indicators and strategies are working independently.
 Therefore, set the parameters for both,
 without conversion to HIGHER time frame.
-
 
 ---
 
@@ -290,7 +270,6 @@ Thank you very much again
 
 Tom
 
-
 ---
 
 ## Re: Highly adaptable CCI Strategy
@@ -298,7 +277,6 @@ Tom
 **Apprentice** · Mon Feb 13, 2012 5:52 am
 
 Your request is added to development list.
-
 
 ---
 
@@ -317,7 +295,6 @@ For a short term fix would I be able to turn the system to only take one open po
 Thanks,
 Matt
 
-
 ---
 
 ## Re: Highly adaptable CCI Strategy
@@ -325,7 +302,6 @@ Matt
 **Apprentice** · Sun May 06, 2012 4:22 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -338,7 +314,6 @@ Hello, I desperately need to add the code to this trading system that limits the
 Thanks,
 Matt
 
-
 ---
 
 ## Re: Highly adaptable CCI Strategy
@@ -346,7 +321,6 @@ Matt
 **Apprentice** · Fri May 11, 2012 3:03 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -358,7 +332,6 @@ I really need standard code to add to this strategy for it to check the balance 
 
 Thanks,
 Matt
-
 
 ---
 
@@ -380,20 +353,20 @@ Code: [Select all](https://fxcodebase.com/code/)
 Code: [Select all](https://fxcodebase.com/code/)
 `local MaxTrades;`
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Prepare(nameOnly)
+```lua
+function Prepare(nameOnly)
     -- check moving average parameters
    OB=instance.parameters.OB;
     OS= instance.parameters.OS;
    SIDE= instance.parameters.SIDE;   
     AllowMultiple= instance.parameters.AllowMultiple;
-   MaxTrades = instance.parameters.MaxTrades;`
+   MaxTrades = instance.parameters.MaxTrades;
+```
 
 Since I have added these parameters in it now allows me to select max number of trades, but the code isn't in the -- check whether the strategy is allowed to trade coding. Could someone who knows how to code finish this please?
 
 Thanks,
 Matt
-
 
 ---
 
@@ -422,7 +395,6 @@ All I need for a complete system is to be able to set the MAX number of trades a
 Thanks,
 Matt
 
-
 ---
 
 ## Re: Highly adaptable CCI Strategy
@@ -430,7 +402,6 @@ Matt
 **nathanalgren** · Thu Sep 13, 2012 2:18 pm
 
 I am testing the zero cross over buy-sell strategy, but it is sometimes ignoring and not executing the trades. Please see the picture.
-
 
 ---
 
@@ -453,7 +424,6 @@ My native language is not English, you can understand my question?
 
 Thank you very much！
 
-
 ---
 
 ## Re: Highly adaptable CCI Strategy
@@ -463,7 +433,6 @@ Thank you very much！
 If you use confirmation.
 You will have Buy, Sell or Both if confirmation CCI Is within Overbought or Oversold Zone.
 With the parameters you are specifying what is permitted in Overbought or Oversold Zone
-
 
 ---
 
@@ -489,7 +458,6 @@ Also, does the strategy take signals based on the time period's closing price or
 
 Thanks!
 
-
 ---
 
 ## Re: Highly adaptable CCI Strategy
@@ -499,7 +467,6 @@ Thanks!
 This is done deliberately.
 One of the reasons, if you are a U.S. account holder,
 We have FIFO rule as well.
-
 
 ---
 
@@ -514,7 +481,6 @@ Is there any way you could convert this strategy into MetaTrader 4? It is very u
 Thanks,
 Matt
 
-
 ---
 
 ## Re: Highly adaptable CCI Strategy
@@ -523,7 +489,6 @@ Matt
 
 Unfortunately, I'm not good enough in MQ4.
 I will post the request, I hope that Alex will find the time.
-
 
 ---
 
@@ -534,7 +499,6 @@ I will post the request, I hope that Alex will find the time.
 I really appreciate the help. I'll patiently wait and hope for a response. Currently I'm just still using your version here for Market Scope!
 
 Thanks
-
 
 ---
 
@@ -548,7 +512,6 @@ Is there anyway to add a smoothing feature to the CCI! This would be for Highly 
 
 Thanks!
 
-
 ---
 
 ## Re: Highly adaptable CCI Strategy
@@ -556,7 +519,6 @@ Thanks!
 **Apprentice** · Thu Nov 29, 2012 3:55 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -569,7 +531,6 @@ When I put in the e-mail alert information, no e-mail is sent. Are their other s
 Thanks,
 Matt
 
-
 ---
 
 ## Re: Highly adaptable CCI Strategy
@@ -578,7 +539,6 @@ Matt
 
 Have you configured SendEmail options?
 [viewtopic.php?f=25&t=2232](https://fxcodebase.com/code/viewtopic.php?f=25&t=2232)
-
 
 ---
 
@@ -605,7 +565,6 @@ I hv enclosed a screenshot of the parameters i hv tried to use so you can see wh
 many thx
 L
 
-
 ---
 
 ## Re: Highly adaptable CCI Strategy
@@ -620,14 +579,11 @@ I have been attempting to backtest this strategy but I can't make it behave. It 
 
 ![Highly Adaptable CCI with confirmation errors.png](images/92073/Highly%20Adaptable%20CCI%20with%20confirmation%20errors.png)
 
-
-
 My confirmation CCI is 50 period with O/B set to 1 and O/S set to -1.
 Would appreciate some help on this as it seems it could be profitable with the correct money management in place.
 
 Thanks in anticipation,
 Ross
-
 
 ---
 
@@ -638,7 +594,6 @@ Ross
 good luck with that spinemaligna. I have been waiting 5 months for a reply. Not sure how these guys priortize requests/questions. No logic as far as i can see.
 
 Shame because as you say it has potential
-
 
 ---
 
@@ -670,7 +625,6 @@ Or My own AddonsToGO.
 The good news is, in the past month, I have some help, so things should get better in future,
 This is Especially true in Strategy Development.
 
-
 ---
 
 ## Re: Highly adaptable CCI Strategy
@@ -693,7 +647,6 @@ Thanks
 
 Phil
 
-
 ---
 
 ## Re: Highly adaptable CCI Strategy
@@ -712,7 +665,6 @@ I understand you are under pressure but would appreciate some input. Maybe someb
 
 Ross
 
-
 ---
 
 ## Re: Highly adaptable CCI Strategy
@@ -724,7 +676,6 @@ Apprentice,
 I have attached an XL file showing the logic steps I think the strategy should take. If this is different to the logic of the strategy is it possible to create a strategy that fulfills these aims.
 
 Ross
-
 
 ---
 
@@ -739,7 +690,6 @@ If u Set
 Overbought Level CrossOver Action to Buy
 Oversold Level CrossUnder Action to Sell
 Trade will be opened on the OB / OS Cross.
-
 
 ---
 
@@ -756,7 +706,6 @@ Looking forward to a prompt reply so we can get this system moving forward.
 
 Ross
 
-
 ---
 
 ## Re: Highly adaptable CCI Strategy
@@ -768,7 +717,6 @@ Ignore the situation during the candle elapse.
 
 "Live" executions, immediately after Cross is possible,
 However, this requires a Strategy redesign.
-
 
 ---
 
@@ -785,7 +733,6 @@ I don't think we are a thousand miles away from achieving this. My aim is to opt
 
 Thanks again, Ross
 
-
 ---
 
 ## Re: Highly adaptable CCI Strategy
@@ -794,7 +741,6 @@ Thanks again, Ross
 
 As it is, this version of strategy can not do described.
 Will modify it.
-
 
 ---
 
@@ -806,7 +752,6 @@ Excellent,
 
 Thanks, Ross
 
-
 ---
 
 ## Re: Highly adaptable CCI Strategy
@@ -814,7 +759,6 @@ Thanks, Ross
 **spinemaligna** · Sat Aug 02, 2014 8:53 am
 
 Six months on, any progress to report?
-
 
 ---
 
@@ -827,7 +771,6 @@ To the original strategy in the first post,
 I want to add MA slope. For example, if MA50 is sloping downwards, the strategy will execute only shorts, and if MA50 is sloping upwards, then only long.
 
 Is that possible to do? If anyone other than the admin/mods can do it, please PM me.
-
 
 ---
 
@@ -846,7 +789,6 @@ Is that possible to do? If anyone other than the admin/mods can do it, please PM
 
 Thanks.
 
-
 ---
 
 ## Re: Highly adaptable CCI Strategy
@@ -862,7 +804,6 @@ Can only go short if price is below EMA (200).
 
 l look forward to hearing from you
 
-
 ---
 
 ## Re: Highly adaptable CCI Strategy
@@ -871,7 +812,6 @@ l look forward to hearing from you
 
 Major Update.
 Your request is added to the development list.
-
 
 ---
 
@@ -891,7 +831,6 @@ Your request is added to the development list.
 
 [https://www.dailyfx.com/forex/education ... lpers.html](https://www.dailyfx.com/forex/education/trading_tips/trend_of_the_day/2014/06/25/A-Simple-CCI-Strategy-for-Scalpers.html)
 
-
 ---
 
 ## Re: Highly adaptable CCI Strategy
@@ -906,7 +845,6 @@ Many thanks,
 
 Jari
 
-
 ---
 
 ## Re: Highly adaptable CCI Strategy
@@ -914,7 +852,6 @@ Jari
 **Apprentice** · Fri Dec 16, 2016 7:09 am
 
 Strategy was revised and updated.
-
 
 ---
 
@@ -930,7 +867,6 @@ when you mention "revised and updated", where can we download the latest version
 
 Thank you in advance.
 
-
 ---
 
 ## Re: Highly adaptable CCI Strategy
@@ -939,7 +875,6 @@ Thank you in advance.
 
 Files are updated where they are publish.
 I have only fix, some bug, made some optimizations.
-
 
 ---
 
@@ -951,7 +886,6 @@ dear apprentice
 can you add the ''multiple'' at the strategy?
 thanks in advance
 
-
 ---
 
 ## Re: Highly adaptable CCI Strategy
@@ -960,7 +894,6 @@ thanks in advance
 
 Multiplier or CCI or position size.
 You need to be specific.
-
 
 ---
 
@@ -979,7 +912,6 @@ every time the price crosses over , open a new buy position.
 
 thanks a lot for your great work apprentice.
 
-
 ---
 
 ## Re: Highly adaptable CCI Strategy
@@ -988,7 +920,6 @@ thanks a lot for your great work apprentice.
 
 Your request is added to the development list, Under Id Number 3717
  If someone is interested to do this task, please contact me.
-
 
 ---
 
@@ -1003,7 +934,6 @@ please can you specify what the below two lines in the strategy means?
 
 please clarify because i am very confused
 thanks a lot
-
 
 ---
 
@@ -1020,7 +950,6 @@ Overbought level CrossOver Action Close Sell Position
 Oversold Level CrossUnder action Close Buy Position
 
 Thanks a Lot
-
 
 ---
 
@@ -1040,7 +969,6 @@ If "Position Cap" is used
  will define the total number of positions allowed for underlying strategy.
 MAX NUMBER OF POSITION IN ONE DIRECTION
  will define the total number of positions allowed on Long or Short side of trade.
-
 
 ---
 
@@ -1066,7 +994,6 @@ MAX NUMBER OF POSITION IN ONE DIRECTION
 
 The strategy is updated.
 
-
 ---
 
 ## Re: Highly adaptable CCI Strategy
@@ -1076,7 +1003,6 @@ The strategy is updated.
 Hi Apprentice,
 
 Can you please add 'Live' execution.
-
 
 ---
 
@@ -1105,7 +1031,6 @@ For this strategy you need to install Tick_CCI indicator also.
 
  [Highly adaptable Renko CCI Strategy.lua](files/115245/Highly%20adaptable%20Renko%20CCI%20Strategy.lua)
 
-
 ---
 
 ## Re: Highly adaptable CCI Strategy
@@ -1114,7 +1039,6 @@ For this strategy you need to install Tick_CCI indicator also.
 
 Hi, I have read about a manual strategy that when the CCI (usually in the hour chart) that once the CCI hits or goes past the 250 and -250 levels then wait for the CCI to cross the 100 (sell) or -100 (buy). Looking over history It seems to be very reliable. Is there a way of implementing this into the strategy but not limiting but letting you to adjust the initial cci value hit. ie instead of limiting to 250 you are able to adjust this. I hope my explanation makes sense.
 Cheers and thanks for all the great work.
-
 
 ---
 

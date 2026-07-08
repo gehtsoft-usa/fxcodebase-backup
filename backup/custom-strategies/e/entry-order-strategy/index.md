@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=59515  
 > Forum: 31 · Topic 59515 · 45 post(s)
 
-
 ---
 
 ## Entry Order Strategy
@@ -12,15 +11,12 @@
 
 ![Entry Order Strategy.png](images/89519/Entry%20Order%20Strategy.png)
 
-
-
 Will generate an Entry order, X pips above or below market.
 At future set point in time.
 
  [Entry Order Strategy.lua](files/89519/Entry%20Order%20Strategy.lua)
 
 The Strategy was revised and updated on January 21, 2019.
-
 
 ---
 
@@ -30,7 +26,6 @@ The Strategy was revised and updated on January 21, 2019.
 
 Hi Apprentice! can you make this available on OCO (one cancels other), Market Order, and Market Range please. Thanks!!!
 
-
 ---
 
 ## Re: Entry Order Strategy
@@ -39,7 +34,6 @@ Hi Apprentice! can you make this available on OCO (one cancels other), Market Or
 
 will consider it.
 Can I, and how to achieve this.
-
 
 ---
 
@@ -54,7 +48,6 @@ at the European open (9.00 a.m as parameter) eur/usd to buy (parameter) 11 pips 
 In this way, we can do a lot of backtest.
 Thank's in advance. WKR Axeas69
 
-
 ---
 
 ## Re: Entry Order Strategy
@@ -66,7 +59,6 @@ Sorry, I forgot 2 conditions about validity of the 2 OCO.
 2- option to cancel the second OCO if the first is started.
 
 Many Thanks. Axeas69
-
 
 ---
 
@@ -93,7 +85,6 @@ ContingencyType
 	2 OTO --use OrderIdPrimary
 	3 ELS --use OrderIdPrimary
 
-
 ---
 
 ## Re: Entry Order Strategy
@@ -103,7 +94,6 @@ ContingencyType
 Hello,
 There is a bug in backtestinf. The strategy stop to work after to create the first order.
 Please can you check? Thanks in advance WKR Axeas
-
 
 ---
 
@@ -116,7 +106,6 @@ This functionality will remain.
 
 OCO version, on the other hand should be run indefinitely.
 
-
 ---
 
 ## Re: Entry Order Strategy
@@ -128,7 +117,6 @@ I'm sorry to disturb you again.I check everywhere and everything but I don't und
 where I can put OCO to get the other version and see the backtest run up to the end of the period.
 Thanks in advance. WKR Axeas
 
-
 ---
 
 ## Re: Entry Order Strategy
@@ -136,7 +124,6 @@ Thanks in advance. WKR Axeas
 **Apprentice** · Mon Jan 27, 2014 3:44 am
 
 Unfortunately this is not so simple, existing strategy, should be modified.
-
 
 ---
 
@@ -147,7 +134,6 @@ Unfortunately this is not so simple, existing strategy, should be modified.
 hello Apprentice how r u? if you please i need your help to set the parameters of your strategy ( Entry Order Strategy) that will achieve opening and closing of orders automaticly and continuously for a giving time frame candle (such as one hour time frame ) because now it gives me only one order then stoped and need to be activated again to get the second order (as i learnd from trying using it) . is it possible to program that ? with my appreciation in advance.
 
 Joined: Thu Sep 11, 2014 5:23 pm
-
 
 ---
 
@@ -162,7 +148,6 @@ We need to write a completely new strategy.
 
 Can you define the entry conditions.
 
-
 ---
 
 ## Re: Entry Order Strategy
@@ -170,7 +155,6 @@ Can you define the entry conditions.
 **easytrading** · Wed Sep 17, 2014 7:08 pm
 
 By using the existing strategy parameters,the only modification need to do is adding a timer to fill the next entry order conditions that are based on the time frame u r using (which will be changeable according to trader's choice) for any currency (such as EUR/USD) and let us say it is 1 hour, and your direction is Buy. So when first working 1hr order comes to end,immediatly take the following 1hr order after the closing and exiting the previous order (to keep only one order working) in the same direcion Buy (as it was set before) and so on keep the strategy working (with the ability to set limit & stop orders in pips as it is in the existing strategy) until you stop it if you want manually. I know it is a challenging, but in the same time I am sure of your programming capabilities from the fantasting job u r doing with my appreciation in advance.
-
 
 ---
 
@@ -180,7 +164,6 @@ By using the existing strategy parameters,the only modification need to do is ad
 
 Your request is added to the development list.
 
-
 ---
 
 ## Re: Entry Order Strategy
@@ -188,7 +171,6 @@ Your request is added to the development list.
 **easytrading** · Fri Sep 19, 2014 2:57 pm
 
 Thank u Apprentice for taking my request into consideration.I really appreciate that.
-
 
 ---
 
@@ -220,7 +202,6 @@ Alright enjoy.
 Cheers,
 MooMooForex
 
-
 ---
 
 ## Re: Entry Order Strategy
@@ -241,7 +222,6 @@ Buy or sell :Buy
 
  kindest regards.
 
-
 ---
 
 ## Re: Entry Order Strategy
@@ -257,7 +237,6 @@ Are you sure you mean close order and not close position?
 Cheers,
 MooMooForex
 
-
 ---
 
 ## Re: Entry Order Strategy
@@ -269,7 +248,6 @@ hello moomoofx,
 I am very very sorry for my mistake ,i should say it is not closing the previous opend positions .could you please update it so it can close the opend posion before opend a new one so we make sure we have only one open posion regardless it will close in profit or loss.
 
 kidest regards.
-
 
 ---
 
@@ -283,7 +261,6 @@ Please redownload from the first post. Enjoy.
 
 Cheers,
 MooMooForex
-
 
 ---
 
@@ -309,7 +286,6 @@ distance to market :0
 buy or sell :sell
 T/P & S/L :no
 
-
 ---
 
 ## Re: Entry Order Strategy
@@ -328,14 +304,11 @@ Therefore, you should be seeing that behavior already. I tested it, and the scre
 
 ![entryOrder.png](images/97320/entryOrder.png)
 
-
-
 02:45 Order placed.
 02:45 Order Executed, Position Opened.
 02:50 5 minutes later Open position closed and new order placed.
 
 Where's the problem?
-
 
 ---
 
@@ -346,7 +319,6 @@ Where's the problem?
 hello moomoofx,
 
 I re-instal it and now it is closing at the bar closing .thank you
-
 
 ---
 
@@ -366,7 +338,6 @@ Y3=Y2+2 (lot size for 3rd loss bar)
 your halp is much appreciated and thank you for the excellent job you are doing.
 kindest regards.cheers
 
-
 ---
 
 ## Re: Entry Order Strategy
@@ -377,7 +348,6 @@ please help me, where is the post
 posting.php?mode=reply&f=31&t=59515#pr95977
 
 this page is error
-
 
 ---
 
@@ -393,7 +363,6 @@ by easytrading » Wed Sep 17, 2014 7:08 pm you will find it in page 2 of this po
 hopping this will help...
 
 easytrading
-
 
 ---
 
@@ -412,7 +381,6 @@ to:
 If a certain price level is reached."
 
 thanks in advance
-
 
 ---
 
@@ -436,7 +404,6 @@ Entry Type: Previous Close
 Bar Time Frame: W1
 Distance to market (in pips): 10
 
-
 ---
 
 ## Re: Entry Order Strategy
@@ -444,7 +411,6 @@ Distance to market (in pips): 10
 **Stance** · Fri Aug 28, 2015 2:10 am
 
 Hi would it be possible to have an option to place 2 or orders simultaneously? Ie when triggered 2 buy orders for the same market is put in.
-
 
 ---
 
@@ -457,8 +423,8 @@ Hi would it be possible to have an option to place 2 or orders simultaneously? I
 
 I've managed to modify the code to support OCO.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`--+------------------------------------------------------------------+
+```lua
+--+------------------------------------------------------------------+
 --|                                         Entry Order Strategy.lua |
 --|                               Copyright © 2014, Gehtsoft USA LLC |
 --|                                            http://fxcodebase.com |
@@ -940,8 +906,8 @@ function checkReady(table)
     return core.host:execute("isTableFilled", table);
 end
 
-dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");`
-
+dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");
+```
 
 ---
 
@@ -951,7 +917,6 @@ dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");`
 
 Is it possible to have it automatically place an OCO when the previous OCO is stopped out, instead of creating a new OCO every 5 mins?
 
-
 ---
 
 ## Re: Entry Order Strategy
@@ -959,7 +924,6 @@ Is it possible to have it automatically place an OCO when the previous OCO is st
 **Apprentice** · Wed Dec 16, 2015 5:43 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -972,7 +936,6 @@ Hello! I love this strategy, it could help me place orders without having to wak
 I backtested it and set the parameters to place an OCO @ 3am every day. I set the Entry Type to Previous Close, and the Bar Time Frame to "D1". I think it's supposed to use the previous daily bar close price (or whatever time frame I've chosen) to calculate the entry orders right? It places the orders using the previous hourly bar close price, instead of the previous daily bar close price. Maybe I'm just setting it up wrong? It does the same thing no matter what time I pick. Other than that, it works great!
 
 Thank you for your time.
-
 
 ---
 
@@ -989,7 +952,6 @@ I would like to request two new features please:
 
 Thank you for all the hard work you guys are putting into this site and the services. I've sent several of my friends here to learn and hopefully contribute.
 
-
 ---
 
 ## Re: Entry Order Strategy
@@ -998,7 +960,6 @@ Thank you for all the hard work you guys are putting into this site and the serv
 
 Your request is added to the development list, Under Id Number 3595
  If someone is interested to do this or any task other from list please contact me.
-
 
 ---
 
@@ -1012,7 +973,6 @@ Can you make an option "Close on Opposite" for open position ?
 
 I think it's a good option for hedge.
 
-
 ---
 
 ## Re: Entry Order Strategy
@@ -1020,7 +980,6 @@ I think it's a good option for hedge.
 **Apprentice** · Mon Aug 29, 2016 4:33 am
 
 Can you describe this trade using the example.
-
 
 ---
 
@@ -1046,7 +1005,6 @@ And if you can make an option like "Maximum number of position in one direction/
 
 Thank you very much,
 
-
 ---
 
 ## Re: Entry Order Strategy
@@ -1057,7 +1015,6 @@ Hi Apprentice,
  I don't see where the option is to make an OCO order in the parameters of this strategy. I see that Stance said he put it in there and others have posted about using the OCO order option but I don't see it. I've downloaded from page one twice. I know I'm probably just missing something but can you let me know what I need to do to get the OCO option in this strategy?
 
 Thank you.
-
 
 ---
 
@@ -1077,7 +1034,6 @@ All positions make by this strategy was ended with a small loss of spread. The l
 
 I think the menchanism to make a new order of Manual Entry Order strategy is better.
 
-
 ---
 
 ## Re: Entry Order Strategy
@@ -1085,7 +1041,6 @@ I think the menchanism to make a new order of Manual Entry Order strategy is bet
 **Apprentice** · Sat Dec 17, 2016 10:24 am
 
 Strategy was revised and updated.
-
 
 ---
 
@@ -1103,7 +1058,6 @@ If you find some example of a strategy that has that property (**fixed stop**) a
 
 Thank you so much
 
-
 ---
 
 ## Re: Entry Order Strategy
@@ -1112,7 +1066,6 @@ Thank you so much
 
 Your request is added to the development list, Under Id Number 3728
  If someone is interested to do this task, please contact me.
-
 
 ---
 
@@ -1132,7 +1085,6 @@ Your request is added to the development list, Under Id Number 3728
 > Thank you so much
 
 The strategy has been updated.
-
 
 ---
 

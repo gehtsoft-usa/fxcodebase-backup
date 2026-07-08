@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=2639  
 > Forum: 31 · Topic 2639 · 168 post(s)
 
-
 ---
 
 ## Breakout Strategy
@@ -26,8 +25,6 @@ You can play with all above parameters to make the strategy most profitable.
 
 ![Breakout_Strategy.png](images/5951/Breakout_Strategy.png)
 
-
-
  [Breakout_Strategy.lua](files/5951/Breakout_Strategy.lua)
 
 Please share any suggestions or comments here.
@@ -43,7 +40,6 @@ You must have both GMMA and GMMACD installed in order to use this strategy.
 MT4/MQ4 version, MT5/MQ5 version.
 [viewtopic.php?f=38&t=70742](https://fxcodebase.com/code/viewtopic.php?f=38&t=70742)
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -51,7 +47,6 @@ MT4/MQ4 version, MT5/MQ5 version.
 **borsaty** · Tue Nov 09, 2010 5:00 pm
 
 Thanks
-
 
 ---
 
@@ -65,7 +60,6 @@ if not what the ability to do that as hedging .
 also what is the ability to add parameter for buy or sell or both
 and also filter parameter like moving average
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -75,7 +69,6 @@ and also filter parameter like moving average
 hi
 can we make this indicator to put buy entry and sell entry instead of market order at the plce of breakout
 thanks
-
 
 ---
 
@@ -87,7 +80,6 @@ Hi, could someone please help to clarify whether Both Indicator and Strategy req
 
 Thank You
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -97,7 +89,6 @@ Thank You
 The indicator must be installed so that strategy could work.
 But you do not need to added it to the chart.
 They are independent.
-
 
 ---
 
@@ -118,7 +109,6 @@ Two Issues:
 
 Thank You Apprentice!
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -137,7 +127,6 @@ Where did I go wrong...?
 
 ![breakout_wrong.png](images/6471/breakout_wrong.png)
 
-
 ---
 
 ## Re:Breakout
@@ -147,7 +136,6 @@ Where did I go wrong...?
 the strategy can't fill all orders
 in this case only EURUSD and USDCAD but the strategy fail to fill EURJPY and GBPJPY
 ......... look at the image
-
 
 ---
 
@@ -160,7 +148,6 @@ in this case only EURUSD and USDCAD but the strategy fail to fill EURJPY and GBP
 > Where did I go wrong...?
 
 Do you have [Autotrading patch](https://fxcodebase.com/code/viewtopic.php?f=31&t=2337) installed?
-
 
 ---
 
@@ -182,7 +169,6 @@ Goodmorning from Greece!
 I have the Trading station console and Marketscope 2.0, also I use some strategies with the "allow trade" ON. Is it OK or I must have the autotrading patch for this strategy?
 THANX for your time!
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -196,7 +182,6 @@ I've installed the Breakout indicator and strategy and both seem to work fine, b
 Any ideas greatly appreciated.
 
 thanks
-
 
 ---
 
@@ -222,7 +207,6 @@ But... I have the same problem with costock. The time that breakout take place m
 
 ![break.png](images/6576/break.png)
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -238,7 +222,6 @@ Also can make some modification i try to list it
 3- the ability to change the number of order 1, 2, 3, ... or any other number ( now either one or all )
 sorry about my language
 Thanks so much........
-
 
 ---
 
@@ -258,7 +241,6 @@ e.g. If I setup the strategy from 10.00 to 15.00 local time (GMT +2), trades tak
 
 Best regards for your services. Kisses from Greece
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -276,7 +258,6 @@ Can you fix it ?
 thanks in advance
 guido
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -284,7 +265,6 @@ guido
 **adekoyagbemi** · Thu Dec 23, 2010 9:56 am
 
 Each time i try to add the breakout strategy, i get an error 'string breakout.lua' :126 : indicator with id BREkOUT not found. Kindly assist to resolve this problem
-
 
 ---
 
@@ -297,7 +277,6 @@ Just Install Breakout indicator.
 You can find it here.
 [viewtopic.php?f=17&t=966](https://fxcodebase.com/code/viewtopic.php?f=17&t=966)
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -305,7 +284,6 @@ You can find it here.
 **adekoyagbemi** · Thu Dec 23, 2010 10:57 am
 
 I have installed it, still having the error message
-
 
 ---
 
@@ -315,7 +293,6 @@ I have installed it, still having the error message
 
 Could you please have the option of trailing stop?
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -323,7 +300,6 @@ Could you please have the option of trailing stop?
 **hawk31003** · Wed Dec 29, 2010 4:10 am
 
 edit: is there any way possible to make the stop and limit work with fifo??
-
 
 ---
 
@@ -335,7 +311,6 @@ The problem of "time type" is not fixet.Instead of LOCAL TIME I use TRADING DAY 
 thanks in advance
 guido
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -343,7 +318,6 @@ guido
 **hawk31003** · Sun Jan 02, 2011 1:50 am
 
 sounds good. if it works out the way i think it should with all the right parameters plugged in, you will be driving in your complimentary gift ferrari within 3 years from now lol. im looking forward to it
-
 
 ---
 
@@ -355,7 +329,6 @@ I like this strategy but feel it could be improved if the following change was m
 
 The advantage of having the stop as the breakeven is highlighted with an example of the opposite described above: if price breaks out upwards by 10 pips then falls back 30 pips and price heads downwards you are stopped out with an unncessary 30 pip loss. If it breaks out again then simply re enter the trade again by choosing multiple times a day.
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -365,7 +338,6 @@ The advantage of having the stop as the breakeven is highlighted with an example
 I have been testing what I wrote in the above post on **live data** by using a combination of the breakout strategy and the breakeven price strategy. I think now that what I said was wrong. If the position is closed after falling to the breakeven breakout level then that stop is effectively too aggressive. Either you choose to enter positions only after the candlestick has closed, which leads to the problem of the candlestick leaving a large shadow but nonetheless moving in the direction of the breakout (leading you to having closed too early) or you enter based on tick data which can get your potential profits eaten up by the spread.
 
 I still think entering on candlestick closes is the right way to go but such a strategy relies on the small losses you make on spreads to be more than made up for by the profits you gain on capturing good breakouts. Perhaps something more like 20 pip stop, 60 pip limit. However, being able to set the stop and limit in terms of the ATR would be ideal for this.
-
 
 ---
 
@@ -383,7 +355,6 @@ Also, a trailing stop might help on those bars when there's movement but the ope
 
 Is any of this possible with this strategy?
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -391,7 +362,6 @@ Is any of this possible with this strategy?
 **Apprentice** · Wed Feb 02, 2011 4:58 am
 
 It is possible. The person who will work on the problem may ask you a few questions.
-
 
 ---
 
@@ -403,7 +373,6 @@ Hi,
 Could you please explain when I down load break out strategy Why Err is coming. Am I doinig some thing wrong. Other indicator are working fine.
 Thanks
 Lucky777
-
 
 ---
 
@@ -420,7 +389,6 @@ Actually, there is a way to resolve the problem right now. The users
 should just restart the Trading Station. After this, the error
 shouldn't appear.
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -429,7 +397,6 @@ shouldn't appear.
 
 Thanks for the help Apprentic
 Lucky777
-
 
 ---
 
@@ -452,7 +419,6 @@ Up.30
 1.40 price
 Down .20
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -465,7 +431,6 @@ Can any one assist with this programme.
 Thanks.
 
 Chinnoman
-
 
 ---
 
@@ -488,7 +453,6 @@ I wish help you!
 
 ![break.png](images/8561/break.png)
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -498,7 +462,6 @@ I wish help you!
 hi, when the strategy triggers my order, it wont set the limit or stop....is there something wrong with it? how can i get it to set the stop and limit automatically?
 
 thanks
-
 
 ---
 
@@ -531,7 +494,6 @@ Thanks for your response. No I do not want to trade on the tick when the price b
 
 Chinnoman
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -539,7 +501,6 @@ Chinnoman
 **mfoste1** · Mon Mar 07, 2011 9:11 pm
 
 could you please modify this strategy to only allow a long position or short position(trend filter)if specified? It would be greatly appreciated
-
 
 ---
 
@@ -549,7 +510,6 @@ could you please modify this strategy to only allow a long position or short pos
 
 nobody out there that can do this?
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -557,7 +517,6 @@ nobody out there that can do this?
 **Apprentice** · Mon Mar 14, 2011 4:58 pm
 
 Your request has been added to developmental cue.
-
 
 ---
 
@@ -579,7 +538,6 @@ Down .20
 Thanks
 Lucky 777
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -589,7 +547,6 @@ Lucky 777
 hey lucky,
 
 the price box defines the ranges(these numbers are indicated by numbers in the left hand corner of ur chart) , so when price goes outside of a box then reverses, all you have to do is pull out a ruler and measure how much it moved back. I doubt any programmer could add that for an option, given that all you have to do is look at a chart to determine the amount and time of the move.
-
 
 ---
 
@@ -603,7 +560,6 @@ the price box defines the ranges(these numbers are indicated by numbers in the l
 I agree! That would turn this into a super strategy, because you if you have a general idea where the currency pair is going, your % successful trades should skyrocket.
 
 Awesome suggestion, I hope you can do it for us vstrelnikov?
-
 
 ---
 
@@ -622,7 +578,6 @@ So, if the breakout candle's ADX is rising, enter the trade, otherwise not.
 Thanks man, you're doing a great job!
 Cyanidez
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -631,7 +586,6 @@ Cyanidez
 
 Your request has been added to developmental cue.
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -639,7 +593,6 @@ Your request has been added to developmental cue.
 **mfoste1** · Mon Mar 28, 2011 10:18 am
 
 anybody try to revise this with the trend filter yet lol?
-
 
 ---
 
@@ -658,7 +611,6 @@ Thanks in advance.
 Regards.
 Lucky777
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -671,7 +623,6 @@ Thanks.
 
 Chinnoman
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -680,7 +631,6 @@ Chinnoman
 
 As far as I know, this strategy has this ability.
 Are you using U.S. account?
-
 
 ---
 
@@ -695,7 +645,6 @@ Are you using U.S. account?
 No I am not using a U.S account. In the strategies property there is a box that allows you to set limit and stop orders in pips. But when your trade is entered the stop and limit orders are not entered on the trade. I have to manually set the limits and stops.
 Can you help me with this
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -703,7 +652,6 @@ Can you help me with this
 **mfoste1** · Mon Apr 04, 2011 5:18 pm
 
 i am also having trouble with the stop and limit orders being set as soon as a position is opened. i am using a US account(which now permit stop and limit orders).
-
 
 ---
 
@@ -715,7 +663,6 @@ could someone please see why this will not set stops/limits when a position is o
 
 also a trend filter would perfect this
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -724,7 +671,6 @@ also a trend filter would perfect this
 
 I am also still waiting on a response as to why this strategy will not set stops and limits automatically when a trade is entered.
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -732,7 +678,6 @@ I am also still waiting on a response as to why this strategy will not set stops
 **mfoste1** · Mon Apr 18, 2011 9:03 pm
 
 yea chinno, i dunno why no one is interested in fixing this algo so it sets stops and limits and has a trend filter ive been all through this site and tested every single strategy and indicator and I can honestly say this is by FAR the most profitable algo or indi on this site. Why no one would want to fix this is beyond me....ah such a shame. Ive tried to fix it three times but to no avail because im not that familiar with the language, and Im at work for most of the day so I dont really have much free time to mess around with the code. I think a decent programmer could fix this in less than 20 min though.
-
 
 ---
 
@@ -743,7 +688,6 @@ yea chinno, i dunno why no one is interested in fixing this algo so it sets stop
 Please find the version with support of Stop/Limit for US-based accounts in the attachment.
 I've just tested it on the history, not on real market. So please let me know if any issues appear.
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -751,7 +695,6 @@ I've just tested it on the history, not on real market. So please let me know if
 **chinnoman** · Thu Apr 21, 2011 5:12 pm
 
 Thanks Sunshine. I will let you know.
-
 
 ---
 
@@ -764,7 +707,6 @@ Thanks again.
 
 Chinnoman
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -773,7 +715,6 @@ Chinnoman
 
 excellent finished product! Id like to thank all that put hard work into this, it is most graciously appreciated
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -781,7 +722,6 @@ excellent finished product! Id like to thank all that put hard work into this, i
 **mfoste1** · Thu May 12, 2011 9:36 am
 
 sorry 2 more things that I forgot for this strategy , i promise . In trending markets, where you will hold trades due to interest rate arbitrage(carry trades), it would greatly increase profits if an **"allow multiple positions in the same direction"**parameter was added to this. Also if a stage type trailing stops could be added, where if a trade gets to X amount of profit the stop will be moved to breakeven. This would be very very helpful to reduce risk and appreciated as always
-
 
 ---
 
@@ -793,7 +733,6 @@ sorry 2 more things that I forgot for this strategy , i promise . In trending ma
 > sorry 2 more things that I forgot for this strategy , i promise . In trending markets, where you will hold trades due to interest rate arbitrage(carry trades), it would greatly increase profits if an **"allow multiple positions in the same direction"**parameter was added to this. Also if a stage type trailing stops could be added, where if a trade gets to X amount of profit the stop will be moved to breakeven. This would be very very helpful to reduce risk and appreciated as always
 
 just wondering if anyone has tried to add these options yet ? I did some backtesting and optimization with this strategy over the past 2 weeks and it seems that if an "allow multiple positions in the same direction" and "stage trailing stop" option parameters were added it would eliminate many intraday losing trades and allow for a larger positions to be built over time for traders who hold positions overnight.
-
 
 ---
 
@@ -811,7 +750,6 @@ Regards and thank you!
 
 RJH
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -822,7 +760,6 @@ I have study your strategy and I have an idea for fix it a little bit better.
 First we want a channel with the top and low of candles . That will be from a certain hour to a certain hour let say from 00.00 to 04.00 GMT. Then we want a certain time frame lets say 1 hour . Then we want a certain hour by the end of it, every position that is open during the day will close let’s say 18.00 . And finally we want to open a position long or short with the break and close out side the channel.
  The perfect system . Can you fix it working like a robot? Thanks.
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -830,7 +767,6 @@ First we want a channel with the top and low of candles . That will be from a ce
 **fskliris** · Wed Jun 15, 2011 12:34 pm
 
 Of course I forgot the stoploss that is the other side of the channel + the spread. This is a new position of course. The take profit is the pips that we take by the end of the certain time that we have put from the start of the system.
-
 
 ---
 
@@ -842,7 +778,6 @@ hello
  You can add the parameter count of bar in the breakout strategy.
  thank you.
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -853,7 +788,6 @@ Can you give more information on how this parameter affects the behavior of the 
 If ... then .... else ...
 
 For example, ignore breakout occurs in the first n periods.
-
 
 ---
 
@@ -868,7 +802,6 @@ hello
 
  if you need more do not hesitate to ask me, thank you for your time
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -876,7 +809,6 @@ hello
 **Apprentice** · Mon Jul 18, 2011 6:45 am
 
 Everything is clear now.
-
 
 ---
 
@@ -910,7 +842,6 @@ The trailing profit described above would then function exactly as the trailing 
 
 Thank you for your help with this.
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -918,7 +849,6 @@ Thank you for your help with this.
 **SystemTrader** · Mon Aug 22, 2011 8:20 am
 
 Hello. Am very interested in this strategy but have a question (apologies in advance if it is stupid..) The strategy backtest report that the system generates seems "light" for my purposes, as it does not contain detailed info in relation to each trade. What I need ideally is the dates and entry and exit levels for each trade - is there a way to get that level of detail out of the system? Thank you in advance.
-
 
 ---
 
@@ -934,7 +864,6 @@ Your thoughts would be most appreciated,
 
 Richard
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -946,7 +875,6 @@ Richard
 
 The next release will include the improved backtester. It will provide more detailed report and tick log with details for each trade.
 For now you can use Indicore SDK to view the tick log which provides info about all trading operations. For details please see [Backtesting of strategy in Indicore SDK](http://www.fxcodebase.com/wiki/index.php/Backtesting_Strategy)
-
 
 ---
 
@@ -970,16 +898,11 @@ Compare the backtest results with "Once per day" set to No (the first image) and
 
 ![BreakMultiple.PNG](images/15275/BreakMultiple.PNG)
 
-
-
  
 
 ![BreakOnce.PNG](images/15275/BreakOnce.PNG)
 
-
-
 Apprentice, please correct me if I'm wrong.
-
 
 ---
 
@@ -991,7 +914,6 @@ Thank you!
 
 Richard
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -999,7 +921,6 @@ Richard
 **Apprentice** · Thu Sep 22, 2011 3:15 pm
 
 You're right, this option allows you to open multiple positions.
-
 
 ---
 
@@ -1011,7 +932,6 @@ Hello all
 
 I am having some issues with this strategy right now. I have parameters turned on correctly, however it is showing up in my event log window as "strategy started", and no trades are being triggered. A popup box should come up that says "price breaks high:BUY" or " price breaks low:SELL" then the trade is entered. This is not happening. Could someone please help me out in getting this strategy to work correctly. Thanks
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -1021,7 +941,6 @@ I am having some issues with this strategy right now. I have parameters turned o
 Please make sure that "Allow strategy to trade" parameter is set to "Yes".
 If this won't help, please check the Log tab in the Events window. Does it contain a error message?
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -1029,7 +948,6 @@ If this won't help, please check the Log tab in the Events window. Does it conta
 **ronald3rg** · Fri Oct 21, 2011 8:11 am
 
 i set the strategy up for my tradiing preferences and it is working fine on the backtest but it is not setting the limit orders i placed on the parameters so it only exits positions on the next alert which is on the other side of a breakout. ANY SUGGESTIONS or FIX in CODE
-
 
 ---
 
@@ -1039,7 +957,6 @@ i set the strategy up for my tradiing preferences and it is working fine on the 
 
 FOUND PREVIOUS POST WITH CORRECT SCRIPT FOR US BASED ACCOUNTS. WORKING PERFECTLY NOW. THE OPTION TO CHOOSE TO REVERSE THE ENTRY TYPE FOR A CURRENCY PAIR WOULD BE NICE UNDER THE PARAMETERS SO I WONT HAVE TO GO INTO SCRIPT AND CHANGE IT. FOR EXAMPLE GBP/CHF WHEN CROSSES THE TOP LINE I SET IT TO SELL INSTEAD OF BUY BECAUSE IT ALWAYS REVERSES
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -1047,7 +964,6 @@ FOUND PREVIOUS POST WITH CORRECT SCRIPT FOR US BASED ACCOUNTS. WORKING PERFECTLY
 **ronald3rg** · Wed Oct 26, 2011 1:56 pm
 
 The onyl thing missing is break out confirmation. by candle or by some kind of indicator. like the ma cross strategy confirms by number of candles after cross
-
 
 ---
 
@@ -1060,7 +976,6 @@ Got any suggestions or heard of a strategy that does a beakout of previouse 24 h
 
 Thanks sooo much !!
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -1068,7 +983,6 @@ Thanks sooo much !!
 **taypot** · Sat Nov 12, 2011 9:50 am
 
 I have put the breakout.lua indicator on my chart and the breakout signal but when i try to add the breakout strategy I get the message that breakout.lua type is unknown. I am using marketscope 2.
-
 
 ---
 
@@ -1080,7 +994,6 @@ Greetings ,
 
 I have a request that could make this strategy better. It should be pretty easy to fix. Instead of having "allow multiple positions" as yes or no, have it "allow X number of positions", X being what ever number the user specifies. This would make a good strategy for traders that like to play larger swings in the market on higher TFs and they could essentially build a large position over the course of a couple days in the direction of the trend. Thanks
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -1088,7 +1001,6 @@ I have a request that could make this strategy better. It should be pretty easy 
 **Apprentice** · Mon Nov 14, 2011 11:41 am
 
 Your request is added to the development queue
-
 
 ---
 
@@ -1104,7 +1016,6 @@ If its easy, please tell me what to change in the .lua editor or something else.
 
 Thanks for your time
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -1118,7 +1029,6 @@ I've tried it on the EUR/USD with no problems.
 I would greately appreaciate your help.
 
 Thanks
-
 
 ---
 
@@ -1151,7 +1061,6 @@ Hi Nikolay,
 > Thanks in advance
 > Lucky 777
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -1162,7 +1071,6 @@ Thank you for reporting the problem.
 Someone will test indicator, this should fix the problem.
 
 Your request is added to the developmental queue.
-
 
 ---
 
@@ -1200,7 +1108,6 @@ Your request is added to the developmental queue.
 hi
 does anything like trailing profit limit exits
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -1211,7 +1118,6 @@ and if possible an option to optimize time
 
 the time when the box should start and when it should end
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -1219,7 +1125,6 @@ the time when the box should start and when it should end
 **Apprentice** · Wed Jan 18, 2012 3:29 am
 
 Your request is added to the developmental queue.
-
 
 ---
 
@@ -1233,7 +1138,6 @@ I have a request to make this strategy even better: Breakout-GMMACD Strategy:
 This would be identical to the breakout strategy. The only difference is that the trade is triggered only if it is confirmed by the GMMACD indicator histogram. if the histogram (GMMACD value) is in the same direction of the trade, then the trade is triggered. Exit strategies are identical to the original strategy. This will likely prevent many losing trades triggered against the overal trend. Let me know what you think.
 
 Great job as always.
-
 
 ---
 
@@ -1249,7 +1153,6 @@ its very simple that will take no more than 15 minutes of work to the most recen
 
 so that a trader can hold and build a position over the development of a trend instead of having to just hold one position and not being allowed to add to it in the same direction
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -1261,7 +1164,6 @@ hi, i cant seem to get this strategy to trade for me? i see it in the log as bei
 thanks
 
 jr
-
 
 ---
 
@@ -1280,7 +1182,6 @@ This will likely prevent many losing trades triggered against the overal trend. 
 
 Great job as always.
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -1292,7 +1193,6 @@ A small request.
 Do not put a your requirements in more places within the forum.
 One is enough.
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -1300,7 +1200,6 @@ One is enough.
 **waelsaleem** · Sun Jan 29, 2012 4:09 pm
 
 Thank you, and sorry, I was not sure of which forum would be most relevant to my request. I hope you liked the illustration, did it explain my request? do you think it will work?
-
 
 ---
 
@@ -1311,7 +1210,6 @@ Thank you, and sorry, I was not sure of which forum would be most relevant to my
 The request is understandable.
 It is possible to write it.
 Will it be a successful strategy, it is difficult to say, in advance.
-
 
 ---
 
@@ -1324,7 +1222,6 @@ When you call "ExtSubscribe" you use instance.parameters.Type == "Bid" to determ
 
 Is this really intentional?
 If you want just Ask price I think you should be clear and just change it to false instead of that equivalence test. People who want to learn programming will get confused by such things.
-
 
 ---
 
@@ -1342,7 +1239,6 @@ We have true Boolean transmitted.
 Use Bid Price Stream.
 In any other case you have false.
 Use Ask Price Stream.
-
 
 ---
 
@@ -1372,7 +1268,6 @@ strategy.parameters:addStringAlternative("Type", "Trading Day time", "", "TD");
 Where do you see Bid or Ask?
 It will never be == "Bid" => Always false ==> Always Ask price.
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -1387,7 +1282,6 @@ In my example you would have something traba this line.
 
 Each code is unique.
 You can not compare the variables of the same name in different code examples.
-
 
 ---
 
@@ -1409,8 +1303,8 @@ I know this. I have no idea why you keep making these misunderstandings. Have yo
 
 If you look at the code (Breakout_Strategy.lua) you will see:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`...
+```lua
+...
     strategy.parameters:addString("Type", "The time type", "", "TD");
     strategy.parameters:addStringAlternative("Type", "Local Time", "", "LT");
     strategy.parameters:addStringAlternative("Type", "EST Time", "", "EST");
@@ -1419,10 +1313,10 @@ Code: [Select all](https://fxcodebase.com/code/)
 ...
 
 gSource = ExtSubscribe(2, nil, instance.parameters.TF, instance.parameters.Type == "Bid", "bar");
-...`
+...
+```
 
 I don't understand how I can be more clear about my point.
-
 
 ---
 
@@ -1439,7 +1333,6 @@ Experienced developers have overlooked this bug.
 
  [Breakout_Strategy.lua](files/24846/Breakout_Strategy.lua)
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -1447,7 +1340,6 @@ Experienced developers have overlooked this bug.
 **Apprentice** · Wed Feb 01, 2012 9:01 am
 
 Breakout Strategy with GMMACD Filter added to topmost post.
-
 
 ---
 
@@ -1464,7 +1356,6 @@ THIS IS UNBELIEVABLE
 
 this website needs proper management, because it is very poorly controlled. Most requests get skipped over or just ignored(as in my case with two requests that i have made in the past two months). These would have taken ten to 15 minutes to finish altering the code and yet they are skipped over? why? do i need to pay someone to do this?
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -1477,7 +1368,6 @@ you really need to take into consideration that the coders are doing this for fr
 
 I'm just saying. You should apologize and try to ask again.
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -1485,7 +1375,6 @@ I'm just saying. You should apologize and try to ask again.
 **waelsaleem** · Wed Feb 01, 2012 2:12 pm
 
 Thank you so much for the strategy. I will let you know how it works.
-
 
 ---
 
@@ -1502,7 +1391,6 @@ Thank you so much for the strategy. I will let you know how it works.
 
 I've had requests up for MONTHS that have been repeatedly ignored. This would certainly generate a degree of frustration, which might be misconstrued by you as "out of line". I would ask again, but my request would most likely be ignored as the previous have been. I never said it was a "right" of mine to get my strategy requests serviced. Moreover, it was stated by the coders that strategy requests would be worked on in the order they were received in the "development cue". They have failed to heed to their own M.O. It's as simple as that. If they want to operate on requests at will or whichever they please, then they need to stop telling people that requests will be "added to the development cue". They should just say "We will work on whatever we want, whenever its convenient for us." This way there would be no discussion that we're having right now. Very simple....
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -1514,7 +1402,6 @@ Hi,
 I am quite interested in the breakout strategy with the GMMACD filter. I have discovered that this was created on the 1st page of this thread. Is it possible to code this filter to the updated version of the breakout strategy?
 
 Keep up the good work
-
 
 ---
 
@@ -1564,7 +1451,6 @@ This means it will only take a position if there isn't one already == never mult
 Edit:
 **Important notice:**If you set "Once Per Day" to **True**, you have to set "Max open positions (0 == unlimited)" to **1** if you don't want more than 1 position open in the same direction! This was limited to 1 position in previous versions, so be aware of this difference!
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -1586,7 +1472,6 @@ All the above options can be potentially optimized by backtesting for each pair.
 Please let me know what you think.
 Thanks again for a great job.
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -1594,7 +1479,6 @@ Thanks again for a great job.
 **Apprentice** · Mon Feb 13, 2012 5:51 am
 
 Your request is added to development list.
-
 
 ---
 
@@ -1610,7 +1494,6 @@ As I have been reviewing the breakout strategy, I noticed that another key eleme
 Please let me know if there is another indicator out there that would do the same job.
 Thanks again for your help.
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -1618,7 +1501,6 @@ Thanks again for your help.
 **Apprentice** · Tue Feb 14, 2012 7:16 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -1629,7 +1511,6 @@ Your request is added to the development list.
 Hello everyone,
 
 I have a request to make, I would like to see if anyone has this breakout strategy written for strategy trader or metatrader. I believe that would be and fxd or mql4 file. And if not how I could go about acquiring it written in one of those languages. I have tested this strategy in marketscope and its amazing. Thank you for your help.
-
 
 ---
 
@@ -1643,7 +1524,6 @@ Try to contact our team premium.
 They can help you.
 If not send me a message.
 Maybe I can find programmers for this job.
-
 
 ---
 
@@ -1662,7 +1542,6 @@ I have installed the Breakout Strategy with the GMMACD filter however I would ap
 3. Could an indicator version of the strategy be created with arrows showing buy , sell and neutral. This would help in either placing trades manually or at least historically seeing where trades would have been triggered.
 
 Thanks and keep up all the good work.
-
 
 ---
 
@@ -1683,7 +1562,6 @@ More about GMMACD you can find here.
 3.
 Yes, Someone will write this one.
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -1692,7 +1570,6 @@ Yes, Someone will write this one.
 
 Average Average True Range You can find here.
 [viewtopic.php?f=17&t=14414](https://fxcodebase.com/code/viewtopic.php?f=17&t=14414)
-
 
 ---
 
@@ -1706,7 +1583,6 @@ while setting sound alert in this strategy sound file is not able to browsed. so
 
 thank you.
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -1714,7 +1590,6 @@ thank you.
 **Apprentice** · Fri May 11, 2012 3:07 am
 
 I have fix Top Most Post Strategys.
-
 
 ---
 
@@ -1727,7 +1602,6 @@ can you please add parameter to close position on end of box(day)?
 
 thenks.
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -1735,7 +1609,6 @@ thenks.
 **Apprentice** · Mon May 14, 2012 1:57 pm
 
 Your request is added to the development list.
-
 
 ---
 
@@ -1749,7 +1622,6 @@ I though that another parameter should be added to this strategy, which should b
 
 There should be a parameter for a direct or reverse signal. So for example, if the price breaks below the lower box line, the natural or direct signal is to SELL. The reverse signal should be to BUY when price break below the lower box line. I would appreciate this amendment very much. Thank you.
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -1757,7 +1629,6 @@ There should be a parameter for a direct or reverse signal. So for example, if t
 **Apprentice** · Thu Aug 16, 2012 11:40 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -1782,7 +1653,6 @@ but does this strategy really work?
 i am getting buy signal s when the gmmacd histogram in below zero line????
 can you solve it
 otherwise great strategy
-
 
 ---
 
@@ -1830,7 +1700,6 @@ otherwise great strategy
 boss Breakout_Strategy with GMMACD Filter.lua
 is seriously not working good concept but strategy not working
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -1858,7 +1727,6 @@ Questions :
 
 Thanks a lot for your hard work.
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -1874,7 +1742,6 @@ Thanks a lot for your hard work.
 
 could someone try to do this please?
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -1885,7 +1752,6 @@ Hi, I'm experiencing problems loading the Breakout Strategy without a problem. I
 Error Message:
 131 The indicator with id BREAKOUT is not found
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -1893,7 +1759,6 @@ Error Message:
 **Apprentice** · Wed Sep 26, 2012 4:25 am
 
 Strategy is based on [breakout indicator](https://fxcodebase.com/code/viewtopic.php?f=17&t=966). Please download and install it, before using strategy.
-
 
 ---
 
@@ -1911,7 +1776,6 @@ Short the opposite.
 A second and more automated version could identify the congestions as the high and low of last n candle stay inside a range and will use that leves as levels for breakout.
 
 Regards
-
 
 ---
 
@@ -1931,7 +1795,6 @@ Regards
 
 Salvatore
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -1939,7 +1802,6 @@ Salvatore
 **mjf1288** · Mon Dec 17, 2012 9:23 am
 
 I need someone to help me fix this strategy. It should have the option to allow multiple positions on different days, so that you can add to a position the next day if you hold longer. It should also not close positions on the opposite signal, rather let stop and limit manage the position.
-
 
 ---
 
@@ -1950,7 +1812,6 @@ I need someone to help me fix this strategy. It should have the option to allow 
 Excellent work!
 I modified Breakout Strategy in order to achieve reverse behavior and according to my results i think that a reverse mode of this stradegy is identical in range conditions, especially for scalpers who looks for a quick and small profit.
 keep up the good work!
-
 
 ---
 
@@ -1987,7 +1848,6 @@ Thank you in advance.
 Regards,
 Imprimus.
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -1995,7 +1855,6 @@ Imprimus.
 **Apprentice** · Mon Jan 06, 2014 3:13 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -2012,7 +1871,6 @@ I've restarted market scope, but it doesn't seem to help.
 
 Thanks
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -2023,7 +1881,6 @@ Once again, please redownload and reinstall both.
 [viewtopic.php?f=17&t=412&hilit=GMMACD](https://fxcodebase.com/code/viewtopic.php?f=17&t=412&hilit=GMMACD)
 Make sure not to change their name.
 Restart the TS is this not work.
-
 
 ---
 
@@ -2041,7 +1898,6 @@ Example. If today's box spread is 20 pips, then entry would be top/bottom of box
 
 Then tomorrow, when the box spread changes to 35. Set limit would recognize this and set the 2x spread to a limit of 70?
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -2049,7 +1905,6 @@ Then tomorrow, when the box spread changes to 35. Set limit would recognize this
 **Apprentice** · Wed May 07, 2014 2:53 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -2067,7 +1922,6 @@ the problem with the BO Stratgey is that the order will be executed way too late
 
 Thanks
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -2083,7 +1937,6 @@ A slightly modified version of the strategy.
 Download strategy:
 
  [Breakout_Strategy2.lua](files/100924/Breakout_Strategy2.lua)
-
 
 ---
 
@@ -2107,7 +1960,6 @@ Hi Alexander,
 in your Strategy Breakout 2 there are a field called "minChange", that is not defined from any formula or calculation... could you define it please
 many thanks
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -2124,7 +1976,6 @@ many thanks
 
 It was an error. Now it is fixed.
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -2138,7 +1989,6 @@ Example: As a filter, when upper box channel breaks upward, it has to be above t
 Same for Sell orders.
 
 By the way, I have FIFO and the Stop order is not being adjusted to the otherside of the box and I cannot set a stop order, although there's a field to do so, by setting a stop, it does nothing.
-
 
 ---
 
@@ -2178,7 +2028,6 @@ Any ideas.
 
 /quant007
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -2187,7 +2036,6 @@ Any ideas.
 
 Hi,
 I agree with AgentPipen. I have a FIFO account and the stops and limits are not being set when a trade is made with the Breakout strategy 2. Just wondering if this could be looked into? Thanks.
-
 
 ---
 
@@ -2198,7 +2046,6 @@ I agree with AgentPipen. I have a FIFO account and the stops and limits are not 
 please add reverse function
 thanks
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -2206,7 +2053,6 @@ thanks
 **Apprentice** · Wed Nov 04, 2015 8:42 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -2216,11 +2062,8 @@ Your request is added to the development list.
 
 ![Immagine.png](images/104032/Immagine.png)
 
-
-
 Apprentice please can you help me?
 when i set strategy and push "ok" i have this message on attached image.
-
 
 ---
 
@@ -2229,7 +2072,6 @@ when i set strategy and push "ok" i have this message on attached image.
 **Apprentice** · Wed Dec 30, 2015 4:57 am
 
 Can you provide download link or indicator file?
-
 
 ---
 
@@ -2243,7 +2085,6 @@ and this is the link [viewtopic.php?t=2639&f=31](https://fxcodebase.com/code/vie
 
 thanks Apprentice.
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -2253,7 +2094,6 @@ thanks Apprentice.
 Can you please post the exact strategy version?
 I was not able to reproduce.
 Do you have breakout.lua installed on your TS?
-
 
 ---
 
@@ -2268,7 +2108,6 @@ Can you help me
 
 breakout_strategy.lua
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -2279,7 +2118,6 @@ Error above i link to this information:
 I have last TSII. and i have installed breakout.lua indicator
 file breakout_strategy.lua is this: [http://fxcodebase.com/code/download/file.php?id=2259](https://fxcodebase.com/code/download/file.php?id=2259)
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -2287,7 +2125,6 @@ file breakout_strategy.lua is this: [http://fxcodebase.com/code/download/file.ph
 **Apprentice** · Wed Jan 27, 2016 8:19 am
 
 I was not able to reproduce this issue.
-
 
 ---
 
@@ -2299,7 +2136,6 @@ Dear Apprentice, what kind of problem is this, when i click ok , pop up this mes
 
 Thank you.
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -2307,7 +2143,6 @@ Thank you.
 **Apprentice** · Wed Dec 14, 2016 6:24 am
 
 Strategy was revised and updated.
-
 
 ---
 
@@ -2326,7 +2161,6 @@ Thanks in advance
 
 Ross
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -2335,7 +2169,6 @@ Ross
 
 Your request is added to the development list, Under Id Number 3733
  If someone is interested to do this task, please contact me.
-
 
 ---
 
@@ -2353,7 +2186,6 @@ Best regards
 
 CM Trend Trader
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -2362,7 +2194,6 @@ CM Trend Trader
 
 Your request is added to the development list, Under Id Number 3767
  If someone is interested to do this task, please contact me.
-
 
 ---
 
@@ -2376,7 +2207,6 @@ Your request is added to the development list, Under Id Number 3767
 
 Try this versions.
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -2385,7 +2215,6 @@ Try this versions.
 
 The range of the "Trade amount in lots" is between 0 and 100. Is it possible to take the cap off?
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -2393,7 +2222,6 @@ The range of the "Trade amount in lots" is between 0 and 100. Is it possible to 
 **Apprentice** · Wed Aug 29, 2018 4:12 am
 
 Fixed for Tue Apr 18, 2017 6:34 pm post.
-
 
 ---
 
@@ -2410,7 +2238,6 @@ Please try this strategy:
 
  [Breakout_Str.mq4](files/124828/Breakout_Str.mq4)
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -2421,7 +2248,6 @@ hi,
 is possible to make this strategy for mt5?
 thanks
 
-
 ---
 
 ## Re: Breakout Strategy
@@ -2430,7 +2256,6 @@ thanks
 
 Your request is added to the development list.
 Development reference 2494.
-
 
 ---
 

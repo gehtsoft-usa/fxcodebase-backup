@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=38&t=21111  
 > Forum: 38 · Topic 21111 · 1 post(s)
 
-
 ---
 
 ## Storage
@@ -32,8 +31,8 @@ Until the function is called, all changes in the database are not saved.
 
 Example of use:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`#include <Storage.mqh>
+```mql4
+#include <Storage.mqh>
 
 int start()
 {
@@ -43,7 +42,8 @@ int start()
  Print(get("val1",1));
  closeDB();
  return(0);
-}`
+}
+```
 
 Download:
 

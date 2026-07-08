@@ -1,7 +1,16 @@
 # New way to install custom indicator or strategy!
 
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=59681  
-> Forum: 17 · Topic 59681 · 11 post(s)
+> Forum: 17 · Topic 59681 · 12 post(s)
+
+
+---
+
+## New way to install custom indicator or strategy!
+
+**Nikolay.Gekht** · Wed Oct 16, 2013 9:04 am
+
+Starting from October 2013 update of Trading Station installing new indicators/strategies is easy as 1-2-3. Just drag and drop an indicator, a view, or a strategy file from a folder or even directly from a website to Marketscope!.
 
 
 ---
