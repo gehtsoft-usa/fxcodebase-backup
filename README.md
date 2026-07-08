@@ -3,6 +3,9 @@
 Back up an [fxcodebase.com](https://fxcodebase.com) phpBB forum (indicators &
 strategies) to Markdown + downloaded attachments.
 
+The backed-up archive is published and browsable online at
+**<https://docs.gehtsoftusa.com/fxcodebase-backup/>**.
+
 > **Note.** fxcodebase.com was the community site for custom indicators and
 > strategies for the **FXCM Trading Station / Marketscope** trading client. It
 > is **now defunct** — this tool was used to preserve its content before it

@@ -60,3 +60,6 @@ Each forum's `forum.md` links to every topic in that forum.
 
 *Archived from the original server-rendered fxcodebase.com forums, which are no
 longer online. All content is released under the GPL license.*
+
+*Source & tooling:
+[github.com/gehtsoft-usa/fxcodebase-backup](https://github.com/gehtsoft-usa/fxcodebase-backup).*
