@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=1044  
 > Forum: 17 · Topic 1044 · 13 post(s)
 
-
 ---
 
 ## Moving Average shifted by time and price axis (displaced MA)
@@ -15,8 +14,6 @@ The indicator just shows the chosen moving average with chosen parameters but sh
  
 
 ![shift_ma.png](images/1965/shift_ma.png)
-
-
 
 Download:
 
@@ -30,10 +27,7 @@ The indicator is also called displaced moving average.
 
 ![EURUSD m1 (01-21-2016 0920).png](images/1965/EURUSD%20m1%20%2801-21-2016%200920%29.png)
 
-
-
  [SHIFT MA Paint Bar.lua](files/1965/SHIFT%20MA%20Paint%20Bar.lua)
-
 
 ---
 
@@ -46,7 +40,6 @@ Thank you very much for this Indicator.
 "KAMA" was able to be added.
 But "ARSI" was not able to be added.
 I hope to add "ARSI".
-
 
 ---
 
@@ -63,14 +56,14 @@ Code: [Select all](https://fxcodebase.com/code/)
 `indicator.parameters:addStringAlternative("MA", "TMA", "", "TMA");`
 and add the following two lines after this line
 
-Code: [Select all](https://fxcodebase.com/code/)
-`indicator.parameters:addStringAlternative("MA", "KAMA", "", "KAMA");
-indicator.parameters:addStringAlternative("MA", "ARSI", "", "ARSI");`
+```lua
+indicator.parameters:addStringAlternative("MA", "KAMA", "", "KAMA");
+indicator.parameters:addStringAlternative("MA", "ARSI", "", "ARSI");
+```
 
 And then restart the Trading Station.
 
 You can also add ANY **indicator** (not oscillator) which take only one **N-periods** parameter, can be applied on **ticks** and produces only **one** output line. The name to specify is the name of the file without lua extension in capital letters. For example - REGRESSION conforms to these conditions.
-
 
 ---
 
@@ -80,7 +73,6 @@ You can also add ANY **indicator** (not oscillator) which take only one **N-peri
 
 Thank you very much Nikolay
 I was able to load it by your comprehensible explanation.
-
 
 ---
 
@@ -92,7 +84,6 @@ Would it be possible to add this indicator to the development queue to update it
 
 Thanks!
 
-
 ---
 
 ## Re: Moving Average shifted by time and price axis (displaced MA)
@@ -101,10 +92,7 @@ Thanks!
 
 ![SHIFT.PNG](images/4742/SHIFT.PNG)
 
-
-
 While we do not fulfill your request you can use Shift Indicator Indicator.
-
 
 ---
 
@@ -114,7 +102,6 @@ While we do not fulfill your request you can use Shift Indicator Indicator.
 
 Style Update.
 
-
 ---
 
 ## Re: Moving Average shifted by time and price axis (displaced
@@ -122,7 +109,6 @@ Style Update.
 **Apprentice** · Thu Jan 21, 2016 3:55 am
 
 SHIFT MA Paint Bar.lua Added.
-
 
 ---
 
@@ -132,7 +118,6 @@ SHIFT MA Paint Bar.lua Added.
 
 SHIFT_MA with Alert.lua Added.
 
-
 ---
 
 ## Re: Moving Average shifted by time and price axis (displaced
@@ -140,7 +125,6 @@ SHIFT_MA with Alert.lua Added.
 **Apprentice** · Mon Jul 09, 2018 5:25 am
 
 The indicator was revised and updated.
-
 
 ---
 
@@ -157,7 +141,6 @@ If MA.DATA[period] > MA.DATA[period-1] then BUY(); else SELL(); end;
 thanks,
 see you soon
 
-
 ---
 
 ## Re: Moving Average shifted by time and price axis (displaced
@@ -165,7 +148,6 @@ see you soon
 **Apprentice** · Wed Aug 07, 2019 4:57 pm
 
 Your request is added to the development list under Id Number 4828
-
 
 ---
 

@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=658  
 > Forum: 17 · Topic 658 · 33 post(s)
 
-
 ---
 
 ## Moving Average Envelopes (MAE) Customizable version.
@@ -20,8 +19,6 @@ The indicator provides an ability to:
 
 ![EMA2.png](images/1187/EMA2.png)
 
-
-
 Download the indicator:
 
  [MAE2.lua](files/1187/MAE2.lua)
@@ -31,8 +28,8 @@ SMMA is here [viewtopic.php?f=17&t=195&p=261](https://fxcodebase.com/code/viewto
 Vidya is here [viewtopic.php?f=17&t=301&p=570](https://fxcodebase.com/code/viewtopic.php?f=17&t=301&p=570)
 Widlers is here [viewtopic.php?f=17&t=248&p=375](https://fxcodebase.com/code/viewtopic.php?f=17&t=248&p=375)
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- Indicator profile initialization routine
+```lua
+-- Indicator profile initialization routine
 -- Defines indicator profile properties and indicator parameters
 -- TODO: Add minimal and maximal value of numeric parameters and default color of the streams
 function Init()
@@ -132,13 +129,13 @@ function Update(period, mode)
         UB[period] = d + s;
         LB[period] = d - s;
     end
-end`
+end
+```
 
  [MAE AVERAGES.lua](files/1187/MAE%20AVERAGES.lua)
 
 For, MAE averages, install Averages Indicator.
 [viewtopic.php?f=17&t=2430](https://fxcodebase.com/code/viewtopic.php?f=17&t=2430)
-
 
 ---
 
@@ -147,7 +144,6 @@ For, MAE averages, install Averages Indicator.
 **twitjaksono** · Mon Jun 21, 2010 11:48 pm
 
 Wow, yes this the one that I meant. Thank you very much Sir
-
 
 ---
 
@@ -160,7 +156,6 @@ Hi Guys,
 Is it possible to get a calculation of the envelope based on the high, low and close. Ive just read Forex Trading for maximum profit by Raghee Horner and it looks like a good indi to test.
 
 Many thanks
-
 
 ---
 
@@ -178,7 +173,6 @@ In financial trading, typical price (sometimes called the pivot point) refers to
 If this is the case.
 As a source of MAE choose Typical data source.
 
-
 ---
 
 ## Re: Moving Average Envelopes (MAE) Customizable version.
@@ -190,7 +184,6 @@ hi,
 this is the one that i have been looking for. thank you so much for giving a time to create this indicator. i have a question though. can you also post a signal/alert code for this indicator, so the charting program can give a signal whenver the price touches the envelope bands.
 thanks for your effort again.
 
-
 ---
 
 ## Re: Moving Average Envelopes (MAE) Customizable version.
@@ -200,7 +193,6 @@ thanks for your effort again.
 I believe that this version is what you seek.
 [viewtopic.php?f=29&t=2222&p=4693&hilit=MAE#p4693](https://fxcodebase.com/code/viewtopic.php?f=29&t=2222&p=4693&hilit=MAE#p4693)
 
-
 ---
 
 ## Re: Moving Average Envelopes (MAE) Customizable version.
@@ -208,7 +200,6 @@ I believe that this version is what you seek.
 **zaydin** · Thu Jun 23, 2011 2:31 am
 
 thanks for replying/ but actually it does not work/ because i use the mae2 version but the one you suggested is for mae version/ the difference is in mae version the band is calculated by the percentage value in mae2 version the band is calculated by the pips/ i was looking for the signal that would calculate the band in pips not in percentage. i would appreciate it if somebody can post a signal that would calculate the band in pips. thanks
-
 
 ---
 
@@ -219,7 +210,6 @@ thanks for replying/ but actually it does not work/ because i use the mae2 versi
 MAE2 Version
 [viewtopic.php?f=29&t=2222&p=11981#p11981](https://fxcodebase.com/code/viewtopic.php?f=29&t=2222&p=11981#p11981)
 
-
 ---
 
 ## Re: Moving Average Envelopes (MAE) Customizable version.
@@ -227,7 +217,6 @@ MAE2 Version
 **zaydin** · Fri Jun 24, 2011 2:55 am
 
 dear apprentice thank you so much for your effort. i installed the signal and customized it according to my strategy and waiting for a signal:) hope it will work. will let you know. thank you again. with respect
-
 
 ---
 
@@ -238,7 +227,6 @@ dear apprentice thank you so much for your effort. i installed the signal and cu
 Dear apprentice,
 the signal is working just fine. the only thing is the signal waits for the hourly candle to close and then gives the signal. is it possible to modify it in a way that it gives the signal as the price touches the upper or lower band. that would have been perfected the signal thank you in advance
 
-
 ---
 
 ## Re: Moving Average Envelopes (MAE) Customizable version.
@@ -246,7 +234,6 @@ the signal is working just fine. the only thing is the signal waits for the hour
 **Apprentice** · Tue Jul 12, 2011 2:51 pm
 
 We will try to do something.
-
 
 ---
 
@@ -258,7 +245,6 @@ Hey there, I am trying to apply a 0.6% and 1.2% moving Average to the 5ema but a
 
 G
 
-
 ---
 
 ## Re: Moving Average Envelopes (MAE) Customizable version.
@@ -268,7 +254,6 @@ G
 I have add double option to Band Width parameter.
 So you can define Envelope widths that are less than 1 percent.
 
-
 ---
 
 ## Re: Moving Average Envelopes (MAE) Customizable version.
@@ -276,7 +261,6 @@ So you can define Envelope widths that are less than 1 percent.
 **boursicoton** · Fri Nov 25, 2011 11:36 am
 
 possible to code an mtf version of this envelopes ?..... with all averages ? thanks.
-
 
 ---
 
@@ -294,7 +278,6 @@ MTF examples.
 BTF example.
 [viewtopic.php?f=17&t=3322&p=16268&hilit=biger#p16268](https://fxcodebase.com/code/viewtopic.php?f=17&t=3322&p=16268&hilit=biger#p16268)
 
-
 ---
 
 ## Re: Moving Average Envelopes (MAE) Customizable version.
@@ -302,7 +285,6 @@ BTF example.
 **Apprentice** · Tue Oct 22, 2013 4:57 am
 
 MAE averages Added.
-
 
 ---
 
@@ -315,7 +297,6 @@ MAE averages Added.
 
 That is awesome. Any plans to develop a strategy for MAE Averages? Sell when price touches upper band and buy when price touches lower band? That'd be pretty damn cool.
 
-
 ---
 
 ## Re: Moving Average Envelopes (MAE) Customizable version.
@@ -325,7 +306,6 @@ That is awesome. Any plans to develop a strategy for MAE Averages? Sell when pri
 Try this version.
 [viewtopic.php?f=31&t=59802](https://fxcodebase.com/code/viewtopic.php?f=31&t=59802)
 
-
 ---
 
 ## Re: Moving Average Envelopes (MAE) Customizable version.
@@ -333,7 +313,6 @@ Try this version.
 **volnmar** · Tue Jul 08, 2014 7:24 am
 
 Are you able to make alert if indicator Averages 20in1 crosses MAE Averages the upper and bottom band?... Send alert if: bottom envelope is crossed from up and upper envelope is crossed from down.
-
 
 ---
 
@@ -343,7 +322,6 @@ Are you able to make alert if indicator Averages 20in1 crosses MAE Averages the 
 
 Your request is added to the development list.
 
-
 ---
 
 ## Re: Moving Average Envelopes (MAE) Customizable version.
@@ -351,7 +329,6 @@ Your request is added to the development list.
 **volnmar** · Fri Jul 11, 2014 5:35 am
 
 How long could it take to develop it?
-
 
 ---
 
@@ -362,7 +339,6 @@ How long could it take to develop it?
 Hopefully by the end of the week.
 I do not give any promises.
 
-
 ---
 
 ## Re: Moving Average Envelopes (MAE) Customizable version.
@@ -370,7 +346,6 @@ I do not give any promises.
 **Apprentice** · Mon Mar 27, 2017 3:25 pm
 
 Indicator was revised and updated.
-
 
 ---
 
@@ -387,7 +362,6 @@ The MAE offered by Meta Trader 4 has 'shift' feature pre-installed, but need it 
 
 Regards,
 
-
 ---
 
 ## Re: Moving Average Envelopes (MAE) Customizable version.
@@ -395,7 +369,6 @@ Regards,
 **Thumper** · Tue Apr 03, 2018 7:05 pm
 
 Can you add an option that a bar or candle changes color if it closes above or below the envelope, please? Much the same as TrendRisk indicator.lua found at [viewtopic.php?f=17&t=61007&p=101558&hilit=trend+risk#p101558](https://fxcodebase.com/code/viewtopic.php?f=17&t=61007&p=101558&hilit=trend+risk#p101558)
-
 
 ---
 
@@ -405,7 +378,6 @@ Can you add an option that a bar or candle changes color if it closes above or b
 
 For both.
 Your request is added to the development list under Id Number 4097
-
 
 ---
 
@@ -419,7 +391,6 @@ Try this version.
 
  [MAE2_Thumper with Alert.lua](files/118714/MAE2_Thumper%20with%20Alert.lua)
 
-
 ---
 
 ## Re: Moving Average Envelopes (MAE) Customizable version.
@@ -427,7 +398,6 @@ Try this version.
 **Thumper** · Sun Jul 15, 2018 6:22 pm
 
 For "MAE2 Thumper" can we have an alert, both email and sound? That is when the bar closes for the first time above the Upper band and below the Lower band. A further option would be above and below the middle line. There would be an option to turn off the MA alert or turn off the band alerts.
-
 
 ---
 
@@ -437,7 +407,6 @@ For "MAE2 Thumper" can we have an alert, both email and sound? That is when the 
 
 MAE2_Thumper with Alert.lua added.
 
-
 ---
 
 ## Re: Moving Average Envelopes (MAE) Customizable version.
@@ -445,7 +414,6 @@ MAE2_Thumper with Alert.lua added.
 **Apprentice** · Tue Jul 17, 2018 10:38 am
 
 Try it now.
-
 
 ---
 
@@ -469,7 +437,6 @@ Currently, the "SHIFT_MA.lua" only allows the moving average line to be shifted/
 Thanks,
 Fortcentral
 
-
 ---
 
 ## Re: Moving Average Envelopes (MAE) Customizable version.
@@ -478,7 +445,6 @@ Fortcentral
 
 Your request is added to the development list.
 Development reference 1173.
-
 
 ---
 

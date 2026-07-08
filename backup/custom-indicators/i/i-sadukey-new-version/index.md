@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=2525  
 > Forum: 17 · Topic 2525 · 42 post(s)
 
-
 ---
 
 ## i_Sadukey (new version)
@@ -24,8 +23,6 @@ This version has the following advantages:
 
 ![i_sadukey_dot.png](images/5583/i_sadukey_dot.png)
 
-
-
 Download:
 
  [i_Sadukey_dot.lua](files/5583/i_Sadukey_dot.lua)
@@ -36,13 +33,10 @@ Download:
 
 ![Sadukey Overlay.png](images/5583/Sadukey%20Overlay.png)
 
-
-
  [i_Sadukey Overlay.lua](files/5583/i_Sadukey%20Overlay.lua)
 
 MT4/MQ4 version.
 [viewtopic.php?f=38&t=70116](https://fxcodebase.com/code/viewtopic.php?f=38&t=70116)
-
 
 ---
 
@@ -55,7 +49,6 @@ Is it possible to develop a strategy based on this signal?
 Thanks
 bluepip
 
-
 ---
 
 ## Re: i_Sadukey (new version)
@@ -64,7 +57,6 @@ bluepip
 
 Your request has been added in the developmental cue.
 
-
 ---
 
 ## Re: i_Sadukey (new version)
@@ -72,7 +64,6 @@ Your request has been added in the developmental cue.
 **carlhans** · Wed Mar 09, 2011 5:34 am
 
 I have experience that in MT4, some indicator repaint....this Sadukey looks promising...almost too prefect...can anybody confirm, it doesnt repaint? So when the dot is plotted on the close of the candle = its definitive, no change afterwards?
-
 
 ---
 
@@ -85,7 +76,6 @@ I have experience that in MT4, some indicator repaint....this Sadukey looks prom
 
 I reviewed the code and can say that it does not repaint already closed candles, only the fresh one.
 
-
 ---
 
 ## Re: i_Sadukey (new version)
@@ -93,7 +83,6 @@ I reviewed the code and can say that it does not repaint already closed candles,
 **compulsive** · Mon Mar 14, 2011 5:56 am
 
 At times,(most of the times it will NOT repaint the bar) BUT occasionally, It DOES repaint the bar. You will need to refresh or switch from ASK to BID and back. (It does it on my charts)
-
 
 ---
 
@@ -114,7 +103,6 @@ Thanks a lot Nikolay!
 Have a good one,
 carl
 
-
 ---
 
 ## Re: i_Sadukey (new version)
@@ -129,7 +117,6 @@ Thank you, good work,
 
 motoko
 
-
 ---
 
 ## Re: i_Sadukey (new version)
@@ -143,14 +130,15 @@ The formula used by algooritam, should be clear then.
 
 First, Define Variables Price1 and Price 2
 
-Code: [Select all](https://fxcodebase.com/code/)
-`Price1[period]=((source.open[period]+source.close[period]+source.high[period]+source.low[period])/4.+source.close[period])/2.;
-        Price2[period]=((source.open[period]+source.close[period]+source.high[period]+source.low[period])/4.+source.open[period])/2.;`
+```lua
+Price1[period]=((source.open[period]+source.close[period]+source.high[period]+source.low[period])/4.+source.close[period])/2.;
+        Price2[period]=((source.open[period]+source.close[period]+source.high[period]+source.low[period])/4.+source.open[period])/2.;
+```
 
 Second, Define Variables Price1 and Price 2
 
-Code: [Select all](https://fxcodebase.com/code/)
-`local B1= 0.11859648*Price1[period]
+```lua
+local B1= 0.11859648*Price1[period]
                   +0.11781324*Price1[period-1]
                   +0.11548308*Price1[period-2]
                   +0.11166411*Price1[period-3]
@@ -282,17 +270,19 @@ Code: [Select all](https://fxcodebase.com/code/)
                   -0.00285188*Price2[period-62]
                   -0.00273508*Price2[period-63]
                   -0.00274361*Price2[period-64]
-                  +0.01018757*Price2[period-65];`
+                  +0.01018757*Price2[period-65];
+```
+
 The final results depends on the comparison of B1 and B2
 
-Code: [Select all](https://fxcodebase.com/code/)
-`if B1 > B2 then
+```lua
+if B1 > B2 then
             bufferUp[period] = B1;         
         else
             bufferDn[period] = B2;
          
-        end`
-
+        end
+```
 
 ---
 
@@ -302,7 +292,6 @@ Code: [Select all](https://fxcodebase.com/code/)
 
 Is there anyway we can get a Multiple Time Frame version of this indicator? For example, if I wanted to use the 1-hour chart for entry, I would want this indicator looking at a 4-hour chart or the daily chart but plotting the points on the 1-hour chart. That way I don't have to waste time jumping back and forth between time frames.
 
-
 ---
 
 ## Re: i_Sadukey (new version)
@@ -310,7 +299,6 @@ Is there anyway we can get a Multiple Time Frame version of this indicator? For 
 **Apprentice** · Wed Oct 12, 2011 5:10 pm
 
 Your request is added to the developmental cue.
-
 
 ---
 
@@ -327,14 +315,11 @@ It is possible in the new version of Marketscope which comes to productions pret
 
 ![I_Sad_MTF.png](images/16164/I_Sad_MTF.png)
 
-
-
 You can choose the time frame in the Indicator Properties dialog box -> Data Source tab:
 
  
 
 ![I_Sad_Prop.png](images/16164/I_Sad_Prop.png)
-
 
 ---
 
@@ -344,7 +329,6 @@ You can choose the time frame in the Indicator Properties dialog box -> Data Sou
 
 Awesome! Thank you very much.
 
-
 ---
 
 ## Re: i_Sadukey (new version)
@@ -352,7 +336,6 @@ Awesome! Thank you very much.
 **faithrider** · Wed Nov 30, 2011 5:07 am
 
 This is a very helpful indicator. Would it be possible to have the i_Sadukey colors overlay the price bars. Green for an uptrend and red for a downtrend. Thank you for your awesome work.
-
 
 ---
 
@@ -362,7 +345,6 @@ This is a very helpful indicator. Would it be possible to have the i_Sadukey col
 
 Your request is added to the developmental cue.
 
-
 ---
 
 ## Re: i_Sadukey (new version)
@@ -370,7 +352,6 @@ Your request is added to the developmental cue.
 **Apprentice** · Wed Mar 14, 2012 3:11 pm
 
 Overlay Added to Topmost post.
-
 
 ---
 
@@ -380,7 +361,6 @@ Overlay Added to Topmost post.
 
 This seems to be similar to the nonlagdot. I notice firsthand on a minute chart repainting for NLD. Is this similar to the calculation and are we certain there is no repainting? I will have to demo this indicator.
 
-
 ---
 
 ## Re: i_Sadukey (new version)
@@ -389,7 +369,6 @@ This seems to be similar to the nonlagdot. I notice firsthand on a minute chart 
 
 Last Candles affects the final value with less than 12%.
 The closing price (close) with about 4 percent.
-
 
 ---
 
@@ -407,7 +386,6 @@ If possible with all the money management and bells and whistles? LOL
 
 You rock!
 
-
 ---
 
 ## Re: i_Sadukey (new version)
@@ -417,7 +395,6 @@ You rock!
 Unfortunately not. The strategy is encoded.
 Can you give me a description.
 What are the indicators used, which are the entry exit conditions.
-
 
 ---
 
@@ -444,7 +421,6 @@ They have lot management which is pretty cool. It adjusts with the % of margin s
 
 I think what could tremendously improve this strategy is introduction of the Tick SAR agreement condition and not trading against it to help with false signals. Thoughts?
 
-
 ---
 
 ## Re: i_Sadukey (new version)
@@ -452,7 +428,6 @@ I think what could tremendously improve this strategy is introduction of the Tic
 **Apprentice** · Sat Mar 31, 2012 3:44 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -466,7 +441,6 @@ i wonder if you could make basic strategy of sadukey.
 Maybe in addings you can let us have 2 or 3 limits. Like Limit1 x% at xpips.
 Same for Limit2 and Limit3.
 
-
 ---
 
 ## Re: i_Sadukey (new version)
@@ -474,7 +448,6 @@ Same for Limit2 and Limit3.
 **Apprentice** · Tue Sep 11, 2012 3:52 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -488,7 +461,6 @@ Thanks!
 
 sjc
 
-
 ---
 
 ## Re: i_Sadukey (new version)
@@ -496,7 +468,6 @@ sjc
 **Apprentice** · Fri Sep 14, 2012 3:39 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -506,7 +477,6 @@ Your request is added to the development list.
 
 Requested can be found here.
 [viewtopic.php?f=17&t=23404](https://fxcodebase.com/code/viewtopic.php?f=17&t=23404)
-
 
 ---
 
@@ -521,7 +491,6 @@ Basic strategy (opposite colour of i_Sadukey indicator)
 
 Thank of the link.
 
-
 ---
 
 ## Re: i_Sadukey (new version)
@@ -531,7 +500,6 @@ Thank of the link.
 Strategy is available here.
 [viewtopic.php?f=31&t=63870](https://fxcodebase.com/code/viewtopic.php?f=31&t=63870)
 
-
 ---
 
 ## Re: i_Sadukey (new version)
@@ -540,7 +508,6 @@ Strategy is available here.
 
 thanks, apprendice
 
-
 ---
 
 ## Re: i_Sadukey (new version)
@@ -548,7 +515,6 @@ thanks, apprendice
 **Apprentice** · Tue Sep 18, 2018 6:52 am
 
 The indicator was revised and updated.
-
 
 ---
 
@@ -562,7 +528,6 @@ Does sadukey repaints?
 
 Thanks,
 
-
 ---
 
 ## Re: i_Sadukey (new version)
@@ -571,7 +536,6 @@ Thanks,
 
 i_Sadukey does not repaint.
 
-
 ---
 
 ## Re: i_Sadukey (new version)
@@ -579,7 +543,6 @@ i_Sadukey does not repaint.
 **hedging** · Wed May 06, 2020 2:56 am
 
 Thanks Apprentice
-
 
 ---
 
@@ -592,7 +555,6 @@ Much needed. Want to apply indicators on sadukey. That's why single stream.
 
 Thanks
 
-
 ---
 
 ## Re: i_Sadukey (new version)
@@ -602,7 +564,6 @@ Thanks
 Your request is added to the development list.
 Development reference 1297.
 
-
 ---
 
 ## Re: i_Sadukey (new version)
@@ -610,7 +571,6 @@ Development reference 1297.
 **Apprentice** · Thu May 21, 2020 7:56 am
 
 Single Stream i_Sadukey_dot.lua added.
-
 
 ---
 
@@ -624,7 +584,6 @@ is there a copy of this file for MT4?
 
 Regards
 
-
 ---
 
 ## Re: i_Sadukey (new version)
@@ -633,7 +592,6 @@ Regards
 
 Your request is added to the development list.
 Development reference 1341.
-
 
 ---
 
@@ -651,7 +609,6 @@ Is there a strategy using this indicator, as a .lua one?
 
 Thanks
 
-
 ---
 
 ## Re: i_Sadukey (new version)
@@ -661,7 +618,6 @@ Thanks
 [viewtopic.php?f=31&t=63870](https://fxcodebase.com/code/viewtopic.php?f=31&t=63870)
 [viewtopic.php?f=31&t=69816](https://fxcodebase.com/code/viewtopic.php?f=31&t=69816)
 Try these versions.
-
 
 ---
 

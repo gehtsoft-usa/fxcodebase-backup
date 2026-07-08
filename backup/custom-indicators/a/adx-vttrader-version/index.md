@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=511  
 > Forum: 17 · Topic 511 · 15 post(s)
 
-
 ---
 
 ## ADX VTTrader version
@@ -12,8 +11,8 @@
 
 MT4 and Trading Station of the ADX indicator differs from one implemented in VTTrader. The VTTrader uses the following formula:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`TR = MAX(PREVIOUS CLOSE, CURRENT HIGH) - MIN(PREVIOUS CLOSE, CURRENT LOW)
+```
+TR = MAX(PREVIOUS CLOSE, CURRENT HIGH) - MIN(PREVIOUS CLOSE, CURRENT LOW)
 PLUSDM = IF ((CURRENT HIGH > PREVIOUS HIGH AND CURRENT LOW >= PREVIOUS LOW) OR
                    (CURRENT HIGH > PREVIOUS HIGH AND CURRENT LOW < PREVIOUS LOW AND
                     CURRENT HIGH  - PREVIOUS HIGH < PREVIOUS LOW - CURRENT LOW)
@@ -32,7 +31,9 @@ MINUSDM = IF ((CURRENT HIGH <= PREVIOUS HIGH AND CURRENT LOW < PREVIOUS LOW) OR
 PLUSDI = 100 * WMA(PLUSDM, N1) / WMA(TR, N1)
 MINUSDI = 100 * WMA(MINUSDM, N1) / WMA(TR, N1)
 
-ADX = 100  * WMA((PLUSDI - MINUSDI) / (PLUSDI + MINUSDI), N2)`
+ADX = 100  * WMA((PLUSDI - MINUSDI) / (PLUSDI + MINUSDI), N2)
+```
+
 where WMA is [Wilders Moving Average](https://fxcodebase.com/code/viewtopic.php?f=17&t=248).
 
 Compare the view of the standard ADX and VT-version of the ADX on the snapshot below:
@@ -41,14 +42,12 @@ Compare the view of the standard ADX and VT-version of the ADX on the snapshot b
 
 ![vtadx.png](images/871/vtadx.png)
 
-
-
 The VT-like version of the ADX is below:
 
 Please, do not forget to download and install [WMA.lua](https://fxcodebase.com/code/download/file.php?id=87) (Wilders Moving Average). This indicator is used by VTADX and, therefore, is required to be installed.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- Indicator profile initialization routine
+```lua
+-- Indicator profile initialization routine
 -- Defines indicator profile properties and indicator parameters
 function Init()
     indicator:name("Average Directional Movement Index (VTTrader version)");
@@ -174,7 +173,8 @@ function Update(p, mode)
     if p >= first then
         ADX[p] = 100 * R_W.DATA[p];
     end
-end`
+end
+```
 
  [VTADX.lua](files/871/VTADX.lua)
 
@@ -182,12 +182,9 @@ end`
 
 ![AUDUSD H1 (04-12-2017 1303).png](images/871/AUDUSD%20H1%20%2804-12-2017%201303%29.png)
 
-
-
  [MTF MCP VTADX.lua](files/871/MTF%20MCP%20VTADX.lua)
 
 The indicator was revised and updated
-
 
 ---
 
@@ -207,8 +204,8 @@ Traders typically use the ADX as a filter along with other indicators to create 
 
 Just for reference: VT code
 
-Code: [Select all](https://fxcodebase.com/code/)
-`TH:= if(Ref(C,-1)>H,Ref(C,-1),H);
+```
+TH:= if(Ref(C,-1)>H,Ref(C,-1),H);
 TL:= if(Ref(C,-1)<L,Ref(C,-1),L);
 TR:= TH-TL;
 PlusDM:= if(H>Ref(H,-1) AND L>=Ref(L,-1), H-Ref(H,-1), if(H>Ref(H,-1) AND L<Ref(L,-1) AND
@@ -219,8 +216,8 @@ MinusDM:= if(L<Ref(L,-1) AND H<=Ref(H,-1), Ref(L,-1)-L, if(H>Ref(H,-1) AND L<Ref
 MinusDI:= 100 * Wilders(MinusDM,Pr)/Wilders(Tr,Pr);
 DIDif:= Abs(PlusDI-MinusDI);
 DISum:= PlusDI + MinusDI;
-_ADX:= 100 * Wilders(DIDif/DISum,SmPr);`
-
+_ADX:= 100 * Wilders(DIDif/DISum,SmPr);
+```
 
 ---
 
@@ -234,7 +231,6 @@ It would be of great benefit!
 
 THANK YOU, IN ADVANCE!!!
 
-
 ---
 
 ## Re: ADX VTTrader version
@@ -246,7 +242,6 @@ The VTDMI indicator is here:
 
 To show it on the same area as ADX just go to the "Location" tab of the indicator properties and select the ADX indicator area .
 
-
 ---
 
 ## Re: ADX VTTrader version
@@ -254,7 +249,6 @@ To show it on the same area as ADX just go to the "Location" tab of the indicato
 **smartfx** · Tue May 04, 2010 1:58 pm
 
 WONDERFUL! Great support! THANK YOU SO MUCH!
-
 
 ---
 
@@ -270,7 +264,6 @@ Big thank you in advance.
 And happy new year to the team
 Danielle
 
-
 ---
 
 ## Re: ADX VTTrader version
@@ -278,7 +271,6 @@ Danielle
 **Apprentice** · Fri Jan 07, 2011 4:07 pm
 
 Added to developmental cue.
-
 
 ---
 
@@ -288,7 +280,6 @@ Added to developmental cue.
 
 Style Option Added.
 
-
 ---
 
 ## Re: ADX VTTrader version
@@ -296,7 +287,6 @@ Style Option Added.
 **sabrumea** · Mon Jan 10, 2011 5:07 am
 
 dear development team, could you guys please help with the signal for VADX?... to make a signal if ADX goes below a certain level.. i have downloaded this indicator together with VDMI you made.. and i found this very reliable tools.. please help with signal
-
 
 ---
 
@@ -306,7 +296,6 @@ dear development team, could you guys please help with the signal for VADX?... t
 
 Added on developmental list.
 
-
 ---
 
 ## Re: ADX VTTrader version
@@ -315,7 +304,6 @@ Added on developmental list.
 
 Requested can be found here.
 [viewtopic.php?f=29&t=3986](https://fxcodebase.com/code/viewtopic.php?f=29&t=3986)
-
 
 ---
 
@@ -330,7 +318,6 @@ Is it possible to get a 3TF version of ADX VTTrader, just like the 3TF stochs ve
 Best Regards,
 G
 
-
 ---
 
 ## Re: ADX VTTrader version
@@ -344,7 +331,6 @@ Could you create a multi-currency VTADX please?
 Thanks,
 Matt
 
-
 ---
 
 ## Re: ADX VTTrader version
@@ -352,7 +338,6 @@ Matt
 **Apprentice** · Wed Apr 12, 2017 6:06 am
 
 Indicator was revised and updated.
-
 
 ---
 

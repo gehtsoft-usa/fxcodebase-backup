@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=38&t=74071  
 > Forum: 38 · Topic 74071 · 28 post(s)
 
-
 ---
 
 ## Indicator_TV_to_MT4 EA
@@ -12,15 +11,12 @@
 
 ![759.png](images/152229/759.png)
 
-
-
 Based on the request.
 [https://fxcodebase.com/code/viewtopic.p ... 49#p152149](https://fxcodebase.com/code/viewtopic.php?f=27&p=152149#p152149)
 
  [Indicador_TV_to_MT4.mq4](files/152229/Indicador_TV_to_MT4.mq4)
 
  [Indicator_TV_to_MT4_EA.mq4](files/152229/Indicator_TV_to_MT4_EA.mq4)
-
 
 ---
 
@@ -31,7 +27,6 @@ Based on the request.
 Sir it's not working as condition
 And not taking any trade as per indicator signal
 
-
 ---
 
 ## Re: Indicator_TV_to_MT4 EA
@@ -41,7 +36,6 @@ And not taking any trade as per indicator signal
 We have added your request to the development list.
 Development reference 771.
 
-
 ---
 
 ## Re: Indicator_TV_to_MT4 EA
@@ -50,7 +44,6 @@ Development reference 771.
 
 Try it now.
 
-
 ---
 
 ## Re: Indicator_TV_to_MT4 EA
@@ -58,7 +51,6 @@ Try it now.
 **Appu264** · Fri Sep 01, 2023 2:59 pm
 
 sorry sir but same condition no trade
-
 
 ---
 
@@ -71,7 +63,6 @@ Also question, do I need the indicator active on the chart for the EA to enter a
 
 Thanks for your awesome work!
 
-
 ---
 
 ## Re: Indicator_TV_to_MT4 EA
@@ -80,7 +71,6 @@ Thanks for your awesome work!
 
 We have added your request to the development list.
 Development reference 1085
-
 
 ---
 
@@ -91,7 +81,6 @@ Development reference 1085
 I see the issue with the indicator. In the journal it throws an error: array out of range in 'indicator_TV_to_MT4.mq4' (256,23). So, it doesn't load the indicator and no trades would be taken.
 
 Thanks.
-
 
 ---
 
@@ -106,7 +95,6 @@ Please add news fillter for news ALSO ACCOUNT protector
 For account equity
 CLOSE BY MONEY TURE AND FALSE
 
-
 ---
 
 ## Re: Indicator_TV_to_MT4 EA
@@ -116,7 +104,6 @@ CLOSE BY MONEY TURE AND FALSE
 We have added your request to the development list.
 Development reference 305
 
-
 ---
 
 ## Re: Indicator_TV_to_MT4 EA
@@ -125,10 +112,7 @@ Development reference 305
 
 ![305.png](images/155081/305.png)
 
-
-
  [Trade_Once_per_candle.mq4](files/155081/Trade_Once_per_candle.mq4)
-
 
 ---
 
@@ -139,7 +123,6 @@ Development reference 305
 just add trade per candle on this ea
 buy trend to buy sell trend sell on this indicator base
 
-
 ---
 
 ## Re: Indicator_TV_to_MT4 EA
@@ -147,7 +130,6 @@ buy trend to buy sell trend sell on this indicator base
 **Appu264** · Tue Apr 23, 2024 11:47 pm
 
 make as indicator & EA MT5 VERSION
-
 
 ---
 
@@ -158,7 +140,6 @@ make as indicator & EA MT5 VERSION
 We have added your request to the development list.
 Development reference 339
 
-
 ---
 
 ## Re: Indicator_TV_to_MT4 EA
@@ -167,18 +148,13 @@ Development reference 339
 
 ![339.png](images/155186/339.png)
 
-
-
  
 
 ![339_EA.png](images/155186/339_EA.png)
 
-
-
  [Indicador_TV_to_MT5.mq5](files/155186/Indicador_TV_to_MT5.mq5)
 
  [Indicator_TV_MT5_EA.mq5](files/155186/Indicator_TV_MT5_EA.mq5)
-
 
 ---
 
@@ -195,7 +171,6 @@ Trade_Once_per_candle.mq4
 
 2024.05.08 18:38:04.607	TestGenerator: unmatched data error (low value 2300.95000 at 2024.05.02 20:35 is not reached from the least timeframe, low price 2301.31200 mismatches)
 
-
 ---
 
 ## Re: Indicator_TV_to_MT4 EA
@@ -204,10 +179,7 @@ Trade_Once_per_candle.mq4
 
 ![test.png](images/155313/test.png)
 
-
-
  [Trade_Once_per_candle.mq4](files/155313/Trade_Once_per_candle.mq4)
-
 
 ---
 
@@ -217,10 +189,7 @@ Trade_Once_per_candle.mq4
 
 ![test.png](images/155342/test.png)
 
-
-
  [Trade_Once_per_candle.mq4](files/155342/Trade_Once_per_candle.mq4)
-
 
 ---
 
@@ -231,7 +200,6 @@ Trade_Once_per_candle.mq4
 MAKE THIS EA AND INDICATOR AS MTF
 TRADE ENTRY AS 5MINS AND EXIT AS 1HRS
 
-
 ---
 
 ## Re: Indicator_TV_to_MT4 EA
@@ -241,22 +209,21 @@ TRADE ENTRY AS 5MINS AND EXIT AS 1HRS
 We have added your request to the development list.
 Development reference 475
 
-
 ---
 
 ## Re: Indicator_TV_to_MT4 EA
 
 **rickCreations** · Wed Jun 12, 2024 4:45 am
 
-Code: [Select all](https://fxcodebase.com/code/)
-`2024.06.12 17:44:46.843   2024.01.02 23:00:00  Trade_Once_per_candle GBPUSD,H1: OrderSend error 131
+```
+2024.06.12 17:44:46.843   2024.01.02 23:00:00  Trade_Once_per_candle GBPUSD,H1: OrderSend error 131
 2024.06.12 17:44:46.752   2024.01.02 22:00:04  Trade_Once_per_candle GBPUSD,H1: OrderSend error 131
 2024.06.12 17:44:46.671   2024.01.02 21:00:00  Trade_Once_per_candle GBPUSD,H1: OrderSend error 131
 2024.06.12 17:44:46.615   2024.01.02 20:00:00  Trade_Once_per_candle GBPUSD,H1: OrderSend error 131
-2024.06.12 17:44:46.513   2024.01.02 19:00:00  Trade_Once_per_candle GBPUSD,H1: OrderSend error 131`
+2024.06.12 17:44:46.513   2024.01.02 19:00:00  Trade_Once_per_candle GBPUSD,H1: OrderSend error 131
+```
 
 FIXLOT & Percent always give me order send error
-
 
 ---
 
@@ -264,17 +231,17 @@ FIXLOT & Percent always give me order send error
 
 **rickCreations** · Wed Jun 12, 2024 4:47 am
 
-Code: [Select all](https://fxcodebase.com/code/)
-`2024.06.12 17:44:46.843   2024.01.02 23:00:00  Trade_Once_per_candle GBPUSD,H1: OrderSend error 131
+```
+2024.06.12 17:44:46.843   2024.01.02 23:00:00  Trade_Once_per_candle GBPUSD,H1: OrderSend error 131
 2024.06.12 17:44:46.752   2024.01.02 22:00:04  Trade_Once_per_candle GBPUSD,H1: OrderSend error 131
 2024.06.12 17:44:46.671   2024.01.02 21:00:00  Trade_Once_per_candle GBPUSD,H1: OrderSend error 131
 2024.06.12 17:44:46.615   2024.01.02 20:00:00  Trade_Once_per_candle GBPUSD,H1: OrderSend error 131
-2024.06.12 17:44:46.513   2024.01.02 19:00:00  Trade_Once_per_candle GBPUSD,H1: OrderSend error 131`
+2024.06.12 17:44:46.513   2024.01.02 19:00:00  Trade_Once_per_candle GBPUSD,H1: OrderSend error 131
+```
 
 I get this when fixed lot is set to 0.01 lots or percent is set to 1
 
 if i change fixed lots to 0.1 then it works fine.. there is something wrong in the calculation.
-
 
 ---
 
@@ -285,7 +252,6 @@ if i change fixed lots to 0.1 then it works fine.. there is something wrong in t
 We have added your request to the development list.
 Development reference 482
 
-
 ---
 
 ## Re: Indicator_TV_to_MT4 EA
@@ -293,7 +259,6 @@ Development reference 482
 **Apprentice** · Tue Jun 18, 2024 1:22 pm
 
 ![482.png](images/155800/482.png)
-
 
 ---
 
@@ -306,7 +271,6 @@ This is actually UT bot and yes finally its exact copy of it. Could you please a
 - Trailing start, distance, step.
 - TP risk reward
 
-
 ---
 
 ## Re: Indicator_TV_to_MT4 EA
@@ -316,7 +280,6 @@ This is actually UT bot and yes finally its exact copy of it. Could you please a
 We have added your request to the development list.
 Development reference 523
 
-
 ---
 
 ## Re: Indicator_TV_to_MT4 EA
@@ -325,10 +288,7 @@ Development reference 523
 
 ![523.png](images/155923/523.png)
 
-
-
  [Indicator_TV_to_MT4_EA.mq4](files/155923/Indicator_TV_to_MT4_EA.mq4)
-
 
 ---
 

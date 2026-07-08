@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=870  
 > Forum: 17 · Topic 870 · 23 post(s)
 
-
 ---
 
 ## Standard Deviation Indicator
@@ -26,10 +25,8 @@ ApPRICE (i) — the price of the current bar.
 
 ![StdDev.png](images/1577/StdDev.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Standard Deviation Indicator");
     indicator:description("Technical indicator named Standard Deviation (StdDev) measures the market volatility.");
     indicator:requiredSource(core.Tick);
@@ -66,12 +63,12 @@ function Update(period, mode)
      end
      StdDev[period]=math.sqrt(dAmount/N);
     end
-end`
+end
+```
 
  [StdDev.lua](files/1577/StdDev.lua)
 
  [Normalized Standard Deviation Indicator.lua](files/1577/Normalized%20Standard%20Deviation%20Indicator.lua)
-
 
 ---
 
@@ -87,7 +84,6 @@ Thanks,
 
 Keyrama
 
-
 ---
 
 ## Re: Standard Deviation Indicator
@@ -95,7 +91,6 @@ Keyrama
 **Nikolay.Gekht** · Thu Apr 29, 2010 8:08 am
 
 The indicator shows how much the price at the particular period differs from the price expected in the trend (i.e. sequence of the prices which looks predictable). So, higher value can point to the change of the price direction.
-
 
 ---
 
@@ -115,7 +110,6 @@ Thanks,
 
 keyrama
 
-
 ---
 
 ## Re: Standard Deviation Indicator
@@ -125,8 +119,8 @@ keyrama
 Update indicator.
 Added method of MA.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Standard Deviation Indicator");
     indicator:description("Technical indicator named Standard Deviation (StdDev) measures the market volatility.");
     indicator:requiredSource(core.Tick);
@@ -171,7 +165,8 @@ function Update(period, mode)
      end
      StdDev[period]=math.sqrt(dAmount/N);
     end
-end`
+end
+```
 
  [StdDev2.lua](files/5132/StdDev2.lua)
 
@@ -180,7 +175,6 @@ end`
 This indicator provides Audio / Email Alerts on Standard Deviation Line / Triger Lines Cross.
 Make sure to define the trigger line which is different from default 0.
 
-
 ---
 
 ## Standard Deviation Indicator
@@ -188,7 +182,6 @@ Make sure to define the trigger line which is different from default 0.
 **Kactassem** · Mon Oct 18, 2010 12:20 pm
 
 Since a workcenter has only 6 standard values, why would you want the standard value key to have more than that?
-
 
 ---
 
@@ -206,7 +199,6 @@ Thanks!
 
 sjc
 
-
 ---
 
 ## Re: Standard Deviation Indicator
@@ -215,7 +207,6 @@ sjc
 
 Standard Deviation Indicator with Alert Added.
 
-
 ---
 
 ## Re: Standard Deviation Indicator
@@ -223,7 +214,6 @@ Standard Deviation Indicator with Alert Added.
 **SenseClash** · Sun Jul 13, 2014 12:27 pm
 
 I like using two moving averages of standard deviations and taking a trade when they cross. For example, when a 10-period simple moving average of the standard deviation crosses over the 20-period SMA of the SD, as shown in the attached example. It shows me that volatility has increased in a way that is more useful than Bollinger bands. Would you be willing to create an indicator for this?
-
 
 ---
 
@@ -235,7 +225,6 @@ From what I can see, u have two Standard Deviation Indicator attached to the cha
 
 Can u give a more detailed description.
 Probably with formula and a description of the desired presentation.
-
 
 ---
 
@@ -251,7 +240,6 @@ etc.
 ----------------------------------------------------------------------------------------------
 Each SD indicator has its own N (Smoothing period), which in my attached chart was a fast one (10) and a slower one (20). I'd like to have both plotted on the same chart (with options I can choose for colors and also styles like histograms), with an alert when the faster one (N=10 in my example) crosses the slower one (N=20 in my example). The overall purpose is to give an alert when volatility increases.
 
-
 ---
 
 ## Re: Standard Deviation Indicator
@@ -260,7 +248,6 @@ Each SD indicator has its own N (Smoothing period), which in my attached chart w
 
 Requested can be found here.
 [viewtopic.php?f=17&t=60896](https://fxcodebase.com/code/viewtopic.php?f=17&t=60896)
-
 
 ---
 
@@ -274,7 +261,6 @@ I have installed StdDev2.lua, StdDev with Alert.lua, and _Alert.lua and I keep g
 
 Any idea why? It's set to alert on a 20MVA when the SD reaches .00050.
 
-
 ---
 
 ## Re: Standard Deviation Indicator
@@ -282,7 +268,6 @@ Any idea why? It's set to alert on a 20MVA when the SD reaches .00050.
 **Apprentice** · Thu Jul 31, 2014 5:50 am
 
 Please Re-Download.
-
 
 ---
 
@@ -298,7 +283,6 @@ Then I put the SD With Alert indicator on a 1-minute chart of the GBP/JPY and se
 
 I've attached my settings for the SD with Alert for you to see if there are any problems with how I've set it up. As always, I'm grateful for your great indicators and strategies and willingness to help!
 
-
 ---
 
 ## Re: Standard Deviation Indicator
@@ -307,7 +291,6 @@ I've attached my settings for the SD with Alert for you to see if there are any 
 
 I do not see Activ _Alert on your chart.
 U have to have one Activ _Alert per currency pair.
-
 
 ---
 
@@ -319,7 +302,6 @@ Okay, I have _Alert as a strategy active on my currency pair. The alert tried to
 
 GBP/JPY	STDDEV WITH ALERT	An error occurred during the calculation of the indicator 'STDDEV WITH ALERT'. The error details: StdDev with Alert.lua:360: attempt to concatenate field '?' (a nil value).	08/04/2014 10:45:45
 
-
 ---
 
 ## Re: Standard Deviation Indicator
@@ -329,7 +311,6 @@ GBP/JPY	STDDEV WITH ALERT	An error occurred during the calculation of the indica
 In addition to some help with the email problem above, I wonder if this indicator can be changed to give me the option to alert only when SD crosses above (not under). In other words, I'd like the option of getting an alert when volatility increases, but not when it decreases.
 
 Thank you.
-
 
 ---
 
@@ -343,7 +324,6 @@ it makes difficult to work.
 Will think about your proposal,
 after my return to the office from vacation.
 
-
 ---
 
 ## Re: Standard Deviation Indicator
@@ -351,7 +331,6 @@ after my return to the office from vacation.
 **Victor.Tereschenko** · Wed Dec 02, 2015 5:35 am
 
 Version with support of latest TS version (with Indicore 3.0)
-
 
 ---
 
@@ -361,7 +340,6 @@ Version with support of latest TS version (with Indicore 3.0)
 
 Indicator was revised and updated.
 
-
 ---
 
 ## Re: Standard Deviation Indicator
@@ -369,7 +347,6 @@ Indicator was revised and updated.
 **Apprentice** · Tue Oct 17, 2017 3:53 am
 
 Normalized Standard Deviation Indicator.lua added.
-
 
 ---
 

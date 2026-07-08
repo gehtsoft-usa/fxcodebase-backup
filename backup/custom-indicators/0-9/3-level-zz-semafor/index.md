@@ -1,7 +1,35 @@
 # 3_Level_ZZ_Semafor
 
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=954  
-> Forum: 17 · Topic 954 · 42 post(s)
+> Forum: 17 · Topic 954 · 44 post(s)
+
+
+---
+
+## 3_Level_ZZ_Semafor
+
+**Nikolay.Gekht** · Tue May 04, 2010 7:47 pm
+
+The indicator shows vertexes of three zigzags.
+
+The indicator is described in The Folding Rule by Viktor Likhovidov article in Stock & Commodities in June, 2001 issue.
+
+ 
+
+![3_Level_ZZ_Semafor.png](images/1753/3_Level_ZZ_Semafor.png)
+
+
+
+Download:
+
+ [3_Level_ZZ_Semafor.lua](files/1753/3_Level_ZZ_Semafor.lua)
+
+MT4/MQ4 version
+[viewtopic.php?f=38&t=64369](https://fxcodebase.com/code/viewtopic.php?f=38&t=64369)
+and
+[viewtopic.php?f=38&t=65061&p=114722#p114722](https://fxcodebase.com/code/viewtopic.php?f=38&t=65061&p=114722#p114722)
+
+The indicator was revised and updated
 
 
 ---
@@ -158,6 +186,15 @@ This modify will help a lot with Breakout Strategy.
 
 Thanks
 gspefx
+
+
+---
+
+## Re: Port of 3_Level_ZZ_Semafor MT4 indicator
+
+**Nikolay.Gekht** · Wed Sep 07, 2011 1:49 pm
+
+Could you please formalize the rules for S/R lines?
 
 
 ---

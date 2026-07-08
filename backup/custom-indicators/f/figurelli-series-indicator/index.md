@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=1289  
 > Forum: 17 · Topic 1289 · 4 post(s)
 
-
 ---
 
 ## Figurelli Series indicator
@@ -17,10 +16,8 @@ Default configuration: 36 moving averages series trends compared each other. If 
 
 ![Figurelli_Series.png](images/2461/Figurelli_Series.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Figurelli Series indicator");
     indicator:description("Figurelli Series indicator");
     indicator:requiredSource(core.Bar);
@@ -66,10 +63,10 @@ function Update(period, mode)
      local tot=tot_Bid-tot_Ask;
      FS[period]=tot;
     end
-end`
+end
+```
 
 The indicator was revised and updated
-
 
 ---
 
@@ -85,7 +82,6 @@ sjc
 
 [http://www.mql5.com/en/code/1641](http://www.mql5.com/en/code/1641)
 
-
 ---
 
 ## Re: Figurelli Series indicator
@@ -93,7 +89,6 @@ sjc
 **Apprentice** · Thu Apr 25, 2013 4:36 am
 
 Your request is added to the development list.
-
 
 ---
 

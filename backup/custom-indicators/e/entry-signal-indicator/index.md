@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=6302  
 > Forum: 17 · Topic 6302 · 4 post(s)
 
-
 ---
 
 ## Entry signal indicator
@@ -16,14 +15,11 @@ The indicator is written at the request: [viewtopic.php?f=27&t=5952](https://fxc
 
 ![EntrySignal.png](images/14542/EntrySignal.png)
 
-
-
 Download:
 
  [Entry_Signal.lua](files/14542/Entry_Signal.lua)
 
 The indicator was revised and updated
-
 
 ---
 
@@ -36,7 +32,6 @@ hello ,
 could you please, tell us how this indicator works, on what bases? cause there is no info at all.
 
 thanks.
-
 
 ---
 
@@ -52,8 +47,8 @@ Input
 Level=30
 Period=9;
 
-Code: [Select all](https://fxcodebase.com/code/)
-`Range=high - low;     
+```lua
+Range=high - low;     
  
      local Range=lwma of Range
      local MaxPrice=max high of Last Period Periods.
@@ -67,7 +62,8 @@ Code: [Select all](https://fxcodebase.com/code/)
      if Close>MaxPrice-(MaxPrice-MinPrice)*Level/100 and previousTrigger~=1 then
       Buff=high+Range/2;
      Trigger=1;
-     end`
+     end
+```
 
 In short if price exceeds
 MinPrice + (MaxPrice-MinPrice)
@@ -76,7 +72,6 @@ we have a trend change.
 
 MaxPrice is max high of Last Period Periods.
 MinPrice is min low of Last Period Periods
-
 
 ---
 

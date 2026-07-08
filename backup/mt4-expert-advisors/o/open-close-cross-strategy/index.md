@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=38&t=66533  
 > Forum: 38 · Topic 66533 · 20 post(s)
 
-
 ---
 
 ## Open Close Cross Strategy
@@ -21,7 +20,6 @@ Please install averages.mq4
 
  [averages.mq4](files/120613/averages.mq4)
 
-
 ---
 
 ## Re: Open Close Cross Strategy
@@ -34,7 +32,6 @@ This indicator is always/ever only showing green candles here, this can't be cor
 
 (I added manually the blue EMA's period 8 -open and close- too have it visually shown better)
 
-
 ---
 
 ## Re: Open Close Cross Strategy
@@ -42,7 +39,6 @@ This indicator is always/ever only showing green candles here, this can't be cor
 **Apprentice** · Thu Aug 30, 2018 1:41 pm
 
 Were averages.mq4 you installed?
-
 
 ---
 
@@ -54,7 +50,6 @@ Yes, averages.mq4 from post 1 here.
 
 Here are two more screenshots...
 
-
 ---
 
 ## Re: Open Close Cross Strategy
@@ -62,7 +57,6 @@ Here are two more screenshots...
 **Apprentice** · Sun Sep 02, 2018 2:51 am
 
 Found a typo. Fixed.
-
 
 ---
 
@@ -75,7 +69,6 @@ Found a typo. Fixed.
 
 looking good now, thanks
 
-
 ---
 
 ## Re: Open Close Cross Strategy
@@ -86,7 +79,6 @@ when active the EA is not installed and does not appear or work.
 could you give me some instructions please
 
 Thank you
-
 
 ---
 
@@ -99,7 +91,6 @@ There is an error compliling the EA file at line 193.
 And even when I fixed the error, and runned the EA, no trades happened.
 I tried multiple timeframes and setting, but nothing.
 
-
 ---
 
 ## Re: Open Close Cross Strategy
@@ -108,7 +99,6 @@ I tried multiple timeframes and setting, but nothing.
 
 line 193 error fixed.
 
-
 ---
 
 ## Re: Open Close Cross Strategy
@@ -116,7 +106,6 @@ line 193 error fixed.
 **[email protected]** · Mon Sep 27, 2021 4:22 am
 
 can we have this indicator in lua also please?
-
 
 ---
 
@@ -129,7 +118,6 @@ i put both indicators in indicators folder
 and expert in experts folder
 any instructions please?
 
-
 ---
 
 ## Re: Open Close Cross Strategy
@@ -138,7 +126,6 @@ any instructions please?
 
 Your request is added to the development list.
 Development reference 872.
-
 
 ---
 
@@ -152,7 +139,6 @@ Development reference 872.
 
 Try it now.
 
-
 ---
 
 ## Re: Open Close Cross Strategy
@@ -162,7 +148,6 @@ Try it now.
 I don't know if I'm missin anything here? But this is a bit different from the tradingview indicator. The tradingview indicator has red/green colors and also more input parameter options..
 
 Thanks
-
 
 ---
 
@@ -193,7 +178,6 @@ Thank you so much dear
 
 [https://www.tradingview.com/script/9wda ... ustUncleL/](https://www.tradingview.com/script/9wda3yUw-Open-Close-Cross-Strategy-NoRepaint-Version-by-JustUncleL/)
 
-
 ---
 
 ## Re: Open Close Cross Strategy
@@ -222,7 +206,6 @@ Thank you so much dear
 
 [https://www.tradingview.com/script/9wda ... ustUncleL/](https://www.tradingview.com/script/9wda3yUw-Open-Close-Cross-Strategy-NoRepaint-Version-by-JustUncleL/)
 
-
 ---
 
 ## Re: Open Close Cross Strategy
@@ -231,8 +214,8 @@ Thank you so much dear
 
 this is not work only show green, why ?
 
-Code: [Select all](https://fxcodebase.com/code/)
-`// Id: 22037
+```lua
+// Id: 22037
 // More information about this indicator can be found at:
 // http://fxcodebase.com/
 
@@ -953,8 +936,8 @@ double GetAveragesValue(AveragesMethod method, int length, int price, int index)
    return iCustom(NULL, 0, "averages", length, 0, (int)method, price, index);
 }
 
-TradeController *tradingLogic;`
-
+TradeController *tradingLogic;
+```
 
 ---
 
@@ -965,7 +948,6 @@ TradeController *tradingLogic;`
 We have added your request to the development list.
 Development reference 1082
 
-
 ---
 
 ## Re: Open Close Cross Strategy
@@ -974,10 +956,7 @@ Development reference 1082
 
 ![1082.png](images/155077/1082.png)
 
-
-
  [Open_Close_Cross_Strategy_v2.mq4](files/155077/Open_Close_Cross_Strategy_v2.mq4)
-
 
 ---
 

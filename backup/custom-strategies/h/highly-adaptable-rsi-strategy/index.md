@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=31552  
 > Forum: 31 · Topic 31552 · 93 post(s)
 
-
 ---
 
 ## Highly adaptable RSI Strategy
@@ -11,8 +10,6 @@
 **Apprentice** · Wed Jan 30, 2013 7:23 am
 
 ![RSI.png](images/53816/RSI.png)
-
-
 
 Trading Events
 1. Line Cross
@@ -42,7 +39,6 @@ Open Long Position
 MT4 version.
 [https://fxcodebase.com/code/viewtopic.php?f=38&t=71255](https://fxcodebase.com/code/viewtopic.php?f=38&t=71255)
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -52,7 +48,6 @@ MT4 version.
 allow multiple
 
 don't work?
-
 
 ---
 
@@ -70,7 +65,6 @@ second buy when second 60 min bar close and rsi under 30
 
 third and so on
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -80,7 +74,6 @@ third and so on
 Strategy only supports Line crossover trades.
 Multiple positions would be open, for example, if you select two trades in same direction on two different lines.
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -89,7 +82,6 @@ Multiple positions would be open, for example, if you select two trades in same 
 
 Could you add a "magic number" to this s it doesn't interfere with other strategies and open trades on the same pair. Thanks.
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -97,7 +89,6 @@ Could you add a "magic number" to this s it doesn't interfere with other strateg
 **Apprentice** · Wed Feb 27, 2013 8:07 am
 
 Your request is added to the developmental lists.
-
 
 ---
 
@@ -119,7 +110,6 @@ RSI level 50 should be the stop lose.
 
 Thank you very much...
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -127,7 +117,6 @@ Thank you very much...
 **Apprentice** · Wed Mar 13, 2013 7:48 am
 
 Your request is added to the developmental list.
-
 
 ---
 
@@ -139,7 +128,6 @@ hello Apprentice,
 
  I want an EA with a version in android and .lua. Hope you can provide it. Thanks more power.
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -148,7 +136,6 @@ hello Apprentice,
 
 This is not possible at this moment
 Mobile TS (Android) does not support indicators/strategies.
-
 
 ---
 
@@ -167,7 +154,6 @@ Code: [Select all](https://fxcodebase.com/code/)
 `Indicators[1]= core.indicators:create("QQE", Source[Price], Period);`
 Would this work? If not can you give me a hand please.
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -179,7 +165,6 @@ QQE uses different parameters.
 Also we have several QQE version.
 Specify which of them you are using.
 Specify strategy trading rules.
-
 
 ---
 
@@ -199,7 +184,6 @@ Specify strategy trading rules.
 
 I had posted that in a QQE Strategy thread, [viewtopic.php?f=31&t=9147&start=20#p84364](https://fxcodebase.com/code/viewtopic.php?f=31&t=9147&start=20#p84364)
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -214,7 +198,6 @@ Also, I do not know if it would be possible, but could you modify Trading Parame
 
 Many thanks, AG
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -222,7 +205,6 @@ Many thanks, AG
 **Apprentice** · Thu Aug 22, 2013 1:45 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -239,7 +221,6 @@ This is a great strategy. Can we add couple of enhancements?
 
 Thank you so much.
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -247,7 +228,6 @@ Thank you so much.
 **Apprentice** · Thu Sep 05, 2013 1:55 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -259,7 +239,6 @@ Any update when this will be done?
 
 Thanks
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -267,7 +246,6 @@ Thanks
 **dstoltz** · Tue Oct 29, 2013 8:14 pm
 
 Has there been any further consideration on working on this filtered strategy or Larry Connors RSI2 strategy and indicator? thanks
-
 
 ---
 
@@ -281,7 +259,6 @@ The strategy is good, but I wonder if it is possible, instead of giving a market
 EUR / USD RSI reaches 70 with price as $ 1.38, at that time the program gives an entry order to "X pips that amount" if you choose 20, the program gives an entry order to $ 1.3820
 Already my thanks
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -289,7 +266,6 @@ Already my thanks
 **Apprentice** · Fri Jan 03, 2014 3:28 pm
 
 Your request is added to the development list.
-
 
 ---
 
@@ -301,7 +277,6 @@ Your request is added to the development list.
 > Your request is added to the development list.
 
 Is very important to me, thank you
-
 
 ---
 
@@ -357,7 +332,6 @@ Ok that's it. I have done my best to test the functionality to make sure it stil
 ![HighlyAdaptableRSI.png](images/92025/HighlyAdaptableRSI.png)
 
 *Screenshot*
-
 
 ---
 
@@ -415,7 +389,6 @@ Thank you, you are the greatest, the strategy seems to be perfect, I'll try it n
 >
 > HighlyAdaptableRSI.png
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -426,7 +399,6 @@ Many thanks for these updates. They come at the PERFECT time for me. I will try 
 
  Amazon1a
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -434,8 +406,6 @@ Many thanks for these updates. They come at the PERFECT time for me. I will try 
 **Paulo C** · Tue Jan 21, 2014 5:25 pm
 
 ![USDJPY.png](images/92191/USDJPY.png)
-
-
 
 Hello guys, I wonder if it is possible to further modification. One of the situations in which it is lost when the program gives an order to buy or sell through the signal, and the price continues to go up or down as shown. In this sense I wonder if it is possible a kind of "follow the order of entry" such as: USD-JPY price begins to fall at some point the progam gives an entry order (purchase) but the price continues to fall .. is so frustrating and you lose many pips. My idea is USD-JPY price falls and hits the 102, reaches the level of RSI for an entry order 20 pips to 102.20 of that amount. The price continues to drop reaches 101.80 at this point the order of entry is updated to 102.20 to 102, and so on until the order is executed.
 I thank you and keep up the good work
@@ -488,7 +458,6 @@ I thank you and keep up the good work
 >
 > The attachment **USDJPY.png** is no longer available
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -505,7 +474,6 @@ Please confirm that this will probably meet your expectation?
 
 Cheers,
 MooMooFX
-
 
 ---
 
@@ -531,7 +499,6 @@ You got it, or cancel the order and create a new one, or update the entry order
 Cheers,
 Paulo C
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -548,7 +515,6 @@ Any other value, specified in pips, trails the entry price of the order when the
 This should meet your requirement as the pending entry orders are automatically updated.
 
 Enjoy. Watch out though, if you set a small EntryOrderTrail value (like 1) they will all trail and sync up. If then the market retraces just enough for them to all enter at the same time then you might find yourself in a bit of trouble.
-
 
 ---
 
@@ -570,7 +536,6 @@ Enjoy. Watch out though, if you set a small EntryOrderTrail value (like 1) they 
 
 MooMooFX Thanks, I'll try it now
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -578,7 +543,6 @@ MooMooFX Thanks, I'll try it now
 **sqrrl99** · Thu Feb 13, 2014 2:02 pm
 
 I am having a problem with backtesting this strategy. I keep getting a message that reads, "close order failed the order is disabled". I have not been able to figure out what is causing this. Any help would be appreciated.
-
 
 ---
 
@@ -593,7 +557,6 @@ If you can't figure it out, please let me know the parameter values are you usin
 Cheers,
 MooMooFX
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -605,7 +568,6 @@ I was on the GBP/JPY 3 hour chart. RSI value was at 8. 1st line was 50. 2nd line
 Thanks again for any help you may give,
 
 Jason
-
 
 ---
 
@@ -622,7 +584,6 @@ Please try this version and let me know if it fixes your issue.
 Cheers,
 MooMooFX
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -632,7 +593,6 @@ MooMooFX
 Looks like it is working.
 
 Thanks MooMoo
-
 
 ---
 
@@ -644,7 +604,6 @@ Great. Thanks for confirming.
 
 Cheers,
 MooMooFX
-
 
 ---
 
@@ -658,7 +617,6 @@ Thanks,
 
 Jason
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -668,7 +626,6 @@ Jason
 A configuration of 3 would allow 3 per direction.
 
 How many trades is it opening and how many in each direction?
-
 
 ---
 
@@ -682,7 +639,6 @@ Thanks,
 
 Jason
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -694,7 +650,6 @@ I have 2 different pairs that are over 3 trades in one direction (EUR/USD curren
 Any help would be appreciated,
 
 Jason
-
 
 ---
 
@@ -708,7 +663,6 @@ I have the same problem - too many trades. I set the limit to 2 but had up to 9 
 
 Thanks, AG
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -716,7 +670,6 @@ Thanks, AG
 **moomoofx** · Fri Feb 21, 2014 1:39 am
 
 Ok thanks everyone for raising the issue. I'll do some testing on a demo account and try to reproduce. If someone could send me a screenshot of their strategy parameters that would be great.
-
 
 ---
 
@@ -731,7 +684,6 @@ I hope this helps you find the problem.
 Thanks,
 
 Jason
-
 
 ---
 
@@ -758,7 +710,6 @@ So, therefore can I ask you
 Cheers,
 MooMooFX
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -767,7 +718,6 @@ MooMooFX
 
 I am using market orders, not entry orders
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -775,7 +725,6 @@ I am using market orders, not entry orders
 **sqrrl99** · Wed Feb 26, 2014 2:22 am
 
 I am gonna test the customerid parameter to see if that works...will let you know tomorrow
-
 
 ---
 
@@ -795,8 +744,8 @@ This means that when the strategy checks to see if there are any trades with the
 
 The fix for this is to simply specify a non-blank CustomID value. Additionally, I have updated the code so by default this is non-blank.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`TEST(USD/JPY[t1], 10, 0)   2014/02/27 16:44:33  Found Trade: 20382885 Amount: 1000 QTXT: FXTC
+```
+TEST(USD/JPY[t1], 10, 0)   2014/02/27 16:44:33  Found Trade: 20382885 Amount: 1000 QTXT: FXTC
 TEST(USD/JPY[t1], 10, 0)   2014/02/27 16:44:33  Found Trade: 20382874 Amount: 2000 QTXT: ID
 TEST(USD/JPY[t1], 10, 0)   2014/02/27 16:44:33  Found Trade: 20382873 Amount: 1000 QTXT: FXTC
 TEST(USD/JPY[t1], 10, 0)   TEST(USD/JPY[t1], 10, 0) is started.
@@ -804,13 +753,13 @@ HIGHLY ADAPTABLE RSI STRATEGY( USD/JPY,, )   Market Order (102.351, USD/JPY, S
 HIGHLY ADAPTABLE RSI STRATEGY( USD/JPY,ID, )   Market Order (102.350, USD/JPY, Sold 2K, 05276615). Successful.
 HIGHLY ADAPTABLE RSI STRATEGY( USD/JPY,, )   Market Order (102.350, USD/JPY, Sold 1K, 05276615). Successful.
 HIGHLY ADAPTABLE RSI STRATEGY( USD/JPY,ID, )   HIGHLY ADAPTABLE RSI STRATEGY( USD/JPY,ID, ) is started.
-HIGHLY ADAPTABLE RSI STRATEGY( USD/JPY,, )   HIGHLY ADAPTABLE RSI STRATEGY( USD/JPY,, ) is started.`
+HIGHLY ADAPTABLE RSI STRATEGY( USD/JPY,, )   HIGHLY ADAPTABLE RSI STRATEGY( USD/JPY,, ) is started.
+```
 
 The previously mentioned holes in the MultipleLimit functionality (Entry Orders, multiple signals in same bar) will not be fixed at this time as there is no standard way to decide which signals is the priority. I don't think this should be a problem for normal use of this strategy.
 
 Cheers,
 MooMooFX
-
 
 ---
 
@@ -821,7 +770,6 @@ MooMooFX
 I was just getting on to let you know that the problem was fixed by filling in the customer id number. Thanks for all your help MooMoo!
 
 Jason
-
 
 ---
 
@@ -835,7 +783,6 @@ Just trying to configure this strategy.
 In the calculation section of the parameters, with the level 1 line cross over etc, what should they be set to? Cross over is sell and cross under is buy, for all 7 levels?
 
 Thanks
-
 
 ---
 
@@ -856,7 +803,6 @@ And so on.
 Cheers,
 MooMooFX
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -869,7 +815,6 @@ Thank you for that explanation. So it gives you more customization, which may im
 
 Cheers,
 Yeders
-
 
 ---
 
@@ -897,7 +842,6 @@ Thank you very much for your excellent works! Have a nice and safe day!
 
 Vantages
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -914,7 +858,6 @@ Thank you very much for your time! Hoping for your thoughts on it.
 
 Vantages
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -922,7 +865,6 @@ Vantages
 **Apprentice** · Fri Jun 27, 2014 3:59 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -935,7 +877,6 @@ Apprentice,
 Would you be able to add "Tick" as part of the price source options so that it doesn't have to wait to take action by other means?
 
 Thanks in advance.
-
 
 ---
 
@@ -954,7 +895,6 @@ In the version I use it waits the candle's closing time (4h) and for my strategy
 
 Thanks for your attention
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -967,7 +907,6 @@ You'll see I wanna the strategy place trades in both directions (sell and buy) b
 Did you understand?...
 Sorry for my bad english... I did my best
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -977,7 +916,6 @@ Sorry for my bad english... I did my best
 I understand.
 We have several versions in this topic.
 Can you provide link to underlying version.
-
 
 ---
 
@@ -992,7 +930,6 @@ Can you provide link to underlying version.
 
 Ummm... Don't know what version is... I just downloaded .lua file from first post of the topic just yesterday...
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -1002,7 +939,6 @@ Ummm... Don't know what version is... I just downloaded .lua file from first pos
 Please Re-Download.
 I introduced the Close On Opposite parameter.
 In your case U will use No.
-
 
 ---
 
@@ -1020,7 +956,6 @@ Thanks for your answer and your job, but new parameter Close On Opposite seems l
 Thanks for your time, wating your answer...
 Cheers!
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -1028,7 +963,6 @@ Cheers!
 **Apprentice** · Sat Aug 09, 2014 4:16 am
 
 Do you use U.S. (zero heaging) account?
-
 
 ---
 
@@ -1046,7 +980,6 @@ I've set Non FIFO No Hedging account type parameter in Backtest strategy wizard 
 Thanks for your time, Waiting your answer.
 Cheers!
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -1061,7 +994,6 @@ Buy, Sell, Close Position, Alert an a Function named: Set Stop to Open?
 
 Greetings
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -1069,7 +1001,6 @@ Greetings
 **Apprentice** · Thu Oct 23, 2014 3:42 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -1083,7 +1014,6 @@ Do you when this request will be done? 2 weeks? 4 weeks? 2 months? Just a rough 
 
 Greetings
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -1092,7 +1022,6 @@ Greetings
 
 First/Topmost post major update.
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -1101,7 +1030,6 @@ First/Topmost post major update.
 
 Strategy was revised and updated.
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -1109,7 +1037,6 @@ Strategy was revised and updated.
 **Apprentice** · Sun Dec 18, 2016 6:18 am
 
 Strategy was revised and updated.
-
 
 ---
 
@@ -1121,7 +1048,6 @@ Could a "Live or End of Turn" option be added to MooMoo's version of this Strate
 
 Thanks
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -1130,7 +1056,6 @@ Thanks
 
 Your request is added to the development list, Under Id Number 3727
  If someone is interested to do this task, please contact me.
-
 
 ---
 
@@ -1147,7 +1072,6 @@ Please, try this version of the strategy.
 
  [Highly adaptable RSI Strategy.lua](files/115436/Highly%20adaptable%20RSI%20Strategy.lua)
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -1155,7 +1079,6 @@ Please, try this version of the strategy.
 **Apprentice** · Mon Feb 05, 2018 2:24 pm
 
 The strategy was revised and updated.
-
 
 ---
 
@@ -1172,7 +1095,6 @@ Hi Apprentice
 
 Thank you so much.
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -1187,7 +1109,6 @@ Can we add couple of enhancements?
 2. Add a field to limit the multiple trades?
 
 Thank you so much.
-
 
 ---
 
@@ -1204,7 +1125,6 @@ Can we add couple of enhancements?
 
 Thank you so much.
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -1214,7 +1134,6 @@ Thank you so much.
 Your request is added to the development list.
 Development reference 248.
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -1222,7 +1141,6 @@ Development reference 248.
 **Apprentice** · Tue Oct 29, 2019 6:11 am
 
 Strategy already have these parameters
-
 
 ---
 
@@ -1236,7 +1154,6 @@ From yesterday, I set up this strategy at my demo account. The time frame was 5 
 Thank you.
 wahid
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -1249,7 +1166,6 @@ when the price is above the daily pivot line you can choose whether to buy only 
 
 thanks
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -1258,7 +1174,6 @@ thanks
 
 Your request is added to the development list.
 Development reference 1409.
-
 
 ---
 
@@ -1270,7 +1185,6 @@ Development reference 1409.
 
 Try this version.
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -1281,7 +1195,6 @@ thanks apprentice
 
 but somehow it wont close on the opposite signal
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -1290,7 +1203,6 @@ but somehow it wont close on the opposite signal
 
 Can you share the parameters used?
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -1298,7 +1210,6 @@ Can you share the parameters used?
 **chai88888** · Wed Jun 03, 2020 6:07 am
 
 here the parameters
-
 
 ---
 
@@ -1309,7 +1220,6 @@ here the parameters
 Your request is added to the development list.
 Development reference 1427.
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -1319,7 +1229,6 @@ Development reference 1427.
 [Highly adaptable RSI Strategy With Pivot Filter.lua](files/134658/Highly%20adaptable%20RSI%20Strategy%20With%20Pivot%20Filter.lua)
 
 Try this version.
-
 
 ---
 
@@ -1340,7 +1249,6 @@ The Filter should have the options of:
 
 Thank you!
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -1349,7 +1257,6 @@ Thank you!
 
 Your request is added to the development list.
 Development reference 105.
-
 
 ---
 
@@ -1361,7 +1268,6 @@ Development reference 105.
 
 Try this version.
 
-
 ---
 
 ## Re: Highly adaptable RSI Strategy
@@ -1369,7 +1275,6 @@ Try this version.
 **bakkies1** · Mon May 31, 2021 3:32 pm
 
 Could this strategy be made for MT4 ?
-
 
 ---
 
@@ -1379,7 +1284,6 @@ Could this strategy be made for MT4 ?
 
 Your request is added to the development list.
 Development reference 542.
-
 
 ---
 

@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=38&t=26029  
 > Forum: 38 · Topic 26029 · 4 post(s)
 
-
 ---
 
 ## MA of MA
@@ -12,12 +11,9 @@
 
 ![maofma.gif](images/44645/maofma.gif)
 
-
-
 This indicator will calculate the MA of MA of Price.
 
  [MAofMA.mq4](files/44645/MAofMA.mq4)
-
 
 ---
 
@@ -29,8 +25,8 @@ Great work thanks, i searched the MA of MA is very helpful to give a "signal" li
 
 Can you make the same with the T3 MA, so the indicator shows just the MA of T3 MA ?
 
-Code: [Select all](https://fxcodebase.com/code/)
-`[list]//+------------------------------------------------------------------+
+```mql4
+[list]//+------------------------------------------------------------------+
 //|                                                     T3 clean.mq4 |
 //|                                                           mladen |
 //+------------------------------------------------------------------+
@@ -296,8 +292,8 @@ string StringUpperCase(string str)
    //
    
    return(s);
-}[/list]`
-
+}[/list]
+```
 
 ---
 
@@ -306,7 +302,6 @@ string StringUpperCase(string str)
 **Apprentice** · Sat Nov 17, 2012 4:14 am
 
 Your request is added to the development list.
-
 
 ---
 

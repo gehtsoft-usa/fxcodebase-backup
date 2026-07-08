@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=2297  
 > Forum: 17 · Topic 2297 · 19 post(s)
 
-
 ---
 
 ## Sylvain Vervoort's Smoothed RSI Inverse Fisher Transform
@@ -28,8 +27,6 @@ These opportunities then must be studied using Slow Stochastic or [SVE_ARSI](htt
 
 ![SVE_RSI_InvFisher.png](images/4873/SVE_RSI_InvFisher.png)
 
-
-
 Download the indicator:
 
  [SVE_RSI_InvFisher.lua](files/4873/SVE_RSI_InvFisher.lua)
@@ -42,8 +39,8 @@ Download Sylvain Vervoort's Rainbow Average indicator for Marketscope:
 
 The formula of this indicator is:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`SVE_RainbowAverage = ( 5 * WAverage( Close, 2 )
+```
+SVE_RainbowAverage = ( 5 * WAverage( Close, 2 )
  + 4 * WAverage( WAverage( Close, 2 ), 2 )
  + 3 * WAverage( WAverage( WAverage( Close, 2 ), 2 ), 2 )
  + 2 * WAverage( WAverage( WAverage( WAverage( Close, 2 ), 2 ) , 2 ), 2 )
@@ -57,13 +54,12 @@ Code: [Select all](https://fxcodebase.com/code/)
  + WAverage( WAverage( WAverage( WAverage( WAverage( WAverage( WAverage(
     WAverage( WAverage( Close, 2 ), 2 ), 2 ), 2 ), 2 ), 2 ), 2 ), 2 ), 2 )
  + WAverage( WAverage( WAverage( WAverage( WAverage( WAverage( WAverage(
-    WAverage( WAverage( WAverage( Close, 2 ), 2 ), 2 ), 2 ), 2 ), 2 ), 2 ), 2 ), 2 ), 2 ) ) / 20 ;`
+    WAverage( WAverage( WAverage( Close, 2 ), 2 ), 2 ), 2 ), 2 ), 2 ), 2 ), 2 ), 2 ), 2 ) ) / 20 ;
+```
 
  
 
 ![EURUSD m1 (05-01-2016 1305).png](images/4873/EURUSD%20m1%20%2805-01-2016%201305%29.png)
-
-
 
 Avereges indicator is available here.
 [viewtopic.php?f=17&t=2430&hilit=averages](https://fxcodebase.com/code/viewtopic.php?f=17&t=2430&hilit=averages)
@@ -74,7 +70,6 @@ Avereges indicator is available here.
 
 MT4 version is available here.
 [viewtopic.php?f=38&t=63454](https://fxcodebase.com/code/viewtopic.php?f=38&t=63454)
-
 
 ---
 
@@ -87,7 +82,6 @@ Could you please the link where we can study the complete strategy? If possible,
 Thanks..
 BC
 
-
 ---
 
 ## Re: Sylvain Vervoort's Smoothed RSI Inverse Fisher Transform
@@ -95,7 +89,6 @@ BC
 **Nikolay.Gekht** · Wed Sep 29, 2010 9:13 am
 
 The last issue of Stock & Commodities. There is a big article there about this method.
-
 
 ---
 
@@ -105,7 +98,6 @@ The last issue of Stock & Commodities. There is a big article there about this m
 
 Thank you so much for adding this indicator! It could improve our trading!
 
-
 ---
 
 ## Re: Sylvain Vervoort's Smoothed RSI Inverse Fisher Transform
@@ -113,7 +105,6 @@ Thank you so much for adding this indicator! It could improve our trading!
 **gigi emas** · Wed Apr 13, 2011 7:45 pm
 
 may i know what trading platform is this indicator for?
-
 
 ---
 
@@ -128,7 +119,6 @@ Files that end with lua File Extension.
 
 We have the know-how for development on other platforms, this service is available through our premium service.
 
-
 ---
 
 ## Re: Sylvain Vervoort's Smoothed RSI Inverse Fisher Transform
@@ -138,7 +128,6 @@ We have the know-how for development on other platforms, this service is availab
 Any chance of getting this indicator programmed as a strategy with selectable time frames?
 Thank you
 
-
 ---
 
 ## Re: Sylvain Vervoort's Smoothed RSI Inverse Fisher Transform
@@ -146,7 +135,6 @@ Thank you
 **mykkee** · Wed Apr 27, 2016 10:34 am
 
 Can other options for the "number of periods for EMA" be made available to use like LWMA, MVA and other averages.....thanks
-
 
 ---
 
@@ -156,7 +144,6 @@ Can other options for the "number of periods for EMA" be made available to use l
 
 SVE_RainbowAverage Averages.lua & SVE_RSI_InvFisher Averages.lua Added.
 
-
 ---
 
 ## Re: Sylvain Vervoort's Smoothed RSI Inverse Fisher Transform
@@ -165,7 +152,6 @@ SVE_RainbowAverage Averages.lua & SVE_RSI_InvFisher Averages.lua Added.
 
 Strategy is available here.
 [viewtopic.php?f=31&t=63429&p=106011#p106011](https://fxcodebase.com/code/viewtopic.php?f=31&t=63429&p=106011#p106011)
-
 
 ---
 
@@ -183,7 +169,6 @@ Regards,
 
 S.
 
-
 ---
 
 ## Re: Sylvain Vervoort's Smoothed RSI Inverse Fisher Transform
@@ -191,7 +176,6 @@ S.
 **Apprentice** · Sun May 08, 2016 11:30 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -201,7 +185,6 @@ Your request is added to the development list.
 
 Try this version.
 [viewtopic.php?f=38&t=63454](https://fxcodebase.com/code/viewtopic.php?f=38&t=63454)
-
 
 ---
 
@@ -215,7 +198,6 @@ is it possible to create a strategy based on this indicator : SVE_RSI_InvFisher.
 
 Thanks a lot.
 
-
 ---
 
 ## Re: Sylvain Vervoort's Smoothed RSI Inverse Fisher Transform
@@ -223,7 +205,6 @@ Thanks a lot.
 **Apprentice** · Thu Sep 22, 2016 3:20 am
 
 Can you define entry / exit rules?
-
 
 ---
 
@@ -248,7 +229,6 @@ cross above level 12 (end of candle).
 
 Thank you for your attention.
 
-
 ---
 
 ## Re: Sylvain Vervoort's Smoothed RSI Inverse Fisher Transform
@@ -257,7 +237,6 @@ Thank you for your attention.
 
 Try this version.
 [viewtopic.php?f=31&t=63892](https://fxcodebase.com/code/viewtopic.php?f=31&t=63892)
-
 
 ---
 
@@ -270,7 +249,6 @@ Great, thank you very very much , Mister Apprentice
 pleasure,
 
 Fafountrader
-
 
 ---
 

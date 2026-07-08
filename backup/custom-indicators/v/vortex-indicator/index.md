@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=277  
 > Forum: 17 · Topic 277 · 18 post(s)
 
-
 ---
 
 ## Vortex Indicator
@@ -21,8 +20,6 @@ Information on this indicator can be found here:[http://www.traders.com/Reprints
 ![vortex.png](images/441/vortex.png)
 
 *Screenshot Of 'Vortex Indicator' from MarketScope*
-
-
 
 **Vortex Indicator**
 by **kingscorpion**
@@ -45,8 +42,8 @@ And now the two ratios are drawn for the Vortex Indicator.
 
 -**kingscorpion**
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- Indicator profile initialization routine
+```lua
+-- Indicator profile initialization routine
 function Init()
     indicator:name("The Vortext Indicator");
     indicator:description("The indicator was described in Jan, 10 issue of the 'Stock and Commodites' Magazin");
@@ -107,13 +104,13 @@ function Update(period, mode)
         VIP[period] = svip / satr * 100;
         VIM[period] = svim / satr * 100;
     end
-end`
+end
+```
 
  [VORTEX.lua](files/441/VORTEX.lua)
 
 MT4/MQ4 Version.
 [viewtopic.php?f=38&t=64350](https://fxcodebase.com/code/viewtopic.php?f=38&t=64350)
-
 
 ---
 
@@ -125,7 +122,6 @@ Can someone please develop a signal with sound for this indicator, thank you in 
 
 Jason
 
-
 ---
 
 ## Re: Vortex Indicator
@@ -135,7 +131,6 @@ Jason
 Requested can be found here.
 [viewtopic.php?f=31&t=6571](https://fxcodebase.com/code/viewtopic.php?f=31&t=6571)
 
-
 ---
 
 ## Re: Vortex Indicator
@@ -144,12 +139,9 @@ Requested can be found here.
 
 ![EURUSD H4 (11-13-2017 1042).png](images/22444/EURUSD%20H4%20%2811-13-2017%201042%29.png)
 
-
-
 Vortex Difference indicator. Plots the VI+ - VI-
 
  [VORTEX_Difference.lua](files/22444/VORTEX_Difference.lua)
-
 
 ---
 
@@ -159,15 +151,11 @@ Vortex Difference indicator. Plots the VI+ - VI-
 
 ![MTF VORTEX.png](images/31772/MTF%20VORTEX.png)
 
-
-
  [MTF VORTEX.lua](files/31772/MTF%20VORTEX.lua)
 
  
 
 ![MTF_MCP_Vortex_List.png](images/31772/MTF_MCP_Vortex_List.png)
-
-
 
  [MTF_MCP_Vortex_List.lua](files/31772/MTF_MCP_Vortex_List.lua)
 
@@ -178,13 +166,10 @@ MQ4/MT4 version.
 
 ![Vortex Heat Map.png](images/31772/Vortex%20Heat%20Map.png)
 
-
-
  [Vortex Heat Map.lua](files/31772/Vortex%20Heat%20Map.lua)
 
 MQ4/MT4 version.
 [viewtopic.php?f=38&t=64362](https://fxcodebase.com/code/viewtopic.php?f=38&t=64362)
-
 
 ---
 
@@ -200,7 +185,6 @@ Thanks again for your efforts, nice work!
 
 sjc
 
-
 ---
 
 ## Re: Vortex Indicator
@@ -208,7 +192,6 @@ sjc
 **Apprentice** · Tue May 01, 2012 8:24 am
 
 Yes it is possible
-
 
 ---
 
@@ -218,10 +201,7 @@ Yes it is possible
 
 ![MTF MCP Vortex Heat Map.png](images/41919/MTF%20MCP%20Vortex%20Heat%20Map.png)
 
-
-
  [MTF MCP Vortex Heat Map.lua](files/41919/MTF%20MCP%20Vortex%20Heat%20Map.lua)
-
 
 ---
 
@@ -233,7 +213,6 @@ Can you please make the MTF_MCP_Vortex_List to display the actual values (in gre
 
 Thank you in advance!
 
-
 ---
 
 ## Re: Vortex Indicator
@@ -242,12 +221,9 @@ Thank you in advance!
 
 ![MTF MCP VORTEX LIST.png](images/59103/MTF%20MCP%20VORTEX%20LIST.png)
 
-
-
 Indicator will show +/- Vortex Values for all currency pairs available, for all time frame selected.
 
  [MTF MCP VORTEX LIST.lua](files/59103/MTF%20MCP%20VORTEX%20LIST.lua)
-
 
 ---
 
@@ -268,7 +244,6 @@ Regards,
 
 Yodian
 
-
 ---
 
 ## Re: Vortex Indicator
@@ -277,7 +252,6 @@ Yodian
 
 Please download new version of TS from FXCM web page.
 This should fix the problems.
-
 
 ---
 
@@ -290,7 +264,6 @@ Thanks,
 
 Yodian
 
-
 ---
 
 ## Re: Vortex Indicator
@@ -300,7 +273,6 @@ Yodian
 Requested can be found here.
 [viewtopic.php?f=17&t=35281&p=59768#p59768](https://fxcodebase.com/code/viewtopic.php?f=17&t=35281&p=59768#p59768)
 
-
 ---
 
 ## Re: Vortex Indicator
@@ -308,7 +280,6 @@ Requested can be found here.
 **Alexander.Gettinger** · Mon Sep 15, 2014 12:22 pm
 
 MQL4 version of Vortex: [viewtopic.php?f=38&t=61152](https://fxcodebase.com/code/viewtopic.php?f=38&t=61152).
-
 
 ---
 
@@ -318,7 +289,6 @@ MQL4 version of Vortex: [viewtopic.php?f=38&t=61152](https://fxcodebase.com/code
 
 VORTEX.lua Update.
 
-
 ---
 
 ## Re: Vortex Indicator
@@ -326,7 +296,6 @@ VORTEX.lua Update.
 **Apprentice** · Mon Nov 13, 2017 8:13 am
 
 The indicator was revised and updated.
-
 
 ---
 

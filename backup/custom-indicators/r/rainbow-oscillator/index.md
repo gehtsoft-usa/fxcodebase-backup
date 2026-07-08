@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=35289  
 > Forum: 17 · Topic 35289 · 2 post(s)
 
-
 ---
 
 ## Rainbow Oscillator
@@ -12,12 +11,10 @@
 
 ![ro.png](images/59781/ro.png)
 
-
-
 As described by Allan J. McNichol.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`Rainbow Oscillator
+```
+Rainbow Oscillator
 100 * (CLOSE - ((
 Mov(C,2,S)
 + Mov(Mov(C,2,S),2,S)
@@ -32,10 +29,10 @@ Mov(Mov(Mov(Mov(Mov(Mov(Mov(Mov(C,2,S),2,S),2,S),2,S),2,S),
 Mov(Mov(Mov(Mov(Mov(Mov(Mov(Mov(Mov(C,2,S),2,S),2,S),2,S),
 2,S),2,S),2,S),2,S),2,S) +
 Mov(Mov(Mov(Mov(Mov(Mov(Mov(Mov(Mov(Mov(C,2,S),2,S),2,S),2,S),2,S),
-2,S),2,S),2,S),2,S),2,S)) / 10)) / (HHV(C,10) - LLV(C,10))`
+2,S),2,S),2,S),2,S),2,S)) / 10)) / (HHV(C,10) - LLV(C,10))
+```
 
  [RO.lua](files/59781/RO.lua)
-
 
 ---
 

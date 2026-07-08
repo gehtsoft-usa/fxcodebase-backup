@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=719  
 > Forum: 17 · Topic 719 · 29 post(s)
 
-
 ---
 
 ## Woodie CCI
@@ -18,8 +17,6 @@ The indicator shows fast and slow CCI and also highlights neutral zone for the s
 
 ![woodiecci.png](images/1305/woodiecci.png)
 
-
-
 download the indicator:
 
  [WOODIE_CCI.lua](files/1305/WOODIE_CCI.lua)
@@ -30,8 +27,8 @@ The old version
 
 Use it when the compatibility is problem.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- Indicator profile initialization routine
+```lua
+-- Indicator profile initialization routine
 -- Defines indicator profile properties and indicator parameters
 -- TODO: Add minimal and maximal value of numeric parameters and default color of the streams
 function Init()
@@ -173,10 +170,11 @@ function Update(period, mode)
     else
         Z[period] = 0;
     end
-end`
+end
+```
+
 Timed Tick WOODIE_CCI version of indicator.
 [viewtopic.php?f=17&t=65432&p=116357#p116357](https://fxcodebase.com/code/viewtopic.php?f=17&t=65432&p=116357#p116357)
-
 
 ---
 
@@ -190,7 +188,6 @@ As a Woodie traditionalist, the only thing I can suggest is to make the slow CCI
 
 Maybe an alternate version for us weirdo's ?
 
-
 ---
 
 ## Re: Woodie CCI
@@ -198,7 +195,6 @@ Maybe an alternate version for us weirdo's ?
 **Nikolay.Gekht** · Wed Apr 21, 2010 4:20 pm
 
 In the next version of Marketscope. Now there is no way to tune width of the lines. I requested this functionality and will modify the indicator as soon as this feature will developed.
-
 
 ---
 
@@ -208,7 +204,6 @@ In the next version of Marketscope. Now there is no way to tune width of the lin
 
 Thanks Nikolay!
 
-
 ---
 
 ## Re: Woodie CCI
@@ -217,7 +212,6 @@ Thanks Nikolay!
 
 could you explain a little bit how to use this indicators. thanks
 
-
 ---
 
 ## Re: Woodie CCI
@@ -225,7 +219,6 @@ could you explain a little bit how to use this indicators. thanks
 **Nikolay.Gekht** · Thu Apr 22, 2010 8:11 am
 
 I think you have to start from this: [http://www.woodiescciclub.com/start.htm](http://www.woodiescciclub.com/start.htm)
-
 
 ---
 
@@ -236,7 +229,6 @@ I think you have to start from this: [http://www.woodiescciclub.com/start.htm](h
 hey great job there
 do you think that you could add SIDEWINER and a CHOP ZONE INDICATORs? CZI and SI in short
 
-
 ---
 
 ## Re: Woodie CCI
@@ -246,7 +238,6 @@ do you think that you could add SIDEWINER and a CHOP ZONE INDICATORs? CZI and SI
 Thanks for the great indicator, Nikolay.
 
 Is it possible to modify to display the current CCI level the same way as StochRSI?
-
 
 ---
 
@@ -259,7 +250,6 @@ You Can Now Adjust Overbought / Oversold Line Levels
 
 patick
 I'm not sure on which aspect of StochRSI you are thinking.
-
 
 ---
 
@@ -276,7 +266,6 @@ The CCI50 has crossed above zero. Then either the CCI 50 or CCI 14 falls below +
 The CCI 14 dips below -75 , moves upward and crosses zero.
 Exits are up to you. Dr. Bob couldn't make up his mind about when to exit either. The entrances are great though.
 
-
 ---
 
 ## Re: Woodie CCI
@@ -285,7 +274,6 @@ Exits are up to you. Dr. Bob couldn't make up his mind about when to exit either
 
 I'm just curious.
 Is this a comment or request for a Strategy/Signal.
-
 
 ---
 
@@ -300,7 +288,6 @@ Is it ok to use the old one? What's different between old version and new versio
 
 Thanks.
 
-
 ---
 
 ## Re: Woodie CCI
@@ -309,7 +296,6 @@ Thanks.
 
 Slow is the same then redudantan with histogram.
 I simply offered a different design, a cleaner, simpler and faster to calculate.
-
 
 ---
 
@@ -320,7 +306,6 @@ I simply offered a different design, a cleaner, simpler and faster to calculate.
 hi
 
 this system looks great but i can't see slow cci14.what could be reason.and if you can add some more screen shots that will be great.
-
 
 ---
 
@@ -336,7 +321,6 @@ I'm curious though, is it a big improvement in terms of calculation speed?
 
 Thanks..
 BC
-
 
 ---
 
@@ -358,7 +342,6 @@ The top post is updated. Please download and reinstall the new version of the in
 > Thanks..
 > BC
 
-
 ---
 
 ## Re: Woodie CCI
@@ -375,7 +358,6 @@ But how you combined the two CCI 14 periods and 6 periods into single CCI chart?
 
 Is it possible to have signal of buy or sell on the chart based of zero line reject and CCI Trendline crosses?
 
-
 ---
 
 ## Re: Woodie CCI
@@ -391,7 +373,6 @@ According to a defined algorithm, slow CCI is used for Bars coloring.
 
 As for these strategies, they are possible.
 
-
 ---
 
 ## Re: Woodie CCI
@@ -401,7 +382,6 @@ As for these strategies, they are possible.
 can you add email alert to woodie cci,
 can you give bigger timeframe woodie cci indicator
 
-
 ---
 
 ## Re: Woodie CCI
@@ -410,7 +390,6 @@ can you give bigger timeframe woodie cci indicator
 
 Your request has been added to developmental cue.
 
-
 ---
 
 ## Re: Woodie CCI
@@ -418,7 +397,6 @@ Your request has been added to developmental cue.
 **MeiniOz** · Thu Jul 21, 2011 11:34 pm
 
 It is development **queue** not cue
-
 
 ---
 
@@ -430,7 +408,6 @@ Is it possible the Slow CCI woodies to look like this instead of the bars view?
 
  [download/file.php?id=3273&mode=view](https://fxcodebase.com/code/download/file.php?id=3273&mode=view)
 
-
 ---
 
 ## Re: Woodie CCI
@@ -439,7 +416,6 @@ Is it possible the Slow CCI woodies to look like this instead of the bars view?
 
 Yes it is.
 Your request has been added to developmental cue.
-
 
 ---
 
@@ -450,7 +426,6 @@ Your request has been added to developmental cue.
 hi,Apprentice ,
 I needs to add one more CCI periods in the old version indicator.Thanks
 
-
 ---
 
 ## Re: Woodie CCI
@@ -458,7 +433,6 @@ I needs to add one more CCI periods in the old version indicator.Thanks
 **Apprentice** · Thu Apr 06, 2017 4:04 pm
 
 Indicator was revised and updated.
-
 
 ---
 
@@ -472,7 +446,6 @@ can I request to make timed tick version for woodie cci indicator.
 
 thanks
 
-
 ---
 
 ## Re: Woodie CCI
@@ -482,7 +455,6 @@ thanks
 Timed Tick WOODIE_CCI version of indicator.
 [viewtopic.php?f=17&t=65432&p=116357#p116357](https://fxcodebase.com/code/viewtopic.php?f=17&t=65432&p=116357#p116357)
 
-
 ---
 
 ## Re: Woodie CCI
@@ -490,7 +462,6 @@ Timed Tick WOODIE_CCI version of indicator.
 **Apprentice** · Mon Apr 23, 2018 8:23 am
 
 The Indicator was revised and updated.
-
 
 ---
 

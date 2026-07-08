@@ -1,8 +1,44 @@
 # Zero Lag MACD
 
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=1623  
-> Forum: 17 · Topic 1623 · 70 post(s)
+> Forum: 17 · Topic 1623 · 71 post(s)
 
+---
+
+## Zero Lag MACD
+
+**Nikolay.Gekht** · Fri Jul 30, 2010 2:17 pm
+
+Zero Lag MACD is initially introduced in the Stock & Commodities in 2000.
+
+This version of MACD has much smaller delay in comparison with classic MACD.
+
+Formula:
+MACD = (2 * EMA(price, FAST) - EMA(EMA(price, FAST), FAST)) - (2 * EMA(price, SLOW) - EMA(EMA(price, SLOW), SLOW))
+SIGNAL = 2 * EMA(MACD, SIG) - EMA(EMA(MACD, SIG), SIG))
+HISTOGRAM = MACD - SIGNAL
+
+ 
+
+![zerolagmacd.png](images/3217/zerolagmacd.png)
+
+Download:
+
+ [ZeroLagMACD.lua](files/3217/ZeroLagMACD.lua)
+
+ [ZeroLagMACD With Alert.lua](files/3217/ZeroLagMACD%20With%20Alert.lua)
+
+ 
+
+![EURUSD m1 (11-28-2016 1156).png](images/3217/EURUSD%20m1%20%2811-28-2016%201156%29.png)
+
+ [On Screen ZeroLagMACD.lua](files/3217/On%20Screen%20ZeroLagMACD.lua)
+
+Indicator-based strategy.
+[viewtopic.php?f=31&t=66908](https://fxcodebase.com/code/viewtopic.php?f=31&t=66908)
+
+Reverse Engineered ZeroLagMACD
+[https://fxcodebase.com/code/viewtopic.php?f=17&t=71262](https://fxcodebase.com/code/viewtopic.php?f=17&t=71262)
 
 ---
 
@@ -11,7 +47,6 @@
 **abcdefg** · Thu Aug 05, 2010 11:32 am
 
 Thank you Nikolay for this indicator . A higher time frame of this indicator would be highly appreciated (to place on my tick chart).
-
 
 ---
 
@@ -25,10 +60,8 @@ This indicator for higher timeframe.
 
 ![BF_ZeroLagMACD.png](images/3437/BF_ZeroLagMACD.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Bigger timeframe ZeroLagMACD");
     indicator:description("");
     indicator:requiredSource(core.Bar);
@@ -242,8 +275,8 @@ function findDateFast(stream, date, precise)
             end
         end
     end
-end`
-
+end
+```
 
 ---
 
@@ -254,7 +287,6 @@ end`
 Thank you kindly. You guys are super
 Time to take over the world
 
-
 ---
 
 ## Re: Zero Lag MACD
@@ -262,7 +294,6 @@ Time to take over the world
 **Alexander.Gettinger** · Thu Jul 05, 2012 4:43 pm
 
 MQL4 version of Zero Lag MACD: [viewtopic.php?f=38&t=20872](https://fxcodebase.com/code/viewtopic.php?f=38&t=20872)
-
 
 ---
 
@@ -276,7 +307,6 @@ Please, Can you create simple strategy for zerolagmacd, with alert when signal c
 
 thanks
 
-
 ---
 
 ## Re: Zero Lag MACD
@@ -284,7 +314,6 @@ thanks
 **Apprentice** · Sat Jan 05, 2013 7:08 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -294,7 +323,6 @@ Your request is added to the development list.
 
 Requested can be found here.
 [viewtopic.php?f=31&t=28156](https://fxcodebase.com/code/viewtopic.php?f=31&t=28156)
-
 
 ---
 
@@ -310,8 +338,8 @@ I would be most grateful to you for this
 
 source code :
 
-Code: [Select all](https://fxcodebase.com/code/)
-`//+------------------------------------------------------------------+
+```
+//+------------------------------------------------------------------+
 //|                                                 ZeroLag MACD.mq4 |
 //|                                                               RD |
 //|                                                 [[email protected]](https://fxcodebase.com/cdn-cgi/l/email-protection) |
@@ -398,8 +426,8 @@ int start()
      }
    return(0);
   }
-//+------------------------------------------------------------------+`
-
+//+------------------------------------------------------------------+
+```
 
 ---
 
@@ -413,7 +441,6 @@ Something like this MTF HA.
 Written for MT4.
 
 And The basis for the calculation is attached MT4 code.
-
 
 ---
 
@@ -431,14 +458,11 @@ macd :
 
 ![macd.gif](images/52204/macd.gif)
 
-
-
 MTF macd :
 
  
 
 ![aMTFbMACD1.gif](images/52204/aMTFbMACD1.gif)
-
 
 ---
 
@@ -453,14 +477,11 @@ You can have this functionality already.
 
 ![MACD.png](images/52394/MACD.png)
 
-
-
 Simply choose your desired time frame Source.
 
 My boss has asked me not to write Biger time frame version,
 as TS is supported this.
 It is possible as a private task, although I think it is not needed.
-
 
 ---
 
@@ -471,7 +492,6 @@ It is possible as a private task, although I think it is not needed.
 Thank you Nikolay for this indicator.
 A higher time frame of this indicator would be highly appreciated (to place on my tick chart).
 
-
 ---
 
 ## Re: Zero Lag MACD
@@ -479,7 +499,6 @@ A higher time frame of this indicator would be highly appreciated (to place on m
 **Apprentice** · Sat Jan 19, 2013 5:44 pm
 
 juju1024 try to use BTF version of indicator posted by Alexander Gettinger on Mon Aug 09, 2010 9:17 pm. The formula used is identical to MT4 indicator.
-
 
 ---
 
@@ -495,7 +514,6 @@ Kind regards
 
 Gideon
 
-
 ---
 
 ## Re: Zero Lag MACD
@@ -503,7 +521,6 @@ Gideon
 **Apprentice** · Thu Oct 22, 2015 5:11 am
 
 ZeroLagMACD With Alert Added.
-
 
 ---
 
@@ -516,7 +533,6 @@ Dec 14, 2015: Compatibility issue Fixed. _Alert helper is not longer needed.
 If you want to use updated version of this indicator,
 please make sure to use TS Version 01.14.101415. or higher.
 
-
 ---
 
 ## Re: Zero Lag MACD
@@ -525,7 +541,6 @@ please make sure to use TS Version 01.14.101415. or higher.
 
 On Screen ZeroLagMACD.lua added.
 
-
 ---
 
 ## Re: Zero Lag MACD
@@ -533,7 +548,6 @@ On Screen ZeroLagMACD.lua added.
 **leppozdrav** · Wed Apr 26, 2017 2:10 am
 
 ...
-
 
 ---
 
@@ -544,7 +558,6 @@ On Screen ZeroLagMACD.lua added.
 Try it now.
 Pozdrav iz Zagreba.
 
-
 ---
 
 ## Re: Zero Lag MACD
@@ -552,7 +565,6 @@ Pozdrav iz Zagreba.
 **leppozdrav** · Wed Apr 26, 2017 8:23 am
 
 ...
-
 
 ---
 
@@ -562,7 +574,6 @@ Pozdrav iz Zagreba.
 
 Yes, First post it this topic.
 
-
 ---
 
 ## Re: Zero Lag MACD
@@ -570,7 +581,6 @@ Yes, First post it this topic.
 **leppozdrav** · Wed Apr 26, 2017 12:35 pm
 
 ...
-
 
 ---
 
@@ -582,7 +592,6 @@ Hello, thanks for this indicator.
 How can I see the lines in different colors when it moves up/down ?
 Thanks for your help !
 
-
 ---
 
 ## Re: Zero Lag MACD
@@ -590,7 +599,6 @@ Thanks for your help !
 **Apprentice** · Mon Jul 30, 2018 10:05 am
 
 To which indicator this applies?
-
 
 ---
 
@@ -605,7 +613,6 @@ Do you think that it's possible ?
 
 (my apologies for my english)
 
-
 ---
 
 ## Re: Zero Lag MACD
@@ -613,7 +620,6 @@ Do you think that it's possible ?
 **Apprentice** · Wed Aug 01, 2018 9:21 am
 
 To which indicator this applies?
-
 
 ---
 
@@ -624,7 +630,6 @@ To which indicator this applies?
 ZeroLagMACD With Alert.lua
 Thanks
 
-
 ---
 
 ## Re: Zero Lag MACD
@@ -632,7 +637,6 @@ Thanks
 **Apprentice** · Fri Aug 03, 2018 3:47 am
 
 Your request is added to the development list under Id Number 4209
-
 
 ---
 
@@ -644,7 +648,6 @@ Your request is added to the development list under Id Number 4209
 
 Try this version.
 
-
 ---
 
 ## Re: Zero Lag MACD
@@ -653,7 +656,6 @@ Try this version.
 
 You are a boss, it's exactly what I wanted, thanks a lot ! =)
 The best version of the MAC 0 lag.
-
 
 ---
 
@@ -671,7 +673,6 @@ Is it coming from the indicator itself ?
 Thanks for your feedback
 Daveatt
 
-
 ---
 
 ## Re: Zero Lag MACD
@@ -680,10 +681,7 @@ Daveatt
 
 ![EURUSD m5 (02-01-2019 1124).png](images/123648/EURUSD%20m5%20%2802-01-2019%201124%29.png)
 
-
-
 Trades opened with this parameters.
-
 
 ---
 
@@ -698,7 +696,6 @@ Anyway, using the on-screen-macd, it works. I assume, the oscillators in strateg
 
 Daveatt
 
-
 ---
 
 ## Re: Zero Lag MACD
@@ -707,7 +704,6 @@ Daveatt
 
 Try this version.
 [viewtopic.php?f=31&t=28156&p](https://fxcodebase.com/code/viewtopic.php?f=31&t=28156&p)
-
 
 ---
 
@@ -725,7 +721,6 @@ I would love an explanation if possible. If not, you already have all my gratitu
 Thanks
 Daveatt
 
-
 ---
 
 ## Re: Zero Lag MACD
@@ -736,7 +731,6 @@ Hello, i see that you have ever works on the MCAD reverse,
 it is possible to have the same result with the MACD ZL ?
 Regards
 
-
 ---
 
 ## Re: Zero Lag MACD
@@ -744,7 +738,6 @@ Regards
 **Apprentice** · Sun Dec 13, 2020 1:54 pm
 
 Can you provide the link to this post?
-
 
 ---
 
@@ -754,7 +747,6 @@ Can you provide the link to this post?
 
 [viewtopic.php?f=17&t=59742&p=113275&hilit=macd+reverse#p113275](https://fxcodebase.com/code/viewtopic.php?f=17&t=59742&p=113275&hilit=macd+reverse#p113275)
 
-
 ---
 
 ## Re: Zero Lag MACD
@@ -763,7 +755,6 @@ Can you provide the link to this post?
 
 Your request is added to the development list.
 Development reference 2459.
-
 
 ---
 
@@ -781,7 +772,6 @@ Could you please change the indicator so thet the input is in seconds instead of
 
 Thanks in advance
 
-
 ---
 
 ## Re: Zero Lag MACD
@@ -790,7 +780,6 @@ Thanks in advance
 
 Something like this?
 [https://fxcodebase.com/code/viewtopic.php?f=17&t=62160](https://fxcodebase.com/code/viewtopic.php?f=17&t=62160)
-
 
 ---
 
@@ -806,7 +795,6 @@ Regards
 
 Swnlobo
 
-
 ---
 
 ## Re: Zero Lag MACD
@@ -815,12 +803,9 @@ Swnlobo
 
 ![USDMXN m1 (04-23-2021 1020).png](images/141665/USDMXN%20m1%20%2804-23-2021%201020%29.png)
 
-
-
 1. Use the m1 time frame.
 2. Make sure enough data has been loaded.
 3. Try to use Tick Time Frame Timed MACD
-
 
 ---
 
@@ -831,7 +816,6 @@ Swnlobo
 I will try
 
 Thanks
-
 
 ---
 
@@ -847,7 +831,6 @@ Would you be kind to set it in order to receive inputs from the tick instead of 
 
 Thanks in advance
 
-
 ---
 
 ## Re: Zero Lag MACD
@@ -855,7 +838,6 @@ Thanks in advance
 **Apprentice** · Mon Apr 26, 2021 2:13 am
 
 Try "Tick Timed MACD.lua"
-
 
 ---
 
@@ -869,7 +851,6 @@ Thanks anyway
 
 Regards
 
-
 ---
 
 ## Re: Zero Lag MACD
@@ -877,7 +858,6 @@ Regards
 **Apprentice** · Tue Apr 27, 2021 6:44 am
 
 Can you please write this error here?
-
 
 ---
 
@@ -890,7 +870,6 @@ Can you please write this error here?
 
 It doesn't give me error signal. Nothing appears on the sub window in my tick chart
 
-
 ---
 
 ## Re: Zero Lag MACD
@@ -899,7 +878,6 @@ It doesn't give me error signal. Nothing appears on the sub window in my tick ch
 
 Timed MACD.lua was rewritten.
 If not a problem, can you test the rest of the Timed indicators?
-
 
 ---
 
@@ -923,7 +901,6 @@ In Tickchart
 
 Many thanks for your help
 
-
 ---
 
 ## Re: Zero Lag MACD
@@ -932,7 +909,6 @@ Many thanks for your help
 
 Try it now.
 All should work now.
-
 
 ---
 
@@ -946,7 +922,6 @@ All the best
 
 Swnlobo
 
-
 ---
 
 ## Re: Zero Lag MACD
@@ -956,7 +931,6 @@ Swnlobo
 Reverse Engineered ZeroLagMACD
 [https://fxcodebase.com/code/viewtopic.php?f=17&t=71262](https://fxcodebase.com/code/viewtopic.php?f=17&t=71262)
 
-
 ---
 
 ## Re: Zero Lag MACD
@@ -965,7 +939,6 @@ Reverse Engineered ZeroLagMACD
 
 Hi, may I ask why this zero-lag macd is not calculated simply by subtracting 2 zero-lag moving averages?
 
-
 ---
 
 ## Re: Zero Lag MACD
@@ -973,7 +946,6 @@ Hi, may I ask why this zero-lag macd is not calculated simply by subtracting 2 z
 **Apprentice** · Mon Oct 04, 2021 2:49 am
 
 The Idea is to show the price point of the MACD/Signal line cross.
-
 
 ---
 
@@ -989,7 +961,6 @@ Signal = Zema(MACD, period)
 
 Thank's for your time.
 
-
 ---
 
 ## Re: Zero Lag MACD
@@ -1002,7 +973,6 @@ will be an oscillator.
 
 Reverse Engineered ZeroLagMACD in indicator placed on the chart.
 While math is a bit different, will show the same signal.
-
 
 ---
 
@@ -1018,7 +988,6 @@ HISTOGRAM = MACD - SIGNAL
 
 And the one I typed above don’t get the same results. My question is why you used this instead of the one I typed.
 
-
 ---
 
 ## Re: Zero Lag MACD
@@ -1031,7 +1000,6 @@ is there a version of this indicator, that provides the option to switch between
 
 Best regards
 
-
 ---
 
 ## Re: Zero Lag MACD
@@ -1040,7 +1008,6 @@ Best regards
 
 We have added your request to the development list.
 Development reference 826.
-
 
 ---
 
@@ -1051,7 +1018,6 @@ Development reference 826.
 Try this version.
 [https://fxcodebase.com/code/viewtopic.php?f=17&t=73039](https://fxcodebase.com/code/viewtopic.php?f=17&t=73039)
 
-
 ---
 
 ## Re: Zero Lag MACD
@@ -1059,7 +1025,6 @@ Try this version.
 **stayingpower** · Wed Jan 11, 2023 2:56 pm
 
 Could you add an option to hide the histogram on "Tick Timed MACD.lua"
-
 
 ---
 
@@ -1070,7 +1035,6 @@ Could you add an option to hide the histogram on "Tick Timed MACD.lua"
 We have added your request to the development list.
 Development reference 31.
 
-
 ---
 
 ## Re: Zero Lag MACD
@@ -1080,7 +1044,6 @@ Development reference 31.
 Try it now.
 [https://fxcodebase.com/code/viewtopic.p ... 0&start=30](https://fxcodebase.com/code/viewtopic.php?f=17&t=62160&start=30)
 
-
 ---
 
 ## Re: Zero Lag MACD
@@ -1088,7 +1051,6 @@ Try it now.
 **stayingpower** · Thu Jan 12, 2023 10:53 am
 
 As always, thanks Apprentice!
-
 
 ---
 
@@ -1108,7 +1070,6 @@ Thanks in advance
 
 S.
 
-
 ---
 
 ## Re: Zero Lag MACD
@@ -1118,7 +1079,6 @@ S.
 We have added your request to the development list.
 Development reference 397.
 
-
 ---
 
 ## Re: Zero Lag MACD
@@ -1127,7 +1087,6 @@ Development reference 397.
 
 Try this version.
 [https://fxcodebase.com/code/viewtopic.php?f=17&t=73700](https://fxcodebase.com/code/viewtopic.php?f=17&t=73700)
-
 
 ---
 

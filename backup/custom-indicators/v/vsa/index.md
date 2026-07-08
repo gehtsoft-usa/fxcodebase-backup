@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=62307  
 > Forum: 17 · Topic 62307 · 41 post(s)
 
-
 ---
 
 ## VSA
@@ -11,8 +10,6 @@
 **Apprentice** · Thu Jun 11, 2015 3:42 am
 
 ![Vsa.png](images/100894/Vsa.png)
-
-
 
 Based on request.
 [viewtopic.php?p=99867#p99867](https://fxcodebase.com/code/viewtopic.php?p=99867#p99867)
@@ -26,7 +23,6 @@ Based on request.
 Compatibility issue fixed.
 _Alert Helper is not longer needed.
 
-
 ---
 
 ## Re: VSA
@@ -36,7 +32,6 @@ _Alert Helper is not longer needed.
 Fixed.
 Please report any additional bugs.
 This code is enormous, difficult to debug.
-
 
 ---
 
@@ -50,7 +45,6 @@ An error occurred during the calculation of the indicator 'VSA NO DEMAND NO SUPP
 
 Thanks
 
-
 ---
 
 ## Re: VSA
@@ -58,7 +52,6 @@ Thanks
 **Apprentice** · Sat Jun 20, 2015 8:21 am
 
 Please Re-Download.
-
 
 ---
 
@@ -72,7 +65,6 @@ I would like to know because I have been getting great results using this based 
 
 Thanks for the help and for creating this.
 
-
 ---
 
 ## Re: VSA
@@ -80,7 +72,6 @@ Thanks for the help and for creating this.
 **midas9090** · Sat Sep 12, 2015 5:59 am
 
 Can alert be added to this indicator (vsa no demand no supply) ?
-
 
 ---
 
@@ -90,7 +81,6 @@ Can alert be added to this indicator (vsa no demand no supply) ?
 
 Your request is added to the development list.
 
-
 ---
 
 ## Re: VSA
@@ -99,7 +89,6 @@ Your request is added to the development list.
 
 VSA No Demand No Supply with Alert.lua Added.
 
-
 ---
 
 ## Re: VSA
@@ -107,7 +96,6 @@ VSA No Demand No Supply with Alert.lua Added.
 **midas9090** · Sun Sep 20, 2015 10:36 am
 
 thanks for adding the alert, but can the indicator be adjusted a bit away from the candle bar, because it overlap with the candle bar, thanks.
-
 
 ---
 
@@ -122,7 +110,6 @@ Is there any possibility of having the option to use True Volume for these pleas
 Many thanks,
 Dave.
 
-
 ---
 
 ## Re: VSA
@@ -130,7 +117,6 @@ Dave.
 **Apprentice** · Wed Sep 23, 2015 5:11 am
 
 Your request is additional to development list.
-
 
 ---
 
@@ -150,8 +136,8 @@ Hi Dave,
 
 Here's my attempt to modify the indicator to use real volume.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`--+------------------------------------------------------------------+
+```lua
+--+------------------------------------------------------------------+
 --|                                   VSA No Demand No Supply.lua    |
 --|                               Copyright © 2015, Gehtsoft USA LLC |
 --|                                            http://fxcodebase.com |
@@ -620,8 +606,8 @@ if L[period-1]<L[period-2] and H[period-1]<=H[period-2] and (H[period-1]-L[perio
 end;
  
    
-end`
-
+end
+```
 
 ---
 
@@ -637,7 +623,6 @@ Thanks again.
 
 Cheers,
 Dave.
-
 
 ---
 
@@ -656,7 +641,6 @@ Any chance this can be rectified?
 Thanks,
 Dave.
 
-
 ---
 
 ## Re: VSA
@@ -665,7 +649,6 @@ Dave.
 
 Try it now.
 
-
 ---
 
 ## Re: VSA
@@ -673,7 +656,6 @@ Try it now.
 **kingman** · Fri Oct 09, 2015 11:38 am
 
 im not getting any sound alert, is it possible get VSA strategie? plz i need a sound to work with
-
 
 ---
 
@@ -684,7 +666,6 @@ im not getting any sound alert, is it possible get VSA strategie? plz i need a s
 I think this indicator has a lot of potential. Thank you for your hard work. It still has a small problem however. Mainly what I observe is this: While running live on a chart, it draws many signal dots that get removed if you make it redraw the exact same chart (e.g. make it change time frames and then back again). It seems that the ones that get removed are false signals (maybe they were tentative signals left over from a candle that didn't close as expected?), and they should have been removed without requiring the trader to manually redraw the chart. Thanks.
 
 It is nowhere explained what "volume" data is being used in the analysis. I have to assume that it is tick volume, as this indicator works on pairs for which FXCM's "real volume" is not available. It would just be nice to know what "volume" data is being used. Thanks again for all the hard work.
-
 
 ---
 
@@ -701,7 +682,6 @@ The hard work has already been done and the mq4 files only need porting over to 
 
 I think Alexander.Gettinger ported over one of them but I have not tested it pending the other four.It saves you replicating effort. I am currently running MT4 especially for these VSA indicators and would love to use them in trading station.
 
-
 ---
 
 ## Re: VSA
@@ -713,7 +693,6 @@ Hi Chimpy,
 I think the other thread you started back in 2011 (in which you posted a zip file containing an "amazing mq4 VSA Volume Spread Analysis suite") might generate more interest if you were able to describe in a little more detail what those 5 or 6 indicators do (maybe post some screen shots?). I would like to genuinely say I am more than a little interested, but I don't have MT4 installed so anything I might say in favor of those indicators would be a guess.
 
 There may also be more interest now that FXCM has made volume more readily available.
-
 
 ---
 
@@ -727,7 +706,6 @@ I think the other thread you started back in 2011 (in which you posted a zip fil
 
 There may also be more interest now that FXCM has made volume more readily available.
 
-
 ---
 
 ## Re: VSA
@@ -738,7 +716,6 @@ Steve,
 
 The original thready does have a PDF explaining all about the indicators, the the inspiration comes form the tradestation tom williams suite of indicators of which you can information by searching it.
 In any event VSA really has a life of its own (a bit like elliot waves) so your research would be better applied to the classical texts and understanding rather that specific implementation - the pdf might help with that though. See also the volumespreadanalysis channel on youtube has loads of videos
-
 
 ---
 
@@ -755,7 +732,6 @@ Even after reading the PDF, I still do not know if I should be interested in the
 So, yes, I am interested in VSA, but what I find (seemingly everywhere I look) is a lot of lightweight discussion or poorly written or not so concise discussion (or both or all three). Meanwhile, it seems the indicator in this thread is not working properly and yet it hard for me to check it since I still do not have a rigorous definition of ND/NS requirements (or at least the intended requirement for the indicator).
 
 Steve0001
-
 
 ---
 
@@ -783,7 +759,6 @@ And as for "And no, I don't really want to watch a 20 minute video explaining to
 
 good luck
 
-
 ---
 
 ## Re: VSA
@@ -793,7 +768,6 @@ good luck
 Hi Apprentice,
 Please can I request a non-repainting version of this indicator if possible
 
-
 ---
 
 ## Re: VSA
@@ -801,7 +775,6 @@ Please can I request a non-repainting version of this indicator if possible
 **Apprentice** · Mon Nov 09, 2015 6:18 am
 
 Can you specify the algorithm?
-
 
 ---
 
@@ -825,7 +798,6 @@ I also suspect the code could have been written much more compactly using loop s
 
 Steve0001
 
-
 ---
 
 ## Re: VSA
@@ -833,7 +805,6 @@ Steve0001
 **Steve0001** · Mon Nov 09, 2015 2:58 pm
 
 I should add to my previous comments this: I didn't say anything about the "squats" indicator because I haven't looked at it yet - partly because it doesn't seem to appear on my charts when I run it (so either something is wrong or they don't appear that often). I still don't even have a good definition of a "squat."
-
 
 ---
 
@@ -852,7 +823,6 @@ Is it possible for the indicator to draw the dots without them changing when I r
 
 Regards
 
-
 ---
 
 ## Re: VSA
@@ -861,7 +831,6 @@ Regards
 
 Compatibility issue fixed.
 _Alert Helper is not longer needed.
-
 
 ---
 
@@ -881,7 +850,6 @@ Many thanks!
 
 Steve
 
-
 ---
 
 ## Re: VSA
@@ -889,7 +857,6 @@ Steve
 **Apprentice** · Wed Dec 30, 2015 4:44 am
 
 What VSA indicator should be used as base indicator?
-
 
 ---
 
@@ -909,7 +876,6 @@ Thanks.
 
 Steve
 
-
 ---
 
 ## Re: VSA
@@ -917,7 +883,6 @@ Steve
 **Apprentice** · Mon Jan 04, 2016 4:56 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -927,7 +892,6 @@ Your request is added to the development list.
 
 Thank you Mario! I really appreciate it!
 
-
 ---
 
 ## Re: VSA
@@ -935,7 +899,6 @@ Thank you Mario! I really appreciate it!
 **Apprentice** · Fri Jul 15, 2016 5:26 am
 
 Major update.
-
 
 ---
 
@@ -949,7 +912,6 @@ It would be useful to have a summary of what you did. I loaded the new version o
 
 Thank again! I know the program is a bit long and confusing.
 
-
 ---
 
 ## Re: VSA
@@ -958,7 +920,6 @@ Thank again! I know the program is a bit long and confusing.
 
 The erroneously marked candles issue is still present (in the NSND indicator) - something to be aware of if you try to use this indicator.
 
-
 ---
 
 ## Re: VSA
@@ -966,7 +927,6 @@ The erroneously marked candles issue is still present (in the NSND indicator) - 
 **Apprentice** · Sat Sep 02, 2017 6:24 am
 
 The indicator was revised and updated.
-
 
 ---
 
@@ -978,7 +938,6 @@ Hi Apprentice, Thanks for such a useful indicator.
 I've noticed something weird though, the indicator keeps plotting wrong signals on the run, which
 get removed directly when I open the indicators properties and close it again ( attached sample before I open the properties and after it for further explanation)
 I wish you can find sometime to check this issue, Thank in advance for the continous support
-
 
 ---
 
@@ -996,7 +955,6 @@ Hi Apprentice,
 it seems that the issue is that the indicator is using tick data, so it plots the signal if the conditions are met any time while the bar is till running, not after it closes, in the meanwhile it doesn't collect the invalidated signals after the bar close.
 hopefully this could help
 Regards.
-
 
 ---
 

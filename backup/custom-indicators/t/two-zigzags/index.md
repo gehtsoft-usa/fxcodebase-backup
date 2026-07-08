@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=2197  
 > Forum: 17 · Topic 2197 · 4 post(s)
 
-
 ---
 
 ## Two ZigZags
@@ -18,10 +17,7 @@
 
 ![Swing_ZZ.png](images/4566/Swing_ZZ.png)
 
-
-
 The indicator was revised and updated
-
 
 ---
 
@@ -35,10 +31,8 @@ The indicator was revised and updated
 
 ![DT_ZZ.png](images/4570/DT_ZZ.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("DT ZigZag");
     indicator:description("DT ZigZag");
     indicator:requiredSource(core.Bar);
@@ -178,8 +172,8 @@ function Update(period, mode)
     end
    end
    
-end`
-
+end
+```
 
 ---
 
@@ -188,7 +182,6 @@ end`
 **bluemoon** · Fri Apr 29, 2011 6:23 am
 
 What is the difference between both indicators?
-
 
 ---
 

@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=38&t=74287  
 > Forum: 38 · Topic 74287 · 14 post(s)
 
-
 ---
 
 ## PipFinite_EA
@@ -12,15 +11,12 @@
 
 ![927.png](images/153051/927.png)
 
-
-
 Based on the request.
 [https://fxcodebase.com/code/viewtopic.php?f=17&t=74254](https://fxcodebase.com/code/viewtopic.php?f=17&t=74254)
 
  [PipFinite_Trend_PRO_fix.ex4](files/153051/PipFinite_Trend_PRO_fix.ex4)
 
  [PipFinite_EA.mq4](files/153051/PipFinite_EA.mq4)
-
 
 ---
 
@@ -33,7 +29,6 @@ Making a request
 1) embed the Indicator inside the EA.
 2) Make all the drawable objects from the indicator visible when the ea is applied to the chart.
 
-
 ---
 
 ## Re: PipFinite_EA
@@ -43,7 +38,6 @@ Making a request
 i am backing testing it take only sell trade
 please update buffer value
 
-
 ---
 
 ## Re: PipFinite_EA
@@ -52,7 +46,6 @@ please update buffer value
 
 We have added your request to the development list.
 Development reference 964
-
 
 ---
 
@@ -64,16 +57,16 @@ i can confirm. when applying to the chart :
 
 2023.10.26 21:14:51.689	2023.07.03 00:04:01 PipFinite_EA USDJPY,H1: invalid pointer access in 'PipFinite_EA.mq4' (3643,13)
 
-Code: [Select all](https://fxcodebase.com/code/)
-`//--- CANDLE CLOSE:
+```mql4
+//--- CANDLE CLOSE:
     if(CloseCandleMode)
         if(!newCandle.IsNewCandle())
         {
             return;
-        }`
+        }
+```
 
 Even if you don't have the option enabled its still being triggered some how.
-
 
 ---
 
@@ -83,10 +76,7 @@ Even if you don't have the option enabled its still being triggered some how.
 
 ![964.png](images/153224/964.png)
 
-
-
  [PipFinite_EA_v2.mq4](files/153224/PipFinite_EA_v2.mq4)
-
 
 ---
 
@@ -115,7 +105,6 @@ Even if you don't have the option enabled its still being triggered some how.
 
  kindly convert this indicator & EA to metatrader-5 build. Thanks in advance.
 
-
 ---
 
 ## Re: PipFinite_EA
@@ -124,7 +113,6 @@ Even if you don't have the option enabled its still being triggered some how.
 
 Only if someone can provide the Mq4 version of the indicator.
 Or any other implementation for other trading platforms.
-
 
 ---
 
@@ -138,7 +126,6 @@ Or any other implementation for other trading platforms.
 
 here you are
 
-
 ---
 
 ## Re: PipFinite_EA
@@ -146,7 +133,6 @@ here you are
 **Apprentice** · Thu Jan 16, 2025 4:44 am
 
 this is .ex4 we need .mq4
-
 
 ---
 
@@ -159,7 +145,6 @@ this is .ex4 we need .mq4
 
 use buffers
 it.s on about tab
-
 
 ---
 
@@ -174,7 +159,6 @@ it.s on about tab
 
  [linetrend-shab.mq4](files/157886/linetrend-shab.mq4)
 
-
 ---
 
 ## Re: PipFinite_EA
@@ -183,7 +167,6 @@ it.s on about tab
 
 We have added your request to the development list.
 Development reference 59
-
 
 ---
 

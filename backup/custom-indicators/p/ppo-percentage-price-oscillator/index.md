@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=2587  
 > Forum: 17 · Topic 2587 · 5 post(s)
 
-
 ---
 
 ## PPO (Percentage Price Oscillator)
@@ -23,14 +22,12 @@ HISTOGRAM = PPO - SIGNAL
 
 ![PPO.png](images/5796/PPO.png)
 
-
-
 Download:
 
  [PPO.lua](files/5796/PPO.lua)
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Percentage Price Oscillator");
     indicator:description("A momentum oscillator that measures the difference between two moving averages as a percentage of the larger moving average.");
     indicator:requiredSource(core.Tick);
@@ -155,8 +152,8 @@ function Update(period, mode)
         -- calculate histogram as a difference between PPO and signal
         HISTOGRAM[period] = PPO[period] - SIGNAL[period];
     end
-end`
-
+end
+```
 
 ---
 
@@ -165,7 +162,6 @@ end`
 **Apprentice** · Thu Feb 02, 2017 3:54 pm
 
 Indicator was revised and updated.
-
 
 ---
 
@@ -198,7 +194,6 @@ PPOV > SIGNAL AND PPOV > BUY LEVEL
 PPOP CROSS UNDER SIGNAL AND PPOP< SELL LEVEL AND
 PPOV<SIGNAL AND PPOV < SELL LEVEL
 
-
 ---
 
 ## Re: PPO (Percentage Price Oscillator)
@@ -207,7 +202,6 @@ PPOV<SIGNAL AND PPOV < SELL LEVEL
 
 Try this version.
 [viewtopic.php?f=31&t=64384](https://fxcodebase.com/code/viewtopic.php?f=31&t=64384)
-
 
 ---
 

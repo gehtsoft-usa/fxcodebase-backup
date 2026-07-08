@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=626  
 > Forum: 17 · Topic 626 · 8 post(s)
 
-
 ---
 
 ## EMA50 Indicator
@@ -64,10 +63,7 @@
 
 ![EMA50.jpg](images/1110/EMA50.jpg)
 
-
-
 The indicator was revised and updated
-
 
 ---
 
@@ -76,7 +72,6 @@ The indicator was revised and updated
 **WWMMACAU** · Tue Apr 13, 2010 5:03 pm
 
 Thanks, Alexander.Gettinger.
-
 
 ---
 
@@ -92,7 +87,6 @@ Also, can you make a signal alert for this indicator? Everytime the color change
 
 Thanks for your help.
 
-
 ---
 
 ## Re: EMA50 Indicator
@@ -105,8 +99,8 @@ You can change to any EMA period you like by editing lines 2 and 7; then edit th
 
 Copy code and paste into Notepad, then save as "EMA62.lua"
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
         indicator:name("EMA62");
         indicator:description("");
         indicator:requiredSource(core.Tick);
@@ -151,8 +145,8 @@ Code: [Select all](https://fxcodebase.com/code/)
          end
         end
 
-    end`
-
+    end
+```
 
 ---
 
@@ -166,7 +160,6 @@ Code: [Select all](https://fxcodebase.com/code/)
 Heh! Welcome back!
 20 years ago... I started my professional carrier in those times.
 
-
 ---
 
 ## Re: EMA50 Indicator
@@ -179,7 +172,6 @@ Thanks for your help.
 
 kevin
 
-
 ---
 
 ## Re: EMA50 Indicator
@@ -188,8 +180,8 @@ kevin
 
 Update of indicator.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("EMA50");
     indicator:description("");
     indicator:requiredSource(core.Tick);
@@ -232,8 +224,8 @@ function Update(period, mode)
      end
     end
 
-end`
-
+end
+```
 
 ---
 

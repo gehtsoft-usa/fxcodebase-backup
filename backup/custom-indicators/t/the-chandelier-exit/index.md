@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=884  
 > Forum: 17 · Topic 884 · 14 post(s)
 
-
 ---
 
 ## The Chandelier Exit
@@ -16,10 +15,8 @@ The Chandelier Exit (developed by Chuck LeBeau) is a volatility measure using th
 
 ![ChandelierExit.png](images/1617/ChandelierExit.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`-- Indicator profile initialization routine
+```lua
+-- Indicator profile initialization routine
 -- Defines indicator profile properties and indicator parameters
 function Init()
     indicator:name("ChandelierExit");
@@ -104,12 +101,12 @@ function Update(period, mode)
     else
         D[period] = 0;
     end
-end`
+end
+```
 
  [ChandelierExit_SS.lua](files/1617/ChandelierExit_SS.lua)
 
  [ChandelierExit.lua](files/1617/ChandelierExit.lua)
-
 
 ---
 
@@ -121,7 +118,6 @@ end`
 
 thanks alot!
 
-
 ---
 
 ## Re: The Chandelier Exit
@@ -132,7 +128,6 @@ Range - the number of periods to find highest high and lowest low.
 Shift - the number of periods to start the finding high/low and to get ATR value. 0 means from now, 1 from the previous bar and so on.
 ATRPeriod - number of periods to calculate ATR
 ATRMultipl - a value to multiply ATR result on.
-
 
 ---
 
@@ -151,7 +146,6 @@ Much thanks in advance.
 Regards,
 re.a.l.
 
-
 ---
 
 ## Re: The Chandelier Exit
@@ -159,7 +153,6 @@ re.a.l.
 **Apprentice** · Wed Sep 28, 2011 1:46 pm
 
 Style Option Added.
-
 
 ---
 
@@ -174,7 +167,6 @@ Apprentice,
 Regards,
 re.a.l.
 
-
 ---
 
 ## Re: The Chandelier Exit
@@ -182,7 +174,6 @@ re.a.l.
 **Apprentice** · Thu Sep 29, 2011 2:49 am
 
 Nema na čemu.
-
 
 ---
 
@@ -205,7 +196,6 @@ Thanks again very much in advance!
 Regards,
 re.a.l.
 
-
 ---
 
 ## Re: The Chandelier Exit
@@ -213,7 +203,6 @@ re.a.l.
 **Apprentice** · Thu Sep 29, 2011 3:35 pm
 
 Your request is added to the developmental cue.
-
 
 ---
 
@@ -223,7 +212,6 @@ Your request is added to the developmental cue.
 
 Can you create a strategy for this indicator? I would like to open my trades manually, but use the indicator as an exit strategy like it was designed.
 
-
 ---
 
 ## Re: The Chandelier Exit
@@ -232,7 +220,6 @@ Can you create a strategy for this indicator? I would like to open my trades man
 
 Message to anyone who would write this.
 Write both versions, trading, and stop.
-
 
 ---
 
@@ -254,7 +241,6 @@ the rule is simple:
 
 sorry for my bad English, thanks
 
-
 ---
 
 ## Re: The Chandelier Exit
@@ -262,7 +248,6 @@ sorry for my bad English, thanks
 **Apprentice** · Wed Feb 21, 2018 11:00 am
 
 The Indicator was revised and updated.
-
 
 ---
 

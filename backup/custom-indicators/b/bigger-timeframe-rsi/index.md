@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=942  
 > Forum: 17 · Topic 942 · 9 post(s)
 
-
 ---
 
 ## Bigger timeframe RSI
@@ -16,12 +15,9 @@ This indicator applies the RSI on the data of the same instrument but in bigger 
 
 ![BF_RSI.png](images/1721/BF_RSI.png)
 
-
-
 The indicator was revised and updated
 
  [BF_RSI.lua](files/1721/BF_RSI.lua)
-
 
 ---
 
@@ -34,7 +30,6 @@ very usefull for me. Do you think it is possible to make the same indicator with
 Thanks a lot.
 Sergio
 
-
 ---
 
 ## Re: Bigger timeframe RSI
@@ -43,7 +38,6 @@ Sergio
 
 OK.
 I shall do this.
-
 
 ---
 
@@ -57,10 +51,8 @@ Bigger timeframe Williams Percent Range (WPR).
 
 ![BF_WPR.png](images/5395/BF_WPR.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Bigger timeframe WPR");
     indicator:description("");
     indicator:requiredSource(core.Bar);
@@ -258,10 +250,10 @@ function findDateFast(stream, date, precise)
             end
         end
     end
-end`
+end
+```
 
 For this indicator must be installed Williams Percent Range (WPR) indicator ([viewtopic.php?f=17&t=898&p=1640](https://fxcodebase.com/code/viewtopic.php?f=17&t=898&p=1640)).
-
 
 ---
 
@@ -272,7 +264,6 @@ For this indicator must be installed Williams Percent Range (WPR) indicator ([vi
 You answer my question very fast !!!
 Thank you very much.
 
-
 ---
 
 ## Re: Bigger timeframe RSI
@@ -281,7 +272,6 @@ Thank you very much.
 
 BF RSI Update.
 Bug Fix.
-
 
 ---
 
@@ -295,7 +285,6 @@ Could i have a version of this indicator that allows me to zoom the RSI so that 
 
 Thank you very much
 
-
 ---
 
 ## Re: Bigger timeframe RSI
@@ -308,12 +297,9 @@ Try Updated Version.
 
 ![Untitled.png](images/91631/Untitled.png)
 
-
-
 FYI.
 We have ceased to provide support for Bigger time frame Indicators.
 As TS now supports this functionality.
-
 
 ---
 

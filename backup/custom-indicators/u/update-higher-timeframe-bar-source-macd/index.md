@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=430  
 > Forum: 17 · Topic 430 · 10 post(s)
 
-
 ---
 
 ## Update Higher TimeFrame Bar Source MACD
@@ -20,8 +19,8 @@ I also attached a HTF MACD Histogram as example.
 
 This is the template code:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- Indicator profile initialization routine
+```lua
+-- Indicator profile initialization routine
 -- Defines indicator profile properties and indicator parameters
 -- TODO: Add minimal and maximal value of numeric parameters and default color of the streams
 -- Written by Gidien
@@ -242,12 +241,13 @@ function calcNewSource(period)
          end
       end         
     end
-end`
+end
+```
 
 This is the HFT MACD Histogram CODE Example:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- Indicator profile initialization routine
+```lua
+-- Indicator profile initialization routine
 -- Defines indicator profile properties and indicator parameters
 function Init()
     indicator:name("HTF MACD Histogram");
@@ -480,7 +480,8 @@ function calcNewSource(period)
          end
       end         
     end
-end`
+end
+```
 
 All Codes were Beta Try it out and let me know , if it works for your.
 
@@ -499,10 +500,7 @@ HFT MACD
 
 ![HFT_MACD.JPG](images/697/HFT_MACD.JPG)
 
-
-
 The indicator was revised and updated
-
 
 ---
 
@@ -523,7 +521,6 @@ Then click on "place inline" button to have the image (or lua) file placed into 
 
 ![upload.png](images/712/upload.png)
 
-
 ---
 
 ## Re: Update Higher TimeFrame Bar Source MACD
@@ -532,13 +529,15 @@ Then click on "place inline" button to have the image (or lua) file placed into 
 
 Just a small issue in the code: h1 should be changed to H1 and h4 to H4 otherwise this:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`if source:barSize() == "h1" then
+```lua
+if source:barSize() == "h1" then
         currentTF = 60;
     end
     if source:barSize() == "h4" then
         currentTF = 240;
-    end`
+    end
+```
+
 will not be executed correctly in the new version of charts.
 Correct periods are:
 t - ticks
@@ -548,7 +547,6 @@ D - days
 W - weeks
 M - months
 
-
 ---
 
 ## Re: Update Higher TimeFrame Bar Source MACD
@@ -556,7 +554,6 @@ M - months
 **Gidien** · Thu Mar 11, 2010 2:02 am
 
 OK thanks
-
 
 ---
 
@@ -571,7 +568,6 @@ Thanks for your work here!
 Is there any chance that you could impliment a indicator to draw a box around the current week, while using the last weeks high/low of the weekly time frame and that box can be adjusted in pips from that weekly high/low.
 
 thanks
-
 
 ---
 
@@ -591,7 +587,6 @@ I have tried, but my programming skills are not what they used to be.
 
 Thanks
 
-
 ---
 
 ## Re: Update Higher TimeFrame Bar Source MACD
@@ -600,7 +595,6 @@ Thanks
 
 Please wait for the new release which will provide an access to other time frames in a "native" manner. It's only a couple of week to official release remains.
 
-
 ---
 
 ## Re: Update Higher TimeFrame Bar Source MACD
@@ -608,7 +602,6 @@ Please wait for the new release which will provide an access to other time frame
 **satishbabut** · Mon Jul 05, 2010 3:56 am
 
 I am trying to write a indicator in to use Higher timeframe HLC values, this example is only able to pass hfClose. You talk about ability to pass hfSource. Can you give an example on how to pass hfSource.
-
 
 ---
 
@@ -621,7 +614,6 @@ Look at High/Low band indicator. It shows High/Low of the chosen (equal or highe
 
 To read about loading the other instrument/time frame data, please follow to the this article in the documentation:
 [http://www.fxcodebase.com/documents/ind ... story.html](http://www.fxcodebase.com/documents/indicoreSDK/host.execute_getHistory.html)
-
 
 ---
 

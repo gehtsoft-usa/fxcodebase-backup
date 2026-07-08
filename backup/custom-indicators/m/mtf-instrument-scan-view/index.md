@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=63603  
 > Forum: 17 · Topic 63603 · 6 post(s)
 
-
 ---
 
 ## MTF INSTRUMENT SCAN VIEW
@@ -12,13 +11,10 @@
 
 ![MTF INSTRUMENT SCAN VIEW (06-16-2016 1724).png](images/106794/MTF%20INSTRUMENT%20SCAN%20VIEW%20%2806-16-2016%201724%29.png)
 
-
-
 Based on request.
 [viewtopic.php?f=27&t=63600](https://fxcodebase.com/code/viewtopic.php?f=27&t=63600)
 
  [MTF Instrument Scan View.lua](files/106794/MTF%20Instrument%20Scan%20View.lua)
-
 
 ---
 
@@ -39,7 +35,6 @@ I ll test it soon and let you know...
 Regards,
 DK
 
-
 ---
 
 ## Re: MTF INSTRUMENT SCAN VIEW
@@ -50,7 +45,6 @@ DK
 
 Can you explain in more detail.
 
-
 ---
 
 ## Re: MTF INSTRUMENT SCAN VIEW
@@ -58,7 +52,6 @@ Can you explain in more detail.
 **Apprentice** · Thu May 10, 2018 6:14 am
 
 The indicator was revised and updated.
-
 
 ---
 
@@ -72,7 +65,6 @@ In this view, you are using core.host:execute("getHistory1"...) instead of core.
 Where can we find a description of this function ?
 why "getHistory" is not working ?
 
-
 ---
 
 ## Re: MTF INSTRUMENT SCAN VIEW
@@ -82,8 +74,8 @@ why "getHistory" is not working ?
 In SDK help.
 [http://fxcodebase.com/documentation.php](https://fxcodebase.com/documentation.php)
 
-Code: [Select all](https://fxcodebase.com/code/)
-`public method host:execute("getHistory1", ...)
+```lua
+public method host:execute("getHistory1", ...)
 
 Brief
 
@@ -150,4 +142,5 @@ Use also host:execute("extendHistory, ...) for loading more data to the history.
 
 See also the host:execute("getSyncHistory", ...) method if you want to have the history synchronized with an indicator source.
 
-Note: When debugging such indicators always switch on the "Pre-deliver data" option in the indicator parameters.`
+Note: When debugging such indicators always switch on the "Pre-deliver data" option in the indicator parameters.
+```

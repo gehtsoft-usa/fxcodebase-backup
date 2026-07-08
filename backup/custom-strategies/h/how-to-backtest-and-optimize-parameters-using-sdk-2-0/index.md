@@ -1,7 +1,22 @@
 # How to Backtest and Optimize Parameters using SDK 2.0?
 
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=3862  
-> Forum: 31 · Topic 3862 · 18 post(s)
+> Forum: 31 · Topic 3862 · 25 post(s)
+
+
+---
+
+## How to Backtest and Optimize Parameters using SDK 2.0?
+
+**Nikolay.Gekht** · Thu Apr 07, 2011 12:11 pm
+
+We recently released Indicore SDK 2.0. Now you can use it to backtest and optimize the strategy parameters with new, ultra fast and precise market simulator, using 1-minute price archives for the whole Jan 2010-Mar 2011 period.
+
+Please read how to use the Indicore SDK 2.0 here:
+[http://fxcodebase.com/wiki/index.php/Op ... by_Step%29](https://fxcodebase.com/wiki/index.php/Optimizing_Strategy_Parameters_%28Step_by_Step%29)
+
+Please also read articles here for more information about SDK, prices, backtesting and parameter optimization:
+[http://fxcodebase.com/wiki/index.php/Ca ... ndicoreSDK](https://fxcodebase.com/wiki/index.php/Category:IndicoreSDK)
 
 
 ---
@@ -140,6 +155,31 @@ Thanks for the help in advance
 
 ## Re: How to Backtest and Optimize Parameters using SDK 2.0?
 
+**Nikolay.Gekht** · Mon Apr 25, 2011 3:58 pm
+
+Yes. The SDK format is pretty similar ([http://fxcodebase.com/wiki/index.php/Pr ... ile_Format](https://fxcodebase.com/wiki/index.php/Price_Data#Data_File_Format)), so any language for the text processing can be used.
+The only point is that SDK requires both, bid and ask data, but you can easily get them by adding some fixed spread.
+If you need help in converting this data, please write us.
+
+
+---
+
+## Re: How to Backtest and Optimize Parameters using SDK 2.0?
+
+**Nikolay.Gekht** · Mon Apr 25, 2011 4:04 pm
+
+> **alepan72 wrote:**
+> and I wonder if it's possible to have the price archive for 2009. I observed that between two years (2009 and 2010) there is big difference in the way that price go on.
+> So, if we can backtesting both years we draw useful conclusions on the strategy that we use.
+> Thanx in advance and best regards for your services!!!
+
+2009 will be available soon. We are preparing the data.
+
+
+---
+
+## Re: How to Backtest and Optimize Parameters using SDK 2.0?
+
 **vstrelnikov** · Mon Apr 25, 2011 6:04 pm
 
 2009 archive uploaded at [http://fxcodebase.com/wiki/index.php/Co ... ce_Archive](https://fxcodebase.com/wiki/index.php/CodeBase_Price_Archive)
@@ -181,6 +221,46 @@ The values mean Bid Volume and Ask Volume respectively.
 
 ## Re: How to Backtest and Optimize Parameters using SDK 2.0?
 
+**Nikolay.Gekht** · Tue Apr 26, 2011 9:48 am
+
+BTW, please note that for FXCM's data bid and ask volume has exactly the same value, because only tick volume is populated. Some other data MAY have bid and ask volume published separately.
+
+
+---
+
+## Re: How to Backtest and Optimize Parameters using SDK 2.0?
+
+**Nikolay.Gekht** · Tue Apr 26, 2011 9:50 am
+
+> **mfoste1 wrote:**
+>
+>
+> > **sunshine wrote:**
+> >
+> >
+> > > **mfoste1 wrote:**
+> > > i think something might be wrong with indicoresdk download....i try to open strategy debugger to backtest and it keep saying "no one strategy can be found"
+> > > could someone please tell me what is wrong or what im doing incorrectly?
+> > > thanks
+> >
+> >
+> > You should copy the strategy you are going to optimize to the **strategies** folder. This folder is located in the folder where the Indicore SDK 2.0 is installed. By default the path is:
+> > C:\Gehtsoft\IndicoreSDK\strategies
+> > Just place your strategy to this folder and the error won't appear.
+>
+>
+> yea i tried this and its still giving me that same message
+
+Please download the fresh Indicore SDK 2.0 (beta update 2) ([http://fxcodebase.com/bin/sdk2beta/IndicoreSDK.exe](https://fxcodebase.com/bin/sdk2beta/IndicoreSDK.exe)). I added the command "file->install custom strategy" which copies the chosen strategy file into the proper location.
+
+Please read how to use this command here:
+[http://fxcodebase.com/wiki/index.php/Op ... a_Strategy](https://fxcodebase.com/wiki/index.php/Optimizing_Strategy_Parameters_using_SDK_2.0_%28Step_by_Step_Instruction%29#Using_Lua_Strategy_Debugger_to_Install_a_Strategy)
+
+
+---
+
+## Re: How to Backtest and Optimize Parameters using SDK 2.0?
+
 **alepan72** · Fri Apr 29, 2011 6:15 am
 
 Hi all,
@@ -192,6 +272,15 @@ Where is th prob?
  
 
 ![limitwrong.png](images/10194/limitwrong.png)
+
+
+---
+
+## Re: How to Backtest and Optimize Parameters using SDK 2.0?
+
+**Nikolay.Gekht** · Fri Apr 29, 2011 12:57 pm
+
+Possible gap in the data. As on the real server, the orders are executed by the current price, and if price moved for 40 pips over the limit level - it is possible, for example if position is kept over weekend.
 
 
 ---
@@ -215,6 +304,21 @@ It is anything in new core of indicoreV2.0 that explains this behavior?
 Thanks in advance for the help
 
 PD: Apologize for my english
+
+
+---
+
+## Re: How to Backtest and Optimize Parameters using SDK 2.0?
+
+**Nikolay.Gekht** · Mon May 02, 2011 9:47 am
+
+It's hard to say without looking at the code, but, the most probable cause is the different behavior of the indicator applied on historical data and on live market:
+Please read the following articles in fxcodebase.wiki for details:
+[http://fxcodebase.com/wiki/index.php/Cl ... t_Live_Bar](https://fxcodebase.com/wiki/index.php/Closed_Bar_against_Live_Bar)
+[http://fxcodebase.com/wiki/index.php/In ... arket_Data](https://fxcodebase.com/wiki/index.php/Indicators_on_Live_Market_Data)
+[http://fxcodebase.com/wiki/index.php/De ... Parameters](https://fxcodebase.com/wiki/index.php/Debugging_Indicator#Indicator_Parameters) (look for predeliver mode discussion).
+
+the SDK 1.0/Marketscope with indicore 1.0 do not simulate live market. SDK 2.0 and further release of Marketscope - does, so it is much simpler to spot such problems.
 
 
 ---

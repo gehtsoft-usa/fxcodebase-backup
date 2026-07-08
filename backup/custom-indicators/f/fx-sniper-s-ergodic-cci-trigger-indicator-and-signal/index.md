@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=1389  
 > Forum: 17 · Topic 1389 · 14 post(s)
 
-
 ---
 
 ## Fx Sniper's Ergodic CCI Trigger indicator and signal
@@ -16,15 +15,12 @@
 
 ![Fx_Sniper's_Ergodic_CCI_Trigger.png](images/2681/Fx_Snipers_Ergodic_CCI_Trigger.png)
 
-
-
  [Fx_Snipers_Ergodic_CCI_Trigger_On_Chart.lua](files/2681/Fx_Snipers_Ergodic_CCI_Trigger_On_Chart.lua)
 
  [Fx_Snipers_Ergodic_CCI_Trigger.lua](files/2681/Fx_Snipers_Ergodic_CCI_Trigger.lua)
 
 MT4/Mq4 version.
 [viewtopic.php?f=38&t=64450](https://fxcodebase.com/code/viewtopic.php?f=38&t=64450)
-
 
 ---
 
@@ -34,8 +30,8 @@ MT4/Mq4 version.
 
 Signal:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     strategy:name("Fx Sniper's Ergodic CCI Trigger signal");
     strategy:description("");
 
@@ -164,8 +160,8 @@ function ExtSignal(source, period, message, soundFile)
     if soundFile ~= nil then
         terminal:alertSound(soundFile, false);
     end
-end`
-
+end
+```
 
 ---
 
@@ -181,7 +177,6 @@ Please help out, God bless you all.
 
 Thanks.
 
-
 ---
 
 ## Re: Fx Sniper's Ergodic CCI Trigger indicator and signal
@@ -189,7 +184,6 @@ Thanks.
 **Apprentice** · Fri May 20, 2011 4:45 pm
 
 Your request has been added to developmental cue.
-
 
 ---
 
@@ -203,7 +197,6 @@ I tried to backtest this strategy and I have some observations; 1. It does not t
 
 Please note both the signal alert on the chart and the strategy settings are the same. please help out, what am I doing wrong? One more thing, does the the strategy remain active on FXCM server when my computer laptop is shot down? I know trailing stop does but is strategy on it?
 
-
 ---
 
 ## Re: Fx Sniper's Ergodic CCI Trigger indicator and signal
@@ -211,7 +204,6 @@ Please note both the signal alert on the chart and the strategy settings are the
 **adolfainsley8** · Fri Apr 22, 2016 3:31 am
 
 One more thing, does the the strategy remain active on FXCM server when my computer laptop is shot down? I know trailing stop does but is strategy on it????
-
 
 ---
 
@@ -224,7 +216,6 @@ One more thing, does the the strategy remain active on FXCM server when my compu
 Unfortunately not .
 You will need to setup a VPS for this task.
 
-
 ---
 
 ## Re: Fx Sniper's Ergodic CCI Trigger indicator and signal
@@ -233,7 +224,6 @@ You will need to setup a VPS for this task.
 
 Strategy is available here.
 [viewtopic.php?f=31&t=63401](https://fxcodebase.com/code/viewtopic.php?f=31&t=63401)
-
 
 ---
 
@@ -248,7 +238,6 @@ the indicator is causing an error.
 Thanks,
 JariCarr
 
-
 ---
 
 ## Re: Fx Sniper's Ergodic CCI Trigger indicator and signal
@@ -256,7 +245,6 @@ JariCarr
 **Apprentice** · Fri Jun 24, 2016 3:11 am
 
 Try it now.
-
 
 ---
 
@@ -272,7 +260,6 @@ Im still getting an error.
 
 thanks,
 JariCarr
-
 
 ---
 
@@ -291,7 +278,6 @@ I installed 4 indicators and renamed them as shown on the screenshot.
 thanks
 JariCarr
 
-
 ---
 
 ## Re: Fx Sniper's Ergodic CCI Trigger indicator and signal
@@ -300,7 +286,6 @@ JariCarr
 
 Deinstall all instances, instal new versions.
 I have changed the names of all the indicator.
-
 
 ---
 

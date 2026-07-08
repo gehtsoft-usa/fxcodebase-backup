@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=5091  
 > Forum: 31 · Topic 5091 · 38 post(s)
 
-
 ---
 
 ## Period Extreme Strategy
@@ -11,8 +10,6 @@
 **Apprentice** · Thu Jul 07, 2011 12:07 pm
 
 ![Period Extreme Strategy.png](images/12462/Period%20Extreme%20Strategy.png)
-
-
 
 Buy
  Signals and/or Trade are given when the value of the current candle exceeds the high of the past two candles
@@ -26,7 +23,6 @@ Based on indicator.
 
 The Strategy was revised and updated on December 10, 2018.
 
-
 ---
 
 ## Re: Period Extreme Strategy
@@ -34,7 +30,6 @@ The Strategy was revised and updated on December 10, 2018.
 **t1982t** · Thu Jul 07, 2011 7:38 pm
 
 wow! brilliant! like mini breakout
-
 
 ---
 
@@ -44,7 +39,6 @@ wow! brilliant! like mini breakout
 
 The strategy is adaptable.
 You can set any number of periods.
-
 
 ---
 
@@ -58,7 +52,6 @@ when i set any number of periods higher than zero it gives me an error message
 "index is out of range"
 Please advise
 
-
 ---
 
 ## Re: Period Extreme Strategy
@@ -71,7 +64,6 @@ Can you re-download strategy.
 I have test it, and I can not repeat this bug.
 It is possible that you have some of the older version.
 
-
 ---
 
 ## Re: Period Extreme Strategy
@@ -79,7 +71,6 @@ It is possible that you have some of the older version.
 **irbica** · Sun Dec 04, 2011 11:12 pm
 
 If the number of periods is 1, does it mean that it will check only on the last period (candle) to determinate the high or the low break?
-
 
 ---
 
@@ -91,7 +82,6 @@ If the number of periods is 1, does it mean that it will check only on the last 
 Previous candles extremes.
 2
 Previous Two candles extremes.
-
 
 ---
 
@@ -106,7 +96,6 @@ I appreciate your work.
 right place at the right time
 
 3RG
-
 
 ---
 
@@ -126,7 +115,6 @@ Thanks
 
 here is my 3 year back-test.
 
-
 ---
 
 ## Re: Period Extreme Strategy
@@ -138,7 +126,6 @@ I'll try to do something.
 I thought that the description I gave is clear and sufficient.
 Which part need clarification.
 
-
 ---
 
 ## Re: Period Extreme Strategy
@@ -149,16 +136,16 @@ The strategy does seem to perform nicely on H4 over time. But I think it sometim
 
 One thing I don't understand is this:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`strategy.parameters:addBoolean("Backtrack", "Use completed candles only", "", true);
+```lua
+strategy.parameters:addBoolean("Backtrack", "Use completed candles only", "", true);
 ...
 if Backtrack then
  period = period-1;
 end
-...`
+...
+```
 
 How does that make it act on non-completed candles? All I see is that it looks at previous period/bar, if you set Backtrack = true. It will still wait for the close be for it acts anyway, if it's false.
-
 
 ---
 
@@ -174,7 +161,6 @@ So far this strategy produces a lot of winners with few losses so I'm trying to 
 
 In any case i really appreciate what you do. I'm trying to learn scripting so i can someday create a strategy of my own. I can read the code understand I have been unable to start from scratch.
 
-
 ---
 
 ## Re: Period Extreme Strategy
@@ -185,7 +171,6 @@ Apprentice,
 
 Ok I went over to the strategy to make sure i understood it correctly and that it was functioning as it should but i think i found some problems maybe you can explain take a look at image below. Looks like false triggers. Let me know if I'm posting to much lol. an SAR confirmation might be better than ADX i previously requested
 
-
 ---
 
 ## Re: Period Extreme Strategy
@@ -193,7 +178,6 @@ Ok I went over to the strategy to make sure i understood it correctly and that i
 **Apprentice** · Thu Feb 02, 2012 2:00 am
 
 Your request was added to our database.
-
 
 ---
 
@@ -203,7 +187,6 @@ Your request was added to our database.
 
 I am also getting the "Index out of Range message, just downloaded and installed. Any idea what might be the problem?
 
-
 ---
 
 ## Re: Period Extreme Strategy
@@ -211,7 +194,6 @@ I am also getting the "Index out of Range message, just downloaded and installed
 **Apprentice** · Mon Apr 02, 2012 4:48 am
 
 What are the parameters you are using.
-
 
 ---
 
@@ -225,7 +207,6 @@ If I set the period to any number higher than 2 in Back testing or Optimization 
 
 If running the strategy on live data it appears to be working normally.
 
-
 ---
 
 ## Re: Period Extreme Strategy
@@ -233,7 +214,6 @@ If running the strategy on live data it appears to be working normally.
 **irbica** · Fri Jun 22, 2012 2:23 pm
 
 Hello Aprentice, can you make this a single previous candle lookback only for HL reference to Buy or Sell? Also would like to have an option to Liquidate at end of current candle if I am not Limited or Stopped. Thanks.
-
 
 ---
 
@@ -243,7 +223,6 @@ Hello Aprentice, can you make this a single previous candle lookback only for HL
 
 Your request is added to the development list.
 
-
 ---
 
 ## Re: Period Extreme Strategy
@@ -251,7 +230,6 @@ Your request is added to the development list.
 **irbica** · Mon Jun 25, 2012 5:24 am
 
 Hi Apprentice, I notice that the strategy does not open a position when the breakout actually happen. Is there any reason? I would like for the position to open when the previous candle low or high are broke in the current candle. My setting is for 1 candle, valid interval is 3 seconds and I am using 15m TF. Also I set NO to use completed candles only. Thanks.
-
 
 ---
 
@@ -264,7 +242,6 @@ i keep trying to use this in back tests but i get [string "c:\program files (x86
 i have tried re downloading serveral times i have tried many values and have only 3 that worked 0, 1 and 2 in the periods and also tried in different time frames as well, any suggestions?
 
 i got it to pass into the progam but i would put "" around my number in the periods section but does not seem to be fuctioning like it should it puts shorts and longs in but the balance falls to 0 shortly into the test
-
 
 ---
 
@@ -295,7 +272,6 @@ CAN YOU USE LOCAL TIME PLEASE
 THANKS
 BY
 
-
 ---
 
 ## Re: Period Extreme Strategy
@@ -304,7 +280,6 @@ BY
 
 The date and time is always in NY time zone.
 
-
 ---
 
 ## Re: Period Extreme Strategy
@@ -312,7 +287,6 @@ The date and time is always in NY time zone.
 **Jeffreyvnlk** · Wed Oct 24, 2012 12:36 pm
 
 This is great. Any feedback ?
-
 
 ---
 
@@ -328,7 +302,6 @@ Regards
 
 Salvatore
 
-
 ---
 
 ## Re: Period Extreme Strategy
@@ -336,7 +309,6 @@ Salvatore
 **Apprentice** · Wed Jan 02, 2013 12:55 pm
 
 I just removed reported bug.
-
 
 ---
 
@@ -349,7 +321,6 @@ Period 1 is last candle.
 What does it mean period 0?
 
 And complete candles? Are candles ar close?
-
 
 ---
 
@@ -372,7 +343,6 @@ Last -2 , Last-1
 If you are using complete candle filter.
 Strategy is not calculated for last, activ candle, in order to avoid false signals.
 
-
 ---
 
 ## Re: Period Extreme Strategy
@@ -384,7 +354,6 @@ I have set Period 0 on Ger 30 last night on daily chart, but today it has not op
 Completed candle: no
 Why?
 
-
 ---
 
 ## Re: Period Extreme Strategy
@@ -392,7 +361,6 @@ Why?
 **Apprentice** · Fri Dec 09, 2016 5:09 am
 
 Strategy was revised and updated.
-
 
 ---
 
@@ -404,7 +372,6 @@ Hello,
 the following error message appears:
 An error occurred during the calculation of the indicator 'GSI(USDOLLAR, 5 pips)'. The error details: C:/Program Files (x86)/Candleworks/FXTS2/Indicators/Standard/GSI.bin:1424: C:/Program Files (x86)/Candleworks/FXTS2/Indicators/Standard/GSI.bin:1379: attempt to call method 'onDecodeError' (a nil value).
 
-
 ---
 
 ## Re: Period Extreme Strategy
@@ -413,7 +380,6 @@ An error occurred during the calculation of the indicator 'GSI(USDOLLAR, 5 pips)
 
 Your request is added to the development list.
 Development reference 29.
-
 
 ---
 
@@ -429,7 +395,6 @@ I would like the strategy to have 1 open short of 1 lot and until that trade is 
 
 Is that possible? Any help will be welcome, by the way this strategy is so far the one who has had the best results for me.
 
-
 ---
 
 ## Re: Period Extreme Strategy
@@ -439,7 +404,6 @@ Is that possible? Any help will be welcome, by the way this strategy is so far t
 We have added your request to the development list.
 Development reference 371.
 
-
 ---
 
 ## Re: Period Extreme Strategy
@@ -447,7 +411,6 @@ Development reference 371.
 **Apprentice** · Wed Jul 06, 2022 2:29 am
 
 GSI doesn't have a source code available. There is little we can do with it.
-
 
 ---
 
@@ -457,7 +420,6 @@ GSI doesn't have a source code available. There is little we can do with it.
 
 Apprentice can you modify the"Period Extreme Strategy.lua" to buy and sell at different periods ? For example buy with 200 periods and sell with 50 periods.
 
-
 ---
 
 ## Re: Period Extreme Strategy
@@ -466,7 +428,6 @@ Apprentice can you modify the"Period Extreme Strategy.lua" to buy and sell at di
 
 We have added your request to the development list.
 Development reference 409.
-
 
 ---
 

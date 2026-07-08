@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=68778  
 > Forum: 17 · Topic 68778 · 6 post(s)
 
-
 ---
 
 ## TMMS
@@ -12,13 +11,10 @@
 
 ![EURUSD D1 (08-13-2019 1101).png](images/127863/EURUSD%20D1%20%2808-13-2019%201101%29.png)
 
-
-
 Based on request.
 [viewtopic.php?f=27&t=68770](https://fxcodebase.com/code/viewtopic.php?f=27&t=68770)
 
  [TMMS.lua](files/127863/TMMS.lua)
-
 
 ---
 
@@ -28,7 +24,6 @@ Based on request.
 
 Great!
 Thank you very much Apprentice.
-
 
 ---
 
@@ -41,8 +36,8 @@ Hello Apprentice,
 Can you upgrade the TMMS.lua indicator as the smTMMS Oscillator V.4 indicator for MT4.
 Here is the code
 
-Code: [Select all](https://fxcodebase.com/code/)
-`//+------------------------------------------------------------------+
+```
+//+------------------------------------------------------------------+
 //|                                       smTMMS Oscillator_vX
 //+------------------------------------------------------------------+
 #property copyright "Copyright 16.08.2019, SwingMan"
@@ -349,9 +344,10 @@ string Get_PeriodString(int iPeriod)
      }
    return(sPeriod);
   }
-//+------------------------------------------------------------------+`
-thank you in advance
+//+------------------------------------------------------------------+
+```
 
+thank you in advance
 
 ---
 
@@ -362,7 +358,6 @@ thank you in advance
 Your request is added to the development list.
  Internal develper referance 2.
 
-
 ---
 
 ## Re: TMMS
@@ -371,12 +366,9 @@ Your request is added to the development list.
 
 ![EURUSD H1 (08-28-2019 1558).png](images/128250/EURUSD%20H1%20%2808-28-2019%201558%29.png)
 
-
-
 HMA: [viewtopic.php?f=17&t=1659](https://fxcodebase.com/code/viewtopic.php?f=17&t=1659)
 
  [ssTTMS.lua](files/128250/ssTTMS.lua)
-
 
 ---
 

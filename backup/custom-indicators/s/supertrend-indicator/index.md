@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=605  
 > Forum: 17 · Topic 605 · 17 post(s)
 
-
 ---
 
 ## SuperTrend Indicator
@@ -18,10 +17,8 @@ This is the implementation of Olivier Seban's Supertrend indicator.
 
 ![supertrend.png](images/1074/supertrend.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`-- Indicator profile initialization routine
+```lua
+-- Indicator profile initialization routine
 -- Defines indicator profile properties and indicator parameters
 function Init()
     indicator:name("SuperTrend Indicator");
@@ -140,7 +137,8 @@ function Update(period, mode)
             end
         end
     end
-end`
+end
+```
 
  [SuperTrend.lua](files/1074/SuperTrend.lua)
 
@@ -152,13 +150,10 @@ Single Stream Version
 
 ![EURUSD m1 (06-13-2018 1124).png](images/1074/EURUSD%20m1%20%2806-13-2018%201124%29.png)
 
-
-
  [SuperTrend Overlay.lua](files/1074/SuperTrend%20Overlay.lua)
 
 Indicator-based strategy.
 [https://fxcodebase.com/code/viewtopic.php?f=31&t=75138](https://fxcodebase.com/code/viewtopic.php?f=31&t=75138)
-
 
 ---
 
@@ -167,7 +162,6 @@ Indicator-based strategy.
 **duzhaoping** · Wed Feb 16, 2011 1:35 am
 
 Would you provide a detailed formula?Thanks a lot.
-
 
 ---
 
@@ -178,7 +172,6 @@ Would you provide a detailed formula?Thanks a lot.
 Single Stream Version for Use within Signals and Strategys.
 
  [SuperTrend.lua](files/8361/SuperTrend.lua)
-
 
 ---
 
@@ -194,7 +187,6 @@ Single Stream Version for Use within Signals and Strategys.
 
 do you mean this one have signal and strategy inside ? or it just an update indicator
 
-
 ---
 
 ## Re: SuperTrend Indicator
@@ -203,7 +195,6 @@ do you mean this one have signal and strategy inside ? or it just an update indi
 
 However, only this version using some strategies and signals.
 The two versions differ, it is the question of compatibility.
-
 
 ---
 
@@ -225,7 +216,6 @@ Hope this helps in selecting your best parameters
 
 With Best Regards
 
-
 ---
 
 ## Re: SuperTrend Indicator
@@ -233,7 +223,6 @@ With Best Regards
 **Apprentice** · Sat Jan 21, 2017 6:12 am
 
 Indicator was revised and updated.
-
 
 ---
 
@@ -244,7 +233,6 @@ Indicator was revised and updated.
 Two Super Trend Line Cross Strategy is available here.
 [viewtopic.php?f=31&t=64320&p=110640#p110640](https://fxcodebase.com/code/viewtopic.php?f=31&t=64320&p=110640#p110640)
 
-
 ---
 
 ## Re: SuperTrend Indicator
@@ -252,7 +240,6 @@ Two Super Trend Line Cross Strategy is available here.
 **Apprentice** · Mon Feb 05, 2018 8:36 am
 
 The Indicator was revised and updated.
-
 
 ---
 
@@ -263,7 +250,6 @@ The Indicator was revised and updated.
 Hello Apprentice,
 if you please, could we have price overlay for SuperTrend.lua (the first post) with my appreciation.
 
-
 ---
 
 ## Re: SuperTrend Indicator
@@ -271,7 +257,6 @@ if you please, could we have price overlay for SuperTrend.lua (the first post) w
 **Apprentice** · Wed Jun 13, 2018 6:25 am
 
 SuperTrend Overlay.lua added.
-
 
 ---
 
@@ -291,7 +276,6 @@ thank you
 really appreciate if you can provide this
 Harshal
 
-
 ---
 
 ## Re: SuperTrend Indicator
@@ -300,7 +284,6 @@ Harshal
 
 Your request is added to the development list.
 Development reference 213.
-
 
 ---
 
@@ -313,7 +296,6 @@ Thanks for the development
 And really appreciate the work
 
 Harshal
-
 
 ---
 
@@ -346,7 +328,6 @@ Thanks for the development,
 Would it be possible to change the color of the **heikin ashi** candles by the color of the candles **SuperTrend Overlay** Candles indicator please ?
 Thanks very much ...
 
-
 ---
 
 ## Re: SuperTrend Indicator
@@ -355,7 +336,6 @@ Thanks very much ...
 
 Try this version.
 [https://fxcodebase.com/code/viewtopic.php?f=17&t=72120](https://fxcodebase.com/code/viewtopic.php?f=17&t=72120)
-
 
 ---
 

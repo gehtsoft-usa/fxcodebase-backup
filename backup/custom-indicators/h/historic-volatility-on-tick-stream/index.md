@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=21021  
 > Forum: 17 · Topic 21021 · 10 post(s)
 
-
 ---
 
 ## Historic Volatility on tick stream
@@ -13,7 +12,6 @@
 In finance, volatility is a measure for variation of price of a financial instrument over time. Historic volatility is derived from time series of past market prices. It is common for discussions to talk about the volatility of a security's price, even while it is the returns' volatility that is being measured. It is used to quantify the risk of the financial instrument over the specified time period. Volatility is normally expressed in annualized terms and in %.
 
 [http://fxcodebase.com/wiki/index.php/HistoricVolatility_on_tick_stream](https://fxcodebase.com/wiki/index.php/HistoricVolatility_on_tick_stream)
-
 
 ---
 
@@ -33,7 +31,6 @@ The lua files attached for your convenience
 
 The indicator was revised and updated
 
-
 ---
 
 ## Re: Historic Volatility on tick stream
@@ -42,7 +39,6 @@ The indicator was revised and updated
 
 Why people interested in tick ? If 2000 or 2 contracts traded, there is still 1 tick. More tick but not more volume or fewer tick but more volume. So you would be free if forget all about tick.IMHO
 
-
 ---
 
 ## Re: Historic Volatility on tick stream
@@ -50,7 +46,6 @@ Why people interested in tick ? If 2000 or 2 contracts traded, there is still 1 
 **Apprentice** · Fri Jun 27, 2014 5:29 am
 
 HV_TICK on Chart.lua & HV on Chart.lua Added.
-
 
 ---
 
@@ -64,8 +59,8 @@ If this continues after this please contact me again.
 
 As for indicator formula, This is a simplified version.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`LogReturn[period] = Log (close[period] / open[period]);
+```lua
+LogReturn[period] = Log (close[period] / open[period]);
 
     sigma = 100 * (Stdev of LogReturn for Last Period Periods);
    
@@ -73,8 +68,8 @@ Code: [Select all](https://fxcodebase.com/code/)
        sigma= sigma *  Sqrt( Number of days since the beginning of the year.);
       end
 
-     HV[period] =  sigma;`
-
+     HV[period] =  sigma;
+```
 
 ---
 
@@ -86,7 +81,6 @@ Hi
 
 Is there any mql4 version of this indicator?Thanks.
 
-
 ---
 
 ## Re: Historic Volatility on tick stream
@@ -94,7 +88,6 @@ Is there any mql4 version of this indicator?Thanks.
 **Apprentice** · Sat Jul 19, 2014 4:24 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -106,13 +99,13 @@ I tried to call this indicator from a strategy but received "364: [string "C:\Ge
 
 Declaration:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`Source = ExtSubscribe(2, nil, instance.parameters.TF, instance.parameters.Type == "Bid", "bar");
-   LP = core.indicators:create("HV", Source[Price1], LongPeriod);`
+```lua
+Source = ExtSubscribe(2, nil, instance.parameters.TF, instance.parameters.Type == "Bid", "bar");
+   LP = core.indicators:create("HV", Source[Price1], LongPeriod);
+```
 
 Code: [Select all](https://fxcodebase.com/code/)
 `LP:update(core.UpdateLast);`
-
 
 ---
 
@@ -125,7 +118,6 @@ In your example HV is only getting close component of Bar.
 
 You should use this
 LP = core.indicators: create ("HV", Source, longperiod);
-
 
 ---
 

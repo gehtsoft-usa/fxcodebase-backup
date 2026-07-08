@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=1591  
 > Forum: 17 · Topic 1591 · 9 post(s)
 
-
 ---
 
 ## JMA Slope indicator
@@ -16,10 +15,8 @@ The indicator displays slope of Jurik Moving Average (the algorithm is published
 
 ![JMA_Slope.png](images/3134/JMA_Slope.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("JMA Slope");
     indicator:description("JMA Slope");
     indicator:requiredSource(core.Bar);
@@ -417,12 +414,12 @@ function Update(period, mode)
       buffDN[period]=rel;
      end
     end
-end`
+end
+```
 
  [JMA_Slope.lua](files/3134/JMA_Slope.lua)
 
  [JMA_Slope with Alert.lua](files/3134/JMA_Slope%20with%20Alert.lua)
-
 
 ---
 
@@ -432,7 +429,6 @@ end`
 
 Can this be modified to use other indicators as a source?
 
-
 ---
 
 ## Re: JMA Slope indicator
@@ -441,12 +437,9 @@ Can this be modified to use other indicators as a source?
 
 ![Tick.png](images/3916/Tick.png)
 
-
-
  [JMA_Slope_Tick.lua](files/3916/JMA_Slope_Tick.lua)
 
 Done.
-
 
 ---
 
@@ -456,7 +449,6 @@ Done.
 
 Alright, Thanks!
 
-
 ---
 
 ## Re: JMA Slope indicator
@@ -464,7 +456,6 @@ Alright, Thanks!
 **Apprentice** · Thu Jan 12, 2017 8:30 am
 
 Indicator was revised and updated.
-
 
 ---
 
@@ -474,7 +465,6 @@ Indicator was revised and updated.
 
 Can you create a signal for this?
 
-
 ---
 
 ## Re: JMA Slope indicator
@@ -483,7 +473,6 @@ Can you create a signal for this?
 
 JMA_Slope with Alert.lua added.
 
-
 ---
 
 ## Re: JMA Slope indicator
@@ -491,7 +480,6 @@ JMA_Slope with Alert.lua added.
 **Finny7** · Fri Jan 13, 2017 2:02 pm
 
 Thank you so much, Apprentice! I really appreciated it
-
 
 ---
 

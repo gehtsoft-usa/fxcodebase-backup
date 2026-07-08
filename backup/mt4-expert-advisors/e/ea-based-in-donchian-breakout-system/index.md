@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=38&t=74022  
 > Forum: 38 · Topic 74022 · 8 post(s)
 
-
 ---
 
 ## EA_based_in_Donchian_Breakout_System
@@ -12,15 +11,12 @@
 
 ![684.png](images/152005/684.png)
 
-
-
 Based on request.
 [https://fxcodebase.com/code/viewtopic.php?f=38&t=73995](https://fxcodebase.com/code/viewtopic.php?f=38&t=73995)
 
  [DonchianBreakoutSystem_v1.1.2 600+.mq4](files/152005/DonchianBreakoutSystem_v1.1.2%20600.mq4)
 
  [EA_based_in_Donchian_Breakout_System.mq4](files/152005/EA_based_in_Donchian_Breakout_System.mq4)
-
 
 ---
 
@@ -45,7 +41,6 @@ add comment ea
 
 thanks for your help sir
 
-
 ---
 
 ## Re: EA_based_in_Donchian_Breakout_System
@@ -55,7 +50,6 @@ thanks for your help sir
 We have added your request to the development list.
 Development reference 33
 
-
 ---
 
 ## Re: EA_based_in_Donchian_Breakout_System
@@ -64,12 +58,9 @@ Development reference 33
 
 ![33.png](images/154419/33.png)
 
-
-
  [Donchian.mq4](files/154419/Donchian.mq4)
 
  [EA_based_in_Donchian_Breakout_System_v3.mq4](files/154419/EA_based_in_Donchian_Breakout_System_v3.mq4)
-
 
 ---
 
@@ -81,7 +72,6 @@ Development reference 33
 
 I receive this error when I use the EA, what could it be due to? I use the latest version of MT4, thank you.
 
-
 ---
 
 ## Re: EA_based_in_Donchian_Breakout_System
@@ -90,7 +80,6 @@ I receive this error when I use the EA, what could it be due to? I use the lates
 
 We have added your request to the development list.
 Development reference 480
-
 
 ---
 
@@ -108,10 +97,10 @@ Development reference 480
 >
 > EA_based_in_Donchian_Breakout_System_v2.mq4
 
-Code: [Select all](https://fxcodebase.com/code/)
-`2024.06.12 17:29:33.064   2024.01.03 06:00:01  EA_based_in_Donchian_Breakout_System_v2 GBPUSD,H1: SendNewOrder::doAction Connot Send Order, error: 131
-2024.06.12 17:29:33.064   2024.01.03 06:00:01  EA_based_in_Donchian_Breakout_System_v2 GBPUSD,H1: OrderSend error 131`
-
+```
+2024.06.12 17:29:33.064   2024.01.03 06:00:01  EA_based_in_Donchian_Breakout_System_v2 GBPUSD,H1: SendNewOrder::doAction Connot Send Order, error: 131
+2024.06.12 17:29:33.064   2024.01.03 06:00:01  EA_based_in_Donchian_Breakout_System_v2 GBPUSD,H1: OrderSend error 131
+```
 
 ---
 
@@ -120,8 +109,6 @@ Code: [Select all](https://fxcodebase.com/code/)
 **Apprentice** · Fri Aug 16, 2024 4:58 pm
 
 ![480.png](images/156444/480.png)
-
-
 
 New simplified indicator and EA
 

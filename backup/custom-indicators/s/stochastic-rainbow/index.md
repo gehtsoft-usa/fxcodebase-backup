@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=11901  
 > Forum: 17 · Topic 11901 · 17 post(s)
 
-
 ---
 
 ## Stochastic Rainbow
@@ -16,14 +15,11 @@ Indicator shows set of stochastics with different parameters.
 
 ![Stochastic_Rainbow.png](images/23755/Stochastic_Rainbow.png)
 
-
-
 Download:
 
  [Stochastic_Rainbow.lua](files/23755/Stochastic_Rainbow.lua)
 
 The indicator was revised and updated
-
 
 ---
 
@@ -35,7 +31,6 @@ Hi
 Can you create this same indicator of StochRsi?
 Thank You
 
-
 ---
 
 ## Re: Stochastic Rainbow
@@ -43,7 +38,6 @@ Thank You
 **Apprentice** · Wed Jan 25, 2012 6:23 pm
 
 Your request is added to the developmental cue.
-
 
 ---
 
@@ -57,12 +51,9 @@ Stochastic RSI Rainbow.
 
 ![Stochastic_RSI_Rainbow.png](images/25179/Stochastic_RSI_Rainbow.png)
 
-
-
 Download:
 
  [StochasticRSI_Rainbow.lua](files/25179/StochasticRSI_Rainbow.lua)
-
 
 ---
 
@@ -79,7 +70,6 @@ Any suggestions
 Thx
 Barry
 
-
 ---
 
 ## Re: Stochastic Rainbow
@@ -90,7 +80,6 @@ For this indicator must be installed AVERAGES indicator ([viewtopic.php?f=17&t=2
 and Alex Version of StochasticRSI
 [download/file.php?id=4294](https://fxcodebase.com/code/download/file.php?id=4294)
 
-
 ---
 
 ## Re: Stochastic Rainbow
@@ -99,7 +88,6 @@ and Alex Version of StochasticRSI
 
 Thank You
 Can you tell me the StochRSI parameters for each color?
-
 
 ---
 
@@ -121,7 +109,6 @@ RSI_Period + 13, K_Period + 13, 3, "MVA"
 RSI_Period + 15, K_Period + 15, 3, "MVA"
 RSI_Period + 17, K_Period + 17, 3, "MVA"
 
-
 ---
 
 ## Re: Stochastic Rainbow
@@ -138,7 +125,6 @@ How could we create this with four lines that have the following parameters:
 As you can see, its based ona Fibonacci sequence.
 
 Thx
-
 
 ---
 
@@ -160,7 +146,6 @@ Please, see this version of stochastic rainbow:
 
  [Stochastic_Fibo_Rainbow.lua](files/27630/Stochastic_Fibo_Rainbow.lua)
 
-
 ---
 
 ## Re: Stochastic Rainbow
@@ -169,7 +154,6 @@ Please, see this version of stochastic rainbow:
 
 That's great....now with the StochRSI
 
-
 ---
 
 ## Re: Stochastic Rainbow
@@ -177,7 +161,6 @@ That's great....now with the StochRSI
 **ThemBonez** · Mon Mar 05, 2012 3:38 pm
 
 ...and the Rainbow.
-
 
 ---
 
@@ -189,8 +172,8 @@ Hi,
 I made an effort to make the changes myself but it will not load. I can't see where the error is. Can you check it over for me and show me where the error is and make the correction. The lua file is attached as well as the code below
 Thank You
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("StochasticRSI Fibo Rainbow indicator");
     indicator:description("StochasticRSI Fibo Rainbow indicator");
     indicator:requiredSource(core.Bar);
@@ -252,8 +235,8 @@ function Update(period, mode)
      St[i][period]=Ind_St[i].D[period];
     end
    end
-end`
-
+end
+```
 
 ---
 
@@ -272,7 +255,6 @@ Second, the parameters that you are passing to STOCHASTICRSI are not valid.
  [Stochastic_RSI Fibo Rainbow.lua](files/27731/Stochastic_RSI%20Fibo%20Rainbow.lua)
 
 If you write what you want to achieve, I can finish this job for you.
-
 
 ---
 
@@ -297,7 +279,6 @@ On the right side of chart 70 and 30 lines.
 If you could finish it for me, that would be great!
 Thanx!
 
-
 ---
 
 ## Re: Stochastic Rainbow
@@ -312,7 +293,6 @@ Thanx!
  [Stochastic_Fibo_Rainbow2.lua](files/27745/Stochastic_Fibo_Rainbow2.lua)
 
  [Stochastic_RSI Fibo Rainbow2.lua](files/27745/Stochastic_RSI%20Fibo%20Rainbow2.lua)
-
 
 ---
 

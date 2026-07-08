@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=29&t=1101  
 > Forum: 29 · Topic 1101 · 15 post(s)
 
-
 ---
 
 ## Heikin-Ashi Signal
@@ -14,15 +13,11 @@
 
 *Heikin-Ashi Signal with Filtering*
 
-
-
  
 
 ![Heikin-Ashi Signal No Filter.png](images/2113/Heikin-Ashi%20Signal%20No%20Filter.png)
 
 *Heikin-Ashi Signal without Filtering*
-
-
 
 Signal is pretty simple.
 I have added the option to filtering, delay signal until appearance of the first candle without a wick.
@@ -46,7 +41,6 @@ Low = Min (Low,Open, Close)
 
 Simultaneous Upper and Lower Wicks (shadows ) indicates a trend change, Indecision.
 
-
 ---
 
 ## Re: Heikin-Ashi Signal
@@ -54,7 +48,6 @@ Simultaneous Upper and Lower Wicks (shadows ) indicates a trend change, Indecisi
 **Apprentice** · Tue May 25, 2010 4:03 am
 
 [Heikin-Ashi Signal without Filtering.lua](files/2118/Heikin-Ashi%20Signal%20without%20Filtering.lua)
-
 
 ---
 
@@ -66,7 +59,6 @@ Hi Apprentice,
  I would be much useful for it to signal when the color of the HA candlestick changes or when dojis are formed(Right now it just signals every 5 minutes, by default, and says Long or Short which is kinda annoying) ..I would like it to signal only **when the color of candlestcick changes or when dojis are formed**..It is at these points that trend changes are occuring and we need to be alerted..
 
 I have attached pic illustrating my idea..
-
 
 ---
 
@@ -80,8 +72,8 @@ Please find the version which is a bit simplified and support Doji (you can spec
 
  [Heikin-Ashi Signal 1.lua](files/2232/Heikin-Ashi%20Signal%201.lua)
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     strategy:name("Heikin-Ashi Signal 1");
     strategy:description("Heikin-Ashi Signal 1");
 
@@ -173,8 +165,8 @@ function Decode(period)
 
 end
 
-dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");`
-
+dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");
+```
 
 ---
 
@@ -183,7 +175,6 @@ dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");`
 **nick818** · Tue Jun 01, 2010 8:38 pm
 
 i am really excited about using this signal, but when i apply it the signal does not show up until some time after......even with filter off. While signal has been in use I have gone to 'change signal' on the chart and then pressed OK and it reloads (updates) signal and a more recent signal shows up. The signal is not signaling when the candle closes. This maybe something simple i have over-looked but would still appreciate some feed back
-
 
 ---
 
@@ -197,7 +188,6 @@ Unfortunately, the back-testing indicator is pretty limited in this version. Fur
 
 To apply the signal on the real-time data and get text and sound notification - please apply signal using "Signals->Add Signal" command.
 
-
 ---
 
 ## Re: Heikin-Ashi Signal
@@ -205,7 +195,6 @@ To apply the signal on the real-time data and get text and sound notification - 
 **nick818** · Wed Jun 02, 2010 4:18 pm
 
 thanks for the reply, yes you were spot on, and i was trying to use the signal(bullet) in real time. Last evening i actually applied the signal to 'add signals' and this works fine. Better in my opinion since their is no need to cycle through charts looking for signal bullets. Thanks again
-
 
 ---
 
@@ -217,7 +206,6 @@ Can only seem to get this to work with daily chart. It shows flat on on my 2 min
 
 Thanks
 
-
 ---
 
 ## Re: Heikin-Ashi Signal
@@ -228,8 +216,6 @@ Thanks
 
 *Heikin-Ashi Signal*
 
-
-
 Did you set the required time frame.
 For reference see the picture.
 
@@ -237,7 +223,6 @@ For reference see the picture.
 Try to articulate trading strategy that you use in order to be able to write the appropriate signal.
 
 Or you use, need only a combination of HA CCI ?
-
 
 ---
 
@@ -248,7 +233,6 @@ Or you use, need only a combination of HA CCI ?
 Hi, can someone write this signal when the color change (blue to red) and the open is equal to the high, and when the color change red to blue and the open is equal to the low??
 
 thanks
-
 
 ---
 
@@ -268,7 +252,6 @@ Heiken Ashi signal
 I NEED signal Market Market on Different time flat
 and e-mail send
 
-
 ---
 
 ## Re: Heikin-Ashi Signal
@@ -276,7 +259,6 @@ and e-mail send
 **Apprentice** · Sat Jul 19, 2014 4:30 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -290,7 +272,6 @@ Sell when color is red and candle hadn't high week
 Thanks
 Ronan
 
-
 ---
 
 ## Re: Heikin-Ashi Signal
@@ -299,7 +280,6 @@ Ronan
 
 Your request is added to the development list.
 Development reference 1073.
-
 
 ---
 

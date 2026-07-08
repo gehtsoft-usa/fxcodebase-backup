@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=61328  
 > Forum: 17 · Topic 61328 · 12 post(s)
 
-
 ---
 
 ## Tow Lines
@@ -12,18 +11,17 @@
 
 ![Tow Lines.png](images/96535/Tow%20Lines.png)
 
-
-
 Based on request.
 [viewtopic.php?f=27&t=61324&p=96533#p96533](https://fxcodebase.com/code/viewtopic.php?f=27&t=61324&p=96533#p96533)
 
 It was suggested to me that the Tow Lines is Chinese for trend lines.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`MID:=(3*CLOSE+LOW+OPEN+HIGH)/6;
+```
+MID:=(3*CLOSE+LOW+OPEN+HIGH)/6;
 A:(20*MID+19*REF(MID,1)+18*REF(MID,2)+17*REF(MID,3)+16*REF(MID,4)+15*REF(MID,5)+14*REF(MID,6)+13*REF(MID,7)+12*REF(MID,8)+11*REF(MID,9)+10*REF(MID,10)+9*REF(MID,11)+8*REF(MID,12)+7*REF(MID,13)+6*REF(MID,14)+5*REF(MID,15)+4*REF(MID,16)+3*REF(MID,17)+2*REF(MID,18)+REF(MID,20))/210,COLORRED;
 B:MA(A,6),COLORGREEN;
-C:MA(CLOSE,5),POINTDOT,COLORLIBLUE;`
+C:MA(CLOSE,5),POINTDOT,COLORLIBLUE;
+```
 
  [Tow Lines.lua](files/96535/Tow%20Lines.lua)
 
@@ -31,13 +29,10 @@ C:MA(CLOSE,5),POINTDOT,COLORLIBLUE;`
 
 ![MTF MCP Tow Lines.png](images/96535/MTF%20MCP%20Tow%20Lines.png)
 
-
-
 Arrow - A Line Slope.
 Color- depends on the relationship between the two lines, see Calculation Mode
 
  [MTF MCP Tow Lines.lua](files/96535/MTF%20MCP%20Tow%20Lines.lua)
-
 
 ---
 
@@ -50,7 +45,6 @@ could you make a "two lines strategy".
 much much appreciated.
 
 please.
-
 
 ---
 
@@ -65,7 +59,6 @@ Many thanks and sorry for my continuos asking...
 have a nice day
 Fabio
 
-
 ---
 
 ## Re: Tow Lines
@@ -78,15 +71,12 @@ Fabio
 
 ![1.png](images/96546/1.png)
 
-
-
 2.Change of Indicator Time Frame
 (Only Higher Time Frames are applicable)
 
  
 
 ![2.png](images/96546/2.png)
-
 
 ---
 
@@ -100,7 +90,6 @@ please make a strategy.
 
 much appreciated
 
-
 ---
 
 ## Re: Tow Lines
@@ -111,7 +100,6 @@ Hello Apprentice, quick question: I asked for adding an arrow in case of short o
 is it possible create a list of currency pairs, index and others (gold, oil...) that, checking the Tow Lines entry or short signal, the system shows the entry in this list?
 many thanks, ciao
 Fabio
-
 
 ---
 
@@ -134,7 +122,6 @@ Fabio
 
 i'm begging you.the "strategy".please.
 
-
 ---
 
 ## Re: Tow Lines
@@ -144,7 +131,6 @@ i'm begging you.the "strategy".please.
 Requested strategy can be found here.
 [viewtopic.php?f=31&t=61332](https://fxcodebase.com/code/viewtopic.php?f=31&t=61332)
 
-
 ---
 
 ## Re: Tow Lines
@@ -152,7 +138,6 @@ Requested strategy can be found here.
 **Apprentice** · Thu Oct 16, 2014 5:25 am
 
 MTF MCP Tow Lines Added.
-
 
 ---
 
@@ -167,7 +152,6 @@ A line crosses B line but not C line
 both for up and down
 many thanks, ciao
 Fabio
-
 
 ---
 
@@ -187,7 +171,6 @@ Color Red
 C CrossUnder A & B Line
 
 Regards
-
 
 ---
 

@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=64251  
 > Forum: 17 · Topic 64251 · 72 post(s)
 
-
 ---
 
 ## Trading_commands
@@ -11,8 +10,6 @@
 **Apprentice** · Tue Dec 27, 2016 9:23 am
 
 ![Capture.PNG](images/110294/Capture.PNG)
-
-
 
 Will Add a custom command "Close all trades","Reverse / Hedge your position","Close 1/2 of your position" to your right mouse menu.
 It is limited to chart instrument.
@@ -31,21 +28,20 @@ If we have 1 positions, 1 will be closed.
 While Trading_commands.lua is chart instrument only.
 Trading_commands_all will work for all instrument, will close/hedge/reverse all position regardless of the instrument.
 
-
 ---
 
 ## Re: Trading_commands
 
 **albertparis** · Tue Dec 27, 2016 10:51 am
 
-Code: [Select all](https://fxcodebase.com/code/)
-`Hello
+```lua
+Hello
 Can be added the hedge function
 
 If 2 positions are open for purchase then if hedge 2 positions for sale will be open
 
-Thank you in advance for your work`
-
+Thank you in advance for your work
+```
 
 ---
 
@@ -65,7 +61,6 @@ I can see this to be an extremely helpful feature.
 
 Best, AG
 
-
 ---
 
 ## Re: Trading_commands
@@ -73,7 +68,6 @@ Best, AG
 **Apprentice** · Wed Dec 28, 2016 12:24 pm
 
 Hedge function added.
-
 
 ---
 
@@ -84,7 +78,6 @@ Hedge function added.
 Can you add a "set limit for all position on this symbol" button?
 Which would update the limit profit level based on where you right click, on all positions opened of the symbol of the chart
 
-
 ---
 
 ## Re: Trading_commands
@@ -93,7 +86,6 @@ Which would update the limit profit level based on where you right click, on all
 
 Your request is added to the development list, Under Id Number 3705
  If someone is interested to do this task, please contact me.
-
 
 ---
 
@@ -106,7 +98,6 @@ Can we add the function: Brekeven price so that the Stop Loss = 0 E
 
 Thank you for your future work
 
-
 ---
 
 ## Re: Trading_commands
@@ -114,7 +105,6 @@ Thank you for your future work
 **Apprentice** · Mon May 29, 2017 5:10 am
 
 Breakeven have 1 pip minimum.
-
 
 ---
 
@@ -127,7 +117,6 @@ If you can add this function: Breakeven have 1 pip minimum
 perfect for me .
 
  Thank you for your future work
-
 
 ---
 
@@ -143,7 +132,6 @@ That is how you do it.
 
 Txs again.
 
-
 ---
 
 ## Re: Trading_commands
@@ -153,7 +141,6 @@ Txs again.
 Can`t thank you enough. Awesome!
 
 Would it be too much to ask of you to add a new command to use OpenMarket() to open a new position if CURRENTLY NO TRADES EXIST ?
-
 
 ---
 
@@ -167,7 +154,6 @@ I did NOT mean to say a new "addCcommand".
 
 I actually meant to say ONLY MODIFY OpenMarket() to open a new position if no positions already exist.
 
-
 ---
 
 ## Re: Trading_commands
@@ -179,7 +165,6 @@ I do NOT want to abuse your generosity.
 Please disregard, my last request (to modify OpenMarket()).
 I should try to do it myself.
 I will ask for help, if I get stuck.
-
 
 ---
 
@@ -198,7 +183,6 @@ Why for so many years INDICORE SDK got me confused under the impression that "ST
 
 Why did INDICORE SDK create the distinction, .... if I can do everything I want in an INDICATOR?????
 
-
 ---
 
 ## Re: Trading_commands
@@ -208,7 +192,6 @@ Why did INDICORE SDK create the distinction, .... if I can do everything I want 
 That was true once.
 Trade from within indicator was introduced later.
 Strategies still have some advantages, like, trade simulation.
-
 
 ---
 
@@ -235,7 +218,6 @@ local valuemap = core.valuemap();
 
 txs,
 
-
 ---
 
 ## Re: Trading_commands
@@ -244,7 +226,6 @@ txs,
 
 You will add different values, depending on the trading command that you will use.
 [http://www.fxcodebase.com/documents/Ind ... mands.html](http://www.fxcodebase.com/documents/IndicoreSDK/TradingCommands.html)
-
 
 ---
 
@@ -257,7 +238,6 @@ Greater Than Life Apprentice:
 Exactly what I was looking for.
 
 Thank you very much,
-
 
 ---
 
@@ -278,7 +258,6 @@ am using TSII - current Version 01.15.090518
 
 if you could have a look - would be very much appreciated\
 
-
 ---
 
 ## Re: Trading_commands
@@ -287,7 +266,6 @@ if you could have a look - would be very much appreciated\
 
 Works perfectly on my non FIFO account.
 Do you use FIFO?
-
 
 ---
 
@@ -303,7 +281,6 @@ From within a LUA INDICATOR, ... is it possible to periodically login into a web
 
 Much Gratitude,
 
-
 ---
 
 ## Re: Trading_commands
@@ -311,7 +288,6 @@ Much Gratitude,
 **Apprentice** · Thu Jul 27, 2017 8:59 am
 
 Not that I know.
-
 
 ---
 
@@ -325,7 +301,6 @@ from this link - [http://download.fxcorporate.com/FXCM/FXTS2Install.EXE](http://
 
 removed all other indicators on chart, and was able to duplicate error ?
 
-
 ---
 
 ## Re: Trading_commands
@@ -334,7 +309,6 @@ removed all other indicators on chart, and was able to duplicate error ?
 
 Do you use Demo or Real?
 Which version of TS you use.
-
 
 ---
 
@@ -353,7 +327,6 @@ am a little reluctant to test (any) indicator on live account - especially if it
 
 when scalping
 
-
 ---
 
 ## Re: Trading_commands
@@ -368,7 +341,6 @@ Thanks
 
 Mountain Bear
 
-
 ---
 
 ## Re: Trading_commands
@@ -378,7 +350,6 @@ Mountain Bear
 Your request is added to the development list, Under Id Number 3896
  If someone is interested to do this task, please contact me.
 
-
 ---
 
 ## Re: Trading_commands
@@ -386,7 +357,6 @@ Your request is added to the development list, Under Id Number 3896
 **Apprentice** · Thu Sep 21, 2017 4:06 am
 
 $/Pip close added.
-
 
 ---
 
@@ -402,7 +372,6 @@ This worked fine
  valuemap.PegPriceOffsetPipsStop = instance.parameters.Stop;
  end
 
-
 ---
 
 ## Re: Trading_commands
@@ -416,7 +385,6 @@ This worked fine
 Please, try this version of the indicator:
 
  [Trading_commands2.lua](files/115519/Trading_commands2.lua)
-
 
 ---
 
@@ -437,7 +405,6 @@ end
 
 Is there an equivalent way In INDICATORS to compare tick price with bar prices ?
 
-
 ---
 
 ## Re: Trading_commands
@@ -446,7 +413,6 @@ Is there an equivalent way In INDICATORS to compare tick price with bar prices ?
 
 Sure, if you use core.host:execute("getSyncHistory" do get your price data.
 This is the case with most MTF MCP indicators.
-
 
 ---
 
@@ -461,7 +427,6 @@ Is it possible to have a STRATEGY or an INDICATOR applied to MULTIPLE instrument
 
 Much appreciated,
 
-
 ---
 
 ## Re: Trading_commands
@@ -469,7 +434,6 @@ Much appreciated,
 **Apprentice** · Wed Nov 22, 2017 5:14 am
 
 Sure. Strategy can trade on different currency pairs.
-
 
 ---
 
@@ -479,7 +443,6 @@ Sure. Strategy can trade on different currency pairs.
 
 Yeah, Move stop to breakeven +x pips would be awesome
 
-
 ---
 
 ## Re: Trading_commands
@@ -487,7 +450,6 @@ Yeah, Move stop to breakeven +x pips would be awesome
 **Apprentice** · Sat Dec 02, 2017 5:51 am
 
 Your request is added to the development list under Id Number 3967
-
 
 ---
 
@@ -498,7 +460,6 @@ Your request is added to the development list under Id Number 3967
 Try this version.
 
  [Trading_commands.lua](files/116457/Trading_commands.lua)
-
 
 ---
 
@@ -516,7 +477,6 @@ But don`t know how to apply it to ALL instruments without having multiple instan
 
 Much appreciated,
 
-
 ---
 
 ## Re: Trading_commands
@@ -527,7 +487,6 @@ Much appreciated,
 
 Give me an example.
 Will write this for you.
-
 
 ---
 
@@ -541,8 +500,8 @@ Will write this for you.
 -- I mean (I could) but do not want to have another instance applied it to a separate USD/JPY chart.
 -- Wish to have ONLY ONE instance to exit both EUR/USD and USD/JPY.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("avg");
     indicator:description("Khairy N");
 --    indicator:requiredSource(core.Tick);
@@ -644,8 +603,8 @@ function haveTrades(BuySell)
         row = enum:next();
     end
     return found
-end`
-
+end
+```
 
 ---
 
@@ -657,7 +616,6 @@ The reason being :
 If I apply this indicator to each chart of say 20 instruments it becomes a big mess.
 Especially every time I modify it.
 
-
 ---
 
 ## Re: Trading_commands
@@ -665,7 +623,6 @@ Especially every time I modify it.
 **7000306337** · Fri Jan 12, 2018 5:16 pm
 
 Forgot to mention that the avg INDICATOR is required to be displayed, .... to choose the threshold avg that will trigger the exit.
-
 
 ---
 
@@ -683,7 +640,6 @@ with the appropriate instrument name.
 But first U will have to create array will all available instruments,
 and do this checks for all of them.
 
-
 ---
 
 ## Re: Trading_commands
@@ -694,7 +650,6 @@ Thank you very much for your precious time.
 Generous as ever.
 Always much appreciated.
 
-
 ---
 
 ## Re: Trading_commands
@@ -702,7 +657,6 @@ Always much appreciated.
 **chai88888** · Fri Jan 19, 2018 12:23 am
 
 can you add a command where you only close all sell and all buy. thanks
-
 
 ---
 
@@ -712,7 +666,6 @@ can you add a command where you only close all sell and all buy. thanks
 
 Your request is added to the development list under Id Number 4015
 
-
 ---
 
 ## Re: Trading_commands
@@ -720,7 +673,6 @@ Your request is added to the development list under Id Number 4015
 **Apprentice** · Sat Jan 20, 2018 4:26 pm
 
 Long / Short option added.
-
 
 ---
 
@@ -730,7 +682,6 @@ Long / Short option added.
 
 thank you very much
 
-
 ---
 
 ## Re: Trading_commands
@@ -738,7 +689,6 @@ thank you very much
 **Apprentice** · Mon Feb 05, 2018 6:49 am
 
 The Strategy was revised and updated.
-
 
 ---
 
@@ -760,7 +710,6 @@ Otherwise I`ll have the ping-pong situation since both the enter() and exit() co
 
 Sincerest Gratitude,
 
-
 ---
 
 ## Re: Trading_commands
@@ -770,7 +719,6 @@ Sincerest Gratitude,
 Unfortunately Closed Trades table it does not provide information about the order type.
 Close time is provided, so we can use this as a reference point.
 With which indicator/strategy this will be used.
-
 
 ---
 
@@ -790,7 +738,6 @@ Because for the rest of the current candle both enter() and exit() conditions ar
 
 Wish there was a way (or a work around) to limit number of enter() per candle to ONLY ONE(1) trade.
 
-
 ---
 
 ## Re: Trading_commands
@@ -804,7 +751,6 @@ I will set a flag=true if enter() is executed once, to prevent entering() again.
 And reset flag=false on each new candle.
 That should work.
 I`ll try it.
-
 
 ---
 
@@ -820,7 +766,6 @@ I was trying to solve the wrong problem by trying to set a flag on ....... exit(
 
 As always much much appreciated,
 Thanks again.
-
 
 ---
 
@@ -838,7 +783,6 @@ If not is there a way to mimic it in INDICATORS?
 
 txs,
 
-
 ---
 
 ## Re: Trading_commands
@@ -846,7 +790,6 @@ txs,
 **Apprentice** · Fri Feb 16, 2018 7:32 am
 
 Only for STRATEGIES.
-
 
 ---
 
@@ -870,7 +813,6 @@ By this behaviour we secure trades with an automatic way with the breakeaven, as
 
 Thanks you in advance.
 
-
 ---
 
 ## Re: Trading_commands
@@ -878,7 +820,6 @@ Thanks you in advance.
 **Apprentice** · Mon Jul 30, 2018 9:57 am
 
 Your request is added to the development list under Id Number 4202
-
 
 ---
 
@@ -891,7 +832,6 @@ There is a strategy which does almost exactly that. I modified it a little bit t
  [Trailing_stop_limit_2.lua](files/120230/Trailing_stop_limit_2.lua)
 
  [Trailing_stop_limit_all trades.lua](files/120230/Trailing_stop_limit_all%20trades.lua)
-
 
 ---
 
@@ -907,7 +847,6 @@ Is it possible to activate the strategy (in stand-by mode) when no trades are op
 Then when we open a position the strategy detect this?
 
 Thanks !
-
 
 ---
 
@@ -941,7 +880,6 @@ That's it. This is for the Trading Station II on FXCM
 
 Cheers!
 
-
 ---
 
 ## Re: Trading_commands
@@ -949,7 +887,6 @@ Cheers!
 **Godspeed108** · Thu Aug 02, 2018 4:57 am
 
 Bump
-
 
 ---
 
@@ -967,7 +904,6 @@ Does anyone have any experience using this strategy in terms of inputs, values, 
 
 Thanks in advance.
 
-
 ---
 
 ## Re: Trading_commands
@@ -978,7 +914,6 @@ Thanks in advance.
 
 Set Trailing stop order to No
 
-
 ---
 
 ## Re: Trading_commands
@@ -986,7 +921,6 @@ Set Trailing stop order to No
 **Apprentice** · Fri Aug 03, 2018 4:05 am
 
 Trailing_stop_limit_all trades.lua added.
-
 
 ---
 
@@ -1001,7 +935,6 @@ What does this new strategy do that is different from the previous one?
 
 Thanks in advance!
 
-
 ---
 
 ## Re: Trading_commands
@@ -1009,7 +942,6 @@ Thanks in advance!
 **Apprentice** · Tue Aug 21, 2018 6:56 am
 
 This strategy has "Monitor all new trades" parameter. When is set to true the strategy will work on all trades instead of the chosen in the " Choose Trade" parameter.
-
 
 ---
 
@@ -1029,7 +961,6 @@ Most of the times it does nothing.
 
 Kind Regards,
 
-
 ---
 
 ## Re: Trading_commands
@@ -1041,7 +972,6 @@ Your request is added to the development list under Id Number 4510
 Can you please provide more information.
 Are you using Real or Demo account, are we talking about FIFO or not-FIFO account.
 
-
 ---
 
 ## Re: Trading_commands
@@ -1050,7 +980,6 @@ Are you using Real or Demo account, are we talking about FIFO or not-FIFO accoun
 
 Topmost/First post of the topic was updated.
 
-
 ---
 
 ## Re: Trading_commands
@@ -1058,7 +987,6 @@ Topmost/First post of the topic was updated.
 **MadMan** · Fri Jul 24, 2020 2:31 am
 
 Hello .. can we have all the commands in one indicator instead of having multiple indicators installed with duplicated commands?
-
 
 ---
 

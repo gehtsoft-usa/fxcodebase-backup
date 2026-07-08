@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=38&t=70565  
 > Forum: 38 · Topic 70565 · 10 post(s)
 
-
 ---
 
 ## Renko_Super-signals
@@ -12,15 +11,12 @@
 
 ![eurusd-h1-fxcm-australia-pty.png](images/138474/eurusd-h1-fxcm-australia-pty.png)
 
-
-
 Based on request.
 [viewtopic.php?f=27&t=70544](https://fxcodebase.com/code/viewtopic.php?f=27&t=70544)
 
  [Renko_Super-signals.mq4](files/138474/Renko_Super-signals.mq4)
 
  [Non Repaint Renko_Super-signals.mq4](files/138474/Non%20Repaint%20Renko_Super-signals.mq4)
-
 
 ---
 
@@ -30,7 +26,6 @@ Based on request.
 
 **Apprentice** can you make it No Repaint, please!
 
-
 ---
 
 ## Re: Renko_Super-signals
@@ -38,7 +33,6 @@ Based on request.
 **planstyr** · Mon Oct 26, 2020 9:01 am
 
 Apprentice, can you make it No Repaint?
-
 
 ---
 
@@ -50,7 +44,6 @@ Thank you so much, but the on/off button doesn't seem to be working can you plea
 
 Thank you
 
-
 ---
 
 ## Re: Renko_Super-signals
@@ -60,7 +53,6 @@ Thank you
 Your request is added to the development list.
 Development reference 2226.
 
-
 ---
 
 ## Re: Renko_Super-signals
@@ -68,7 +60,6 @@ Development reference 2226.
 **Apprentice** · Mon Nov 02, 2020 3:20 am
 
 Fixed.
-
 
 ---
 
@@ -81,7 +72,6 @@ Fixed.
 
 thank you
 
-
 ---
 
 ## Re: Renko_Super-signals
@@ -89,7 +79,6 @@ thank you
 **Apprentice** · Sat Aug 12, 2023 3:02 am
 
 Non Repaint Renko_Super-signals.mq4 added.
-
 
 ---
 
@@ -102,10 +91,10 @@ Non Repaint Renko_Super-signals.mq4 added.
 
 Array out of range error
 
-Code: [Select all](https://fxcodebase.com/code/)
-`b1[i] = EMPTY_VALUE;   
-in the void draw() section`
-
+```mql4
+b1[i] = EMPTY_VALUE;   
+in the void draw() section
+```
 
 ---
 

@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=858  
 > Forum: 17 · Topic 858 · 16 post(s)
 
-
 ---
 
 ## ATR Channel
@@ -13,8 +12,6 @@
 ![ATR Channel Custom.png](images/1545/ATR%20Channel%20Custom.png)
 
 *ATR Channel Custom*
-
-
 
 On user request I made this version of the ATR Channel indicator.
 Allows you to define the percentage of multiples, ATR-a period.
@@ -35,7 +32,6 @@ MT4/MQ4 version.
 
 The indicator was revised and updated
 
-
 ---
 
 ## Re: ATR Channel
@@ -45,8 +41,6 @@ The indicator was revised and updated
 ![atr.png](images/1546/atr.png)
 
 *ATR Channel*
-
-
 
 This version uses averaged closing price to get a smooth central line.
 
@@ -63,7 +57,6 @@ To use this version of the indicator,
 You must install Averages Indivator
 [viewtopic.php?f=17&t=2430&p=5705&hilit=averages#p5705](https://fxcodebase.com/code/viewtopic.php?f=17&t=2430&p=5705&hilit=averages#p5705)
 
-
 ---
 
 ## Re: ATR Channel
@@ -79,7 +72,6 @@ Thank you
 
 Regards
 
-
 ---
 
 ## Re: ATR Channel
@@ -87,7 +79,6 @@ Regards
 **Apprentice** · Thu Jul 08, 2010 4:50 am
 
 Added to development cue.
-
 
 ---
 
@@ -104,7 +95,6 @@ Thank you in advance.
 
 Regards
 
-
 ---
 
 ## Re: ATR Channel
@@ -117,10 +107,8 @@ ATR Channel for bigger timeframe:
 
 ![BF_ATR_Channel.png](images/3159/BF_ATR_Channel.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`-- todo: support week offset
+```lua
+-- todo: support week offset
 
 function Init()
     indicator:name("Bigger timeframe ATR Channel");
@@ -353,8 +341,8 @@ function findDateFast(stream, date, precise)
             end
         end
     end
-end`
-
+end
+```
 
 ---
 
@@ -366,7 +354,6 @@ what are the classical values to make the keltner channel appear as it does on f
 
 Thank you
 
-
 ---
 
 ## Re: ATR Channel
@@ -376,7 +363,6 @@ Thank you
 In my experience, there does not exist, the right option,
 You can adjust it to the current state of the market,
 to suits your style of trading, trading strategy.
-
 
 ---
 
@@ -393,7 +379,6 @@ I didn't describe that well. I pair the keltner channel and the bollinger band t
 
 How do I just make the lines straighter.
 
-
 ---
 
 ## Re: ATR Channel
@@ -401,7 +386,6 @@ How do I just make the lines straighter.
 **momo721** · Wed Dec 29, 2010 11:52 pm
 
 I am new to forex. Where I can read about how to use ATR Channel indicator? I understand what the middle line is, but what are the green lines above and below? Instructors at DailyFX use ATR indicator, but it looks somewhat different. Please advise. Thank you.
-
 
 ---
 
@@ -420,12 +404,9 @@ Simply put, ATR Channel indicator, is in every respect, a derivative of Bullinge
 
 ![ATR.png](images/7078/ATR.png)
 
-
-
 On this chart you can see simultaneously both indicators.
 You may notice that the ATR channel indicator narrows
 when the value of ATR Indicator, drops.
-
 
 ---
 
@@ -442,7 +423,6 @@ To use this version of the indicator,
 You must install Averages Indivator
 [viewtopic.php?f=17&t=2430&p=5705&hilit=averages#p5705](https://fxcodebase.com/code/viewtopic.php?f=17&t=2430&p=5705&hilit=averages#p5705)
 
-
 ---
 
 ## Re: ATR Channel
@@ -450,7 +430,6 @@ You must install Averages Indivator
 **Apprentice** · Sat Feb 18, 2017 5:21 am
 
 Indicator was revised and updated.
-
 
 ---
 
@@ -468,7 +447,6 @@ I know that all the above are much to ask, so I will be pleased if you develop a
 Thank you,
 Alex
 
-
 ---
 
 ## Re: ATR Channel
@@ -477,7 +455,6 @@ Alex
 
 Your request is added to the development list.
 Development reference 1356.
-
 
 ---
 

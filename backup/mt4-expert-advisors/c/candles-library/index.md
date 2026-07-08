@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=38&t=23331  
 > Forum: 38 · Topic 23331 · 1 post(s)
 
-
 ---
 
 ## Candles library
@@ -44,8 +43,8 @@ CANDLEPROP_WIDTH.
 
 Example of use:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`//+------------------------------------------------------------------+
+```mql4
+//+------------------------------------------------------------------+
 //|                                                CandlesSample.mq4 |
 //|                               Copyright © 2012, Gehtsoft USA LLC |
 //|                                            http://fxcodebase.com |
@@ -99,13 +98,12 @@ int start()
   pos--;
  } 
  return(0);
-}`
+}
+```
 
  
 
 ![CandlesLibrary_MQL.PNG](images/40163/CandlesLibrary_MQL.PNG)
-
-
 
 Download library:
 

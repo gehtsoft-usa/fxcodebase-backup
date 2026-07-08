@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=1848  
 > Forum: 17 · Topic 1848 · 22 post(s)
 
-
 ---
 
 ## WAVE-PM (Whistler's Active Volatility Energy - Price Mass)
@@ -18,8 +17,6 @@ Note: The indicator is a bit optimized during porting, however the result are ca
 
 ![wave-pm.png](images/3686/wave-pm.png)
 
-
-
 Download the indicator:
 
  [WAVE-PM.lua](files/3686/WAVE-PM.lua)
@@ -28,7 +25,6 @@ MT4 / MQ4 version can be found here.
 [viewtopic.php?f=38&t=64011](https://fxcodebase.com/code/viewtopic.php?f=38&t=64011)
 
 The indicator was revised and updated
-
 
 ---
 
@@ -39,7 +35,6 @@ The indicator was revised and updated
 Thank you very much !
 
 Thanks again.
-
 
 ---
 
@@ -52,7 +47,6 @@ This is a game changer. I cannot remember the last time I, literally, could not 
 I'm assuming as soon as volume is avail in MarketScope, you'll be converting the VWAP indicator, too?
 
 Thank you very much for the WAVE PM! I could've made 50-75 pips tonight using it... if I could've stop reading the ebook But, there's always tomorrow.
-
 
 ---
 
@@ -67,7 +61,6 @@ Now that we have volume avail in MarketScope, is it possible to create a VWAP an
 Thank you
 Gustavo
 
-
 ---
 
 ## Re: WAVE-PM (Whistler's Active Volatility Energy - Price Mass)
@@ -76,7 +69,6 @@ Gustavo
 
 Indicator that you are looking for is already written.
 It will be loaded as well as many other volume based indicators during the next week.
-
 
 ---
 
@@ -92,7 +84,6 @@ If so, can you plwase send me a link where I can download them?
 Thanks again
 Gustavo
 
-
 ---
 
 ## Re: WAVE-PM (Whistler's Active Volatility Energy - Price Mass)
@@ -104,7 +95,6 @@ But you can download it here.
 
  [VAMA.lua](files/4415/VAMA.lua)
 
-
 ---
 
 ## Re: WAVE-PM (Whistler's Active Volatility Energy - Price Mass)
@@ -112,7 +102,6 @@ But you can download it here.
 **gcardo** · Sun Sep 12, 2010 6:19 pm
 
 Thanks
-
 
 ---
 
@@ -125,7 +114,6 @@ However I wonder whether it would be possible to improve the indicator by enabli
 
 Thanks for considering this.
 
-
 ---
 
 ## Re: WAVE-PM (Whistler's Active Volatility Energy - Price Mass)
@@ -133,7 +121,6 @@ Thanks for considering this.
 **Apprentice** · Thu Apr 05, 2012 7:15 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -143,7 +130,6 @@ Your request is added to the development list.
 
 Update.
 
-
 ---
 
 ## Re: WAVE-PM (Whistler's Active Volatility Energy - Price Mas
@@ -152,7 +138,6 @@ Update.
 
 I second fxdirekt's comment. Color coded sloping would be a massive improvement. Any possibility for assistance on this? Thankyou!
 
-
 ---
 
 ## Re: WAVE-PM (Whistler's Active Volatility Energy - Price Mas
@@ -160,7 +145,6 @@ I second fxdirekt's comment. Color coded sloping would be a massive improvement.
 **Apprentice** · Sun Jun 19, 2016 3:32 am
 
 Color Option Added.
-
 
 ---
 
@@ -177,7 +161,6 @@ Just wanted to share this link to Mark Whistlers videos in YouTube.
 Thanks,
 JariCarr
 
-
 ---
 
 ## Re: WAVE-PM (Whistler's Active Volatility Energy - Price Mas
@@ -190,7 +173,6 @@ Can someone please explain how to use this indicator ?
 
 Thanks,
 
-
 ---
 
 ## Re: WAVE-PM (Whistler's Active Volatility Energy - Price Mas
@@ -198,7 +180,6 @@ Thanks,
 **Asack55** · Fri Jun 24, 2016 8:31 am
 
 To get a really clear view of how this works you need to read the book Volatility illuminated. Essentially it is two normalized bollinger bands, readings below .5 tells us that the market is compressed and that there may be a strong move soon .9 tells us that the move is pushing full throttle. The indicator is not directional, it is only concerned with volatility. Take a look at your chart on the daily and mark places where the short term and long term compression are below .5 and what happens as price moves above .5 to get an idea of how this works.
-
 
 ---
 
@@ -213,7 +194,6 @@ Will give your recommendations a try.
 Be well,
 JariCarr
 
-
 ---
 
 ## Re: WAVE-PM (Whistler's Active Volatility Energy - Price Mas
@@ -221,7 +201,6 @@ JariCarr
 **Asack55** · Tue Aug 09, 2016 2:33 pm
 
 Is it possible to create an alert strategy when the long line crosses above .5?
-
 
 ---
 
@@ -232,7 +211,6 @@ Is it possible to create an alert strategy when the long line crosses above .5?
 Strategy is available here.
 [viewtopic.php?f=31&t=63746](https://fxcodebase.com/code/viewtopic.php?f=31&t=63746)
 
-
 ---
 
 ## Re: WAVE-PM (Whistler's Active Volatility Energy - Price Mas
@@ -240,7 +218,6 @@ Strategy is available here.
 **Asack55** · Fri Oct 21, 2016 6:43 pm
 
 Anybody know if there is an MT4 version of this indicator? Been looking and the links to purchse them are dead.
-
 
 ---
 
@@ -251,7 +228,6 @@ Anybody know if there is an MT4 version of this indicator? Been looking and the 
 MT4 / MQ4 version can be found here.
 [viewtopic.php?f=38&t=64011](https://fxcodebase.com/code/viewtopic.php?f=38&t=64011)
 
-
 ---
 
 ## Re: WAVE-PM (Whistler's Active Volatility Energy - Price Mas
@@ -260,8 +236,8 @@ MT4 / MQ4 version can be found here.
 
 Is it possible to port over a version of WVAV? I noticed the VAMA indicator used time based periods instead of the 5000/10000 tick levels used in WVAV.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`Copyright © Mark Whistler 2009 / fxVolatility.com.   //+--------------------------------------------------+ //|Whistler Volume Adjusted Volatility - WVAV       | //|                                                 | //| Copyright 2009, fxVolatility.com                | //| Authors: Mark Whistler/EcTrader.net             | //| [[email protected]](https://fxcodebase.com/cdn-cgi/l/email-protection)                     | //|www.WallStreetRockStar.com|www.fxVolatility.com. | //+--------------------------------------------------+ #property copyright "Copyright 2009, Mark Whistler" #property link "http://www.wallstreetrockstar.com"     //---- #property indicator_chart_window #property indicator_buffers 5 #property indicator_color1 Red #property indicator_color2 DarkGoldenrod #property indicator_color3 Black   #property indicator_color4 Black #property indicator_color5 Black //---- input parameters extern int MA_Ticks = 10000; extern int MA_Shift = 0; extern int MA_Start = 500; //---- indicator parameters1 extern string aa="*****************************"; //---- indicator parameters extern bool MidBandVisible=false; extern int    BandsPeriod=14; extern int    BandsShift=0; extern double BandsDeviations=3.2;   //---- indicator buffers double ExtMapBuffer[]; double ExpVolBuffer[]; //---- buffers //---- double MovingBuffer[]; double UpperBuffer[]; double LowerBuffer[]; //--------------     //+---------------------------------------------------+ //|Custom Indicator Initialization                    | //+---------------------------------------------------+     int init()   { //----    SetIndexStyle(0, DRAW_LINE);
+```
+Copyright © Mark Whistler 2009 / fxVolatility.com.   //+--------------------------------------------------+ //|Whistler Volume Adjusted Volatility - WVAV       | //|                                                 | //| Copyright 2009, fxVolatility.com                | //| Authors: Mark Whistler/EcTrader.net             | //| [[email protected]](https://fxcodebase.com/cdn-cgi/l/email-protection)                     | //|www.WallStreetRockStar.com|www.fxVolatility.com. | //+--------------------------------------------------+ #property copyright "Copyright 2009, Mark Whistler" #property link "http://www.wallstreetrockstar.com"     //---- #property indicator_chart_window #property indicator_buffers 5 #property indicator_color1 Red #property indicator_color2 DarkGoldenrod #property indicator_color3 Black   #property indicator_color4 Black #property indicator_color5 Black //---- input parameters extern int MA_Ticks = 10000; extern int MA_Shift = 0; extern int MA_Start = 500; //---- indicator parameters1 extern string aa="*****************************"; //---- indicator parameters extern bool MidBandVisible=false; extern int    BandsPeriod=14; extern int    BandsShift=0; extern double BandsDeviations=3.2;   //---- indicator buffers double ExtMapBuffer[]; double ExpVolBuffer[]; //---- buffers //---- double MovingBuffer[]; double UpperBuffer[]; double LowerBuffer[]; //--------------     //+---------------------------------------------------+ //|Custom Indicator Initialization                    | //+---------------------------------------------------+     int init()   { //----    SetIndexStyle(0, DRAW_LINE);
 
    SetIndexShift(0, MA_Shift); //---- indicator buffers mapping    SetIndexBuffer(0, ExtMapBuffer);    SetIndexStyle(1, DRAW_NONE);    SetIndexBuffer(1, ExpVolBuffer);    SetIndexDrawBegin(0, 0);  //---- initialization done //---- indicators    SetIndexStyle(2,DRAW_LINE);    SetIndexBuffer(2,ExtMapBuffer);    SetIndexStyle(3,DRAW_LINE);    SetIndexBuffer(3,UpperBuffer);    SetIndexStyle(4,DRAW_LINE);    SetIndexBuffer(4,LowerBuffer);   //----    SetIndexDrawBegin(2,BandsPeriod+BandsShift);    SetIndexDrawBegin(3,BandsPeriod+BandsShift);    SetIndexDrawBegin(4,BandsPeriod+BandsShift);    return(0);   }   //+---------------------------------------------------+ //|Custom Indicator Initialization                    | //+---------------------------------------------------+     int start()   {    int counted_bars = IndicatorCounted();
 
@@ -271,4 +247,5 @@ Code: [Select all](https://fxcodebase.com/code/)
 
                sumVol += evol * Open[j];                ts += evol;              }            else              {                sumVol += (MA_Ticks - ts) * Open[j];                ts = MA_Ticks;              }            j++;          }        ExtMapBuffer[rest] = sumVol / MA_Ticks;        rest--;      }     //----------------------End Volume MA-----------------    //---------------------Begin Bollinger Band-----------     //----      i=Bars-BandsPeriod+1;    if(counted_bars>BandsPeriod-1) i=Bars-counted_bars-1;    while(i>=0)      {       sum=0.0;       k=i+BandsPeriod-1;       oldval=ExtMapBuffer[i];       while(k>=i)         {          newres=Close[k]-oldval;          sum+=newres*newres;
 
-         k--;         }       deviation=BandsDeviations*MathSqrt(sum/BandsPeriod);       UpperBuffer[i]=oldval+deviation;       LowerBuffer[i]=oldval-deviation;       i--;      } //----   //-----------------------End Band--------------------- //----    return(0);`
+         k--;         }       deviation=BandsDeviations*MathSqrt(sum/BandsPeriod);       UpperBuffer[i]=oldval+deviation;       LowerBuffer[i]=oldval-deviation;       i--;      } //----   //-----------------------End Band--------------------- //----    return(0);
+```

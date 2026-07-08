@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=903  
 > Forum: 17 · Topic 903 · 79 post(s)
 
-
 ---
 
 ## 15 popular candle patterns
@@ -18,12 +17,9 @@ The indicator shows a short name of patterns above (below) the last candle of th
 
 ![pat.png](images/1648/pat.png)
 
-
-
  [Patterns2.lua](files/1648/Patterns2.lua)
 
 The indicator was revised and updated
-
 
 ---
 
@@ -61,7 +57,6 @@ The same side next bar usually confirms the trend; the opposite next bar can pre
 The high (low) prices are the same. The close of the current bar is below (above) the close price of the previous bar.
 The stronger version of the outside bar.
 
-
 ---
 
 ## Patterns (part II)
@@ -88,7 +83,6 @@ The pattern can predict the change of the trend.
 Two consequent bars are opposite bars and have the same size of the body. Up and down shadows does not matter.
 The pattern can indicate the end of the price correction.
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -98,7 +92,6 @@ The pattern can indicate the end of the price correction.
 Man, every time I think, "this is my favorite indicator," you [guys] bring out an even bigger diamond out of the mine
 
 May you make so much money, you'll have a hard time storing it all in one country.
-
 
 ---
 
@@ -110,7 +103,6 @@ Thank you!
 
 We're really happy that our indicators are useful for our valuable users.
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -120,7 +112,6 @@ We're really happy that our indicators are useful for our valuable users.
 possible to see one pattern on all pattern ? for good visibity....
 thanks
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -129,8 +120,8 @@ thanks
 
 On/off patterns added.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Candle Pattern 3");
     indicator:description("");
     indicator:requiredSource(core.Bar);
@@ -363,8 +354,8 @@ function UpdatePattern(p)
             RegisterPattern(p, PAT_CPRD);
         end
     end
-end`
-
+end
+```
 
 ---
 
@@ -381,7 +372,6 @@ Thank you
 Kind regards,
 DS0167
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -390,7 +380,6 @@ DS0167
 
 This indicator work on the Bar Chart also.
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -398,7 +387,6 @@ This indicator work on the Bar Chart also.
 **boursicoton** · Mon Sep 13, 2010 10:38 am
 
 very good !
-
 
 ---
 
@@ -413,7 +401,6 @@ Thanks
 
 Jernej
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -421,7 +408,6 @@ Jernej
 **Apprentice** · Mon Sep 13, 2010 6:00 pm
 
 Added to Development Cue.
-
 
 ---
 
@@ -431,8 +417,8 @@ Added to Development Cue.
 
 In indicator are added 14 new patterns.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Candle Pattern 3");
     indicator:description("");
     indicator:requiredSource(core.Bar);
@@ -775,8 +761,8 @@ function UpdatePattern(p)
        RegisterPattern(p, PAT_MORNDJSTAR);
    end
     end
-end`
-
+end
+```
 
 ---
 
@@ -798,7 +784,6 @@ Little body (black or white) with long top and without bottom shadow.
 
 After big white body follows small white with top breakup. Third black candle must have close price within first body.
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -816,7 +801,6 @@ Small black body follows big white candle and it is found between high and low f
 **BEARHARAMICROSS** - Bearish Harami Cross
 
 Doji follows big white candle and it is found between high and low first candle.
-
 
 ---
 
@@ -836,7 +820,6 @@ Doji follows big black candle and it is found between high and low first candle.
 
 After white candle follow black candle. Black candle opened above high of white candle and closed within white candle.
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -855,7 +838,6 @@ After small white candle follow big outside black candle.
 
 After small black candle follow big outside white candle.
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -870,7 +852,6 @@ After big white body follows doji with top breakup. Third black candle must have
 
 After big black body follows doji with bottom breakup. Third white candle must have close price within first body.
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -883,10 +864,8 @@ Signals for candle patterns.
 
 ![Patterns3_Signal.png](images/4546/Patterns3_Signal.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     strategy:name("Candle patterns signal");
     strategy:description("Candle patterns signal");
 
@@ -1264,10 +1243,10 @@ function ExtUpdate(id, source, period)
 
 end
 
-dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");`
+dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");
+```
 
 Program must be installed as strategy.
-
 
 ---
 
@@ -1279,8 +1258,8 @@ In indicator and signal added pattern NB2: two consecutive Neutral Bars.
 
 Indicator:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Candle Pattern 3");
     indicator:description("");
     indicator:requiredSource(core.Bar);
@@ -1633,12 +1612,13 @@ function UpdatePattern(p)
        RegisterPattern(p, PAT_MORNDJSTAR);
    end
     end
-end`
+end
+```
 
 Signal:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     strategy:name("Candle patterns signal");
     strategy:description("Candle patterns signal");
 
@@ -2026,8 +2006,8 @@ function ExtUpdate(id, source, period)
 
 end
 
-dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");`
-
+dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");
+```
 
 ---
 
@@ -2036,7 +2016,6 @@ dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");`
 **Checkz** · Wed Sep 29, 2010 9:12 pm
 
 I was wondering why the new patterns don't show up on the chart. I downloaded the second version with the morning and evening star, etc. patterns but they don't show up on the screen.
-
 
 ---
 
@@ -2048,7 +2027,6 @@ i would like to shared my indicator, but it seems i had no authority to post.
 how can i post a new indicator?
 thx.
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -2058,7 +2036,6 @@ thx.
 I do not have permission to do something more, but if you
 Send the indicator through the mail to me.
 So I could get it published.
-
 
 ---
 
@@ -2072,7 +2049,6 @@ So I could get it published.
 > thx.
 
 I updated your profile, so now you can. Please try.
-
 
 ---
 
@@ -2093,7 +2069,6 @@ I updated your profile, so now you can. Please try.
 
 apply group succeed. thanks!
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -2106,10 +2081,8 @@ Other version of this indicator.
 
 ![Pattern4.png](images/5424/Pattern4.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Candle Pattern 4");
     indicator:description("");
     indicator:requiredSource(core.Bar);
@@ -2537,8 +2510,8 @@ function UpdatePattern(p)
        RegisterPattern(p, PAT_MORNDJSTAR);
    end
     end
-end`
-
+end
+```
 
 ---
 
@@ -2550,7 +2523,6 @@ This is the best candle pattern indicator by far.
 
 Any chance that someone can convert it into MT4 format please?
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -2559,7 +2531,6 @@ Any chance that someone can convert it into MT4 format please?
 
 This forum is dedicated to Marketskope charting platform.
 This requirement can be realized through our Premium Development Services
-
 
 ---
 
@@ -2575,7 +2546,6 @@ function Prepare()
 What does "EQ" mean in "instance.parameters.EQ"?
 
 It sounds like some sort of global parameter but I can't find it in the SDK guide.
-
 
 ---
 
@@ -2594,7 +2564,6 @@ In Prepare() Function we call this parameter, its value we store in variable.
 Description of Instance Parameters you can find in SDK guide here.
 [http://www.fxcodebase.com/documents/Ind ... eters.html](http://www.fxcodebase.com/documents/IndicoreSDK/instance_strategy.parameters.html)
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -2612,7 +2581,6 @@ and
 [http://www.fxcodebase.com/documents/Ind ... tance.html](http://www.fxcodebase.com/documents/IndicoreSDK/profile.createInstance.html)
 
 I do not see "EQ" anywhere. What am I missing?
-
 
 ---
 
@@ -2643,7 +2611,6 @@ function Init()
  ...
  end
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -2651,7 +2618,6 @@ function Init()
 **raulbanda1** · Tue Jul 05, 2011 8:25 am
 
 Great Job on the "Pattern3_Signal" indicator. Can you add where you can get an email alert once a certain candle pattern forms?
-
 
 ---
 
@@ -2663,7 +2629,6 @@ Indicators can not provide this type of signal.
 However, the strategy that I wrote could help you.
 [viewtopic.php?f=31&t=4846](https://fxcodebase.com/code/viewtopic.php?f=31&t=4846)
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -2673,7 +2638,6 @@ However, the strategy that I wrote could help you.
 I love this indicator, but I can't get the "14 additional patterns" - hammer, shooting star etc, to appear in to list of switchable patterns.
 
 How do I down download this updated signal / indicator
-
 
 ---
 
@@ -2685,7 +2649,6 @@ I apologise, of course I have to remove the old "patterns3", and then reload the
 
 My mistake
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -2694,7 +2657,6 @@ My mistake
 
 Nice
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -2702,7 +2664,6 @@ Nice
 **bomberone3** · Tue Oct 25, 2011 3:52 pm
 
 Could we add the pesavento patterns and the harmonic patterns?
-
 
 ---
 
@@ -2713,7 +2674,6 @@ Could we add the pesavento patterns and the harmonic patterns?
 pesavento yes.
 for harmonic am not sure that this is the best solution.
 I've already written an indicator for harmonic.
-
 
 ---
 
@@ -2731,7 +2691,6 @@ Thanks
 
 Alex
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -2741,7 +2700,6 @@ Alex
 Hi,
 one quick thing when i load the indicator patterns3 it only seems to detect hammers and shooting stars with EQ = 1 the other new candle patterns never seem to appear (bullish engulfing, bearish engulfing ... etc) though they are actually happening. Also what is the parameter EQ used for i know is a threshold for comparing prices, but how is it used to detect the correct patterns
 Thanks!
-
 
 ---
 
@@ -2756,7 +2714,6 @@ Love the patterns3 indicator! Just wondering if it can be made to recognise morn
 thanks,
 G
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -2768,7 +2725,6 @@ I believe the reason why some patterns don't work, is because the close price of
 So for a programmer there is no way in the world to show these patterns since the data is simply not available.
 
 Thank you Nikolay.Gekht for all your hard work!
-
 
 ---
 
@@ -2795,7 +2751,6 @@ Maybe that would help the conditions to be meet for the patterns that the indica
 >
 > Thank you Nikolay.Gekht for all your hard work!
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -2808,7 +2763,6 @@ another excellent tool. which version is the most recent and inclusive of all up
 
 thanks
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -2819,7 +2773,6 @@ Thank you for this indicator, like it a lot.
 Question do you think it will possible to add a signal alert to it ?
 thank you very much
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -2827,7 +2780,6 @@ thank you very much
 **Apprentice** · Wed Mar 28, 2012 6:32 am
 
 Yes, this functionality is possible.
-
 
 ---
 
@@ -2848,7 +2800,6 @@ Thanks for the work guys, already done 1 little donation
 But might continue.
 Thanks
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -2857,7 +2808,6 @@ Thanks
 
 Your request is added to the development list.
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -2865,7 +2815,6 @@ Your request is added to the development list.
 **manish8980** · Thu Apr 19, 2012 3:55 pm
 
 is it possible for you to send this indicator to me on [[email protected]](https://fxcodebase.com/cdn-cgi/l/email-protection#eb868a85829883c5809e85818299ab8c868a8287c5888486) in .mq4 format, thanks in advance
-
 
 ---
 
@@ -2878,7 +2827,6 @@ Contact Alex or out of premium development team.
 They can help you.
 If not, contact me, I could find hired help for you.
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -2886,7 +2834,6 @@ If not, contact me, I could find hired help for you.
 **manish8980** · Mon Apr 23, 2012 6:04 am
 
 ok. thanks
-
 
 ---
 
@@ -2897,7 +2844,6 @@ ok. thanks
 I have good news for you and all users of the MT4 platform.
 From now onward we provide free development service for MT4.
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -2905,7 +2851,6 @@ From now onward we provide free development service for MT4.
 **manish8980** · Wed Apr 25, 2012 2:09 am
 
 Thanks Apprentice. Can you please send me candle patterns mt4 indicator which gives buy/sell arrow for bullish reversal patterns.
-
 
 ---
 
@@ -2917,7 +2862,6 @@ Not me personally.
 I'm not an expert on MT4.
 I hope that Alex will have the time.
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -2925,7 +2869,6 @@ I hope that Alex will have the time.
 **Alexander.Gettinger** · Fri Apr 27, 2012 12:26 pm
 
 MQL4 version of candle pattern indicator: [viewtopic.php?f=38&t=17243](https://fxcodebase.com/code/viewtopic.php?f=38&t=17243)
-
 
 ---
 
@@ -2939,7 +2882,6 @@ in an effort to keep charts uncluttered, for patterns3 can you add an option to 
 
 Thanks.
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -2947,7 +2889,6 @@ Thanks.
 **Apprentice** · Tue Sep 11, 2012 4:10 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -2961,7 +2902,6 @@ and signal PATTERN3_SIGNAL.LUA.
 this is correct?
 thanks
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -2969,7 +2909,6 @@ thanks
 **Apprentice** · Wed Oct 10, 2012 4:01 am
 
 Yes, As far as I know.
-
 
 ---
 
@@ -2983,7 +2922,6 @@ Yes, As far as I know.
 thanks a lot
 Davide
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -2996,7 +2934,6 @@ but i think thak INSIDE BAR not calculare correctly.
 
 some time i can see not realy INSIDE BAR, body not in all body of preview candle
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -3008,7 +2945,6 @@ can i have news about my last post?
 
 thanks a lot
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -3016,7 +2952,6 @@ thanks a lot
 **luigipg** · Mon Oct 22, 2012 2:01 pm
 
 Hi, inside bar is calculated when his body is in all High/Low of previous candle! Luigi!!!
-
 
 ---
 
@@ -3032,7 +2967,6 @@ look the link:
 
 ciao
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -3045,7 +2979,6 @@ I just tested pattern 3 signal.If I put the maximum number of pips distance to 0
 
 Regards,
 Bedayan.
-
 
 ---
 
@@ -3060,7 +2993,6 @@ I have tested the candle pattern but it seems bearish engulfing pattern and bear
 Regards,
 Bedayan .
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -3073,7 +3005,6 @@ Try to use my version
 Alex is using the literal definition, which is difficult to achieve on forex,
 Because we have a supermarket close / gaps only during weekends, it's not a daily occurrence as is the case for stocks.
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -3082,7 +3013,6 @@ Because we have a supermarket close / gaps only during weekends, it's not a dail
 
 FANTASTIC..... FANTASTIC.. thanks a million for this one.
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -3090,7 +3020,6 @@ FANTASTIC..... FANTASTIC.. thanks a million for this one.
 **johnrichard26** · Wed Nov 06, 2013 5:57 pm
 
 how to install PATTERN3_SIGNAL.LUA in trading station
-
 
 ---
 
@@ -3104,7 +3033,6 @@ Hi johnrichard26,
 
 Please read [this post](https://fxcodebase.com/code/viewtopic.php?f=17&t=59681#p90124) and watch the video tutorial.
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -3115,7 +3043,6 @@ Please read [this post](https://fxcodebase.com/code/viewtopic.php?f=17&t=59681#p
 > Because we have a supermarket close / gaps only during weekends, it's not a daily occurrence as is the case for stocks.
 
 IMO the way Forex Candles are being presented is fundamentally flawed with the open of each candle being always equal to the previous close. As per my understanding the close of a candle should show the value of the last trade of that period and the open should show the first trade of the next period. Anyway given the way it is, we need to rewrite the engulfing pattern rules slightly to accommodate for this, don't we!
-
 
 ---
 
@@ -3130,7 +3057,6 @@ in 5min period it is impossible to read the legend can it be put with variable c
 2/ in pattern3 with sound it does n't write on the chart the legend of the pattern anymore, is it possible to put it again?
 many thanks
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -3138,7 +3064,6 @@ many thanks
 **Apprentice** · Fri Nov 29, 2013 2:58 pm
 
 Your request is added to the development list.
-
 
 ---
 
@@ -3151,7 +3076,6 @@ Just 2 questions..
 a: which is the best setting to use for a H1 chart 0 or 1 in maximun pips distance setting ?
 b: does anyone knows a similar expert for MT4 ? some type of alert is a bonus..i have found several experts in candle pattern recognition but i don't know which one to choose ..
  any suggestion is welcome -:)
-
 
 ---
 
@@ -3171,7 +3095,6 @@ The difference between the Outside candle and this type of Closing Price Reversa
 
 Thanks,
 
-
 ---
 
 ## Re: 15 popular candle patterns
@@ -3179,7 +3102,6 @@ Thanks,
 **Apprentice** · Fri Nov 06, 2015 4:37 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -3200,8 +3122,8 @@ Code: [Select all](https://fxcodebase.com/code/)
 
 then in the function "ExtUpdate" add:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`O4=gSource.open[period - 4];
+```lua
+O4=gSource.open[period - 4];
 H4=gSource.high[period - 4];
 ....
 ....
@@ -3209,10 +3131,10 @@ T4=math.max(O4,C4);
 B4=math.min(O4,C4);
 ....
 ....
-et cetera...`
+et cetera...
+```
 
 Thanks for your reply
-
 
 ---
 

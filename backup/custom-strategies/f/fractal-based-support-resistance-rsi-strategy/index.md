@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=2595  
 > Forum: 31 · Topic 2595 · 26 post(s)
 
-
 ---
 
 ## Fractal-based Support/Resistance RSI Strategy
@@ -11,8 +10,6 @@
 **Apprentice** · Thu Nov 04, 2010 1:01 pm
 
 ![FBSR_STRATEGY.png](images/5821/FBSR_STRATEGY.png)
-
-
 
 1: If Candle closes above FB resistance, open long postition.
 2: If Candle closes below FB support, open short position.
@@ -31,7 +28,6 @@ Overbought/Oversold Filter
 Fractal-based Support/Resistance Lines Indicator can be found here [http://fxcodebase.com/code/viewtopic.php?f=17&t=367&p=606&hilit=FBSR#p606](https://fxcodebase.com/code/viewtopic.php?f=17&t=367&p=606&hilit=FBSR#p606)
 You must have it installed, strategy to work properly.
 
-
 ---
 
 ## Re: Fractal-based Support/Resistance RSI Strategy
@@ -46,7 +42,6 @@ I will make a list and give example of what I find as soon as I can.
 
 Still thank you very much!!!
 
-
 ---
 
 ## Re: Fractal-based Support/Resistance RSI Strategy
@@ -55,7 +50,6 @@ Still thank you very much!!!
 
 Use Close option, under the Price simulation, this should filter out all false signals.
 
-
 ---
 
 ## Re: Fractal-based Support/Resistance RSI Strategy
@@ -63,7 +57,6 @@ Use Close option, under the Price simulation, this should filter out all false s
 **baumann** · Thu Nov 04, 2010 4:04 pm
 
 I will test it on live market and give feedback. Thank you.
-
 
 ---
 
@@ -81,7 +74,6 @@ I will post my findings later next week.
 
 Thanks to Apprentice for a job well done!
 
-
 ---
 
 ## Re: Fractal-based Support/Resistance RSI Strategy
@@ -94,8 +86,8 @@ I added oversold and overbought settings and it performs much better now.
 
 Here is the code:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- Version Oct 14, 2010
+```lua
+-- Version Oct 14, 2010
 
 function Init()
     strategy:name("FBSR Strategy");
@@ -446,14 +438,14 @@ function exit(BuySell)
     end
 end
 
-dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");`
+dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");
+```
 
 Apprentice - can you look at the code and see if it's sufficient and update the uploaded file?
 
 Thank you very much.
 
 I will test it live this week. (Only on EURUSD)
-
 
 ---
 
@@ -464,7 +456,6 @@ I will test it live this week. (Only on EURUSD)
 Looks good.
 I'm lazy by nature, So I added one more option,
 i can have the best of both worlds now.
-
 
 ---
 
@@ -481,7 +472,6 @@ Is it possible to change the code so that it opens the trade one tick above/belo
 
 I have been looking at the code but i cant figure it out
 
-
 ---
 
 ## Re: Fractal-based Support/Resistance RSI Strategy
@@ -490,7 +480,6 @@ I have been looking at the code but i cant figure it out
 
 If i load FBSDR on strategy the strategy run, but when I try to back test of FBSR strategy doesn't work and appear the following message: string FBSR_strategy.lua: 121 unsupported.
 What does it mean? What can I do?
-
 
 ---
 
@@ -508,7 +497,6 @@ so far i think we need an option to make a limit and stop for every trade that i
 
 what do u think guys ?
 
-
 ---
 
 ## Re: Fractal-based Support/Resistance RSI Strategy
@@ -521,7 +509,6 @@ Although seemingly minor in comparison when used on smaller time compressions, i
 
 In way of correcting this flaw?
 
-
 ---
 
 ## Re: Fractal-based Support/Resistance RSI Strategy
@@ -529,7 +516,6 @@ In way of correcting this flaw?
 **TMos1124** · Thu Sep 08, 2011 11:43 am
 
 Thank you for this strategy and indicator. I am not sure whether to request a new strategy, so I will post here. I would like to choose to trade above support or below resistance. In addition if it would be possible to also attach an MA, also to choose to trade above or below. Lastly, if a trading hours module could be attached, so I know when it will stop trading. My attempts to piece this all together in the Editor has proven futile. Many thanks again.
-
 
 ---
 
@@ -548,7 +534,6 @@ Thank you for this strategy and indicator. I am not sure whether to request a ne
 3rd You want the opportunity to define trading hours.
 Possibility of closing open positions after the expiration of this time.
 
-
 ---
 
 ## Re: Fractal-based Support/Resistance RSI Strategy
@@ -562,7 +547,6 @@ Thank you for your reply, allow me to clarify:
 3. I want all trades to be closed at the end of the time period.
 
 I hope that gives a better picture, I would be glad to explain further.
-
 
 ---
 
@@ -578,7 +562,6 @@ Second, in conjunction with the above, if the price closes past the support and/
 
 for example, price on a five minute bar closes 10 pips ABOVE the FB resistance, then the autotrader would open a buy and vice versa.
 
-
 ---
 
 ## Re: Fractal-based Support/Resistance RSI Strategy
@@ -591,7 +574,6 @@ Thanks!
 
 sjc
 
-
 ---
 
 ## Re: Fractal-based Support/Resistance RSI Strategy
@@ -600,7 +582,6 @@ sjc
 
 Part 2 of FBSR strategy notes for review and brainstorming. FBSR works best in Breakouts (current situation since Sept 2 of this year) while in a Trend, but can be utilized in a Range which you will see from this daily chart was the case from May through to Sept.
 
-
 ---
 
 ## Re: Fractal-based Support/Resistance RSI Strategy
@@ -608,7 +589,6 @@ Part 2 of FBSR strategy notes for review and brainstorming. FBSR works best in B
 **TMos1124** · Wed Sep 14, 2011 8:52 am
 
 I agree with this poster, I asked for the changes for exactly this. My buy logic was for trending markets to initiate a buy if price closes above resistance while above a moving average, and sell logic of if price closes below support while below the moving average. I wanted to keep these somewhat independent so I could adjust for ranging markets (sell at close above resistance OR below support while above the moving average, and buying below support OR above resistance below the moving average).
-
 
 ---
 
@@ -624,7 +604,6 @@ Regards,
 
 Richard
 
-
 ---
 
 ## Re: Fractal-based Support/Resistance RSI Strategy
@@ -637,7 +616,6 @@ can u add following option in this strategy
 buying condition:**rsi{period 14}>central line** and **rsi {period 14}<ob level[70]** and price crossover fbsr resistance
 sell ing condition:r**si{period 14}<central line** and **rsi {period14}> os level[30]** price cross under fbsr resistance
 
-
 ---
 
 ## Re: Fractal-based Support/Resistance RSI Strategy
@@ -645,7 +623,6 @@ sell ing condition:r**si{period 14}<central line** and **rsi {period14}> os leve
 **Apprentice** · Thu Oct 06, 2011 4:43 pm
 
 Your request is added to the developmental cue.
-
 
 ---
 
@@ -659,7 +636,6 @@ Is what you can with the VFratales indicator ([http://www.fxcodebase.com/code/vi
 
 Thank you.
 
-
 ---
 
 ## Re: Fractal-based Support/Resistance RSI Strategy
@@ -667,7 +643,6 @@ Thank you.
 **Apprentice** · Tue Dec 13, 2016 4:33 pm
 
 Strategy was revised and updated.
-
 
 ---
 
@@ -684,7 +659,6 @@ DownArrow only time price cross FBSR.S
 
 Thanks in advance!
 
-
 ---
 
 ## Re: Fractal-based Support/Resistance RSI Strategy
@@ -693,7 +667,6 @@ Thanks in advance!
 
 Try this version.
 [viewtopic.php?f=17&t=64230](https://fxcodebase.com/code/viewtopic.php?f=17&t=64230)
-
 
 ---
 
@@ -709,15 +682,11 @@ Obviously the calculation of the fractal is not good.
 
 ![Capture 1.png](images/120562/Capture%201.png)
 
-
-
 After refresh.
 
  
 
 ![Capture 2.png](images/120562/Capture%202.png)
-
-
 
 I put the fractal indicator that is installed by default on the TS2.
 

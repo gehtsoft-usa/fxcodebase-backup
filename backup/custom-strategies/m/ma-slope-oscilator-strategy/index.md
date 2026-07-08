@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=31812  
 > Forum: 31 · Topic 31812 · 18 post(s)
 
-
 ---
 
 ## MA Slope Oscilator Strategy
@@ -11,8 +10,6 @@
 **Apprentice** · Wed Feb 06, 2013 6:20 pm
 
 ![MASO.png](images/54240/MASO.png)
-
-
 
 The strategy is based on the MASO indicator.
 [viewtopic.php?f=17&t=2431](https://fxcodebase.com/code/viewtopic.php?f=17&t=2431)
@@ -29,7 +26,6 @@ Please install MA_Slope indicator
 
 The Strategy was revised and updated on January 19, 2019.
 
-
 ---
 
 ## Re: MA Slope Oscilator Strategy
@@ -37,7 +33,6 @@ The Strategy was revised and updated on January 19, 2019.
 **Ramp711** · Fri Feb 22, 2013 12:36 am
 
 Hi Apprentice, can you please include the maximum number of positions that can be opened at any time "selection"
-
 
 ---
 
@@ -53,7 +48,6 @@ I want to use a third Ma Slope to confirm entry, this to be set under the confir
 
 Thanks
 
-
 ---
 
 ## Re: MA Slope Oscilator Strategy
@@ -62,7 +56,6 @@ Thanks
 
 can it be able to have an option that two consecutive colors changed to open trade rather than only one color changed. i.e. like red red, green green, => confirmed. red green red , green red green => no action.
 
-
 ---
 
 ## Re: MA Slope Oscilator Strategy
@@ -70,7 +63,6 @@ can it be able to have an option that two consecutive colors changed to open tra
 **Apprentice** · Sat Feb 23, 2013 7:30 am
 
 Your requests are added to the development list.
-
 
 ---
 
@@ -81,7 +73,6 @@ Your requests are added to the development list.
 Hi Apprentice
 
 Any feedback on the requested changes?
-
 
 ---
 
@@ -94,7 +85,6 @@ Hi Apprentice
 Can you please make the following changes:
 
 I want to be able to reverse the signal of each Ma slope confirmation, therefore have a selection to reverse each Ma slope confirmation.
-
 
 ---
 
@@ -109,7 +99,6 @@ If i have 1 long positon , open 1 short position, effectively go to market neutr
 or
 If i have 1 long positon , close long, then open short.
 
-
 ---
 
 ## Re: MA Slope Oscilator Strategy
@@ -117,7 +106,6 @@ If i have 1 long positon , close long, then open short.
 **Ramp711** · Tue Mar 12, 2013 10:37 am
 
 More of, i want to reverse each signal individually, each signal can be reversed to give either a buy/sell depending on the reverse selector.
-
 
 ---
 
@@ -128,7 +116,6 @@ More of, i want to reverse each signal individually, each signal can be reversed
 Hi Apprentice
 
 Any progress on the requested changes?
-
 
 ---
 
@@ -159,7 +146,6 @@ Everything else should be left as per default
 
 Generates quite an incredible number of pips with fractional lots. Back test on current Yen period, 2013 quite different to 2012.
 
-
 ---
 
 ## Re: MA Slope Oscilator Strategy
@@ -169,8 +155,8 @@ Generates quite an incredible number of pips with fractional lots. Back test on 
 Hi Apprentice, i would like to add three more slope parameters, this is the current code for two slopes:
 Please help with the codingfor three more slopes
 
-Code: [Select all](https://fxcodebase.com/code/)
-`indicator1:update(core.UpdateLast);
+```lua
+indicator1:update(core.UpdateLast);
       indicator2:update(core.UpdateLast);
 
     if period < first +1  then
@@ -231,8 +217,8 @@ Code: [Select all](https://fxcodebase.com/code/)
                               if haveTrades("S") then
                                  exit("S");
                                  Signal ("Close Short");
-                              end`
-
+                              end
+```
 
 ---
 
@@ -242,7 +228,6 @@ Code: [Select all](https://fxcodebase.com/code/)
 
 Please explain ...
 U need MASO indicator/stratetgy, based on a 5 MA slopes...
-
 
 ---
 
@@ -254,7 +239,6 @@ Yes i need a MASO strategy based on 5 MA slopes. The one you have created alread
 
 Thanks in Advance
 
-
 ---
 
 ## Re: MA Slope Oscilator Strategy
@@ -263,7 +247,6 @@ Thanks in Advance
 
 Your request is added to the development list.
 
-
 ---
 
 ## Re: MA Slope Oscilator Strategy
@@ -271,7 +254,6 @@ Your request is added to the development list.
 **Apprentice** · Fri Dec 09, 2016 7:42 am
 
 Strategy was revised and updated.
-
 
 ---
 
@@ -289,7 +271,6 @@ can you add :
 3 Max number of position in one direction
 
 Thank you in advance for your work
-
 
 ---
 

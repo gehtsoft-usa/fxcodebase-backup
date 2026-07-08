@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=38&t=74021  
 > Forum: 38 · Topic 74021 · 14 post(s)
 
-
 ---
 
 ## Price_Break_EA_MT4
@@ -12,13 +11,10 @@
 
 ![682.png](images/152003/682.png)
 
-
-
 Based on the request.
 [https://fxcodebase.com/code/viewtopic.php?f=27&p=151939](https://fxcodebase.com/code/viewtopic.php?f=27&p=151939)
 
  [Price_Break_EA_MT4.mq4](files/152003/Price_Break_EA_MT4.mq4)
-
 
 ---
 
@@ -49,7 +45,6 @@ Magic Numbers?
 
 Thank you.
 
-
 ---
 
 ## Re: Price_Break_EA_MT4
@@ -59,7 +54,6 @@ Thank you.
 We have added your request to the development list.
 Development reference 747.
 
-
 ---
 
 ## Re: Price_Break_EA_MT4
@@ -67,7 +61,6 @@ Development reference 747.
 **Apprentice** · Fri Sep 01, 2023 2:55 pm
 
 Try it now.
-
 
 ---
 
@@ -90,7 +83,6 @@ Candle 3 - Similar to candle 2, it opened a buy when price hit previous candles 
 
 Thank You once again.
 
-
 ---
 
 ## Re: Price_Break_EA_MT4
@@ -99,7 +91,6 @@ Thank You once again.
 
 We have added your request to the development list.
 Development reference 825.
-
 
 ---
 
@@ -110,7 +101,6 @@ Development reference 825.
 [Price_Break_EA_MT4.mq4](files/152587/Price_Break_EA_MT4.mq4)
 
 Try his version.
-
 
 ---
 
@@ -128,11 +118,11 @@ Try his version.
 
 Hi Apprentice, thanks for this code, it's really well written, I'm learning a lot by studying it. I'm trying to make some changes and among these I would like to be able to set the take profit to 2 or 3 times the stop lose. I'm trying to add these lines, but I'm definitely doing something wrong, my programming skills are very poor. Any advice? cheers
 
-Code: [Select all](https://fxcodebase.com/code/)
-`case TwoTimesTheStopLose:
+```mql4
+case TwoTimesTheStopLose:
 levelTP = new Levels(new ByPipsFromCandle(_Symbol, side, 2*userSLpips, "TP", 0, 1));
-result = levelTP.calculateLevel();`
-
+result = levelTP.calculateLevel();
+```
 
 ---
 
@@ -142,7 +132,6 @@ result = levelTP.calculateLevel();`
 
 We have added your request to the development list.
 Development reference 152
-
 
 ---
 
@@ -154,7 +143,6 @@ Development reference 152
 
 Try this version.
 
-
 ---
 
 ## Re: Price_Break_EA_MT4
@@ -163,7 +151,6 @@ Try this version.
 
 Dear
 pls add TSL in this EA.
-
 
 ---
 
@@ -174,7 +161,6 @@ pls add TSL in this EA.
 We have added your request to the development list.
 Development reference 485
 
-
 ---
 
 ## Re: Price_Break_EA_MT4
@@ -182,7 +168,6 @@ Development reference 485
 **myhome13** · Tue Jun 25, 2024 11:11 pm
 
 sir any Update for reference 485
-
 
 ---
 

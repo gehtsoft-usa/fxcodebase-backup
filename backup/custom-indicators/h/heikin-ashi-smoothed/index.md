@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=606  
 > Forum: 17 · Topic 606 · 51 post(s)
 
-
 ---
 
 ## Heikin-Ashi Smoothed
@@ -11,8 +10,6 @@
 **Nikolay.Gekht** · Sun Apr 11, 2010 8:14 pm
 
 ![HASM.png](images/1075/HASM.png)
-
-
 
 The Heikin-Ashi smoothed indicator is similar to the regular Heikin-Ashi, but:
 
@@ -44,8 +41,6 @@ As the standard HA indicator, the HASM indicator result is a regular bar source,
 
 ![MTF MCP Heikin-Ashi Smoothed.png](images/1075/MTF%20MCP%20Heikin-Ashi%20Smoothed.png)
 
-
-
  [MTF MCP Heikin-Ashi Smoothed.lua](files/1075/MTF%20MCP%20Heikin-Ashi%20Smoothed.lua)
 
 Indicator will show the current direction of Heikin-Ashi Smoothed indicator for all selected time frames and currency pairs.
@@ -55,15 +50,12 @@ Active Cross is graphically presented.
 
 ![MTF MCP Heikin-Ashi Smoothed.png](images/1075/MTF%20MCP%20Heikin-Ashi%20Smoothed%20%282%29.png)
 
-
-
  [MTF MCP Heikin-Ashi Smoothed (2).lua](files/1075/MTF%20MCP%20Heikin-Ashi%20Smoothed%20%282%29.lua)
 
 A similar indicator can be found here.
 [viewtopic.php?f=17&t=63347&p=105655#p105655](https://fxcodebase.com/code/viewtopic.php?f=17&t=63347&p=105655#p105655)
 
 The indicator was revised and updated
-
 
 ---
 
@@ -83,8 +75,8 @@ Download:
 
 The original version does not use, in fact, the specified N1 and N2 parameters, so, therefore, the default Moving Average parameter is used. This update fixes this error.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Heikin-Ashi Smoothed");
     indicator:description("");
     indicator:requiredSource(core.Bar);
@@ -208,8 +200,8 @@ function Update(period, mode)
         high[period] = math.max(open[period], close[period], smihigh.DATA[period]);
         low[period] = math.min(open[period], close[period], smilow.DATA[period]);
     end
-end`
-
+end
+```
 
 ---
 
@@ -219,7 +211,6 @@ end`
 
 Thank you very much for spotting and fixing the problem.
 
-
 ---
 
 ## Re: Heikin-Ashi Smoothed
@@ -227,7 +218,6 @@ Thank you very much for spotting and fixing the problem.
 **kitar01** · Fri May 13, 2011 9:49 am
 
 all ok but this indicator cancel all the candles and do not allow to watch both...
-
 
 ---
 
@@ -239,7 +229,6 @@ ok it is working.
 would be better if we can have a separated colour option...
 thank you
 
-
 ---
 
 ## Re: Heikin-Ashi Smoothed
@@ -249,7 +238,6 @@ thank you
 Color option added.
 
  [HASM.lua](files/10600/HASM.lua)
-
 
 ---
 
@@ -266,7 +254,6 @@ I have only yesterday discoverd the joy of the Heikin-Ashi Smoothed Indicator.
 Many thanks and much love. XX
 lisa_baby_xx
 
-
 ---
 
 ## Re: Heikin-Ashi Smoothed
@@ -275,7 +262,6 @@ lisa_baby_xx
 
 Signal that you seek is available here.
 [viewtopic.php?f=29&t=2344&p=5013&hilit=Heikin+Ashi#p5013](https://fxcodebase.com/code/viewtopic.php?f=29&t=2344&p=5013&hilit=Heikin+Ashi#p5013)
-
 
 ---
 
@@ -286,7 +272,6 @@ Signal that you seek is available here.
 Thanks sweetie. XX.
 
 lisa_baby_xx
-
 
 ---
 
@@ -302,7 +287,6 @@ I would like to program this indcator into excel Can anyone please help me with 
 
 Many Thanks
 
-
 ---
 
 ## Re: Heikin-Ashi Smoothed
@@ -312,7 +296,6 @@ Many Thanks
 The formula of Heikin-Ashi Smoothed is in the top post.
 MVA is a simple moving average. Please see:
 [Simple Moving Average (MVA, SMA)](https://fxcodebase.com/wiki/index.php/Simple_Moving_Average_%28MVA,_SMA%29)
-
 
 ---
 
@@ -324,7 +307,6 @@ What does N1 and N2 refer to?
 
 Thanks
 
-
 ---
 
 ## Re: Heikin-Ashi Smoothed
@@ -333,7 +315,6 @@ Thanks
 
 N1 and N2 are variables, which retain information on the period for moving averages,
 that the user has selected.
-
 
 ---
 
@@ -347,7 +328,6 @@ Is there anyway to have this indicator show as hollow boxes rather than a solid 
 
 Thanks
 
-
 ---
 
 ## Re: Heikin-Ashi Smoothed
@@ -356,7 +336,6 @@ Thanks
 
 Unfortunately not.
 I will forward the request to the development team.
-
 
 ---
 
@@ -372,7 +351,6 @@ Download:
 
 For this indicator must be installed AVERAGES indicator ([viewtopic.php?f=17&t=2430](https://fxcodebase.com/code/viewtopic.php?f=17&t=2430)).
 
-
 ---
 
 ## Re: Heikin-Ashi Smoothed
@@ -387,7 +365,6 @@ I realize this would be 2 different indicators but this would help clean up the 
 
 Thanks
 
-
 ---
 
 ## Re: Heikin-Ashi Smoothed
@@ -396,7 +373,6 @@ Thanks
 
 Your request is added to the development list.
 When we find the time someone will help you.
-
 
 ---
 
@@ -413,7 +389,6 @@ See this version of indicator:
 
  [MTF MCP HASM.lua](files/26233/MTF%20MCP%20HASM.lua)
 
-
 ---
 
 ## Re: Heikin-Ashi Smoothed
@@ -421,7 +396,6 @@ See this version of indicator:
 **chriswant** · Sun Feb 19, 2012 12:29 am
 
 hello, This indicator is Great... would it be possible to add some future candle say 5-10, maybe in a different color, based on the past, maybe with a percentage of accuracy of just for its general movement
-
 
 ---
 
@@ -435,7 +409,6 @@ The development of this something takes time and money.
 I have people who have experience with such problems.
 However, no funding for such work.
 
-
 ---
 
 ## Re: Heikin-Ashi Smoothed
@@ -447,7 +420,6 @@ Hi
 I have tried to download this indicator. HASM.lau (after your posting of fixing 2 lines) and HASMTB.lau. But when I try to get it on my chart it doesn't change and comes up as a strategy? can someone please help me with what I am doing wrong.
 
 Cheers, Jane
-
 
 ---
 
@@ -470,7 +442,6 @@ Cheers, Jane
 
 Can you do a system with HASM3 BUY/SELL when in agreement to TSF (Data Source = HASM3 Close) GREEN/RED signal where exit is a disagreement? A Daily chart for NZDJPY looks amazing. I'd be curious to back test that. As long as there is no repainting or anything false, it's very nice.
 
-
 ---
 
 ## Re: Heikin-Ashi Smoothed
@@ -479,7 +450,6 @@ Can you do a system with HASM3 BUY/SELL when in agreement to TSF (Data Source = 
 
 Your request is added to the development list.
 
-
 ---
 
 ## Re: Heikin-Ashi Smoothed
@@ -487,7 +457,6 @@ Your request is added to the development list.
 **jdjones23** · Sun Jul 29, 2012 8:52 pm
 
 Is there a way to update this indicator so that you can select the color of the up and down candles. Right now, can only use green and red. Great indicator!.. thanks
-
 
 ---
 
@@ -501,7 +470,6 @@ Thanks!!
 
 [http://www.forex-tsd.com/blogs/newdigit ... -prev.html](http://www.forex-tsd.com/blogs/newdigital/1527-new-elite-section-indicators-swing-line-binary-2-indicators-prev.html)
 
-
 ---
 
 ## Re: Heikin-Ashi Smoothed
@@ -511,7 +479,6 @@ Thanks!!
 Do you have a description, formula or code for this indicator.
 Try my version.
 [viewtopic.php?f=17&t=22967](https://fxcodebase.com/code/viewtopic.php?f=17&t=22967)
-
 
 ---
 
@@ -527,7 +494,6 @@ The original HASM version has this already, so maybe it isn't a lot of work for 
 
 Thanks in advance.
 
-
 ---
 
 ## Re: Heikin-Ashi Smoothed
@@ -535,7 +501,6 @@ Thanks in advance.
 **Apprentice** · Tue Nov 06, 2012 7:21 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -546,7 +511,6 @@ Your request is added to the development list.
 Transparent Heikin Ashi Smoothed.lua Added.
 See First post in topic.
 
-
 ---
 
 ## Re: Heikin-Ashi Smoothed
@@ -554,7 +518,6 @@ See First post in topic.
 **Apprentice** · Fri Oct 17, 2014 11:54 am
 
 MTF MCP Heikin-Ashi Smoothed Added.
-
 
 ---
 
@@ -564,7 +527,6 @@ MTF MCP Heikin-Ashi Smoothed Added.
 
 hello ,
 could anyone help to develop a strategy for this indicator based on HA smothed bar color changing with the option of deferent timeframes please, thanks.
-
 
 ---
 
@@ -576,7 +538,6 @@ U can use Heiken_AshiSmoothed_N_Bars_Strategy.lua
 Set Count of bars Parameter to 1
 [viewtopic.php?f=31&t=3655](https://fxcodebase.com/code/viewtopic.php?f=31&t=3655)
 
-
 ---
 
 ## Re: Heikin-Ashi Smoothed
@@ -584,7 +545,6 @@ Set Count of bars Parameter to 1
 **Apprentice** · Wed Aug 19, 2015 4:10 am
 
 MTF MCP Heikin-Ashi Smoothed Added.
-
 
 ---
 
@@ -601,7 +561,6 @@ It's working well for me but I can't figure out how to get the bar graph represe
 Can you pls explain how to do this?
 
 Thanks for your time
-
 
 ---
 
@@ -628,7 +587,6 @@ i.e. Looking at the M5 chart, the H1 HA is bullish, but the H1 candle hasn't com
 
 Thanks
 
-
 ---
 
 ## Re: Heikin-Ashi Smoothed
@@ -640,7 +598,6 @@ Try MTF MCP Heikin-Ashi Smoothed (2).lua
 ALL_IN
 MTF MCP indicator will reflect change in HASM indicator.
 
-
 ---
 
 ## Re: Heikin-Ashi Smoothed
@@ -649,7 +606,6 @@ MTF MCP indicator will reflect change in HASM indicator.
 
 Thanks
 
-
 ---
 
 ## Re: Heikin-Ashi Smoothed
@@ -657,7 +613,6 @@ Thanks
 **jarmush** · Sun Oct 25, 2015 8:55 pm
 
 all_in: Yes, it can change colors. Heikin Ashi OPEN is allways in the middle of the previous Heikin Ashi candle, but other candles use most actual values so can change colors (including HA CLOSE - have a look at this: [http://www.technicalindicators.net/indi ... hi-candles](http://www.technicalindicators.net/indicators-technical-analysis/96-heikin-ashi-candles)). And the HA variations behave the same. Hope this helps.
-
 
 ---
 
@@ -672,7 +627,6 @@ close = MVA(MVA(OPEN, N1) + MVA(CLOSE, N1) + MVA(HIGH, N1) + MVA(LOW, N1)/ 2, N2
 high = MAX(open, close, MVA(HIGH, N1), N2)
 low = MIN(open, close, MVA(LOW, N1), N2)
 
-
 ---
 
 ## Re: Heikin-Ashi Smoothed
@@ -683,7 +637,6 @@ Hi, is it possible to display this over a candle chart, so that both this indica
 
 All the best.
 
-
 ---
 
 ## Re: Heikin-Ashi Smoothed
@@ -692,12 +645,9 @@ All the best.
 
 ![EURUSD m1 (01-20-2016 1113).png](images/104355/EURUSD%20m1%20%2801-20-2016%201113%29.png)
 
-
-
 Sure, try this version.
 
  [HASM.lua](files/104355/HASM.lua)
-
 
 ---
 
@@ -706,7 +656,6 @@ Sure, try this version.
 **Apprentice** · Mon May 16, 2016 10:06 am
 
 HASM with Alert.lua added.
-
 
 ---
 
@@ -718,7 +667,6 @@ Hello Apprentice, can we have a strategy that opens a trade automatically in the
 For example I choose to buy a certain pair, when The HASM closes the candle green we go long and when it closes red the trade automatically close and the opposite.
 Thanks
 
-
 ---
 
 ## Re: Heikin-Ashi Smoothed
@@ -727,7 +675,6 @@ Thanks
 
 You can use Heiken_AshiSmoothed_N_Bars_Strategy.lua
 [viewtopic.php?f=31&t=3655&p=12016&hilit=HASM#p12016](https://fxcodebase.com/code/viewtopic.php?f=31&t=3655&p=12016&hilit=HASM#p12016)
-
 
 ---
 
@@ -738,7 +685,6 @@ You can use Heiken_AshiSmoothed_N_Bars_Strategy.lua
 Try this version.
 [viewtopic.php?f=31&t=63566](https://fxcodebase.com/code/viewtopic.php?f=31&t=63566)
 
-
 ---
 
 ## Re: Heikin-Ashi Smoothed
@@ -748,7 +694,6 @@ Try this version.
 Do we have any strategy that uses the MTF MCP Heikin-Ashi Smoothed? I just need a reference to build my own.
 TIA
 
-
 ---
 
 ## Re: Heikin-Ashi Smoothed
@@ -757,7 +702,6 @@ TIA
 
 Here you can find a few of the MTF and MCP strategies templates.
 [viewtopic.php?f=28&t=2712](https://fxcodebase.com/code/viewtopic.php?f=28&t=2712)
-
 
 ---
 
@@ -781,7 +725,6 @@ I wanted to request an update to the implementation of the "On-Chart" smoothed h
 
 2. Can the indicator be coded into an oscillator, much like the MTF version, which would just show red or green when the colors of the heiken ashi candles change?
 
-
 ---
 
 ## Re: Heikin-Ashi Smoothed
@@ -793,7 +736,6 @@ Can you define the "On-Chart"
  About 2. request.
 Your request is added to the development list, Under Id Number 3821
  If someone is interested to do this task, please contact me.
-
 
 ---
 

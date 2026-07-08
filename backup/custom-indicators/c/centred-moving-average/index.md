@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=24476  
 > Forum: 17 · Topic 24476 · 49 post(s)
 
-
 ---
 
 ## Centred moving average
@@ -11,8 +10,6 @@
 **Apprentice** · Mon Oct 15, 2012 12:20 pm
 
 ![CMA.png](images/42118/CMA.png)
-
-
 
 This indicator is basically a simple moving average,
 if compared with the original, there is a notable reduction in lag time,
@@ -25,8 +22,6 @@ last Period/2 values are just a projection of possible future SMA values.
  
 
 ![CMA.png](images/42118/CMA%20%282%29.png)
-
-
 
  [CMAD.lua](files/42118/CMAD.lua)
 
@@ -44,12 +39,9 @@ CMAS = CMA-CMA[-1]
 
 ![CMAD Momentum.png](images/42118/CMAD%20Momentum.png)
 
-
-
 CMAD Momentum = CMAD- CMAD N Perods Ago
 
  [CMAD Momentum.lua](files/42118/CMAD%20Momentum.lua)
-
 
 ---
 
@@ -59,8 +51,6 @@ CMAD Momentum = CMAD- CMAD N Perods Ago
 
 ![Two Averages Oscillator.png](images/42174/Two%20Averages%20Oscillator.png)
 
-
-
 TAO= MA1-MA2
 
  [Two Averages Oscillator.lua](files/42174/Two%20Averages%20Oscillator.lua)
@@ -69,7 +59,6 @@ Centred moving average is one of the moving averages used.
 As Centered moving average repaint,
 when CMA is used, TAO will also repaint.
 However i have included Static / Dynamic Mode Selector also.
-
 
 ---
 
@@ -86,7 +75,6 @@ Thanks
 
 Lucmat
 
-
 ---
 
 ## Re: Centred moving average
@@ -95,7 +83,6 @@ Lucmat
 
 I post your simplified version in the Indicator Request subforum.
 I have not had time for you first integral version.
-
 
 ---
 
@@ -123,7 +110,6 @@ Hi Appendice, Hello, I would like to know if it is possible at first to have a p
 > when CMA is used, TAO will also repaint.
 > However i have included Static / Dynamic Mode Selector also.
 
-
 ---
 
 ## Re: Centred moving average
@@ -138,7 +124,6 @@ trading, in current (last) period is possible...
 But I guess with lot of changes in indications.
 Write trading algorithm conditions, we can try...
 
-
 ---
 
 ## Re: Centred moving average
@@ -147,8 +132,8 @@ Write trading algorithm conditions, we can try...
 
 Thank you Apprentice, I propose that (for short):
 
-Code: [Select all](https://fxcodebase.com/code/)
-`Value for CMA1 = N
+```
+Value for CMA1 = N
 Value for CMA2 = 2*N     ,       TAO1=CMA1-CMA2     
 Value for CMA3 = 4*N     ,       TAO2=CMA2-CMA3
 Value for CMA4 = 8*N     ,       TAO3=CMA3-CMA4
@@ -192,7 +177,8 @@ sell 2 lots
 Target = 2* G  - MAXIMUM
 Endif
 
-The same for long with condition ">" in place of "<", and C = 0  and  MINIMUM in place of MAXIMUM to calculate Target when buy 2 lots.`
+The same for long with condition ">" in place of "<", and C = 0  and  MINIMUM in place of MAXIMUM to calculate Target when buy 2 lots.
+```
 
 If you have any question don't hesitate to contact me.
 
@@ -207,7 +193,6 @@ David.
 > But I guess with lot of changes in indications.
 > Write trading algorithm conditions, we can try...
 
-
 ---
 
 ## Re: Centred moving average
@@ -215,7 +200,6 @@ David.
 **Davids0869** · Sun Nov 11, 2012 6:19 am
 
 Maybe there is a particular condition for the calculation of G (and of course the new target). It is a mobile point and I think that we could fix it when the price crosses G. At this moment there we shall have defined the new target of exit of the trade.
-
 
 ---
 
@@ -234,7 +218,6 @@ Type of projection: [listbox with the different kind of line]
 
 Thanks
 
-
 ---
 
 ## Re: Centred moving average
@@ -245,7 +228,6 @@ This is possible.
 But i will prefer different Color, not Style difference, compatibility issue,
 for line style i have to use two streams, not one as now.
 Is this satisfactory.
-
 
 ---
 
@@ -261,7 +243,6 @@ Is this satisfactory.
 
 Ok, no problem, it's ok too
 
-
 ---
 
 ## Re: Centred moving average
@@ -269,7 +250,6 @@ Ok, no problem, it's ok too
 **Apprentice** · Sun Nov 25, 2012 5:59 am
 
 Prediction Color Added.
-
 
 ---
 
@@ -295,7 +275,6 @@ Regards
 
 Salvatore
 
-
 ---
 
 ## Re: Centred moving average
@@ -303,7 +282,6 @@ Salvatore
 **Apprentice** · Sun Nov 25, 2012 11:12 am
 
 For CMA difference try Two Averages Oscillator.
-
 
 ---
 
@@ -321,7 +299,6 @@ Regards
 
 Salvatore
 
-
 ---
 
 ## Re: Centred moving average
@@ -329,7 +306,6 @@ Salvatore
 **Apprentice** · Sun Nov 25, 2012 2:52 pm
 
 Both Added to topmost post.
-
 
 ---
 
@@ -346,7 +322,6 @@ CMADSpeed= CMAD[]-CMAD[-1]
 Thanks:)
 
 (With this indicator you fulfill my request in this topic: [http://fxcodebase.com/code/viewtopic.php?f=27&t=24602&p=42392#p42392](https://fxcodebase.com/code/viewtopic.php?f=27&t=24602&p=42392#p42392))
-
 
 ---
 
@@ -374,7 +349,6 @@ Regards
 
 Salvatore
 
-
 ---
 
 ## Re: Centred moving average
@@ -385,7 +359,6 @@ Is not your fault.
 I have correct formula.
 Unfortunately I mix up the names.
 Corrected.
-
 
 ---
 
@@ -401,7 +374,6 @@ Just on thing:
 
 Id I put on CMAD 25 and 50 as periods it explode.. with other periods it work well
 
-
 ---
 
 ## Re: Centred moving average
@@ -414,7 +386,6 @@ Not a perfect solution, but better from older versions.
 In fact I have a problem with CMA, not with CMAD.
 All odd periods are not allowed.
 
-
 ---
 
 ## Re: Centred moving average
@@ -423,7 +394,6 @@ All odd periods are not allowed.
 
 CMA updated.
 
-
 ---
 
 ## Re: Centred moving average
@@ -431,7 +401,6 @@ CMA updated.
 **Apprentice** · Mon Nov 26, 2012 11:42 am
 
 Tigre3 try CMAD Momentum Indicator.
-
 
 ---
 
@@ -445,7 +414,6 @@ If I put as period 200 and 400 it work strange.
 
 On daily it works as I change from daily to h4 or h1 it explode...
 
-
 ---
 
 ## Re: Centred moving average
@@ -454,7 +422,6 @@ On daily it works as I change from daily to h4 or h1 it explode...
 
 New Version of CMA will fix things.
 Download it from top most post.
-
 
 ---
 
@@ -466,7 +433,6 @@ I've a problem with the CMAD..
 
 With 15 - 30 setting it shows an horizontal line
 
-
 ---
 
 ## Re: Centred moving average
@@ -475,7 +441,6 @@ With 15 - 30 setting it shows an horizontal line
 
 Try to installed a new version of CMA.bin.
 That should fix things.
-
 
 ---
 
@@ -499,7 +464,6 @@ David.
 >
 > Thanks
 
-
 ---
 
 ## Re: Centred moving average
@@ -514,7 +478,6 @@ David
 >
 > With 15 - 30 setting it shows an horizontal line
 
-
 ---
 
 ## Re: Centred moving average
@@ -528,7 +491,6 @@ Thanks
 
 Lucmat
 
-
 ---
 
 ## Re: Centred moving average
@@ -537,7 +499,6 @@ Lucmat
 
 Requested can be found here.
 [viewtopic.php?f=17&t=32423](https://fxcodebase.com/code/viewtopic.php?f=17&t=32423)
-
 
 ---
 
@@ -550,7 +511,6 @@ using a new scale on the left of the graph?
 
 thanks....
 
-
 ---
 
 ## Re: Centred moving average
@@ -558,7 +518,6 @@ thanks....
 **Apprentice** · Mon Mar 18, 2013 5:31 am
 
 You mean, to have both indicators on one chart simultaneously.
-
 
 ---
 
@@ -572,7 +531,6 @@ You mean, to have both indicators on one chart simultaneously.
 yes, and drawn in the same chart area index, like a Ema.
 would be much easier to use. in a single graph, there would be the representation of the cycle and of its speed...
 
-
 ---
 
 ## Re: Centred moving average
@@ -580,7 +538,6 @@ would be much easier to use. in a single graph, there would be the representatio
 **Apprentice** · Wed Mar 20, 2013 3:52 am
 
 Several indicators was updated.
-
 
 ---
 
@@ -590,7 +547,6 @@ Several indicators was updated.
 
 Support added for EMA, LWMA, TMA, SMMA, KAMA, VIDYA, WMA
 
-
 ---
 
 ## Re: Centred moving average
@@ -599,7 +555,6 @@ Support added for EMA, LWMA, TMA, SMMA, KAMA, VIDYA, WMA
 
 MQL4 version of Centred moving average: [http://www.fxcodebase.com/code/viewtopi ... 38&t=59119](http://www.fxcodebase.com/code/viewtopic.php?f=38&t=59119)
 
-
 ---
 
 ## Re: Centred moving average
@@ -607,7 +562,6 @@ MQL4 version of Centred moving average: [http://www.fxcodebase.com/code/viewtopi
 **virgilio** · Fri Nov 01, 2013 3:37 pm
 
 hello, I am not sure if this can even be done, but is it possible to have the CMA (Centred Moving Average) static without repainting? Any way at all?
-
 
 ---
 
@@ -619,7 +573,6 @@ Possible, but not practical.
 Because the historical and live calculations will then use different algorithm.
 And with this said, incomparable, with each other or with the moving average.
 
-
 ---
 
 ## Re: Centred moving average
@@ -627,7 +580,6 @@ And with this said, incomparable, with each other or with the moving average.
 **Apprentice** · Tue Jul 08, 2014 11:39 am
 
 CMAD Histogram.lua & CMAS Histogram.lua Added.
-
 
 ---
 
@@ -637,7 +589,6 @@ CMAD Histogram.lua & CMAS Histogram.lua Added.
 
 Minor Update.
 
-
 ---
 
 ## Re: Centred moving average
@@ -645,7 +596,6 @@ Minor Update.
 **Apprentice** · Wed Sep 06, 2017 5:13 am
 
 The indicator was revised and updated.
-
 
 ---
 
@@ -659,7 +609,6 @@ Where can I get CMA for meta trader 4? Could not find on mql4.
 
 Regards,
 
-
 ---
 
 ## Re: Centred moving average
@@ -672,7 +621,6 @@ I request to kindly make CMA for mq4. Indicator would be great. The good thing i
 
 Regards,
 
-
 ---
 
 ## Re: Centred moving average
@@ -680,7 +628,6 @@ Regards,
 **Apprentice** · Thu Nov 02, 2017 5:08 pm
 
 Your request is added to the development list under Id Number 3937
-
 
 ---
 
@@ -697,7 +644,6 @@ Your request is added to the development list under Id Number 3937
 
 MT4 version of CMA indicator: [viewtopic.php?f=38&t=65339](https://fxcodebase.com/code/viewtopic.php?f=38&t=65339)
 
-
 ---
 
 ## Re: Centred moving average
@@ -705,7 +651,6 @@ MT4 version of CMA indicator: [viewtopic.php?f=38&t=65339](https://fxcodebase.co
 **Apprentice** · Mon Apr 09, 2018 6:36 am
 
 The indicator was revised and updated.
-
 
 ---
 
@@ -723,7 +668,6 @@ I am very curious to see/understand your code to achieve this result.
 It will certainly be very instructive.
 
 Thank you in advance for your response.
-
 
 ---
 

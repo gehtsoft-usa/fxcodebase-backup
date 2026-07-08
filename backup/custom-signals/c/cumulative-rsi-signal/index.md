@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=29&t=1341  
 > Forum: 29 · Topic 1341 · 1 post(s)
 
-
 ---
 
 ## Cumulative RSI signal
@@ -25,16 +24,14 @@ The books reported that the strategy worked well on indexes in daily time frame.
 
 ![crsi_signal.png](images/2563/crsi_signal.png)
 
-
-
 Download:
 
  [CummulativeRSI_signal.lua](files/2563/CummulativeRSI_signal.lua)
 
 You must also download and install CummulativeRSI indicator: [viewtopic.php?f=17&t=1340](https://fxcodebase.com/code/viewtopic.php?f=17&t=1340)
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- strategy profile initialization routine
+```lua
+-- strategy profile initialization routine
 function Init()
     strategy:name("Cumulative RSI");
     strategy:description("The strategy described in Chapter 9 of Trading Strategies That Work by Larry Connors and Cesar Alvarez.");
@@ -130,4 +127,5 @@ function ExtUpdate(id, source, period)
     end
 end
 
-dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");`
+dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");
+```

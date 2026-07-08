@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=1719  
 > Forum: 17 · Topic 1719 · 11 post(s)
 
-
 ---
 
 ## Flat/Trend MACD indicator
@@ -11,8 +10,6 @@
 **Alexander.Gettinger** · Mon Aug 09, 2010 2:06 pm
 
 ![FlatTrend.png](images/3432/FlatTrend.png)
-
-
 
 The indicator formula is
 if SignalMACD<MACD and MACD>0 then indicator show up trend,
@@ -25,8 +22,6 @@ else indicator show flat.
 
 ![MTF MCP FlatTrend Heat Map.png](images/3432/MTF%20MCP%20FlatTrend%20Heat%20Map.png)
 
-
-
  [MTF MCP FlatTrend Heat Map.lua](files/3432/MTF%20MCP%20FlatTrend%20Heat%20Map.lua)
 
 MT4/MQ4 version
@@ -36,13 +31,10 @@ MT4/MQ4 version
 
 ![MTF MCP  FLAT TREND INDICATOR LIST.png](images/3432/MTF%20MCP%20FLAT%20TREND%20INDICATOR%20LIST.png)
 
-
-
  [MTF MCP FLAT TREND INDICATOR LIST.lua](files/3432/MTF%20MCP%20FLAT%20TREND%20INDICATOR%20LIST.lua)
 
 MT4/MQ4 version
 [viewtopic.php?f=38&t=65313&p=115739#p115739](https://fxcodebase.com/code/viewtopic.php?f=38&t=65313&p=115739#p115739)
-
 
 ---
 
@@ -56,10 +48,8 @@ And this indicator for higher timeframe.
 
 ![BF_FlatTrend.png](images/3433/BF_FlatTrend.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Bigger timeframe Flat/Trend indicator");
     indicator:description("");
     indicator:requiredSource(core.Bar);
@@ -274,10 +264,10 @@ function findDateFast(stream, date, precise)
             end
         end
     end
-end`
+end
+```
 
  [BF_FlatTrend.lua](files/3433/BF_FlatTrend.lua)
-
 
 ---
 
@@ -292,7 +282,6 @@ Thanks
 
 JC.
 
-
 ---
 
 ## Re: Flat/Trend MACD indicator
@@ -305,7 +294,6 @@ Your thoughts please.
 
 RJH
 
-
 ---
 
 ## Re: Flat/Trend MACD indicator
@@ -314,7 +302,6 @@ RJH
 
 MTF MCP FlatTrend Heat Map.lua Added
 FlatTrend.lua Update
-
 
 ---
 
@@ -328,7 +315,6 @@ CAN YOU CREAT MTF MCP LIST FLAT TREND INDICATOR.
 
 THANK YOU
 
-
 ---
 
 ## Re: Flat/Trend MACD indicator
@@ -336,7 +322,6 @@ THANK YOU
 **Apprentice** · Wed Feb 11, 2015 4:23 am
 
 MTF MCP FLAT TREND INDICATOR LIST Added.
-
 
 ---
 
@@ -358,7 +343,6 @@ ALL CURRENCY PAIR GRAB INDICATOR IS FOUND IN FOLLOWING PAGE
 
 [http://fxcodebase.com/code/viewtopic.ph ... RAB#p95491](https://fxcodebase.com/code/viewtopic.php?f=17&t=6256&p=95491&hilit=GRAB#p95491)
 
-
 ---
 
 ## Re: Flat/Trend MACD indicator
@@ -370,7 +354,6 @@ Your request is added to the development list.
 In the meantime, try update version.
 This will fix, presentation, if a small number of time frames is used.
 
-
 ---
 
 ## Re: Flat/Trend MACD indicator
@@ -378,7 +361,6 @@ This will fix, presentation, if a small number of time frames is used.
 **Apprentice** · Wed Nov 15, 2017 10:35 am
 
 The indicator was revised and updated.
-
 
 ---
 

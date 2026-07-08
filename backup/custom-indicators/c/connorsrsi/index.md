@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=62518  
 > Forum: 17 · Topic 62518 · 17 post(s)
 
-
 ---
 
 ## ConnorsRSI
@@ -11,8 +10,6 @@
 **Apprentice** · Tue Aug 11, 2015 3:40 am
 
 ![ConnorsRSI.png](images/101737/ConnorsRSI.png)
-
-
 
 ConnorsRSI(3,2,100) = [ RSI(Close,3) + RSI(UpDownDays,2) + PercentRank(percentMove,100) ] / 3
 
@@ -22,10 +19,7 @@ ConnorsRSI(3,2,100) = [ RSI(Close,3) + RSI(UpDownDays,2) + PercentRank(percentMo
 
 ![EURUSD H8 (10-10-2017 0947).png](images/101737/EURUSD%20H8%20%2810-10-2017%200947%29.png)
 
-
-
  [MTF MCP Connors RSI Heat Map.lua](files/101737/MTF%20MCP%20Connors%20RSI%20Heat%20Map.lua)
-
 
 ---
 
@@ -35,7 +29,6 @@ ConnorsRSI(3,2,100) = [ RSI(Close,3) + RSI(UpDownDays,2) + PercentRank(percentMo
 
 MQL4 version of Connors RSI oscillator: [viewtopic.php?f=38&t=62614](https://fxcodebase.com/code/viewtopic.php?f=38&t=62614).
 
-
 ---
 
 ## Re: ConnorsRSI
@@ -44,7 +37,6 @@ MQL4 version of Connors RSI oscillator: [viewtopic.php?f=38&t=62614](https://fxc
 
 The indicator was revised and updated.
 
-
 ---
 
 ## Re: ConnorsRSI
@@ -52,7 +44,6 @@ The indicator was revised and updated.
 **Apprentice** · Tue Oct 10, 2017 4:38 am
 
 MTF MCP Connors RSI Heat Map.lua added.
-
 
 ---
 
@@ -66,7 +57,6 @@ Can you add alert for this pattern in Connors RSI? Triangular divergence between
 
 ![879878.png](images/117989/879878.png)
 
-
 ---
 
 ## Re: ConnorsRSI
@@ -76,7 +66,6 @@ Can you add alert for this pattern in Connors RSI? Triangular divergence between
 Can you describe the alert logic with more details?
 The indicator was revised and updated.
 
-
 ---
 
 ## Re: ConnorsRSI
@@ -84,7 +73,6 @@ The indicator was revised and updated.
 **isamegrelo** · Sun Mar 04, 2018 8:28 am
 
 ![1258.png](images/118001/1258.png)
-
 
 ---
 
@@ -94,7 +82,6 @@ The indicator was revised and updated.
 
 ![1259.png](images/118002/1259.png)
 
-
 ---
 
 ## Re: ConnorsRSI
@@ -103,7 +90,6 @@ The indicator was revised and updated.
 
 If necessary, I can graphically describe in more detail
 
-
 ---
 
 ## Re: ConnorsRSI
@@ -111,7 +97,6 @@ If necessary, I can graphically describe in more detail
 **Apprentice** · Mon Mar 05, 2018 8:41 am
 
 Your request is added to the development list under Id Number 4059
-
 
 ---
 
@@ -123,7 +108,6 @@ Your request is added to the development list under Id Number 4059
 
 Done, but... there is something wrong. I didn't manage to find not a single instance on the chart where these conditions for the alert are met. All screenshot provided are from TradingView. Maybe we needs this alert based on different indicator?
 
-
 ---
 
 ## Re: ConnorsRSI
@@ -134,8 +118,8 @@ This is formula from Tradingview.
 
 Source: [https://www.tradingview.com/script/OD1o ... -RSI-Test/](https://www.tradingview.com/script/OD1odrK5-Connors-RSI-Test/)
 
-Code: [Select all](https://fxcodebase.com/code/)
-`//--study(title="Connors RSI")
+```
+//--study(title="Connors RSI")
 study("Connors RSI Test", shorttitle = "CRSI Test", overlay=false)
 
 //--------------- input parameters
@@ -173,8 +157,8 @@ fill(band1, band2)
 
 plotshape(sig1, style=shape.labeldown, size=size.tiny, location=location.top, color=red)
 plotshape(sig2, style=shape.labelup, size=size.tiny, location=location.bottom, color=blue)
-//--END`
-
+//--END
+```
 
 ---
 
@@ -183,7 +167,6 @@ plotshape(sig2, style=shape.labelup, size=size.tiny, location=location.bottom, c
 **Apprentice** · Fri Mar 09, 2018 6:34 am
 
 Your request is added to the development list under Id Number 4067
-
 
 ---
 
@@ -194,7 +177,6 @@ Your request is added to the development list under Id Number 4067
 [ConnorsRSI_with_alert.tradingview.lua](files/118121/ConnorsRSI_with_alert.tradingview.lua)
 
 Try this version.
-
 
 ---
 
@@ -208,7 +190,6 @@ why your version of Connors RSI is lagging?
 
 ![18828.jpg](images/118148/18828.jpg)
 
-
 ---
 
 ## Re: ConnorsRSI
@@ -216,7 +197,6 @@ why your version of Connors RSI is lagging?
 **Apprentice** · Tue Mar 13, 2018 6:50 am
 
 I'm not sure the code looks the same.
-
 
 ---
 

@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=38&t=69193  
 > Forum: 38 · Topic 69193 · 6 post(s)
 
-
 ---
 
 ## CycleIdentifier
@@ -12,13 +11,10 @@
 
 ![eurusd-h4-forex-capital-markets-4.png](images/130076/eurusd-h4-forex-capital-markets-4.png)
 
-
-
 Based on request.
 [viewtopic.php?f=27&t=69181](https://fxcodebase.com/code/viewtopic.php?f=27&t=69181)
 
  [CycleIdentifier.mq4](files/130076/CycleIdentifier.mq4)
-
 
 ---
 
@@ -47,16 +43,11 @@ but why are there so many signals?
 
 ![yours.png](images/130136/yours.png)
 
-
-
  
 
 ![origin.png](images/130136/origin.png)
 
-
-
 yet the parameters are the same
-
 
 ---
 
@@ -68,7 +59,6 @@ yet the parameters are the same
 
 Indicator is REALLY poorly written. Any modifications change its calculations.
 I have fixed some bugs, but I think the original calculates values not as intended
-
 
 ---
 
@@ -95,8 +85,8 @@ I haven’t tested yet because trading is not my job
 
 it gives this
 
-Code: [Select all](https://fxcodebase.com/code/)
-`#property copyright ""
+```mql4
+#property copyright ""
 #property link      ""
 //----
 #property indicator_separate_window
@@ -554,13 +544,14 @@ public:
    }
 };
 Signaler* signaler;
-//+------------------------------------------------------------------+`
+//+------------------------------------------------------------------+
+```
+
 //| |
 
  
 
 ![cycle.png](images/130281/cycle.png)
-
 
 ---
 
@@ -569,7 +560,6 @@ Signaler* signaler;
 **sydneygithinji** · Mon Mar 23, 2020 4:24 pm
 
 Best indicator ever when looking at the bigger picture in relation to market cycles
-
 
 ---
 

@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=896  
 > Forum: 17 · Topic 896 · 8 post(s)
 
-
 ---
 
 ## Momentum
@@ -25,10 +24,8 @@ CLOSE(i-N) — is the closing bar price N periods ago.
 
 ![Momentum.png](images/1638/Momentum.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Momentum");
     indicator:description("Momentum");
     indicator:requiredSource(core.Tick);
@@ -56,15 +53,14 @@ function Update(period, mode)
     if (period>first+N) then
      Momentum[period]=source[period]*100./source[period-N];
     end
-end`
+end
+```
 
  [Momentum.lua](files/1638/Momentum.lua)
 
  
 
 ![Momentum Price Overlay.png](images/1638/Momentum%20Price%20Overlay.png)
-
-
 
  [Momentum Price Overlay.lua](files/1638/Momentum%20Price%20Overlay.lua)
 
@@ -75,10 +71,7 @@ Simple momentum strategy.
 
 ![EURSEK H1 (02-15-2018 1140).png](images/1638/EURSEK%20H1%20%2802-15-2018%201140%29.png)
 
-
-
  [Detrended Momentum.lua](files/1638/Detrended%20Momentum.lua)
-
 
 ---
 
@@ -92,7 +85,6 @@ What about **CMO** oscillator in FXCM Marketscope ?
 Isn't it the same thing ?
 
 Regards,
-
 
 ---
 
@@ -118,7 +110,6 @@ s1 = mathex.sum(cmo1, p, period);
 s2 = mathex.sum(cmo2, p, period);
 CMO[period] = (s1 - s2) / (s1 + s2) * 100;
 
-
 ---
 
 ## Re: Momentum
@@ -127,7 +118,6 @@ CMO[period] = (s1 - s2) / (s1 + s2) * 100;
 
 So CMO isn't the old & classical Momentum known by every one ? It is another oscillator ?
 
-
 ---
 
 ## Re: Momentum
@@ -135,7 +125,6 @@ So CMO isn't the old & classical Momentum known by every one ? It is another osc
 **Apprentice** · Fri Dec 02, 2011 5:56 pm
 
 Yes, As the difference in the name suggests.
-
 
 ---
 
@@ -148,7 +137,6 @@ Is it possible to code a Momentum Price Overlay, Similar to RSI Price overlay, a
 Thanks,
 Xpertize Trading
 
-
 ---
 
 ## Re: Momentum
@@ -156,7 +144,6 @@ Xpertize Trading
 **Apprentice** · Sun Jun 07, 2015 3:38 am
 
 Momentum Price Overlay.lua Added.
-
 
 ---
 

@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=1169  
 > Forum: 17 · Topic 1169 · 7 post(s)
 
-
 ---
 
 ## ASCTrend indicator (Update)
@@ -16,14 +15,11 @@
 
 ![ASCTrend.png](images/2239/ASCTrend.png)
 
-
-
  [ASCTrend.lua](files/2239/ASCTrend.lua)
 
  [ASCTrendK.lua](files/2239/ASCTrendK.lua)
 
 The indicator was revised and updated
-
 
 ---
 
@@ -39,7 +35,6 @@ Thanks.
 
 bonnevie
 
-
 ---
 
 ## Re: ASCTrend indicator (Update)
@@ -47,7 +42,6 @@ bonnevie
 **Apprentice** · Mon Oct 11, 2010 11:40 pm
 
 Added to development cue.
-
 
 ---
 
@@ -58,8 +52,8 @@ Added to development cue.
 Indicator updated.
 Added dot mode.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("ASCTrend indicator");
     indicator:description("");
     indicator:requiredSource(core.Bar);
@@ -180,8 +174,8 @@ function Update(period, mode)
      end
 
     end
-end`
-
+end
+```
 
 ---
 
@@ -190,7 +184,6 @@ end`
 **Alexander.Gettinger** · Tue Nov 09, 2010 2:26 am
 
 Strategy on this indicator: [viewtopic.php?f=31&t=2633](https://fxcodebase.com/code/viewtopic.php?f=31&t=2633)
-
 
 ---
 
@@ -203,7 +196,6 @@ thank you for this indi, can you please develop
 "ASCTrend histogram 2TF" to use it with "Genesis System Heat Map"
 
 thank you
-
 
 ---
 

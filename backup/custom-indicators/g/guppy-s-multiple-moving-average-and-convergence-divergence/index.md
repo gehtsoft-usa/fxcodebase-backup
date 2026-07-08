@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=412  
 > Forum: 17 · Topic 412 · 61 post(s)
 
-
 ---
 
 ## Guppy's Multiple Moving Average and Convergence/Divergence
@@ -27,12 +26,10 @@ GMMACD = (s - f) / s * 100
 
 ![gmma.png](images/663/gmma.png)
 
-
-
 GMMA.lua
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Guppy's Multiple Moving Average");
     indicator:requiredSource(core.Tick);
     indicator:type(core.Indicator);
@@ -108,12 +105,13 @@ function Update(period)
     CalcEMA(9, 45, period);
     CalcEMA(10, 50, period);
     CalcEMA(11, 60, period);
-end`
+end
+```
 
 GMMACD.lua
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Guppy's Multiple Moving Average Convergence/Divergence");
     indicator:requiredSource(core.Tick);
     indicator:type(core.Oscillator);
@@ -149,7 +147,8 @@ function Update(period, mode)
             GMMA:getStream(9)[period] + GMMA:getStream(10)[period] + GMMA:getStream(11)[period];
         out[period] = (f - s) / s * 100;
     end
-end`
+end
+```
 
 Download:
 
@@ -163,8 +162,6 @@ Note: you must have GMMA.lua installed in order to use GMMACD.lua
 
 ![CGMMA.png](images/663/CGMMA.png)
 
-
-
 Version that allows you to define EMA periods.
 
  [CGMMA.lua](files/663/CGMMA.lua)
@@ -177,10 +174,7 @@ Note: you must have CGMMA.lua installed in order to use CGMMACD.lua
 
 ![EURUSD D1 (07-04-2016 0010).png](images/663/EURUSD%20D1%20%2807-04-2016%200010%29.png)
 
-
-
  [GMMACD Overlay.lua](files/663/GMMACD%20Overlay.lua)
-
 
 ---
 
@@ -191,7 +185,6 @@ Note: you must have CGMMA.lua installed in order to use CGMMACD.lua
 hi any chance for a signal when the oscilaltor crossess above/below the 0 line
 Thanks
 
-
 ---
 
 ## Re: Guppy's Multiple Moving Average and Convergence/Divergence
@@ -200,7 +193,6 @@ Thanks
 
 The signal can be found here
 [http://fxcodebase.com/code/viewtopic.php?f=29&t=1281#p2442](https://fxcodebase.com/code/viewtopic.php?f=29&t=1281#p2442)
-
 
 ---
 
@@ -216,7 +208,6 @@ Can someone, please, explain it to me how this GMMACD indicator works?
 
 Cheers
 
-
 ---
 
 ## Re: Guppy's Multiple Moving Average and Convergence/Divergence
@@ -225,7 +216,6 @@ Cheers
 
 As said in the first post GMMACD is the indicator which shows relationship between fast and slow moving averages of GMMA indicator. When the indicator is above zero, the sum of fast MA's is above the sum of slow MAs, when it is below zero - the fast MA's are below slow MA's. The using of the "cross zero" signal is similar to use of two MA intersection. When it goes above zero - it indicates the uptrend. When it goes below zero - it indicates the downtrend. Because, like any MA indicator is a bit inertial (i.e. it shows signal with a lag), the trend must be long enough to be successfully detected.
 
-
 ---
 
 ## Re: Guppy's Multiple Moving Average and Convergence/Divergence
@@ -233,7 +223,6 @@ As said in the first post GMMACD is the indicator which shows relationship betwe
 **Apprentice** · Tue Sep 21, 2010 4:15 pm
 
 GMMA Style Update
-
 
 ---
 
@@ -246,7 +235,6 @@ Could you possibly add a line following the ends of the bars of the histogram - 
 
 Cheers
 
-
 ---
 
 ## Re: Guppy's Multiple Moving Average and Convergence/Divergence
@@ -254,7 +242,6 @@ Cheers
 **Apprentice** · Fri Jan 13, 2012 3:48 am
 
 Your request is added to the developmental cue.
-
 
 ---
 
@@ -274,7 +261,6 @@ Could we please have the OPTION of changing the time frames for the EMA's used? 
 Thanks!
 sjc
 
-
 ---
 
 ## Re: Guppy's Multiple Moving Average and Convergence/Divergence
@@ -282,7 +268,6 @@ sjc
 **Apprentice** · Sun Jan 15, 2012 4:42 am
 
 Your request is added to the developmental cue.
-
 
 ---
 
@@ -301,7 +286,6 @@ Download:
 
  [GMMACD2.lua](files/23773/GMMACD2.lua)
 
-
 ---
 
 ## Re: Guppy's Multiple Moving Average and Convergence/Divergence
@@ -309,7 +293,6 @@ Download:
 **Jigit Jigit** · Fri Jan 20, 2012 6:15 am
 
 Thank you Alexander.
-
 
 ---
 
@@ -323,7 +306,6 @@ So the first couple of bars after crossing the 0 line could be e.g. gray.
 
 Thanks for all your great work!
 
-
 ---
 
 ## Re: Guppy's Multiple Moving Average and Convergence/Divergence
@@ -331,7 +313,6 @@ Thanks for all your great work!
 **Apprentice** · Fri Jan 27, 2012 6:17 pm
 
 Your request is added to the developmental cue.
-
 
 ---
 
@@ -350,7 +331,6 @@ This will likely prevent many losing trades triggered against the overal trend. 
 
 Great job as always.
 
-
 ---
 
 ## Re: Guppy's Multiple Moving Average and Convergence/Divergence
@@ -362,8 +342,8 @@ while waiting for my request (above) to be dealt with I've tried to modify the l
 
 What I'm trying to achieve is to make the indicator change its colour depending on its position against the zero line.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Guppy's Multiple Moving Average Convergence/Divergence with colouring");
     indicator:requiredSource(core.Tick);
     indicator:type(core.Oscillator);
@@ -407,10 +387,10 @@ function Update(period, mode)
         if out[period] > 0 then out1;
         elseif out[period] <0 then out2;
     end
-end`
+end
+```
 
 Cheers
-
 
 ---
 
@@ -423,7 +403,6 @@ I have add Coloring Option.
 
  [GMMACD.lua](files/24533/GMMACD.lua)
 
-
 ---
 
 ## Re: Guppy's Multiple Moving Average and Convergence/Divergence
@@ -432,7 +411,6 @@ I have add Coloring Option.
 
 Thank you Apprentice. It certainly does the trick.
 
-
 ---
 
 ## Re: Guppy's Multiple Moving Average and Convergence/Divergence
@@ -440,7 +418,6 @@ Thank you Apprentice. It certainly does the trick.
 **zmender** · Mon Feb 06, 2012 10:10 pm
 
 Would it be possible to have a multi frame (BF) version of this indicator?
-
 
 ---
 
@@ -451,7 +428,6 @@ Would it be possible to have a multi frame (BF) version of this indicator?
 You can choose the the bigger timeframe on the Data Source tab in the Indicator Properties dialog box.
 Please read also: [Applying other time frame indicator](http://www.fxcodebase.com/wiki/index.php/Applying_other_time_frame_indicator)
 
-
 ---
 
 ## Re: Guppy's Multiple Moving Average and Convergence/Divergence
@@ -460,7 +436,6 @@ Please read also: [Applying other time frame indicator](http://www.fxcodebase.co
 
 My Multi Time Frame, Multi Currency Pairs GMMACD may help you.
 [viewtopic.php?f=17&t=12958](https://fxcodebase.com/code/viewtopic.php?f=17&t=12958)
-
 
 ---
 
@@ -474,7 +449,6 @@ But is there away to through the ema lines into the future by using a prediction
 
 But Thank You agin for your Time
 
-
 ---
 
 ## Re: Guppy's Multiple Moving Average and Convergence/Divergence
@@ -487,7 +461,6 @@ I can compile something simple.
 But for an advanced algorithm, I should hire a colleague.
 Unfortunately he is not free.
 
-
 ---
 
 ## Re: Guppy's Multiple Moving Average and Convergence/Divergence
@@ -498,7 +471,6 @@ hi alexander
 
 can u add this indicator increase color1 decrease color2
 
-
 ---
 
 ## Re: Guppy's Multiple Moving Average and Convergence/Divergence
@@ -506,7 +478,6 @@ can u add this indicator increase color1 decrease color2
 **Apprentice** · Fri Mar 02, 2012 4:57 am
 
 Can you specify for which version.
-
 
 ---
 
@@ -520,10 +491,7 @@ Color Option Added.
 
 ![GMMACD Color.png](images/28938/GMMACD%20Color.png)
 
-
-
  [GMMACD Color.lua](files/28938/GMMACD%20Color.lua)
-
 
 ---
 
@@ -536,7 +504,6 @@ hi apprentice
 Can u add manually editable period of fast and slow ma's... (0-1000)
 please..this is very important for me
 
-
 ---
 
 ## Re: Guppy's Multiple Moving Average and Convergence/Divergence
@@ -548,7 +515,6 @@ please..this is very important for me
 1-1000 added.
 Unfortunately 0 is not possible
 
-
 ---
 
 ## Re: Guppy's Multiple Moving Average and Convergence/Divergence
@@ -556,7 +522,6 @@ Unfortunately 0 is not possible
 **cersoz** · Sat Apr 28, 2012 10:55 am
 
 where is new version? this is old version?
-
 
 ---
 
@@ -568,7 +533,6 @@ Hi aprentice
 
 still waiting your new version?
 
-
 ---
 
 ## Re: Guppy's Multiple Moving Average and Convergence/Divergence
@@ -579,7 +543,6 @@ Indicator is updated.
 Try to use difrent different computer,
 or web browser, delete web browser history / cache.
 
-
 ---
 
 ## Re: Guppy's Multiple Moving Average and Convergence/Divergence
@@ -588,7 +551,6 @@ or web browser, delete web browser history / cache.
 
 i tried 3 computers but still same old indicator..
 
-
 ---
 
 ## Re: Guppy's Multiple Moving Average and Convergence/Divergence
@@ -596,7 +558,6 @@ i tried 3 computers but still same old indicator..
 **Apprentice** · Wed May 02, 2012 3:48 pm
 
 I will send it by email...
-
 
 ---
 
@@ -610,7 +571,6 @@ i mean i want to can change all fast ma's( 3 5 8 10 12 15) and all slow ma's( 30
 
 not only signal ma
 
-
 ---
 
 ## Re: Guppy's Multiple Moving Average and Convergence/Divergence
@@ -618,7 +578,6 @@ not only signal ma
 **Apprentice** · Sun May 06, 2012 4:29 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -628,7 +587,6 @@ Your request is added to the development list.
 
 Requested can be found at Top Most post.
 
-
 ---
 
 ## Re: Guppy's Multiple Moving Average and Convergence/Divergence
@@ -636,7 +594,6 @@ Requested can be found at Top Most post.
 **cersoz** · Mon May 07, 2012 2:07 pm
 
 thanks for r effort... but i need color option like colour macd?
-
 
 ---
 
@@ -646,7 +603,6 @@ thanks for r effort... but i need color option like colour macd?
 
 Next time write a detailed specification.
 
-
 ---
 
 ## Re: Guppy's Multiple Moving Average and Convergence/Divergence
@@ -654,7 +610,6 @@ Next time write a detailed specification.
 **cersoz** · Thu May 10, 2012 1:40 pm
 
 can u add to cgmmacd some color style like " gmmacd color" indicator ? its would be great!...
-
 
 ---
 
@@ -664,7 +619,6 @@ can u add to cgmmacd some color style like " gmmacd color" indicator ? its would
 
 Your request is added to the development list.
 
-
 ---
 
 ## Re: Guppy's Multiple Moving Average and Convergence/Divergence
@@ -673,7 +627,6 @@ Your request is added to the development list.
 
 any progress about "customizable gmmacd colour" indicator?
 
-
 ---
 
 ## Re: Guppy's Multiple Moving Average and Convergence/Divergen
@@ -681,8 +634,6 @@ any progress about "customizable gmmacd colour" indicator?
 **Apprentice** · Fri Jun 22, 2012 1:56 am
 
 ![GMMACD Color.png](images/35884/GMMACD%20Color.png)
-
-
 
 I have added two algorithms,
 with and without the signal line.
@@ -696,10 +647,7 @@ Note: you must have GMMA.lua installed in order to use GMMACD Color.lua
 
 ![EURUSD m1 (01-08-2017 1125).png](images/35884/EURUSD%20m1%20%2801-08-2017%201125%29.png)
 
-
-
  [GMMACD Color Overlay.lua](files/35884/GMMACD%20Color%20Overlay.lua)
-
 
 ---
 
@@ -712,7 +660,6 @@ nice improvements but neither i dont have..
 ithink my english sux then u dont understand me...
 
 i wanna customizable moving averages but colour gmacd style indicator (like before u make one color cgmacd indicator)
-
 
 ---
 
@@ -729,7 +676,6 @@ Your assistance is most appreciated!
 Regards & Thanks,
 
 RJH
-
 
 ---
 
@@ -758,7 +704,6 @@ Could it be possible a MT4 version of GMMA and GMMACD?
 
 Thank you very much in advance.
 
-
 ---
 
 ## Re: Guppy's Multiple Moving Average and Convergence/Divergen
@@ -766,7 +711,6 @@ Thank you very much in advance.
 **Apprentice** · Sat May 11, 2013 2:12 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -777,7 +721,6 @@ Your request is added to the development list.
 GMMA can be found here.
 [viewtopic.php?f=38&t=37446](https://fxcodebase.com/code/viewtopic.php?f=38&t=37446)
 
-
 ---
 
 ## Re: Guppy's Multiple Moving Average and Convergence/Divergen
@@ -787,7 +730,6 @@ GMMA can be found here.
 GMMACD can be found here.
 [viewtopic.php?f=38&t=37446](https://fxcodebase.com/code/viewtopic.php?f=38&t=37446)
 
-
 ---
 
 ## Re: Guppy's Multiple Moving Average and Convergence/Divergen
@@ -795,7 +737,6 @@ GMMACD can be found here.
 **cccornesss** · Thu May 16, 2013 2:41 am
 
 That was quick! I really appreciate it, thank you very much!
-
 
 ---
 
@@ -807,7 +748,6 @@ Is there a strategy already made, or can we get one made for the Gmmacd?
 Preferably it would Buy on Green, Sell on Red, and close position on Grey.
 Would be much appreciated!
 
-
 ---
 
 ## Re: Guppy's Multiple Moving Average and Convergence/Divergen
@@ -816,7 +756,6 @@ Would be much appreciated!
 
 Strategy Based on GMMACD Color can be found here.
 [viewtopic.php?f=31&t=59829](https://fxcodebase.com/code/viewtopic.php?f=31&t=59829)
-
 
 ---
 
@@ -839,7 +778,6 @@ Exit short - Choose color#_
 
 Your consideration is appreciated.
 
-
 ---
 
 ## Re: Guppy's Multiple Moving Average and Convergence/Divergen
@@ -847,7 +785,6 @@ Your consideration is appreciated.
 **Apprentice** · Fri Apr 01, 2016 3:12 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -864,7 +801,6 @@ GMMACD Below Zero (Rising)
 
 Also, a divergence engine would be sweet!
 
-
 ---
 
 ## Re: Guppy's Multiple Moving Average and Convergence/Divergen
@@ -872,7 +808,6 @@ Also, a divergence engine would be sweet!
 **Apprentice** · Sat Jan 07, 2017 8:56 am
 
 GMMACD Overlay.lua added.
-
 
 ---
 
@@ -888,7 +823,6 @@ Thanks! I just noted one little issue. Although there is a neutral color paramet
 
 ![GMMACD OVERLAY.JPG](images/110391/GMMACD%20OVERLAY.JPG)
 
-
 ---
 
 ## Re: Guppy's Multiple Moving Average and Convergence/Divergen
@@ -897,7 +831,6 @@ Thanks! I just noted one little issue. Although there is a neutral color paramet
 
 GMMACD Color Overlay.lua added (5 page of topics.)
 
-
 ---
 
 ## Re: Guppy's Multiple Moving Average and Convergence/Divergen
@@ -905,7 +838,6 @@ GMMACD Color Overlay.lua added (5 page of topics.)
 **Apprentice** · Tue Apr 04, 2017 5:33 am
 
 Indicator was revised and updated.
-
 
 ---
 
@@ -917,7 +849,6 @@ Hi Apprentice,
 I would like to ask if it is feasible to build Guppy oscillator with one average calculated out of all Guppy's averages. I use Guppy oscillator on meta trader 4. I have founded it on meta trader forum Guppy Multiple Moving Average ([https://www.mql5.com/en/forum/172971/page](https://www.mql5.com/en/forum/172971/page) 4). I am looking for something similar.
 Kind regards, Bart
 
-
 ---
 
 ## Re: Guppy's Multiple Moving Average and Convergence/Divergen
@@ -926,7 +857,6 @@ Kind regards, Bart
 
 Try this version.
 [viewtopic.php?f=17&t=65023&p=114414#p114414](https://fxcodebase.com/code/viewtopic.php?f=17&t=65023&p=114414#p114414)
-
 
 ---
 

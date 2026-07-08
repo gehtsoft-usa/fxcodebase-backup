@@ -1,8 +1,198 @@
 # Populate the current offers from TS into Excel using DDE
 
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=4159  
-> Forum: 31 · Topic 4159 · 43 post(s)
+> Forum: 31 · Topic 4159 · 44 post(s)
 
+---
+
+## Populate the current offers from TS into Excel using DDE
+
+**Nikolay.Gekht** · Mon May 09, 2011 12:19 pm
+
+The DDE (Dynamic Data Exchange) is a windows service, which helps to populate the data from one application into another.
+
+To put data via DDE in excel, all you need is to enter the following formula into the excel cell:
+=A|B!C
+where
+A is a service name
+B is a topic
+and
+C is a value.
+
+So, all you need is a service which publish the current offer data via DDE.
+
+The Trading Station or Lua themselves do not support DDE, so you need an **extension module** for Lua which provides DDE services.
+
+I developed such extension, you must download and install it before using the DDE offers publishing strategy:
+
+ [ddeserver_lua.dll](files/10451/ddeserver_lua.dll)
+
+To install the extension module:
+1) Save the ddeserver_lua.dll file to your computer.
+2) Copy the file into:
+* `"C:\Program Files\Candleworks\FXTS2\"` folder if you use a 32 bit operating system
+or
+* `"C:\Program Files (x86)\Candleworks\FXTS2\"` folder if you use a 64 operating system
+
+That's all, the extension is ready to be used in this or other strategies.
+
+Now download and install (as described here on wiki: [http://fxcodebase.com/wiki/index.php/Cu ... arketscope](https://fxcodebase.com/wiki/index.php/Custom_Strategies:_How_To_Install_in_Marketscope)) the DDE_Offers.lua strategy:
+
+ [dde_offers.lua](files/10451/dde_offers.lua)
+
+Now you can launch DDE_Offers strategy and just watch the data in Excel (click on the image to see it in full size):
+
+ 
+
+![dde_offers.png](images/10451/dde_offers.png)
+
+Note 1: The strategy has just one parameter - the name of the service. Each DDE publishing strategy you are executing must have its unique name. However, you can run as many DDE publishing strategies as you need, just put the new service name every time when you start another one strategy.
+
+Note 2: The strategy populates the following data:
+
+1) =TS2OFFERS|OFFERS!LIST
+(if you changed the name of the service, use it instead of TS2OFFERS in the formulas!, for example is the service name you entered in the strategy parameters is MYOFFERS, the formula must be =MYOFFERS|OFFERS!LIST).
+
+The semicolon-separated list of the topics. A topic is created for each instrument you are subscribed. The non-character symbols (such as / (slash)) are replaced with an underscore. So, for example EUR/USD offer will be translated as EUR_USD topic.
+
+2) Each offer's topic has the following values:
+BID - current bid price
+ASK - current ask price
+TIME - date and time of the last price change.
+DIGITS - precision of the offer's prices.
+
+For example to get a bid price of the EUR/USD, you must enter:
+=TS2OFFERS|EUR_USD!BID
+
+3) Please note, that the date and time is populated as a number. But, Trading Station and Excel uses exactly the same date/time format, so all you need is to change the cell format to date/time (for example to m/d/yy hh:mm:ss), and the date/time will be displayed properly.
+
+4) The date/time is always in EST/EDT (New York) time zone
+
+5) The prices are updated every second.
+
+Additional Material:
+
+1) Source code of the strategy:
+
+```lua
+function Init()
+    strategy:name("DDE Offer")
+    strategy:description("Publishes Offers via DDE")
+
+    strategy.parameters:addString("SRV", "Service Name", "The service name must be unique amoung all running instances of the strategy", "TS2OFFERS");
+end
+
+require("ddeserver_lua");
+
+local dde_server;
+local ids = {};
+local timeid;
+
+function Prepare(onlyName)
+    instance:name(profile:id() .. "(" .. instance.parameters.SRV .. ")");
+    if onlyName then
+        return ;
+    end
+
+    -- start dde server
+    dde_server = ddeserver_lua.new(instance.parameters.SRV);
+   
+    local enum = core.host:findTable("offers"):enumerator();
+    local row, topic;
+    local offers, offer;
+    -- create topics
+    offers = "";
+    local ofr, val;
+    while true do
+        row = enum:next();
+        if row == nil then
+            break ;
+        end
+        topic = {};
+        offer = string.gsub(row.Instrument, "([^A-Za-z0-9])", "_");
+        offers = offers .. offer .. ";";
+
+        topic.id = dde_server:addTopic(offer);
+
+        topic.bid = dde_server:addValue(topic.id, "Bid");
+        topic.ask = dde_server:addValue(topic.id, "Ask");
+        topic.time = dde_server:addValue(topic.id, "Time");
+
+        val = dde_server:addValue(topic.id, "Digits");
+        dde_server:set(topic.id, val, row.Digits);
+        ids[row.Instrument] = topic;
+    end
+
+    ofr = dde_server:addTopic("OFFERS");
+    val = dde_server:addValue(ofr, "LIST");
+    dde_server:set(ofr, val, offers);
+
+    timerid = core.host:execute("setTimer", 1, 1);
+
+end
+
+function Update()
+end
+
+function AsyncOperationFinished(cookie, success, msg)
+    if cookie == 1 then
+        local enum = core.host:findTable("offers"):enumerator();
+        local row, topic;
+        -- create topics
+        while true do
+            row = enum:next();
+            if row == nil then
+                return ;
+            end
+            topic = ids[row.Instrument];
+            if topic ~= nil then
+                dde_server:set(topic.id, topic.bid, row.Bid);
+                dde_server:set(topic.id, topic.ask, row.Ask);
+                dde_server:set(topic.id, topic.time, row.Time);
+            end
+        end
+    end
+end
+
+function ReleaseInstance()
+    core.host:execute("killTimer", timerid);
+    dde_server:close();
+end
+```
+
+2) the source code of ddeserver_lua extension (Visual C++). Please note that you will need Indicore Integration SDK (see here: [http://fxcodebase.com/wiki/index.php/Ca ... grationSDK](https://fxcodebase.com/wiki/index.php/Category:IndicoreIntegrationSDK)) to compile that code.
+
+ [luadde.zip](files/10451/luadde.zip)
+
+3) How to use ddeserver_lua in your own strategy (or indicator)
+
+Step 1) Deploy ddeserver_lua.dll into the same folder where the application is deployed (for TS see instruction above, for Indicore SDK - deploy to `C:\Gehtsoft\IndicoreSDK\`, for your own application - put into the same folder where lua5.1.dll is located).
+
+Step 2) Add `require("ddeserver_lua");` before `Prepare()` function.
+
+Step 3) Declare a global variable for the server, e.g. local `dde_server` before `Prepare()` function.
+
+Step 4) In the `Prepare()` function, when `onlyName` parameter is `false`:
+a) create an instance of the dde server and give the service an unique name. This value shall be used as first part of the DDE reference, e.g. for the code below, all DDE references will be started with `MYSERVICENAME`.
+
+`dde_server = ddeserver_lua.new("MYSERVICE");`
+
+b) Register topic and value inside the topic, keep the identifiers of the topic and value for further usage:
+
+`topic = dde_server:addTopic("MYTOPIC");`
+`value = dde_server:addValue(topic, "MYVALUE");`
+
+where topic and value are global variables.
+
+Now, your value is available from Excel as =MYSERVICE|MYTOPIC!MYVALUE.
+
+Step 5). Set the value whereever you need.
+
+dde_server:set(topic, value, 12345);
+
+The value can be either a number or a string.
+
+Step 6) Implement `ReleaseInstance()` function and call `dde_server:close()` in this function.
 
 ---
 
@@ -25,7 +215,6 @@ Could you please provide for Access to the following Info:
 
 Thank You ...
 
-
 ---
 
 ## Re: Populate the current offers from TS into Excel using DDE
@@ -35,7 +224,6 @@ Thank You ...
 It would be really great if we can access to this information asked by ancient-school.
 
 Thanks
-
 
 ---
 
@@ -66,7 +254,6 @@ For example to get a Gross P/L for account 01380757, you must enter:
 
 Also in the attachment you can find the modified "dde_offers.lua" which provides access to pip cost, high and low.
 
-
 ---
 
 ## Re: Populate the current offers from TS into Excel using DDE
@@ -87,7 +274,6 @@ etc.
 Is there anyway of further developing this tool in order to allow data to be grabbed from the charting package Marketscope 2.0 ? This would allow you to grab data from any indicator installed on the charting package.
 
 Thanks for the great work guys!
-
 
 ---
 
@@ -114,7 +300,6 @@ By the way, currently Bid/Ask prices are available through the dde_offers.lua st
 
 Please explain which data you would like to get. Is this just current indicator value or the last N indicator values?
 
-
 ---
 
 ## Re: Populate the current offers from TS into Excel using DDE
@@ -124,7 +309,6 @@ Please explain which data you would like to get. Is this just current indicator 
 Would it also be possible to do the reverse?
 
 More specifically, I want to maintain historical database of SSI that is published on dailyfx+. Have tradestation pull in the data from excel and plot it up as an indicator.
-
 
 ---
 
@@ -136,7 +320,6 @@ Could anyone give me an example of how to populate data from excel into Merketsc
 
 cheers.
 
-
 ---
 
 ## Re: Populate the current offers from TS into Excel using DDE
@@ -145,7 +328,6 @@ cheers.
 
 Is it possible to load historical prices into excel with this strategy? Right now, I manually load prices into excel at the end of the day.
 
-
 ---
 
 ## Re: Populate the current offers from TS into Excel using DDE
@@ -153,7 +335,6 @@ Is it possible to load historical prices into excel with this strategy? Right no
 **sunshine** · Tue Mar 26, 2013 8:25 am
 
 Yes, it should be possible. I have forwarded the issue to the developers. I hope they will prepare the example.
-
 
 ---
 
@@ -165,7 +346,6 @@ Yes, it should be possible. I have forwarded the issue to the developers. I hope
 > Is it possible to load historical prices into excel with this strategy? Right now, I manually load prices into excel at the end of the day.
 
 This sample will write "yyyy-m-d.csv" file into the TS folder daily (not DDE is needed).
-
 
 ---
 
@@ -211,7 +391,6 @@ and it didn't work.
 
 So are there other topics and values available, or we can only access the ones in dde_offers_adv.lua and in dde_accounts.lua?
 
-
 ---
 
 ## Re: Populate the current offers from TS into Excel using DDE
@@ -221,7 +400,6 @@ So are there other topics and values available, or we can only access the ones i
 I know it's an old thread but this has given me some brilliant information and resource - thank you!
 It's great to be able to access live Account and Offers data directly in Excel.
 The only thing I'm missing is the ability to get information from the TS2 Orders into Excel - can anyone help with that? My programming skills don't include the ability I'm afraid.
-
 
 ---
 
@@ -235,7 +413,6 @@ Could you please explain what do you want to get in Excel for Orders? Using this
 
 Alexey
 
-
 ---
 
 ## Re: Populate the current offers from TS into Excel using DDE
@@ -247,7 +424,6 @@ I understand that this is an old threat...but this is NIZE.
 I was just wondering how can the above be used to get OHLC for 5 min bars?
 Can this be done and how...thanks
 
-
 ---
 
 ## Re: Populate the current offers from TS into Excel using DDE
@@ -258,7 +434,6 @@ Hi, congok
 
 Sorry but I don't understand what do want to get. Do you want to get a file with m5 bars OHLC? Or do you want to use DDE somehow? Please clarify your needs.
 
-
 ---
 
 ## Re: Populate the current offers from TS into Excel using DDE
@@ -267,7 +442,6 @@ Sorry but I don't understand what do want to get. Do you want to get a file with
 
 What i would like to have is the following:
 having excel printing OHLC every 5 min during live market...Maybe this might not be possible via DDE...not very familiar...or you may guide me how to record the data coming in and then getting the High and Low of the last 5 min...i hope this is clearer.
-
 
 ---
 
@@ -285,7 +459,6 @@ Sorry for delay. I missed your post. There are more questions.
 
 Alexey
 
-
 ---
 
 ## Re: Populate the current offers from TS into Excel using DDE
@@ -293,7 +466,6 @@ Alexey
 **Apprentice** · Mon Dec 12, 2016 3:51 pm
 
 Strategy was revised and updated.
-
 
 ---
 
@@ -306,7 +478,6 @@ Hello there guys, I'm having some trouble to connect DDE with FXCM Trading Stati
 do you guys know how to fix that?
 my best regards
 
-
 ---
 
 ## Re: Populate the current offers from TS into Excel using DDE
@@ -314,7 +485,6 @@ my best regards
 **steveped** · Fri Sep 21, 2018 9:47 am
 
 Hi guys, what's the code for getting Rollover values? I mean, =TS2OFFERS|EUR_USD!??? Thanks
-
 
 ---
 
@@ -325,7 +495,6 @@ Hi guys, what's the code for getting Rollover values? I mean, =TS2OFFERS|EUR_USD
 IntrS = core.host:findTable("offers"):find("Instrument", source:instrument()).IntrS;
  IntrB = core.host:findTable("offers"):find("Instrument", source:instrument()).IntrB;
 
-
 ---
 
 ## Re: Populate the current offers from TS into Excel using DDE
@@ -333,7 +502,6 @@ IntrS = core.host:findTable("offers"):find("Instrument", source:instrument()).In
 **steveped** · Fri Nov 16, 2018 1:35 pm
 
 Unfortunately If I enter =TS2OFFERS|EUR_USD!IntrS or =TS2OFFERS|EUR_USD!IntrB I receive an errore message: #name? Any suggestions?
-
 
 ---
 
@@ -345,7 +513,6 @@ Try this version.
 local InstrumentName="EUR/USD"
 IntrS = core.host:findTable("offers"):find("Instrument", InstrumentName).IntrS;
 IntrB = core.host:findTable("offers"):find("Instrument", InstrumentName).IntrB;
-
 
 ---
 
@@ -360,7 +527,6 @@ Is there a way to export Live trade-station strategy alerts to excel ?
 Regards,
 Santosh.
 
-
 ---
 
 ## Re: Populate the current offers from TS into Excel using DDE
@@ -370,7 +536,6 @@ Santosh.
 Try these versions.
 [viewtopic.php?f=17&t=66854](https://fxcodebase.com/code/viewtopic.php?f=17&t=66854)
 [viewtopic.php?f=17&t=4685&hilit=csv&start=110](https://fxcodebase.com/code/viewtopic.php?f=17&t=4685&hilit=csv&start=110)
-
 
 ---
 
@@ -385,7 +550,6 @@ Can we export Live text alerts from a strategy.lua file which is running in trad
 Regards,
 Santosh.
 
-
 ---
 
 ## Re: Populate the current offers from TS into Excel using DDE
@@ -398,7 +562,6 @@ Because i am to trying export all live tradestation alerts of the strategy that 
 
 Is there anyone who can help me in this task ?
 
-
 ---
 
 ## Re: Populate the current offers from TS into Excel using DDE
@@ -407,7 +570,6 @@ Is there anyone who can help me in this task ?
 
 Sure.
 Can you give me an actual example, so we can code this for you?
-
 
 ---
 
@@ -430,7 +592,6 @@ Hope its clear now ?
 Regards ,
 SANTOSH.
 
-
 ---
 
 ## Re: Populate the current offers from TS into Excel using DDE
@@ -439,7 +600,6 @@ SANTOSH.
 
 Your request is added to the development list under Id Number 4335
 
-
 ---
 
 ## Re: Populate the current offers from TS into Excel using DDE
@@ -447,7 +607,6 @@ Your request is added to the development list under Id Number 4335
 **SANTOSH** · Sun Dec 02, 2018 5:18 am
 
 Any Progress?
-
 
 ---
 
@@ -458,7 +617,6 @@ Any Progress?
 Try this version.
 [viewtopic.php?f=17&t=67053](https://fxcodebase.com/code/viewtopic.php?f=17&t=67053)
 
-
 ---
 
 ## Re: Populate the current offers from TS into Excel using DDE
@@ -468,7 +626,6 @@ Try this version.
 Hi ,
 Can it be made for any strategy (universal) ?
 
-
 ---
 
 ## Re: Populate the current offers from TS into Excel using DDE
@@ -477,7 +634,6 @@ Can it be made for any strategy (universal) ?
 
 Will suggest it to TS development team.
 For now, it will have to be added, coded in a particular strategy.
-
 
 ---
 
@@ -496,7 +652,6 @@ Will be nice to see all alerts in excel
 
 Regards,
 Santosh.
-
 
 ---
 
@@ -523,7 +678,6 @@ Santosh.
 
 Still awaiting?
 
-
 ---
 
 ## Re: Populate the current offers from TS into Excel using DDE
@@ -542,7 +696,6 @@ Like just a provision to add any strategy in the menu option , then it's alerts 
 
 Regards ,
 Santosh Sahu.
-
 
 ---
 
@@ -563,7 +716,6 @@ It's like the menu should have an option to import any strategy file , so that t
 Regards ,
 Santosh Sahu.
 
-
 ---
 
 ## Re: Populate the current offers from TS into Excel using DDE
@@ -576,7 +728,6 @@ This integration is a great development for mankind.
 
 Blessed is the Apprentice,
 
-
 ---
 
 ## Re: Populate the current offers from TS into Excel using DDE
@@ -586,7 +737,6 @@ Blessed is the Apprentice,
 My apologies,
 
 Here is the attachment.
-
 
 ---
 
@@ -600,7 +750,6 @@ Here is the attachment.
 > Here is the attachment.
 
 This comment was supposed to be on the topic [https://fxcodebase.com/code/viewtopic.php?f=17&t=34200](https://fxcodebase.com/code/viewtopic.php?f=17&t=34200)
-
 
 ---
 
@@ -633,7 +782,6 @@ Santosh .
 >
 > Regards ,
 > Santosh Sahu.
-
 
 ---
 

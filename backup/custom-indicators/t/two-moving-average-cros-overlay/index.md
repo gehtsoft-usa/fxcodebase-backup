@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=2385  
 > Forum: 17 · Topic 2385 · 13 post(s)
 
-
 ---
 
 ## Two Moving Average CROS Overlay
@@ -11,8 +10,6 @@
 **Apprentice** · Tue Oct 12, 2010 11:55 am
 
 ![TWO_MA_ CROS_Overlay.png](images/5148/TWO_MA_%20CROS_Overlay.png)
-
-
 
 When the shorter moving average is above the long, Candles are Green
 And vice versa.
@@ -23,7 +20,6 @@ The indicator was revised and updated
 MT4/MQ4 version
 [viewtopic.php?f=38&t=66150](https://fxcodebase.com/code/viewtopic.php?f=38&t=66150)
 
-
 ---
 
 ## Re: Two Moving Average CROS Overlay
@@ -32,7 +28,6 @@ MT4/MQ4 version
 
 Could you possibly add VAMA to this indicator, please?
 
-
 ---
 
 ## Re: Two Moving Average CROS Overlay
@@ -40,7 +35,6 @@ Could you possibly add VAMA to this indicator, please?
 **Apprentice** · Sun Feb 05, 2012 2:55 am
 
 I can, I will.
-
 
 ---
 
@@ -52,8 +46,8 @@ Thanks a million Apprentice. I'll be much obliged.
 
 Also, while you'll be at it, perhaps you could add VAMA option to the existing MA cross signal?
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     strategy:name(resources:get("R_Name"));
     strategy:description(resources:get("R_Description"));
     strategy:setTag("group", "Moving Averages");
@@ -164,8 +158,8 @@ function ExtUpdate(id, source, period)
    end
 end
 
-dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");`
-
+dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");
+```
 
 ---
 
@@ -176,7 +170,6 @@ dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");`
 VAMA Average Added.
 
 As for MA cross signal This is standard MA cross signal?
-
 
 ---
 
@@ -193,7 +186,6 @@ But I would be happy with any signal alerting me of desired VAMA crossings.
 
 Cheers
 
-
 ---
 
 ## Re: Two Moving Average CROS Overlay
@@ -206,7 +198,6 @@ but could you please add colour selection to the Two Moving Average Cross Overla
 
 Thanks a million.
 
-
 ---
 
 ## Re: Two Moving Average CROS Overlay
@@ -215,7 +206,6 @@ Thanks a million.
 
 Color option Added.
 
-
 ---
 
 ## Re: Two Moving Average CROS Overlay
@@ -223,7 +213,6 @@ Color option Added.
 **Apprentice** · Sun Mar 26, 2017 4:29 pm
 
 Indicator was revised and updated.
-
 
 ---
 
@@ -235,7 +224,6 @@ Hi, Apprentice
 I have a issue. Maybe you can help me? I tried to add indicator to the chart, but error appears.
 Not sure why?
 
-
 ---
 
 ## Re: Two Moving Average CROS Overlay
@@ -245,7 +233,6 @@ Not sure why?
 Your request is added to the development list.
 Development reference 805.
 
-
 ---
 
 ## Re: Two Moving Average CROS Overlay
@@ -253,7 +240,6 @@ Development reference 805.
 **Apprentice** · Wed Mar 04, 2020 5:59 am
 
 Try it now.
-
 
 ---
 

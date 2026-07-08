@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=2231  
 > Forum: 17 · Topic 2231 · 32 post(s)
 
-
 ---
 
 ## Non-Lag Moving Average
@@ -16,8 +15,6 @@
 
 ![NonLagMA.png](images/4663/NonLagMA.png)
 
-
-
  [NonLagMA.lua](files/4663/NonLagMA.lua)
 
  [SSNonLagMA.lua](files/4663/SSNonLagMA.lua)
@@ -26,7 +23,6 @@
 
 The indicator was revised and updated
 
-
 ---
 
 ## Re: Non-Lag Moving Average
@@ -34,7 +30,6 @@ The indicator was revised and updated
 **colddog** · Mon Sep 20, 2010 11:26 pm
 
 Thanks so much for your help!
-
 
 ---
 
@@ -46,7 +41,6 @@ Hi,
 
 just wondering if its possible to include an option which changes the width of the line being drawn? so that i can make it thicker?
 
-
 ---
 
 ## Re: Non-Lag Moving Average
@@ -54,7 +48,6 @@ just wondering if its possible to include an option which changes the width of t
 **Apprentice** · Wed Sep 22, 2010 11:55 am
 
 Added to development cue.
-
 
 ---
 
@@ -65,8 +58,8 @@ Added to development cue.
 Update Non-Lag Moving Average.
 Added line styles.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("NonLagMA indicator");
     indicator:description("NonLagMA indicator");
     indicator:requiredSource(core.Tick);
@@ -172,8 +165,8 @@ function Update(period, mode)
      end
 
     end
-end`
-
+end
+```
 
 ---
 
@@ -184,7 +177,6 @@ end`
 [NonLagMA.lua](files/5455/NonLagMA.lua)
 
 Single Line Option Added, Needed for compatibility with some indicators, signals.
-
 
 ---
 
@@ -203,7 +195,6 @@ Once I load 10 of them they seem to kill Marketscope, it literally freezes.
 I have already posted a request for a multiple non-lag indicator.
 Do you think multiple non-lag MAs would work better if made into one indicator? Would it be easier for Marketscope to load?
 
-
 ---
 
 ## Re: Non-Lag Moving Average
@@ -211,7 +202,6 @@ Do you think multiple non-lag MAs would work better if made into one indicator? 
 **thejesters1** · Mon Nov 01, 2010 3:02 am
 
 a signal for this would be great. thanks
-
 
 ---
 
@@ -221,7 +211,6 @@ a signal for this would be great. thanks
 
 Added to developmental cue.
 
-
 ---
 
 ## Re: Non-Lag Moving Average
@@ -230,8 +219,8 @@ Added to developmental cue.
 
 Indicator updated. Added non-color mode.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("NonLagMA indicator");
     indicator:description("NonLagMA indicator");
     indicator:requiredSource(core.Tick);
@@ -361,8 +350,8 @@ function Update(period, mode)
      end
 
     end
-end`
-
+end
+```
 
 ---
 
@@ -372,7 +361,6 @@ end`
 
 Strategy on this indicator: [viewtopic.php?f=31&t=2632](https://fxcodebase.com/code/viewtopic.php?f=31&t=2632)
 
-
 ---
 
 ## Re: Non-Lag Moving Average
@@ -380,7 +368,6 @@ Strategy on this indicator: [viewtopic.php?f=31&t=2632](https://fxcodebase.com/c
 **Fortunelost** · Thu Feb 03, 2011 11:27 am
 
 Sorry ignore past post, I note what I have suggested is already available. thanks.
-
 
 ---
 
@@ -397,7 +384,6 @@ Great work on all these indicators!
 Thanks,
 G
 
-
 ---
 
 ## Re: Non-Lag Moving Average
@@ -405,7 +391,6 @@ G
 **Apprentice** · Sat Apr 09, 2011 5:36 pm
 
 Added to developmental cue.
-
 
 ---
 
@@ -415,7 +400,6 @@ Added to developmental cue.
 
 Please, see this universal indicator: [viewtopic.php?f=17&t=4048](https://fxcodebase.com/code/viewtopic.php?f=17&t=4048)
 
-
 ---
 
 ## Re: Non-Lag Moving Average
@@ -423,7 +407,6 @@ Please, see this universal indicator: [viewtopic.php?f=17&t=4048](https://fxcode
 **Giantball** · Fri Apr 29, 2011 5:11 pm
 
 I added the NonLag thru BF indicator, but it doesn't work.
-
 
 ---
 
@@ -438,7 +421,6 @@ I was wondering if the BF non-lag will be created soon? Thank you for the great 
 Best regards,
 G
 
-
 ---
 
 ## Re: Non-Lag Moving Average
@@ -448,7 +430,6 @@ G
 Alex is committed to this task.
 I'll ask him.
 
-
 ---
 
 ## Re: Non-Lag Moving Average
@@ -456,7 +437,6 @@ I'll ask him.
 **Alexander.Gettinger** · Mon Jun 06, 2011 2:54 am
 
 I work on it.
-
 
 ---
 
@@ -466,11 +446,8 @@ I work on it.
 
 ![untitled2.PNG](images/19115/untitled2.PNG)
 
-
-
 Bigger time frame version is now unnecessary.
 It is possible to have this, by changing the time frame of the data source.
-
 
 ---
 
@@ -479,7 +456,6 @@ It is possible to have this, by changing the time frame of the data source.
 **Apprentice** · Sun Mar 19, 2017 11:00 am
 
 Indicator was revised and updated.
-
 
 ---
 
@@ -491,7 +467,6 @@ Hello Apprentice,
 
 if you please, could we have price overlay for NonLagMA.lua with my appreciation.
 
-
 ---
 
 ## Re: Non-Lag Moving Average
@@ -499,7 +474,6 @@ if you please, could we have price overlay for NonLagMA.lua with my appreciation
 **Apprentice** · Wed Jul 18, 2018 7:31 am
 
 NonLagMA Overlay.lua added.
-
 
 ---
 
@@ -511,7 +485,6 @@ Hello Apprentice,
 
 if you please, is it possible to add another method of price overlay for NonLagMA Overlay.lua based on line color change and let the user to select between slope or line color change overlay with my appreciation.
 
-
 ---
 
 ## Re: Non-Lag Moving Average
@@ -519,7 +492,6 @@ if you please, is it possible to add another method of price overlay for NonLagM
 **Apprentice** · Tue Jul 24, 2018 8:39 am
 
 Your request is added to the development list under Id Number 4196
-
 
 ---
 
@@ -531,7 +503,6 @@ Hello Apprentice,
 
 if you please, is it possible to add another version of price overlay for NonLagMA.lua based on line color mode change cause the one that we have already is based on line slope overlay but what i need is to overlay the price candles according to line color mode changing with my highly appreciation.
 
-
 ---
 
 ## Re: Non-Lag Moving Average
@@ -539,7 +510,6 @@ if you please, is it possible to add another version of price overlay for NonLag
 **Apprentice** · Fri Jan 18, 2019 5:43 am
 
 Your request is added to the development list under Id Number 4432
-
 
 ---
 
@@ -550,7 +520,6 @@ Your request is added to the development list under Id Number 4432
 Please try this indicator:
 
  [NonLagMA Overlay2.lua](files/124036/NonLagMA%20Overlay2.lua)
-
 
 ---
 
@@ -564,7 +533,6 @@ Please can you added a Non-Lag Triangular Moving Average (TMA)
 
 Thank you very much :) !
 
-
 ---
 
 ## Re: Non-Lag Moving Average
@@ -574,7 +542,6 @@ Thank you very much :) !
 Your request is added to the development list.
 Development reference 131.
 
-
 ---
 
 ## Re: Non-Lag Moving Average
@@ -583,7 +550,6 @@ Development reference 131.
 
 You can use Averages.lua
 [https://fxcodebase.com/code/viewtopic.php?f=17&t=2430](https://fxcodebase.com/code/viewtopic.php?f=17&t=2430)
-
 
 ---
 

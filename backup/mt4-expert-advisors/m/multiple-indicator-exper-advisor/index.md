@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=38&t=64496  
 > Forum: 38 · Topic 64496 · 38 post(s)
 
-
 ---
 
 ## Multiple Indicator Exper Advisor
@@ -11,8 +10,6 @@
 **Apprentice** · Wed Mar 01, 2017 5:28 am
 
 ![Multi_Indicator_EA.png](images/111270/Multi_Indicator_EA.png)
-
-
 
 DESCRIPTION:
 
@@ -66,7 +63,6 @@ Expert Advisor Options/Features:
 
  [Multi_Indicator_EA.mq4](files/111270/Multi_Indicator_EA.mq4)
 
-
 ---
 
 ## Re: Multiple Indicator Exper Advisor
@@ -80,7 +76,6 @@ I'm new to MT4 but not to programming. I'm willing to be a beta guinea pig.
 If there are problems I'll try looking at the code first before I complain.
 
 P.S. I know you from LUAs you have written and I have used from FXCM days.
-
 
 ---
 
@@ -97,7 +92,6 @@ Revisions contemplate the following:
 - The trailing stop will work only after a trailing step has been met, for example each 5 pips will make the 10 pips trailing stop to be modified (Difference between Bid or Ask and the TSL)
 - If the trader chooses to have more than 1 trade open at once he can determine the minutes to wait for the next trade to be opened.
 
-
 ---
 
 ## Re: Multiple Indicator Exper Advisor
@@ -106,7 +100,6 @@ Revisions contemplate the following:
 
 Update.
 
-
 ---
 
 ## Re: Multiple Indicator Exper Advisor
@@ -114,7 +107,6 @@ Update.
 **Apprentice** · Thu Mar 16, 2017 4:45 am
 
 Update.
-
 
 ---
 
@@ -132,7 +124,6 @@ I've added a setting called "Allowed Trade" which is initially set to true. If y
 
 I've also made what could be a controversial change. The original version waited for the trade to be stopped out before changing direction. I've added code that will allow a stop and reverse if the polling changes its mind in the middle of a trade.
 
-
 ---
 
 ## Re: Multiple Indicator Exper Advisor
@@ -144,7 +135,6 @@ Interesting corrections.
 Could you please attach the mq4 file for a proper comparisson and ad these features to the EA framework?
 
 Thanks
-
 
 ---
 
@@ -178,7 +168,6 @@ One note about the trailing stop
 
 The way the Stop Loss works is to initially protect the trade, say with 20 pips. If the user additionally sets a trailing stop (TSL) of 15 pips with a 5 pips step, it will not work until the trade is in profit. This means they are two different concepts. The TSL will be activated when the trade is 15 pips in the green and then correct itself every 5 pips (step).
 
-
 ---
 
 ## Re: Multiple Indicator Exper Advisor
@@ -186,7 +175,6 @@ The way the Stop Loss works is to initially protect the trade, say with 20 pips.
 **wordlink** · Thu Mar 30, 2017 11:11 am
 
 I really like the changes. This is some of your best work! It's like a Swiss Army knife for trading.
-
 
 ---
 
@@ -199,7 +187,6 @@ I'm new here.
 I need multiple indicator exper advisor last version for MT4; (possibly in french)
 Thanks
 
-
 ---
 
 ## Re: Multiple Indicator Exper Advisor
@@ -210,7 +197,6 @@ Benido93
 Post your request here
 [viewforum.php?f=27](https://fxcodebase.com/code/viewforum.php?f=27)
 Or contact me via email mario(.)jemic(@)gmail(.)com for private tasks.
-
 
 ---
 
@@ -224,7 +210,6 @@ Will post my findings when done with testings.
 
 Thanks
 
-
 ---
 
 ## Re: Multiple Indicator Exper Advisor
@@ -237,7 +222,6 @@ I'm getting error 130 when trying to test with crypto.
 
 Thanks
 
-
 ---
 
 ## Re: Multiple Indicator Exper Advisor
@@ -245,7 +229,6 @@ Thanks
 **Apprentice** · Wed May 01, 2019 5:54 am
 
 It's not a bug. Error 130 means that the order was rejected by the broker because stop loss/take profit is too close to the current price. The wider sl/tp should be used.
-
 
 ---
 
@@ -259,7 +242,6 @@ Is there an upto date mt5 version of this available?
 The testing capabilities and optimisation in MT5 would make finding suitable sets much easier..
 thanks in advance
 
-
 ---
 
 ## Re: Multiple Indicator Exper Advisor
@@ -268,7 +250,6 @@ thanks in advance
 
 Your request is added to the development list.
 Development reference 1929.
-
 
 ---
 
@@ -283,7 +264,6 @@ Development reference 1929.
  [Multi_Indicator_EA.mq5](files/138013/Multi_Indicator_EA.mq5)
 
 Try this version.
-
 
 ---
 
@@ -302,7 +282,6 @@ Thanks that is great work... however I get an error message on every trade when 
 
 I'm using a live MT5 at IC Markets...please advise how I correct this
 
-
 ---
 
 ## Re: Multiple Indicator Exper Advisor
@@ -311,7 +290,6 @@ I'm using a live MT5 at IC Markets...please advise how I correct this
 
 Your request is added to the development list.
 Development reference 2224.
-
 
 ---
 
@@ -324,7 +302,6 @@ It looks like your broker put special conditions on the execution of orders.
 The orders need to be executed in a special way.
 But I need to know your broker and account.
 
-
 ---
 
 ## Re: Multiple Indicator Exper Advisor
@@ -332,7 +309,6 @@ But I need to know your broker and account.
 **nick1uk** · Thu Nov 05, 2020 3:45 am
 
 Its IC Markets MT5 Hedge account
-
 
 ---
 
@@ -344,7 +320,6 @@ Have some problems with IC Markets
 I can't run the EA live and I can't run the backtest.
 Try to use some of the alternatives.
 
-
 ---
 
 ## Re: Multiple Indicator Exper Advisor
@@ -352,7 +327,6 @@ Try to use some of the alternatives.
 **hamstertrance** · Wed Dec 09, 2020 10:56 pm
 
 trying to use this indicator but somehow it didnt trade even placing there for some time..... i did manage to do some decent backtesting. i've enable true for the EA also. have i missed out anything?
-
 
 ---
 
@@ -362,7 +336,6 @@ trying to use this indicator but somehow it didnt trade even placing there for s
 
 I have run into some issues with the EA. I was able to do the backtesting normally but when place into chart for live trading it is not able to get and trades executed. Nothing on journal as well. I have enabled EA to true.
 
-
 ---
 
 ## Re: Multiple Indicator Exper Advisor
@@ -370,7 +343,6 @@ I have run into some issues with the EA. I was able to do the backtesting normal
 **Apprentice** · Thu Dec 10, 2020 5:34 am
 
 Can you specify the exact file name?
-
 
 ---
 
@@ -389,7 +361,6 @@ As for the Trainling stop, I realized that it is not working properly, but to so
 
 So far, in general this EA is very good,
 it has already earned me a lot of positive pips.
-
 
 ---
 
@@ -469,7 +440,6 @@ As for the Trainling stop, I realized that it is not working properly, but to so
 So far, in general this EA is very good,
 it has already earned me a lot of positive pips.
 
-
 ---
 
 ## Re: Multiple Indicator Exper Advisor
@@ -478,7 +448,6 @@ it has already earned me a lot of positive pips.
 
 Your request is added to the development list.
 Development reference 270.
-
 
 ---
 
@@ -491,7 +460,6 @@ hi guys,
 did the trailing stop loss issue ever get resolved?
 
 thks
-
 
 ---
 
@@ -513,7 +481,6 @@ Please add the features to this MT4 version --> Multi_Indicator_EA.mq4
 
 Thank you for your support!
 
-
 ---
 
 ## Re: Multiple Indicator Exper Advisor
@@ -522,7 +489,6 @@ Thank you for your support!
 
 We have added your request to the development list.
 Development reference 936
-
 
 ---
 
@@ -538,28 +504,27 @@ Is my request number 936 still in the queue?
 
 Thank you!
 
-
 ---
 
 ## Re: Multiple Indicator Exper Advisor
 
 **rickCreations** · Fri Nov 24, 2023 12:35 am
 
-Code: [Select all](https://fxcodebase.com/code/)
-`void OnTick()
+```mql4
+void OnTick()
 {
    for (int i = 0; i < ArraySize(controllers); ++i)
    {
       controllers[i].DoTrading();
    }
-}`
+}
+```
 
 same issues with both versions of the EA after compile and add to chart
 
 Code: [Select all](https://fxcodebase.com/code/)
 `controllers[i].DoTrading();`
 this line is causing pointer access issues.
-
 
 ---
 
@@ -569,10 +534,7 @@ this line is causing pointer access issues.
 
 ![936.png](images/153394/936.png)
 
-
-
  [Multi_Indicator_EA_v2.mq4](files/153394/Multi_Indicator_EA_v2.mq4)
-
 
 ---
 
@@ -584,7 +546,6 @@ Hey, this Ea is great, but if it wont be to much pressure to create mt5, just te
 
 Best regards Marius.
 
-
 ---
 
 ## Re: Multiple Indicator Exper Advisor
@@ -594,7 +555,6 @@ Best regards Marius.
 We have added your request to the development list.
 Development reference 129
 
-
 ---
 
 ## Re: Multiple Indicator Exper Advisor
@@ -603,10 +563,7 @@ Development reference 129
 
 ![129.png](images/154713/129.png)
 
-
-
  [Multi_Indicator_EA_v2.mq5](files/154713/Multi_Indicator_EA_v2.mq5)
-
 
 ---
 

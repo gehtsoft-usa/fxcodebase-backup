@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=249  
 > Forum: 17 · Topic 249 · 23 post(s)
 
-
 ---
 
 ## Schaff Trend Cycle Oscillator
@@ -29,8 +28,6 @@ Read more about the indicator [here](http://www.cmsfx.com/en/trading-software/vt
 
 ![schtc.jpg](images/376/schtc.jpg)
 
-
-
 Download:
 
  [SCHTC.lua](files/376/SCHTC.lua)
@@ -40,7 +37,6 @@ Download:
 This indicator will provides Audio / Email Alerts if and when Schaff Trend Cycle Oscillator cross Central, Over Bought or Over Sold Level.
 
 Dec 14, 2015: Compatibility issue Fixed. _Alert helper is not longer needed.
-
 
 ---
 
@@ -62,7 +58,6 @@ Thanks!
 
 sjc
 
-
 ---
 
 ## Re: [beta] Schaff Trend Cycle Oscillator
@@ -71,7 +66,6 @@ sjc
 
 Requested can be found here.
 [viewtopic.php?f=31&t=14741&p=27939#p27939](https://fxcodebase.com/code/viewtopic.php?f=31&t=14741&p=27939#p27939)
-
 
 ---
 
@@ -83,8 +77,8 @@ Could we please request a Schaff Trend Oscillator DIVERGENCE indicator based on 
 
 Perhaps this MT4 indicator will assist.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`#property copyright "Copyright © 2004, MetaQuotes Software Corp."
+```
+#property copyright "Copyright © 2004, MetaQuotes Software Corp."
 #property link "[[email protected]](https://fxcodebase.com/cdn-cgi/l/email-protection) & [[email protected]](https://fxcodebase.com/cdn-cgi/l/email-protection)"
 #property indicator_separate_window
 #property indicator_buffers 2
@@ -206,12 +200,12 @@ int start()
      }
    return(0);
   }
-//+------------------------------------------------------------------+`
+//+------------------------------------------------------------------+
+```
 
 Thanks,
 
 sjc
-
 
 ---
 
@@ -220,7 +214,6 @@ sjc
 **Apprentice** · Thu Oct 11, 2012 2:03 pm
 
 Your request is added to the development list.
-
 
 ---
 
@@ -234,7 +227,6 @@ Thanks,
 
 sjc
 
-
 ---
 
 ## Re: Schaff Trend Cycle Oscillator
@@ -242,8 +234,6 @@ sjc
 **Apprentice** · Fri Oct 12, 2012 11:38 am
 
 ![MTF MCP Day Change Heat Map.png](images/41940/MTF%20MCP%20Day%20Change%20Heat%20Map.png)
-
-
 
 Calculation Modes
 1. "Slope"
@@ -257,7 +247,6 @@ Slope with reference to the Central Line.
 
 Please inslatall Schaff Trend Cycle Oscillator (SCHTC) indicator, in order to use this indicator.
 
-
 ---
 
 ## Re: Schaff Trend Cycle Oscillator
@@ -266,10 +255,7 @@ Please inslatall Schaff Trend Cycle Oscillator (SCHTC) indicator, in order to us
 
 ![MTF SCHTC.png](images/41947/MTF%20SCHTC.png)
 
-
-
  [MTF SCHTC.lua](files/41947/MTF%20SCHTC.lua)
-
 
 ---
 
@@ -281,7 +267,6 @@ I think this index is very useful, you can now increase on the basis of a same c
 
 Thank you very much.
 
-
 ---
 
 ## Re: Schaff Trend Cycle Oscillator
@@ -289,7 +274,6 @@ Thank you very much.
 **Apprentice** · Mon Oct 29, 2012 2:46 pm
 
 Can you be more clear, unfortunately I do not understand your remark.
-
 
 ---
 
@@ -335,7 +319,6 @@ EXIT SELL:
 1. SCHAFF TREND CYCLE CROSS OVER BUY LEVEL 1 IN M15 OR
 2. SCHAFF TREND CYCLE CROSS OVER SELL LEVEL 2 IN H1
 
-
 ---
 
 ## Re: Schaff Trend Cycle Oscillator
@@ -345,7 +328,6 @@ EXIT SELL:
 Requested can be found here.
 [viewtopic.php?f=31&t=26441](https://fxcodebase.com/code/viewtopic.php?f=31&t=26441)
 
-
 ---
 
 ## Re: Schaff Trend Cycle Oscillator
@@ -353,7 +335,6 @@ Requested can be found here.
 **Apprentice** · Wed Jun 12, 2013 12:33 am
 
 Few Bug are now Fixed in both MTF versions.
-
 
 ---
 
@@ -363,7 +344,6 @@ Few Bug are now Fixed in both MTF versions.
 
 Schaff Trend Cycle Oscillator with Alert.lua Added.
 
-
 ---
 
 ## Re: Schaff Trend Cycle Oscillator
@@ -371,7 +351,6 @@ Schaff Trend Cycle Oscillator with Alert.lua Added.
 **SuperTrader** · Thu Oct 08, 2015 7:47 am
 
 Hi Apprentice, your very latest version of this indicator "**Schaff Trend Cycle Oscillator with Alert.lua**" is fantastic (the **most complete** Schaff indicator I've found so far). Could you please just add a little "something" to it (whenever you have time): **Colorize its line** so that it's green when rising and red when falling (or when your live alert triggers or whatever you prefer and easier for you), similarly to the attached screenshot. It would be visually great and much easier on the eyes, especially for traders watching many open charts at the same time). **Thank you very much in advance!**
-
 
 ---
 
@@ -381,7 +360,6 @@ Hi Apprentice, your very latest version of this indicator "**Schaff Trend Cycle 
 
 Your request is added to the development list.
 
-
 ---
 
 ## Re: Schaff Trend Cycle Oscillator
@@ -390,7 +368,6 @@ Your request is added to the development list.
 
 Color Option Added.
 
-
 ---
 
 ## Re: Schaff Trend Cycle Oscillator
@@ -398,7 +375,6 @@ Color Option Added.
 **SuperTrader** · Tue Oct 20, 2015 3:07 am
 
 wow, the color helps a lot when trading on tick-charts, **thank you** for another good job Apprentice! (by the way, I can't express how much I appreciate **all your efforts here** in this forum all these past years, by developing hundreds of indicators, strategies, signals, it's just great to have someone **as talented as you** to help us all in here!)
-
 
 ---
 
@@ -411,7 +387,6 @@ Dec 14, 2015: Compatibility issue Fixed. _Alert helper is not longer needed.
 If you want to use updated version of this indicator,
 please make sure to use TS Version 01.14.101415. or higher.
 
-
 ---
 
 ## Re: Schaff Trend Cycle Oscillator
@@ -419,7 +394,6 @@ please make sure to use TS Version 01.14.101415. or higher.
 **Apprentice** · Thu Oct 05, 2017 6:18 am
 
 The indicator was revised and updated.
-
 
 ---
 
@@ -431,7 +405,6 @@ Hi Apprentice,
 
 Can you set up a highly adaptable strategy with this indicator please.
 
-
 ---
 
 ## Re: Schaff Trend Cycle Oscillator
@@ -439,7 +412,6 @@ Can you set up a highly adaptable strategy with this indicator please.
 **Apprentice** · Fri Oct 06, 2017 12:22 pm
 
 Can you define basic rules?
-
 
 ---
 

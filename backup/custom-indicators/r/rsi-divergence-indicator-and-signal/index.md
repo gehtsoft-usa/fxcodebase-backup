@@ -1,8 +1,38 @@
 # RSI Divergence indicator and signal
 
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=846  
-> Forum: 17 · Topic 846 · 49 post(s)
+> Forum: 17 · Topic 846 · 52 post(s)
 
+---
+
+## RSI Divergence indicator and signal
+
+**Nikolay.Gekht** · Mon Apr 26, 2010 4:08 pm
+
+The indicator detects and shows RSI classical and reversal divergences.
+Bullish divergences are shown in green below the RSI (or prices).
+Bearish divergences are shown in red above the RSI (or prices).
+To check whether divergence is classical or reversal, just move the mouse points over the arrow which shows the end of a divergence and wait until a tool tip appears.
+
+ 
+
+![RSI_DIV.png](images/1514/RSI_DIV.png)
+
+There are three lua modules:
+
+1) RSI Divergence Oscillator. Shows RSI of close prices and RSI divergence lines.
+
+ [RSI_Divergence.lua](files/1514/RSI_Divergence.lua)
+
+2) RSI Divergence Indicator. Shows trend lines on the prices. The RSI_Divergence.lua must be also installed.
+
+ [RSI_Divergence1.lua](files/1514/RSI_Divergence1.lua)
+
+3) RSI Divergence Signal. Signals when the divergence is detected (pay attention that signal happens two candles past the detected trend). The RSI_Divergence.lua must be also installed.
+
+ [RSI_Divergence_Signal.lua](files/1514/RSI_Divergence_Signal.lua)
+
+Please do not forget that indicators must be installed via Chart->Manage Custom Indicators command and the signal must be installed via Signals->Manage Custom Signals command.
 
 ---
 
@@ -16,7 +46,6 @@ it wod be perfect
 
 best regards
 bent
-
 
 ---
 
@@ -34,7 +63,6 @@ bent
 
 You use macd divergence or histogram of macd divergence?
 
-
 ---
 
 ## Re: RSI Divergence indicator and signal
@@ -51,7 +79,6 @@ it wil transform my trading big time
 
 bent
 
-
 ---
 
 ## Re: RSI Divergence indicator and signal
@@ -65,7 +92,6 @@ Could I get a a signal file created for this that would trigger upon immediate c
 I would definitely appreciate it.
 
 Thanks
-
 
 ---
 
@@ -83,7 +109,6 @@ go !
 cci div indictaor and signal...possible ?
 market profile ?....snif....
 
-
 ---
 
 ## Re: RSI Divergence indicator and signal
@@ -92,6 +117,13 @@ market profile ?....snif....
 
 What is the purpose of sending the signal after two candles? Why not set it up after one candle?
 
+---
+
+## Re: RSI Divergence indicator and signal
+
+**Nikolay.Gekht** · Fri Oct 22, 2010 11:57 am
+
+It sends after one candle. This is rather problem in drawing. The indicator draws the line to the beginning of the candle at which divergence really ends.
 
 ---
 
@@ -101,7 +133,6 @@ What is the purpose of sending the signal after two candles? Why not set it up a
 
 can you add email alert with rsi divergence signal
 
-
 ---
 
 ## Re: RSI Divergence indicator and signal
@@ -110,6 +141,19 @@ can you add email alert with rsi divergence signal
 
 Request added to the developmental cue.
 
+---
+
+## Re: RSI Divergence indicator and signal
+
+**Nikolay.Gekht** · Mon Jun 06, 2011 10:52 am
+
+request from email:
+
+The RSI divergence indicator is super but it does not catch all divergence some times it suppoze hill some price turn backs , maybe we can include sma on rsı and should let pass a little for concurrence
+
+ 
+
+![rsi.png](images/11412/rsi.png)
 
 ---
 
@@ -125,7 +169,6 @@ For you what is the best period for this indicator.
 I use 14, what do you think ?
 
 Regards
-
 
 ---
 
@@ -144,7 +187,6 @@ Thank you very much !!!
 
 Regards...
 
-
 ---
 
 ## Re: RSI Divergence indicator and signal
@@ -161,7 +203,6 @@ Like flores_joseg, i hope you could check this issue.
 
 Thank you
 
-
 ---
 
 ## Re: RSI Divergence indicator and signal
@@ -169,7 +210,6 @@ Thank you
 **dohko2a** · Mon Nov 28, 2011 7:34 pm
 
 Anybody ?
-
 
 ---
 
@@ -179,7 +219,6 @@ Anybody ?
 
 Hi,
 also I cant get this to work in the recently upgraded TS2. Looks like a few people are trying to use. Any chance you can check this one out, thx
-
 
 ---
 
@@ -191,7 +230,6 @@ I've replaced two files "RSI_Divergence.lua" and "RSI_Divergence1.lua" in the to
 The problem with FXTSII should be fixed.
 Would you please, re-download and re-install the indicator and check it out.
 
-
 ---
 
 ## Re: RSI Divergence indicator and signal
@@ -200,7 +238,6 @@ Would you please, re-download and re-install the indicator and check it out.
 
 Yeah thank you !!!!!!!!
 It works fine )
-
 
 ---
 
@@ -214,7 +251,6 @@ can you create strategy based on this signal.
 
 thank you.
 
-
 ---
 
 ## Re: RSI Divergence indicator and signal
@@ -222,7 +258,6 @@ thank you.
 **Apprentice** · Sun May 20, 2012 3:18 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -235,7 +270,6 @@ Great indicator
 Can you add the 40, 50, and 60 lines to the RSI oscillator window
 Thank You
 
-
 ---
 
 ## Re: RSI Divergence indicator and signal
@@ -244,7 +278,6 @@ Thank You
 
 Your request is added to the list of developers.
 
-
 ---
 
 ## Re: RSI Divergence indicator and signal
@@ -252,7 +285,6 @@ Your request is added to the list of developers.
 **sdcasper** · Sun Jun 10, 2012 2:12 pm
 
 signal indicator is loading with an error message.
-
 
 ---
 
@@ -264,7 +296,6 @@ Can you specify the error message.
  Do you have RSI_Divergence installed on your TS.
 P.S. i have made Minor Update, unrelated with your problem.
 
-
 ---
 
 ## Re: RSI Divergence indicator and signal
@@ -275,7 +306,6 @@ Could you please provide MT4 version of this indicator?
 
 Thanks,
 
-
 ---
 
 ## Re: RSI Divergence indicator and signal
@@ -283,7 +313,6 @@ Thanks,
 **Apprentice** · Wed Jun 27, 2012 4:28 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -294,7 +323,6 @@ Your request is added to the development list.
 hi ,
 
 recurrent sound in this strategy is not working , can you fix it.
-
 
 ---
 
@@ -315,7 +343,6 @@ Was an EA every developed for this indicator? Either for trading Station II or M
 Thanks,
 speedytina
 
-
 ---
 
 ## Re: RSI Divergence indicator and signal
@@ -323,7 +350,6 @@ speedytina
 **Apprentice** · Fri Mar 01, 2013 5:41 am
 
 Unfortunately no, I have not had the time, I can not speak for other developers.
-
 
 ---
 
@@ -333,7 +359,6 @@ Unfortunately no, I have not had the time, I can not speak for other developers.
 
 Understood.
 Thank you.
-
 
 ---
 
@@ -360,8 +385,8 @@ I have difficulty to understand what realy do extent option in addstream.
 sorry for my english.
 good day.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- RSI avec Divergente
+```lua
+-- RSI avec Divergente
 function Init()
     indicator:name(resources:get("name"));
     indicator:description(resources:get("description"));
@@ -564,12 +589,13 @@ function Update(periode)
          end
       end   
     end
-end`
+end
+```
 
 and the ressource file
 
-Code: [Select all](https://fxcodebase.com/code/)
-`include=common.lua.rc
+```
+include=common.lua.rc
 default=enu
 [enu]
 codepage=1252
@@ -594,8 +620,8 @@ param_DN_color_line_name=Divergence Baisse
 Div_name_class=Affiche les divergences classiques
 Div_desc_class=Vrai: pour afficher les divergences classiques
 Div_name_cache=Affiche les divergences cachees
-Div_desc_cache=Vrai: pour afficher les divergences cachees`
-
+Div_desc_cache=Vrai: pour afficher les divergences cachees
+```
 
 ---
 
@@ -608,7 +634,6 @@ extent - The optional parameter. The parameter specifies the difference between 
 For example. if you have 100 candles on our chart.
 And you want to have more than 100 candles in your indicator output.
 Ichimoku cloud, where cloud spreads beyond last candle, is a good example.
-
 
 ---
 
@@ -623,7 +648,6 @@ Why in this case the extent is -1. ?
 
 Best REgards.
 
-
 ---
 
 ## Re: RSI Divergence indicator and signal
@@ -631,7 +655,6 @@ Best REgards.
 **Apprentice** · Thu Oct 08, 2015 4:33 am
 
 Output is shorter than the source
-
 
 ---
 
@@ -644,7 +667,6 @@ Output is shorter than the source
 
 Please suggest on this or direct me to the right place. If we have it somewhere? Also need this only for Trading Station
 
-
 ---
 
 ## Re: RSI Divergence indicator and signal
@@ -654,7 +676,6 @@ Please suggest on this or direct me to the right place. If we have it somewhere?
 You can use RSI_Divergence_Signal.lua for alerts.
 (First/Topmost post in topic)
 
-
 ---
 
 ## Re: RSI Divergence indicator and signal
@@ -662,7 +683,6 @@ You can use RSI_Divergence_Signal.lua for alerts.
 **Apprentice** · Wed Mar 30, 2016 6:17 am
 
 OB/OS Level selector added.
-
 
 ---
 
@@ -672,7 +692,6 @@ OB/OS Level selector added.
 
 I have added the indicator. But this is not showing in the TS. I can able to see the first 2. Any suggestion on this
 
-
 ---
 
 ## Re: RSI Divergence indicator and signal
@@ -681,11 +700,8 @@ I have added the indicator. But this is not showing in the TS. I can able to see
 
 ![Capture.PNG](images/105649/Capture.PNG)
 
-
-
 RSI_Divergence_Signal.lua is signal.
 You will find it as Signal / Strategy.
-
 
 ---
 
@@ -710,7 +726,6 @@ ALSO, if you used daily EMA 81 for the HR events, then it would filter the HR ev
 These changes would make this strategy awesome....... Can you fix it up?
 David
 
-
 ---
 
 ## Re: RSI Divergence indicator and signal
@@ -719,7 +734,6 @@ David
 
 Your request is added to the development list.
 
-
 ---
 
 ## Re: RSI Divergence indicator and signal
@@ -727,7 +741,6 @@ Your request is added to the development list.
 **Apprentice** · Wed Oct 03, 2018 5:33 am
 
 The indicator was revised and updated.
-
 
 ---
 
@@ -743,7 +756,6 @@ The indicator was revised and updated.
 Please, try this MQL4 indicator:
 [viewtopic.php?f=38&t=21033&p=104783](https://fxcodebase.com/code/viewtopic.php?f=38&t=21033&p=104783)
 
-
 ---
 
 ## Re: RSI Divergence indicator and signal
@@ -751,7 +763,6 @@ Please, try this MQL4 indicator:
 **chzavala** · Mon Jan 08, 2024 8:53 am
 
 Could you please add to the **RSI Divergence Signa**l, also send it by email?
-
 
 ---
 
@@ -762,7 +773,6 @@ Could you please add to the **RSI Divergence Signa**l, also send it by email?
 We have added your request to the development list.
 Development reference 43
 
-
 ---
 
 ## Re: RSI Divergence indicator and signal
@@ -771,7 +781,6 @@ Development reference 43
 
 Try this version.
 [https://fxcodebase.com/code/viewtopic.p ... 45#p159645](https://fxcodebase.com/code/viewtopic.php?f=31&t=76045&p=159645#p159645)
-
 
 ---
 
@@ -783,7 +792,6 @@ sir please for mt4 make it too non repaint
 thanks
 khan
 
-
 ---
 
 ## Re: RSI Divergence indicator and signal
@@ -793,7 +801,6 @@ khan
 We have added your request to the development list.
 Development reference 531
 
-
 ---
 
 ## Re: RSI Divergence indicator and signal
@@ -802,10 +809,7 @@ Development reference 531
 
 ![eurusd-d1-stratos-trading-pty.png](images/160376/eurusd-d1-stratos-trading-pty.png)
 
-
-
  [RSI_Divergence.mq4](files/160376/RSI_Divergence.mq4)
-
 
 ---
 
@@ -814,7 +818,6 @@ Development reference 531
 **khanatd** · Sat Sep 13, 2025 2:12 am
 
 Hi respected sir plz reminder with mt4 version and arrows thanks a lot
-
 
 ---
 
@@ -825,7 +828,6 @@ Hi respected sir plz reminder with mt4 version and arrows thanks a lot
 We have added your request to the development list.
 Development reference 586
 
-
 ---
 
 ## Re: RSI Divergence indicator and signal
@@ -833,7 +835,5 @@ Development reference 586
 **Apprentice** · Sun Sep 28, 2025 12:04 pm
 
 ![586.png](images/160658/586.png)
-
-
 
  [RSI_Divergence.mq4](files/160658/RSI_Divergence.mq4)

@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=61007  
 > Forum: 17 · Topic 61007 · 15 post(s)
 
-
 ---
 
 ## Trend Risk Indicator
@@ -11,8 +10,6 @@
 **Apprentice** · Fri Aug 01, 2014 4:13 am
 
 ![Trend Risk Indicator.png](images/95243/Trend%20Risk%20Indicator.png)
-
-
 
 T3Trend Bands Indicator Spin-off
 [viewtopic.php?f=17&t=3128&p=7347&hilit=t3+trendbands#p7347](https://fxcodebase.com/code/viewtopic.php?f=17&t=3128&p=7347&hilit=t3+trendbands#p7347)
@@ -25,7 +22,6 @@ Under The Bottom Line or Within channel.
  [TrendRisk indicator.lua](files/95243/TrendRisk%20indicator.lua)
 
 The indicator was revised and updated
-
 
 ---
 
@@ -42,7 +38,6 @@ Deviation 1.8
 
 Thanks a bunch!!
 
-
 ---
 
 ## Re: Trend Risk Indicator
@@ -52,7 +47,6 @@ Thanks a bunch!!
 Would it be possible to have a candlestick wick color option? For example, top side wick red, bottom side wick green? This referring to wicks only, not the actual candle. Is this possible?
 
 Thanks a bunch
-
 
 ---
 
@@ -69,7 +63,6 @@ U can draw two vertical lines.
 First from math.max (open,close) to High
 Second From math.min (open,close) to Low
 
-
 ---
 
 ## Re: Trend Risk Indicator
@@ -79,15 +72,14 @@ Second From math.min (open,close) to Low
 Hello
 can i have a formula please ;
 
-
 ---
 
 ## Re: Trend Risk Indicator
 
 **Apprentice** · Wed Aug 20, 2014 1:16 pm
 
-Code: [Select all](https://fxcodebase.com/code/)
-`SmoothPrice[period]=(SmoothPrice[period-1]*(BandBars-1)+source.close[period])/BandBars;
+```lua
+SmoothPrice[period]=(SmoothPrice[period-1]*(BandBars-1)+source.close[period])/BandBars;
     SmoothRange[period]=(SmoothRange[period-1]*(BandBars-1)+source.high[period]-source.low[period])/BandBars;
  
     Top[period]=SmoothPrice[period]+SmoothRange[period]*Deviation;
@@ -95,11 +87,11 @@ Code: [Select all](https://fxcodebase.com/code/)
 
 if source.close[i]< Top[i] then Color[i] = Up;
 if source.close[i]> Bottom[i] then Color[i] = Down
-else  Color = Neutral`
+else  Color = Neutral
+```
 
 This is a simplified version.
 The complete algorithm is available within Indicator Code.
-
 
 ---
 
@@ -110,7 +102,6 @@ The complete algorithm is available within Indicator Code.
 very good
 merci
 
-
 ---
 
 ## Re: Trend Risk Indicator
@@ -120,7 +111,6 @@ merci
 Mq4 version is available here.
 [viewtopic.php?f=38&t=61722](https://fxcodebase.com/code/viewtopic.php?f=38&t=61722)
 
-
 ---
 
 ## Re: Trend Risk Indicator
@@ -128,7 +118,6 @@ Mq4 version is available here.
 **Thumper** · Mon Jul 27, 2015 9:34 pm
 
 Apprentice can you please create a third line for Trendrisk123 that is exactly between the two existing lines. Also can you make it that the user can choose a dotted line for this new middle line and have at the same time a full line for the top and bottom existing lines? Also the user can choose a different colour for each of the 3 lines. Thanks mate! Rob
-
 
 ---
 
@@ -138,7 +127,6 @@ Apprentice can you please create a third line for Trendrisk123 that is exactly b
 
 The indicator was revised and updated.
 
-
 ---
 
 ## Re: Trend Risk Indicator
@@ -146,7 +134,6 @@ The indicator was revised and updated.
 **dixonttk** · Sat Apr 04, 2020 12:06 am
 
 Hi Apprentice, anyway I can get this Trend Risk Indicator code in TradingView PineScript version?
-
 
 ---
 
@@ -157,7 +144,6 @@ Hi Apprentice, anyway I can get this Trend Risk Indicator code in TradingView Pi
 Your request is added to the development list.
 Development reference 1012.
 
-
 ---
 
 ## Re: Trend Risk Indicator
@@ -167,7 +153,6 @@ Development reference 1012.
 [TrendRisk_indicator.zip](files/132615/TrendRisk_indicator.zip)
 
 Try this version.
-
 
 ---
 
@@ -180,7 +165,6 @@ Hi Apprentice
 We have used this your code in python earlier, but after we have changed to Go, the calculation on all 3 bands are way off. Which means that the change of trend happens too rapidly, as to what you would see in for instance trade interceptor.
 
 Would it be possible to get a version from you in GO?
-
 
 ---
 

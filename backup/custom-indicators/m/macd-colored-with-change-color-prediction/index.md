@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=3789  
 > Forum: 17 · Topic 3789 · 15 post(s)
 
-
 ---
 
 ## MACD colored with change color prediction
@@ -25,16 +24,14 @@ The highlight of the indicator is that, being applied on the live chart, shows t
 
 ![macd_colored.png](images/9217/macd_colored.png)
 
-
-
 Download indicator:
 
  [MACD_colored.lua](files/9217/MACD_colored.lua)
 
 Source code:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Colored MACD");
     indicator:description("Colored MACD with sensitivity and an ability to predict how much pips market shall move to change the color of the bar");
     indicator:requiredSource(core.Tick);
@@ -154,8 +151,8 @@ function Update(period, mode)
             core.host:execute("setStatus", "");
         end
     end
-end`
-
+end
+```
 
 ---
 
@@ -166,7 +163,6 @@ end`
 p.s. The indicator may be interesting for the developers. Please see this post about how properly port such indicators to Lua:
 [viewtopic.php?f=28&t=3790](https://fxcodebase.com/code/viewtopic.php?f=28&t=3790)
 
-
 ---
 
 ## Re: MACD colored with change color prediction
@@ -174,7 +170,6 @@ p.s. The indicator may be interesting for the developers. Please see this post a
 **larkin1** · Mon Jan 23, 2012 8:27 pm
 
 Is it possible to have this indicator corrected or have the MACD On Off Indicator incorporate the prediction functions. Thank You
-
 
 ---
 
@@ -185,7 +180,6 @@ Is it possible to have this indicator corrected or have the MACD On Off Indicato
 Try My ON / OFF MACD
 [viewtopic.php?f=17&t=1050&p=3371&hilit=macd#p3371](https://fxcodebase.com/code/viewtopic.php?f=17&t=1050&p=3371&hilit=macd#p3371)
 
-
 ---
 
 ## Re: MACD colored with change color prediction
@@ -194,7 +188,6 @@ Try My ON / OFF MACD
 
 I am currently using it but would like to see the blue bar predictor as in the other indicator but that one does not work.
 
-
 ---
 
 ## Re: MACD colored with change color prediction
@@ -202,7 +195,6 @@ I am currently using it but would like to see the blue bar predictor as in the o
 **larkin1** · Thu Jan 26, 2012 7:58 pm
 
 When I load the Macd On / Off parallel with the Macd color with change prediction indicator, the Macd color with change prediction indicator does not line up even after I confirm the settings are the same. Please assist. Thank You.
-
 
 ---
 
@@ -216,7 +208,6 @@ set 2 default .0003 and -.0003 color,width, style
 set 3 default .00045 and -.00045 color, width, style
 Thanks
 
-
 ---
 
 ## Re: MACD colored with change color prediction
@@ -224,7 +215,6 @@ Thanks
 **Apprentice** · Fri May 24, 2013 3:43 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -236,7 +226,6 @@ Thanks a million for this indicator!
 The traditional MACD on market scope does not allow for the value of 1for the signal line.
 This version of MACD is used for the 4HR MACD strategy which has a very high success rate, better than most of the expensive strategies out there. I know because I've tried alot of them. Just google 4HR MACD strategy. It's very popular and you'll be glad you did.
 (sorry, if this comment is not in the appropriate section).
-
 
 ---
 
@@ -258,7 +247,6 @@ Please advise when you can deliver this
 
 Many thanks
 
-
 ---
 
 ## Re: MACD colored with change color prediction
@@ -279,7 +267,6 @@ Please advise when you can deliver this
 
 Many thanks
 
-
 ---
 
 ## Re: MACD colored with change color prediction
@@ -288,10 +275,7 @@ Many thanks
 
 ![Capture.PNG](images/108358/Capture.PNG)
 
-
-
 Signal line is already available.
-
 
 ---
 
@@ -311,7 +295,6 @@ Can you add the signal line to the 1st indicator please
 
 Thank you.
 
-
 ---
 
 ## Re: MACD colored with change color prediction
@@ -319,7 +302,6 @@ Thank you.
 **Pips34** · Sun Oct 02, 2016 7:33 pm
 
 My apologies, after i posted my reply to your post, I realized that this is a the 3rd indicator which you are referring to that already has the signal line. Sorry for the confusion, I got what I was looking for.
-
 
 ---
 

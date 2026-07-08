@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=29&t=758  
 > Forum: 29 · Topic 758 · 6 post(s)
 
-
 ---
 
 ## trendmagic, DMI, parabolic SAR signal
@@ -24,10 +23,8 @@ Trendmagic indicator is bearish.
 
 ![TM_DMI_SAR.jpg](images/1396/TM_DMI_SAR.jpg)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     strategy:name("Trend magic/DMI/Parabolic SAR signal");
     strategy:description("The parabolic sar signal is used; the trendmagic and DMI are used as filters.");
 
@@ -161,10 +158,10 @@ function ExtSignal(source, period, message, soundFile)
     if soundFile ~= nil then
         terminal:alertSound(soundFile, false);
     end
-end`
+end
+```
 
 The signal requires the custom indicator TrendMagic: [viewtopic.php?f=17&t=563](https://fxcodebase.com/code/viewtopic.php?f=17&t=563)
-
 
 ---
 
@@ -177,7 +174,6 @@ I'm having a few problems with it the signal. Could you do me a favour and remov
 The indicator is giving buy signals when it should give sell and sell signals when it should give buy (parabolic dots: the ones above are sell signals and the ones below buy- i probably should have said that before- sorry ). Would you be able to change buy signals to sell, and sell signals to buy?
 thanks
 
-
 ---
 
 ## Re: trendmagic, DMI, parabolic SAR signal
@@ -185,7 +181,6 @@ thanks
 **shona155** · Mon Dec 29, 2014 6:22 am
 
 First bearish parabolic sar signal is given since bullish parabolic signals were given.
-
 
 ---
 
@@ -195,7 +190,6 @@ First bearish parabolic sar signal is given since bullish parabolic signals were
 
 Can you clarify your comment.
 Is any action is needed?
-
 
 ---
 
@@ -217,7 +211,6 @@ di->di+
 Exit sell when price >=sar
 
 Many thanks
-
 
 ---
 

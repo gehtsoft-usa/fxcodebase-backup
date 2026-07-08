@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=9511  
 > Forum: 17 · Topic 9511 · 26 post(s)
 
-
 ---
 
 ## Daystart vertical line
@@ -16,14 +15,12 @@ The simple indicator which just draws a vertical line at the beginning of chose 
 
 ![daystartline.PNG](images/20433/daystartline.PNG)
 
-
-
 Download:
 
  [daystartline.lua](files/20433/daystartline.lua)
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Day Start Line");
     indicator:description("The indicator draws a vertical line at the specified time");
     indicator:requiredSource(core.Bar);
@@ -102,8 +99,8 @@ function Update(period, mode)
         id = id + 1;
         host:execute("drawLine", id, date, 0, date, 100000, clr, style, width, core.formatDate(host:execute("convertTime", core.TZ_EST, core.TZ_TS, date)));
     end
-end`
-
+end
+```
 
 ---
 
@@ -115,7 +112,6 @@ as borat would say...."Very Nice!"
 
 thanks nikolay
 
-
 ---
 
 ## Re: Daystart vertical line
@@ -123,7 +119,6 @@ thanks nikolay
 **nazaar** · Mon Dec 12, 2011 5:23 pm
 
 Brilliant, thank you!
-
 
 ---
 
@@ -135,7 +130,6 @@ thank you again for making this simple yet very **useful**tool.
 
 Is it possible, on the daily chart, add the option to place a vertical line on the 1st of each month?
 
-
 ---
 
 ## Re: Daystart vertical line
@@ -146,7 +140,6 @@ Love this Indicator thanks
 
  I just started learning how to create (code) indicators and going through the docs and downloaded the tools to code.I wanted to ask you if there is away to create an indicator to just draw a horizontal line at exactly the close of each trading day (17:00 EST). I'm trying to work on something and I wanted to see if there was a way to do that.
 Any assistance is apprecaited
-
 
 ---
 
@@ -162,7 +155,6 @@ I am looking for an indicator that can count and indicate X bars back. For examp
 
 thanks in advance.
 
-
 ---
 
 ## Re: Daystart vertical line
@@ -170,7 +162,6 @@ thanks in advance.
 **Apprentice** · Wed Jan 11, 2012 4:41 pm
 
 Your request has been added to the developmental cue.
-
 
 ---
 
@@ -180,7 +171,6 @@ Your request has been added to the developmental cue.
 
 Requested can be found here.
 [viewtopic.php?f=17&t=11079&p=23420#p23420](https://fxcodebase.com/code/viewtopic.php?f=17&t=11079&p=23420#p23420)
-
 
 ---
 
@@ -198,7 +188,6 @@ Please add a **week start line** tool. The weekly start would be Sunday 17:00 or
 
 thanks in advance.
 
-
 ---
 
 ## Re: Daystart vertical line
@@ -207,7 +196,6 @@ thanks in advance.
 
 Your request is added to the development list.
 
-
 ---
 
 ## Re: Daystart vertical line
@@ -215,7 +203,6 @@ Your request is added to the development list.
 **FxGump** · Mon Sep 10, 2012 6:16 am
 
 I am also interested in the week start line. Is it now available?
-
 
 ---
 
@@ -227,7 +214,6 @@ Hello,
 Is there any week start line available here?
 Thanks in advance.
 
-
 ---
 
 ## Re: Daystart vertical line
@@ -236,7 +222,6 @@ Thanks in advance.
 
 Try My version
 [viewtopic.php?f=17&t=11079&p=43962#p43962](https://fxcodebase.com/code/viewtopic.php?f=17&t=11079&p=43962#p43962)
-
 
 ---
 
@@ -256,7 +241,6 @@ This is similar to constant break strategy but uses the previous day and open/cl
 
 Thanks for any info or development in my search
 
-
 ---
 
 ## Re: Daystart vertical line
@@ -264,7 +248,6 @@ Thanks for any info or development in my search
 **Apprentice** · Fri May 13, 2016 1:35 pm
 
 Your request is added to the development list.
-
 
 ---
 
@@ -278,7 +261,6 @@ Can we have a mq4 version of the indicator.
 
 Regards,
 
-
 ---
 
 ## Re: Daystart vertical line
@@ -288,7 +270,6 @@ Regards,
 Your request is added to the development list, Under Id Number 3881
  If someone is interested to do this task, please contact me.
 
-
 ---
 
 ## Re: Daystart vertical line
@@ -296,7 +277,6 @@ Your request is added to the development list, Under Id Number 3881
 **Alexander.Gettinger** · Tue Sep 05, 2017 11:22 am
 
 MQL4 version of indicator: [viewtopic.php?f=38&t=65056](https://fxcodebase.com/code/viewtopic.php?f=38&t=65056)
-
 
 ---
 
@@ -308,7 +288,6 @@ Hi Apprentice could you add a line into the future setting or extended lines for
 
 Thanks
 
-
 ---
 
 ## Re: Daystart vertical line
@@ -317,7 +296,6 @@ Thanks
 
 Can you clarify.
 Maybe show on the chart example.
-
 
 ---
 
@@ -333,7 +311,6 @@ Thanks
 
 ![Capture.PNG](images/118437/Capture.PNG)
 
-
 ---
 
 ## Re: Daystart vertical line
@@ -342,7 +319,6 @@ Thanks
 
 As we have in DaysWeekSeparator.lua?
 [viewtopic.php?f=17&t=11079&p=116236&hilit=week#p116236](https://fxcodebase.com/code/viewtopic.php?f=17&t=11079&p=116236&hilit=week#p116236)
-
 
 ---
 
@@ -356,7 +332,6 @@ As we have in DaysWeekSeparator.lua?
 
 This doesn't extend into the future??
 
-
 ---
 
 ## Re: Daystart vertical line
@@ -364,7 +339,6 @@ This doesn't extend into the future??
 **Apprentice** · Thu Apr 05, 2018 4:27 am
 
 Your request is added to the development list under Id Number 4099
-
 
 ---
 
@@ -375,7 +349,6 @@ Your request is added to the development list under Id Number 4099
 Try this version.
 
  [daystartline.lua](files/118506/daystartline.lua)
-
 
 ---
 

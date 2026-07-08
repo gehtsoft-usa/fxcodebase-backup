@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=62129  
 > Forum: 17 · Topic 62129 · 5 post(s)
 
-
 ---
 
 ## T3 Indicator - Better Moving Average
@@ -23,16 +22,16 @@ Code: [Select all](https://fxcodebase.com/code/)
 
 The implementation quiet differs slightly from the formula above:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`EMA[1] = EMA(Source, n) and EMA[i] = EMA(EMA, i - 1)
-T3 = -v^3 * EMA[6] + (3 * v^2 + 3 * v^3) * EMA[5] + (-6 * v^2 - 3 * v - 3 * v^3) * EMA[4] + (1 + 3 * v + v^3 + 3 * v^2) * EMA[3]`
+```
+EMA[1] = EMA(Source, n) and EMA[i] = EMA(EMA, i - 1)
+T3 = -v^3 * EMA[6] + (3 * v^2 + 3 * v^3) * EMA[5] + (-6 * v^2 - 3 * v - 3 * v^3) * EMA[4] + (1 + 3 * v + v^3 + 3 * v^2) * EMA[3]
+```
 
 The T3 indicator can be downloaded here:
 
  [T3.lua](files/99930/T3.lua)
 
 Chris
-
 
 ---
 
@@ -43,7 +42,6 @@ Chris
 Thank you for your efforts.
 Identical indicator can be found here.
 [viewtopic.php?f=17&t=1302&p=2487&hilit=Tim+Tillson#p2487](https://fxcodebase.com/code/viewtopic.php?f=17&t=1302&p=2487&hilit=Tim+Tillson#p2487)
-
 
 ---
 
@@ -59,7 +57,6 @@ Code: [Select all](https://fxcodebase.com/code/)
 `TFirst = First + 6 * math.floor(1.5 * N);`
 Chris
 
-
 ---
 
 ## Re: T3 Indicator - Better Moving Average
@@ -68,7 +65,6 @@ Chris
 
 MT4 version is available here.
 [viewtopic.php?f=38&t=63063&p=106118#p106118](https://fxcodebase.com/code/viewtopic.php?f=38&t=63063&p=106118#p106118)
-
 
 ---
 

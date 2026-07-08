@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=4109  
 > Forum: 31 · Topic 4109 · 50 post(s)
 
-
 ---
 
 ## Stage trailing stop
@@ -20,7 +19,6 @@ Download:
 
 The Strategy was revised and updated on December 10, 2018.
 
-
 ---
 
 ## Re: Stage trailing stop
@@ -30,7 +28,6 @@ The Strategy was revised and updated on December 10, 2018.
 Please is there any more trailing stop management tool like this one on this site, someone more familiar with TS2 custom indicator please help out. Will the Stage Trailing Stop work on automated trading?
 
 Thanks.
-
 
 ---
 
@@ -69,7 +66,6 @@ The strategy sets stop value for the chosen trade using fractals.
 
 Yes. For this it's necessary to include the code of Stage Trailing Stop to the code of your strategy.
 
-
 ---
 
 ## Re: Stage trailing stop
@@ -83,7 +79,6 @@ Questions: 1) Do I have to add it to every currency pair I want to trade for it 
 Please Sunshine help out and thank you in advance for your time and energy but above all, your kindness.
 
 Thanks.
-
 
 ---
 
@@ -123,7 +118,6 @@ such as:
 
 May CurrentOrder is useful .
 
-
 ---
 
 ## Re: Stage trailing stop
@@ -135,8 +129,8 @@ Hi Guys:
  I try to develop this strategy to look after all my orders, but it can not work.
  It seems hard to manage all the orders from TS2.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     strategy:name("Profit lock");
     strategy:description("Profit lock");
     strategy.parameters:addGroup("Profit lock Parameters");   
@@ -258,8 +252,8 @@ end 
 end
 end
 
-dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");`
-
+dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");
+```
 
 ---
 
@@ -277,7 +271,6 @@ As a starter I would like to just use one level, so I am wondering if you could 
 
 Tank you.
 Laurus
-
 
 ---
 
@@ -297,7 +290,6 @@ This modification, might allow a normal trailing (fixed pip) SL strategy to deal
 
 Thanks in advance for your replies
 
-
 ---
 
 ## Re: Stage trailing stop
@@ -312,7 +304,6 @@ when Level1 is reached take Profit of 1 lot
 and at level2 take profit of second lot etc..
 
 What do u think guys???
-
 
 ---
 
@@ -329,7 +320,6 @@ And when Level2 is reached take the second profit or move TS.. etc
 
 Thanks
 
-
 ---
 
 ## Re: Stage trailing stop
@@ -340,7 +330,6 @@ Vaguthun
 Why not just open 2 positions (mini lots) and set appropriate (TP) Limit orders on one while using this strategy to move your SL on the other.
 Hope I understood your post, and this helps
 STEIGO
-
 
 ---
 
@@ -353,7 +342,6 @@ If I understand your question - You could achieve this resutly by opening 2 (hal
 Hope this helps
 STEIGO
 
-
 ---
 
 ## Re: Stage trailing stop
@@ -363,7 +351,6 @@ STEIGO
 Dear programmers,
 unfortunately automated strategies allow only for dinamic stop. It's possible to set up a strategy that places a fixed trailing stop in which you can set the value on each open position???
 
-
 ---
 
 ## Re: Stage trailing stop
@@ -371,7 +358,6 @@ unfortunately automated strategies allow only for dinamic stop. It's possible to
 **Apprentice** · Sun Jan 29, 2012 1:45 pm
 
 You can have both, fix stop levels, and stop or algorithm that is independent from strategy build in stop.
-
 
 ---
 
@@ -387,7 +373,6 @@ just start an order on Macd strategy, automatically the strategy Stage Trailing 
 You can make this change?
 Thanks
 
-
 ---
 
 ## Re: Stage trailing stop
@@ -399,7 +384,6 @@ Is there away to apply this stage trailing stop to an Entry Order, so that it wi
 Thanks
 SJB
 
-
 ---
 
 ## Re: Stage trailing stop
@@ -408,7 +392,6 @@ SJB
 
 It is possible.
 
-
 ---
 
 ## Re: Stage trailing stop
@@ -416,7 +399,6 @@ It is possible.
 **SJB944** · Mon Feb 13, 2012 6:22 pm
 
 Good. How?
-
 
 ---
 
@@ -430,7 +412,6 @@ Am I missing something? I just want the the stop to remain at the level 1 Stop p
 
 SJB.
 
-
 ---
 
 ## Re: Stage trailing stop
@@ -438,7 +419,6 @@ SJB.
 **Apprentice** · Wed Feb 15, 2012 6:58 am
 
 I or Alex will prepare several solutions.
-
 
 ---
 
@@ -460,10 +440,7 @@ I attached an image how I set the parameters.
 
 *SL parameters*
 
-
-
 Thanks in advance for your answer.
-
 
 ---
 
@@ -473,7 +450,6 @@ Thanks in advance for your answer.
 
 I'll prepare something today (Completely new strategy).
 
-
 ---
 
 ## Re: Stage trailing stop
@@ -481,7 +457,6 @@ I'll prepare something today (Completely new strategy).
 **SJB944** · Thu Feb 16, 2012 7:45 pm
 
 Excellent. Look forward to seeing the results.
-
 
 ---
 
@@ -492,7 +467,6 @@ Excellent. Look forward to seeing the results.
 Good looking forward to seeing it. But I hope it will work for limit buy stop or sell stop orders.
 
 Thanks
-
 
 ---
 
@@ -507,7 +481,6 @@ It is very awkward at times to have to open multiple positions in order to achie
 
 Ross
 
-
 ---
 
 ## Re: Stage trailing stop
@@ -517,7 +490,6 @@ Ross
 Hi,
 
 I have a question as to why I keep getting an error message. that says number needs to be a positive number. I have level 1 set at 29 and stop level to 2 and level 2 at 38 and stop level 2 at 20. Any thoughts are appreciated. Thanks
-
 
 ---
 
@@ -535,7 +507,6 @@ Is this capable of doing this or can someone point me in the right direction? It
 
 Thanks
 
-
 ---
 
 ## Re: Stage trailing stop
@@ -543,7 +514,6 @@ Thanks
 **Apprentice** · Fri Apr 06, 2012 4:35 am
 
 Unfortunately this strategy does not support input of the absolute, but rather, the relative position of stop orders in relation to the entry position.
-
 
 ---
 
@@ -553,7 +523,6 @@ Unfortunately this strategy does not support input of the absolute, but rather, 
 
 Thank you for the reply. Do you know of any strategies that would accomplish what I'm looking for?
 
-
 ---
 
 ## Re: Stage trailing stop
@@ -561,7 +530,6 @@ Thank you for the reply. Do you know of any strategies that would accomplish wha
 **Apprentice** · Mon Apr 16, 2012 3:38 am
 
 Updated.
-
 
 ---
 
@@ -574,7 +542,6 @@ Can someone please tell me how to input the Stage Trailing Stop strategy into my
 Thanks,
 Jason.
 
-
 ---
 
 ## Re: Stage trailing stop
@@ -585,7 +552,6 @@ SDK is not needed. It can help you.
 Adding other indicators is not easy task for beginners.
 There is no simple way, you must first be familiar with the Lua programming language,
 SDK and TS specific functions.
-
 
 ---
 
@@ -602,7 +568,6 @@ Ideally I would like to have the Stop moving to + 0,4 pips "break even" when pro
 Thank you.
 Laurus
 
-
 ---
 
 ## Re: Stage trailing stop
@@ -610,7 +575,6 @@ Laurus
 **Apprentice** · Wed May 30, 2012 2:44 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -621,7 +585,6 @@ Your request is added to the development list.
 Thank you Apprentice. I appreciate it.
 
 Laurus
-
 
 ---
 
@@ -636,7 +599,6 @@ I am just wondering if you could please tell me what the progress is with the "S
 Thanks.
 Laurus
 
-
 ---
 
 ## Re: Stage trailing stop
@@ -646,7 +608,6 @@ Laurus
 Hey, I'm from USA. My idea coincides with yours regarding the stop being automatically changed to the profit side. My idea was: open trade; 100pips limit, 50pips stop - level 1 10pips; stop 1 +5pips; level 2 20pips; stop 2 +10pips; and so on. That would be a great way to minimize risk and increase profits.
 
 This profit enhancing tool should definitely be prioritized as I've done manual calculations with it, and while trading good 4H - 1D timeframes; following daily trend, it proved to be extremely profitable!!
-
 
 ---
 
@@ -659,7 +620,6 @@ This strategy requires a position to set, ask to be amended to breed as object?
 Because I have a lot of positions in the setting of this strategy was in trouble.
 
 THANK YOU!
-
 
 ---
 
@@ -677,7 +637,6 @@ HI Apprentice,This strategy has quickly set up a trade method? I open a lot of s
 
 Thank you.
 
-
 ---
 
 ## Re: Stage trailing stop
@@ -687,7 +646,6 @@ Thank you.
 HI Apprentice
 
 This strategy can increase the function of movable stops? Thank you.
-
 
 ---
 
@@ -712,7 +670,6 @@ Thanks,
 
 Ross
 
-
 ---
 
 ## Re: Stage trailing stop
@@ -720,7 +677,6 @@ Ross
 **Apprentice** · Mon Mar 02, 2015 6:12 pm
 
 Your request is added to the development list.
-
 
 ---
 
@@ -736,7 +692,6 @@ i trade on marketscope 2.0. idk if that would make a difference or not.
 can anyone direct me to a system that does that??
 thanks in advance.
 
-
 ---
 
 ## Re: Stage trailing stop
@@ -745,7 +700,6 @@ thanks in advance.
 
 Another eight months on. Any progress to report? I can achieve this on Metatrader so it shouldn't be too difficult.
 Ross
-
 
 ---
 
@@ -761,7 +715,6 @@ I have 2 questions
 
 thank you for your time
 
-
 ---
 
 ## Re: Stage trailing stop
@@ -770,7 +723,6 @@ thank you for your time
 
 hi,
 I downloaded the stage trailing stop to my demo and real acct on fxcm trading station. How do I go by setting up the trailing stop? such as after 15 pips or target 1 is reached, move stop to break even. When price reach target 2 move stop 15 pip or where 1:1 was ect. do you have a video or instructions on how to use this? thanks
-
 
 ---
 
@@ -782,7 +734,6 @@ hi, i downloaded your software on my fxcm platform on both demo and real account
 
 thanks
 
-
 ---
 
 ## Re: Stage trailing stop
@@ -793,7 +744,6 @@ hello again,
 
 I have downloaded the software to my demo acct and tried it . I set up my trades by splitting all of my positions into two separate orders. so i have two TP's. for example one of the TP is 15 pips and next one is 30. However, when I tried and it reached target 1 or 15 pips the stop did not move. Is there a system on here that would move the stop loss of the 15 pip order to break even once the first limit order is taken out on the 30 pip move ? what am I doing wrong. I would appreciate a reply. thank you
 
-
 ---
 
 ## Re: Stage trailing stop
@@ -801,7 +751,6 @@ I have downloaded the software to my demo acct and tried it . I set up my trades
 **Alexander.Gettinger** · Wed Oct 05, 2016 11:56 am
 
 Should the stops of several orders to move dependently of each other?
-
 
 ---
 

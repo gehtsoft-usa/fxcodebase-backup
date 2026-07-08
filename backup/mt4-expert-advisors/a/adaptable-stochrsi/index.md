@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=38&t=61176  
 > Forum: 38 · Topic 61176 · 2 post(s)
 
-
 ---
 
 ## Adaptable StochRSI
@@ -25,8 +24,6 @@ Here is a graphic example:
 
 ![StochRsi_Criteria_Graphic_Example.png](images/95993/StochRsi_Criteria_Graphic_Example.png)
 
-
-
 The green boxes show three stochrsi charts that meet the criteria and the red shows one that does not. The circle show the position of the last 2 crossovers. Since the 8,5,3,3; 21,13,8,8; and, 34,21,13,13 all meet the criteria, I would use the 34,21,13,13 chart for my trading decisions since it is the highest.
 
 I hope this is clear as to what I want to do.
@@ -37,7 +34,6 @@ Thank You
 ThemBonez
 
  [Stoch_RSI.mq4](files/95993/Stoch_RSI.mq4)
-
 
 ---
 
@@ -60,8 +56,8 @@ Ps....I added this code to the Stochastic Rsi code between the lines that calcul
 
 Thank You
 
-Code: [Select all](https://fxcodebase.com/code/)
-`int C,  L,  S,  T, Bar ;
+```mql4
+int C,  L,  S,  T, Bar ;
  Bar=1;
 C=0; L=0; S=0; T=0;
 
@@ -112,4 +108,5 @@ C=0; L=0; S=0; T=0;
                  
                  }           
                  
-  return(0);`
+  return(0);
+```

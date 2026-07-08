@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=1985  
 > Forum: 31 · Topic 1985 · 92 post(s)
 
-
 ---
 
 ## (NEW) Introduce dMACD strategy (Divergence on MACD Signals)
@@ -23,8 +22,6 @@ My primary goal was to research for trading on divergence signals (all types: Tr
 
 *dMACD*
 
-
-
  [dMACD.lua](files/4029/dMACD.lua)
 
  **Note: improved version exists with full functional Risk Management and more (look at post, Tue Dec 14, 2010 [http://www.fxcodebase.com/code/viewtopic.php?f=31&t=1985&p=6747#p6747](http://www.fxcodebase.com/code/viewtopic.php?f=31&t=1985&p=6747#p6747))**
@@ -38,7 +35,6 @@ My primary goal was to research for trading on divergence signals (all types: Tr
 **Note**. Please do not use the strategy on live accounts unless you carefully checked and implicitly decided that the strategy meets your trading goals. Please do not forget that you are solely and fully responsible for all the trades made by the strategy exactly like for the trades executed manually.
 
 The Strategy was revised and updated on December 18, 2018.
-
 
 ---
 
@@ -54,8 +50,6 @@ The Strategy was revised and updated on December 18, 2018.
 
 *dMACD properties*
 
-
-
 Next picture discovers the divergence at glance as it’s implemented by the dMACD strategy.
 
  
@@ -63,8 +57,6 @@ Next picture discovers the divergence at glance as it’s implemented by the dMA
 ![Divergences at work.JPG](images/4030/Divergences%20at%20work.JPG)
 
 *Divergences at work*
-
-
 
 Please also take a look at result of back testing for dMACD strategy.
 
@@ -78,7 +70,6 @@ Thanks!
 
 **NB**
 Currently used symmetric risk management approach, when limit and stop established by the same value (delta).
-
 
 ---
 
@@ -94,7 +85,6 @@ FYI, I tried a backtest with the same pair and time frame than you and my result
 
 Kind regards,
 Danielle
-
 
 ---
 
@@ -119,10 +109,7 @@ I have guessed about different results of yours back testing. Perhaps your BACKT
 
 *Backtesting properties*
 
-
-
 The “Backtesting_properties.JPG” is also included to “Backtesting result.zip” that is provided at previous posts.
-
 
 ---
 
@@ -151,7 +138,6 @@ and latest back testing result.
 
 Thanks!
 
-
 ---
 
 ## Re: Introduce dMACD strategy (Divergence on MACD Signals)
@@ -162,7 +148,6 @@ Hi Konstantin,
  I can't open .lua files. I've used recommended booster but didn't work.
 
 Regards.
-
 
 ---
 
@@ -199,7 +184,6 @@ Please follow next simple “check list” for self:
 
 10. That’s all.
 
-
 ---
 
 ## Re: Introduce dMACD strategy (Divergence on MACD Signals)
@@ -209,7 +193,6 @@ Please follow next simple “check list” for self:
 hi,
 could you tell me on which time frame this strategy should be best used.
 
-
 ---
 
 ## Re: Introduce dMACD strategy (Divergence on MACD Signals)
@@ -218,7 +201,6 @@ could you tell me on which time frame this strategy should be best used.
 
 Hi!
 From my point of view the best time frame is 60 minutes (H1).
-
 
 ---
 
@@ -230,7 +212,6 @@ Hi, I like this strategy, but I have a problem: it opens more than one position,
 Can you enter a check to let it open only one position, or a number estabilished in global configuration?
 Thanks
 
-
 ---
 
 ## Re: Introduce dMACD strategy (Divergence on MACD Signals)
@@ -238,7 +219,6 @@ Thanks
 **vigird** · Thu Sep 30, 2010 4:28 pm
 
 Another position in the opposite direction won't close the current one if you have hedging enabled on your account.
-
 
 ---
 
@@ -248,7 +228,6 @@ Another position in the opposite direction won't close the current one if you ha
 
 Robin, you may also turn off the “**Risk management**” by switch the “**Is need to perform risks management?**” parameter to “**No**”. In this case only “true market order” will be created for opening a position at any currently available market rate.
 This switching off will lead to open only one position at time as you desire.
-
 
 ---
 
@@ -261,7 +240,6 @@ I would like to ask for a little change in this strategy adding the possibility 
 THANK YOU VERY MUCH FOR ALL YOUR HARD WORK.
 JDARIUX
 
-
 ---
 
 ## Re: Introduce dMACD strategy (Divergence on MACD Signals)
@@ -271,7 +249,6 @@ JDARIUX
 And also if you can add the step that before opening a trade should check if the margin is below X % of the account (configurable in the panel). If this condition is correct (Low margin) the position should not open. I guess is to introduce the latest signal of margin alert from Nikolai [viewtopic.php?f=31&t=2442](https://fxcodebase.com/code/viewtopic.php?f=31&t=2442) in this strategy (but again I don’t know how to do it). I was thinking in that the other day and now you have the signal, what are the odds? You are the best!!!!.
 regards
 Jdariux
-
 
 ---
 
@@ -291,13 +268,10 @@ Please take a look at draft of new version of dMACD strategy.
 
 *dMACDext properties*
 
-
-
 Note, this extended edition is not requiring additional .RC file.
 I hope all your desires are fulfilled. In any case, feel free to contact me.
 
 Thanks.
-
 
 ---
 
@@ -306,7 +280,6 @@ Thanks.
 **jdariux** · Tue Oct 26, 2010 1:00 pm
 
 Thank you Konstantin I will test it but it looks even better than I thought.
-
 
 ---
 
@@ -326,26 +299,26 @@ The new parameter "**Is need to perform strict care?**" has been added to "Profi
 
 *new dMACDext properties*
 
-
-
 If "Is need to perform strict care?" = **YES**then trade position will not opened when locking or limiting actions have been happen (it means that current value for Gross P/L of account overcomes established limits, "Max Profit" and "Min Loss" parameters), see lines 245…248:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`local GrossPL = account.GrossPL;
+```lua
+local GrossPL = account.GrossPL;
    if GrossPL > instance.parameters.profit or GrossPL < instance.parameters.loss then
       return;
-   end`
+   end
+```
 
 If "Is need to perform strict care?" = **NO**then trade position will opened and later, if current value (recalculated automatically after open position) for Gross P/L of account overcomes established limits ("Max Profit" and "Min Loss" parameters) then True market close order will be created, see lines 279…283:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`local GrossPL = account.GrossPL;
+```lua
+local GrossPL = account.GrossPL;
    if GrossPL > instance.parameters.profit or GrossPL < instance.parameters.loss then
      valuemap.OrderType = "CM"; -- True market close order closes a position…    
      terminal:execute(id, valuemap);
-   end`
-Thanks.
+   end
+```
 
+Thanks.
 
 ---
 
@@ -380,12 +353,9 @@ Changes:
 
 *Properties of modified version dMACDext*
 
-
-
  [dMACDext.lua](files/5765/dMACDext.lua)
 
 Thanks.
-
 
 ---
 
@@ -407,7 +377,6 @@ Thanks to everybody for your time and sorry for my poor english!
 
 Viriato
 
-
 ---
 
 ## Re: Introduce dMACD strategy (Divergence on MACD Signals)
@@ -415,7 +384,6 @@ Viriato
 **a0007002** · Sun Nov 07, 2010 10:51 am
 
 I couldn't find any info in the forum on this already so will ask here since it relates to all strategy backtesting. When performing a test of a strategy (dMACD in this case) my equity line never changes from 1,000,000. It is a straight line across from left to right no matter what time frame or how much data I zoom in or out on the chart. How do I get the backtest equity to show profit/loss? I contacted FXCM (micro email support) and they never answered me.
-
 
 ---
 
@@ -425,7 +393,6 @@ I couldn't find any info in the forum on this already so will ask here since it 
 
 Try to set "Is need to use autotrading" option to Yes.
 This should fix your problem.
-
 
 ---
 
@@ -442,7 +409,6 @@ Of course, its indirectly affects to profit, but I think, since this strategy ba
 
 Thanks.
 
-
 ---
 
 ## Re: Introduce dMACD strategy (Divergence on MACD Signals)
@@ -457,7 +423,6 @@ please share properties of BACKTEST and used strategy too.
 
 Thanks.
 
-
 ---
 
 ## Re: Introduce dMACD strategy (Divergence on MACD Signals)
@@ -470,7 +435,6 @@ I try to make it, and I continue studying LUA step by step too!
 
 Viriato
 
-
 ---
 
 ## Re: Introduce dMACD strategy (Divergence on MACD Signals)
@@ -482,7 +446,6 @@ It did not work. I have this problem for ALL strategies not just this one. Here 
  
 
 ![backtest.jpg](images/5944/backtest.jpg)
-
 
 ---
 
@@ -498,7 +461,6 @@ your version number of FXCM Trading Station?
 
 Thanks.
 
-
 ---
 
 ## Re: Introduce dMACD strategy (Divergence on MACD Signals)
@@ -511,7 +473,6 @@ currently using version 1.09.101210
  
 
 ![backtest2.jpg](images/5964/backtest2.jpg)
-
 
 ---
 
@@ -537,7 +498,6 @@ You also told:
 Please pay attention, not all strategies has ability to work in “Autotrading” mode. In this case any changes of Equity in Backtesting will not show also.
 
 Thanks.
-
 
 ---
 
@@ -580,18 +540,13 @@ Trade for pleasure with full Risk Management!
 
 *dMACDext properties*
 
-
-
  
 
 ![Example of logging (for FIFO account).JPG](images/6065/Example%20of%20logging%20%28for%20FIFO%20account%29.JPG)
 
 *Example of logging (for FIFO account)*
 
-
-
 Thanks.
-
 
 ---
 
@@ -607,7 +562,6 @@ I was wondering why you set it to Mix simulation of price instead of Close. Isn'
 If you use Close, it rarely provides profit though.
 
 Just wondering, I'm still kind of a newbie
-
 
 ---
 
@@ -629,8 +583,6 @@ Please take a look at next picture. There is dMACDext strategy applied for backt
 
 *Mix mode of backtesting process*
 
-
-
 As you can see, BUY/SELL signals are produced at one time.
 
 But, if you change the “Price simulation” parameter of BACKTEST to “Close” the backtesting process will have less data (ticks per period of the history) for simulation and BUY/SELL signals of backtesting will not concur with signals in “real trade place”. This situation will provide rarely profit, so I have suggested using “Mix” mode for backtesting process, in general cases.
@@ -640,7 +592,6 @@ For additional information,
 if “Price simulation” parameter of BACKTEST sets to “Close” we have only one (1) tick per period of the history and if it sets to “Mix” or other we have eleven (11) ticks per period of the history.
 
 Thanks.
-
 
 ---
 
@@ -653,7 +604,6 @@ Thanks! Outstanding reply and explanation.
 I am succesfully using your strategy now on my windows system with a locale that uses . as the decimal seperator. I did notice it gives *very* strange results when using it on a windows machine that has another localized setting, such as Dutch, where the , (comma) is used for decimal seperation....
 
 I'll just keep my locale on English, just thought you might want to know!
-
 
 ---
 
@@ -670,7 +620,6 @@ Could you please explain what exactly means
 Since I have Russian locale, that also has “,” (comma) as decimal separation and do not have problem.
 
 Thanks in advance.
-
 
 ---
 
@@ -709,7 +658,6 @@ Hello, I tried to download DMACD,but I couldn't download it as shown in the exam
 >
 > **Note**. Please do not use the strategy on live accounts unless you carefully checked and implicitly decided that the strategy meets your trading goals. Please do not forget that you are solely and fully responsible for all the trades made by the strategy exactly like for the trades executed manually.
 
-
 ---
 
 ## Re: (NEW) Introduce dMACD strategy (Divergence on MACD Signals)
@@ -736,7 +684,6 @@ Again though, I don't mind, just thought I should let you know
 
 Playing around with it something else came to mind; can you build in email notifications of the net result when an order is closed? ie: the profit or loss?
 
-
 ---
 
 ## Re: (NEW) Introduce dMACD strategy (Divergence on MACD Signals)
@@ -754,7 +701,6 @@ In any case, there is direct link to last version of strategy. (dMACDext, versio
 Please check it.
 
 Thanks.
-
 
 ---
 
@@ -776,8 +722,6 @@ Now is possible to monitoring for trade positions with notification by E-mail.
 
 *dMACDext properties (version 2.2)*
 
-
-
  [dMACDext.lua](files/6438/dMACDext.lua)
 
  [E-mail notification sample.txt](files/6438/E-mail%20notification%20sample.txt)
@@ -790,7 +734,6 @@ Please, do not forget to properly configure the Send Email Functionality of FXCM
 
 Thanks.
 
-
 ---
 
 ## Re: (NEW) Introduce dMACD strategy (Divergence on MACD Signals)
@@ -798,7 +741,6 @@ Thanks.
 **Caalador** · Tue Dec 07, 2010 5:46 am
 
 very nice! I am going to install a virtual machine on my server and see if your strategy (and FXCM) and the email stuff will work in an RDP session Will keep you posted, might take a while until I get it up, cuz I just got back from the US
-
 
 ---
 
@@ -811,7 +753,6 @@ very nice! I am going to install a virtual machine on my server and see if your 
 
 Based on my experience, the Trading Station/Marketscope works very well via RDP. Personally I have one PC with platform running my strategies working for weeks without any crash or hang. I use my laptop to monitor trades execution with either RDP or just another Trading Station under the same login.
 
-
 ---
 
 ## Re: (NEW) Introduce dMACD strategy (Divergence on MACD Signals)
@@ -819,7 +760,6 @@ Based on my experience, the Trading Station/Marketscope works very well via RDP.
 **Caalador** · Mon Dec 13, 2010 3:05 pm
 
 ok, tried it in a windows XP vm....but the strategy properties say "TESTACC_ID" instead of my account number. I'm logged into the real server though. Any thoughts? I also tried backtesting with that, it just got a huge loss on every currency pair with the default settings, which it doesn't on my laptop...
-
 
 ---
 
@@ -839,12 +779,9 @@ Now is possible to choice Price Stream (data source, including Volumes) for basi
 
 *dMACDext properties (version 2.3)*
 
-
-
  [dMACDext.lua](files/6747/dMACDext.lua)
 
 Thanks.
-
 
 ---
 
@@ -863,15 +800,11 @@ Please take a look at next pictures for details.
 
 *dMACDext backtesting (on Volumes)*
 
-
-
  
 
 ![dMACDext backtesting on Volumes (during approx one year).JPG](images/6749/dMACDext%20backtesting%20on%20Volumes%20%28during%20approx%20one%20year%29.JPG)
 
 *dMACDext backtesting on Volumes (during approx one year)*
-
-
 
  
 
@@ -879,10 +812,7 @@ Please take a look at next pictures for details.
 
 *BACKTEST properties (on Volumes)*
 
-
-
 Thanks.
-
 
 ---
 
@@ -893,7 +823,6 @@ Thanks.
 What period do you set your strategy to? In your screenshot it shows minute, but in previous versions and posts you mentioned hourly to be optimal for your strategy?
 
 Also, I still have the TESTACC_ID thing in my RDP sessions, where strategies don't seem to work normally. Where on my normal FXCM I see my account number...(see my previous post, I think it was approved later by the mod/admin)
-
 
 ---
 
@@ -913,7 +842,6 @@ For backtesting you will always have TESTACC_ID instead of account number, no ma
 
 Thanks.
 
-
 ---
 
 ## Re: (NEW) Introduce dMACD strategy (Divergence on MACD Signals)
@@ -925,7 +853,6 @@ Hmm, interesting, in backtesting it always shows my account number...I'm using W
 The only place where it shows TESTACC_ID is on my virtual machine (windows xp x32), where the strategies don't work...weird.
 
 Thanks for the info on strategies by the way, it's good to know more about optimal periods
-
 
 ---
 
@@ -944,7 +871,6 @@ And for double check, what's version of FXCM Trading Station you using?
 
 Thanks in advance.
 
-
 ---
 
 ## Re: (NEW) Introduce dMACD strategy (Divergence on MACD Signals)
@@ -956,7 +882,6 @@ ok, tradinsgtation on computer WITHOUT RDP: 01.09.091010
 and tradingstation on computer WITH RDP: 01.09.101210
 
 strange how it shows or hides the account number isn't it? And how very different the backtesting result is...I don't understand
-
 
 ---
 
@@ -978,8 +903,6 @@ All works fine, w/o any problem and I have exactly the same result for backtesti
 
 *dMACDext on WinXP x32 via RDP*
 
-
-
 Please take a look at attached archive for full details.
 
  [dMACDext on virtual machine (windows xp x32).zip](files/6821/dMACDext%20on%20virtual%20machine%20%28windows%20xp%20x32%29.zip)
@@ -992,7 +915,6 @@ Please keep in touch with me, I have interesting what’s wrong for your environ
 
 Thanks.
 
-
 ---
 
 ## Re: (NEW) Introduce dMACD strategy (Divergence on MACD Signals)
@@ -1002,7 +924,6 @@ Thanks.
 ok, I have the newest version now on all 5 virtual machines and they are consistent now. I'm testing your strategy over different periods and with different options to assess their viability on test accounts instead of backtesting
 
 So far I've noticed it sometimes dives very deep into the margin limit and opens a huge amount of positions when risk management is not used. And it rarely closes these positions....but so far so good.
-
 
 ---
 
@@ -1024,7 +945,6 @@ The old 'Typical' selection also works well on daily, and sometimes on hourly, b
 
 I will keep testing your strategies for 3 months and I will post the final results here.
 
-
 ---
 
 ## Re: (NEW) Introduce dMACD strategy (Divergence on MACD Signals)
@@ -1042,7 +962,6 @@ Working with “Volumes” please pay attention, not all currency pairs and time
 Applying timeframes below D1 (i.e. H8, H6, H4 and so on) will lead to worse profit, since based Price Stream (Volume) in this case is not well represented (has not enough values).
 
 Thanks a lot for report about ‘Typical selection’ and thanks in advance for your future ‘final results‘.
-
 
 ---
 
@@ -1067,7 +986,6 @@ Thanks a lot for report about ‘Typical selection’ and thanks in advance for 
 
 I am getting the same error message. Have you managed to resolve this Caalador? I have downloaded the latest version Trading Station but this hasn't solved it.
 
-
 ---
 
 ## Re: (NEW) Introduce dMACD strategy (Divergence on MACD Signals)
@@ -1084,7 +1002,6 @@ One more guesses what about standard MACD indicator for your instance of FXCM Tr
 
 Thanks.
 
-
 ---
 
 ## Re: (NEW) Introduce dMACD strategy (Divergence on MACD Signals)
@@ -1096,7 +1013,6 @@ Thanks.
 
 I just removed all the backtests (the test thing in the graph in marketscope in the bottom that shows profit/loss for the tested strategy) and readded them and the problem went away. I did see a similar error once more when I lost my internet connection while it was running but it didn't seem to cause any problems.
 
-
 ---
 
 ## Re: (NEW) Introduce dMACD strategy (Divergence on MACD Signals)
@@ -1105,7 +1021,6 @@ I just removed all the backtests (the test thing in the graph in marketscope in 
 
 Thanks for your help, I've got it working now.
 
-
 ---
 
 ## Re: (NEW) Introduce dMACD strategy (Divergence on MACD Signals)
@@ -1113,7 +1028,6 @@ Thanks for your help, I've got it working now.
 **Egioras** · Sat Jan 15, 2011 8:32 am
 
 Hello everyone.I´m allso have error massage on EUR/USD but it works on USD/JPY. EUR/JPY is not working.
-
 
 ---
 
@@ -1127,7 +1041,6 @@ Could you please share your BACKTEST and Strategy Properties? I have retested **
 
 Thanks in advance.
 
-
 ---
 
 ## Re: (NEW) Introduce dMACD strategy (Divergence on MACD Signals)
@@ -1138,7 +1051,6 @@ Hi
 i just started to use this awesome strategy but first couple of time it didn't let me to backtest it , when i changed the auto trading to yes
 Then I've restarted the platform and now i can use it but it gives me flat equity bar
 for the record i use the latest version of trading station and i did change auto trading to yes
-
 
 ---
 
@@ -1162,15 +1074,12 @@ Please take a look at next picture,
 
 *BACKTEST and Strategy Properties*
 
-
-
 you can see BACKTESTing of strategy and all properties.
 
 Could you please check it for you with the same properties and the same currency pair (EUR/USD) and timeframe (m1)?
 I have also latest version of trading station (**01.10.010311**) and all works fine.
 
 Thanks in advance.
-
 
 ---
 
@@ -1179,7 +1088,6 @@ Thanks in advance.
 **knightflyer** · Tue Jan 18, 2011 11:55 am
 
 I must have missed something but how do you prevent this from opening multiple positions, one after the other, in the same direction. Thanks.
-
 
 ---
 
@@ -1204,7 +1112,6 @@ In case ‘Non-hedging account’ (FIFO, US-account) the third position (Sell) w
 
 Thank you too.
 
-
 ---
 
 ## Re: (NEW) Introduce dMACD strategy (Divergence on MACD Signals)
@@ -1212,7 +1119,6 @@ Thank you too.
 **knightflyer** · Wed Jan 19, 2011 3:02 am
 
 Thanks for that Konstantin, I have been using various time frames for back testing and have found daily to be the most reliable. If this works half as well in real life as in the back tests it should be fantastic. Fingers crossed here we go.
-
 
 ---
 
@@ -1231,7 +1137,6 @@ How can I fxi this issue?
 Thanks
 Mike
 
-
 ---
 
 ## Re: (NEW) Introduce dMACD strategy (Divergence on MACD Signals)
@@ -1246,7 +1151,6 @@ What type of account you use.
 Real or Demo,
  what version of the platform you use,
 Do you have a Uk or U.S. account,
-
 
 ---
 
@@ -1272,7 +1176,6 @@ Do you have a Uk or U.S. account,
 Thanks a lot Konstantin.Usanov
 i will try your advice as soon as i get a chance and i let you know
 
-
 ---
 
 ## Re: (NEW) Introduce dMACD strategy (Divergence on MACD Signals)
@@ -1286,7 +1189,6 @@ Can this be used in 15M timeframe or less?
 
 Thanks
 BC
-
 
 ---
 
@@ -1315,7 +1217,6 @@ Yes, the strategy can be used in any timeframes, except ticks (T). But need to k
 
 Thank you too.
 
-
 ---
 
 ## Re: (NEW) Introduce dMACD strategy (Divergence on MACD Signals)
@@ -1330,7 +1231,6 @@ i want to trade 1 lot , limit 25 stop 100.
 
 if i want to set it to trade 5 lots each time, do i set the limit to 125 and stop to 500?
 
-
 ---
 
 ## Re: (NEW) Introduce dMACD strategy (Divergence on MACD Signals)
@@ -1339,7 +1239,6 @@ if i want to set it to trade 5 lots each time, do i set the limit to 125 and sto
 
 Hi again,Constantin.Simply i can´t load dMACD file to platform.I´m using FXCM.But loading dMACDext is ok.
 
-
 ---
 
 ## Re: (NEW) Introduce dMACD strategy (Divergence on MACD Signals)
@@ -1347,7 +1246,6 @@ Hi again,Constantin.Simply i can´t load dMACD file to platform.I´m using FXCM.
 **Caalador** · Thu Jan 27, 2011 7:12 pm
 
 Egioras, you're trying to load it as an indicator, you should load it as a strategy, in marketscope
-
 
 ---
 
@@ -1364,7 +1262,6 @@ This is wrong way to load strategies, please load strategies by corresponded dia
 For example, “Add Strategy” -> “Manage Custom Strategies” dialogs.
 
 Thanks.
-
 
 ---
 
@@ -1397,7 +1294,6 @@ I hope, it will help you.
 
 Thanks.
 
-
 ---
 
 ## Re: (NEW) Introduce dMACD strategy (Divergence on MACD Signals)
@@ -1405,7 +1301,6 @@ Thanks.
 **Caalador** · Fri Jan 28, 2011 3:17 pm
 
 ah yeah, ok so I shouldn't multiply my stop or limit by the lot size, understood
-
 
 ---
 
@@ -1426,7 +1321,6 @@ ah yeah, ok so I shouldn't multiply my stop or limit by the lot size, understood
 > Mike
 
 I'm having the same problem at EUR/USD. Is there a fix to this? Only setting the basic properties and leaving the extended options as is. But its giving me the error above too.
-
 
 ---
 
@@ -1455,7 +1349,6 @@ I hope this will helpful for you.
 
 Thanks.
 
-
 ---
 
 ## Re: (NEW) Introduce dMACD strategy (Divergence on MACD Signals)
@@ -1469,7 +1362,6 @@ Keep a maximum of 1 or 2 or 3 positions open and each one of a maximum of 1 or 2
 I would like the strategy to have 1 open short of 1 lot and until that trade is not closed, the strategy should not try to short again.
 
 Is that possible? Any help will be welcome, by the way this strategy is so far the one who has had the best results for me.
-
 
 ---
 
@@ -1502,7 +1394,6 @@ value from parameters then trade is not process.
 
 Thanks.
 
-
 ---
 
 ## Re: (NEW) Introduce dMACD strategy (Divergence on MACD Signals)
@@ -1519,7 +1410,6 @@ If the strategy wouldn't have opened the second short, i would have ended with +
 3. Finally, the idea of autotrading is to create a strategy that operates the way i would do it even when i'm sleeping, well, i would never use more than 50% of my account resources, that means i always want to have at least 50% of my account as backup, but the stratefy does not take that into consideration.
 
 Well, thanks very much for taking the time to answer to my post. If I had the knowledge, i would implement those changes by myself, but i tried and i didn't succeed, so, if someone else is interested in helping me, that will be much appreciated.
-
 
 ---
 
@@ -1546,7 +1436,6 @@ That way you could trade hourly charts, but never go against the daily trends.
 
 Hope my feedback is usable
 
-
 ---
 
 ## Re: (NEW) Introduce dMACD strategy (Divergence on MACD Signals)
@@ -1570,7 +1459,6 @@ It’s the same strategy as dMACDext but can use different indicators (not only 
 
 Thanks.
 
-
 ---
 
 ## Re: (NEW) Introduce dMACD strategy (Divergence on MACD Signals)
@@ -1578,7 +1466,6 @@ Thanks.
 **Caalador** · Wed Mar 09, 2011 4:01 pm
 
 Hmm, does that mean the indicators have to give the right signals? I just tried the standard one for ichimoku and it didn't seem to do anything in a backtest (with trade allowed)
-
 
 ---
 
@@ -1590,7 +1477,6 @@ if configured it to start with the same currency pair (i.g EUR/USD) if i want to
 
 thx
 
-
 ---
 
 ## Re: (NEW) Introduce dMACD strategy (Divergence on MACD Signals)
@@ -1598,7 +1484,6 @@ thx
 **Konstantin.Usanov** · Mon May 16, 2011 7:06 am
 
 ..., you should not configure the price type one for ask and one for bid, since strategy will decide about certain trading operation automatically by divergence calculation.
-
 
 ---
 
@@ -1615,7 +1500,6 @@ I just noticed that when I have Margin Care activated, the strategy would not ac
 Is this intended behavior or am I doing something wrong?
 
 Thanks
-
 
 ---
 
@@ -1639,7 +1523,6 @@ In other words, the “Margin Care” feature is always acting prior to any trad
 This approach insures your account’s resources when the “AutoTrading” feature of dMACDext strategy is acting. Since, for example, you may have other trading operation (manual or produced by other strategies) that works on the same account and they also may reduce available account’s resources.
 
 Thanks.
-
 
 ---
 
@@ -1680,7 +1563,6 @@ would be great ful to you if you could add profit/loss care parameter to the 2 M
 thanks
 by
 
-
 ---
 
 ## Re: (NEW) Introduce dMACD strategy (Divergence on MACD Signals)
@@ -1690,7 +1572,6 @@ by
 It seems that I am having a problem with this program. It is only executing short positions. There is probably something that I'm doing wrong but I cant figure it out.
 Can someone help?
 Thank You
-
 
 ---
 
@@ -1706,7 +1587,6 @@ I have read almost all the posts on the DMACD threads.
 I cannot figure out what the exit of a trade is if there is no Stop or Limit set.
 How is a Histogram Divergence trade exited?
 
-
 ---
 
 ## Re: (NEW) Introduce dMACD strategy (Divergence on MACD Signa
@@ -1715,7 +1595,6 @@ How is a Histogram Divergence trade exited?
 
 Hi, I'm trying to run this strategy to trade live, but I notice in the strategies tab in Trading Station it shows "allow Trading" is set to no. I have "Is need to use autotrading" set to yes. Will it still do autotrading or is there some way for Trading Station to show allow trading set to yes? I am using version 2.3 of the dMACD strategy. Thanks in advance!
 
-
 ---
 
 ## Re: (NEW) Introduce dMACD strategy (Divergence on MACD Signa
@@ -1723,7 +1602,6 @@ Hi, I'm trying to run this strategy to trade live, but I notice in the strategie
 **Apprentice** · Sat Dec 17, 2016 9:03 am
 
 Strategy was revised and updated.
-
 
 ---
 
@@ -1735,7 +1613,6 @@ Dear amgalanbaatar,
 
 I was not able to install the file dMACD.lua.rc since TS does not recognize the extension "rc". What I have to do to install it?
 Fabio
-
 
 ---
 

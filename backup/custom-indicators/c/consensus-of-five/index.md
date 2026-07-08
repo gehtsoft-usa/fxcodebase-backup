@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=27184  
 > Forum: 17 · Topic 27184 · 22 post(s)
 
-
 ---
 
 ## Consensus of Five
@@ -11,8 +10,6 @@
 **Apprentice** · Thu Nov 29, 2012 10:32 am
 
 ![Consensus of Five.png](images/47338/Consensus%20of%20Five.png)
-
-
 
 This indication is obtained as Consensus of all selected (five) indicators.
 
@@ -39,13 +36,10 @@ blue
 
 ![EURUSD D1 (03-11-2016 2034).png](images/47338/EURUSD%20D1%20%2803-11-2016%202034%29.png)
 
-
-
  [MTF MCP Consensus of Five.lua](files/47338/MTF%20MCP%20Consensus%20of%20Five.lua)
 
 MT4 version is available here.
 [viewtopic.php?f=38&t=61082&p=107618#p107618](http://www.fxcodebase.com/code/viewtopic.php?f=38&t=61082&p=107618#p107618)
-
 
 ---
 
@@ -55,7 +49,6 @@ MT4 version is available here.
 
 Thank you for indicator. Could you please create strategy according to scenario - buy on start of green color and sell start of red color.
 
-
 ---
 
 ## Re: Consensus of Five
@@ -64,7 +57,6 @@ Thank you for indicator. Could you please create strategy according to scenario 
 
 Requested can be found here.
 [viewtopic.php?f=31&t=29545](https://fxcodebase.com/code/viewtopic.php?f=31&t=29545)
-
 
 ---
 
@@ -76,8 +68,8 @@ hi,
 
 i think the ADX was given the other way around for the signal of opening short deals - it still should be above 20 and below 40 as it was given for the long positions.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`if ONE == nil   and  TWO == nil  and THREE_B == nil  and THREE_S == nil and FOUR_B== nil and FOUR_S== nil and FIVE_B== nil  and FIVE_S== nil  then
+```lua
+if ONE == nil   and  TWO == nil  and THREE_B == nil  and THREE_S == nil and FOUR_B== nil and FOUR_S== nil and FIVE_B== nil  and FIVE_S== nil  then
       open:setColor(period, instance.parameters.No);      
       elseif (ONE == true or ONE == nil) 
       and (TWO  == true  or TWO == nil) 
@@ -93,8 +85,8 @@ Code: [Select all](https://fxcodebase.com/code/)
       and (FIVE_S  == false or FIVE_S == nil) 
       then
       open:setColor(period, instance.parameters.Dn);
-      else`
-
+      else
+```
 
 ---
 
@@ -104,7 +96,6 @@ Code: [Select all](https://fxcodebase.com/code/)
 
 Fixed.
 Please Re-Download.
-
 
 ---
 
@@ -120,7 +111,6 @@ This would be a great help!
 Thanks,
 Zoltan
 
-
 ---
 
 ## Re: Consensus of Five
@@ -133,7 +123,6 @@ If not can one be made??
 
 Thankss!
 
-
 ---
 
 ## Re: Consensus of Five
@@ -141,7 +130,6 @@ Thankss!
 **Apprentice** · Thu Aug 28, 2014 5:22 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -151,7 +139,6 @@ Your request is added to the development list.
 
 Requested can be found here.
 [viewtopic.php?f=38&t=61082](https://fxcodebase.com/code/viewtopic.php?f=38&t=61082)
-
 
 ---
 
@@ -167,7 +154,6 @@ sell when EWO crossunder 0 line or top and consensus of five is red
 
 Thanks in advance
 
-
 ---
 
 ## Re: Consensus of Five
@@ -175,7 +161,6 @@ Thanks in advance
 **Apprentice** · Tue Dec 23, 2014 3:23 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -194,7 +179,6 @@ blue dot; for neutral trend
 if the indicator look is like mtf mcp alternative ichimoku it will be good
 [viewtopic.php?f=17&t=63193](http://www.fxcodebase.com/code/viewtopic.php?f=17&t=63193)
 
-
 ---
 
 ## Re: Consensus of Five
@@ -203,7 +187,6 @@ if the indicator look is like mtf mcp alternative ichimoku it will be good
 
 MTF MCP Consensus of Five Added.
 
-
 ---
 
 ## Re: Consensus of Five
@@ -211,7 +194,6 @@ MTF MCP Consensus of Five Added.
 **Apprentice** · Sun Sep 23, 2018 7:13 am
 
 The indicator was revised and updated.
-
 
 ---
 
@@ -229,7 +211,6 @@ Hello, I know this is an old post, but I liked this tool, you did a great job!
 
 p.s. I have attached an image with the explanation, buy/sell arrow (with buffer) only on the first sinal of the row.
 
-
 ---
 
 ## Re: Consensus of Five
@@ -239,7 +220,6 @@ p.s. I have attached an image with the explanation, buy/sell arrow (with buffer)
 Your request is added to the development list.
 Development reference 793.
 
-
 ---
 
 ## Re: Consensus of Five
@@ -248,12 +228,9 @@ Development reference 793.
 
 ![AUDJPY M1 (03-02-2020 1843).png](images/131636/AUDJPY%20M1%20%2803-02-2020%201843%29.png)
 
-
-
 Try this version.
 
  [Consensus of Five.lua](files/131636/Consensus%20of%20Five.lua)
-
 
 ---
 
@@ -264,7 +241,6 @@ Try this version.
 Sorry, I only know how to open/compile .mql4 files... Can you please send as .mql4?
 thanks so much!!
 
-
 ---
 
 ## Re: Consensus of Five
@@ -272,7 +248,6 @@ thanks so much!!
 **jonas_sp** · Wed Mar 04, 2020 10:32 pm
 
 Looking to the picture it seems like it's getting the alert to the second candle after the consensus, is this the best or only way to enter? I am saying because the first candle is more assertive, it would be great to anticipate that, but is looking good, thank you
-
 
 ---
 
@@ -283,7 +258,6 @@ Looking to the picture it seems like it's getting the alert to the second candle
 Your request is added to the development list.
 Development reference 822.
 
-
 ---
 
 ## Re: Consensus of Five
@@ -292,7 +266,6 @@ Development reference 822.
 
 MT4/MQ4 version.
 [viewtopic.php?f=38&t=69508](https://fxcodebase.com/code/viewtopic.php?f=38&t=69508)
-
 
 ---
 

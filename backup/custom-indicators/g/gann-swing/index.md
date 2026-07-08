@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=294  
 > Forum: 17 · Topic 294 · 14 post(s)
 
-
 ---
 
 ## Gann Swing
@@ -31,8 +30,8 @@ The rules are the following:
 >
 > 9. Markets fall below the previous valley marks the beginning of Downtrenda (Dash line).
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- initializes the indicator
+```lua
+-- initializes the indicator
 function Init()
     indicator:name("Gann Swing");
     indicator:description("");
@@ -206,7 +205,8 @@ function Update(period)
             _previousDrawn = source:date(previousDrawn);
         end
     end
-end`
+end
+```
 
 Download:
 
@@ -218,7 +218,6 @@ Mq4 version can be found here.
 [viewtopic.php?f=38&t=63884&p=108195#p108195](https://fxcodebase.com/code/viewtopic.php?f=38&t=63884&p=108195#p108195)
 
 The indicator was revised and updated
-
 
 ---
 
@@ -232,7 +231,6 @@ Can you make it in bigger time frame, too?
 
 Thank you in advance
 
-
 ---
 
 ## Re: Gann Swing
@@ -241,7 +239,6 @@ Thank you in advance
 
 Added to developmental cue.
 
-
 ---
 
 ## Re: Gann Swing
@@ -249,7 +246,6 @@ Added to developmental cue.
 **Apprentice** · Fri Nov 26, 2010 10:42 am
 
 Style Update
-
 
 ---
 
@@ -261,7 +257,6 @@ As it is illustrated on bullet points 8 and 9 of the original post, it would be 
 
 Thanks in advance
 
-
 ---
 
 ## Re: Gann Swing
@@ -271,7 +266,6 @@ Thanks in advance
 Adding this capability is now quite complicated, gives me a headache.
 Just wait a few days to release a new version of the platform.
 
-
 ---
 
 ## Re: Gann Swing
@@ -280,11 +274,8 @@ Just wait a few days to release a new version of the platform.
 
 ![untitled.PNG](images/19112/untitled.PNG)
 
-
-
 Bigger time frame version is now unnecessary.
 It is possible to have this, by changing the time frame of the data source.
-
 
 ---
 
@@ -300,7 +291,6 @@ Is it possible to combine the 2 here attached indicators in order to have a Gann
 
 Thank you in advance
 
-
 ---
 
 ## Re: Gann Swing
@@ -308,7 +298,6 @@ Thank you in advance
 **Apprentice** · Wed Sep 25, 2013 4:25 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -319,7 +308,6 @@ Your request is added to the development list.
 Try This version.
 [viewtopic.php?f=17&t=59571](https://fxcodebase.com/code/viewtopic.php?f=17&t=59571)
 
-
 ---
 
 ## Re: Gann Swing
@@ -327,7 +315,6 @@ Try This version.
 **volnmar** · Tue Dec 02, 2014 4:52 am
 
 can you please update it with option for **3** consecutive bars? Not only 2.
-
 
 ---
 
@@ -344,7 +331,6 @@ Or like it is described here: [http://www.ino.com/blog/2009/07/using-gann-swing-
 >
 > Observe diagrams A & B. (Assume trend is up). The “standard” Gann 3 candle pullback is shown in diagram A. A swing low is established at point X. According to W.D. Gann, point Y in diagram B would not qualify as a swing low, because down days are not consecutive. In reality I suggest there is little difference between diagram A and B, so little in fact, one can suggest they are substantially the same. Consequently, I have chosen to modify a traditional Gann 3 period swing chart by relaxing the requirement for there to be 3 “consecutive” days in order for a Gann swing to be formed. I use the definition of 3 lower lows (without there being a new higher high – i.e. higher than “Z” in-between).
 
-
 ---
 
 ## Re: Gann Swing
@@ -352,7 +338,6 @@ Or like it is described here: [http://www.ino.com/blog/2009/07/using-gann-swing-
 **Apprentice** · Tue Dec 02, 2014 6:44 pm
 
 Your request is added to the development list.
-
 
 ---
 

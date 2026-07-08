@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=301  
 > Forum: 17 · Topic 301 · 9 post(s)
 
-
 ---
 
 ## Chande's Momentum Osc. and Variable Index Dyn. Avg. (Vidya)
@@ -37,8 +36,6 @@ VIDYA[i] = K * SC * PRICE[i] + (1 – K * SC) * VIDYA[I - 1]
 
 ![vidya.png](images/523/vidya.png)
 
-
-
 Download:
 
  [CMO.lua](files/523/CMO.lua)
@@ -48,7 +45,6 @@ See also absolute CMO below ([viewtopic.php?f=17&t=301#p1250](https://fxcodebase
  [VIDYA.lua](files/523/VIDYA.lua)
 
 The indicator was revised and updated
-
 
 ---
 
@@ -62,10 +58,8 @@ Compare the Vidya (blue) and Vidya92 (green) at the chart:
 
 ![vidya.png](images/525/vidya.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`-- Indicator profile initialization routine
+```lua
+-- Indicator profile initialization routine
 function Init()
     indicator:name("Chande's Variable Index Dynamic Average 1992 version");
     indicator:description("");
@@ -114,12 +108,12 @@ function Update(period)
         cmo = s1 / s2;
         V[period] = sc * cmo * source[period] + (1 - sc * cmo) * V[period - 1];
     end
-end`
+end
+```
 
 Download:
 
  [VIDYA92.lua](files/525/VIDYA92.lua)
-
 
 ---
 
@@ -131,7 +125,6 @@ Thank you.
 This is exactly the indicator I was starting to code myself...
 This version of the variable moving average is VERY useful, if you know how to use it.
 
-
 ---
 
 ## Re: Chande's Momentum Osc. and Variable Index Dyn. Avg. (Vidya)
@@ -139,7 +132,6 @@ This version of the variable moving average is VERY useful, if you know how to u
 **michaelwen** · Thu Apr 15, 2010 10:24 pm
 
 do you have indicator call: Absolute CMO? thanks
-
 
 ---
 
@@ -156,8 +148,8 @@ So, it's easy to modify the CMO indicator to absolute CMO.
 
 The code of the indicator is below
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- Indicator profile initialization routine
+```lua
+-- Indicator profile initialization routine
     function Init()
         indicator:name("Absolute Chande Momentum Oscillator");
         indicator:description("");
@@ -221,12 +213,12 @@ Code: [Select all](https://fxcodebase.com/code/)
             --CMO[period] = (s1 - s2) / (s1 + s2) * 100;
             CMO[period] = math.abs((s1 - s2) / (s1 + s2) * 100) / 100;
         end
-    end`
+    end
+```
 
 Download the indicator:
 
  [AbsCMO.lua](files/1250/AbsCMO.lua)
-
 
 ---
 
@@ -237,7 +229,6 @@ Download the indicator:
 Thanks Mr Nikolay. I will test this indicator. thanks again for your time.
 
 Michael
-
 
 ---
 
@@ -250,7 +241,6 @@ i just join fxcodebase and i have no trading experience, although i practised so
 I'm just starting with loading some indicator on marketscope and see what happens. One of the first indicator i loaded is the Vidya.lue file, since i already experienced it on the other platform, and changed it by using as smoothing for exaple the VHF instead of the CMO. Something that sound strange to me is that the Vidya seems by far the worst moving average , even if compared to a simple moving average. The Kama much more reactive.For example with a period of 20 the lag of Vidya seems more than clear. Perhaps my memory about the Vidya reactivity are groundless, or perhaps i never understood how to use it. But seems to be a confirmation the fact that the other proposed Vidya92.lua behaves "properly", even with short and long range both equal to 20.
 I would like also to kindly ask you some suggestion on how to vary the Vidya (or any other variable moving average) in order to use two different periods for the calculation of the smoothing and of the Vidya itself
 
-
 ---
 
 ## Re: Chande's Momentum Osc. and Variable Index Dyn. Avg. (Vid
@@ -261,7 +251,6 @@ I am having a issue with the VIDYA 92 Indicator, when its operating in the FRACT
 The error message I am having is C44,-1:E19-Specified Index Is Out Of Range.
 
 Can I have some assistance with this error message please.
-
 
 ---
 

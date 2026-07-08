@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=2068  
 > Forum: 17 · Topic 2068 · 16 post(s)
 
-
 ---
 
 ## TrendLord Indicator [Upd Oct, 05]
@@ -28,12 +27,10 @@ where N is the indicator parameters.
 
 ![TrendLord.png](images/4233/TrendLord.png)
 
-
-
 Download indicator:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Trend lord");
     indicator:description("Trend lord");
     indicator:requiredSource(core.Tick);
@@ -111,15 +108,14 @@ function Update(period, mode)
             end
         end
      end
-end`
+end
+```
 
  [TrendLord.lua](files/4233/TrendLord.lua)
 
  
 
 ![TrendLord with Higher Time Frame Confirmation.png](images/4233/TrendLord%20with%20Higher%20Time%20Frame%20Confirmation.png)
-
-
 
 TrendLord with Higher Time Frame Confirmation will add Higher Time Frame TrendLord,
 to confirm the chart time frame indications.
@@ -129,7 +125,6 @@ to confirm the chart time frame indications.
 TrendLord.lua based strategy.
 [viewtopic.php?f=31&t=2262](https://fxcodebase.com/code/viewtopic.php?f=31&t=2262)
 
-
 ---
 
 ## Re: TrendLord Indicator (make a signal?)
@@ -138,7 +133,6 @@ TrendLord.lua based strategy.
 
 Is it possible to create a signal for this indicator with a sound associated to buys and sells?
 
-
 ---
 
 ## Re: TrendLord Indicator
@@ -146,7 +140,6 @@ Is it possible to create a signal for this indicator with a sound associated to 
 **Apprentice** · Sat Sep 25, 2010 4:42 am
 
 Added to development cue.
-
 
 ---
 
@@ -157,7 +150,6 @@ Added to development cue.
 This Signal / Strategy can be found here.
 [viewtopic.php?f=31&t=2262&p=4786#p4786](https://fxcodebase.com/code/viewtopic.php?f=31&t=2262&p=4786#p4786)
 
-
 ---
 
 ## Re: TrendLord Indicator [Upd Oct, 05]
@@ -165,7 +157,6 @@ This Signal / Strategy can be found here.
 **ancient-school** · Thu Jun 09, 2011 2:59 pm
 
 Is it possible to plot this Indicator on Price?
-
 
 ---
 
@@ -184,8 +175,6 @@ To place the indicator on main chart area:
 
 ![location.PNG](images/11679/location.PNG)
 
-
-
 3) The confirmation box will appear. Click OK.
 4) In the dialog click OK.
 Your indicator will be moved to the main chart area:
@@ -193,7 +182,6 @@ Your indicator will be moved to the main chart area:
  
 
 ![trendlord.PNG](images/11679/trendlord.PNG)
-
 
 ---
 
@@ -205,7 +193,6 @@ Can you add a MA timeframe confirmation?
 
 Thank you
 
-
 ---
 
 ## Re: TrendLord Indicator [Upd Oct, 05]
@@ -213,7 +200,6 @@ Thank you
 **Apprentice** · Sat Oct 04, 2014 2:36 am
 
 Sure. Will try to write something for you tomorrow.
-
 
 ---
 
@@ -229,7 +215,6 @@ TrendLord with Higher Time Frame Confirmation Added.
 Something like this.
 Your request is not eloquent at best,
 and It is difficult to decipher it.
-
 
 ---
 
@@ -263,7 +248,6 @@ Trendlord red
 if price above 1hr 50 MA
 do nothing
 
-
 ---
 
 ## Re: TrendLord Indicator [Upd Oct, 05]
@@ -278,7 +262,6 @@ Your awesome!
 
 Dave
 
-
 ---
 
 ## Re: TrendLord Indicator [Upd Oct, 05]
@@ -288,7 +271,6 @@ Dave
 Requested can be found here.
 [viewtopic.php?f=31&t=61543](https://fxcodebase.com/code/viewtopic.php?f=31&t=61543)
 
-
 ---
 
 ## Re: TrendLord Indicator [Upd Oct, 05]
@@ -296,7 +278,6 @@ Requested can be found here.
 **Apprentice** · Tue Jul 18, 2017 7:34 am
 
 The indicator was revised and updated.
-
 
 ---
 
@@ -310,7 +291,6 @@ Will the indicator still repaint if the data source is set to 'open' price? Aski
 
 Regards,
 
-
 ---
 
 ## Re: TrendLord Indicator [Upd Oct, 05]
@@ -320,7 +300,6 @@ Regards,
 LWMA MA is used.
 LWMA repaint for Current candle only.
 If open price is used, this will NOT be the case.
-
 
 ---
 

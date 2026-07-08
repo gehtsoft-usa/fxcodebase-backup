@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=2799  
 > Forum: 17 · Topic 2799 · 47 post(s)
 
-
 ---
 
 ## Average Daily Range (ADR) Projection
@@ -11,8 +10,6 @@
 **Apprentice** · Thu Nov 25, 2010 7:30 am
 
 ![ADR Projection.png](images/6370/ADR%20Projection.png)
-
-
 
 ADR Projections Up = low[period] + ADR[period];
 ADR Projections Down = high[period] - ADR[period];
@@ -31,7 +28,6 @@ Allows selection of Time Frame
 
 MT4/MQ4 version.
 [viewtopic.php?f=38&t=66195](https://fxcodebase.com/code/viewtopic.php?f=38&t=66195)
-
 
 ---
 
@@ -57,7 +53,6 @@ I would like to use this indicator on MTF ADR Projection and :
 Please tell me if you can develop this indicator
 Thanks
 
-
 ---
 
 ## Re: Average Daily Range (ADR) Projection
@@ -67,7 +62,6 @@ Thanks
 I downloaded the indicator and all I got on the chart was two green lines.
 How do I get the text that is shown in your screen shot?
 
-
 ---
 
 ## Re: Average Daily Range (ADR) Projection
@@ -75,7 +69,6 @@ How do I get the text that is shown in your screen shot?
 **sunshine** · Tue Sep 13, 2011 8:14 am
 
 Please try to move chart "in future" to see the text. For me this works.
-
 
 ---
 
@@ -86,7 +79,6 @@ Please try to move chart "in future" to see the text. For me this works.
 The MTF version is nice. Thanks.
 Showing Daily Range projection on a 15m chart.
 
-
 ---
 
 ## Re: Average Daily Range (ADR) Projection
@@ -94,7 +86,6 @@ Showing Daily Range projection on a 15m chart.
 **sabrumea** · Mon Oct 24, 2011 7:33 am
 
 is it possible to add an option to display it historically???
-
 
 ---
 
@@ -104,7 +95,6 @@ is it possible to add an option to display it historically???
 
 Your request is added to the developmental cue.
 
-
 ---
 
 ## Re: Average Daily Range (ADR) Projection
@@ -113,7 +103,6 @@ Your request is added to the developmental cue.
 
 thank you Apprentice, looking forward to have it. it is very useful indicator!
 
-
 ---
 
 ## Re: Average Daily Range (ADR) Projection
@@ -121,7 +110,6 @@ thank you Apprentice, looking forward to have it. it is very useful indicator!
 **sabrumea** · Sat Oct 29, 2011 1:08 pm
 
 Apprentice, sorry once you will do the historical option could you also fix the font of the text to make it a bit smaller? i was trying to do that myself but can not understand where is it in the code
-
 
 ---
 
@@ -133,24 +121,25 @@ Apprentice,
 
 i have created font
 
-Code: [Select all](https://fxcodebase.com/code/)
-`local font;
+```lua
+local font;
 function Prepare() 
    ...
    font = core.host:execute("createFont", "Verdana", 10, false, false);   
-   ...`
+   ...
+```
 
 how should i call it now in the DrawLable1 function??
 
-Code: [Select all](https://fxcodebase.com/code/)
-`if TR[1] >TR[2] then
+```lua
+if TR[1] >TR[2] then
             core.host:execute ("drawLabel", 1, source:date(source:size()-1) + 3*size , MAX + 2*(MAX-MIN)/5, "TR "..tostring( round( TR[1]* M,0)).. " (+)" );
             elseif  TR[1] < TR[2] then
             core.host:execute ("drawLabel", 1, source:date(source:size()-1) + 3*size , MAX + 2*(MAX-MIN)/5, "TR "..tostring( round( TR[1]* M,0)) .." (-)" );
             else
             core.host:execute ("drawLabel", 1, source:date(source:size()-1) + 3*size , MAX + 2*(MAX-MIN)/5, "TR "..tostring( round( TR[1]* M,0)) .." (0)" );
-            end`
-
+            end
+```
 
 ---
 
@@ -167,7 +156,6 @@ host method: Execute ("drawLabel1", ...)
 A complete description can be found here.
 [http://www.fxcodebase.com/documents/Ind ... abel1.html](http://www.fxcodebase.com/documents/IndicoreSDK/host.execute_drawLabel1.html)
 
-
 ---
 
 ## Re: Average Daily Range (ADR) Projection
@@ -175,7 +163,6 @@ A complete description can be found here.
 **sabrumea** · Wed Nov 02, 2011 7:22 am
 
 oh well i tried that, friend, it is not working for me can you help me with it? could you fix the font option too when you would be doing historical version of this indicator?... the historical option would be very very useful! this is a good indicator especially on daily basis and with averaging for 8 periods! and the font option is necessary because right now you did this indicator in such a way that lines are not extended till the end of the period so it clatters the chart can not see my candles well .... so if you could either extend the lines till the end of the period or make the font option it would be really great!!!
-
 
 ---
 
@@ -185,7 +172,6 @@ oh well i tried that, friend, it is not working for me can you help me with it? 
 
 this ADR calculates the last 5 days excluding the current active day? it makes it base of calculation from which point?
 
-
 ---
 
 ## Re: Average Daily Range (ADR) Projection
@@ -194,7 +180,6 @@ this ADR calculates the last 5 days excluding the current active day? it makes i
 
 From the current high / low,
 Plus / Minus, ADR value for last N periods.
-
 
 ---
 
@@ -214,7 +199,6 @@ Can you please make the changes or let me know any comments you have on this,
 
 Thanks
 
-
 ---
 
 ## Re: Average Daily Range (ADR) Projection
@@ -223,7 +207,6 @@ Thanks
 
 I guess that option can be added, which would enable the selection,
 between these two possibilities.
-
 
 ---
 
@@ -235,7 +218,6 @@ Good,
 
 would you please so kind and add this option.
 
-
 ---
 
 ## Re: Average Daily Range (ADR) Projection
@@ -243,7 +225,6 @@ would you please so kind and add this option.
 **Apprentice** · Tue May 01, 2012 8:26 am
 
 I already put this on our list.
-
 
 ---
 
@@ -253,7 +234,6 @@ I already put this on our list.
 
 MQL4 version of this indicator: [viewtopic.php?f=38&t=20224](https://fxcodebase.com/code/viewtopic.php?f=38&t=20224)
 
-
 ---
 
 ## Re: Average Daily Range (ADR) Projection
@@ -261,7 +241,6 @@ MQL4 version of this indicator: [viewtopic.php?f=38&t=20224](https://fxcodebase.
 **SuperTrader** · Mon Aug 13, 2012 3:09 am
 
 This is a very useful indicator Apprentice, thank you for that. But can we please have the 4 text strings (on the screenshot) on the left side of the chart instead ? Or in one of the left corners (top/bottom). Or at least a user option for all the text positioned either on left or right side. This way we can use all that space on the right of the chart for more price bars (by shifting the chart all the way to the right extreme). Thank you very much in advance !
-
 
 ---
 
@@ -271,7 +250,6 @@ This is a very useful indicator Apprentice, thank you for that. But can we pleas
 
 Your request is added to the development list.
 
-
 ---
 
 ## Re: Average Daily Range (ADR) Projection
@@ -279,7 +257,6 @@ Your request is added to the development list.
 **Jeffreyvnlk** · Sat May 04, 2013 8:20 pm
 
 Could you shorten the projected horizontal lines ? thank you
-
 
 ---
 
@@ -289,7 +266,6 @@ Could you shorten the projected horizontal lines ? thank you
 
 Shorten, in what way ...
 On left side of chart?
-
 
 ---
 
@@ -303,7 +279,6 @@ On left side of chart?
 
 For example, if ADR for 1 week, the line just limited on that week
 
-
 ---
 
 ## Re: Average Daily Range (ADR) Projection
@@ -311,7 +286,6 @@ For example, if ADR for 1 week, the line just limited on that week
 **Apprentice** · Tue May 07, 2013 5:50 am
 
 ADR Projection and MTF ADR Projection have been modified accordingly.
-
 
 ---
 
@@ -324,7 +298,6 @@ ADR Projection and MTF ADR Projection have been modified accordingly.
 
 That perfect.Thank you very much
 
-
 ---
 
 ## Re: Average Daily Range (ADR) Projection
@@ -335,7 +308,6 @@ That perfect.Thank you very much
 > ADR Projection and MTF ADR Projection have been modified accordingly.
 
 Glad to have it.Very neat, many thanks
-
 
 ---
 
@@ -349,7 +321,6 @@ I placed the MTF indicator on the chart ... the green lines starts at 12 o'clock
 
 Thanks,
 
-
 ---
 
 ## Re: Average Daily Range (ADR) Projection
@@ -358,7 +329,6 @@ Thanks,
 
 Will consider it, when I find time.
 
-
 ---
 
 ## Re: Average Daily Range (ADR) Projection
@@ -366,7 +336,6 @@ Will consider it, when I find time.
 **smookem** · Tue Nov 18, 2014 3:00 pm
 
 Any way to code this to so that it's optional of when to calculate the ADR i.e., 1700 to 1700. Can you put in a "Start Hour" option?
-
 
 ---
 
@@ -378,7 +347,6 @@ I was wonder if you could add a thicker line setting and to be able to remove pr
 
 Thanks
 
-
 ---
 
 ## Re: Average Daily Range (ADR) Projection
@@ -389,7 +357,6 @@ Oh I forgot to mention I wanted to extend the lines and for the MTF version
 
 Thanks
 
-
 ---
 
 ## Re: Average Daily Range (ADR) Projection
@@ -398,7 +365,6 @@ Thanks
 
 Required modifications added.
 
-
 ---
 
 ## Re: Average Daily Range (ADR) Projection
@@ -406,7 +372,6 @@ Required modifications added.
 **rtsayers** · Mon Jan 05, 2015 9:50 pm
 
 Thank you very much!!!
-
 
 ---
 
@@ -420,7 +385,6 @@ I have downloaded the MTF version and I don't see any modification related to th
 
 Thanks
 
-
 ---
 
 ## Re: Average Daily Range (ADR) Projection
@@ -428,7 +392,6 @@ Thanks
 **gezisLV** · Tue Jan 06, 2015 10:31 am
 
 hi can you create version that is not repainting?because it''s repainting heavily
-
 
 ---
 
@@ -438,7 +401,6 @@ hi can you create version that is not repainting?because it''s repainting heavil
 
 Only bug I see is that once ADR is reached, the range somehow shrinks. Let's say it's looking for an ADR of 90. Once TR > ADR, the distance between the high and low line shrinks to something like 55. How about having the lines lock in place where they are and changing color or line style once TR > ADR?
 
-
 ---
 
 ## Re: Average Daily Range (ADR) Projection
@@ -446,7 +408,6 @@ Only bug I see is that once ADR is reached, the range somehow shrinks. Let's say
 **smookem** · Sun Oct 25, 2015 9:17 am
 
 Is there an ATR projection indicator that starts at 5pm EST? or allows you to chose when to start the calculation?
-
 
 ---
 
@@ -456,7 +417,6 @@ Is there an ATR projection indicator that starts at 5pm EST? or allows you to ch
 
 Not that I'm aware of.
 
-
 ---
 
 ## Re: Average Daily Range (ADR) Projection
@@ -464,7 +424,6 @@ Not that I'm aware of.
 **smookem** · Sun Dec 06, 2015 2:12 pm
 
 Can you develop one? Or modify the ATR_Pips indicator to have those options?
-
 
 ---
 
@@ -474,7 +433,6 @@ Can you develop one? Or modify the ATR_Pips indicator to have those options?
 
 I meant to develop one or modify the Average Daily Range (ADR) Projection indicator to use those options?
 
-
 ---
 
 ## Re: Average Daily Range (ADR) Projection
@@ -482,7 +440,6 @@ I meant to develop one or modify the Average Daily Range (ADR) Projection indica
 **Apprentice** · Thu Dec 10, 2015 6:16 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -492,7 +449,6 @@ Your request is added to the development list.
 
 Any update for this indicator? It would be greatly appreciated
 
-
 ---
 
 ## Re: Average Daily Range (ADR) Projection
@@ -500,7 +456,6 @@ Any update for this indicator? It would be greatly appreciated
 **Apprentice** · Sun Aug 27, 2017 6:34 am
 
 The indicator was revised and updated.
-
 
 ---
 
@@ -510,7 +465,6 @@ The indicator was revised and updated.
 
 Any way this could be converted to MT4 with the updated options to select when to start the ADR calcuations?
 
-
 ---
 
 ## Re: Average Daily Range (ADR) Projection
@@ -518,7 +472,6 @@ Any way this could be converted to MT4 with the updated options to select when t
 **Apprentice** · Fri Sep 29, 2017 4:47 am
 
 Your request is added to the development list under Id Number 3904
-
 
 ---
 

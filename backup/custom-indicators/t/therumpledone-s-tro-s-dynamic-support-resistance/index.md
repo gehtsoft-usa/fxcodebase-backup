@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=882  
 > Forum: 17 · Topic 882 · 19 post(s)
 
-
 ---
 
 ## TheRumpledOne's (TRO's) Dynamic Support/Resistance
@@ -31,14 +30,12 @@ The indicator generates buy and sell signals. For me it looks a bit noisy, but, 
 
 ![tro_dynamic_sr.png](images/1614/tro_dynamic_sr.png)
 
-
-
 Download:
 
  [tro_dynamic_sr.lua](files/1614/tro_dynamic_sr.lua)
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- +------------------------------------------------------------------+
+```lua
+-- +------------------------------------------------------------------+
 -- |   TRO_DYNAMIC_FIBS_SR_Trail                                      |
 -- |                                                                  |
 -- |   Copyright © 2009, Avery T. Horton, Jr. aka TheRumpledOne       |
@@ -194,8 +191,8 @@ function Update(period, mode)
             ShTrig[period] = source.close[period] + Trigger;
         end
     end
-end`
-
+end
+```
 
 ---
 
@@ -205,7 +202,6 @@ end`
 
 CAN YOU POST AN UPDATED VERSION OF THIS INDICATOR. THE NAME IS:
 THE RUMPLED ONE'S (TRO's) DYNAMIC FIBS S/R.
-
 
 ---
 
@@ -220,7 +216,6 @@ Can I please request a Bigger TF for this indicator for a tick chart. Highly app
 **@Nikolay:**It is similar to a Donchian channel, but the trigger line with the option to input different values of pips are very useful.
 I agree the signal arrows produces near to zero profits, but the trigger line is very powerful in following the trend.
 
-
 ---
 
 ## Re: TheRumpledOne's (TRO's) Dynamic Support/Resistance
@@ -228,7 +223,6 @@ I agree the signal arrows produces near to zero profits, but the trigger line is
 **Apprentice** · Fri Nov 05, 2010 3:50 am
 
 Added to developmental cue.
-
 
 ---
 
@@ -239,7 +233,6 @@ Added to developmental cue.
 I am using this indicator, i think that the lines produce confusion,
 i change the core.Line for core.Dot, i think that looks better.
 
-
 ---
 
 ## Re: TheRumpledOne's (TRO's) Dynamic Support/Resistance
@@ -248,11 +241,8 @@ i change the core.Line for core.Dot, i think that looks better.
 
 ![untitled2.PNG](images/19113/untitled2.PNG)
 
-
-
 Bigger time frame version is now unnecessary.
 It is possible to have this, by changing the time frame of the data source.
-
 
 ---
 
@@ -265,7 +255,6 @@ is it possible to install an alarm/email alert in this indicator or better
  to make a strategy with possibility for trading.
 thanks
 
-
 ---
 
 ## Re: TheRumpledOne's (TRO's) Dynamic Support/Resistance
@@ -273,7 +262,6 @@ thanks
 **Apprentice** · Wed Mar 14, 2012 2:51 am
 
 Can you define a trading algorithm, for this strategy.
-
 
 ---
 
@@ -291,7 +279,6 @@ algorithm:
 +signal parameter (alert, play sound etc)
 +email parameter
 thanks
-
 
 ---
 
@@ -312,7 +299,6 @@ SL
 Limit
 Limit in candle
 
-
 ---
 
 ## Re: TheRumpledOne's (TRO's) Dynamic Support/Resistance
@@ -321,7 +307,6 @@ Limit in candle
 
 Your request is added to the development list.
 
-
 ---
 
 ## Re: TheRumpledOne's (TRO's) Dynamic Support/Resistance
@@ -329,7 +314,6 @@ Your request is added to the development list.
 **Apprentice** · Sun May 27, 2012 5:48 am
 
 Indicator is Updated.
-
 
 ---
 
@@ -342,7 +326,6 @@ Hi man,
 please do that, can't wait just drop a basic version man, sell and buy when arrow appears, limit, sl, alert and that'll be good. yeah signal are to be detected real time not end of candle
 Drop this by monday tuesday bro.
 
-
 ---
 
 ## Re: TheRumpledOne's (TRO's) Dynamic Support/Resistance
@@ -354,7 +337,6 @@ is it possible to make a strategy for this indicator. please.
 so that sells or buys automatically when the indicator gives his signal.
 with possibility for setting email,period,limit,stop.
 thanks a lot
-
 
 ---
 
@@ -370,7 +352,6 @@ Indicator do not work within Backtester.
 Will contact the development team about this issue.
 Everything should be OK with live trading.
 
-
 ---
 
 ## Re: TheRumpledOne's (TRO's) Dynamic Support/Resistance
@@ -378,7 +359,6 @@ Everything should be OK with live trading.
 **Apprentice** · Mon Jun 12, 2017 6:13 am
 
 The indicator was revised and updated.
-
 
 ---
 
@@ -399,7 +379,6 @@ Regards
 
 S.
 
-
 ---
 
 ## Re: TheRumpledOne's (TRO's) Dynamic Support/Resistance
@@ -411,7 +390,6 @@ Why are people posting my code when I have asked that my code not be posted.
 I do this so you will know where to get the correct, latest and updated version of my code.
 
 [https://youtu.be/pVe07eAT_R4](https://youtu.be/pVe07eAT_R4)
-
 
 ---
 

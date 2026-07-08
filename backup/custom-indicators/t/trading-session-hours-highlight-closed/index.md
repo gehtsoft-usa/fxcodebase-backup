@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=940  
 > Forum: 17 · Topic 940 · 59 post(s)
 
-
 ---
 
 ## Trading Session Hours Highlight (closed)
@@ -29,14 +28,12 @@ Because N-hours candles are always aligned against the FXCM's trading day (17:00
 
 ![tradingsession.png](images/1713/tradingsession.png)
 
-
-
 Download the indicator:
 
  [TRADESESSIONS.lua](files/1713/TRADESESSIONS.lua)
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- Indicator profile initialization routine
+```lua
+-- Indicator profile initialization routine
 -- Defines indicator profile properties and indicator parameters
 function Init()
     indicator:name("The indicator highlights trade sessions");
@@ -370,8 +367,8 @@ function findDateFast(stream, date, precise)
             end
         end
     end
-end`
-
+end
+```
 
 ---
 
@@ -381,7 +378,6 @@ end`
 
 Outstanding!
 
-
 ---
 
 ## Re: Trading Session Hours Highlight
@@ -389,7 +385,6 @@ Outstanding!
 **a135711** · Mon May 03, 2010 6:38 pm
 
 can it be extended to highlight an oscillator window in the exact same way?
-
 
 ---
 
@@ -403,7 +398,6 @@ Hi this looks like a useful tool. WHen I load it has the following error
 Any idea why this is so ?
 
 Thanks
-
 
 ---
 
@@ -421,7 +415,6 @@ The step-by-step instruction on how to install the indicator is here:
 Do not be confused with signals:
 [viewtopic.php?f=29&t=602](https://fxcodebase.com/code/viewtopic.php?f=29&t=602)
 
-
 ---
 
 ## Re: Trading Session Hours Highlight
@@ -429,7 +422,6 @@ Do not be confused with signals:
 **cayantgee** · Thu May 06, 2010 7:36 am
 
 Thanks for the tip Nikolay. It worked.
-
 
 ---
 
@@ -444,7 +436,6 @@ first, i need the session period divided into 5 time periods based with a line t
 second, i need the session range to be divided according to fibo, that is 38,50,62 lines and the extensions 1.38 , 1.5, 1.62. the extensions should be both above and below the range. there is no need for numbers or percents to be visible, just the lines.
 thanks
 
-
 ---
 
 ## Re: Trading Session Hours Highlight
@@ -455,7 +446,6 @@ thanks
 > hello, i need the following functionality on the tradesessions indicator
 
 As far as I can see, in that case, the session high/low will change during the session life time, especially during the start period, so these lines will also move and will get their final state when the session is finished. Shouldn't it be something like Breakout indicator?
-
 
 ---
 
@@ -469,7 +459,6 @@ the start period of the session should be the start of the session fibo calculat
 
 essentially, i am asking for an autolevels indicator that starts at session start and ends at session end and draws fibo lines, internal and extended, for the session only.
 
-
 ---
 
 ## Re: Trading Session Hours Highlight
@@ -479,7 +468,6 @@ essentially, i am asking for an autolevels indicator that starts at session star
 Well. To more questions:
 1) Do you want to see these lines for the chosen session only (e.g. NY or London only) or for all currently active sessions?
 2) What to do with the lines when the session ends? Should line disappears until the next session begins?
-
 
 ---
 
@@ -497,7 +485,6 @@ lets establish the trading day as the point of change. when a new trading day be
 2) What to do with the lines when the session ends? Should line disappears until the next session begins?
 the lines should be left visible for each active session until the end of the trading day.
 
-
 ---
 
 ## Re: Trading Session Hours Highlight
@@ -514,7 +501,6 @@ London/NY
 NY
 
 if each period has the lines drawn for that period, then the next period can be compared to it. it might be cleaner to write under this distinction.
-
 
 ---
 
@@ -548,7 +534,6 @@ Well done so far.
 Cheers
 LordTwig
 
-
 ---
 
 ## Re: Trading Session Hours Highlight
@@ -556,7 +541,6 @@ LordTwig
 **Apprentice** · Fri Jun 18, 2010 2:30 pm
 
 I second that Suggestions by LordTwig, about 5 proposals still not have clear mind.
-
 
 ---
 
@@ -592,12 +576,9 @@ The only problem I see is that the chart now have too much information. So, I ne
 
 ![session.png](images/2651/session.png)
 
-
-
 To try this version download (it's beta!!!):
 
  [TRADESESSIONS.lua](files/2651/TRADESESSIONS.lua)
-
 
 ---
 
@@ -613,7 +594,6 @@ instance:addStream(n, core.Line, iname .. "." .. n, n, color, first);
 with
 instance:addStream(n, core.Line, iname, "", color, first);
 
-
 ---
 
 ## Re: Trading Session Hours Highlight
@@ -623,7 +603,6 @@ instance:addStream(n, core.Line, iname, "", color, first);
 any numerical or textual information definitely in tool tips or the option to turn it off. i like the idea of having a absolute pip range per session since this could be compared session to session at a glance. having the session spelled and color coded seems to add unnecessary information. what is needed is a mid line per session, or the session channel divided into high to mid channel and a mid to low channel.
 
 how goes the fibo enhancement for this indicator?
-
 
 ---
 
@@ -649,7 +628,6 @@ BTW..... not getting picky.... but for future ref, Sydney is spelt with an Y not
 Cheers
 LordTwig
 
-
 ---
 
 ## Re: Trading Session Hours Highlight
@@ -673,7 +651,6 @@ Say 'yeah' everybody.
 Cheers
 LordTwig
 
-
 ---
 
 ## Re: Trading Session Hours Highlight
@@ -684,7 +661,6 @@ LordTwig
 
 i was able some months back to get only the data to print on a tool tip as well as real time dynamic text to print, the tooltip is specific to the bar itself. i only have to run the cursor over the top of the bar to get it. it only shows the information i programmed it to do so. any indicator or oscillator value can be printed in this way.
 numerical text data(oscillator values) can also be printed real-time above the bar, below it. i used it to print above the current bar the value of the current RLW indicator. granted its precision was only 3 digits for the sake of clarity, but it did tell me that when the RLW hit 100 or 0 whilst the bar was in action
-
 
 ---
 
@@ -708,7 +684,6 @@ How to change the tooltip timeout:
 2) Precision was a question until the last beta release. Now the indicators and oscillators can define their own precision on the streams.
 
 Ok, anyway I'll prepare another version today, following to your ideas, so we can go forward step-by-step.
-
 
 ---
 
@@ -737,14 +712,11 @@ e) The default font size is reduced from 8 to 6.
 
 ![ss.png](images/2692/ss.png)
 
-
-
 download:
 
  [TRADESESSIONS.lua](files/2692/TRADESESSIONS.lua)
 
 Note: Beta!!! When the indicator is finished I'll update the topmost post!
-
 
 ---
 
@@ -775,7 +747,6 @@ user selected option for session trend
 
 i do appreciate your time and effort
 
-
 ---
 
 ## Re: Trading Session Hours Highlight
@@ -787,7 +758,6 @@ Just a small correction... I noticed in the Properties tab:
 Line 14 should read: indicator.parameters:addColor("LO_C", "London session color", "", core.rgb(0, 255, 0));
 
 (was: ...."New York session....",)
-
 
 ---
 
@@ -812,7 +782,6 @@ How can I make the session high/low line thinner (looked but cannot find it) as 
 I turned the transparency up to 96% and it is way better to view now also.
 LordTwig
 
-
 ---
 
 ## Re: Trading Session Hours Highlight
@@ -836,7 +805,6 @@ Another beta:
 
  [TRADESESSIONS.lua](files/2739/TRADESESSIONS.lua)
 
-
 ---
 
 ## Re: Trading Session Hours Highlight
@@ -851,7 +819,6 @@ the vertical line is midpoint of the session
 
 thank you
 
-
 ---
 
 ## Re: Trading Session Hours Highlight
@@ -865,7 +832,6 @@ The triangulation and open to close line is added. How do you think, should user
 Beta with triangulation and open-to-close lines:
 
  [TRADESESSIONS.lua](files/2754/TRADESESSIONS.lua)
-
 
 ---
 
@@ -887,7 +853,6 @@ a mid line drawn from session start to session end that has the value of (sessio
 this should have the same color as the session color
 thank you
 
-
 ---
 
 ## Re: Trading Session Hours Highlight
@@ -895,7 +860,6 @@ thank you
 **Nikolay.Gekht** · Sat Jun 26, 2010 9:21 am
 
 Midline is not a problem, the triangles as you described will require a bit modification of the code, but are possible as well. Will do it in the next beta.
-
 
 ---
 
@@ -907,7 +871,6 @@ Changed triangulation as it was requested. One note: on 1-minute chart triangula
 
  [TRADESESSIONS.lua](files/2780/TRADESESSIONS.lua)
 
-
 ---
 
 ## Re: Trading Session Hours Highlight
@@ -917,7 +880,6 @@ Changed triangulation as it was requested. One note: on 1-minute chart triangula
 > Changed triangulation as it was requested. One note: on 1-minute chart triangulation this works very slow, because it requires to finding the exact position of the low and high. Starting 15+ minutes it works pretty well. I'll look on what can I do for the 1-minute frame later.
 
 looks good, provides a wealth of reference data at a glance. i will analyze it effectiveness and get back with you in a week.
-
 
 ---
 
@@ -975,7 +937,6 @@ extend diagonal lines n-sessions(default 1 session forward)
 all diagonal lines and all diagonal line extensions for a particular session are drawn at the open of the following session. example: all diagonal lines that are drawn in the NY session are drawn at the open of Sydney. enhanced sessions function the same way
 diagonals and extensions are a user selected color different than the session color. default is (255,255,255,)
 
-
 ---
 
 ## Re: Trading Session Hours Highlight
@@ -983,7 +944,6 @@ diagonals and extensions are a user selected color different than the session co
 **Nikolay.Gekht** · Wed Jun 30, 2010 1:13 pm
 
 BTW, I don't see triangulation here. Should it be removed?
-
 
 ---
 
@@ -1006,7 +966,6 @@ additional lines needed
 session low at candle low/session close at candle close(needed)
 session high at candle high/session close at candle close(needed)
 
-
 ---
 
 ## Re: Trading Session Hours Highlight
@@ -1014,7 +973,6 @@ session high at candle high/session close at candle close(needed)
 **Nikolay.Gekht** · Wed Jun 30, 2010 3:51 pm
 
 I got it. I'll try to do it asap, but... do not expect it earlier than by the end next week.
-
 
 ---
 
@@ -1024,7 +982,6 @@ I got it. I'll try to do it asap, but... do not expect it earlier than by the en
 
 It's very usefull indicator.
 I use it in my trading every day.
-
 
 ---
 
@@ -1040,7 +997,6 @@ Looking forward to your reply,
 
 Regards
 
-
 ---
 
 ## Re: Trading Session Hours Highlight (closed)
@@ -1048,7 +1004,6 @@ Regards
 **Apprentice** · Sun Jun 17, 2012 3:24 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -1059,7 +1014,6 @@ Your request is added to the development list.
 Try this Version
 
  [TRADESESSIONS.lua](files/35893/TRADESESSIONS.lua)
-
 
 ---
 
@@ -1079,7 +1033,6 @@ Looking forard to your reply,
 
 Regards
 
-
 ---
 
 ## Re: Trading Session Hours Highlight (closed)
@@ -1091,7 +1044,6 @@ Hi Apprentice,
 Thank you for the indi. Can you make tradestations.lua to show horizontal line at open price only when the market session is start-finish, not range high-low.
 
 Thanks in advance
-
 
 ---
 
@@ -1114,7 +1066,6 @@ Regards
 Joined: Fri Jun 15, 2012 2:09 pm
 Private messageE-mail
 
-
 ---
 
 ## Re: Trading Session Hours Highlight (closed)
@@ -1133,7 +1084,6 @@ Looking forward to anyones help and response.
 
 Regards
 
-
 ---
 
 ## Re: Trading Session Hours Highlight (closed)
@@ -1148,7 +1098,6 @@ If I "remove" the TRADESESSIONS - it is very fast to zoom in/out and scroll the 
 
 Anyway - I think this is a very good tool and I am grateful it was built. THX.
 
-
 ---
 
 ## Re: Trading Session Hours Highlight (closed)
@@ -1156,7 +1105,6 @@ Anyway - I think this is a very good tool and I am grateful it was built. THX.
 **Apprentice** · Wed Oct 10, 2012 4:04 am
 
 Unfortunately yes, the next version, data retrieval is somewhat accelerated.
-
 
 ---
 
@@ -1173,7 +1121,6 @@ Can it work on a 15 minute chart and 5 minute chart too?
 
 Regards,
 
-
 ---
 
 ## Re: Trading Session Hours Highlight (closed)
@@ -1185,7 +1132,6 @@ Will not work, if time frame is less than 1 hour.
 
 I'll try to find time to make the necessary changes so u can have both.
 
-
 ---
 
 ## Re: Trading Session Hours Highlight (closed)
@@ -1196,7 +1142,6 @@ philipphilip I believe that this version has everything you need.
 [download/file.php?id=6874](https://fxcodebase.com/code/download/file.php?id=6874)
 Posted on Fri Jun 22, 2012 11:39 am
 
-
 ---
 
 ## Re: Trading Session Hours Highlight (closed)
@@ -1204,7 +1149,6 @@ Posted on Fri Jun 22, 2012 11:39 am
 **speakinmymind** · Tue Apr 09, 2013 8:52 am
 
 can you add the ability to set the clock usage to local as opposed to changing the hours for each session?
-
 
 ---
 
@@ -1224,7 +1168,6 @@ Kindly check and confirm the feasibility. Thanks in advance
 
 Rgds / Kumaresan.
 
-
 ---
 
 ## Re: Trading Session Hours Highlight (closed)
@@ -1233,7 +1176,6 @@ Rgds / Kumaresan.
 
 Your request is added to the development list.
 
-
 ---
 
 ## Re: Trading Session Hours Highlight (closed)
@@ -1241,7 +1183,6 @@ Your request is added to the development list.
 **olasz11** · Mon Oct 21, 2013 5:24 am
 
 Are there any other versions of this indicator, which can extend the lines during all day. For example: i would like to see the sudney session high and session low lines which are extended to right side of the chart (to current candle). Is it possible?
-
 
 ---
 
@@ -1252,7 +1193,6 @@ Are there any other versions of this indicator, which can extend the lines durin
 I believe that this version has this functionality.
 [viewtopic.php?f=17&t=1974](https://fxcodebase.com/code/viewtopic.php?f=17&t=1974)
 
-
 ---
 
 ## Re: Trading Session Hours Highlight (closed)
@@ -1261,7 +1201,6 @@ I believe that this version has this functionality.
 
 Hi!
 It also does not work. I want to see simple horizontal lines which has a length of the whole screen. For exapmle if i draw a simple horizontal line to the chart, the line length is "infinite", i can see it the whole screen.
-
 
 ---
 
@@ -1277,14 +1216,11 @@ I am uploadin two picture. On the second picture you can see extended h line on 
 
 *Normal use os indicator, the line's length are only the session strat to end.*
 
-
-
  
 
 ![session h line.jpg](images/90440/session%20h%20line.jpg)
 
 *that is what i talking about: i want extended h line.(these lines was drawn as a simple h line, the indicator did not inculde these lines.)*
-
 
 ---
 
@@ -1295,7 +1231,6 @@ I am uploadin two picture. On the second picture you can see extended h line on 
 Such a thing is possible
 Your request is added to the development list.
 
-
 ---
 
 ## Re: Trading Session Hours Highlight (closed)
@@ -1303,7 +1238,6 @@ Your request is added to the development list.
 **Apprentice** · Sat Aug 19, 2017 4:19 pm
 
 The indicator was revised and updated.
-
 
 ---
 

@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=29&t=844  
 > Forum: 29 · Topic 844 · 12 post(s)
 
-
 ---
 
 ## CCI/MACD Signal
@@ -38,10 +37,8 @@
 
 ![CCI_MACD.png](images/1505/CCI_MACD.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     strategy:name("CCI/MACD signal");
     strategy:description("CCI/MACD collaboration");
 
@@ -178,8 +175,8 @@ function ExtSignal(source, period, message, soundFile)
     if soundFile ~= nil then
         terminal:alertSound(soundFile, false);
     end
-end`
-
+end
+```
 
 ---
 
@@ -195,7 +192,6 @@ I also wanted to know whether it was a buy or a sell. The symbols appear to not 
 
 Again, thanks for the code!!
 
-
 ---
 
 ## Re: CCI/MACD Signal
@@ -210,7 +206,6 @@ Oh, Alex, I downloaded the file, but I got an error trying to load it. I'll try 
 
 Thanks
 
-
 ---
 
 ## Re: CCI/MACD Signal
@@ -218,7 +213,6 @@ Thanks
 **Nikolay.Gekht** · Mon Apr 26, 2010 4:11 pm
 
 Please, check whether you have used the Signals->Manage Custom Signals command, not the Indicators->Manage Custom Indicators command.
-
 
 ---
 
@@ -249,7 +243,6 @@ The signal is not displaying although I am getting a message.
 I have not been able to load the MACD for it is not in the list.
 I have been able to load the CCI.
 
-
 ---
 
 ## Re: CCI/MACD Signal
@@ -267,8 +260,6 @@ You can specify all parameter, such as the indicator parameter or triggering lev
 
 ![cci-macd-1.PNG](images/1529/cci-macd-1.PNG)
 
-
-
 > **pipsqueak wrote:**
 > Oh Signals do not show historical information?
 
@@ -280,10 +271,7 @@ If you would like to test the signal on the historical data - just open the char
 
 ![cci-macd-2.PNG](images/1529/cci-macd-2.PNG)
 
-
-
 The show signal indicator is in the "Other" section of the "Add Indicator" form.
-
 
 ---
 
@@ -301,7 +289,6 @@ The derivative parameter I don't see. How many time periods back for the derivat
 
 Signal display is set for yes under options yet does not display.
 
-
 ---
 
 ## Re: CCI/MACD Signal
@@ -309,7 +296,6 @@ Signal display is set for yes under options yet does not display.
 **Nikolay.Gekht** · Tue Apr 27, 2010 8:35 am
 
 There is no special version of the FX Trading Station for micro accounts. The things above must work at any account. Could you please provide me the list of actions you do and some snapshots to have an idea what you see?
-
 
 ---
 
@@ -341,8 +327,8 @@ A SELL signal would occur when ALL of the following conditions are met at a part
 Remove: signal of MACD is < MACD (adjustable?)
 3) d(MACD histogram)/dt is negative (the derivative is negative based on previous period) (adjustable?)
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     strategy:name("CCI/MACD signal");
     strategy:description("CCI/MACD collaboration");
 
@@ -482,8 +468,8 @@ function ExtSignal(source, period, message, soundFile)
         terminal:alertMessage(source:instrument(), source[period], gSignalBase .. message, source:date(period));
     end
     if soundFile ~= nil then
-        terminal:alertSound(soundFile, false);`
-
+        terminal:alertSound(soundFile, false);
+```
 
 ---
 
@@ -517,7 +503,6 @@ Regards,
 
 Jerry Clasby
 
-
 ---
 
 ## Re: CCI/MACD Signal
@@ -529,7 +514,6 @@ Hey Apprentice, looks good but has some problems. Can you fix it or give us the 
 The error details: [string "Dual Stochastic confirmation.lua"]
 and
 Attempt to index global 'strategy' (a nil value)
-
 
 ---
 

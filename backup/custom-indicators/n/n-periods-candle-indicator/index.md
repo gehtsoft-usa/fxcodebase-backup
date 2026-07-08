@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=2529  
 > Forum: 17 · Topic 2529 · 19 post(s)
 
-
 ---
 
 ## N periods candle indicator
@@ -21,10 +20,8 @@ Low = Lower price of the last N periods
 
 ![NCandle.png](images/5591/NCandle.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("NCandle indicator");
     indicator:description("NCandle indicator");
     indicator:requiredSource(core.Bar);
@@ -108,7 +105,8 @@ function Update(period, mode)
     Low[period]=nil;
    end
    
-end`
+end
+```
 
  [NCandle.lua](files/5591/NCandle.lua)
 
@@ -117,7 +115,6 @@ end`
 MT4/MQ4 version
 [viewtopic.php?f=38&t=66241](https://fxcodebase.com/code/viewtopic.php?f=38&t=66241)
 
-
 ---
 
 ## Re: N periods candle indicator
@@ -125,7 +122,6 @@ MT4/MQ4 version
 **mcarr005** · Wed Oct 27, 2010 10:15 pm
 
 Thank you very much, nice work!
-
 
 ---
 
@@ -138,7 +134,6 @@ More nice work Alexander.
 Would it be possible to make the indicator with an option to not include the current bar?
 
 thanks -rob
-
 
 ---
 
@@ -160,7 +155,6 @@ thx
 
 d
 
-
 ---
 
 ## Re: N periods candle indicator
@@ -169,7 +163,6 @@ d
 
 I will forward this request to Alex.
 
-
 ---
 
 ## Re: N periods candle indicator
@@ -177,7 +170,6 @@ I will forward this request to Alex.
 **Alexander.Gettinger** · Thu Oct 06, 2011 11:10 am
 
 Please, see this version of indicator.
-
 
 ---
 
@@ -189,7 +181,6 @@ is there any way possible to make this a strategy? if current candle closes belo
 
 dc
 
-
 ---
 
 ## Re: N periods candle indicator
@@ -200,7 +191,6 @@ aww scratch that.. found one that does exactly what I need thanks for the aweseo
 
 dc
 
-
 ---
 
 ## Re: N periods candle indicator
@@ -208,7 +198,6 @@ dc
 **Apprentice** · Sun Mar 19, 2017 10:21 am
 
 Indicator was revised and updated.
-
 
 ---
 
@@ -222,7 +211,6 @@ I would like to request a small feature to be added: ignore inside bars; So that
 
 Thanks you.
 
-
 ---
 
 ## Re: N periods candle indicator
@@ -230,7 +218,6 @@ Thanks you.
 **Apprentice** · Mon Aug 07, 2017 1:41 pm
 
 Try Modified NCandle.lua
-
 
 ---
 
@@ -244,7 +231,6 @@ Try Modified NCandle.lua
 Yes. The modified Ncandle works just as I require.
 Thanks.
 
-
 ---
 
 ## Re: N periods candle indicator
@@ -257,7 +243,6 @@ Thanks in advance
 Best regards
 Axeas69
 
-
 ---
 
 ## Re: N periods candle indicator
@@ -266,7 +251,6 @@ Axeas69
 
 Your request is added to the development list under Id Number 4168
 
-
 ---
 
 ## Re: N periods candle indicator
@@ -274,7 +258,6 @@ Your request is added to the development list under Id Number 4168
 **Apprentice** · Tue Jul 03, 2018 5:25 am
 
 Mq4 version added.
-
 
 ---
 
@@ -286,7 +269,6 @@ Hi,
 Thanks a lot.
 WKR
 Axeas69
-
 
 ---
 
@@ -310,7 +292,6 @@ I hope that the request is clear.
 Thanks in advance
 Best regards
 
-
 ---
 
 ## Re: N periods candle indicator
@@ -319,7 +300,6 @@ Best regards
 
 Your request is added to the development list.
 Development reference 2218.
-
 
 ---
 

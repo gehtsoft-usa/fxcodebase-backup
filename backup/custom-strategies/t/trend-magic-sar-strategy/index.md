@@ -1,7 +1,80 @@
 # Trend Magic + SAR strategy
 
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=2375  
-> Forum: 31 · Topic 2375 · 14 post(s)
+> Forum: 31 · Topic 2375 · 15 post(s)
+
+
+---
+
+## Trend Magic + SAR strategy
+
+**Nikolay.Gekht** · Mon Oct 11, 2010 10:08 pm
+
+The strategy is based on SAR indicator and [Trend Magic indicator](https://fxcodebase.com/code/viewtopic.php?f=17&t=2374) for confirmation of SAR signals.
+
+Rules:
+
+1) The strategy enters long when SAR switches up and trend magic shows up trend.
+
+2) The strategy enters short when SAR switches down and trend magic shows down trend.
+
+3) The strategy closes all opposite positions first.
+
+4) The strategy does not enter in the same direction twice.
+
+Options:
+
+1) The strategy can show signals (alerts, sounds (including recurrent), emails) as well as can trade. By default trading is disabled. To let the strategy trade please go to the "Trading Parameters" and switch "AllowTrading" parameter to "On".
+
+2) In trading parameters you can also switch on and configure stop and limit orders.
+
+3) You can also configure "auto lot size". In case the previous trade wasn't profitable, the strategy will increase the next lot by the specified amount unless the maximum amount is reached. In case trade was profitable - the strategy will reset the trade size. Important note! In case trade is closed by stop or limit order and more than 30 trades was closed after that moment, the strategy cannot detect whether the trade was closed with profit or not. This is a limitation of the trading platform which shows only 30 last trades.
+
+What to read?
+
+There is a good article on dailyfx about the SAR-based strategies.
+[http://www.dailyfx.com/forex/technical/ ... ategy.html](http://www.dailyfx.com/forex/technical/article/forex_strategy_corner/2010/09/27/Forex_Strategy_Corner_Using_Parabolic_SAR_as_Trading_Strategy.html)
+
+How to use?
+
+The default parameters, applied on 1 hour or higher time frame, the strategy works well on trendy market. On flat market careful risk management is required.
+
+AUD/USD, 1 hour
+
+ 
+
+![trendmagic2.png](images/5122/trendmagic2.png)
+
+
+
+EUR/USD, 1 hour
+
+ 
+
+![trendmagic3.png](images/5122/trendmagic3.png)
+
+
+
+EUR/USD, 1 day, 300 pips trailing stop
+
+ 
+
+![trendmagic4.png](images/5122/trendmagic4.png)
+
+
+
+Please, do not forget to download and install **new** version of Trend Magic indicator:
+[viewtopic.php?f=17&t=2374](https://fxcodebase.com/code/viewtopic.php?f=17&t=2374)
+
+Download strategy:
+
+ [TrendMagic_Sar_Strategy.lua](files/5122/TrendMagic_Sar_Strategy.lua)
+
+Updated Version
+
+ [TrendMagic_Sar_Strategy.lua](files/5122/TrendMagic_Sar_Strategy%20%282%29.lua)
+
+The Strategy was revised and updated on January 22, 2019.
 
 
 ---

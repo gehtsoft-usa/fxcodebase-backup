@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=10686  
 > Forum: 31 · Topic 10686 · 5 post(s)
 
-
 ---
 
 ## SinTrend strategy
@@ -16,8 +15,6 @@ This strategy based on SinTrend indicator: [viewtopic.php?f=17&t=10495](https://
 
 ![SinTrend_Strategy.png](images/22016/SinTrend_Strategy.png)
 
-
-
 Download strategy:
 
  [SinTrend_Strategy.lua](files/22016/SinTrend_Strategy.lua)
@@ -25,7 +22,6 @@ Download strategy:
 For this strategy must be installed SinTrend indicator ([viewtopic.php?f=17&t=10495](https://fxcodebase.com/code/viewtopic.php?f=17&t=10495))
 
 The Strategy was revised and updated on November 22, 2018.
-
 
 ---
 
@@ -35,8 +31,8 @@ The Strategy was revised and updated on November 22, 2018.
 
 It doesn't work for me with the "typical" price, in the Strategy Optimizer (not debugger). In fact a few prices seem to be missing. An assertion is thrown by this code in Strategies\Standard\include\helper.lua:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`if sub.tick then
+```lua
+if sub.tick then
         return sub.stream;
     else
         if type == "open" then
@@ -52,8 +48,8 @@ Code: [Select all](https://fxcodebase.com/code/)
         else
             assert(false, type .. " is unknown");
         end
-    end`
-
+    end
+```
 
 ---
 
@@ -64,7 +60,6 @@ Code: [Select all](https://fxcodebase.com/code/)
 I fix this problem.
 Please, download strategy again.
 
-
 ---
 
 ## Re: SinTrend strategy
@@ -72,7 +67,6 @@ Please, download strategy again.
 **briansummy** · Wed Mar 21, 2012 12:59 pm
 
 Does this repaint by chance? I have been noticing to watch out for those. This would be a great strategy with Heikin-Ashi Agreement trading to enter and exit for N+1 close.
-
 
 ---
 

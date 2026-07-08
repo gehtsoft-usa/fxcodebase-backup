@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=2572  
 > Forum: 31 · Topic 2572 · 16 post(s)
 
-
 ---
 
 ## DMI Cross strategy
@@ -12,15 +11,12 @@
 
 ![DMI_Cross_Strategy.png](images/5741/DMI_Cross_Strategy.png)
 
-
-
 Signals appear when DMI+ and DMI- crossing.
 The signal can be direct or reverse.
 MT4/MQ4 version.
 [viewtopic.php?f=38&t=69485](https://fxcodebase.com/code/viewtopic.php?f=38&t=69485)
 
  [DMI_Cross_Signal.lua](files/5741/DMI_Cross_Signal.lua)
-
 
 ---
 
@@ -29,7 +25,6 @@ MT4/MQ4 version.
 **sabrumea** · Thu Dec 09, 2010 6:18 pm
 
 could anyone check if sound is playing in this strategy?... because i only get alerts on the screen and no sound even though i specified the file and everything..
-
 
 ---
 
@@ -41,16 +36,16 @@ Greetings! What line of code can be added to modify the buy/sell logic. I want t
 
 like AND CROSS value > 25
 
-Code: [Select all](https://fxcodebase.com/code/)
-`local MustB=false;
+```lua
+local MustB=false;
     local MustS=false;
     if (dip[period]<dim[period] and dip[period-1]>dim[period-1] and instance.parameters.TypeSignal=="direct") or (dip[period]>dim[period] and dip[period-1]<dim[period-1] and instance.parameters.TypeSignal=="reverse") then
      MustS=true;
     end
     if (dip[period]>dim[period] and dip[period-1]<dim[period-1] and instance.parameters.TypeSignal=="direct") or (dip[period]<dim[period] and dip[period-1]>dim[period-1] and instance.parameters.TypeSignal=="reverse") then
      MustB=true;
-    end`
-
+    end
+```
 
 ---
 
@@ -62,8 +57,8 @@ Hi PipGrabber,
 I've added the Cross parameter with default value 25.
 Unfortunately there is no function to easily define the crossing value, so I calculate it as follows:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- calculation of the crossing value 
+```lua
+-- calculation of the crossing value 
 
     local iXStart, iXEnd;
     iXStart = DMI.DIP:date(period - 1);
@@ -92,10 +87,10 @@ Code: [Select all](https://fxcodebase.com/code/)
 
     CROSS = (dB * iYDelta1 - dA * iYDelta2) / dC;
 
--- end of calculation`
+-- end of calculation
+```
 
 And then I've added "AND CROSS > CrossValue" to the Buy/Sell conditions (where CrossValue is the value defined in the properties, CROSS is the value of DI+ and DI- crossing).
-
 
 ---
 
@@ -105,7 +100,6 @@ And then I've added "AND CROSS > CrossValue" to the Buy/Sell conditions (where C
 
 Thanks sunshine! I really appreciate the effort you put into making a work around on the crossed value. Hope lua has a built in function that makes things easier..hehe.
 
-
 ---
 
 ## Re: DMI Cross strategy
@@ -114,7 +108,6 @@ Thanks sunshine! I really appreciate the effort you put into making a work aroun
 
 I would appreciate if we can add an option of having a limit and SL specified by pips
 
-
 ---
 
 ## Re: DMI Cross strategy
@@ -122,7 +115,6 @@ I would appreciate if we can add an option of having a limit and SL specified by
 **Apprentice** · Sat Sep 29, 2012 1:36 am
 
 What's wrong with current Stop/Limit settings.
-
 
 ---
 
@@ -133,7 +125,6 @@ What's wrong with current Stop/Limit settings.
 They are ok but sometimes when the crossover happens in the opposite direction the trade turns to loss though it has been profitable
 That was clear when I made a backtest for the strategy as it ends with few pips as a profit though sometimes it may reach more than 100 pips before it gets closed for 10-20 pips
 So I think that having SL with certain amount of pips and trailing stop would endup in more profits
-
 
 ---
 
@@ -184,7 +175,6 @@ So I think that having SL with certain amount of pips and trailing stop would en
 Hello,
 
 After importing I have the message that is present yet it does not appear in the indicators.
-
 
 ---
 
@@ -244,7 +234,6 @@ After importing I have the message that is present yet it does not appear in the
 
 I was wrong: the topic strategy here.
 
-
 ---
 
 ## Re: DMI Cross strategy
@@ -258,10 +247,7 @@ Is that possible to have this kind of parameters for this strategy?
 
 ![Capture.png](images/102289/Capture.png)
 
-
-
 Thanks in advance.
-
 
 ---
 
@@ -271,7 +257,6 @@ Thanks in advance.
 
 DMI_Cross_Signal updated.
 
-
 ---
 
 ## Re: DMI Cross strategy
@@ -279,7 +264,6 @@ DMI_Cross_Signal updated.
 **Apprentice** · Tue Dec 13, 2016 4:22 pm
 
 Strategy was revised and updated.
-
 
 ---
 
@@ -293,7 +277,6 @@ If you please, to have the MT4 version for DMI_Cross_Signal.lua strategy.
 
 your help is highly appreciated.
 
-
 ---
 
 ## Re: DMI Cross strategy
@@ -302,7 +285,6 @@ your help is highly appreciated.
 
 Your request is added to the development list.
 Development reference 808.
-
 
 ---
 

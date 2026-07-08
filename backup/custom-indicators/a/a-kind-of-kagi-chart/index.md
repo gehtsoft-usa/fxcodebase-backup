@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=1362  
 > Forum: 17 · Topic 1362 · 8 post(s)
 
-
 ---
 
 ## A kind of Kagi chart
@@ -24,10 +23,8 @@ The lighter arrow is shown in case the segment is above (below) the previous seg
 
 ![kagi.png](images/2620/kagi.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`-- Indicator profile initialization routine
+```lua
+-- Indicator profile initialization routine
 -- Defines indicator profile properties and indicator parameters
 function Init()
     indicator:name("Kagi Chart");
@@ -204,12 +201,12 @@ function Update(period)
         end
         p = p + size1;
     end
-end`
+end
+```
 
  [kagi.lua](files/2620/kagi.lua)
 
  [kagi_alert.lua](files/2620/kagi_alert.lua)
-
 
 ---
 
@@ -218,7 +215,6 @@ end`
 **clodhoppes** · Tue Aug 31, 2010 3:08 am
 
 Nice indicator. Thank you for your contribution, but I encountered a problem. Kagi chart does not update when a new period starts.
-
 
 ---
 
@@ -231,7 +227,6 @@ Just like P&F charts, Kagi charts only add a new vertical line when prices have 
 The period between Kagi change is not in direct connection with the lapse of time.
 The time between changes is not fixed.
 
-
 ---
 
 ## Re: A kind of Kagi chart
@@ -239,7 +234,6 @@ The time between changes is not fixed.
 **clodhoppes** · Tue Aug 31, 2010 7:32 am
 
 Sorry that I didn't make it clear. I found kagi charts did not update even after many periods. However, after I updated the chart window, the Kagi chart had added several new arrows. It's a surpise to me.
-
 
 ---
 
@@ -250,7 +244,6 @@ Sorry that I didn't make it clear. I found kagi charts did not update even after
 Is it possible to add an email/text alert to a kagi chart when the chart changes from thick to thin and thin to thick. I'm not looking for a new or customized kagi chart only an alert when theres a change in thickness
 Thank you
 
-
 ---
 
 ## Re: A kind of Kagi chart
@@ -259,7 +252,6 @@ Thank you
 
 Your request is added to the development list.
 
-
 ---
 
 ## Re: A kind of Kagi chart
@@ -267,7 +259,6 @@ Your request is added to the development list.
 **Apprentice** · Thu Jul 28, 2016 1:38 pm
 
 kagi_alert.lua added.
-
 
 ---
 

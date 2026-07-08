@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=537  
 > Forum: 17 · Topic 537 · 4 post(s)
 
-
 ---
 
 ## Derivative Oscillator (DEROSC)
@@ -21,12 +20,10 @@ EMA(EMA(RSI(14), 5)), 3) - MVA(EMA(EMA(RSI(14), 5)), 3), 9)
 
 ![derosc.png](images/926/derosc.png)
 
-
-
  [DEROSC.lua](files/926/DEROSC.lua)
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- Indicator profile initialization routine
+```lua
+-- Indicator profile initialization routine
 -- Defines indicator profile properties and indicator parameters
 function Init()
     indicator:name("Derivative Oscillator");
@@ -87,8 +84,8 @@ function Update(period, mode)
     if period >= first then
         DO[period] = EMA2.DATA[period] - MVA.DATA[period];
     end
-end`
-
+end
+```
 
 ---
 
@@ -100,7 +97,6 @@ hello is possible to have a diffent color for descending and ascending bar ?
 
 Thank you
 
-
 ---
 
 ## Re: Derivative Oscillator
@@ -108,7 +104,6 @@ Thank you
 **Apprentice** · Tue Aug 02, 2016 7:20 am
 
 Color Mode Option Added.
-
 
 ---
 

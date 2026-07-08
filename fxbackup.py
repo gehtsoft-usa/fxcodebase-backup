@@ -197,6 +197,40 @@ _PUSH_TAGS = {"b", "strong", "i", "em", "u", "span", "a", "code", "pre",
               "blockquote", "cite", "li", "h1", "h2", "h3", "h4", "h5", "h6"}
 _SKIP_TAGS = {"script", "style"}
 
+# Language tagging for phpBB code boxes. Indicore Lua is detected from content;
+# anything C-style that isn't Lua falls back to the forum default (e.g. mql4 for
+# the MT4 forum), and XML / data / prose stay as plain fences.
+_LUA_STRONG = re.compile(
+    r'indicator:name|indicator\.parameters|core\.indicators|core\.[A-Z]'
+    r'|instance[:.]|:addStream|ExtSubscribe|\bdofile\s*\('
+    r'|[A-Za-z_]*[Ss]ource[.:](open|close|high|low|volume|bar)'
+    r'|\[period\b|terminal:')
+_LUA_TOKENS = [re.compile(t, re.M) for t in (
+    r'\bfunction\b', r'\blocal\b', r'\bthen\b', r'\bnil\b', r'\belseif\b',
+    r'(^|\n)\s*end\b', r'\bdo\b', r'\brepeat\b', r'\buntil\b', r'~=',
+    r'(^|\n)\s*--')]
+_CSTYLE = re.compile(r'[{}]|(^|\n)\s*//|#property|\bextern\b|\bvoid\b|\bdouble\b')
+
+
+def detect_code_language(code, default=""):
+    """Best-effort fenced-code language for a phpBB code box: 'lua' for Indicore
+    Lua, the forum `default` (e.g. 'mql4') for other C-style code, and '' (plain
+    fence) for XML / CSV / logs / prose."""
+    lines = [ln.lstrip() for ln in code.split("\n") if ln.strip()]
+    if lines and sum(s.startswith("<") for s in lines) >= len(lines) * 0.4:
+        return ""                                  # markup / XML
+    if _LUA_STRONG.search(code):
+        return "lua"
+    if _CSTYLE.search(code):
+        return default or ""                       # C / MQL / JS style
+    if sum(1 for r in _LUA_TOKENS if r.search(code)) >= 2:
+        return "lua"
+    return ""
+
+
+# Per-forum fallback language for non-Lua code boxes (by phpBB forum id).
+_CODE_LANG_BY_FORUM = {"38": "mql4"}   # 38 = MT4 Expert Advisors
+
 
 class MarkdownConverter(HTMLParser):
     """Converts the limited HTML phpBB emits inside <div class="content">.
@@ -206,12 +240,15 @@ class MarkdownConverter(HTMLParser):
     pass through untouched as plain text and are substituted later.
     """
 
-    def __init__(self, base_url):
+    def __init__(self, base_url, default_lang=""):
         super().__init__(convert_charrefs=True)
         self.base_url = base_url
+        self.default_lang = default_lang
         self.stack = [{"tag": "_root", "buf": [], "meta": {}}]
         self.list_stack = []      # entries: [type, counter]
         self.skip_depth = 0
+        self.in_codebox = False   # inside <dl class="codebox">
+        self._dt_skip = False     # suppressing the "Code: Select all" <dt>
 
     # -- buffer helpers -------------------------------------------------------
     def emit(self, s):
@@ -249,10 +286,15 @@ class MarkdownConverter(HTMLParser):
                 return f"[{s}]({href})"
             return inner
         if tag == "code":
+            body = inner.strip("\n")
+            if "\n" in body:                       # multi-line -> code box
+                lang = detect_code_language(body, self.default_lang)
+                return f"\n\n```{lang}\n{body}\n```\n\n"
             return f"`{s}`" if s else ""
         if tag == "pre":
             body = inner.strip("\n")
-            return f"\n\n```\n{body}\n```\n\n"
+            lang = detect_code_language(body, self.default_lang)
+            return f"\n\n```{lang}\n{body}\n```\n\n"
         if tag == "cite":
             return f"**{s}**\n" if s else ""
         if tag == "blockquote":
@@ -289,7 +331,15 @@ class MarkdownConverter(HTMLParser):
         elif tag in ("ul", "ol"):
             self.list_stack.append([tag, 0])
             self.emit("\n")
-        elif tag in ("dl", "dt", "dd", "tr"):
+        elif tag == "dl":
+            if "codebox" in (a.get("class") or ""):
+                self.in_codebox = True
+            self.emit("\n")
+        elif tag == "dt" and self.in_codebox:
+            # suppress the "Code: Select all" header of a code box
+            self._dt_skip = True
+            self.skip_depth += 1
+        elif tag in ("dt", "dd", "tr"):
             self.emit("\n")
         elif tag == "img":
             pass  # attachments are pre-extracted; ignore decorative imgs
@@ -305,6 +355,14 @@ class MarkdownConverter(HTMLParser):
     def handle_endtag(self, tag):
         if tag in _SKIP_TAGS:
             self.skip_depth = max(0, self.skip_depth - 1)
+            return
+        if tag == "dt" and self._dt_skip:
+            self._dt_skip = False
+            self.skip_depth = max(0, self.skip_depth - 1)
+            return
+        if tag == "dl" and self.in_codebox:
+            self.in_codebox = False
+            self.emit("\n")
             return
         if self.skip_depth:
             return
@@ -335,8 +393,8 @@ class MarkdownConverter(HTMLParser):
         return text.strip()
 
 
-def html_to_markdown(content_html, base_url):
-    conv = MarkdownConverter(base_url)
+def html_to_markdown(content_html, base_url, default_lang=""):
+    conv = MarkdownConverter(base_url, default_lang)
     conv.feed(content_html)
     conv.close()
     return conv.get_markdown()
@@ -409,8 +467,8 @@ def extract_content_html(post_frag):
     return post_frag[start:]
 
 
-_POST_SPLIT_RE = re.compile(r'(?=<div id="p\d+" class="post bg[12]")')
-_POST_START_RE = re.compile(r'<div id="p(\d+)" class="post bg[12]"')
+_POST_SPLIT_RE = re.compile(r'(?=<div id="p\d+" class="post[^"]*\bbg[12]\b)')
+_POST_START_RE = re.compile(r'<div id="p(\d+)" class="post[^"]*\bbg[12]\b')
 _AUTHOR_RE = re.compile(r'<p class="author">(.*?)</p>', re.S)
 _SUBJECT_RE = re.compile(r"<h3[^>]*>\s*<a[^>]*>(.*?)</a>", re.S)
 _PROFILE_RE = re.compile(r"viewprofile[^>]*>(.*?)</a>", re.S)
@@ -649,8 +707,9 @@ class Backup:
                  f"> Forum: {self.forum_id} · Topic {tid} · "
                  f"{len(posts)} post(s)\n"]
 
+        default_lang = _CODE_LANG_BY_FORUM.get(self.forum_id, "")
         for idx, post in enumerate(posts):
-            md = html_to_markdown(post["content_html"], self.base)
+            md = html_to_markdown(post["content_html"], self.base, default_lang)
             md = self._substitute(md, post["occ"], idmap)
             subject = post["subject"] or f"Post {idx + 1}"
             meta = []

@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=29&t=1061  
 > Forum: 29 · Topic 1061 · 13 post(s)
 
-
 ---
 
 ## Volty Channel Stop Signal
@@ -17,8 +16,6 @@ Please note that the indicator must also be installed.
 
 ![vts.png](images/2014/vts.png)
 
-
-
 Download:
 
 Indicator:
@@ -29,8 +26,8 @@ Signal:
 
  [VoltyChannel_Stop_Signal.lua](files/2014/VoltyChannel_Stop_Signal.lua)
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     strategy:name("Volty Channel Stop");
     strategy:description("");
 
@@ -140,8 +137,8 @@ function ExtUpdate(id, source, period)
     end
 end
 
-dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");`
-
+dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");
+```
 
 ---
 
@@ -159,7 +156,6 @@ It would be great
 Thanks
 Jeff
 
-
 ---
 
 ## Re: Volty Channel Stop Signal
@@ -167,7 +163,6 @@ Jeff
 **Nikolay.Gekht** · Sun May 23, 2010 3:16 pm
 
 To play the sound when signal appears just specify true in the parameter Play Sound (the parameter before the last parameter of the signal, false (do not play sound by default)) and choose a wav file to play in the Sound File parameter (this last parameter).
-
 
 ---
 
@@ -183,7 +178,6 @@ Thank You very much
 
 Oktoeight
 
-
 ---
 
 ## Re: Volty Channel Stop Signal
@@ -191,7 +185,6 @@ Oktoeight
 **Apprentice** · Mon Sep 27, 2010 5:57 am
 
 Added to development cue.
-
 
 ---
 
@@ -201,7 +194,6 @@ Added to development cue.
 
 Email functionality is added.
 
-
 ---
 
 ## Re: Volty Channel Stop Signal
@@ -209,7 +201,6 @@ Email functionality is added.
 **Nikolay.Gekht** · Tue Sep 28, 2010 1:04 pm
 
 BTW, I don't think that we should support it anymore. VoltiChannelStop strategy does exactly the same in case 'trading mode' is off.
-
 
 ---
 
@@ -223,7 +214,6 @@ Thank You very much !!
 
 Great Work !
 
-
 ---
 
 ## Re: Volty Channel Stop Signal
@@ -231,7 +221,6 @@ Great Work !
 **luigipg** · Fri Apr 29, 2011 1:45 am
 
 Hi Nikolay, this is not an indicator but a signal, in fact the trading station gives me the error loading, please can you develop for this indicator the corresponding signal? I would be grateful. Thanks for everything. Luigi!!!
-
 
 ---
 
@@ -244,7 +233,6 @@ Hi Nikolay, this is not an indicator but a signal, in fact the trading station g
 
 I've found the Volty Channel Stop indicator on fxcodebase:
 [viewtopic.php?f=17&t=893](https://fxcodebase.com/code/viewtopic.php?f=17&t=893)
-
 
 ---
 
@@ -262,7 +250,6 @@ Thank you!
 
 RJH
 
-
 ---
 
 ## Re: Volty Channel Stop Signal
@@ -270,7 +257,6 @@ RJH
 **sunshine** · Mon Jul 23, 2012 3:31 pm
 
 I have attached the signal file (VoltyChannel_Stop_Signal.lua) to the top post in this topic.
-
 
 ---
 

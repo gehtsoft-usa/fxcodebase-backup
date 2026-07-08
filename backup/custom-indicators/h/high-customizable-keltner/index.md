@@ -1,8 +1,240 @@
 # High Customizable Keltner
 
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=280  
-> Forum: 17 · Topic 280 · 66 post(s)
+> Forum: 17 · Topic 280 · 69 post(s)
 
+---
+
+## High Customizable Keltner
+
+**Nikolay.Gekht** · Wed Feb 03, 2010 5:41 pm
+
+Keltner indicator looks similar and is calculated similar to the Bollinger Band Indicator.
+
+In common, formula is:
+
+Keltner.High(i) = Smooth(Source) + Variation * Factor
+Keltner.Low(i) = Smooth(Source) - Variation * Factor
+
+There are many choices how to smooth the source and what is the variation.
+
+The most common cases are:
+Case 1). Smoothing is Moving Average, Source is Close, Variation is average of the differences between high and low:
+Keltner.High = Avg(Close) + Avg(High - Low)
+Keltner.Low = Avg(Close) - Avg(High - Low)
+
+Case 2). Smoothing is Moving Average, the Source is Median and Variation is Average True Range
+Keltner.High = Avg((High + Low + Close)/3) + ATR(Bar)
+Keltner.Low = Avg((High + Low + Close)/3) - ATR(Bar)
+
+The implementation here lets you customize the source, smoothing method and variation method.
+Source can be:
+a) Close Price
+b) Median as (High + Low) / 2
+c) Median as (High + Low + Close) / 3
+
+Smoothing could be:
+a) Simple Moving Average (MVA)
+b) Exponential Moving Average (EMA)
+c) Linear Weighted Moving Average (LWMA)
+d) Smoothed Moving Average (SMMA)
+e) Wilder's Moving Average (WMA)
+
+**Note** If you would like to use SMMA and WMA, please download and install these indicators.
+SMMA is available [here](https://fxcodebase.com/code/viewtopic.php?f=17&t=195). WMA is available [here](https://fxcodebase.com/code/viewtopic.php?f=17&t=248)
+
+Variation can be:
+a) Smoothed difference between High and Low
+b) Average True Range
+
+You can also choose the numbers of period to smooth the base line, the numbers of period to smooth the variation and the factor which is used to multiply variation before applying it.
+
+At the example below:
+Left indicator:
+Base: Moving Average of the last 10 periods of the Close
+Variation: Moving Average of the last 10 periods of the difference between High and Low
+Factor: 1
+Right Indicator:
+Base: Wilder's Smoothing of the last 50 periods of the Median (High + Low + Close) / 3
+Variation: Average True Range of the Last 50 periods.
+Factor: 3.5
+
+ 
+
+![keltner.png](images/449/keltner.png)
+
+The source code of the indicator is below
+
+```lua
+-- Indicator profile initialization routine
+-- Defines indicator profile properties and indicator parameters
+function Init()
+    indicator:name("Keltner Band");
+    indicator:description("No description");
+    indicator:requiredSource(core.Bar);
+    indicator:type(core.Indicator);
+
+    -- indicator parameters
+    indicator.parameters:addInteger("NM", "Number of the periods to smooth the center line", "", 50);
+    indicator.parameters:addInteger("NB", "Number of periods to smooth deviation", "", 50);
+    indicator.parameters:addDouble("F", "Factor which is used to apply the deviation", "", 1);
+
+    -- source method
+    indicator.parameters:addString("SRC", "The center line source", "", "C");
+    indicator.parameters:addStringAlternative("SRC", "Close", "", "C");
+    indicator.parameters:addStringAlternative("SRC", "Median (H+L)/2", "", "M1");
+    indicator.parameters:addStringAlternative("SRC", "Median (H+L+C)/3", "", "M2");
+
+    -- source smoothing method
+    indicator.parameters:addString("MS", "The center line smoothing method", "", "MVA");
+    indicator.parameters:addStringAlternative("MS", "MVA", "", "MVA");
+    indicator.parameters:addStringAlternative("MS", "EMA", "", "EMA");
+    indicator.parameters:addStringAlternative("MS", "LWMA", "", "LWMA");
+    indicator.parameters:addStringAlternative("MS", "SMMA", "", "SMMA");
+    indicator.parameters:addStringAlternative("MS", "Wilders", "", "WMA");
+
+    -- variation method
+    indicator.parameters:addString("MV", "Variation Method", "", "AHL");
+    indicator.parameters:addStringAlternative("MV", "Smoothed H-L", "", "AHL");
+    indicator.parameters:addStringAlternative("MV", "ATR of source", "", "ATR");
+
+    indicator.parameters:addColor("H_color", "Color of Upper Band Line", "", core.rgb(255, 0, 0));
+    indicator.parameters:addColor("M_color", "Color of Middle Band Line", "", core.rgb(0, 255, 255));
+    indicator.parameters:addColor("L_color", "Color of Lower Band Line", "", core.rgb(255, 0, 0));
+end
+
+-- Indicator instance initialization routine
+-- Processes indicator parameters and creates output streams
+-- TODO: Refine the first period calculation for each of the output streams.
+-- TODO: Calculate all constants, create instances all subsequent indicators and load all required libraries
+-- Parameters block
+local NM;
+local NB;
+local MS;
+local MV;
+local SRC;
+local F;
+
+local first;
+local source = nil;
+
+-- Streams block
+local H = nil;
+local M = nil;
+local L = nil;
+
+local AS;           -- alternative source
+local MI;           -- middle line smoothed
+
+local VM1;          -- the source stream for H-L variation method
+local VMI;          -- the indicator for smoothing H-L variation method
+local ATR;          -- ATR indicator for smoothing method
+
+-- Routine
+function Prepare()
+    NM = instance.parameters.NM;
+    NB = instance.parameters.NB;
+    SRC = instance.parameters.SRC;
+    F = instance.parameters.F;
+    MV = instance.parameters.MV;
+    MS = instance.parameters.MS;
+    source = instance.source;
+
+    local name = profile:id() .. "(" .. source:name() .. "." .. SRC .. ", "
+    -- preare the source
+    if SRC == "C" then
+        AS = source.close;
+    elseif SRC == "M1" or SRC == "M2" then
+        AS = instance:addInternalStream(source:first(), 0);
+    else
+        assert(false, "The source method is unknown");
+    end
+
+    -- create an indicator to calculate the middle line
+    name = name .. MS .. "(" .. NM .. "), "
+    MI = core.indicators:create(MS, AS, NM);
+    first = MI.DATA:first();
+
+    if MV == "AHL" then
+        name = name .. MS .. "(H-L, " .. NB .. "), "
+        VM1 = instance:addInternalStream(source:first(), 0);
+        VMI = core.indicators:create(MS, VM1, NB);
+        if VMI.DATA:first() > first then
+            first = MI.DATA:first();
+        end
+    elseif MV == "ATR" then
+        name = name .. "ATR(" .. NB .. "), "
+        ATR = core.indicators:create("ATR", source, NB);
+        if ATR.DATA:first() > first then
+            first = ATR.DATA:first();
+        end
+    else
+        assert(false, "The variation method is unknown");
+    end
+    name = name .. F;
+    name = name .. ")";
+    instance:name(name);
+    H = instance:addStream("H", core.Line, name .. ".H", "H", instance.parameters.H_color, first);
+    M = instance:addStream("M", core.Line, name .. ".M", "M", instance.parameters.M_color, first);
+    L = instance:addStream("L", core.Line, name .. ".L", "L", instance.parameters.L_color, first);
+end
+
+-- Indicator calculation routine
+function Update(period, mode)
+    if period >= source:first() then
+        if SRC == "M1" then
+            AS[period] = (source.high[period] + source.low[period]) / 2;
+        elseif SRC == "M2" then
+            AS[period] = (source.high[period] + source.low[period] + source.close[period]) / 3;
+        end
+        -- update the source smoothing indicator
+        MI:update(mode);
+
+        if MV == "AHL" then
+            VM1[period] = source.high[period] - source.low[period];
+            VMI:update(mode);
+        elseif MV == "ATR" then
+            ATR:update(mode);
+        end
+    end
+
+    if period >= first then
+        local v;
+        M[period] = MI.DATA[period];
+        if MV == "AHL" then
+            VM1[period] = source.high[period] - source.low[period];
+            v = VMI.DATA[period];
+        elseif MV == "ATR" then
+            v = ATR.DATA[period];
+        end
+        H[period] = M[period] + v * F;
+        L[period] = M[period] - v * F;
+    end
+end
+```
+
+Download the indicator
+
+ [Keltner.lua](files/449/Keltner.lua)
+
+Updated May, 31 2010. A new parameter 'Show center line' is added.
+
+ [Keltner1.lua](files/449/Keltner1.lua)
+
+This indicator provides Audio / Email Alerts, for Keltner indicator,
+It is possible to define three separate signals.
+Top/Bottom/Central Line Crossover Alert.
+
+ [Keltner with Alert.lua](files/449/Keltner%20with%20Alert.lua)
+
+Compatibility issue fixed.
+_Alert Helper is not longer needed.
+
+MQ4 version of Keltner channel indicator can be found here.
+[viewtopic.php?f=38&t=20204&p=35520#p35520](https://fxcodebase.com/code/viewtopic.php?f=38&t=20204&p=35520#p35520)
+
+Version with additional smoothing options.
+[https://fxcodebase.com/code/viewtopic.php?f=17&t=71126](https://fxcodebase.com/code/viewtopic.php?f=17&t=71126)
 
 ---
 
@@ -15,6 +247,13 @@ Thanks a lot Nikolay ! You rule ! It will be very usefull to me ...
 Best to you
 Kevin
 
+---
+
+## Re: High Customizable Keltner
+
+**Nikolay.Gekht** · Thu Feb 04, 2010 11:15 pm
+
+Don't mention it! You are always welcome!
 
 ---
 
@@ -24,6 +263,13 @@ Kevin
 
 Thanks for this very useful indicator. Is there an easy way to either not plot the centre line or colour it transparent? Thanks.
 
+---
+
+## Re: High Customizable Keltner
+
+**Nikolay.Gekht** · Mon May 31, 2010 11:38 am
+
+I put updated indicator (ketler1) to the first post of this topic.
 
 ---
 
@@ -33,7 +279,6 @@ Thanks for this very useful indicator. Is there an easy way to either not plot t
 
 Thank you Nikolay! Really appreciate your help.
 Jürgen
-
 
 ---
 
@@ -49,7 +294,6 @@ I would like to differentiate different deiviations buy line thickness and dotte
 
 many thx in advance
 
-
 ---
 
 ## Re: High Customizable Keltner
@@ -57,7 +301,6 @@ many thx in advance
 **Apprentice** · Sat Jul 16, 2011 3:59 am
 
 Style Option Added.
-
 
 ---
 
@@ -67,7 +310,6 @@ Style Option Added.
 
 thx very much Apprentice. do i just download the KELTNER1.LUA once again?
 
-
 ---
 
 ## Re: High Customizable Keltner
@@ -76,7 +318,6 @@ thx very much Apprentice. do i just download the KELTNER1.LUA once again?
 
 thx very much Apprentice.
 
-
 ---
 
 ## Re: High Customizable Keltner
@@ -84,7 +325,6 @@ thx very much Apprentice.
 **7510109079** · Sat Jul 16, 2011 6:11 am
 
 works great! ignore last query
-
 
 ---
 
@@ -102,7 +342,6 @@ If you could do it in such a way that one could set different alert tones for up
 
 muchos gracias in advance
 
-
 ---
 
 ## Re: High Customizable Keltner
@@ -114,7 +353,6 @@ just checking if the last request for an automated alert for hitting the limits 
 Any one able to work on this?
 thx Lawrence
 
-
 ---
 
 ## Re: High Customizable Keltner
@@ -122,7 +360,6 @@ thx Lawrence
 **Apprentice** · Sun Aug 21, 2011 12:10 pm
 
 This is possible using / writing signal not with indicator.
-
 
 ---
 
@@ -144,7 +381,6 @@ many thx
 
 LAwrence
 
-
 ---
 
 ## Re: High Customizable Keltner
@@ -153,7 +389,6 @@ LAwrence
 
 >>> to see whole image above, right click and copy image url into new browser page
 
-
 ---
 
 ## Re: High Customizable Keltner
@@ -161,7 +396,6 @@ LAwrence
 **7510109079** · Thu Oct 13, 2011 7:24 am
 
 Would it be possible to add a time period option so one could superimpose/plot the Kelt line of a different period chart e.g. plot an m5 Kelt channel on an m1 chart or vice versa?
-
 
 ---
 
@@ -175,7 +409,6 @@ Would it be possible to add a time period option so one could superimpose/plot t
 It is possible in the new version of Marketscope which comes to productions pretty soon. For now the beta version is available here: [viewtopic.php?f=30&t=6490](https://fxcodebase.com/code/viewtopic.php?f=30&t=6490)
 You can choose the time frame in the Indicator Properties dialog box -> Data Source tab.
 
-
 ---
 
 ## Re: High Customizable Keltner
@@ -183,7 +416,6 @@ You can choose the time frame in the Indicator Properties dialog box -> Data Sou
 **zmender** · Wed Jan 25, 2012 9:32 pm
 
 Hi Apprentice, is the strategy for this indicator still on the developmental cue? - Thx
-
 
 ---
 
@@ -197,12 +429,9 @@ Keltner indicator with color clouds.
 
 ![Keltner2.png](images/25480/Keltner2.png)
 
-
-
 Download:
 
  [Keltner2.lua](files/25480/Keltner2.lua)
-
 
 ---
 
@@ -211,7 +440,6 @@ Download:
 **7510109079** · Fri Feb 10, 2012 5:55 am
 
 thx Apprentice. Saw your msg about time period. Thx also for the cloud lua
-
 
 ---
 
@@ -224,7 +452,6 @@ im looking keltner bands but with seting like Trade Stations
 -NumATRs
 -Displace
 Please and Thx
-
 
 ---
 
@@ -252,7 +479,6 @@ if Displace <= 0 or CurrentBar > AbsValue( Displace )or BarStatus(1) = 2
  end;
  ----- maybe that help
 
-
 ---
 
 ## Re: High Customizable Keltner
@@ -261,14 +487,11 @@ if Displace <= 0 or CurrentBar > AbsValue( Displace )or BarStatus(1) = 2
 
 ![Keltner Band.png](images/35496/Keltner%20Band.png)
 
-
-
 Cental = Moving Average
 Top =Central + Central * Percentage
 Bottom =Central - Central * Percentage
 
  [Keltner Band.lua](files/35496/Keltner%20Band.lua)
-
 
 ---
 
@@ -278,7 +501,6 @@ Bottom =Central - Central * Percentage
 
 look perfect thx a lot of but can u add cloud? please
 
-
 ---
 
 ## Re: High Customizable Keltner
@@ -287,12 +509,9 @@ look perfect thx a lot of but can u add cloud? please
 
 ![Cloud.png](images/35539/Cloud.png)
 
-
-
 With Cloud Version.
 
  [Keltner Band.lua](files/35539/Keltner%20Band.lua)
-
 
 ---
 
@@ -303,7 +522,6 @@ With Cloud Version.
 The Keltner from the June 14, 2012 post does not seem to work in shorter time frames. It goes way off from the price.
 Thank you.
 
-
 ---
 
 ## Re: High Customizable Keltner
@@ -312,7 +530,6 @@ Thank you.
 
 Try to use smaller Percentage value.
 This should fix your problem.
-
 
 ---
 
@@ -325,7 +542,6 @@ If so I cannot find it(I tried 2-3 versions)
 The Alert is for price closing above or below Keltner channel.
 Thanks
 
-
 ---
 
 ## Re: High Customizable Keltner
@@ -334,7 +550,6 @@ Thanks
 
 See top most post.
 I just uploaded the version that has alert functionality.
-
 
 ---
 
@@ -347,7 +562,6 @@ I just uploaded the version that has alert functionality.
 3. And choosing Low or High instead of Close?
 
 Being a beginner simple download is probably the maximum I can manage.
-
 
 ---
 
@@ -363,7 +577,6 @@ How can I use Low or High instead of Close?
 
 The changes in the code -probably (H+H)/2 instead of (H+L)/2- might not be too complicated but being a beginner simple download is probably the maximum I can manage.
 
-
 ---
 
 ## Re: High Customizable Keltner
@@ -372,7 +585,6 @@ The changes in the code -probably (H+H)/2 instead of (H+L)/2- might not be too c
 
 In this implementation, it is not possible,
 We use the ATR, which requires a complete bar (open, close, high, low)
-
 
 ---
 
@@ -390,7 +602,6 @@ If yes how can I download it?
 
 P.S.I guess the coding shouldn't be too complicated even though it is beyond the scope of my skills i.e. I don't know how to turn a new code into a downloadable .lua version.
 
-
 ---
 
 ## Re: High Customizable Keltner
@@ -401,7 +612,6 @@ Only if we use Tick ATR
  [viewtopic.php?f=17&t=34094&p=57962&hilit=tick+atr#p57962](https://fxcodebase.com/code/viewtopic.php?f=17&t=34094&p=57962&hilit=tick+atr#p57962)
 Note, ATR and TickATR have different values​​.
 
-
 ---
 
 ## Re: High Customizable Keltner
@@ -409,7 +619,6 @@ Note, ATR and TickATR have different values​​.
 **Apprentice** · Fri Jun 28, 2013 2:32 am
 
 Simply set style for medium line to "No Line"
-
 
 ---
 
@@ -423,7 +632,6 @@ Short when the price closes above the top of the keltner band
 
 Thank you.
 
-
 ---
 
 ## Re: High Customizable Keltner
@@ -432,7 +640,6 @@ Thank you.
 
 Requested can be found here.
 [viewtopic.php?f=31&t=59755](https://fxcodebase.com/code/viewtopic.php?f=31&t=59755)
-
 
 ---
 
@@ -446,7 +653,6 @@ Thanks,
 
 sjc
 
-
 ---
 
 ## Re: High Customizable Keltner
@@ -456,7 +662,6 @@ sjc
 In theory, yes.
 Unfortunately, this is not possible without major under the hood, changes,
 as ATR require a full bar for the calculation.
-
 
 ---
 
@@ -470,7 +675,6 @@ Can we get an alert even if the price action only touches the high/low K line, b
 
 thx
 
-
 ---
 
 ## Re: High Customizable Keltner
@@ -481,7 +685,6 @@ to clarify, i mean similar functionality to the built-in chart price alert condi
 
 [http://tinypic.com/r/29yhz0j/8](http://tinypic.com/r/29yhz0j/8)
 
-
 ---
 
 ## Re: High Customizable Keltner
@@ -489,7 +692,6 @@ to clarify, i mean similar functionality to the built-in chart price alert condi
 **Apprentice** · Fri May 30, 2014 4:05 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -499,7 +701,6 @@ Your request is added to the development list.
 
 thx
 
-
 ---
 
 ## Re: High Customizable Keltner
@@ -507,7 +708,6 @@ thx
 **klutzy** · Mon Sep 01, 2014 12:34 pm
 
 Please let user displace lines to left up to half the period span.
-
 
 ---
 
@@ -529,7 +729,6 @@ WHEN AVERAGES SELL=KELTNER MAKE ONLY SELL OPTION
 
 WHEN IT WOULD BE DONE
 
-
 ---
 
 ## Re: High Customizable Keltner
@@ -538,7 +737,6 @@ WHEN IT WOULD BE DONE
 
 Highly adaptable Keltner Strategy with Confirmation Added.
 [viewtopic.php?f=31&t=59755&p=98279#p98279](https://fxcodebase.com/code/viewtopic.php?f=31&t=59755&p=98279#p98279)
-
 
 ---
 
@@ -554,7 +752,6 @@ HI
 can you make a Indicatot with signal Dots
 THX
 
-
 ---
 
 ## Re: High Customizable Keltner
@@ -565,7 +762,6 @@ Hi,
 Is it possible to create a version of Keltner2 that projects the 3 lines 3 to 5 bars into the future based on current slope.
 Thank You
 
-
 ---
 
 ## Re: High Customizable Keltner
@@ -573,7 +769,6 @@ Thank You
 **rtsayers** · Tue Dec 08, 2015 10:46 pm
 
 The center line cross alert not working? All of the alerts are on and the alerts are working for other indicators?
-
 
 ---
 
@@ -584,7 +779,6 @@ The center line cross alert not working? All of the alerts are on and the alerts
 Compatibility issue fixed.
 _Alert Helper is not longer needed.
 
-
 ---
 
 ## Re: High Customizable Keltner
@@ -593,7 +787,6 @@ _Alert Helper is not longer needed.
 
 Could you make a tick based version of Keltner1.lua ?
 Thanks
-
 
 ---
 
@@ -604,7 +797,6 @@ Thanks
 Try this version.
 [viewtopic.php?f=17&t=63381](https://fxcodebase.com/code/viewtopic.php?f=17&t=63381)
 
-
 ---
 
 ## Re: High Customizable Keltner
@@ -612,7 +804,6 @@ Try this version.
 **Apprentice** · Thu Jun 01, 2017 6:17 am
 
 Indicator was revised and updated.
-
 
 ---
 
@@ -623,7 +814,6 @@ Indicator was revised and updated.
 Hi Apprentice, Have a nice day, Could it be possible to modify this indicator in order to apply it to different indicator like RSI as an Example.
 Regards.
 
-
 ---
 
 ## Re: High Customizable Keltner
@@ -633,7 +823,6 @@ Regards.
 Try this version.
 [viewtopic.php?f=17&t=63381&p=114825&hilit=Keltner#p114825](https://fxcodebase.com/code/viewtopic.php?f=17&t=63381&p=114825&hilit=Keltner#p114825)
 
-
 ---
 
 ## Re: High Customizable Keltner
@@ -642,7 +831,6 @@ Try this version.
 
 Thank you Apprentice so much, you are always such a great help
 
-
 ---
 
 ## Re: High Customizable Keltner
@@ -650,7 +838,6 @@ Thank you Apprentice so much, you are always such a great help
 **Apprentice** · Mon Sep 24, 2018 9:53 am
 
 The indicator was revised and updated.
-
 
 ---
 
@@ -671,7 +858,6 @@ Can we have a customisable (color & size) marker for each type of 6 sound alerts
 
 thank you
 
-
 ---
 
 ## Re: High Customizable Keltner
@@ -679,7 +865,6 @@ thank you
 **Apprentice** · Fri Nov 02, 2018 12:21 pm
 
 Your request is added to the development list under Id Number 4293
-
 
 ---
 
@@ -691,7 +876,6 @@ OK great thx.
 
 Did you manage to reproduce/sort out the bug?
 
-
 ---
 
 ## Re: High Customizable Keltner
@@ -701,7 +885,6 @@ Did you manage to reproduce/sort out the bug?
 Try it now, file Id: 9218
 Id will be shown in you hover over the file with your mouse cursor.
 
-
 ---
 
 ## Re: High Customizable Keltner
@@ -709,7 +892,6 @@ Id will be shown in you hover over the file with your mouse cursor.
 **Phamilton630** · Wed Nov 07, 2018 7:46 am
 
 Thanks but why the change of marker symbol? It is better with the dot on the cross over
-
 
 ---
 
@@ -721,7 +903,6 @@ hello
 can I have the moving averages "jurisk" and "HMA" to calculate keltner
 thank you
 
-
 ---
 
 ## Re: High Customizable Keltner
@@ -731,7 +912,6 @@ thank you
 Your request is added to the development list.
 Development reference 326.
 
-
 ---
 
 ## Re: Keltner personnalisable élevé
@@ -739,7 +919,6 @@ Development reference 326.
 **bruno2017** · Tue Mar 30, 2021 7:01 am
 
 thank you
-
 
 ---
 
@@ -749,7 +928,6 @@ thank you
 
 Try this version.
 [https://fxcodebase.com/code/viewtopic.php?f=17&t=71126](https://fxcodebase.com/code/viewtopic.php?f=17&t=71126)
-
 
 ---
 
@@ -762,7 +940,6 @@ Hi, I get an error:
 I'm also on a completely new Marketscipe, using almost only this.
 
 M.
-
 
 ---
 

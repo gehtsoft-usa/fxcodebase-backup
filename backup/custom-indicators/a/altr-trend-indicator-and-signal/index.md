@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=1123  
 > Forum: 17 · Topic 1123 · 13 post(s)
 
-
 ---
 
 ## Altr Trend indicator and signal
@@ -16,12 +15,10 @@
 
 ![AltrTrend.png](images/2145/AltrTrend.png)
 
-
-
 Indicator:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Altr Trend indicator");
     indicator:description("");
     indicator:requiredSource(core.Bar);
@@ -93,12 +90,13 @@ function Update(period, mode)
      old=uptrend;
 
     end
-end`
+end
+```
 
 Signal:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     strategy:name("Altr Trend signal");
     strategy:description("");
 
@@ -233,7 +231,8 @@ function ExtSignal(source, period, message, soundFile)
     if soundFile ~= nil then
         terminal:alertSound(soundFile, false);
     end
-end`
+end
+```
 
  [AltrTrend.lua](files/2145/AltrTrend.lua)
 
@@ -243,13 +242,10 @@ end`
 
 ![EURUSD m1 (07-06-2016 0924).png](images/2145/EURUSD%20m1%20%2807-06-2016%200924%29.png)
 
-
-
  [AltrTrend Overlay.lua](files/2145/AltrTrend%20Overlay.lua)
 
 Altr Trend indicator based strategy.
 [viewtopic.php?f=31&t=66618](https://fxcodebase.com/code/viewtopic.php?f=31&t=66618)
-
 
 ---
 
@@ -270,7 +266,6 @@ Is there a way to fix this?
 Thanks..
 BC
 
-
 ---
 
 ## Re: Altr Trend indicator and signal
@@ -278,7 +273,6 @@ BC
 **Nikolay.Gekht** · Thu Jun 03, 2010 8:24 am
 
 The same problem in the logic, as I reported for the BB_Stop signal.
-
 
 ---
 
@@ -293,7 +287,6 @@ could you tell me how to configure this indicator's parameters?
 thank you
 
 best regards
-
 
 ---
 
@@ -311,7 +304,6 @@ Regards,
 
 Richard
 
-
 ---
 
 ## Re: Altr Trend indicator and signal
@@ -326,7 +318,6 @@ I will continue to monitor.
 
 RJH
 
-
 ---
 
 ## Re: Altr Trend indicator and signal
@@ -335,7 +326,6 @@ RJH
 
 Hello dear, is it possible to have a Multi Time Frame indicator (perhaps up to 5 different time frames) for this indicator? Thanks.
 
-
 ---
 
 ## Re: Altr Trend indicator and signal
@@ -343,7 +333,6 @@ Hello dear, is it possible to have a Multi Time Frame indicator (perhaps up to 5
 **sunshine** · Wed Sep 07, 2011 12:26 am
 
 In the next release of the platform you can choose the time frame for any indicator, right in the indicator properties, on the source tab. Please wait a bit. The beta version will be published on this site soon. Watch for updates.
-
 
 ---
 
@@ -355,7 +344,6 @@ hello Apprentice,
 
 could we have overlay for this indicator please? thanks a lot
 
-
 ---
 
 ## Re: Altr Trend indicator and signal
@@ -364,7 +352,6 @@ could we have overlay for this indicator please? thanks a lot
 
 AltrTrend Overlay.lua added.
 
-
 ---
 
 ## Re: Altr Trend indicator and signal
@@ -372,7 +359,6 @@ AltrTrend Overlay.lua added.
 **Apprentice** · Sun Sep 02, 2018 5:42 am
 
 The indicator was revised and updated.
-
 
 ---
 
@@ -386,7 +372,6 @@ With this parameters:
 
 when a buy signal open a buy trade and close all sell trades
 when a sell signal open a sell trade and close all buy trades
-
 
 ---
 

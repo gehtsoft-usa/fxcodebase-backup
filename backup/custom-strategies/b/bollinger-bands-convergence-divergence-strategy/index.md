@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=63430  
 > Forum: 31 · Topic 63430 · 6 post(s)
 
-
 ---
 
 ## Bollinger Bands Convergence Divergence Strategy
@@ -12,15 +11,12 @@
 
 ![EURUSD m5 (05-01-2016 1458).png](images/106015/EURUSD%20m5%20%2805-01-2016%201458%29.png)
 
-
-
 Based on Bollinger Bands Convergence Divergence Indicator.
 [viewtopic.php?f=17&t=63020](https://fxcodebase.com/code/viewtopic.php?f=17&t=63020)
 
  [Highly adaptable Bollinger Bands Convergence Divergence Strategy.lua](files/106015/Highly%20adaptable%20Bollinger%20Bands%20Convergence%20Divergence%20Strategy.lua)
 
 The Strategy was revised and updated on December 18, 2018.
-
 
 ---
 
@@ -37,7 +33,6 @@ Exemple [viewtopic.php?f=17&t=23335&hilit=BB+analyser](https://fxcodebase.com/co
 
  thank you very much
 
-
 ---
 
 ## Re: Bollinger Bands Convergence Divergence Strategy
@@ -46,15 +41,14 @@ Exemple [viewtopic.php?f=17&t=23335&hilit=BB+analyser](https://fxcodebase.com/co
 
 You want to add an extra averaging of BB lines?
 
-
 ---
 
 ## Re: Bollinger Bands Convergence Divergence Strategy
 
 **albertparis** · Thu Dec 15, 2016 5:28 am
 
-Code: [Select all](https://fxcodebase.com/code/)
-`Hello
+```
+Hello
 No,
 Possibility of taking the ATRSL indicator for the calculation of the bollinger bands
 
@@ -69,8 +63,8 @@ Number of périods to smooth ATR : 20
 
 This will make it possible to see the ranges
 
-Thank you for your work`
-
+Thank you for your work
+```
 
 ---
 
@@ -80,15 +74,14 @@ Thank you for your work`
 
 U want to add BB indicator to indicator ATRSL?
 
-
 ---
 
 ## Re: Bollinger Bands Convergence Divergence Strategy
 
 **albertparis** · Fri Dec 16, 2016 7:03 am
 
-Code: [Select all](https://fxcodebase.com/code/)
-`Hello
+```
+Hello
 Band of Bollinger formula:
 
 The upper bound which corresponds to a moving average of the volatility to which is added a standard deviation
@@ -103,4 +96,5 @@ Can modify the calculation formula :
 
 Take the ATRMSL calculation to build bollinger high and low bollinger bands
 
-Thank you for your work`
+Thank you for your work
+```

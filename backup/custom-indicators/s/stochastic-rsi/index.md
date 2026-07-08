@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=451  
 > Forum: 17 · Topic 451 · 28 post(s)
 
-
 ---
 
 ## Stochastic RSI
@@ -30,10 +29,8 @@ SLOW = MVA(FAST, D)
 
 ![stochrsi.png](images/735/stochrsi.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`-- Indicator profile initialization routine
+```lua
+-- Indicator profile initialization routine
 -- Defines indicator profile properties and indicator parameters
 function Init()
     indicator:name("Stochastic RSI");
@@ -123,7 +120,8 @@ function Update(period, mode)
     if (period >= firstD) then
         SD[period] = MVA2.DATA[period];
     end
-end`
+end
+```
 
  [StochRSI.lua](files/735/StochRSI.lua)
 
@@ -138,8 +136,6 @@ Added By Apprentice
  
 
 ![Stochastic RSI with Alert.png](images/735/Stochastic%20RSI%20with%20Alert.png)
-
-
 
 This indicator provides Audio / Email Alerts for six signals.
 1) OB Zone Cross
@@ -158,7 +154,6 @@ using subsequently available functionality.
 
 The indicator was revised and updated
 
-
 ---
 
 ## Re: Stochastic RSI
@@ -166,7 +161,6 @@ The indicator was revised and updated
 **kkhart1935** · Tue Mar 01, 2011 9:09 am
 
 I cannot get this to work. I get an error that says to download stochrsi. What am I doing wrong?
-
 
 ---
 
@@ -176,7 +170,6 @@ I cannot get this to work. I get an error that says to download stochrsi. What a
 
 I get the following error
 An error occurred during the calculation of the indicator 'MTF_ STOCHRSI'. The error details: [string "MTF_ StochRSI.lua"]:140: [string "StochRSI.lua"]:219: attempt to call method 'barSize' (a nil value).
-
 
 ---
 
@@ -190,7 +183,6 @@ I can not repeat the bug.
 Interesting.
 Can you restart the platform.
 
-
 ---
 
 ## Re: Stochastic RSI
@@ -201,7 +193,6 @@ Line Style Option Added.
 
  [StochRSI.lua](files/10039/StochRSI.lua)
 
-
 ---
 
 ## Re: Stochastic RSI
@@ -209,7 +200,6 @@ Line Style Option Added.
 **jeisenm** · Tue Apr 26, 2011 1:40 pm
 
 very nice indicator. thanks apprentice.
-
 
 ---
 
@@ -227,7 +217,6 @@ Thanks
 
 Jawad
 
-
 ---
 
 ## Re: Stochastic RSI
@@ -235,7 +224,6 @@ Jawad
 **station0524** · Sat May 14, 2011 4:47 pm
 
 I do not know why but the indicator seems to be incorrect. When compared to the same indicator on other charting programs like Metatrader and Fib Trader the values that yours produce is not the same. Put them side by side, same chart, same time frame, same settings, yours is the only one that is different.
-
 
 ---
 
@@ -247,7 +235,6 @@ There are several solutions.
 Can you post the version you mention.
 (Code or Link)
 
-
 ---
 
 ## Re: Stochastic RSI
@@ -255,7 +242,6 @@ Can you post the version you mention.
 **station0524** · Sat May 21, 2011 1:13 pm
 
 The version I downloaded is the one posted here on this page. Not sure if you want me to post the metatrader versions or yours.
-
 
 ---
 
@@ -267,7 +253,6 @@ Post, mq4 code you are using.
 So we could see the difference.
 Out there is a lot of different versions.
 
-
 ---
 
 ## Re: Stochastic RSI
@@ -276,8 +261,8 @@ Out there is a lot of different versions.
 
 Here is the code,
 
-Code: [Select all](https://fxcodebase.com/code/)
-`Input Parameters:
+```
+Input Parameters:
 RSIPeriod = The RSI Period to use (Default 8)
 PeriodK = The Stochastic %K period. (Default 8)
 SlowPeriod = The final smoothing (slow) value (Default 3)
@@ -448,8 +433,8 @@ double HHV( double& indBuffer[], int Periods, int shift ) {
     }
    
     return( dblRet );
-}`
-
+}
+```
 
 ---
 
@@ -462,7 +447,6 @@ Please, see this version of oscillator.
 Download:
 
  [StochasticRSI.lua](files/12644/StochasticRSI.lua)
-
 
 ---
 
@@ -482,7 +466,6 @@ I think it requires another indicator, could you please tell me where I can get 
 
 Thanks
 
-
 ---
 
 ## Re: Stochastic RSI
@@ -491,7 +474,6 @@ Thanks
 
 Please install the Averages indicator
 [http://www.fxcodebase.com/code/viewtopi ... =17&t=2430](http://www.fxcodebase.com/code/viewtopic.php?f=17&t=2430)
-
 
 ---
 
@@ -504,7 +486,6 @@ Please install the Averages indicator
 
 I get the same thing
 
-
 ---
 
 ## Re: Stochastic RSI
@@ -513,7 +494,6 @@ I get the same thing
 
 MQL4 version of Stochastic RSI: [viewtopic.php?f=38&t=60051](https://fxcodebase.com/code/viewtopic.php?f=38&t=60051).
 
-
 ---
 
 ## Re: Stochastic RSI
@@ -521,7 +501,6 @@ MQL4 version of Stochastic RSI: [viewtopic.php?f=38&t=60051](https://fxcodebase.
 **Apprentice** · Sun Dec 06, 2015 4:35 am
 
 Compatibility issue Fix. _Alert helper is not longer needed.
-
 
 ---
 
@@ -537,7 +516,6 @@ Since they are very similar indicators (but with quite different results often) 
 
 What say you coders?
 
-
 ---
 
 ## Re: Stochastic RSI
@@ -545,7 +523,6 @@ What say you coders?
 **Apprentice** · Fri Aug 12, 2016 11:23 am
 
 "live" / "end of turn" option add for "Stochastic RSI with Alert"
-
 
 ---
 
@@ -560,7 +537,6 @@ Awesome!
 
 How about K/D line cross over/under alert? Too much to ask?
 
-
 ---
 
 ## Re: Stochastic RSI
@@ -569,7 +545,6 @@ How about K/D line cross over/under alert? Too much to ask?
 
 Your request is added to the development list, Under Id Number 3600
  If someone is interested to do this or any task other from list please contact me.
-
 
 ---
 
@@ -583,7 +558,6 @@ Your request is added to the development list, Under Id Number 3600
 
 How do I track that . . . . I tried to find that area in the forum but could not........
 
-
 ---
 
 ## Re: Stochastic RSI
@@ -592,7 +566,6 @@ How do I track that . . . . I tried to find that area in the forum but could not
 
 This is an internal forum.
 For developers only.
-
 
 ---
 
@@ -603,7 +576,6 @@ For developers only.
 Stochastic RSI with Alert.lua major update.
 K/D Cross Added.
 
-
 ---
 
 ## Re: Stochastic RSI
@@ -611,7 +583,6 @@ K/D Cross Added.
 **Apprentice** · Tue Mar 14, 2017 8:55 am
 
 Indicator was revised and updated.
-
 
 ---
 
@@ -623,7 +594,6 @@ Indicator was revised and updated.
 > Indicator was revised and updated.
 
 Where can I find it ？
-
 
 ---
 

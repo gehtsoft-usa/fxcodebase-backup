@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=358  
 > Forum: 17 · Topic 358 · 37 post(s)
 
-
 ---
 
 ## Colorful MACD (aka Golden MT4's MACD)
@@ -25,8 +24,6 @@ Preview:
 
 ![gmacd.png](images/595/gmacd.png)
 
-
-
 Download:
 
  [GMACD.lua](files/595/GMACD.lua)
@@ -37,8 +34,6 @@ Download:
 
 ![EURUSD m1 (07-20-2016 1247).png](images/595/EURUSD%20m1%20%2807-20-2016%201247%29.png)
 
-
-
 Above 0 & above signal = Blue.
 Above 0 & below signal = Light Blue.
 Below 0 & below signal = Red.
@@ -47,7 +42,6 @@ Below 0 & above signal = Light Red.
  [4 color GMACD histogram with Alerts.lua](files/595/4%20color%20GMACD%20histogram%20with%20Alerts.lua)
 
 The indicator was revised and updated
-
 
 ---
 
@@ -58,7 +52,6 @@ The indicator was revised and updated
 This is a very useful indicator.
 Can a bigger time frame version be created?
 
-
 ---
 
 ## Re: Colorful MACD (aka Golden MT4's MACD)
@@ -67,7 +60,6 @@ Can a bigger time frame version be created?
 
 Added to the Development cue.
 I have to check but I think someone has already written what one.
-
 
 ---
 
@@ -81,10 +73,8 @@ Bigger time frame indicator.
 
 ![BF_GMACD.png](images/3455/BF_GMACD.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Bigger timeframe GMACD");
     indicator:description("");
     indicator:requiredSource(core.Bar);
@@ -303,10 +293,10 @@ function findDateFast(stream, date, precise)
             end
         end
     end
-end`
+end
+```
 
  [BF_GMACD.lua](files/3455/BF_GMACD.lua)
-
 
 ---
 
@@ -316,7 +306,6 @@ end`
 
 Thank you, Alexander.
 You guys rock!
-
 
 ---
 
@@ -330,7 +319,6 @@ Simple, exponential weighted, etc..
 
 It would be very interesting!
 Thanks in advance
-
 
 ---
 
@@ -347,7 +335,6 @@ This version allows you requested.
 Price Type, Selection, Added.
 Added MA Type Selection.
 
-
 ---
 
 ## Re: Colorful MACD (aka Golden MT4's MACD)
@@ -361,7 +348,6 @@ Currently, the color of the bars is determined on the basis of the signal line.
 You can set a variable so that the bar color is determined by the difference in length with the previous bar?
 Thanks!
 
-
 ---
 
 ## Re: Colorful MACD (aka Golden MT4's MACD)
@@ -369,7 +355,6 @@ Thanks!
 **Apprentice** · Thu Dec 02, 2010 5:51 am
 
 Style Update.
-
 
 ---
 
@@ -383,7 +368,6 @@ Please see the picture about my MACD in MT4.
 
 Thanks again.
 
-
 ---
 
 ## Re: Colorful MACD (aka Golden MT4's MACD)
@@ -393,7 +377,6 @@ Thanks again.
 News for the development?
 
 Thanks!
-
 
 ---
 
@@ -407,10 +390,7 @@ to upsunx, Something like this
 
 ![GMACD Lines.png](images/28940/GMACD%20Lines.png)
 
-
-
  [GMACD Lines.lua](files/28940/GMACD%20Lines.lua)
-
 
 ---
 
@@ -421,7 +401,6 @@ to upsunx, Something like this
 Hey! I'd need to color the area between 2 monig avarage...doen anybody know how to do it?
 thanks
 ALex
-
 
 ---
 
@@ -434,7 +413,6 @@ Try to use Cloud Indicator.
 P.S.
 Only one post is sufficient, multiple posts are not necessity.
 
-
 ---
 
 ## Re: Colorful MACD (aka Golden MT4's MACD)
@@ -445,7 +423,6 @@ Hi, is there any strategy for colorful MACD indicator that open positions when M
 
 Thank you
 
-
 ---
 
 ## Re: Colorful MACD (aka Golden MT4's MACD)
@@ -453,7 +430,6 @@ Thank you
 **Apprentice** · Mon Jul 09, 2012 6:55 am
 
 You can use MACD strategy which is using this algo.
-
 
 ---
 
@@ -463,7 +439,6 @@ You can use MACD strategy which is using this algo.
 
 Can't find this strategy Aprentice. Can you help please.
 
-
 ---
 
 ## Re: Colorful MACD (aka Golden MT4's MACD)
@@ -472,7 +447,6 @@ Can't find this strategy Aprentice. Can you help please.
 
 Please see [MACD Strategy](https://fxcodebase.com/code/viewtopic.php?f=31&t=4100&p=22982&hilit=macd#p10276)
 
-
 ---
 
 ## Re: Colorful MACD (aka Golden MT4's MACD)
@@ -480,7 +454,6 @@ Please see [MACD Strategy](https://fxcodebase.com/code/viewtopic.php?f=31&t=4100
 **ertonm** · Tue Jul 10, 2012 10:11 pm
 
 Thank you sunshine.
-
 
 ---
 
@@ -496,7 +469,6 @@ Thank you,
 
 RJH
 
-
 ---
 
 ## Re: Colorful MACD (aka Golden MT4's MACD)
@@ -505,7 +477,6 @@ RJH
 
 Hi, Is there a version of MACD that would let me add Horizontal lines as well as a Zero line, eg. +/- 0.0025 etc, preferably with a choice of color.
 
-
 ---
 
 ## Re: Colorful MACD (aka Golden MT4's MACD)
@@ -513,7 +484,6 @@ Hi, Is there a version of MACD that would let me add Horizontal lines as well as
 **mykkee** · Sun Aug 23, 2015 12:44 pm
 
 Hi, I would like to know if a signal can be made for the GMACD. I use the GMACD and have a area between the .0002 and negative -.0002 marked off or shaded. I find that when the GMACD is between these levels the pair more or less is ranging and anything above or below these levels it tends to be trending. I would like to know if a signal or alert can be made that triggers when the histograms bar close is either above or below theses levels. Also I would like for the signal to be able to be used on different or custom time frames, as I use the 1, 2, 3, 5 and 10 minute charts. Thank you for your time and service.
-
 
 ---
 
@@ -524,7 +494,6 @@ Hi, I would like to know if a signal can be made for the GMACD. I use the GMACD 
 Try MACD Histogram Level Cross Strategy
 [viewtopic.php?f=31&t=62587](https://fxcodebase.com/code/viewtopic.php?f=31&t=62587)
 
-
 ---
 
 ## Re: Colorful MACD (aka Golden MT4's MACD)
@@ -532,7 +501,6 @@ Try MACD Histogram Level Cross Strategy
 **mykkee** · Wed Aug 26, 2015 1:32 pm
 
 Hey, I think that may work....it lets me put in the levels....but can you also adjust or allow so that I can put in different time frames like I can on the charts....like M2, M3, M10...for 2,3 and 10 minute charts, I would like to use these other time frames to help with confirmation and some of them as alerts ...thanks a bunch!!
-
 
 ---
 
@@ -542,7 +510,6 @@ Hey, I think that may work....it lets me put in the levels....but can you also a
 
 It would be nice to have a signal/arrow painted on the chart when the GMACD histogram closes above and below the signal line, if at all possible. Thanks!
 
-
 ---
 
 ## Re: Colorful MACD (aka Golden MT4's MACD)
@@ -550,7 +517,6 @@ It would be nice to have a signal/arrow painted on the chart when the GMACD hist
 **Apprentice** · Wed Feb 17, 2016 5:46 am
 
 GMACD with Alert.lua Added (First post in topic)
-
 
 ---
 
@@ -562,7 +528,6 @@ GMACD with Alert.lua Added (First post in topic)
 
 Here is a screenshot of the GMACD with Alert.
 Note: I did edit the .lua to suit my needs.
-
 
 ---
 
@@ -579,7 +544,6 @@ Below 0 & above signal = Light Red.
 
 Thanks!
 
-
 ---
 
 ## Re: Colorful MACD (aka Golden MT4's MACD)
@@ -587,7 +551,6 @@ Thanks!
 **Apprentice** · Wed Jul 20, 2016 6:20 am
 
 4 color GMACD histogram with Alerts.lua added.
-
 
 ---
 
@@ -598,7 +561,6 @@ Thanks!
 Screenshot of "4 color GMACD histogram with Alerts.lua"
 
 Thanks!!!
-
 
 ---
 
@@ -611,7 +573,6 @@ But could we get a version that flat out ignores the signal line and colors acco
 
 Also, a zero line that isn't red would be nice, any shade of grey or black would do fine.
 
-
 ---
 
 ## Re: Colorful MACD (aka Golden MT4's MACD)
@@ -619,7 +580,6 @@ Also, a zero line that isn't red would be nice, any shade of grey or black would
 **Apprentice** · Fri Sep 02, 2016 2:29 am
 
 GMACD.lua without signal line, Only MACD & Histogram bars?
-
 
 ---
 
@@ -629,7 +589,6 @@ GMACD.lua without signal line, Only MACD & Histogram bars?
 
 Pretty much, just the MACD line as a histogram. I don't use the signal line, so I just want to recolor it to make it easier to read. Basically, I'm looking to make the golden MACD look like the four color OsMA indicator, as seen below.
 
-
 ---
 
 ## Re: Colorful MACD (aka Golden MT4's MACD)
@@ -638,7 +597,6 @@ Pretty much, just the MACD line as a histogram. I don't use the signal line, so 
 
 Try this version.
 [viewtopic.php?f=17&t=63834](https://fxcodebase.com/code/viewtopic.php?f=17&t=63834)
-
 
 ---
 
@@ -650,7 +608,6 @@ I hadn't realized I never thanked you for this, my bad. I think I downloaded it,
 
 One question, is there a strategy for this indicator? Just the change in slope of the MACD line. I saw there's a few indicators with alerts but because you can't select a sound file it yields an error.
 
-
 ---
 
 ## Re: Colorful MACD (aka Golden MT4's MACD)
@@ -661,7 +618,6 @@ Hi Apprentice,
 it is possible to create a strategy with "GMACD with Alert".
 
 Cordially BigFOX.
-
 
 ---
 

@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=901  
 > Forum: 17 · Topic 901 · 12 post(s)
 
-
 ---
 
 ## Williams Accumulation/Distribution (WAD)
@@ -11,8 +10,6 @@
 **Alexander.Gettinger** · Fri Apr 30, 2010 12:33 pm
 
 ![WAD.png](images/1643/WAD.png)
-
-
 
 Williams AD is the accumulated sum of positive "accumulational" and negative "distributional" price movements.
 
@@ -55,8 +52,8 @@ CurА/D — means current value of accumulation/distribution;
 WА/D (i) — the current value of Williams Accumulation/Distribution indicator;
 WА/D (i - 1) — the value of Williams Accumulation/Distribution indicator on the previous bar.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Williams Accumulation/Distribution (WAD)");
     indicator:description("Williams Accumulation/Distribution (WAD)");
     indicator:requiredSource(core.Bar);
@@ -93,12 +90,12 @@ function Update(period, mode)
     else
      WAD[period]=0.;
     end
-end`
+end
+```
 
  [WAD.lua](files/1643/WAD.lua)
 
  [WAD Price Overlay.lua](files/1643/WAD%20Price%20Overlay.lua)
-
 
 ---
 
@@ -108,7 +105,6 @@ end`
 
 Can i ask who Williams ? Larry Williams or Bill Williams ? I guess it is Larry
 
-
 ---
 
 ## Re: Williams Accumulation/Distribution (WAD)
@@ -116,7 +112,6 @@ Can i ask who Williams ? Larry Williams or Bill Williams ? I guess it is Larry
 **Apprentice** · Sun Jun 02, 2013 11:31 am
 
 Williams Accumulation Distribution was created by Larry Williams.
-
 
 ---
 
@@ -126,7 +121,6 @@ Williams Accumulation Distribution was created by Larry Williams.
 
 Now I realized this indicator was just a part of Williams AD formula because the volume element was taken out. However I expressed thank to Alexander for bringing this up because IMHO, tick volume is kind of joke so AD without volume might be more practical in Forex. Btw, you should change the name of this indicator. In his book, Larry originally called it as Net Change Price
 
-
 ---
 
 ## Re: Williams Accumulation/Distribution (WAD)
@@ -134,7 +128,6 @@ Now I realized this indicator was just a part of Williams AD formula because the
 **Jeffreyvnlk** · Mon Aug 12, 2013 10:17 am
 
 Btw, could you make it overlay (behind the price) , please.Thank you
-
 
 ---
 
@@ -144,7 +137,6 @@ Btw, could you make it overlay (behind the price) , please.Thank you
 
 Your request is added to the development list.
 
-
 ---
 
 ## Re: Williams Accumulation/Distribution (WAD)
@@ -152,7 +144,6 @@ Your request is added to the development list.
 **Apprentice** · Sun Aug 25, 2013 6:24 am
 
 WAD Price Overlay added.
-
 
 ---
 
@@ -165,7 +156,6 @@ WAD Price Overlay added.
 
 And based on real volume appreciated. Would be a fine gem finally.Thanks
 
-
 ---
 
 ## Re: Williams Accumulation/Distribution (WAD)
@@ -173,7 +163,6 @@ And based on real volume appreciated. Would be a fine gem finally.Thanks
 **Apprentice** · Tue Sep 09, 2014 2:24 am
 
 As I stated already, for now it is impossible to implement real volume for use within indicators.
-
 
 ---
 
@@ -193,7 +182,6 @@ Thanks!
 
 sjc
 
-
 ---
 
 ## Re: Williams Accumulation/Distribution (WAD)
@@ -201,7 +189,6 @@ sjc
 **Apprentice** · Wed Apr 15, 2015 5:26 am
 
 Color fill added.
-
 
 ---
 

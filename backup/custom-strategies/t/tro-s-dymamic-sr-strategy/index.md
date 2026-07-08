@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=59633  
 > Forum: 31 · Topic 59633 · 9 post(s)
 
-
 ---
 
 ## TRO's Dymamic SR Strategy
@@ -11,8 +10,6 @@
 **Apprentice** · Wed Oct 09, 2013 2:12 pm
 
 ![TRO's Dymamic SR.png](images/89921/TROs%20Dymamic%20SR.png)
-
-
 
 **Still in development, will not work within Backtester.**
 
@@ -24,7 +21,6 @@ Please install TheRumpledOne's (TRO's) Dynamic Support/Resistance.
 
 The Strategy was revised and updated on December 11, 2018.
 
-
 ---
 
 ## Re: TRO's Dymamic SR Strategy
@@ -33,7 +29,6 @@ The Strategy was revised and updated on December 11, 2018.
 
 Sorry, because I can't send a new post, so only the questions here.
 Excuse me, does not affect the strategy of running condition can be used in calculating the parameter "MVA" is how much? I want to try to quote "MVA" ---1000 average, can? I tried, failed. Why? Is there any way to solve this BUG? Thank you!!
-
 
 ---
 
@@ -65,7 +60,6 @@ Indicators and strategies similar to consider for me?
 
 Thank you very much!
 
-
 ---
 
 ## Re: TRO's Dymamic SR Strategy
@@ -75,7 +69,6 @@ Thank you very much!
 Hi guangho,
 
 I have forwarded your requests to the developers, it should be discussed. But, unfortunately, currently there is no way to solve it.
-
 
 ---
 
@@ -90,7 +83,6 @@ I have forwarded your requests to the developers, it should be discussed. But, u
 
 Really appreciate your help and answer. Good luck!
 
-
 ---
 
 ## Re: TRO's Dymamic SR Strategy
@@ -103,10 +95,12 @@ Unfortunately the ExtSubscribe which you use request the default amount of bars 
 Instead of including helper.lua, open it and copy all code of the helper.lua file into your strategy.
 In this code you can find the following strings:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`sub.stream = core.host:execute("getHistory", id, instance.bid:instrument(), period, 0, 0, bid);
+```lua
+sub.stream = core.host:execute("getHistory", id, instance.bid:instrument(), period, 0, 0, bid);
 ...
-sub.stream = core.host:execute("getHistory", id, instrument, period, 0, 0, bid);`
+sub.stream = core.host:execute("getHistory", id, instrument, period, 0, 0, bid);
+```
+
 Two zeros here are dates. To get more than 300 bars you should send range of dates which your strategy need.
 local s, e = core.getcandle("m5", 0, 0, 0);
 local from_date = core.now() - 1000 * (e - s);
@@ -116,7 +110,6 @@ sub.stream = core.host:execute("getHistory", id, instance.bid:instrument(), peri
 sub.stream = core.host:execute("getHistory", id, instrument, period, from_date, 0, bid);
 But it will not work for tick timeframe.
 Please note, we have not tested this code, it is just example.
-
 
 ---
 
@@ -135,7 +128,6 @@ Methods according to what you said to try. Results the success!! It can index mo
 You were great.
 
 Thank you very much for your help！
-
 
 ---
 
@@ -156,7 +148,6 @@ Because of the "M1" cycle strategy will cause automatic stop. This is not proble
 Do you have special monitoring "strategy" running strategy? If there is a similar strategy please recommend to me.
 
 Thank you very much！
-
 
 ---
 

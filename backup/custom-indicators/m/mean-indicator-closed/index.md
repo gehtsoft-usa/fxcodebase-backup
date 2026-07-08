@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=2378  
 > Forum: 17 · Topic 2378 · 10 post(s)
 
-
 ---
 
 ## Mean indicator (closed)
@@ -18,14 +17,11 @@
 
 ![Mean.png](images/5130/Mean.png)
 
-
-
  [Mean.lua](files/5130/Mean.lua)
 
  [Mean Calculation.lua](files/5130/Mean%20Calculation.lua)
 
 The indicator was revised and updated
-
 
 ---
 
@@ -37,7 +33,6 @@ Hi Alexander
 
 Can you please explain how this indicator works?
 
-
 ---
 
 ## Re: Mean indicator
@@ -47,7 +42,6 @@ Can you please explain how this indicator works?
 Thanks
 
 but is it possible to change the beginning of the time session, especially for the forex.
-
 
 ---
 
@@ -61,7 +55,6 @@ Thinking in Market profile, it is possible calculate this indicator whith "the m
 
 regards
 
-
 ---
 
 ## Re: Mean indicator
@@ -71,7 +64,6 @@ regards
 Is it possible to have a signal/strategy for this indicator?
 thank you.
 
-
 ---
 
 ## Re: Mean indicator
@@ -80,7 +72,6 @@ thank you.
 
 Certainly, but you can specify, when, the conditions when the signal generated signals.
 
-
 ---
 
 ## Re: Mean indicator
@@ -88,7 +79,6 @@ Certainly, but you can specify, when, the conditions when the signal generated s
 **virgilio** · Tue Oct 19, 2010 10:14 am
 
 The goal is to have a strategy that generates buy/sell orders based on the same conditions as of the indicator.
-
 
 ---
 
@@ -99,8 +89,8 @@ The goal is to have a strategy that generates buy/sell orders based on the same 
 Indicator updated.
 Added other time session for calculation MA.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Mean indicator");
     indicator:description("Mean indicator");
     indicator:requiredSource(core.Tick);
@@ -234,8 +224,8 @@ function Update(period, mode)
       end
    
    end
-end`
-
+end
+```
 
 ---
 
@@ -244,7 +234,6 @@ end`
 **Apprentice** · Mon Jan 30, 2017 7:03 am
 
 Indicator was revised and updated.
-
 
 ---
 

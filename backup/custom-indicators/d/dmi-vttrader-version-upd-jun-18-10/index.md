@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=950  
 > Forum: 17 · Topic 950 · 8 post(s)
 
-
 ---
 
 ## DMI VTTrader Version (Upd: Jun 18 10)
@@ -22,16 +21,14 @@ See [ADX VTTrader version](https://fxcodebase.com/code/viewtopic.php?f=17&t=511)
 
 ![vtdmi.png](images/1742/vtdmi.png)
 
-
-
 Download the indicator:
 
  [VTDMI.lua](files/1742/VTDMI.lua)
 
 This indicator uses WMA indicator. Please, do not forget to download and install it. Find the WMA indicator here: [WMA (Wilder's moving average)](https://fxcodebase.com/code/viewtopic.php?f=17&t=248).
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- Indicator profile initialization routine
+```lua
+-- Indicator profile initialization routine
 -- Defines indicator profile properties and indicator parameters
 -- TODO: Add minimal and maximal value of numeric parameters and default color of the streams
 function Init()
@@ -140,7 +137,8 @@ function Update(p, mode)
         DIP[p] = 100 * PlusDM_W.DATA[p] / TR_W.DATA[p]
         DIM[p] = 100 * MinusDM_W.DATA[p] / TR_W.DATA[p]
     end
-end`
+end
+```
 
  
 
@@ -148,7 +146,6 @@ Simple VTDMI based strategy.
 [viewtopic.php?f=31&t=65666&p=117209#p117209](https://fxcodebase.com/code/viewtopic.php?f=31&t=65666&p=117209#p117209)
 
 The indicator was revised and updated
-
 
 ---
 
@@ -163,7 +160,6 @@ Am I missing something?
 Cheers..
 BC
 
-
 ---
 
 ## Re: DMI VTTrader Version
@@ -175,7 +171,6 @@ BC
 
 It's me who was missing something. The first version was always calculated N=14. I apologize for the inconvenience. The indicator is fixed. Thank you very much for reporting the problem.
 
-
 ---
 
 ## Re: DMI VTTrader Version (Upd: Jun 18 10)
@@ -183,7 +178,6 @@ It's me who was missing something. The first version was always calculated N=14.
 **Apprentice** · Sat Jan 08, 2011 9:02 am
 
 Style Option Added.
-
 
 ---
 
@@ -201,7 +195,6 @@ Many kind thank you in advance,
 
 Danielle
 
-
 ---
 
 ## Re: DMI VTTrader Version (Upd: Jun 18 10)
@@ -210,14 +203,11 @@ Danielle
 
 ![VTDMI.png](images/8653/VTDMI.png)
 
-
-
 Danielle,
 Here you can find an indicator.
 I hope that i will finish signal today as well.
 
  [VTDMI.lua](files/8653/VTDMI.lua)
-
 
 ---
 
@@ -230,7 +220,6 @@ Wonderful !!!
 You are the best team ever
 
 Thank you again )
-
 
 ---
 

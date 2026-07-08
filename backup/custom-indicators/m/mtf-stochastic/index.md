@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=3301  
 > Forum: 17 · Topic 3301 · 20 post(s)
 
-
 ---
 
 ## MTF STOCHASTIC
@@ -12,12 +11,9 @@
 
 ![MTF.png](images/7843/MTF.png)
 
-
-
 This indicator gives the MTF Price Overlay.
 
  [MTF STOCHASTIC.lua](files/7843/MTF%20STOCHASTIC.lua)
-
 
 ---
 
@@ -34,7 +30,6 @@ Many thank you in advance.
 All the best,
 Danielle
 
-
 ---
 
 ## Re: MTF STOCHASTIC
@@ -50,7 +45,6 @@ Can you help me with this strategy???
 
 Thanks
 
-
 ---
 
 ## Re: MTF STOCHASTIC
@@ -60,7 +54,6 @@ Thanks
 This can be found here.
 [viewtopic.php?f=31&t=3833](https://fxcodebase.com/code/viewtopic.php?f=31&t=3833)
 
-
 ---
 
 ## Re: MTF STOCHASTIC
@@ -68,7 +61,6 @@ This can be found here.
 **dspurr624** · Thu Aug 04, 2011 8:00 am
 
 Great Indicator - Thanks !!
-
 
 ---
 
@@ -83,7 +75,6 @@ Maybe you could put the option under common parameters section?
 
 Many thanks for a great indicator.
 
-
 ---
 
 ## Re: MTF STOCHASTIC
@@ -92,7 +83,6 @@ Many thanks for a great indicator.
 
 Style Options Added.
 
-
 ---
 
 ## Re: MTF STOCHASTIC
@@ -100,7 +90,6 @@ Style Options Added.
 **ClivePackham** · Mon Feb 06, 2012 4:04 pm
 
 Thats great many thanks
-
 
 ---
 
@@ -129,7 +118,6 @@ Thanks in advanced
 >
 > MTF STOCHASTIC.lua
 
-
 ---
 
 ## Re: MTF STOCHASTIC
@@ -138,7 +126,6 @@ Thanks in advanced
 
 Requested can be found here.
 [viewtopic.php?f=17&t=60584](https://fxcodebase.com/code/viewtopic.php?f=17&t=60584)
-
 
 ---
 
@@ -151,10 +138,10 @@ at line 139 of the code. i found this condition.
 Something wrong ?
 Thanks for your sharing work. best regards.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`if not Indicator[i].DATA:hasData(Indicator[i].DATA:size()-1)  or not Indicator[i].DATA:hasData(Indicator[i].DATA:size()-1)then   
-                        return;`
-
+```
+if not Indicator[i].DATA:hasData(Indicator[i].DATA:size()-1)  or not Indicator[i].DATA:hasData(Indicator[i].DATA:size()-1)then   
+                        return;
+```
 
 ---
 
@@ -164,7 +151,6 @@ Code: [Select all](https://fxcodebase.com/code/)
 
 The MTF Stochastic very useful, only 1 thing is can the location of the indicator be adjusted to the top left hand side of sreen , or make an options for us to adjust its location on the screen?
 
-
 ---
 
 ## Re: MTF STOCHASTIC
@@ -173,7 +159,6 @@ The MTF Stochastic very useful, only 1 thing is can the location of the indicato
 
 Try it now.
 
-
 ---
 
 ## Re: MTF STOCHASTIC
@@ -181,7 +166,6 @@ Try it now.
 **Apprentice** · Wed May 02, 2018 6:22 am
 
 The indicator was revised and updated.
-
 
 ---
 
@@ -193,7 +177,6 @@ Hi ... Can we have the option of selecting the time frames to be used?
 
 Thanks
 
-
 ---
 
 ## Re: MTF STOCHASTIC
@@ -202,10 +185,7 @@ Thanks
 
 ![Capture.PNG](images/134809/Capture.PNG)
 
-
-
 Do you need on / off option?
-
 
 ---
 
@@ -214,7 +194,6 @@ Do you need on / off option?
 **MadMan** · Thu Jun 11, 2020 11:46 am
 
 Yes exactly
-
 
 ---
 
@@ -225,7 +204,6 @@ Yes exactly
 Your request is added to the development list.
 Development reference 1467.
 
-
 ---
 
 ## Re: MTF STOCHASTIC
@@ -233,7 +211,6 @@ Development reference 1467.
 **Apprentice** · Fri Jun 12, 2020 4:19 am
 
 Added.
-
 
 ---
 

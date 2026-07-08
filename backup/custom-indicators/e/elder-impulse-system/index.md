@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=993  
 > Forum: 17 · Topic 993 · 53 post(s)
 
-
 ---
 
 ## Elder Impulse System
@@ -18,8 +17,6 @@ Please, read more about Elder Impulse system here: [http://stockstudent.blogspot
 
 ![elder.png](images/1848/elder.png)
 
-
-
 Download:
 
  [Elder_Impulse_System.lua](files/1848/Elder_Impulse_System.lua)
@@ -30,7 +27,6 @@ Download:
 
 Note: the implementation is a port of the MT4's indicator which uses modified a slightly version of the MACD formula.
 
-
 ---
 
 ## Re: Elder Impulse System
@@ -40,7 +36,6 @@ Note: the implementation is a port of the MT4's indicator which uses modified a 
 Thank you for the Oscillator.
 
 Can a bigger time frame version be done, please?
-
 
 ---
 
@@ -54,10 +49,8 @@ Bigger timeframe Elder Impulse System:
 
 ![BF_Elder_Impulse_System.png](images/4844/BF_Elder_Impulse_System.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     indicator:name("Bigger timeframe Elder Impulse System");
     indicator:description("");
     indicator:requiredSource(core.Bar);
@@ -293,8 +286,8 @@ function findDateFast(stream, date, precise)
             end
         end
     end
-end`
-
+end
+```
 
 ---
 
@@ -308,10 +301,8 @@ Multitimeframe Elder Impulse System Heat Map:
 
 ![Elder_Impulse_System_Heat_Map.png](images/4846/Elder_Impulse_System_Heat_Map.png)
 
-
-
-Code: [Select all](https://fxcodebase.com/code/)
-`function AddMvaParam(id, frame, EMA, MACDF, MACDS)
+```lua
+function AddMvaParam(id, frame, EMA, MACDF, MACDS)
     indicator.parameters:addString("B" .. id, "Time frame for avegage " .. id, "", frame);
     indicator.parameters:setFlag("B" .. id, core.FLAG_PERIODS);
     indicator.parameters:addInteger("EMA" .. id, "EMA " .. id .. "EMA ", "", EMA);
@@ -619,14 +610,14 @@ function findDateFast(stream, date, precise)
             end
         end
     end
-end`
+end
+```
 
  [Elder_Impulse_System_Heat_Map.lua](files/4846/Elder_Impulse_System_Heat_Map.lua)
 
  [Elder_Impulse_System_Heat_Map With Alert.lua](files/4846/Elder_Impulse_System_Heat_Map%20With%20Alert.lua)
 
 If fime frames, flagged as "Alert", reach the "Alert Trigger Level", the alert will be given.
-
 
 ---
 
@@ -635,7 +626,6 @@ If fime frames, flagged as "Alert", reach the "Alert Trigger Level", the alert w
 **Pride80** · Mon Oct 04, 2010 12:29 pm
 
 Thank you very much, these are great tools
-
 
 ---
 
@@ -653,8 +643,8 @@ I've tried to modified your code, but as I am no programmer it was pure guessing
 
 Cheers
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function AddMvaParam(id, frame, EMA, MACDF, MACDS)
+```lua
+function AddMvaParam(id, frame, EMA, MACDF, MACDS)
     indicator.parameters:addString("B" .. id, "Time frame for avegage " .. id, "", frame);
     indicator.parameters:setFlag("B" .. id, core.FLAG_PERIODS);
     indicator.parameters:addInteger("EMA" .. id, "EMA " .. id .. "EMA ", "", EMA);
@@ -964,8 +954,8 @@ function findDateFast(stream, date, precise)
             end
         end
     end
-end`
-
+end
+```
 
 ---
 
@@ -980,7 +970,6 @@ Something like this.
 While developing this indicator, I found a bug in the original indicator.
 This version inherited this problem.
 
-
 ---
 
 ## Re: Elder Impulse System
@@ -989,7 +978,6 @@ This version inherited this problem.
 
 Thanks a million Apprentice.
 You're the man.
-
 
 ---
 
@@ -1004,7 +992,6 @@ or move it so that it is above and more to the side of the little squares?
 
 Cheers
 
-
 ---
 
 ## Re: Elder Impulse System
@@ -1013,8 +1000,8 @@ Cheers
 
 Update for Multitimeframe Elder Impulse System Heat Map.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function AddMvaParam(id, frame, EMA, MACDF, MACDS)
+```lua
+function AddMvaParam(id, frame, EMA, MACDF, MACDS)
     indicator.parameters:addString("B" .. id, "Time frame for avegage " .. id, "", frame);
     indicator.parameters:setFlag("B" .. id, core.FLAG_PERIODS);
     indicator.parameters:addInteger("EMA" .. id, "EMA " .. id .. "EMA ", "", EMA);
@@ -1322,8 +1309,8 @@ function findDateFast(stream, date, precise)
             end
         end
     end
-end`
-
+end
+```
 
 ---
 
@@ -1337,14 +1324,11 @@ This indicator paints candles in accordance with Elder Impulse System.
 
 ![ElderImpulseBar.png](images/7453/ElderImpulseBar.png)
 
-
-
 Download:
 
  [ElderImpulseBar.lua](files/7453/ElderImpulseBar.lua)
 
  [EIS.lua](files/7453/EIS.lua)
-
 
 ---
 
@@ -1357,7 +1341,6 @@ Is it possible to remove the time frame labels in the bottom right hand corner o
 Thanks!
 Chris
 
-
 ---
 
 ## Re: Elder Impulse System
@@ -1365,7 +1348,6 @@ Chris
 **compulsive** · Sun Feb 20, 2011 10:44 pm
 
 Is it possible that you could remove the labels on the HEAT and place them all the way to the right and they stay there even when zooming in or better yet just have the option where the trader can select NO and no label.
-
 
 ---
 
@@ -1376,7 +1358,6 @@ Is it possible that you could remove the labels on the HEAT and place them all t
 Hey Guys,
 
 I have notice that the HEAT map does not update accurately in real time. I notice that when switching from BID to ASK and back to BID at times it will give different colors and this is done withing seconds. Why is that?
-
 
 ---
 
@@ -1390,7 +1371,6 @@ I submitted a request in the request section to have someone look at helping us 
 
 Chris
 
-
 ---
 
 ## Re: Elder Impulse System
@@ -1399,7 +1379,6 @@ Chris
 
 Your request has been recorded.
 I hope that soon we will have time to finish it.
-
 
 ---
 
@@ -1412,7 +1391,6 @@ An error occurred during the calculation of the indicator 'ELDER_IMPULSE_SYSTEM_
 
 Thank you.
 
-
 ---
 
 ## Re: Elder Impulse System
@@ -1420,7 +1398,6 @@ Thank you.
 **sunshine** · Fri Aug 05, 2011 2:22 am
 
 Please make sure that you've installed the Elder_Impulse_System.lua indicator which is attached to the top post in this thread.
-
 
 ---
 
@@ -1430,7 +1407,6 @@ Please make sure that you've installed the Elder_Impulse_System.lua indicator wh
 
 thank you.
 
-
 ---
 
 ## Re: Elder Impulse System
@@ -1439,7 +1415,6 @@ thank you.
 
 I am trading live using this fabulous indicator. Is it possible to attach an alert to this i.e send email when H1, H4 and D1 all line up in the same direction (green or red) ?
 
-
 ---
 
 ## Re: Elder Impulse System
@@ -1447,7 +1422,6 @@ I am trading live using this fabulous indicator. Is it possible to attach an ale
 **Apprentice** · Thu Aug 25, 2011 6:03 pm
 
 Your Request has been added to our database.
-
 
 ---
 
@@ -1461,7 +1435,6 @@ An error occurred during the calculation of the indicator 'ELDER_IMPULSE_SYSTEM_
 
 Plz could someone fix asap? Thank you. Bebbspoke
 
-
 ---
 
 ## Re: Elder Impulse System
@@ -1469,7 +1442,6 @@ Plz could someone fix asap? Thank you. Bebbspoke
 **Nikolay.Gekht** · Mon Sep 26, 2011 9:52 am
 
 **Note**: To use this indicator on [Trading Station 2011-III beta](https://fxcodebase.com/code/viewtopic.php?f=30&t=6490) or upcoming release, please take [the optimized version of these indicators, especially heat map!](https://fxcodebase.com/code/viewtopic.php?f=30&t=6541)
-
 
 ---
 
@@ -1483,7 +1455,6 @@ I want to add 3 new periods times (m4, m12 and m26) in Elder impul System Multif
 
 Thanks.
 
-
 ---
 
 ## Re: Elder Impulse System
@@ -1491,7 +1462,6 @@ Thanks.
 **Apprentice** · Sun Oct 16, 2011 8:15 am
 
 Unfortunately, non-standard time frames are not supported.
-
 
 ---
 
@@ -1509,7 +1479,6 @@ There is a SERIOUS problem here... indicator behaviour is difficult enough to fo
 
 Sincerely, Bebbspoke
 
-
 ---
 
 ## Re: Elder Impulse System
@@ -1517,7 +1486,6 @@ Sincerely, Bebbspoke
 **lino2011** · Sat Oct 29, 2011 10:27 am
 
 What is the forex instrument and time frame that it works better?
-
 
 ---
 
@@ -1529,7 +1497,6 @@ Hi Lino - you're new to this - be VERY careful... TS3 is still very much in beta
 It is essential to ensure that you are running the correct version of the EIS that corresponds with TS3. The ONLY EIS Heat Map variant that PART works properly on TS3 is the most recent as posted 2810/2011 by Vasiliy Strelnikobebbspokev but this will ONLY display correctly if the Heat Map is in "bar" display mode. The system works for any symbol.
 Cheers, Bebbspoke
 
-
 ---
 
 ## Re: Elder Impulse System
@@ -1538,7 +1505,6 @@ Cheers, Bebbspoke
 
 I use TS2 what is the last right version to download?
 Is this the heat map?
-
 
 ---
 
@@ -1554,7 +1520,6 @@ TS2 downloaded from the site of your broker is the last right version for using 
 
 Bebbspoke mentioned the version from this post: [http://fxcodebase.com/code/viewtopic.php?f=30&t=6541](https://fxcodebase.com/code/viewtopic.php?f=30&t=6541) which is created for upcoming new TS2 version.
 
-
 ---
 
 ## Re: Elder Impulse System
@@ -1562,7 +1527,6 @@ Bebbspoke mentioned the version from this post: [http://fxcodebase.com/code/view
 **LuckyPanda** · Mon Nov 07, 2011 2:45 am
 
 Hi, thanks for the signal. In TS or Strategy Trader, is there anyway to make an alert with a popup or sound when all time frames line up? I tried using backtest function but doens't seem to work. It might need to be a strategy to create an alert. Thanks!
-
 
 ---
 
@@ -1578,7 +1542,6 @@ This is the error it gives:
 
 An error occurred during the calculation of the indicator 'ELDERIMPULSEBAR'. The error details: [string "ElderImpulseBar.lua"]:78: attempt to index field 'UP' (a nil value).
 
-
 ---
 
 ## Re: Elder Impulse System
@@ -1586,7 +1549,6 @@ An error occurred during the calculation of the indicator 'ELDERIMPULSEBAR'. The
 **Apprentice** · Tue Nov 08, 2011 1:22 pm
 
 Fixed.
-
 
 ---
 
@@ -1600,7 +1562,6 @@ Fixed.
 I downloaded the ElderImpulseBar.lua but still gives an error.
 Is there anyway to get a popup alert when the time frames change? Thanks.
 
-
 ---
 
 ## Re: Elder Impulse System
@@ -1611,7 +1572,6 @@ I tested it and I could not repeat this error.
 Plese re-download, install the indicator.
 Close yourt TS.
 
-
 ---
 
 ## Re: Elder Impulse System
@@ -1619,7 +1579,6 @@ Close yourt TS.
 **mhejek** · Sat Apr 02, 2016 5:28 am
 
 could we can get this for mt4?
-
 
 ---
 
@@ -1629,7 +1588,6 @@ could we can get this for mt4?
 
 MT4 version can be found here.
 [viewtopic.php?f=38&t=63345](https://fxcodebase.com/code/viewtopic.php?f=38&t=63345)
-
 
 ---
 
@@ -1643,7 +1601,6 @@ MT4 version can be found here.
 
 i mean the MTF one
 
-
 ---
 
 ## Re: Elder Impulse System
@@ -1651,7 +1608,6 @@ i mean the MTF one
 **Apprentice** · Wed Apr 06, 2016 10:59 am
 
 You mean the Heat Map?
-
 
 ---
 
@@ -1684,7 +1640,6 @@ In the above example, no of color change is four and therefore meet the above co
 
 It will be great if the no of color change parameter can be adjust by user as well. i.e. if this parameter configure to four, then it will make the alert if the no of color change at the same time is more than four.
 
-
 ---
 
 ## Re: Elder Impulse System
@@ -1694,7 +1649,6 @@ It will be great if the no of color change parameter can be adjust by user as we
 Your request is added to the development list, Under Id Number 3837
  If someone is interested to do this task, please contact me.
 
-
 ---
 
 ## Re: Elder Impulse System
@@ -1702,7 +1656,6 @@ Your request is added to the development list, Under Id Number 3837
 **Apprentice** · Sun Aug 06, 2017 7:05 am
 
 Try Elder_Impulse_System_Heat_Map With Alert.lua
-
 
 ---
 
@@ -1719,7 +1672,6 @@ Please try this strategy:
 
 You will need to install Elder_Impulse_System.lua
 
-
 ---
 
 ## Re: Elder Impulse System
@@ -1727,7 +1679,6 @@ You will need to install Elder_Impulse_System.lua
 **Avignon** · Thu Jul 09, 2020 6:58 am
 
 Nothing.
-
 
 ---
 
@@ -1737,7 +1688,6 @@ Nothing.
 
 Do you have ELDER_IMPULSE_SYSTEM indicator installed?
 
-
 ---
 
 ## Re: Elder Impulse System
@@ -1746,11 +1696,8 @@ Do you have ELDER_IMPULSE_SYSTEM indicator installed?
 
 ![EURUSD H1 (07-15-2020 1454).png](images/135986/EURUSD%20H1%20%2807-15-2020%201454%29.png)
 
-
-
 Backtest with Elder_Impulse_System.lua installed.
 [download/file.php?id=656](https://fxcodebase.com/code/download/file.php?id=656)
-
 
 ---
 
@@ -1760,12 +1707,9 @@ Backtest with Elder_Impulse_System.lua installed.
 
 ![Capture.png](images/136851/Capture.png)
 
-
-
 I not understand. EIS.lua is installed.
 
 Thanks.
-
 
 ---
 
@@ -1776,7 +1720,6 @@ Thanks.
 [Elder_Impulse_System_Heat_Map With Alert.lua](files/136856/Elder_Impulse_System_Heat_Map%20With%20Alert.lua)
 
 Fixed.
-
 
 ---
 
@@ -1792,14 +1735,11 @@ On the other hand, as soon as the 2 UTs converged, I had an avalanche of signals
 
 ![Capture.png](images/136869/Capture.png)
 
-
-
  
 
 ![Capture 2.png](images/136869/Capture%202.png)
 
 *Screenshot of my mailbox.*
-
 
 ---
 
@@ -1818,10 +1758,7 @@ Is it possible to shift a little to the left?
 
 ![Capture.png](images/141977/Capture.png)
 
-
-
 Thank you.
-
 
 ---
 
@@ -1831,7 +1768,6 @@ Thank you.
 
 For what purpose?
 If we do this, will no longer be synchronous with the candle chart.
-
 
 ---
 
@@ -1846,7 +1782,6 @@ It would need to be like MT4/MT5, a feature to be able to shift the chart to see
 Currently I have to shift by hand.
 
 I asked, you never know, a solution, a trick.
-
 
 ---
 

@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=65713  
 > Forum: 17 · Topic 65713 · 7 post(s)
 
-
 ---
 
 ## SimpleGuy Indicator
@@ -11,8 +10,6 @@
 **Apprentice** · Fri Feb 09, 2018 6:41 am
 
 ![EURUSD D1 (02-09-2018 1039).png](images/117665/EURUSD%20D1%20%2802-09-2018%201039%29.png)
-
-
 
 Based on the request.
 [viewtopic.php?f=27&t=65710](https://fxcodebase.com/code/viewtopic.php?f=27&t=65710)
@@ -36,7 +33,6 @@ SSNonLagMA.lua SSNonLagMA.lua
 2.Line
  [Close] - [non lag moving average]
 
-
 ---
 
 ## Re: SimpleGuy Indicator
@@ -49,11 +45,11 @@ Thank you for your indi. And thank you SimpleGuy, also.
 
 I noticed I should add this to calculation in order to display correctly on 2-digit charts:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`point = source:pipSize();
+```lua
+point = source:pipSize();
 ...
-Line1[period]= (NLMA.DATA[period] - EMA.DATA[period]) / source[period]*(point/0.0001);`
-
+Line1[period]= (NLMA.DATA[period] - EMA.DATA[period]) / source[period]*(point/0.0001);
+```
 
 ---
 
@@ -73,7 +69,6 @@ Can make it separately become 2 indicator?
 
 Best Regards
 
-
 ---
 
 ## Re: SimpleGuy Indicator
@@ -90,7 +85,6 @@ second indicator is [Close] - [non lag moving average]
 
 Really thanks alot
 
-
 ---
 
 ## Re: SimpleGuy Indicator
@@ -98,7 +92,6 @@ Really thanks alot
 **Apprentice** · Fri Feb 09, 2018 11:24 am
 
 SimpleGuy Indicator 1. Line.lua & SimpleGuy Indicator 2. Line.lua added.
-
 
 ---
 
@@ -119,7 +112,6 @@ second indicator = [Close] - [non lag moving average]
 [non lag moving average] - [Close] MODIFIED TO [Close] - [non lag moving average]
 
 THANKS ALOT
-
 
 ---
 

@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=29&t=852  
 > Forum: 29 · Topic 852 · 20 post(s)
 
-
 ---
 
 ## BB_Bands stop Signals [Upd: Jun 06]
@@ -20,14 +19,12 @@ Signals based on indicator BB_Bands stop: [viewtopic.php?f=17&t=757&p=1449](http
 
 ![BBands_Stop_Signal.jpg](images/1526/BBands_Stop_Signal.jpg)
 
-
-
 Download:
 
  [BBands_Stop_Signal.lua](files/1526/BBands_Stop_Signal.lua)
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     strategy:name("BBands_Stop signal");
     strategy:description("");
 
@@ -151,8 +148,8 @@ function ExtSignal(source, period, message, soundFile)
     if soundFile ~= nil then
         terminal:alertSound(soundFile, false);
     end
-end`
-
+end
+```
 
 ---
 
@@ -168,7 +165,6 @@ BB_Bands stop Signals I cannot load
 
 Please help
 
-
 ---
 
 ## Re: BB_Bands stop Signals
@@ -176,7 +172,6 @@ Please help
 **Nikolay.Gekht** · Tue Jun 01, 2010 8:39 am
 
 This is not an indicator. This is a signal. And... Could you please provide a bit more details about "cannot load".
-
 
 ---
 
@@ -203,7 +198,6 @@ This may not sound in the place which must sound.
 Why does not the signal to all
 Please look at the image file.
 
-
 ---
 
 ## Re: BB_Bands stop Signals
@@ -211,7 +205,6 @@ Please look at the image file.
 **Nikolay.Gekht** · Wed Jun 02, 2010 9:36 am
 
 Oh, I see. It looks like this could be Marketscope problem. I reported the problem to the developers to have it the checked carefully. Thank you for the reporting. I'll keep you informed.
-
 
 ---
 
@@ -229,7 +222,6 @@ It is regrettable.
 
 Marketscope becomes better, it is good.
 
-
 ---
 
 ## Re: BB_Bands stop Signals
@@ -240,9 +232,11 @@ Alexander, I checked the strategy carefully. Look, the problem is in a bit incor
 
 First, you detects when another candle is closed:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`if LastBidCandle == nil or
-   LastBidCandle ~= gSourceBid:serial(gSourceBid:size() - 1) then`
+```lua
+if LastBidCandle == nil or
+   LastBidCandle ~= gSourceBid:serial(gSourceBid:size() - 1) then
+```
+
 So, all other code works every time when a new candle is started. But then you check a newly started candle, not a completely closed candle, i.e. this code
 
 Code: [Select all](https://fxcodebase.com/code/)
@@ -263,7 +257,6 @@ Alexander, could you please fix the strategy?
 
 jsi@jp, thank you very much for reporting the problem. I hope the fix will be provided pretty fast.
 
-
 ---
 
 ## Re: BB_Bands stop Signals [Upd: Jun 06]
@@ -271,7 +264,6 @@ jsi@jp, thank you very much for reporting the problem. I hope the fix will be pr
 **Nikolay.Gekht** · Tue Jun 08, 2010 3:01 pm
 
 Up. The signal is updated.
-
 
 ---
 
@@ -287,7 +279,6 @@ The signal is not giving any notifiactions.
 Tested it on 1min, 15mins charts.
 
 Can you check.
-
 
 ---
 
@@ -306,7 +297,6 @@ Please see the snapshot below to see how the applied signal should look:
 
 ![signal.png](images/2502/signal.png)
 
-
 ---
 
 ## Re: BB_Bands stop Signals [Upd: Jun 06]
@@ -315,8 +305,8 @@ Please see the snapshot below to see how the applied signal should look:
 
 Update signal:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     strategy:name("BBands_Stop signal");
     strategy:description("");
 
@@ -440,7 +430,8 @@ function ExtSignal(source, period, message, soundFile)
     if soundFile ~= nil then
         terminal:alertSound(soundFile, false);
     end
-end`
+end
+```
 
 Download:
 
@@ -448,7 +439,6 @@ Download:
 
 Please, do not forget to download and install the indicator BBANDS_STOP from here:
 [viewtopic.php?f=17&t=757](https://fxcodebase.com/code/viewtopic.php?f=17&t=757)
-
 
 ---
 
@@ -460,7 +450,6 @@ umm can someone enlighten me on how to add a sound alert for this one? cant seem
 
 thanks!
 
-
 ---
 
 ## Re: BB_Bands stop Signals [Upd: Jun 06]
@@ -471,7 +460,6 @@ For some strange reason, i get the error message: [string "BBands_Stop_Signal.lu
 Cheers
 bill
 
-
 ---
 
 ## Re: BB_Bands stop Signals [Upd: Jun 06]
@@ -480,7 +468,6 @@ bill
 
 Did you install BBANDS_STOP indicator?
 [viewtopic.php?f=17&t=757](https://fxcodebase.com/code/viewtopic.php?f=17&t=757)
-
 
 ---
 
@@ -494,7 +481,6 @@ Did you install BBANDS_STOP indicator?
 
 Have you tried to switch "Play Sound" parameter to "Yes" and then choose the sound file (any wav file, the default Trading Station set is located here: "C:\Program Files\Candleworks\FXTS2\Sounds\")?
 
-
 ---
 
 ## Re: BB_Bands stop Signals [Upd: Jun 06]
@@ -505,7 +491,6 @@ Is it possible to update this signal to employ the new email alert feature in th
 
 Thanks!
 
-
 ---
 
 ## Re: BB_Bands stop Signals [Upd: Jun 06]
@@ -514,7 +499,6 @@ Thanks!
 
 Added to developmen cue.
 
-
 ---
 
 ## Re: BB_Bands stop Signals [Upd: Jun 06]
@@ -522,7 +506,6 @@ Added to developmen cue.
 **Apprentice** · Thu Jun 09, 2011 11:23 am
 
 Sound Problem Fixed.
-
 
 ---
 
@@ -543,7 +526,6 @@ sell half at +10 (hopefully you can set it up where you can change the amount)..
 second half out when signal reverses.
 
 Thank you!
-
 
 ---
 

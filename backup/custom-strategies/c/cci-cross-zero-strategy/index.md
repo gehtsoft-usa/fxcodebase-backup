@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=2743  
 > Forum: 31 · Topic 2743 · 6 post(s)
 
-
 ---
 
 ## CCI cross zero Strategy
@@ -16,10 +15,7 @@ There is a simple CCI based strategy, which enters to market when CCI indicators
 
 ![CCIZ.png](images/6226/CCIZ.png)
 
-
-
  [CCIZ.lua](files/6226/CCIZ.lua)
-
 
 ---
 
@@ -38,7 +34,6 @@ I've attached a pic of what I mean. The CCI has crossed over 0 (bottom part of t
 Thanks
 -Jaime
 
-
 ---
 
 ## Re: CCI cross zero Strategy
@@ -51,7 +46,6 @@ Actually the strategy works on close prices. This means that the system checks t
 For example, you apply the strategy on one-hour time frame. The current time is 18:37. The CCI indicator crosses the zero level at 18:49. In case this crossing is retained on closing of this bar, that is at 19:00, you'll get a signal at this moment.
 
 Checking closing of bars allows avoiding false signals, since the crossing can occur several times inside the same bar.
-
 
 ---
 
@@ -81,7 +75,6 @@ equate to this?
 Any help is very much appreciated
 -JO
 
-
 ---
 
 ## Re: CCI cross zero Strategy
@@ -102,8 +95,8 @@ Any help is very much appreciated
 
 You can use timers:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`local CHECK_CONDITIONS=12345;
+```lua
+local CHECK_CONDITIONS=12345;
 function Prepare()
 ...
 local timerIntervalSeconds = 60; -- run checks each menute
@@ -120,8 +113,8 @@ end
 
 function ReleaseInstance()
     core.host:execute("killTimer", CHECK_CONDITIONS);
-end`
-
+end
+```
 
 ---
 

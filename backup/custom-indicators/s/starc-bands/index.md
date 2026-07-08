@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=228  
 > Forum: 17 · Topic 228 · 7 post(s)
 
-
 ---
 
 ## STARC Bands
@@ -25,8 +24,6 @@ Description on how to use this indicator you can find here:
 
 *Screenshot from MarketScope.*
 
-
-
 **Download:**
 
  [STARC.lua](files/321/STARC.lua)
@@ -35,8 +32,8 @@ Description on how to use this indicator you can find here:
 
 **Source:**
 
-Code: [Select all](https://fxcodebase.com/code/)
-`--- Indicator profile initialization routine
+```lua
+--- Indicator profile initialization routine
 -- Defines indicator profile properties and indicator parameters
 function Init()
     indicator:name("STARC Band");
@@ -104,10 +101,10 @@ function Update(period, mode)
         LB[period] = smaVal - atrVal;
         AL[period] = smaVal;
     end
-end`
+end
+```
 
 Respond to this topic if you have questions.
-
 
 ---
 
@@ -116,7 +113,6 @@ Respond to this topic if you have questions.
 **ausjus18** · Sun May 30, 2010 6:29 am
 
 This is a really useful indicator. Is there a way of allowing multipliers that are 0.1 increments, not just limited to 1,2,3 etc. Thanks.
-
 
 ---
 
@@ -131,7 +127,6 @@ with
 
 Download the modified version.
 
-
 ---
 
 ## Re: STARC Bands
@@ -140,7 +135,6 @@ Download the modified version.
 
 That's fantastic! Thank you Nikolay! Really appreciate your help.
 Jürgen
-
 
 ---
 
@@ -152,7 +146,6 @@ Hello, It would be nice to have the possibility to choose from differents type o
 
 The concept "MA + ATR*multiplier" it's really interesting, thank you.
 
-
 ---
 
 ## Re: STARC Bands
@@ -160,7 +153,6 @@ The concept "MA + ATR*multiplier" it's really interesting, thank you.
 **Apprentice** · Mon Apr 27, 2015 2:55 am
 
 Customizable STARC.lua Added.
-
 
 ---
 

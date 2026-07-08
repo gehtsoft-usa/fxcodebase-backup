@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=4148  
 > Forum: 31 · Topic 4148 · 47 post(s)
 
-
 ---
 
 ## Heikin-Ashi Strategy
@@ -11,8 +10,6 @@
 **Apprentice** · Sun May 08, 2011 6:19 am
 
 ![HA Strategy.png](images/10416/HA%20Strategy.png)
-
-
 
 With a simple HA signals,
 strategy supports the definition of Trigger Level,
@@ -26,7 +23,6 @@ If the trigger level is not reached, the strategy will not enter the trade.
 
 The Strategy was revised and updated on December 11, 2018.
 
-
 ---
 
 ## Re: Heikin-Ashi Strategy
@@ -38,7 +34,6 @@ The Strategy was revised and updated on December 11, 2018.
 2. Also please add the parameter Option "Act on Close/Break Out" The option determines should the strategy open a new position when candle closes after a color change, or upon the instant of HA color change (or breakout). (See the trading parameters of ATRStrategy for example. [viewtopi](http://www.fxcodebase.com/code/viewtopi) ... =31&t=3861)
 
 Right now when trading on shorter time spans the indicator waits for another candle to close, and by that time it has missed the window of profitability.
-
 
 ---
 
@@ -52,7 +47,6 @@ Is there any way to add this.
 
 best regards.
 
-
 ---
 
 ## Re: Heikin-Ashi Strategy
@@ -61,7 +55,6 @@ best regards.
 
 Are You From U.S. or have an open U.S. Based trading account.
 If this is the case, these functionalities is not available.
-
 
 ---
 
@@ -73,7 +66,6 @@ I am from Nicaragua but my account is from FXCM UK.
 
 best regards
 
-
 ---
 
 ## Re: Heikin-Ashi Strategy
@@ -83,7 +75,6 @@ best regards
 Hi Apprentice,
 
 I think I am going to ask you a lame question, well I am still a newbie in forex. I tried to install your strategy in the Trading Station II and I got this message. "[string "HA Strategy.lua"] :155: The indicator with id HA is not found." I've installed Heikin-Ashi Smoothed i found in this forum. Or do I need to install different indicator? Thanks in million!
-
 
 ---
 
@@ -98,7 +89,6 @@ And Heikin-Ashi indicator is a standard pre-installed one.
 Which broker you use.
 have you delete some standard ones.
 
-
 ---
 
 ## Re: Heikin-Ashi Strategy
@@ -108,7 +98,6 @@ have you delete some standard ones.
 Well, I am with FXCM USA though I'm from Singapore. The problem is, I can't find Heikin-Ashi in pre-installed indicators list. Btw I am using FXCM Trading Station II ver 01.10.041211. Sigh I still can't install your strategy. I also can't install TDI strategy I found in this forum too.
 
 Anyway thanks for your fast reply. You really are helpful and idol for newbie like me
-
 
 ---
 
@@ -124,7 +113,6 @@ Anyway thanks for your fast reply. You really are helpful and idol for newbie li
 > Right now when trading on shorter time spans the indicator waits for another candle to close, and by that time it has missed the window of profitability.
 
 Can you guys add these parameters please?
-
 
 ---
 
@@ -148,7 +136,6 @@ Or if the Regression Supertrend and HA Strategy can be combined into one strateg
 
 Thank you.
 
-
 ---
 
 ## Re: Heikin-Ashi Strategy
@@ -156,7 +143,6 @@ Thank you.
 **Apprentice** · Wed Jun 15, 2011 1:18 pm
 
 Stop/Limit Bug Fixed.
-
 
 ---
 
@@ -174,7 +160,6 @@ Thanks
 
 nookie
 
-
 ---
 
 ## Re: Heikin-Ashi Strategy
@@ -188,7 +173,6 @@ Hi Apprentice, I am very interested in HA candles. I find 2 basic HA Strategies 
  Percentage/PIP
 
 Attached a screen shot. Thanks for all your help. Bob
-
 
 ---
 
@@ -204,7 +188,6 @@ This difference may be in percentage or in pips.
 It is calculated as the difference between current price and previous trading price.
 As a basis we use, Price or HA.
 
-
 ---
 
 ## Re: Heikin-Ashi Strategy
@@ -212,7 +195,6 @@ As a basis we use, Price or HA.
 **amazon1a** · Wed May 23, 2012 10:30 am
 
 Sorry, but it is still not clear. Is it possible to show me an example with the input fields filled in??
-
 
 ---
 
@@ -223,7 +205,6 @@ Sorry, but it is still not clear. Is it possible to show me an example with the 
 Good morning, I am a little confused. I installed the HA Strategy on a NZD/USD chart and selected the same symbol, however the strategy opened a position on the EUR/USD.
 Your assistance is appreciated. I will pose the same question here as I did in another post. Is there a way to filter trades to only trade in the direction of a higher time frame and can time filters be added.
 
-
 ---
 
 ## Re: Heikin-Ashi Strategy
@@ -231,7 +212,6 @@ Your assistance is appreciated. I will pose the same question here as I did in a
 **BabyBull** · Mon Jul 23, 2012 9:50 am
 
 One other question, instead of the supertrend, DMI and SAR could the HA strategy and Supertrend strategy be combined? It seems to me in looking at charts this could work out well.The ability to limit the times in which it trades, being able to trade in the direction of a higher time frame, and only when the volatility is adequate would be helpful. Thank you
-
 
 ---
 
@@ -246,7 +226,6 @@ What does parameter "Wick Filtering" mean???
 Much love to everyone. X
 lisa_baby_xx
 
-
 ---
 
 ## Re: Heikin-Ashi Strategy
@@ -259,7 +238,6 @@ Could someone convert this to MT4 please??
 
 Much love to all.
 lisa_baby_fx
-
 
 ---
 
@@ -277,7 +255,6 @@ a long trade would only open if the fast EMA is above the slow EMA, any bearish 
 this way we scalp with the trend.
  Thank You
 
-
 ---
 
 ## Re: Heikin-Ashi Strategy
@@ -286,7 +263,6 @@ this way we scalp with the trend.
 
 Your request is added to the developmental list.
 
-
 ---
 
 ## Re: Heikin-Ashi Strategy
@@ -294,7 +270,6 @@ Your request is added to the developmental list.
 **geofanin** · Thu Mar 14, 2013 9:04 pm
 
 Thank You. Looking forward to using it
-
 
 ---
 
@@ -310,7 +285,6 @@ can u also add a reverse Mode?
 
 Thx a lot
 
-
 ---
 
 ## Re: Heikin-Ashi Strategy
@@ -321,7 +295,6 @@ Can you give a detailed explanation.
 uses
 if () then () else
 logic ...
-
 
 ---
 
@@ -336,7 +309,6 @@ Is it possible to have this same strategy but using SAR? I'd like to run a compa
 Thanks,
 Oisin
 
-
 ---
 
 ## Re: Heikin-Ashi Strategy
@@ -344,7 +316,6 @@ Oisin
 **Apprentice** · Tue May 21, 2013 5:27 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -356,7 +327,6 @@ Could you please add smoothing with this strategy? With 1 to 100.
 
 Thanks a million
 
-
 ---
 
 ## Re: Heikin-Ashi Strategy
@@ -366,7 +336,6 @@ Thanks a million
 Purpose of this MA will be?
 To smooth the source data, or to act as a filter.
 Can you provide a more detailed description.
-
 
 ---
 
@@ -378,7 +347,6 @@ Yeh to smooth the source data so I can smooth out the HA.
 
 ThANKS
 
-
 ---
 
 ## Re: Heikin-Ashi Strategy
@@ -386,7 +354,6 @@ ThANKS
 **Apprentice** · Fri Sep 27, 2013 6:40 am
 
 HA with smoothing Strategy added.
-
 
 ---
 
@@ -398,7 +365,6 @@ Thanks for the smoothing but I wanted to be able to put in the amount of smoothi
 
 Thanks
 
-
 ---
 
 ## Re: Heikin-Ashi Strategy
@@ -406,7 +372,6 @@ Thanks
 **Apprentice** · Sun Sep 29, 2013 3:02 am
 
 Smoothing period added.
-
 
 ---
 
@@ -416,7 +381,6 @@ Smoothing period added.
 
 Hi Apprentice, This is fantastic!! Now can you do the same for MTF HA? Thanks for all your hard work, AG
 
-
 ---
 
 ## Re: Heikin-Ashi Strategy
@@ -425,7 +389,6 @@ Hi Apprentice, This is fantastic!! Now can you do the same for MTF HA? Thanks fo
 
 I need a bit more info,
 which MTF HA, provide a link...
-
 
 ---
 
@@ -439,7 +402,6 @@ Hi Apprentice, Here is the one that I am using. I typically smooth the HA indica
 
 Thanks, AG
 
-
 ---
 
 ## Re: Heikin-Ashi Strategy
@@ -448,7 +410,6 @@ Thanks, AG
 
 Your request is added to the development list.
 As for combo, can you specify the rules.
-
 
 ---
 
@@ -463,7 +424,6 @@ At the moment if the strategy is set to trade on both directions a reversed posi
 Thanks,
 Oisin
 
-
 ---
 
 ## Re: Heikin-Ashi Strategy
@@ -471,7 +431,6 @@ Oisin
 **Apprentice** · Thu Oct 24, 2013 1:56 am
 
 Such an option is possible.
-
 
 ---
 
@@ -487,12 +446,12 @@ Here's the logic I have in Strategy Wizard for the entry:
 
 Here's the logic from the HA Strategy
 
-Code: [Select all](https://fxcodebase.com/code/)
-`if  indicator.open[period] <   indicator.close [period] and indicator.open[period-1] >  indicator.close [period-1]  then
-BUY= true;`
+```lua
+if  indicator.open[period] <   indicator.close [period] and indicator.open[period-1] >  indicator.close [period-1]  then
+BUY= true;
+```
 
 It's exactly the same logic as the HA Strategy (from this site) but for some reason it isn't working on my strategy. I am at a loss.
-
 
 ---
 
@@ -527,7 +486,6 @@ Hi, Any chance there is a version of the strategy (without smoothing) that actua
 Thanks,
 Oisin
 
-
 ---
 
 ## Re: Heikin-Ashi Strategy
@@ -539,7 +497,6 @@ Oisin
 Try this version.
 Reverse Direction parameter is Introduced.
 
-
 ---
 
 ## Re: Heikin-Ashi Strategy
@@ -548,7 +505,6 @@ Reverse Direction parameter is Introduced.
 
 HA Strategy.lua & HA with smoothing Strategy.lua Update
 See First, Topmost post in Topic.
-
 
 ---
 
@@ -561,7 +517,6 @@ Hi Apprentice, I was wondering if you could add an option for reverse signals fo
 Thanks,
 Cam
 
-
 ---
 
 ## Re: Heikin-Ashi Strategy
@@ -571,7 +526,6 @@ Cam
 This version have reverse option.
 [download/file.php?id=11746](https://fxcodebase.com/code/download/file.php?id=11746)
 
-
 ---
 
 ## Re: Heikin-Ashi Strategy
@@ -579,7 +533,6 @@ This version have reverse option.
 **Apprentice** · Sun Dec 11, 2016 10:11 am
 
 Strategy was revised and updated.
-
 
 ---
 
@@ -592,7 +545,6 @@ Hello Apprentice,
 If you please, could we have MT4 version of HA Strategy.lua as an Expert Adviser.
 
 with highly appreciation.
-
 
 ---
 

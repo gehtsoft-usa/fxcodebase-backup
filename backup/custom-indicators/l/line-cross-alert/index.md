@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=15690  
 > Forum: 17 · Topic 15690 · 59 post(s)
 
-
 ---
 
 ## Line Cross Alert
@@ -11,8 +10,6 @@
 **Apprentice** · Sat Apr 07, 2012 3:56 pm
 
 ![SLope.png](images/29545/SLope.png)
-
-
 
 The indicator provides audio and Email Alerts.
 When Source Data (close) crosses the trend line defined by the user.
@@ -22,7 +19,6 @@ Current version supports only one trend line per currency pair.
 
  [Line Cross Alert.lua](files/29545/Line%20Cross%20Alert.lua)
 
-
 ---
 
 ## Re: Line Cross Alert
@@ -30,7 +26,6 @@ Current version supports only one trend line per currency pair.
 **Apprentice** · Mon Apr 09, 2012 8:56 am
 
 Moved from Beta Sub Forum.
-
 
 ---
 
@@ -48,7 +43,6 @@ Also does it work on an indicator data source?
 
 Thanks.
 
-
 ---
 
 ## Re: Line Cross Alert
@@ -58,7 +52,6 @@ Thanks.
 When I find time, I had planned to offer you advanced version.
 The current version works on Indicator data.
 
-
 ---
 
 ## Re: Line Cross Alert
@@ -67,13 +60,10 @@ The current version works on Indicator data.
 
 ![MLCA.png](images/30238/MLCA.png)
 
-
-
 This version allows you to add unlimited number of lines.
 Before defining new line use New parameter to define it.
 
  [MLCA.lua](files/30238/MLCA.lua)
-
 
 ---
 
@@ -89,7 +79,6 @@ Also right clicking to set start or end is difficult because usually the start o
 
 Hope to see rebounding alert when you have time. Thanks.
 
-
 ---
 
 ## Re: Line Cross Alert
@@ -97,7 +86,6 @@ Hope to see rebounding alert when you have time. Thanks.
 **Apprentice** · Wed Apr 18, 2012 2:06 am
 
 Bug - Make sure that the line start / end is not, prior to the first, after the last, candles.
-
 
 ---
 
@@ -109,7 +97,6 @@ Ya that's what happened with the lines.
 
 After more testing, I did not get an audio alert when lines crossed. Could you add a pop up dialog option? Thanks.
 
-
 ---
 
 ## Re: Line Cross Alert
@@ -118,7 +105,6 @@ After more testing, I did not get an audio alert when lines crossed. Could you a
 
 Do yuo have _Alert Signal/Strategy installed, loaded and Activ.
 
-
 ---
 
 ## Re: Line Cross Alert
@@ -126,7 +112,6 @@ Do yuo have _Alert Signal/Strategy installed, loaded and Activ.
 **LuckyPanda** · Mon Apr 23, 2012 4:52 pm
 
 OK I loaded _Alert and it did make alert sound but no popup. Also does it need to be loaded for every pair that the MLCA is loaded? Thanks.
-
 
 ---
 
@@ -137,7 +122,6 @@ OK I loaded _Alert and it did make alert sound but no popup. Also does it need t
 popup? I'm not sure what you mean.
 This indicator provides audio alerts, sending email notifications.
 Yes for each currency pair, you must add a separate indicator.
-
 
 ---
 
@@ -152,7 +136,6 @@ looks like a great indicator but I dont know how to assign the lines that are to
 all the best,
 Laners303
 
-
 ---
 
 ## Re: Line Cross Alert
@@ -165,8 +148,6 @@ Add the indicator Line Cross Alert to your chart. To assign values for the line,
 
 ![CrossAlert.PNG](images/31161/CrossAlert.PNG)
 
-
-
 The point where you right-clicked will be assigned for the value. First, choose the "LINE CROSS ALERT...: First" command to assign the first value. Then right-click on another point on the chart and choose "LINE CROSS ALERT...: Second" command to assign the second value.
 You will see the line on your chart:
 
@@ -174,10 +155,7 @@ You will see the line on your chart:
 
 ![CrossAlert2.PNG](images/31161/CrossAlert2.PNG)
 
-
-
 If you need to re-assign values, use the command "LINE CROSS ALERT...: Reset".
-
 
 ---
 
@@ -187,7 +165,6 @@ If you need to re-assign values, use the command "LINE CROSS ALERT...: Reset".
 
 A small addition.
 Use, Extend Start / End if you are using sound alert.
-
 
 ---
 
@@ -201,7 +178,6 @@ could make the world of difference.
 All the best,
 Laners303
 
-
 ---
 
 ## Re: Line Cross Alert
@@ -214,7 +190,6 @@ Thank you for helping us small guys out.
 
 Best regards,
 G
-
 
 ---
 
@@ -230,15 +205,11 @@ Please check the settings in the Indicator Properties:
 
 ![prop.PNG](images/31459/prop.PNG)
 
-
-
 Besides, to be able to get email alerts, you should configure sending e-mail alerts in Chart Options. I use the following options and this works for me:
 
  
 
 ![options.PNG](images/31459/options.PNG)
-
-
 
 Please read for details: [How to configure send e-mail alert properly](https://fxcodebase.com/code/viewtopic.php?f=31&t=3034)
 
@@ -248,7 +219,6 @@ Also, I'd recommend you to use the Events window to view errors in case you will
 
 ![events.PNG](images/31459/events.PNG)
 
-
 ---
 
 ## Re: Line Cross Alert
@@ -256,7 +226,6 @@ Also, I'd recommend you to use the Events window to view errors in case you will
 **LuckyPanda** · Fri Apr 27, 2012 1:44 am
 
 Can you make it so the alert also shows a dialog in addition to an audio alert? It's easy to miss the audio alert. A dialog box like the built-in pricealert does would be good. Thanks.
-
 
 ---
 
@@ -270,7 +239,6 @@ thanks,
 
 sjc
 
-
 ---
 
 ## Re: Line Cross Alert
@@ -279,10 +247,7 @@ sjc
 
 ![Line.png](images/41748/Line.png)
 
-
-
 Yes, it's possible, just add the Alert Line Cross on oscillator of your choosing.
-
 
 ---
 
@@ -300,7 +265,6 @@ thanks,
 
 sjc
 
-
 ---
 
 ## Re: Line Cross Alert
@@ -308,7 +272,6 @@ sjc
 **Apprentice** · Sun Oct 14, 2012 6:26 am
 
 I will discuss this with the development team.
-
 
 ---
 
@@ -331,7 +294,6 @@ I have questions
 
 cheers
 
-
 ---
 
 ## Re: Line Cross Alert
@@ -342,7 +304,6 @@ As it is, it will alert you if chart time frame line is crossed on any time fram
 as we have Live, Not, End of Turn Alert.
 
 Your request has been added to the development list.
-
 
 ---
 
@@ -360,7 +321,6 @@ Close on opposite.
 
 with much much appreciation in advance.
 
-
 ---
 
 ## Re: Line Cross Alert
@@ -371,7 +331,6 @@ kindly Apprentice,
 could you show the colored dot when price crossing blow/above MLCA.lua lines ,the same way as in Line Cross Alert.lua do ?
 thank you in advance.
 
-
 ---
 
 ## Re: Line Cross Alert
@@ -379,7 +338,6 @@ thank you in advance.
 **Apprentice** · Mon Jul 06, 2015 4:43 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -393,7 +351,6 @@ Furthermore, I have the _alert file appearing in the top left corner of the firs
 
 Could we please have an explanation of exactly how to install, activate & use the _alert file so that there will be a sound when a line is crossed. Many thanks.
 
-
 ---
 
 ## Re: Line Cross Alert
@@ -405,7 +362,6 @@ Please redownload.
 Have fix a potential bug.
 Audio alert has been tested and work as expected now.
 
-
 ---
 
 ## Re: Line Cross Alert
@@ -414,7 +370,6 @@ Audio alert has been tested and work as expected now.
 
 Hi Apprentice,
 Thanks for the fix. I have re-downloaded & all is working perfectly. Thanks heaps for the indicator.
-
 
 ---
 
@@ -428,7 +383,6 @@ Unfortunately I am finding that the alert only sounds some of the time. I am app
 
 So it seems that it has taken 10 minutes for it to get the idea. Do you have any thoughts? Has anyone else found the same thing happening?
 
-
 ---
 
 ## Re: Line Cross Alert
@@ -439,7 +393,6 @@ Update. I am figuring out that the alert is only sounding when approached from a
 
 The alert sounds without any time delay when approached from above, so, it is nothing to do with the passing of time, but the direction from which the line is approached.
 
-
 ---
 
 ## Re: Line Cross Alert
@@ -449,7 +402,6 @@ The alert sounds without any time delay when approached from above, so, it is no
 Hello Apprentice,
 
 I am wondering whether you have noticed my last two posts & whether you have time to reply. Since posting I have continued to attempt using the MLCA but without success. Tonight alerts are not sounding at all & the indicator seems to have corrupted other indicators. E.g. standard price alerts have sometimes not been sounding. Another example is that the numbers that go with the MLCA lines have been appearing when I apply other indicators such as the parabolic SAR & ATR (even though the MLCA indicator has been deleted from the chart).
-
 
 ---
 
@@ -463,7 +415,6 @@ Indicator will get native alert support.
 This alert helper business can become messy,
 especially if multiple instances are used.
 
-
 ---
 
 ## Re: Line Cross Alert
@@ -473,7 +424,6 @@ especially if multiple instances are used.
 Hi Apprentice,
 Thanks so much for your reply. I understand both your busy-ness & the difficulties. That is marvellous news that the trend line alert will be in the next TS update!
 
-
 ---
 
 ## Re: Line Cross Alert
@@ -482,7 +432,6 @@ Thanks so much for your reply. I understand both your busy-ness & the difficulti
 
 Compatibility issue Fix.
 _Alert helper is not longer needed.
-
 
 ---
 
@@ -498,7 +447,6 @@ When you have time I would like to be able to add a second alerted trend line to
 
 Many many thanks.
 
-
 ---
 
 ## Re: Line Cross Alert
@@ -506,7 +454,6 @@ Many many thanks.
 **Apprentice** · Wed Dec 16, 2015 4:56 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -518,7 +465,6 @@ Hello Apprentice,
 
 Is there any word on the native support? Thank you again for your help on this. It's amazing it hasn't already been included yet.
 
-
 ---
 
 ## Re: Line Cross Alert
@@ -526,7 +472,6 @@ Is there any word on the native support? Thank you again for your help on this. 
 **Apprentice** · Wed Jan 20, 2016 5:37 am
 
 Native support for Line Tool Cross Alert?
-
 
 ---
 
@@ -537,7 +482,6 @@ Native support for Line Tool Cross Alert?
 Hi Apprentice,
 I made a request some time ago for the ability to add a second alerted TL to a chart. Do you have time to look at this?
 
-
 ---
 
 ## Re: Line Cross Alert
@@ -545,7 +489,6 @@ I made a request some time ago for the ability to add a second alerted TL to a c
 **Apprentice** · Sun Jul 24, 2016 7:56 am
 
 Why do not you use MLCA.lua instead?
-
 
 ---
 
@@ -555,7 +498,6 @@ Why do not you use MLCA.lua instead?
 
 Okay. I didn't realise it was there. Thank you very much.
 
-
 ---
 
 ## Re: Line Cross Alert
@@ -563,7 +505,6 @@ Okay. I didn't realise it was there. Thank you very much.
 **Steve0001** · Wed Jan 18, 2017 5:08 pm
 
 I am trying to use MCLA.lua, but so far I have not been able to get it to sound an alert or send me an e-mail. Yes, I put my e-mail address in the indicator. My next step is go back to Line Cross Alert.lua and see if I can get that to work. Any ideas about getting this to work will be appreciated. Thanks!
-
 
 ---
 
@@ -573,10 +514,7 @@ I am trying to use MCLA.lua, but so far I have not been able to get it to sound 
 
 ![Capture.PNG](images/110590/Capture.PNG)
 
-
-
 You must define the trend lines, via showed menu.
-
 
 ---
 
@@ -586,7 +524,6 @@ You must define the trend lines, via showed menu.
 
 Indicator was revised and updated.
 
-
 ---
 
 ## Re: Line Cross Alert
@@ -594,7 +531,6 @@ Indicator was revised and updated.
 **Steve0001** · Thu Jan 19, 2017 5:03 pm
 
 OK, thanks. I thought I did everything correctly (had lines on my chart and price crossed lines, but no alert). I will download your revised version and try it again.
-
 
 ---
 
@@ -613,7 +549,6 @@ Possible ideas for improvement:
 
 Thanks again!
 
-
 ---
 
 ## Re: Line Cross Alert
@@ -621,7 +556,6 @@ Thanks again!
 **Steve0001** · Thu Jan 19, 2017 10:34 pm
 
 Also, I did not get the e-mail notification to work.
-
 
 ---
 
@@ -632,7 +566,6 @@ Also, I did not get the e-mail notification to work.
 If Sound Alert is ok.
 Email should work also.
 Can you please check / test, your TS email settings.
-
 
 ---
 
@@ -645,7 +578,6 @@ Thanks! You were correct. TS was not configured to send e-mail. Explanation for 
 The only problem now is this: I did a few limited tests with the indicator and found that it seems to alert for crossing under, but not for crossing over.
 
 Thanks!
-
 
 ---
 
@@ -661,7 +593,6 @@ It might also be useful if there was an option to alert only if the line crossin
 
 Thanks.
 
-
 ---
 
 ## Re: Line Cross Alert
@@ -676,7 +607,6 @@ This is EXACTLY what I need .... IF (in addition to activating the ALERT) .... i
 Could this be done????????
 Or impossible .. too good to be true !!!!
 
-
 ---
 
 ## Re: Line Cross Alert
@@ -686,7 +616,6 @@ Or impossible .. too good to be true !!!!
 hi . very good work . but i faced a problem . i normally take trading signal at candle close . not at touch .
 
 can you add selection of time frame to make the alert go . bib or 1m or 5m or 15 or 1h or 2h .... etc
-
 
 ---
 
@@ -702,7 +631,6 @@ Steve0001
 Your request is added to the development list, Under Id Number 3824
  If someone is interested to do this task, please contact me.
 
-
 ---
 
 ## Re: Line Cross Alert
@@ -715,7 +643,6 @@ Please, please, please give me a link to an existing example of each of the 2 wa
 
 You`re amazing.
 
-
 ---
 
 ## Re: Line Cross Alert
@@ -727,14 +654,14 @@ Trade from Indicator
 As for second part.
 U can use
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Prepare()
+```lua
+function Prepare()
        ...
        require("storagedb");
        local db = storagedb.get_db("MYINDI");
        ...
-   end`
-
+   end
+```
 
 ---
 
@@ -749,7 +676,6 @@ One for anashassan76
 I've tested it on AUD/JPY.
 
  [1.csv](files/114697/1.csv)
-
 
 ---
 

@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=22  
 > Forum: 17 · Topic 22 · 6 post(s)
 
-
 ---
 
 ## DeMarker Oscillator [Upd Nov, 03 10]
@@ -28,8 +27,6 @@ Nov, 03 2010, ng: new feature:
 
 *DeMarker Screenshot.*
 
-
-
 **DOWNLOAD:**
 (last version)
 
@@ -37,8 +34,8 @@ Nov, 03 2010, ng: new feature:
 
 (previous version)
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- initializes the indicator
+```lua
+-- initializes the indicator
 function Init()
     indicator:name("DeMarker");
     indicator:description("")
@@ -136,10 +133,10 @@ function Update(period, mode)
             out[period] = vmax / (vmax + vmin);
         end
     end
-end`
+end
+```
 
 Tags: DeMarker, indicator, Marketscope, oscillator, Trading Station, FXCM, dbFX
-
 
 ---
 
@@ -151,7 +148,6 @@ updated
 1) choice for smoothing method
 2) line styles
 3) levels and level styles
-
 
 ---
 
@@ -167,7 +163,6 @@ updated
 
 Appreciated if you could give an edited version with no smoothing
 
-
 ---
 
 ## Re: DeMarker Oscillator [Upd Nov, 03 10]
@@ -175,7 +170,6 @@ Appreciated if you could give an edited version with no smoothing
 **Apprentice** · Wed Sep 17, 2014 11:48 am
 
 [dem without smoothing.lua](files/95968/dem%20without%20smoothing.lua)
-
 
 ---
 
@@ -189,7 +183,6 @@ Appreciated if you could give an edited version with no smoothing
 > dem without smoothing.lua
 
 Fantastic. Thank Apprentice !
-
 
 ---
 

@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=60705  
 > Forum: 17 · Topic 60705 · 17 post(s)
 
-
 ---
 
 ## Range Strong Weak
@@ -11,8 +10,6 @@
 **Apprentice** · Sun May 18, 2014 12:45 pm
 
 ![Range Strong Weak.png](images/94066/Range%20Strong%20Weak.png)
-
-
 
 Posted by request.
 [viewtopic.php?f=27&t=60699](https://fxcodebase.com/code/viewtopic.php?f=27&t=60699)
@@ -30,12 +27,9 @@ SW(USD) = ( SW(1) (USD) + SW(2) (USD) + ... + SW (N) (USD) ) / N * 100
 
 ![Range Strong Weak Indicator.png](images/94066/Range%20Strong%20Weak%20Indicator.png)
 
-
-
  [Range Strong Weak Indicator.lua](files/94066/Range%20Strong%20Weak%20Indicator.lua)
 
  [Range Strong Weak Oscillator.lua](files/94066/Range%20Strong%20Weak%20Oscillator.lua)
-
 
 ---
 
@@ -45,7 +39,6 @@ SW(USD) = ( SW(1) (USD) + SW(2) (USD) + ... + SW (N) (USD) ) / N * 100
 
 Hi, I need to know if it is possible to fix a bug in this indicator. When I try to compress the chart, shows an error like in the picture. attached two images, one, the indicator without error and another error is shown to compress the chart. is a great indicator, I hope you can help me. Tkns
 
-
 ---
 
 ## Re: Range Strong Weak
@@ -53,7 +46,6 @@ Hi, I need to know if it is possible to fix a bug in this indicator. When I try 
 **Apprentice** · Wed Jun 04, 2014 2:21 am
 
 Fixed.
-
 
 ---
 
@@ -65,7 +57,6 @@ As requested.
 [viewtopic.php?f=27&t=60793&p=94398#p94398](https://fxcodebase.com/code/viewtopic.php?f=27&t=60793&p=94398#p94398)
 Range Strong Weak Indicator & Range Strong Weak Oscillator are introduced.
 
-
 ---
 
 ## Re: Range Strong Weak
@@ -76,7 +67,6 @@ Range Strong Weak Indicator & Range Strong Weak Oscillator are introduced.
 > Fixed.
 
 like always, you're the best. Thanks
-
 
 ---
 
@@ -91,7 +81,6 @@ like always, you're the best. Thanks
 
 Thank you Apprentice, very good job!
 
-
 ---
 
 ## Re: Range Strong Weak
@@ -102,7 +91,6 @@ I'm getting the following error message when trying to apply the indicator to EU
 
 /FXTS2/indicators/Custom/Range Strong Weak Indicator.lua:131: Incorrect instrument name
 
-
 ---
 
 ## Re: Range Strong Weak
@@ -111,12 +99,9 @@ I'm getting the following error message when trying to apply the indicator to EU
 
 ![test.png](images/103378/test.png)
 
-
-
 I was not able to reproduce this.
 Indicator is adjusted by the number of available pairs.
 All currency pairs are optional.
-
 
 ---
 
@@ -127,7 +112,6 @@ All currency pairs are optional.
 Here is a pic, I just add it just like any other indicator.
 
 [https://photos-3.dropbox.com/t/2/AADJV4f3e8Kn6JFgH_2B3AmCp9EFzL_aL38hAVGXh18tMg/12/68353796/png/32x32/1/_/1/2/sw.png/EPj2kDUYwakGIAcoBw/e0eFI9BsVhcCKlFbTXHjK1AagxT2x7FZCEMd2KHT2eU?size=1280x960&size_mode=2](https://photos-3.dropbox.com/t/2/AADJV4f3e8Kn6JFgH_2B3AmCp9EFzL_aL38hAVGXh18tMg/12/68353796/png/32x32/1/_/1/2/sw.png/EPj2kDUYwakGIAcoBw/e0eFI9BsVhcCKlFbTXHjK1AagxT2x7FZCEMd2KHT2eU?size=1280x960&size_mode=2)
-
 
 ---
 
@@ -145,7 +129,6 @@ and
 
 **"/Range Strong Weak Oscillator.lua:143: Incorrect instrument name"**
 
-
 ---
 
 ## Re: Range Strong Weak
@@ -154,7 +137,6 @@ and
 
 Try to re-download.
 I did not manage to get above picture.
-
 
 ---
 
@@ -168,7 +150,6 @@ Just tried, the same problem
 
 Is it because I have an Australian account?
 
-
 ---
 
 ## Re: Range Strong Weak
@@ -178,7 +159,6 @@ Is it because I have an Australian account?
 For some reason this version works.
 
 [http://fxcodebase.com/code/download/file.php?id=11931](https://fxcodebase.com/code/download/file.php?id=11931)
-
 
 ---
 
@@ -190,8 +170,8 @@ Hi,
 
 I've tried using the indicator in a strategy with the following lines of code and it runs, but it doesn't seem to do anything as the backtesting results are the same regardless of whatever I change the period and difference to. Am I missing something or is it this indicator won't work in backtesting?
 
-Code: [Select all](https://fxcodebase.com/code/)
-`strategy.parameters:addInteger("SWPeriod", "Strong Weak Period", " " , 200);
+```lua
+strategy.parameters:addInteger("SWPeriod", "Strong Weak Period", " " , 200);
 strategy.parameters:addDouble("Difference", "Strong Weak Difference", " " , 30);
 .
 .
@@ -218,8 +198,8 @@ BUY()
 elseif SW.DATA:colorI(period) ==  core.rgb( 255,0, 0)
 then
 SELL()
-end`
-
+end
+```
 
 ---
 
@@ -231,7 +211,6 @@ Range Strong Weak Indicator - With the new TS2 Marketscope I get the error messa
 
 Thanks for your help
 
-
 ---
 
 ## Re: Range Strong Weak
@@ -239,7 +218,6 @@ Thanks for your help
 **Apprentice** · Mon Jan 04, 2016 4:54 am
 
 Have received several similar reports, will investigate.
-
 
 ---
 

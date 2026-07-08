@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=706  
 > Forum: 17 · Topic 706 · 37 post(s)
 
-
 ---
 
 ## Belkhayate's Center Of Gravity
@@ -16,8 +15,6 @@ The indicator can be used to detect the direction of the trade. Looks, for examp
 
 ![BELCOG.png](images/1278/BELCOG.png)
 
-
-
 Download the indicator:
 
  [BELCOG.lua](files/1278/BELCOG.lua)
@@ -28,15 +25,12 @@ See also the [bigger time frame version](https://fxcodebase.com/code/viewtopic.p
 
 ![BELCOG.png](images/1278/BELCOG%20%282%29.png)
 
-
-
 Finite Belkhayates center of gravity can be located anywhere on chart.
 
  [Finite Belkhayates Center Of Gravity.lua](files/1278/Finite%20Belkhayates%20Center%20Of%20Gravity.lua)
 
 MT4/MQ4 version.
 [viewtopic.php?f=38&t=68929](https://fxcodebase.com/code/viewtopic.php?f=38&t=68929)
-
 
 ---
 
@@ -50,7 +44,6 @@ Thanks so much for this indicator, it works really well, my only query is how co
 
 Thanks
 
-
 ---
 
 ## Re: Belkhayate's Center Of Gravity
@@ -58,7 +51,6 @@ Thanks
 **Nikolay.Gekht** · Mon May 03, 2010 7:57 am
 
 Yes. The indicator is drawn for the last N (where N is the first parameter of the indicator) bars only. Moreover, the indicator completely redraws all last N bars when a new bar appears.
-
 
 ---
 
@@ -72,12 +64,9 @@ The bigger time frame version of the indicator:
 
 ![bf_belcog.png](images/1775/bf_belcog.png)
 
-
-
  [BF_BELCOG.lua](files/1775/BF_BELCOG.lua)
 
 (the [BELCOG.lua](https://fxcodebase.com/code/viewtopic.php?f=17&t=706) must be also installed!)
-
 
 ---
 
@@ -87,7 +76,6 @@ The bigger time frame version of the indicator:
 
 Ahhhh yes. A 'selling into strength' system... just what my bank account needs!
 
-
 ---
 
 ## Re: Belkhayate's Center Of Gravity
@@ -96,7 +84,6 @@ Ahhhh yes. A 'selling into strength' system... just what my bank account needs!
 
 any possibility of getting a version of this indicator that doesn't repaint on every new bar?
 
-
 ---
 
 ## Re: Belkhayate's Center Of Gravity
@@ -104,7 +91,6 @@ any possibility of getting a version of this indicator that doesn't repaint on e
 **Nikolay.Gekht** · Tue Jul 13, 2010 10:02 pm
 
 No, because such class of the indicator (the same is, for example for any approximation indicators or to the wave analysis) always does it. It is specific of the method.
-
 
 ---
 
@@ -115,7 +101,6 @@ No, because such class of the indicator (the same is, for example for any approx
 Hello. I search the indicator "Belkhayate Timer" (and not Belkhayate Timing) with Marketscope 2.0 from FXCM ! Can you help me ?
 Thanks.
 
-
 ---
 
 ## Re: Belkhayate's Center Of Gravity
@@ -123,7 +108,6 @@ Thanks.
 **Apprentice** · Wed Nov 09, 2011 5:53 pm
 
 Can you provide me code for this indicator or a web reference.
-
 
 ---
 
@@ -135,8 +119,8 @@ This indicator seems to work quite well. I tried to make a signal but my knowled
 
 Dear Nikolay, maybe you can help?
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- Indicator profile initialization routine
+```lua
+-- Indicator profile initialization routine
 -- Defines indicator profile properties and indicator parameters
 function Init()
     strategy:name("Gravity signal");
@@ -258,8 +242,8 @@ function ExtUpdate(id, source, period)
     end
 end
 
-dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");`
-
+dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");
+```
 
 ---
 
@@ -270,8 +254,8 @@ dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");`
 Karlo_Karlo:
 See if this works. I haven't tested it.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- Indicator profile initialization routine
+```lua
+-- Indicator profile initialization routine
     -- Defines indicator profile properties and indicator parameters
     function Init()
     strategy:name("Gravity signal");
@@ -394,8 +378,8 @@ Code: [Select all](https://fxcodebase.com/code/)
         end
     end
 
-    dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");`
-
+    dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");
+```
 
 ---
 
@@ -407,7 +391,6 @@ Hello developer(s), this is truly a nice treat. There is also another indicator 
 If so, then we have a formidable tool to use.
 Thank you!
 
-
 ---
 
 ## Re: Belkhayate's Center Of Gravity
@@ -416,7 +399,6 @@ Thank you!
 
 virgilio:
 This [viewtopic.php?f=17&t=715](https://fxcodebase.com/code/viewtopic.php?f=17&t=715) ?
-
 
 ---
 
@@ -427,7 +409,6 @@ This [viewtopic.php?f=17&t=715](https://fxcodebase.com/code/viewtopic.php?f=17&t
 Thank you gentlemen, but it looks no different than it was before.
 There is the MBFX Timing Indicator subject also; MT4 version gives a color line while the lua version gives something very different, which I do not understand how to use. I understand that it's a subject of intellectual property but it very much looks like that the MT4 Timing Indicator is a colorized version of some common indicator. I tried to look for but did not succeed.
 What do you think about it?
-
 
 ---
 
@@ -440,7 +421,6 @@ You have to define what you want exactly otherwise it's not so easy.
 
 If you are requesting another indicator please make a proper request in the request forum, with enough information to make something out of it, e.g. a link or code (and picture+description) of the MT4 version.
 
-
 ---
 
 ## Re: Belkhayate's Center Of Gravity
@@ -450,7 +430,6 @@ If you are requesting another indicator please make a proper request in the requ
 Thank you Hug Coder,
 Below is the "MBFX Timing.ex4" file, which is the additional indicator for MBFX system. But It is for the MT4 and we do not have a lua version. As it is said in the beginning of this thread that this system is an intellectual property of Mr.Belkhayate and it is not allowed to make a lua version of his indicator without his permission. But I think that this indicator is not a very sophisticated one. I tried to compare it with other common indicators in the MT4 but I could not find anything similar yet. In my recent post I was simply asking your opinion about this indicators resemblance with others.
 
-
 ---
 
 ## Re: Belkhayate's Center Of Gravity
@@ -458,7 +437,6 @@ Below is the "MBFX Timing.ex4" file, which is the additional indicator for MBFX 
 **trendwatch** · Sun Mar 04, 2012 7:50 am
 
 I've read several statements of mr. Belkhayate wherein he states he is in no way related to MBFX. So the MBFX inidcators are not the same as those mr. Belkhayate uses in his system. Just thought you might like know this before you started using these indicators.
-
 
 ---
 
@@ -471,7 +449,6 @@ As I said, if you want another indicator, you shouldn't post requests in this th
 
 The file you posted seems to be a compiled file which has no clear text/code so it's of no use.
 
-
 ---
 
 ## Re: Belkhayate's Center Of Gravity
@@ -482,7 +459,6 @@ a) Can the Belkhayate indicators (BF long term reg and timing indicators) be use
 b) currently reviewing an H4 chart and the GBP/USD is way outside the L7 band. am i correct in that this indicates that one should take a long position? how many pips to risk on the stop and what would his limit be on profit taking?
 any comments or suggestions would be greatly appreciated
 
-
 ---
 
 ## Re: Belkhayate's Center Of Gravity
@@ -491,7 +467,6 @@ any comments or suggestions would be greatly appreciated
 
 I am not aware of such limitations.
  Everything posted here can be used for your own private use.
-
 
 ---
 
@@ -509,7 +484,6 @@ The file is taken from
 Thanks
 BC
 
-
 ---
 
 ## Re: Belkhayate's Center Of Gravity
@@ -518,7 +492,6 @@ BC
 
 This is the encoded version.
 Do you have a description, formula or MQ4 file.
-
 
 ---
 
@@ -534,7 +507,6 @@ Ouch.. sorry, I don't have one or know (at this moment) where I can get it..
 
 Sorry..
 BC
-
 
 ---
 
@@ -553,7 +525,6 @@ Audible alert when candles collide with L1 or L2 or L4 or L5, L6, L7
 Thanks
 Cordialy
 
-
 ---
 
 ## Re: Belkhayate's Center Of Gravity
@@ -561,7 +532,6 @@ Cordialy
 **Apprentice** · Fri Nov 16, 2012 4:44 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -573,7 +543,6 @@ Is it possible to define the start and end points for this indicator? Instead of
 
 Thanks,
 
-
 ---
 
 ## Re: Belkhayate's Center Of Gravity
@@ -582,7 +551,6 @@ Thanks,
 
 See, Finite Belkhayates center of gravity.
 First Post in this Topic.
-
 
 ---
 
@@ -595,8 +563,8 @@ could you help me with the chart in attachement. it gives me lines that are far 
 hope you could tell me where is the mistake (i followed the code shown below).
 thanks.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`-- Indicator profile initialization routine
+```lua
+-- Indicator profile initialization routine
 -- Defines indicator profile properties and indicator parameters
 function Init()
     indicator:name("Belkhayate's Center Of Gravity");
@@ -785,8 +753,8 @@ function Update(period)
             end
         end
     end
-end`
-
+end
+```
 
 ---
 
@@ -795,7 +763,6 @@ end`
 **Apprentice** · Wed Sep 13, 2017 7:33 am
 
 The indicator was revised and updated.
-
 
 ---
 
@@ -807,7 +774,6 @@ hello Apprentice,
 
 is it possible to show slope color change to all lines for BELCOG.lua, please ? with my appreciation .
 
-
 ---
 
 ## Re: Belkhayate's Center Of Gravity
@@ -816,7 +782,6 @@ is it possible to show slope color change to all lines for BELCOG.lua, please ? 
 
 Green for uptrend and vice versa?
 
-
 ---
 
 ## Re: Belkhayate's Center Of Gravity
@@ -824,7 +789,6 @@ Green for uptrend and vice versa?
 **easytrading** · Mon Jun 18, 2018 8:53 pm
 
 Yes, please .
-
 
 ---
 
@@ -836,7 +800,6 @@ Try this version.
 
  [BELCOG.lua](files/119627/BELCOG.lua)
 
-
 ---
 
 ## Re: Belkhayate's Center Of Gravity
@@ -847,7 +810,6 @@ Hello Apprentice,
 
 Is it possible to add Line width & line style to BELCOG.lua please, ? with my appreciation.
 
-
 ---
 
 ## Re: Belkhayate's Center Of Gravity
@@ -856,7 +818,6 @@ Is it possible to add Line width & line style to BELCOG.lua please, ? with my ap
 
 for the second version please . thanks
 
-
 ---
 
 ## Re: Belkhayate's Center Of Gravity
@@ -864,7 +825,6 @@ for the second version please . thanks
 **Apprentice** · Mon Nov 19, 2018 8:27 am
 
 Added.
-
 
 ---
 

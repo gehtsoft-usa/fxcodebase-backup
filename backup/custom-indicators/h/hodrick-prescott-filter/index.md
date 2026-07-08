@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=17&t=3024  
 > Forum: 17 · Topic 3024 · 39 post(s)
 
-
 ---
 
 ## Hodrick-Prescott Filter
@@ -11,8 +10,6 @@
 **Apprentice** · Mon Dec 27, 2010 12:00 pm
 
 ![HPF.png](images/7014/HPF.png)
-
-
 
 The Hodrick-Prescott filter is a mathematical tool used in macroeconomics, especially in real business cycle theory to separate the cyclical component of a time series from raw data.
 
@@ -22,7 +19,6 @@ The Hodrick-Prescott filter is a mathematical tool used in macroeconomics, espec
 
 The indicator was revised and updated
 
-
 ---
 
 ## Re: Hodrick-Prescott Filter
@@ -30,7 +26,6 @@ The indicator was revised and updated
 **Apprentice** · Mon Dec 27, 2010 3:41 pm
 
 When used in combination with a 50 period EMA of HPS gives good Entry / Exit signals.
-
 
 ---
 
@@ -44,7 +39,6 @@ BTW, what do you means by "50 period EMA of HPS"? Do you mean when this indicato
 
 Thanks
 
-
 ---
 
 ## Re: Hodrick-Prescott Filter
@@ -52,8 +46,6 @@ Thanks
 **Apprentice** · Wed Dec 29, 2010 7:48 am
 
 ![HPFEMA.png](images/7044/HPFEMA.png)
-
-
 
 Instead you are using closing price, to calculate the EMA.
 Use the EMA based on the HPF data stream.
@@ -68,8 +60,6 @@ EMA has a little too much noise.
 
 ![DATA.PNG](images/7044/DATA.PNG)
 
-
-
 Here you can see how to choose an alternative data source for EMA.
 
 If 50 EMA have too much Lag for you use lower value,
@@ -77,7 +67,6 @@ for example 10 or even 5 period EMA.
 
 The classic EMA with this period gives a lot of false signals,
 EMA of HPF with period 5 almost never given false ones.
-
 
 ---
 
@@ -88,7 +77,6 @@ EMA of HPF with period 5 almost never given false ones.
 Thanks Apprentice...
 
 Much appreciated
-
 
 ---
 
@@ -102,7 +90,6 @@ if the HPF was an option in the MA ADVISOR strategy, and you could adjust the EM
 
 Laners303
 
-
 ---
 
 ## Re: Hodrick-Prescott Filter
@@ -110,7 +97,6 @@ Laners303
 **ALEX678** · Sat Jan 15, 2011 5:20 am
 
 This HPF 50 with EMA 50 is the great indicators, ther is a signal with this two indicators combined?
-
 
 ---
 
@@ -120,7 +106,6 @@ This HPF 50 with EMA 50 is the great indicators, ther is a signal with this two 
 
 The answer to both post, HPF is primarily an analytical tool, not for trader,
  I will see whether this is justified.
-
 
 ---
 
@@ -139,7 +124,6 @@ two questions
 
 thanks for your reply
 
-
 ---
 
 ## Re: Hodrick-Prescott Filter
@@ -152,7 +136,6 @@ I set it up just as Apprentice said with the 50 HPF and the 50 EMA. On the hourl
 
 all the best man,
 Laners303
-
 
 ---
 
@@ -172,7 +155,6 @@ thanks a lot Laners
 
 Craige
 
-
 ---
 
 ## Re: Hodrick-Prescott Filter
@@ -187,7 +169,6 @@ when you got the singal, you put the order buy or sell, the question is that in 
 
 thanks a lot
 
-
 ---
 
 ## Re: Hodrick-Prescott Filter
@@ -195,7 +176,6 @@ thanks a lot
 **knightflyer** · Wed Jan 19, 2011 8:32 pm
 
 +1 for the HPF in the MA Advisor strategy, although it may need to wait a bar or two after the cross to confirm. Keep up the good work.
-
 
 ---
 
@@ -211,8 +191,8 @@ I get this error when the strategy calls the updateLast method.
 
 [string "HPMCrossTestVersion.lua"]:87: [string "HPF.lua"]:121: attempt to index field 'open' (a nil value)
 
-Code: [Select all](https://fxcodebase.com/code/)
-`80: function ExtUpdate(id, source, period)
+```lua
+80: function ExtUpdate(id, source, period)
 81:    if id == 1 and price == nil then
 82:        price = ExtSubscribe(2, nil, instance.parameters.TF, true, "close");
 83:        hpfLine = core.indicators:create("HPF", price, instance.parameters.HPF);
@@ -220,12 +200,13 @@ Code: [Select all](https://fxcodebase.com/code/)
 85:        first = math.max(hpfLine.DATA:first(), emaLine.DATA:first()) + 1;
 86:    elseif id == 2 then
 87:        hpfLine:update(core.UpdateLast); --error is here
-88:        emaLine:update(core.UpdateLast);`
+88:        emaLine:update(core.UpdateLast);
+```
+
 HPF.lua:
 
 Code: [Select all](https://fxcodebase.com/code/)
 `121:  a[i]=(source.open[i]-hh3*hh5-h3*h4)/z;`
-
 
 ---
 
@@ -237,7 +218,6 @@ It appears that you have sent Tick Data to Indicator.
 The indicator use Data Bar.
 
 If this does not help, post the whole code.
-
 
 ---
 
@@ -253,8 +233,8 @@ There's two things. The orders lag way behind and at different intervals. I saw 
 
 Also, some crosses don't open an order. I don't think it's because of repainting but I can't tell because I'm still learning lua and indicore.
 
-Code: [Select all](https://fxcodebase.com/code/)
-`function Init()
+```lua
+function Init()
     strategy:name("HPF Cross Strategy");
     strategy:description("Hodrick-Prescott Filter Cross with HPF's EMA. Based on HPF indicator by Apprentace.");
 
@@ -456,8 +436,8 @@ function close(sell)
     return closed;
 end
 
-dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");`
-
+dofile(core.app_path() .. "\\strategies\\standard\\include\\helper.lua");
+```
 
 ---
 
@@ -475,7 +455,6 @@ P.S.
 I tried also the code posted before, but it didn't work!
 Please help us...
 
-
 ---
 
 ## Re: Hodrick-Prescott Filter
@@ -483,7 +462,6 @@ Please help us...
 **craige** · Mon Jan 31, 2011 11:44 pm
 
 any progress achieved?
-
 
 ---
 
@@ -495,7 +473,6 @@ The HPF Indicator appears to be an excellent Indicator under my limited test on 
 As I watch many currency pairs at once on three screens, could you kindly program the HPF trendline to change colour when Up or Down. This visual 'alarm" will assist to catch the correct currency pair for a trade or exit.
 Keep up the good work,
 
-
 ---
 
 ## Re: Hodrick-Prescott Filter
@@ -504,7 +481,6 @@ Keep up the good work,
 
 Can anyone tell me what the Hodrick-Prescott Filter calculations is?
 Thank you.
-
 
 ---
 
@@ -518,7 +494,6 @@ In addition to improving performance,
 Some algorithms are changed, or corrected.
 
 Fully compatible with the old version was held.
-
 
 ---
 
@@ -536,7 +511,6 @@ God bless,
 
 davetherave110179
 
-
 ---
 
 ## Re: Hodrick-Prescott Filter
@@ -548,7 +522,6 @@ Good night from Spain, Apprentice,
 I can confirm that this indicator does not repaint as another's in a thread about this site??
 
 Thanks for your time
-
 
 ---
 
@@ -564,7 +537,6 @@ Please delete my request, I apologise for any inconvienence (and head-aches) inc
 
 davetherave110179
 
-
 ---
 
 ## Re: Hodrick-Prescott Filter
@@ -576,7 +548,6 @@ I have the most to blame for this problem.
 The development team will find a solution.
 To make indicators like this work in the future.
 
-
 ---
 
 ## Re: Hodrick-Prescott Filter
@@ -586,7 +557,6 @@ To make indicators like this work in the future.
 Its possible, just define a crossover with another filter and delay the entry order for x bars until a set of conditions has been met- there has to be some kind of coefficient that determines under what conditions the filter could repaint, and to what degree- i.e. after time t with slope y, the filter wont repaint itself(to the extent of a new crossover at t-1) because… perhaps a certain area threshold between filters a and b has been met for example, or they have diverged a distance that cant possibly be retraced in time t(if you couldn’t find the coefficients with math, this could be based on some statistical analysis of how the filter has performed over years of data)...But this kind of thing goes well beyond the scope of a simple request. There is perhaps weeks of pointless work involved here, and in the end, nothing changes.
 
 In the end, risk is risk; its only a filter, don’t be fooled by it. By its nature, it is taking its information from current prices and applying them to the past, if you change any of this, then its no longer the HPF…it just becomes another filter, that also cant predict the future, it just paints a pretty and hypnotizing picture of the past.
-
 
 ---
 
@@ -605,7 +575,6 @@ Scrat.
 
  [HPF_Static.lua](files/39971/HPF_Static.lua)
 
-
 ---
 
 ## Re: Hodrick-Prescott Filter
@@ -613,7 +582,6 @@ Scrat.
 **petrus.marx** · Thu Nov 01, 2012 3:38 am
 
 There could be something to this if I look at this chart, been checking it out for the last day or so, and going back in the past. Seem like the only problem is finding a good exit point. Entry is after the cross of the two lines, maybe give it two candles or so.
-
 
 ---
 
@@ -629,7 +597,6 @@ thanks very much
 
 Cordialy
 
-
 ---
 
 ## Re: Hodrick-Prescott Filter
@@ -641,7 +608,6 @@ one remark, the Hodrick-Prescott filter is not the best indicator for historical
 Because entry, exit crosses constantly move around.
 As you know this indicator repaints.
 
-
 ---
 
 ## Re: Hodrick-Prescott Filter
@@ -649,7 +615,6 @@ As you know this indicator repaints.
 **juju1024** · Sun Nov 18, 2012 11:05 am
 
 Yes i know, what is the best indicator for historical indicator testing (no repaint)?
-
 
 ---
 
@@ -660,7 +625,6 @@ Yes i know, what is the best indicator for historical indicator testing (no repa
 I do not use indicators / strategies in my trading.
 Fundamentals, risk control, position sizing, sentiment are more important in my book.
 
-
 ---
 
 ## Re: Hodrick-Prescott Filter
@@ -669,7 +633,6 @@ Fundamentals, risk control, position sizing, sentiment are more important in my 
 
 Okay, can you create this request, the repaint is not a problem it is short
 
-
 ---
 
 ## Re: Hodrick-Prescott Filter
@@ -677,7 +640,6 @@ Okay, can you create this request, the repaint is not a problem it is short
 **Apprentice** · Tue Nov 20, 2012 3:21 am
 
 I have planned this, but I have not found the time.
-
 
 ---
 
@@ -688,7 +650,6 @@ I have planned this, but I have not found the time.
 I'd like to bump this along... Apprentice - any ETA on when you could create this strategy?
 
 Thanks!
-
 
 ---
 
@@ -704,7 +665,6 @@ Sjc
 
 [http://www.mql5.com/en/code/191](http://www.mql5.com/en/code/191)
 
-
 ---
 
 ## Re: Hodrick-Prescott Filter
@@ -712,7 +672,6 @@ Sjc
 **Apprentice** · Sun Jun 02, 2013 11:58 am
 
 Your request is added to the development list.
-
 
 ---
 
@@ -724,7 +683,6 @@ I read the suggestion by Apprentice to use HPF as the data source on moving aver
  I set up several different combinations of time frames with the Averages indicator and watched in real time to make sure it wasn't just a pretty repainting illusion. It seems to work quite well. Since there is already an Averages strategy existing, is it feasible to change the data base to HPF? If so, I would request the option to change the HP filter period and max bars to calculate as with the indicator. Would also request strategy uses end of turn if it doesn't already.
 
 Thanks very much
-
 
 ---
 

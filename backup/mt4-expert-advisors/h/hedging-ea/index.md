@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=38&t=74765  
 > Forum: 38 · Topic 74765 · 5 post(s)
 
-
 ---
 
 ## Hedging_EA
@@ -12,13 +11,10 @@
 
 ![270.png](images/154966/270.png)
 
-
-
 Based on the request.
 [https://fxcodebase.com/code/viewtopic.php?f=17&p=154793](https://fxcodebase.com/code/viewtopic.php?f=17&p=154793)
 
  [Hedging_EA.mq5](files/154966/Hedging_EA.mq5)
-
 
 ---
 
@@ -39,8 +35,8 @@ Based on the request.
 
 Because of this line:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`bool doAction()
+```mql4
+bool doAction()
   {
     if (newOrder.type() == ORDER_TYPE_BUY_STOP) {
       if (!trade.BuyStop(newOrder.lot(), newOrder.price(), newOrder.symbol(), newOrder.sl(), newOrder.tp(), 0, 0, newOrder.comment())) {
@@ -60,10 +56,10 @@ Code: [Select all](https://fxcodebase.com/code/)
       return false;
     }
     return true;
-  }`
+  }
+```
 
 many of your EA are now not working because your using C++ in your coding instead of using mq5 or mq4 coding.
-
 
 ---
 
@@ -81,10 +77,10 @@ many of your EA are now not working because your using C++ in your coding instea
 
 THESE FUNCTIONS ARE BROKEN:
 
-Code: [Select all](https://fxcodebase.com/code/)
-`input double       userMoney      = 10;                 // Setup Lots by "Money":
-input double       userBalancePer = 0.1;                // Setup Lots by "Account Percent":`
-
+```mql4
+input double       userMoney      = 10;                 // Setup Lots by "Money":
+input double       userBalancePer = 0.1;                // Setup Lots by "Account Percent":
+```
 
 ---
 
@@ -92,15 +88,15 @@ input double       userBalancePer = 0.1;                // Setup Lot
 
 **rickCreations** · Sat Apr 13, 2024 1:44 am
 
-Code: [Select all](https://fxcodebase.com/code/)
-`2024.04.13 14:43:27.196   Core 01   2023.04.03 10:38:02   sell stop 0.01 GBPUSD at 1.23015 (1.23215 / 1.23215)
+```
+2024.04.13 14:43:27.196   Core 01   2023.04.03 10:38:02   sell stop 0.01 GBPUSD at 1.23015 (1.23215 / 1.23215)
 2024.04.13 14:43:27.196   Core 01   2023.04.03 10:38:02   CTrade::OrderSend: sell stop 0.01 GBPUSD at 1.23015 [done]
-2024.04.13 14:43:27.196   Core 01   2023.04.03 10:38:02   SendNewOrder::doAction Cannot Send Order, error: 4756`
+2024.04.13 14:43:27.196   Core 01   2023.04.03 10:38:02   SendNewOrder::doAction Cannot Send Order, error: 4756
+```
 
 Reason:
 
 > error 4756. This error will occur when sending a negotiation request failed because of any of the following reasons: Invalid lot size Invalid stop loss
-
 
 ---
 
@@ -109,8 +105,6 @@ Reason:
 **Apprentice** · Mon Apr 22, 2024 9:34 am
 
 ![302.png](images/155071/302.png)
-
-
 
 I tested the features and they work well.
 

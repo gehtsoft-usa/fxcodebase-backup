@@ -3,7 +3,6 @@
 > Source: https://fxcodebase.com/code/viewtopic.php?f=31&t=2632  
 > Forum: 31 · Topic 2632 · 25 post(s)
 
-
 ---
 
 ## Non-Lag Moving Average strategy
@@ -16,10 +15,7 @@ Strategy on Non-Lag Moving Average ([viewtopic.php?f=17&t=2231&p=5930#p5930](htt
 
 ![NonLagMA_Strategy.png](images/5931/NonLagMA_Strategy.png)
 
-
-
 For this strategy must be installed indicator SSNonLagMA from [viewtopic.php?f=17&t=2231&p=5930#p5930](https://fxcodebase.com/code/viewtopic.php?f=17&t=2231&p=5930#p5930)
-
 
 ---
 
@@ -28,7 +24,6 @@ For this strategy must be installed indicator SSNonLagMA from [viewtopic.php?f=1
 **thejesters1** · Mon Nov 15, 2010 6:23 am
 
 thank you for this one. however everytime the autotrade is initiated, the stoploss and limit order that i've set is not triggered. any help?
-
 
 ---
 
@@ -41,7 +36,6 @@ Hi
 Thank you for this strategy. Can someone explain to me what the 'Filter' option is please?
 
 Thanks.
-
 
 ---
 
@@ -64,7 +58,6 @@ The parameter allows ignoring price fluctuations that are smaller than the value
 
 The parameter is set in pips. A zero value means there is no filtering.
 
-
 ---
 
 ## Re: Non-Lag Moving Average strategy
@@ -72,7 +65,6 @@ The parameter is set in pips. A zero value means there is no filtering.
 **jontaur81** · Thu Jan 20, 2011 10:18 pm
 
 The indicator works well; but the straegy does not. Can you advise as to a fix. I am using Trading station II
-
 
 ---
 
@@ -83,7 +75,6 @@ The indicator works well; but the straegy does not. Can you advise as to a fix. 
 What error do you get?
 Please let me know so I can further assist you.
 
-
 ---
 
 ## Re: Non-Lag Moving Average strategy
@@ -91,7 +82,6 @@ Please let me know so I can further assist you.
 **Fortunelost** · Thu Feb 03, 2011 11:20 am
 
 I am testing the NonLag MA Strategy and the Indicator, is it possible to have the ascending and the decending trend line in seperate colours, I am a visual person and this will help tremendously. Thanks in advance.
-
 
 ---
 
@@ -109,7 +99,6 @@ so can i request for this strategy be incorporated with the MACD? the entry rule
 
 can i also have an option to automatically close the trade when the non-lag MA is in downward pressure (sell signal) eventhough the MACD is still upwards?
 
-
 ---
 
 ## Re: Non-Lag Moving Average strategy
@@ -117,7 +106,6 @@ can i also have an option to automatically close the trade when the non-lag MA i
 **Apprentice** · Mon Mar 21, 2011 11:17 am
 
 Your request has been added to developmental cue.
-
 
 ---
 
@@ -127,7 +115,6 @@ Your request has been added to developmental cue.
 
 Requested can be found here.
 [viewtopic.php?f=31&t=3752&p=9112#p9112](https://fxcodebase.com/code/viewtopic.php?f=31&t=3752&p=9112#p9112)
-
 
 ---
 
@@ -145,7 +132,6 @@ Thanks,
 
 Richard
 
-
 ---
 
 ## Re: Non-Lag Moving Average strategy
@@ -153,7 +139,6 @@ Richard
 **arieldutchess** · Mon Jan 14, 2013 10:47 pm
 
 I've been testing this indicator as well, has anyone requested an EA to be develop? thanks.
-
 
 ---
 
@@ -167,7 +152,6 @@ I also use different updated indicator.
  Arieldutchess
 Can you describe your strategy.
 
-
 ---
 
 ## Re: Non-Lag Moving Average strategy
@@ -175,7 +159,6 @@ Can you describe your strategy.
 **rstar250** · Fri Dec 20, 2013 12:10 pm
 
 I've been working with this for a week or so. Haven't been able to understand how it is working. Set up the non lag indicator and the strategy with the same settings but the entry and exits don't match at all. Anyone have any input that might help?
-
 
 ---
 
@@ -191,7 +174,6 @@ Open Long Trade
 Negative Slope
 Open Short Trade
 
-
 ---
 
 ## Re: Non-Lag Moving Average strategy
@@ -199,7 +181,6 @@ Open Short Trade
 **rstar250** · Mon Dec 23, 2013 11:31 pm
 
 Thanks Apprentice.
-
 
 ---
 
@@ -222,8 +203,6 @@ I was having a hard time getting the strategy to execute trades when the indicat
 
 ![701.png](images/99711/701.png)
 
-
-
 If not could you make a strategy that places an order when it changes color on the indicator as above?
 
 I was also wondering about the filter.
@@ -234,7 +213,6 @@ It was said that
 so if the filter is set on 1 would that be a 1 pip filter?
 
 sorry about all the questions I am just trying to figure out how it works.
-
 
 ---
 
@@ -247,7 +225,6 @@ Trade is delayed until end of turn.
 Filter parameter is Non-Lag MA Indicator parameter.
 Filter parameter will determine the minimum required changes need to change in MA.
 
-
 ---
 
 ## Re: Non-Lag Moving Average strategy
@@ -256,8 +233,8 @@ Filter parameter will determine the minimum required changes need to change in M
 
 I wanted to change this :
 
-Code: [Select all](https://fxcodebase.com/code/)
-`if   Indicator[1].DATA[period]> Indicator[1].DATA[period-1]
+```lua
+if   Indicator[1].DATA[period]> Indicator[1].DATA[period-1]
       and   Indicator[1].DATA[period-2] > Indicator[1].DATA[period-1] 
       then
        
@@ -274,13 +251,14 @@ Code: [Select all](https://fxcodebase.com/code/)
             if Direction then
                 SELL();
             else
-                BUY();`
+                BUY();
+```
 
 To this:
 I want this to take in account for the the ColorBarBack and not the actual level of the MA but the color that is printed on the MA
 
-Code: [Select all](https://fxcodebase.com/code/)
-`if Indicator[1].DATA[period] prints GREEN and Indicator[1].DATA[period-1] prints GREEN
+```lua
+if Indicator[1].DATA[period] prints GREEN and Indicator[1].DATA[period-1] prints GREEN
 then
 if Color then
 BUY();
@@ -288,8 +266,8 @@ BUY();
 if Indicator[1].DATA[period] prints RED and Indicator[1].DATA[period-1] prints RED
 then
 if Color then
-SELL();`
-
+SELL();
+```
 
 ---
 
@@ -299,7 +277,6 @@ SELL();`
 
 You mean, Take a trade on color change?
 
-
 ---
 
 ## Re: Non-Lag Moving Average strategy
@@ -307,7 +284,6 @@ You mean, Take a trade on color change?
 **Sedamenta** · Fri Jun 12, 2015 6:05 pm
 
 yes, is it possible?
-
 
 ---
 
@@ -318,7 +294,6 @@ yes, is it possible?
 Try this version.
 [viewtopic.php?f=31&t=62314](https://fxcodebase.com/code/viewtopic.php?f=31&t=62314)
 
-
 ---
 
 ## Re: Non-Lag Moving Average strategy
@@ -326,7 +301,6 @@ Try this version.
 **Apprentice** · Mon Dec 12, 2016 3:44 pm
 
 Strategy was revised and updated.
-
 
 ---
 
@@ -337,7 +311,6 @@ Strategy was revised and updated.
 Hi, I just started using this strategy and every time it closes a position and tries to open the opposite position it fails to open the position and I get an error in TradeStation under "Action" that says "Trading activity delayed while Net Quantity Order xxxxxxx is pending". Any idea why this is happening.
 
 Thanks in advance.
-
 
 ---
 
