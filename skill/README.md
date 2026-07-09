@@ -6,6 +6,16 @@ custom indicators, signals, and strategies published on
 [fxcodebase.com](https://fxcodebase.com) and run inside Trading Station / Marketscope — so it can
 be **ported to another platform**.
 
+> **Get the skill:** the source lives at
+> **[github.com/gehtsoft-usa/fxcodebase-backup](https://github.com/gehtsoft-usa/fxcodebase-backup/tree/main/skill)**
+> (this `skill/` folder). Clone or download it with:
+>
+> ```
+> git clone https://github.com/gehtsoft-usa/fxcodebase-backup.git
+> ```
+>
+> then see [INSTALL.md](INSTALL.md) for how to install and use it.
+
 ## Why this exists
 
 Indicore's Lua dialect looks ordinary but has several semantics that quietly break naive ports:
